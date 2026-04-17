@@ -1,0 +1,3 @@
+{
+  "/admin/[scope]/page": "app/admin/[scope]/page.js"
+}

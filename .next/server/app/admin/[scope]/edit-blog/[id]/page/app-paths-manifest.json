@@ -1,0 +1,3 @@
+{
+  "/admin/[scope]/edit-blog/[id]/page": "app/admin/[scope]/edit-blog/[id]/page.js"
+}

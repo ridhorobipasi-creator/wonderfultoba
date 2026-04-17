@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(public)/layout,_N_T_/(public)/tour/layout,_N_T_/(public)/tour/blog/layout,_N_T_/(public)/tour/blog/page,_N_T_/tour/blog"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KHB1YmxpYyk/tour/blog/__PAGE__",
+    "/!KHB1YmxpYyk/tour/blog",
+    "/!KHB1YmxpYyk/tour",
+    "/!KHB1YmxpYyk",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,0 +1,3 @@
+{
+  "/admin/[scope]/create-blog/page": "app/admin/[scope]/create-blog/page.js"
+}
