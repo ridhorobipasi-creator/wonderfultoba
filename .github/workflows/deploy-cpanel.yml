@@ -45,8 +45,3 @@ jobs:
           rm: false
           strip_components: 0
           overwrite: true
-          exclude: |
-            .git*
-            node_modules
-            .env
-            .github

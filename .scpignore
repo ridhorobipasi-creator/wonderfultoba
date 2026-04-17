@@ -1,0 +1,8 @@
+# File/folder yang tidak ingin di-upload ke cPanel
+.git*
+node_modules/
+.env
+.github/
+*.log
+*.md
+*.txt
