@@ -33,17 +33,20 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       # --- DEPLOYMENT MENGGUNAKAN SFTP (PORT 22) ---
-      - name: Upload to public_html
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Upload to public_html (SCP)
+        uses: appleboy/scp-action@v0.1.7
         with:
-          server: ${{ secrets.CPANEL_FTP_HOST }}
+          host: ${{ secrets.CPANEL_FTP_HOST }}
           username: ${{ secrets.CPANEL_FTP_USERNAME }}
           password: ${{ secrets.CPANEL_FTP_PASSWORD }}
           port: 22
-          local_path: ./
-          remote_path: ${{ secrets.CPANEL_TARGET_DIR || 'public_html/' }}
+          source: ./
+          target: ${{ secrets.CPANEL_TARGET_DIR || 'public_html/' }}
+          rm: false
+          strip_components: 0
+          overwrite: true
           exclude: |
-            **/.git*
-            **/node_modules/**
+            .git*
+            node_modules
             .env
-            .github/
+            .github
