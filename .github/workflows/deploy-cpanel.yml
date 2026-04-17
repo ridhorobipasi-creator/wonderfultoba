@@ -36,12 +36,12 @@ jobs:
       - name: Upload to public_html
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.CPANEL_FTP_HOST }}
+          server: ${{ secrets.CPANEL_FTP_HOST }}
           username: ${{ secrets.CPANEL_FTP_USERNAME }}
           password: ${{ secrets.CPANEL_FTP_PASSWORD }}
           port: 22
-          local_dir: ./
-          remote_dir: ${{ secrets.CPANEL_TARGET_DIR || 'public_html/' }}
+          local_path: ./
+          remote_path: ${{ secrets.CPANEL_TARGET_DIR || 'public_html/' }}
           exclude: |
             **/.git*
             **/node_modules/**
