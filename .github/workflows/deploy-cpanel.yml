@@ -1,0 +1,51 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- FRONTEND BUILD ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd nextjs-app
+          npm install
+
+      - name: Build Frontend
+        run: |
+          cd nextjs-app
+          npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      # --- DEPLOYMENT MENGGUNAKAN SFTP (PORT 22) ---
+      - name: Upload Build to public_html
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          host: ${{ secrets.CPANEL_FTP_HOST }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          port: 22
+          local_dir: ./nextjs-app/dist/ # Jika Next.js di-export ke static
+          # Jika Next.js dijalankan via Node.js di cPanel, ganti local_dir ke ./nextjs-app/
+          remote_dir: ${{ secrets.CPANEL_TARGET_DIR || 'public_html/' }}
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            .env

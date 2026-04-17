@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  phone     String?
+  photoURL  String?
+  metadata  Json?
+  role      String   @default("user")
+  bookings  Booking[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Package {
+  id               Int       @id @default(autoincrement())
+  slug             String    @unique
+  name             String
+  shortDescription String?   @db.Text
+  description      String    @db.LongText
+  locationTag      String?
+  price            Float     @default(0)
+  childPrice       Float?    @default(0)
+  priceDisplay     String?
+  duration         String
+  images           Json      // Array of strings
+  includes         Json      // Array of strings
+  excludes         Json      // Array of strings
+  pricingDetails   Json?     // Array of {pax, price_per_person}
+  itinerary        Json?     // Array of {day, title, description}
+  itineraryText    String?   @db.LongText
+  dronePrice       Float?    @default(0)
+  droneLocation    String?
+  notes            String?   @db.Text
+  status           String    @default("active")
+  isFeatured       Boolean   @default(false)
+  isOutbound       Boolean   @default(false)
+  sortOrder        Int       @default(0)
+  metaTitle        String?
+  metaDescription  String?   @db.Text
+  translations     Json?     // {en: {}, ms: {}}
+  cityId           Int?
+  city             City?     @relation(fields: [cityId], references: [id])
+  bookings         Booking[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model City {
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String    @unique
+  packages  Package[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Car {
+  id               Int       @id @default(autoincrement())
+  name             String
+  type             String
+  capacity         Int
+  transmission     String
+  fuel             String
+  price            Float     @default(0)
+  priceWithDriver  Float?    @default(0)
+  images           Json      // Array of strings
+  description      String?   @db.LongText
+  terms            String?   @db.Text
+  features         Json?     // Array of strings
+  includes         Json?     // Array of strings
+  status           String    @default("available")
+  isFeatured       Boolean   @default(false)
+  sortOrder        Int       @default(0)
+  metaTitle        String?
+  metaDescription  String?   @db.Text
+  pricingDetails   Json?     // Custom duration pricing
+  translations     Json?     // {en: {}, ms: {}}
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  bookings         Booking[]
+}
+
+model Booking {
+  id            Int      @id @default(autoincrement())
+  userId        Int?
+  type          String
+  itemId        Int
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Float
+  customerName  String
+  customerEmail String
+  customerPhone String
+  notes         String?  @db.Text
+  metadata      Json?
+  status        String   @default("pending")
+  user          User?    @relation(fields: [userId], references: [id])
+  package       Package? @relation(fields: [itemId], references: [id], map: "Booking_Package_fkey")
+  car           Car?     @relation(fields: [itemId], references: [id], map: "Booking_Car_fkey")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([itemId])
+  @@index([userId])
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  content   String   @db.LongText
+  excerpt   String   @db.Text
+  image     String?
+  author    String
+  status    String   @default("published")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value Json
+}
