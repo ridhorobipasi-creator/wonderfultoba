@@ -1,0 +1,591 @@
+"use client";
+
+import { useState, useEffect, useCallback } from 'react';
+import { Upload, Image as ImageIcon, Trash2, Search, Grid3x3, List, FolderPlus, Download, Eye, X, Check, Folder, File } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../utils/cn';
+import { toast } from 'sonner';
+import api from '../lib/api';
+
+interface MediaFile {
+  id: string;
+  filename: string;
+  url: string;
+  size: number;
+  type: string;
+  folder: string;
+  uploadedAt: string;
+  dimensions?: { width: number; height: number };
+}
+
+interface Folder {
+  name: string;
+  count: number;
+}
+
+export default function AdminMediaLibrary() {
+  const [files, setFiles] = useState<MediaFile[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([
+    { name: 'All Media', count: 0 },
+    { name: 'Packages', count: 0 },
+    { name: 'Blog', count: 0 },
+    { name: 'Cars', count: 0 },
+    { name: 'Landing', count: 0 },
+  ]);
+  const [selectedFolder, setSelectedFolder] = useState('All Media');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [previewFile, setPreviewFile] = useState<MediaFile | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [dragActive, setDragActive] = useState(false);
+
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+
+  const fetchMedia = async () => {
+    setLoading(true);
+    try {
+      // Simulate API call - replace with real API
+      const mockFiles: MediaFile[] = [
+        {
+          id: '1',
+          filename: 'danau-toba-sunset.jpg',
+          url: '/storage/2023/10/001-1.jpg',
+          size: 2456789,
+          type: 'image/jpeg',
+          folder: 'Packages',
+          uploadedAt: '2026-04-15T10:30:00Z',
+          dimensions: { width: 1920, height: 1080 }
+        },
+        {
+          id: '2',
+          filename: 'innova-reborn.jpg',
+          url: '/storage/2023/10/002-1.jpg',
+          size: 1234567,
+          type: 'image/jpeg',
+          folder: 'Cars',
+          uploadedAt: '2026-04-14T15:20:00Z',
+          dimensions: { width: 1600, height: 900 }
+        },
+        {
+          id: '3',
+          filename: 'blog-header.jpg',
+          url: '/storage/2023/10/003-1.jpg',
+          size: 3456789,
+          type: 'image/jpeg',
+          folder: 'Blog',
+          uploadedAt: '2026-04-13T09:15:00Z',
+          dimensions: { width: 2400, height: 1350 }
+        },
+      ];
+      setFiles(mockFiles);
+      
+      // Update folder counts
+      const updatedFolders = folders.map(folder => ({
+        ...folder,
+        count: folder.name === 'All Media' 
+          ? mockFiles.length 
+          : mockFiles.filter(f => f.folder === folder.name).length
+      }));
+      setFolders(updatedFolders);
+    } catch (error) {
+      console.error('Error fetching media:', error);
+      toast.error('Gagal memuat media');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    await handleUpload(droppedFiles);
+  }, [selectedFolder]);
+
+  const handleFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      await handleUpload(selectedFiles);
+    }
+  };
+
+  const handleUpload = async (filesToUpload: File[]) => {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      filesToUpload.forEach(file => {
+        formData.append('files', file);
+      });
+      formData.append('folder', selectedFolder === 'All Media' ? 'Packages' : selectedFolder);
+
+      // Simulate upload - replace with real API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast.success(`${filesToUpload.length} file berhasil diupload`);
+      fetchMedia();
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Gagal upload file');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (fileIds: string[]) => {
+    if (!window.confirm(`Hapus ${fileIds.length} file?`)) return;
+
+    try {
+      // Simulate delete - replace with real API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setFiles(files.filter(f => !fileIds.includes(f.id)));
+      setSelectedFiles([]);
+      toast.success('File berhasil dihapus');
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast.error('Gagal menghapus file');
+    }
+  };
+
+  const handleSelectFile = (fileId: string) => {
+    setSelectedFiles(prev => 
+      prev.includes(fileId) 
+        ? prev.filter(id => id !== fileId)
+        : [...prev, fileId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedFiles.length === filteredFiles.length) {
+      setSelectedFiles([]);
+    } else {
+      setSelectedFiles(filteredFiles.map(f => f.id));
+    }
+  };
+
+  const copyToClipboard = (url: string) => {
+    navigator.clipboard.writeText(url);
+    toast.success('URL disalin ke clipboard');
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  const filteredFiles = files.filter(file => {
+    const matchesFolder = selectedFolder === 'All Media' || file.folder === selectedFolder;
+    const matchesSearch = file.filename.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFolder && matchesSearch;
+  });
+
+  const totalSize = filteredFiles.reduce((acc, file) => acc + file.size, 0);
+
+  return (
+    <div className="space-y-6 pb-12">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+          <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Media Library</h1>
+          <p className="text-sm text-slate-400 font-medium mt-1">Kelola semua file gambar Anda di satu tempat</p>
+        </div>
+        <div className="flex gap-2 w-full lg:w-auto">
+          <label className="flex-1 lg:flex-none cursor-pointer">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileInput}
+              className="hidden"
+              disabled={uploading}
+            />
+            <div className="flex items-center justify-center gap-2 px-4 lg:px-6 py-3 bg-toba-green text-white rounded-2xl font-bold text-sm shadow-lg shadow-toba-green/20 hover:bg-toba-green/90 transition-all">
+              <Upload className="w-4 h-4" />
+              <span className="hidden sm:inline">Upload File</span>
+              <span className="sm:hidden">Upload</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+        <div className="bg-white p-4 lg:p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-toba-green/10 rounded-xl flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 lg:w-6 lg:h-6 text-toba-green" />
+            </div>
+            <div>
+              <p className="text-xs lg:text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Files</p>
+              <p className="text-xl lg:text-2xl font-black text-slate-900">{files.length}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-4 lg:p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+              <Folder className="w-5 h-5 lg:w-6 lg:h-6 text-blue-500" />
+            </div>
+            <div>
+              <p className="text-xs lg:text-[10px] font-black text-slate-400 uppercase tracking-widest">Folders</p>
+              <p className="text-xl lg:text-2xl font-black text-slate-900">{folders.length - 1}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-4 lg:p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-amber-50 rounded-xl flex items-center justify-center">
+              <File className="w-5 h-5 lg:w-6 lg:h-6 text-amber-500" />
+            </div>
+            <div>
+              <p className="text-xs lg:text-[10px] font-black text-slate-400 uppercase tracking-widest">Storage</p>
+              <p className="text-xl lg:text-2xl font-black text-slate-900">{formatFileSize(totalSize)}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-4 lg:p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-purple-50 rounded-xl flex items-center justify-center">
+              <Check className="w-5 h-5 lg:w-6 lg:h-6 text-purple-500" />
+            </div>
+            <div>
+              <p className="text-xs lg:text-[10px] font-black text-slate-400 uppercase tracking-widest">Selected</p>
+              <p className="text-xl lg:text-2xl font-black text-slate-900">{selectedFiles.length}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Sidebar - Folders */}
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 lg:p-6">
+            <h3 className="text-sm font-black text-slate-900 mb-4 uppercase tracking-widest">Folders</h3>
+            <div className="space-y-1">
+              {folders.map(folder => (
+                <button
+                  key={folder.name}
+                  onClick={() => setSelectedFolder(folder.name)}
+                  className={cn(
+                    "w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all",
+                    selectedFolder === folder.name
+                      ? "bg-toba-green text-white shadow-lg shadow-toba-green/20"
+                      : "text-slate-600 hover:bg-slate-50"
+                  )}
+                >
+                  <span className="flex items-center gap-2">
+                    <Folder className="w-4 h-4" />
+                    {folder.name}
+                  </span>
+                  <span className={cn(
+                    "text-xs font-black px-2 py-0.5 rounded-lg",
+                    selectedFolder === folder.name
+                      ? "bg-white/20"
+                      : "bg-slate-100 text-slate-400"
+                  )}>
+                    {folder.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="lg:col-span-9 space-y-4">
+          {/* Toolbar */}
+          <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Cari file..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-medium text-sm"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={cn(
+                    "p-2.5 rounded-xl transition-all",
+                    viewMode === 'grid'
+                      ? "bg-toba-green text-white shadow-lg shadow-toba-green/20"
+                      : "bg-slate-50 text-slate-400 hover:text-slate-600"
+                  )}
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={cn(
+                    "p-2.5 rounded-xl transition-all",
+                    viewMode === 'list'
+                      ? "bg-toba-green text-white shadow-lg shadow-toba-green/20"
+                      : "bg-slate-50 text-slate-400 hover:text-slate-600"
+                  )}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+                {selectedFiles.length > 0 && (
+                  <button
+                    onClick={() => handleDelete(selectedFiles)}
+                    className="px-4 py-2.5 bg-rose-50 text-rose-600 rounded-xl font-bold text-sm hover:bg-rose-100 transition-all flex items-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span className="hidden sm:inline">Hapus ({selectedFiles.length})</span>
+                    <span className="sm:hidden">({selectedFiles.length})</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Upload Zone */}
+          {uploading && (
+            <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-4"></div>
+                <p className="text-slate-600 font-bold">Uploading files...</p>
+              </div>
+            </div>
+          )}
+
+          {/* Drag & Drop Zone */}
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            className={cn(
+              "border-2 border-dashed rounded-2xl p-8 transition-all",
+              dragActive
+                ? "border-toba-green bg-toba-green/5"
+                : "border-slate-200 bg-white"
+            )}
+          >
+            <div className="text-center">
+              <Upload className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <p className="text-slate-600 font-bold mb-2">Drag & drop files here</p>
+              <p className="text-xs text-slate-400">atau klik tombol Upload File di atas</p>
+            </div>
+          </div>
+
+          {/* Files Grid/List */}
+          {loading ? (
+            <div className="bg-white p-20 rounded-2xl border border-slate-100 shadow-sm text-center">
+              <div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-slate-400 font-medium">Loading media...</p>
+            </div>
+          ) : filteredFiles.length === 0 ? (
+            <div className="bg-white p-20 rounded-2xl border border-slate-100 shadow-sm text-center">
+              <ImageIcon className="w-16 h-16 text-slate-200 mx-auto mb-4" />
+              <p className="text-slate-400 font-medium">Tidak ada file di folder ini</p>
+            </div>
+          ) : viewMode === 'grid' ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
+              {filteredFiles.map((file, index) => (
+                <motion.div
+                  key={file.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={cn(
+                    "bg-white rounded-2xl border-2 overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer group relative",
+                    selectedFiles.includes(file.id)
+                      ? "border-toba-green ring-2 ring-toba-green/20"
+                      : "border-slate-100"
+                  )}
+                >
+                  <div className="aspect-square relative overflow-hidden bg-slate-50">
+                    <img
+                      src={file.url}
+                      alt={file.filename}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute bottom-2 left-2 right-2 flex gap-1">
+                        <button
+                          onClick={() => setPreviewFile(file)}
+                          className="flex-1 p-2 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition-all"
+                          title="Preview"
+                        >
+                          <Eye className="w-4 h-4 mx-auto text-slate-700" />
+                        </button>
+                        <button
+                          onClick={() => copyToClipboard(file.url)}
+                          className="flex-1 p-2 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition-all"
+                          title="Copy URL"
+                        >
+                          <Download className="w-4 h-4 mx-auto text-slate-700" />
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleSelectFile(file.id)}
+                      className={cn(
+                        "absolute top-2 right-2 w-6 h-6 rounded-lg flex items-center justify-center transition-all",
+                        selectedFiles.includes(file.id)
+                          ? "bg-toba-green text-white"
+                          : "bg-white/90 backdrop-blur-sm text-slate-400 hover:text-slate-700"
+                      )}
+                    >
+                      {selectedFiles.includes(file.id) && <Check className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  <div className="p-3">
+                    <p className="text-xs font-bold text-slate-900 truncate">{file.filename}</p>
+                    <p className="text-[10px] text-slate-400 font-medium">{formatFileSize(file.size)}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50/50 border-b border-slate-100">
+                    <th className="px-4 py-3 text-left">
+                      <input
+                        type="checkbox"
+                        checked={selectedFiles.length === filteredFiles.length}
+                        onChange={handleSelectAll}
+                        className="rounded"
+                      />
+                    </th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">File</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Size</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Uploaded</th>
+                    <th className="px-4 py-3 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {filteredFiles.map(file => (
+                    <tr key={file.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-4 py-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedFiles.includes(file.id)}
+                          onChange={() => handleSelectFile(file.id)}
+                          className="rounded"
+                        />
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <img src={file.url} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                          <div>
+                            <p className="text-sm font-bold text-slate-900">{file.filename}</p>
+                            <p className="text-xs text-slate-400 lg:hidden">{formatFileSize(file.size)}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-600 hidden lg:table-cell">{formatFileSize(file.size)}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600 hidden lg:table-cell">
+                        {new Date(file.uploadedAt).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex justify-end gap-1">
+                          <button
+                            onClick={() => setPreviewFile(file)}
+                            className="p-2 text-slate-400 hover:text-toba-green transition-all"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete([file.id])}
+                            className="p-2 text-slate-400 hover:text-rose-500 transition-all"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Preview Modal */}
+      <AnimatePresence>
+        {previewFile && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 className="text-xl font-black text-slate-900">{previewFile.filename}</h3>
+                <button
+                  onClick={() => setPreviewFile(null)}
+                  className="p-2 hover:bg-slate-100 rounded-xl transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-6">
+                <img
+                  src={previewFile.url}
+                  alt={previewFile.filename}
+                  className="w-full rounded-2xl"
+                />
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Size</p>
+                    <p className="text-sm font-bold text-slate-900">{formatFileSize(previewFile.size)}</p>
+                  </div>
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Dimensions</p>
+                    <p className="text-sm font-bold text-slate-900">
+                      {previewFile.dimensions?.width} × {previewFile.dimensions?.height}
+                    </p>
+                  </div>
+                  <div className="col-span-2 bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">URL</p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={previewFile.url}
+                        readOnly
+                        className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm font-mono"
+                      />
+                      <button
+                        onClick={() => copyToClipboard(previewFile.url)}
+                        className="px-4 py-2 bg-toba-green text-white rounded-lg font-bold text-sm hover:bg-toba-green/90 transition-all"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

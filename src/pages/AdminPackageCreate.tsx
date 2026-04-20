@@ -12,6 +12,11 @@ import {
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
 import FileUpload from '@/components/admin/FileUpload';
+import LoadingButton from '@/components/admin/LoadingButton';
+import FormField from '@/components/admin/FormField';
+import { showErrorToast } from '@/lib/errorHandler';
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
 
 interface PricingDetailForm {
   pax: string;
@@ -62,9 +67,11 @@ export default function AdminPackageCreate() {
   const id = params?.id;
   const [cities, setCities] = useState<City[]>([]);
   const [activeTab, setActiveTab] = useState('info');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const { register, handleSubmit, control, reset, watch, setValue } = useForm<PackageFormValues>({
+  const { register, handleSubmit, control, reset, watch, setValue, formState: { errors, isDirty } } = useForm<PackageFormValues>({
+    mode: 'onChange', // Enable real-time validation
     defaultValues: {
       status: 'active',
       is_featured: false,
@@ -90,6 +97,36 @@ export default function AdminPackageCreate() {
     name: "itinerary"
   });
 
+  // Auto-save draft
+  const formData = watch();
+  const { restoreDraft, clearDraft } = useAutoSave({
+    data: formData,
+    key: `draft-package-${id || 'new'}`,
+    enabled: !id, // Only auto-save for new packages
+  });
+
+  // Warn before leaving with unsaved changes
+  useUnsavedChanges(isDirty);
+
+  // Auto-generate slug from name
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'name' && value.name && !value.slug) {
+        const slug = value.name
+          .toLowerCase()
+          .replace(/ /g, '-')
+          .replace(/[^\w-]+/g, '');
+        setValue('slug', slug);
+      }
+
+      // Auto-fill meta title from name
+      if (name === 'name' && value.name && !value.meta_title) {
+        setValue('meta_title', `${value.name} - Wonderful Toba`);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
+
   useEffect(() => {
     api.get('/cities').then(res => setCities(res.data)).catch(console.error);
     
@@ -104,12 +141,27 @@ export default function AdminPackageCreate() {
         });
       }).catch(err => {
         console.error('Error fetching package:', err);
-        toast.error('Gagal mengambil data paket');
+        showErrorToast(err, toast);
       });
+    } else {
+      // Try to restore draft for new packages
+      const draft = restoreDraft();
+      if (draft && draft.name) {
+        const shouldRestore = window.confirm(
+          'Ditemukan draft yang belum tersimpan. Restore?'
+        );
+        if (shouldRestore) {
+          reset(draft);
+          toast.info('Draft berhasil dipulihkan');
+        } else {
+          clearDraft();
+        }
+      }
     }
-  }, [id, reset]);
+  }, [id, reset, restoreDraft, clearDraft]);
 
   const onSubmit = async (data: PackageFormValues) => {
+    setLoading(true);
     try {
       const includesArray = data.includes ? data.includes.split(',').map((s: string) => s.trim()) : [];
       const excludesArray = data.excludes ? data.excludes.split(',').map((s: string) => s.trim()) : [];
@@ -150,11 +202,14 @@ export default function AdminPackageCreate() {
       } else {
         await api.post('/packages', payload);
         toast.success('Paket Wisata baru berhasil ditambahkan');
+        clearDraft(); // Clear draft after successful save
       }
       router.push('/admin/packages');
     } catch (error) {
       console.error('Error saving package:', error);
-      toast.error('Gagal menyimpan paket wisata');
+      showErrorToast(error, toast);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,13 +236,14 @@ export default function AdminPackageCreate() {
             </h2>
             <p className="text-slate-500 font-medium">Buat paket wisata menarik dengan fitur lengkap.</p>
           </div>
-          <button
+          <LoadingButton
             onClick={handleSubmit(onSubmit)}
-            className="bg-obaja-blue text-white px-10 py-4 rounded-2xl font-bold hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
+            loading={loading}
+            loadingText={id ? 'Menyimpan...' : 'Membuat...'}
+            icon={<Save size={20} />}
           >
-            <Save size={20} />
-            <span>{id ? 'Simpan Perubahan' : 'Simpan Paket Wisata'}</span>
-          </button>
+            {id ? 'Simpan Perubahan' : 'Simpan Paket Wisata'}
+          </LoadingButton>
         </div>
 
         {/* Tab Navigation */}
@@ -209,91 +265,138 @@ export default function AdminPackageCreate() {
           {activeTab === 'info' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Paket</label>
-                  <div className="relative">
-                    <PackageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      {...register('name', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
-                      placeholder="Contoh: Explore Danau Toba 3D2N"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Kategori Layanan</label>
+                <FormField
+                  label="Nama Paket"
+                  error={errors.name}
+                  icon={<PackageIcon size={20} />}
+                  required
+                >
+                  <input
+                    {...register('name', { 
+                      required: 'Nama paket wajib diisi',
+                      minLength: { value: 5, message: 'Nama paket minimal 5 karakter' }
+                    })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
+                      errors.name ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    placeholder="Contoh: Explore Danau Toba 3D2N"
+                  />
+                </FormField>
+
+                <FormField
+                  label="Kategori Layanan"
+                  error={errors.category}
+                  required
+                >
                   <select
-                    {...register('category', { required: true })}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    {...register('category', { required: 'Kategori wajib dipilih' })}
+                    className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                      errors.category ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all`}
                   >
                     <option value="tour">Tour & Travel</option>
                     <option value="outbound">Corporate Outbound</option>
                   </select>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Friendly URL (Slug)</label>
+                </FormField>
+
+                <FormField
+                  label="Friendly URL (Slug)"
+                  error={errors.slug}
+                  helperText="Otomatis dibuat dari nama paket"
+                  maxLength={100}
+                  currentLength={watch('slug')?.length || 0}
+                >
                   <input
-                    {...register('slug')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                    {...register('slug', {
+                      maxLength: { value: 100, message: 'Slug maksimal 100 karakter' },
+                      pattern: {
+                        value: /^[a-z0-9-]+$/,
+                        message: 'Slug hanya boleh huruf kecil, angka, dan tanda hubung'
+                      }
+                    })}
+                    className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                      errors.slug ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
                     placeholder="Contoh: paket-tour-danau-toba-3d2n"
                   />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Durasi</label>
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      {...register('duration', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
-                      placeholder="3 Hari 2 Malam"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Tag Lokasi (Badge atas foto)</label>
+                </FormField>
+
+                <FormField
+                  label="Durasi"
+                  error={errors.duration}
+                  icon={<Calendar size={20} />}
+                  required
+                >
+                  <input
+                    {...register('duration', { required: 'Durasi wajib diisi' })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
+                      errors.duration ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    placeholder="3 Hari 2 Malam"
+                  />
+                </FormField>
+
+                <FormField
+                  label="Tag Lokasi (Badge atas foto)"
+                  error={errors.location_tag}
+                >
                   <input
                     {...register('location_tag')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                    className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all"
                     placeholder="Contoh: Samosir, Sumatera Utara"
                   />
-                </div>
+                </FormField>
               </div>
 
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Pre-order Info (Opsional)</label>
+              <FormField
+                label="Pre-order Info (Opsional)"
+                error={errors.pre_order_info}
+              >
                 <input
                   {...register('pre_order_info')}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
                   placeholder="Contoh: Booking 7 hari sebelum..."
                 />
+              </FormField>
+
+              <div className="pt-4 border-t border-slate-100">
+                <FormField
+                  label="Deskripsi Singkat"
+                  error={errors.short_description}
+                  maxLength={200}
+                  currentLength={watch('short_description')?.length || 0}
+                  helperText="Tampil ringkas di bawah harga"
+                >
+                  <textarea
+                    {...register('short_description', {
+                      maxLength: { value: 200, message: 'Deskripsi singkat maksimal 200 karakter' }
+                    })}
+                    rows={2}
+                    className={`w-full p-5 bg-slate-50 border-2 ${
+                      errors.short_description ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
+                    placeholder="Tampil ringkas di bawah harga..."
+                  />
+                </FormField>
               </div>
 
-              <div className="space-y-3 pt-4 border-t border-slate-100">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Deskripsi Singkat</label>
-                <textarea
-                  {...register('short_description')}
-                  rows={2}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
-                  placeholder="Tampil ringkas di bawah harga..."
-                />
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Deskripsi Lengkap</label>
+              <FormField
+                label="Deskripsi Lengkap"
+                error={errors.description}
+              >
                 <textarea
                   {...register('description')}
                   rows={6}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
                   placeholder="Penjelasan lengkap mengenai perjalanan ini..."
                 />
-              </div>
+              </FormField>
 
               <div className="space-y-3">
                 <FileUpload 
                   label="Galeri Gambar (Upload)" 
                   currentValue={watch('image')} 
                   onUploadSuccess={(url) => {
-                    // For multiple images, we can append or replace
                     const current = watch('image');
                     const newVal = current ? `${current}, ${url}` : url;
                     setValue('image', newVal);
@@ -307,7 +410,7 @@ export default function AdminPackageCreate() {
                   <textarea
                     {...register('image')}
                     rows={2}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900 transition-all"
                     placeholder="https://example.com/tour1.jpg, https://example.com/tour2.jpg"
                   />
                 </div>
@@ -345,39 +448,56 @@ export default function AdminPackageCreate() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Harga Dasar (Default)</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      type="number"
-                      {...register('price', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
-                      placeholder="500000"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Harga Anak (8 Thn Kebawah)</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      type="number"
-                      {...register('child_price')}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
-                      placeholder="250000"
-                    />
-                  </div>
-                </div>
+                <FormField
+                  label="Harga Dasar (Default)"
+                  error={errors.price}
+                  icon={<DollarSign size={20} />}
+                  required
+                  helperText="Masukkan angka tanpa titik atau koma"
+                >
+                  <input
+                    type="number"
+                    {...register('price', { 
+                      required: 'Harga wajib diisi',
+                      min: { value: 0, message: 'Harga tidak boleh negatif' }
+                    })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
+                      errors.price ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    placeholder="500000"
+                  />
+                </FormField>
+
+                <FormField
+                  label="Harga Anak (8 Thn Kebawah)"
+                  error={errors.child_price}
+                  icon={<DollarSign size={20} />}
+                  helperText="Opsional, kosongkan jika tidak ada"
+                >
+                  <input
+                    type="number"
+                    {...register('child_price', {
+                      min: { value: 0, message: 'Harga tidak boleh negatif' }
+                    })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
+                      errors.child_price ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    placeholder="250000"
+                  />
+                </FormField>
               </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Teks Harga Custom</label>
+
+              <FormField
+                label="Teks Harga Custom"
+                error={errors.price_display}
+                helperText="Tampil di card paket, contoh: Mulai dari Rp 500.000 / pax"
+              >
                 <input
                   {...register('price_display')}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
                   placeholder="Mulai dari Rp 500.000 / pax"
                 />
-              </div>
+              </FormField>
             </div>
           )}
 
@@ -486,25 +606,38 @@ export default function AdminPackageCreate() {
           {activeTab === 'seo' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Status Publikasi</label>
+                <FormField
+                  label="Status Publikasi"
+                  error={errors.status}
+                  required
+                >
                   <select
-                    {...register('status')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    {...register('status', { required: 'Status wajib dipilih' })}
+                    className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                      errors.status ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all`}
                   >
                     <option value="active">Aktif (Tampil di Web)</option>
                     <option value="inactive">Nonaktif (Draft)</option>
                   </select>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Urutan Tampil (Sort Order)</label>
+                </FormField>
+
+                <FormField
+                  label="Urutan Tampil (Sort Order)"
+                  error={errors.sort_order}
+                  helperText="Angka lebih kecil tampil lebih dulu"
+                >
                   <input
                     type="number"
-                    {...register('sort_order')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                    {...register('sort_order', {
+                      min: { value: 0, message: 'Urutan tidak boleh negatif' }
+                    })}
+                    className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                      errors.sort_order ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
                     placeholder="0"
                   />
-                </div>
+                </FormField>
               </div>
 
               <div className="flex items-center space-x-3 bg-slate-50 p-6 rounded-2xl">
@@ -518,23 +651,44 @@ export default function AdminPackageCreate() {
               </div>
 
               <div className="pt-4 border-t border-slate-100 space-y-4">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Meta Title (SEO)</label>
+                <h4 className="font-bold text-slate-900 mb-2">Optimasi Mesin Pencari (SEO)</h4>
+                
+                <FormField
+                  label="Meta Title"
+                  error={errors.meta_title}
+                  maxLength={60}
+                  currentLength={watch('meta_title')?.length || 0}
+                  helperText="Idealnya 50-60 karakter untuk tampilan optimal di Google"
+                >
                   <input
-                    {...register('meta_title')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    {...register('meta_title', {
+                      maxLength: { value: 60, message: 'Meta title maksimal 60 karakter' }
+                    })}
+                    className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                      errors.meta_title ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
                     placeholder="Paket Wisata Danau Toba Terbaik..."
                   />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Meta Description (SEO)</label>
+                </FormField>
+
+                <FormField
+                  label="Meta Description"
+                  error={errors.meta_description}
+                  maxLength={160}
+                  currentLength={watch('meta_description')?.length || 0}
+                  helperText="Idealnya 150-160 karakter untuk tampilan optimal di Google"
+                >
                   <textarea
-                    {...register('meta_description')}
+                    {...register('meta_description', {
+                      maxLength: { value: 160, message: 'Meta description maksimal 160 karakter' }
+                    })}
                     rows={2}
-                    className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className={`w-full p-5 bg-slate-50 border-2 ${
+                      errors.meta_description ? 'border-rose-500' : 'border-transparent'
+                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
                     placeholder="Nikmati liburan ke Samosir dengan fasilitas lengkap..."
                   />
-                </div>
+                </FormField>
               </div>
             </div>
           )}

@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '../utils/cn';
+import ImageUpload from '../components/ImageUpload';
 
 interface AboutSection {
   title: string;
@@ -243,7 +244,12 @@ export default function AdminOutboundLanding() {
                           <InputGroup label="Judul Layanan" value={svc.title} onChange={(v) => updateItem('services', idx, 'title', v)} placeholder="Team Building" />
                           <InputGroup label="Tagline" value={svc.desc} onChange={(v) => updateItem('services', idx, 'desc', v)} placeholder="Sinergi Personil" />
                         </div>
-                        <InputGroup label="URL Gambar" value={svc.image} onChange={(v) => updateItem('services', idx, 'image', v)} placeholder="https://..." />
+                        <ImageUpload 
+                          label="Gambar Service" 
+                          value={svc.image} 
+                          onChange={(v) => updateItem('services', idx, 'image', v)} 
+                          aspectRatio="square"
+                        />
                         <div className="space-y-3">
                           <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Keterangan Detail</label>
                           <textarea
@@ -307,7 +313,7 @@ export default function AdminOutboundLanding() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {content.locations.map((loc: LocationItem, idx: number) => (
                       <div key={idx} className="p-5 bg-slate-50 rounded-3xl border border-slate-200 group relative">
-                        <button onClick={() => removeItem('locations', idx)} className="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => removeItem('locations', idx)} className="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           <Trash2 size={12} />
                         </button>
                         <div className="space-y-3">
@@ -317,11 +323,11 @@ export default function AdminOutboundLanding() {
                             placeholder="Nama Resort"
                             className="w-full px-4 py-2 bg-white border border-slate-100 rounded-lg text-sm font-bold"
                           />
-                          <input
-                            value={loc.img}
-                            onChange={(e) => updateItem('locations', idx, 'img', e.target.value)}
-                            placeholder="URL Gambar"
-                            className="w-full px-4 py-2 bg-white border border-slate-100 rounded-lg text-[10px]"
+                          <ImageUpload 
+                            label="Gambar Lokasi" 
+                            value={loc.img} 
+                            onChange={(v) => updateItem('locations', idx, 'img', v)} 
+                            aspectRatio="video"
                           />
                         </div>
                       </div>
@@ -339,43 +345,39 @@ export default function AdminOutboundLanding() {
               {/* GALLERY */}
               {activeTab === 'gallery' && (
                 <div className="space-y-8">
-                  <SectionHeader title="Dokumentasi Galeri" icon={ImageIcon} desc="Kumpulan URL foto dokumentasi." />
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <SectionHeader title="Dokumentasi Galeri" icon={ImageIcon} desc="Kumpulan foto dokumentasi kegiatan outbound." />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {content.gallery.map((img: string, idx: number) => (
-                      <div key={idx} className="aspect-square relative group rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
-                        {img && <img src={img} className="w-full h-full object-cover" alt="" />}
-                        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
-                          <textarea
-                            value={img}
-                            onChange={(e) => {
-                              const newList = [...content.gallery];
-                              newList[idx] = e.target.value;
-                              setContent({ ...content, gallery: newList });
-                            }}
-                            className="w-full h-full bg-white/20 backdrop-blur-md border-white/40 text-[10px] text-white p-2 rounded-xl focus:bg-white focus:text-slate-900 transition-colors"
-                            placeholder="URL Gambar"
-                          />
-                          <button 
-                            onClick={() => {
-                              const newList = [...content.gallery];
-                              newList.splice(idx, 1);
-                              setContent({ ...content, gallery: newList });
-                            }}
-                            className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </div>
+                      <div key={idx} className="relative">
+                        <ImageUpload 
+                          label={`Foto ${idx + 1}`}
+                          value={img} 
+                          onChange={(v) => {
+                            const newList = [...content.gallery];
+                            newList[idx] = v;
+                            setContent({ ...content, gallery: newList });
+                          }} 
+                          aspectRatio="square"
+                        />
+                        <button 
+                          onClick={() => {
+                            const newList = [...content.gallery];
+                            newList.splice(idx, 1);
+                            setContent({ ...content, gallery: newList });
+                          }}
+                          className="absolute -top-2 -right-2 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-rose-600 transition-colors z-20"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     ))}
-                    <button 
-                      onClick={() => setContent({ ...content, gallery: [...content.gallery, ''] })}
-                      className="aspect-square border-2 border-dashed border-slate-200 rounded-2xl text-slate-300 hover:text-toba-green hover:border-toba-green transition-all flex flex-col items-center justify-center gap-2"
-                    >
-                      <Plus size={24} />
-                      <span className="text-xs font-bold">Upload URL</span>
-                    </button>
                   </div>
+                  <button 
+                    onClick={() => setContent({ ...content, gallery: [...content.gallery, ''] })}
+                    className="w-full py-6 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 font-bold hover:text-toba-green hover:border-toba-green transition-all flex items-center justify-center gap-2"
+                  >
+                    <Plus size={20} /> Tambah Foto Galeri
+                  </button>
                 </div>
               )}
             </motion.div>

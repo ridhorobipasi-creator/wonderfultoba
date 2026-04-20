@@ -4,18 +4,20 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, Home, FileText, MapPin, Package, Car, CalendarCheck, Globe2, Users, LogOut, Settings, Layers, Box, ExternalLink, BookOpen
+  LayoutDashboard, Home, FileText, MapPin, Package, Car, CalendarCheck, Globe2, Users, LogOut, Settings, Layers, Box, ExternalLink, BookOpen, Image, Menu, X, Building2, MonitorPlay
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useStore } from '@/store/useStore';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { setToken, setUser } = useStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -41,9 +43,10 @@ export default function AdminSidebar() {
     {
       label: 'MANAJEMEN KONTEN (CMS)',
       items: [
-        { label: 'Pengaturan Beranda', href: '/admin/cms-tour', icon: Home, pattern: /\/cms-tour/ },
+        { label: '🏠 CMS Beranda Tour', href: '/admin/cms-tour', icon: Home, pattern: /\/cms-tour/ },
         { label: 'Blog / Artikel', href: '/admin/blog', icon: FileText, pattern: /\/blog/ },
         { label: 'Wilayah & Kota', href: '/admin/cities', icon: MapPin, pattern: /\/cities/ },
+        { label: 'Media Library', href: '/admin/media', icon: Image, pattern: /\/media/ },
       ],
     },
     {
@@ -67,18 +70,29 @@ export default function AdminSidebar() {
       ],
     },
     {
-      label: '🧑‍🤝‍🧑OUTBOUND',
+      label: 'OUTBOUND',
       items: [
-        { label: 'Pengaturan Beranda', href: '/admin/cms-outbound', icon: Home, pattern: /\/cms-outbound/ },
-        { label: 'Paket Outbound', href: '/admin/outbound', icon: Layers, pattern: /\/outbound/ },
+        { label: '🏢 CMS Beranda Outbound', href: '/admin/cms-outbound', icon: Home, pattern: /\/cms-outbound/ },
+        { label: 'Paket Outbound', href: '/admin/outbound', icon: Layers, pattern: /^\/admin\/outbound$/ },
+      ],
+    },
+    {
+      label: 'KONTEN OUTBOUND',
+      items: [
+        { label: 'Layanan Outbound', href: '/admin/outbound/services', icon: Box, pattern: /\/outbound\/services/ },
+        { label: 'Video Highlight', href: '/admin/outbound/videos', icon: MonitorPlay, pattern: /\/outbound\/videos/ },
+        { label: 'Lokasi Venue', href: '/admin/outbound/locations', icon: MapPin, pattern: /\/outbound\/locations/ },
+        { label: 'Logo Klien', href: '/admin/clients', icon: Building2, pattern: /\/clients/ },
+        { label: 'Galeri Foto', href: '/admin/gallery', icon: Image, pattern: /\/gallery/ },
+        { label: 'Tier Paket', href: '/admin/package-tiers', icon: Package, pattern: /\/package-tiers/ },
       ],
     },
   ];
 
   const isActive = (pattern: RegExp) => pattern.test(pathname ?? "");
 
-  return (
-    <aside className="w-64 flex flex-col min-h-screen border-r border-slate-100 bg-white">
+  const SidebarContent = () => (
+    <>
       {/* Logo */}
       <div className="flex flex-col items-center gap-2 pt-6 pb-4">
         <div className="w-10 h-10 bg-toba-green rounded-xl flex items-center justify-center shadow-lg shadow-toba-green/20">
@@ -95,15 +109,16 @@ export default function AdminSidebar() {
       <hr className="my-6 border-slate-100" />
 
       {/* Menu Groups */}
-      <nav className="flex-1 flex flex-col gap-2">
+      <nav className="flex-1 flex flex-col gap-2 overflow-y-auto">
         {menuGroups.map((group, idx) => (
-          <div key={group.label} className={cn(idx === 5 && 'mt-6')}> {/* OUTBOUND group extra margin */}
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 mb-3 px-6">{idx === 5 ? <span className="inline-block mr-1">🧑‍🤝‍🧑</span> : null}{group.label}</p>
+          <div key={group.label} className={cn(idx === 5 && 'mt-6 pt-6 border-t border-slate-100')}> {/* OUTBOUND group extra margin */}
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 mb-3 px-6">{group.label}</p>
             <div className="flex flex-col gap-1 mb-2">
               {group.items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={cn(
                     "flex items-center gap-3 px-6 py-3 rounded-2xl font-bold transition-all group",
                     isActive(item.pattern)
@@ -112,7 +127,7 @@ export default function AdminSidebar() {
                   )}
                 >
                   <item.icon className={cn("w-5 h-5", isActive(item.pattern) ? "text-white" : "text-toba-green group-hover:text-toba-green")}/>
-                  <span>{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                 </Link>
               ))}
             </div>
@@ -129,6 +144,36 @@ export default function AdminSidebar() {
           <span>Keluar</span>
         </button>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white rounded-2xl shadow-lg border border-slate-100"
+      >
+        {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex w-64 flex-col min-h-screen border-r border-slate-100 bg-white">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Sidebar */}
+      {mobileMenuOpen && (
+        <>
+          <div 
+            className="lg:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <aside className="lg:hidden fixed top-0 left-0 bottom-0 w-72 flex flex-col bg-white z-50 shadow-2xl">
+            <SidebarContent />
+          </aside>
+        </>
+      )}
+    </>
   );
 }

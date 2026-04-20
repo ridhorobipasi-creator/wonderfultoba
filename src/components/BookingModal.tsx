@@ -7,6 +7,10 @@ import { X, User, Phone, Mail, Calendar, Save, MessageCircle } from 'lucide-reac
 import api from '../lib/api';
 import { useStore } from '../store/useStore';
 import { toast } from 'sonner';
+import LoadingButton from './admin/LoadingButton';
+import FormField from './admin/FormField';
+import { showErrorToast } from '@/lib/errorHandler';
+import { useForm } from 'react-hook-form';
 
 interface ApiErrorResponse {
   message?: string;
@@ -21,74 +25,75 @@ interface BookingModalProps {
   onClose: () => void;
 }
 
+interface BookingFormValues {
+  name: string;
+  email: string;
+  phone: string;
+  startDate: string;
+  endDate: string;
+  notes: string;
+}
+
 export default function BookingModal({ type, itemId, itemName, pricePerUnit, onClose }: BookingModalProps) {
   const { user } = useStore();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    phone: '',
-    startDate: '',
-    endDate: '',
-    notes: '',
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<BookingFormValues>({
+    mode: 'onChange',
+    defaultValues: {
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: '',
+      startDate: '',
+      endDate: '',
+      notes: '',
+    }
   });
 
-  const days = form.startDate && form.endDate
-    ? Math.max(1, Math.ceil((new Date(form.endDate).getTime() - new Date(form.startDate).getTime()) / (1000 * 60 * 60 * 24)))
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
+
+  const days = startDate && endDate
+    ? Math.max(1, Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)))
     : 1;
 
   const totalPrice = pricePerUnit * days;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.startDate || !form.endDate) {
-      toast.error('Tanggal mulai dan selesai wajib diisi');
-      return;
-    }
+  const onSubmit = async (data: BookingFormValues) => {
+    setLoading(true);
     try {
-      // Use the newly created guest endpoint
       await api.post('/bookings/guest', {
         type,
         item_id: Number(itemId),
-        start_date: form.startDate,
-        end_date: form.endDate,
+        start_date: data.startDate,
+        end_date: data.endDate,
         total_price: totalPrice,
-        customer_name: form.name,
-        customer_email: form.email,
-        customer_phone: form.phone,
-        notes: form.notes,
+        customer_name: data.name,
+        customer_email: data.email,
+        customer_phone: data.phone,
+        notes: data.notes,
       });
       
       toast.success('Pemesanan berhasil! Tim kami akan segera menghubungi Anda.');
       
-      // WhatsApp Automation: Open WA with details after successful DB save
-      const message = `*HALO WONDERFUL TOBA!* 🌊\n\nSaya ingin mengonfirmasi pesanan saya:\n\n*LAYANAN:* ${type === 'package' ? 'Paket Wisata' : 'Rental Mobil'}\n*ITEM:* ${itemName}\n*NAMA:* ${form.name}\n*TELEPON:* ${form.phone}\n*TANGGAL:* ${form.startDate} s/d ${form.endDate}\n*TOTAL:* Rp ${totalPrice.toLocaleString('id-ID')}\n${form.notes ? `\n*CATATAN:* ${form.notes}\n` : ''}\nMohon informasi selanjutnya, terima kasih!`;
+      // WhatsApp Automation
+      const message = `*HALO WONDERFUL TOBA!* 🌊\n\nSaya ingin mengonfirmasi pesanan saya:\n\n*LAYANAN:* ${type === 'package' ? 'Paket Wisata' : 'Rental Mobil'}\n*ITEM:* ${itemName}\n*NAMA:* ${data.name}\n*TELEPON:* ${data.phone}\n*TANGGAL:* ${data.startDate} s/d ${data.endDate}\n*TOTAL:* Rp ${totalPrice.toLocaleString('id-ID')}\n${data.notes ? `\n*CATATAN:* ${data.notes}\n` : ''}\nMohon informasi selanjutnya, terima kasih!`;
       const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
       
-      // Delay slightly so user can see the success toast
       setTimeout(() => {
         window.open(waUrl, '_blank');
         onClose();
       }, 1500);
 
     } catch (err: unknown) {
-      if (isAxiosError<ApiErrorResponse>(err) && err.response?.data?.errors) {
-        const errors = err.response.data.errors;
-        const firstError = Object.values(errors)[0] as string[];
-        toast.error(firstError[0] || 'Validasi gagal.');
-      } else {
-        const msg = isAxiosError<ApiErrorResponse>(err)
-          ? err.response?.data?.message || 'Gagal membuat pemesanan. Coba lagi.'
-          : 'Gagal membuat pemesanan. Coba lagi.';
-        toast.error(msg);
-      }
+      showErrorToast(err, toast);
     } finally {
       setLoading(false);
     }
   };
 
   const waMessage = encodeURIComponent(
-    `*HALO WONDERFUL TOBA!* 🌊\n\nSaya ingin memesan ${type === 'package' ? 'Paket Wisata' : 'Rental Mobil'}:\n\n*ITEM:* ${itemName}\n*NAMA:* ${form.name}\n*TELEPON:* ${form.phone}\n*TANGGAL:* ${form.startDate || '-'} s/d ${form.endDate || '-'}\n${form.notes ? `\n*CATATAN:* ${form.notes}\n` : ''}\nMohon bantuannya untuk ketersediaan jadwal, terima kasih!`
+    `*HALO WONDERFUL TOBA!* 🌊\n\nSaya ingin memesan ${type === 'package' ? 'Paket Wisata' : 'Rental Mobil'}:\n\n*ITEM:* ${itemName}\n*NAMA:* ${watch('name')}\n*TELEPON:* ${watch('phone')}\n*TANGGAL:* ${startDate || '-'} s/d ${endDate || '-'}\n${watch('notes') ? `\n*CATATAN:* ${watch('notes')}\n` : ''}\nMohon bantuannya untuk ketersediaan jadwal, terima kasih!`
   );
 
   return (
@@ -112,98 +117,138 @@ export default function BookingModal({ type, itemId, itemName, pricePerUnit, onC
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5">
           {/* Name */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Nama Lengkap</label>
-            <div className="relative group">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition-colors" size={18} />
-              <input
-                required
-                value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                className="w-full pl-11 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900"
-                placeholder="Nama sesuai KTP"
-              />
-            </div>
-          </div>
+          <FormField
+            label="Nama Lengkap"
+            error={errors.name}
+            icon={<User size={18} />}
+            required
+          >
+            <input
+              {...register('name', { 
+                required: 'Nama lengkap wajib diisi',
+                minLength: { value: 3, message: 'Nama minimal 3 karakter' }
+              })}
+              className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${
+                errors.name ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+              } focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+              placeholder="Nama sesuai KTP"
+            />
+          </FormField>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Email */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Email</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition-colors" size={18} />
-                <input
-                  required type="email"
-                  value={form.email}
-                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                  className="w-full pl-11 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900"
-                  placeholder="email@contoh.com"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Email"
+              error={errors.email}
+              icon={<Mail size={18} />}
+              required
+            >
+              <input
+                {...register('email', { 
+                  required: 'Email wajib diisi',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Format email tidak valid'
+                  }
+                })}
+                type="email"
+                className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${
+                  errors.email ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+                } focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+                placeholder="email@contoh.com"
+              />
+            </FormField>
+
             {/* Phone */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">No. HP / WA</label>
-              <div className="relative group">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition-colors" size={18} />
-                <input
-                  required
-                  value={form.phone}
-                  onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                  className="w-full pl-11 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900"
-                  placeholder="08xxxxxxxxxx"
-                />
-              </div>
-            </div>
+            <FormField
+              label="No. HP / WA"
+              error={errors.phone}
+              icon={<Phone size={18} />}
+              required
+            >
+              <input
+                {...register('phone', { 
+                  required: 'Nomor HP wajib diisi',
+                  pattern: {
+                    value: /^(\+62|62|0)[0-9]{9,12}$/,
+                    message: 'Format nomor HP tidak valid'
+                  }
+                })}
+                className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${
+                  errors.phone ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+                } focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+                placeholder="08xxxxxxxxxx"
+              />
+            </FormField>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Start Date */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Tanggal Mulai</label>
-              <div className="relative group">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition-colors" size={18} />
-                <input
-                  required type="date"
-                  min={new Date().toISOString().split('T')[0]}
-                  value={form.startDate}
-                  onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))}
-                  className="w-full pl-11 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Tanggal Mulai"
+              error={errors.startDate}
+              icon={<Calendar size={18} />}
+              required
+            >
+              <input
+                {...register('startDate', { required: 'Tanggal mulai wajib diisi' })}
+                type="date"
+                min={new Date().toISOString().split('T')[0]}
+                className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${
+                  errors.startDate ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+                } focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+              />
+            </FormField>
+
             {/* End Date */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Tanggal Selesai</label>
-              <div className="relative group">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition-colors" size={18} />
-                <input
-                  required type="date"
-                  min={form.startDate || new Date().toISOString().split('T')[0]}
-                  value={form.endDate}
-                  onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))}
-                  className="w-full pl-11 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Tanggal Selesai"
+              error={errors.endDate}
+              icon={<Calendar size={18} />}
+              required
+            >
+              <input
+                {...register('endDate', { 
+                  required: 'Tanggal selesai wajib diisi',
+                  validate: (value) => {
+                    if (startDate && value < startDate) {
+                      return 'Tanggal selesai harus setelah tanggal mulai';
+                    }
+                    return true;
+                  }
+                })}
+                type="date"
+                min={startDate || new Date().toISOString().split('T')[0]}
+                className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${
+                  errors.endDate ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+                } focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+              />
+            </FormField>
           </div>
 
           {/* Notes */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Catatan (opsional)</label>
+          <FormField
+            label="Catatan (opsional)"
+            error={errors.notes}
+            maxLength={500}
+            currentLength={watch('notes')?.length || 0}
+          >
             <textarea
+              {...register('notes', {
+                maxLength: { value: 500, message: 'Catatan maksimal 500 karakter' }
+              })}
               rows={2}
-              value={form.notes}
-              onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
-              className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent focus:border-toba-green/20 focus:bg-white rounded-2xl transition-all font-medium text-slate-900 resize-none"
+              className={`w-full px-5 py-4 bg-slate-50 border-2 ${
+                errors.notes ? 'border-rose-500 focus:border-rose-500' : 'border-transparent focus:border-toba-green/20'
+              } focus:bg-white rounded-2xl transition-all font-medium text-slate-900 resize-none`}
               placeholder="Permintaan khusus, jumlah orang, dll..."
             />
-          </div>
+          </FormField>
 
           {/* Price Summary */}
-          {form.startDate && form.endDate && (
+          {startDate && endDate && (
             <div className="bg-toba-green/5 border border-toba-green/20 rounded-2xl p-4 flex justify-between items-center">
               <div>
                 <p className="text-xs font-bold text-slate-500">{days} {type === 'car' ? 'hari' : 'paket'} × Rp {pricePerUnit.toLocaleString('id-ID')}</p>
@@ -222,14 +267,15 @@ export default function BookingModal({ type, itemId, itemName, pricePerUnit, onC
             >
               <MessageCircle size={18} /> WhatsApp
             </a>
-            <button
+            <LoadingButton
               type="submit"
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-toba-green text-white rounded-2xl font-bold hover:bg-toba-green/90 transition-all shadow-lg shadow-toba-green/20 disabled:opacity-60 text-sm"
+              loading={loading}
+              loadingText="Memproses..."
+              icon={<Save size={18} />}
+              className="flex-1 bg-toba-green hover:bg-toba-green/90 text-white shadow-lg shadow-toba-green/20 text-sm"
             >
-              <Save size={18} />
-              {loading ? 'Memproses...' : 'Konfirmasi Pesan'}
-            </button>
+              Konfirmasi Pesan
+            </LoadingButton>
           </div>
         </form>
       </motion.div>

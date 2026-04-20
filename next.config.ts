@@ -3,33 +3,28 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   serverExternalPackages: ['@prisma/client'],
   
-  // Output standalone untuk deployment
-  output: 'standalone',
-  
-  // Webpack configuration untuk cPanel compatibility
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: false,
-      };
-    }
-    return config;
-  },
+  // Turbopack config (untuk Next.js 16)
+  turbopack: {},
   
   // Image optimization
   images: {
-    domains: ['localhost'],
-    unoptimized: process.env.NODE_ENV === 'production', // Disable optimization di shared hosting
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+    unoptimized: process.env.NODE_ENV === 'production',
   },
   
   // Compress output
   compress: true,
   
-  // Production source maps (optional, disable untuk performa)
+  // Production source maps (disable untuk performa)
   productionBrowserSourceMaps: false,
 };
 

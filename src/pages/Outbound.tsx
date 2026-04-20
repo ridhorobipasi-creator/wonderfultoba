@@ -47,50 +47,56 @@ export default function Outbound() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeVideoTab, setActiveVideoTab] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<OutboundLandingData>({
-    about: { 
-      title: 'Apa itu Outbound?', 
-      description: 'Bentuk pembelajaran ilmu terapan yang disimulasikan di alam terbuka dengan memadukan unsur intelegensia, fisik, dan mental dalam bentuk permainan interaktif.',
-      vision: 'Menjadi provider outbound yang terbaik dan terupdate...',
-      mission: 'Menjadi provider profesional yang berfokus pada peningkatan kualitas individu...',
-      statsLabel: 'Tahun Pengalaman',
-      statsValue: '12+'
-    },
-    services: [
-      { title: 'TEAM BUILDING', desc: 'Sinergi dan kolaborasi personal', icon: Users, image: '/assets/images/2023/10/A11-Team-Building.jpg', detail: 'Lewat team building, setiap personal bisa memberi respek dan menghargai perbedaan.' },
-      { title: 'FUN GAMES', desc: 'Bermain seru dengan tujuan', icon: Smile, image: '/assets/images/2023/10/A12-Fun-Games.jpg', detail: 'Dipimpin oleh seorang Game Master...' },
-      { title: 'GATHERING', desc: 'Acara kebersamaan perusahaan', icon: Sparkles, image: '/assets/images/2023/10/A12-Gathering.jpg', detail: 'Ragam kegiatan seru yang disusun profesional...' },
-    ],
-    videos: [
-      { title: 'Highlight', url: 'https://www.youtube.com/embed/J59m32QV0rM' },
-    ],
-    locations: [
-      { title: 'Marianna Resort, Samosir', img: '/assets/images/2023/10/00-Marianna-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg' },
-    ],
-    gallery: []
-  });
+  const [services, setServices] = useState<OutboundService[]>([]);
+  const [videos, setVideos] = useState<OutboundVideo[]>([]);
+  const [locations, setLocations] = useState<OutboundLocation[]>([]);
+  const [clients, setClients] = useState<string[]>([]);
+  const [gallery, setGallery] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchLanding() {
+    async function fetchAllData() {
       try {
-        const response = await fetch('/api/settings?key=outbound_landing');
-        const json = await response.json();
-        if (json) {
-          // Merge icons back into dynamic data if they are lost in JSON
-          const servicesWithIcons = (json.services as Array<Omit<OutboundService, 'icon'> & { icon?: string }>).map((s) => {
-            const original = [Users, Smile, Sparkles, Compass, Target, Swords];
-            // Simple mapping logic or just use a default
-            return { ...s, icon: original.find(o => o.name === s.icon) || Users };
-          });
-          setData({ ...json, services: servicesWithIcons } as OutboundLandingData);
-        }
+        const [servicesRes, videosRes, locationsRes, clientsRes, galleryRes] = await Promise.all([
+          fetch('/api/outbound/services'),
+          fetch('/api/outbound/videos'),
+          fetch('/api/outbound/locations'),
+          fetch('/api/clients'),
+          fetch('/api/gallery?category=outbound')
+        ]);
+
+        const [servicesData, videosData, locationsData, clientsData, galleryData] = await Promise.all([
+          servicesRes.json(),
+          videosRes.json(),
+          locationsRes.json(),
+          clientsRes.json(),
+          galleryRes.json()
+        ]);
+
+        // Map icon strings to Lucide components
+        const iconMap: Record<string, IconComponent> = {
+          Users, Smile, Sparkles, Compass, Target, Swords
+        };
+
+        const servicesWithIcons = servicesData.map((s: any) => ({
+          ...s,
+          icon: iconMap[s.icon] || Users,
+          image: s.image,
+          detail: s.detailDesc,
+          desc: s.shortDesc
+        }));
+
+        setServices(servicesWithIcons);
+        setVideos(videosData.map((v: any) => ({ title: v.title, url: v.youtubeUrl })));
+        setLocations(locationsData.map((l: any) => ({ title: l.name, img: l.image })));
+        setClients(clientsData.map((c: any) => c.logo));
+        setGallery(galleryData.map((g: any) => g.imageUrl));
       } catch (e) {
-        console.error("Failed to fetch landing data", e);
+        console.error("Failed to fetch data", e);
       } finally {
         setLoading(false);
       }
     }
-    fetchLanding();
+    fetchAllData();
   }, []);
 
   const heroImages = [
@@ -109,73 +115,14 @@ export default function Outbound() {
     return () => clearInterval(timer);
   }, [heroImages.length]);
 
-  const services = [
-    { title: 'TEAM BUILDING', desc: 'Sinergi dan kolaborasi personal', icon: Users, image: '/assets/images/2023/10/A11-Team-Building.jpg', detail: 'Lewat team building, setiap personal bisa memberi respek dan menghargai perbedaan. Selanjutnya mereka bisa berbagi tujuan dan meraih ekspektasi bersama.' },
-    { title: 'FUN GAMES', desc: 'Bermain seru dengan tujuan', icon: Smile, image: '/assets/images/2023/10/A12-Fun-Games.jpg', detail: 'Dipimpin oleh seorang Game Master dan beberapa orang moderator agar tercipta suasana "seru" tanpa meninggalkan tujuan dari outbound sendiri.' },
-    { title: 'GATHERING', desc: 'Acara kebersamaan perusahaan', icon: Sparkles, image: '/assets/images/2023/10/A12-Gathering.jpg', detail: 'Ragam kegiatan seru yang disusun profesional oleh tim kreatif. Acara gathering dapat diisi dengan kegiatan rewards untuk pegawai terbaik.' },
-    { title: 'OUTBOUND KIDS', desc: 'Kreativitas dan keberanian anak', icon: Compass, image: '/assets/images/2023/10/A13a-Outbound-Kids.jpg', detail: 'Bertujuan mengembangkan kepercayaan diri, keberanian dan daya kreatifitas anak-anak mulai dari umur 5 hingga 15 tahun keatas.' },
-    { title: 'ARCHERY', desc: 'Fokus dan kesabaran emosi', icon: Target, image: '/assets/images/2023/10/A14a-Archery.jpg', detail: 'Selain membutuhkan kekuatan fisik, panahan juga membutuhkan kedisiplinan, fokus, dan kesabaran emosi.' },
-    { title: 'PAINTBALL', desc: 'Simulasi tempur & strategi', icon: Swords, image: '/assets/images/2023/10/A15a-Paintball.jpg', detail: 'Melatih kedisiplinan, sportifitas, kepemimpinan, strategi, dan kreatifitas, serta mengendurkan syaraf yang tegang karena rutinitas kerja.' },
-  ];
-
-  const lokasiOutboundData = [
-    { title: 'Marianna Resort, Samosir', img: '/assets/images/2023/10/00-Marianna-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'The Hill Resort, Sibolangit', img: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Grand Mutiara Hotel, Berastagi', img: '/assets/images/2023/10/02-Grand-Mutiara-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Mikie Holiday Hotel, Berastagi', img: '/assets/images/2023/10/03-Mikie-Holiday-Hotel-Resort-Berastagi-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Sinabung Hills Hotel, Berastagi', img: '/assets/images/2023/10/04-Sinabung-Hills-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Sibayak Hotel, Berastagi', img: '/assets/images/2023/10/05-Sibayak-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Taman Simalem Resort', img: '/assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Hotel Niagara, Parapat', img: '/assets/images/2023/10/07-Hotel-Niagara-Parapat-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'KHAS Parapat Hotel', img: '/assets/images/2023/10/08-KHAS-Parapat-Hotel-Parapat-wonderfultoba_outbound-outbound_medan.jpeg' },
-    { title: 'Labersa Toba Hotel, Balige', img: '/assets/images/2023/10/09-Labersa-Toba-Hotel-Balige-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Pancur Gading Resort', img: '/assets/images/2023/10/10-Pancur-Gading-Hotel-Resort-Delitua-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Kampung Outbound, Pancur Batu', img: '/assets/images/2023/10/12-Kampung-Outbound-Pancur-Batu-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Singapore Land, Batubara', img: '/assets/images/2023/10/13-Singapore-Land-Batubara-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Bukit Lawang', img: '/assets/images/2023/10/15-Bukit-Lawang-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Hillpark Sibolangit', img: '/assets/images/2023/10/17-Hillpark-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg' },
-    { title: 'Samosir Villa Resort', img: '/assets/images/2023/10/20-Samosir-Villa-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg' }
-  ];
-
-  const clients = [
-    'Mandiri-taspen-wondefultoba-outbound-medan.png',
-    'USU-wonderfultoba-outbound-medan.png',
-    'Charoen-pokphand-wonderfultoba-outbound-medan.png',
-    'Lions-club-wonderfultoba-outbound-medan.png',
-    'Pelindo-1-wonderfultoba-outbound-medan.png',
-    'tpi-wonderfultoba-outbound-medan0.png',
-    'Oriflame-wonderfultoba-outbound-medan.png',
-    'Otsuka-wonderfultoba-outbound-medan.png',
-    'Al-amjad-wonderfultoba-outbound-medan.png',
-    'High-scope-wonderfultoba-outbound-medan.png',
-    'Hyundai-wonderfultoba-outbound-medan.png',
-    'PKK-dairi-wonderfultoba-outbound-medan.png',
-    'bbpptp-wonderfultoba-outbound-medan.png',
-    'bmw-wonderfultoba-outbound-medan.png',
-    'hutama-karya-wonderfultoba-outbound-medan.png',
-    'man-insan-cendekia-wonderfultoba-outbound-medan.png',
-    'nirvana-memorial-park-wonderfultoba-outbound-medan.png',
-    'nissan-wonderfultoba-outbound-medan.png',
-    'samudera-lautan-luas-wonderfultoba-outbound-medan.png'
-  ].map(img => `/assets/images/2023/10/${img}`);
-
-  const videos = [
-    { title: 'Highlight', url: 'https://www.youtube.com/embed/J59m32QV0rM' },
-    { title: 'Hutama Karya', url: 'https://www.youtube.com/embed/4x8p17rAqSA' },
-    { title: 'Pelindo 1', url: 'https://www.youtube.com/embed/0iQn9cHj1Sk' },
-    { title: 'Lions Club', url: 'https://www.youtube.com/embed/r6G6GBDQq_Q' },
-    { title: 'BBPPTP', url: 'https://www.youtube.com/embed/Ilk5Lb8RLr4' },
-    { title: 'Charoen Pokphand', url: 'https://www.youtube.com/embed/sZ4E2tpKMaY' }
-  ];
-
-  const galleryImages = [
-    'wonderfultoba_0922.jpg', 'wonderfultoba_0924.jpg', 'wonderfultoba_0925.jpg', 'wonderfultoba_0926.jpg',
-    'wonderfultoba_0927.jpg', 'wonderfultoba_0935.jpg', 'wonderfultoba_0939.jpg', 'wonderfultoba_0940.jpg',
-    'wonderfultoba_0942.jpg', 'wonderfultoba_0944.jpg', 'wonderfultoba_0946.jpg', 'wonderfultoba_0948.jpg',
-    'wonderfultoba_0950.jpg', 'wonderfultoba_0954.jpg', 'wonderfultoba_0963.jpg', 'wonderfultoba_0965.jpg',
-    'wonderfultoba_0970.jpg', 'wonderfultoba_0976.jpg', 'wonderfultoba_0977.jpg', 'wonderfultoba_0978.jpg',
-    'wonderfultoba_0979.jpg', 'wonderfultoba_0981.jpg', 'wonderfultoba_0982.jpg', 'wonderfultoba_0984.jpg'
-  ].map(img => `/assets/images/2023/10/${img}`);
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <div className="w-16 h-16 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-4" />
+        <p className="text-slate-600 font-medium">Memuat konten...</p>
+      </div>
+    );
+  }
 
   const fallbackBlogs = [
     {
@@ -469,7 +416,7 @@ export default function Outbound() {
           </div>
           
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {data.videos.length > 0 && data.videos.map((vid, i: number) => (
+            {videos.length > 0 && videos.map((vid, i: number) => (
               <button 
                 key={i} 
                 onClick={() => setActiveVideoTab(i)}
@@ -525,7 +472,7 @@ export default function Outbound() {
           </div>
           
           <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {data.locations.map((lokasi, idx: number) => (
+            {locations.map((lokasi, idx: number) => (
               <motion.div key={idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (idx % 4) * 0.1 }} 
                 className="break-inside-avoid relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-2xl transition-all">
                  <img src={lokasi.img} alt={lokasi.title} className="w-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out" />
@@ -572,7 +519,7 @@ export default function Outbound() {
            </div>
            
            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-             {data.gallery.map((img: string, i: number) => (
+             {gallery.map((img: string, i: number) => (
                <motion.div key={i} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: (i % 6) * 0.05 }} 
                  className="aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-toba-green/20 relative group bg-slate-800">
                  <img src={img} loading="lazy" alt={`Gallery ${i}`} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700" />

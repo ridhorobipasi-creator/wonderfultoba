@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '../utils/cn';
+import ImageUpload from '../components/ImageUpload';
 
 interface HeroContent {
   title: string;
@@ -24,7 +25,7 @@ interface SliderItem {
   image: string;
   cardImage: string;
   duration: string;
-  price: string;
+  price: number;
 }
 
 interface WhyUsItem {
@@ -97,6 +98,15 @@ export default function AdminTourLanding() {
         if (!data.whyUs) data.whyUs = { title: '', items: [] };
         if (!data.testimonials) data.testimonials = [];
         if (!data.stats) data.stats = [];
+        
+        // Convert price to number if it's string (backward compatibility)
+        if (data.slider && Array.isArray(data.slider)) {
+          data.slider = data.slider.map(slide => ({
+            ...slide,
+            price: typeof slide.price === 'string' ? parseInt(slide.price) || 0 : slide.price
+          }));
+        }
+        
         setContent(data);
       }
     } catch (error) {
@@ -129,6 +139,31 @@ export default function AdminTourLanding() {
 
   const addItem = (type: 'slider' | 'stats' | 'testimonials', template: SliderItem | StatItem | TestimonialItem) => {
     setContent({ ...content, [type]: [...(content[type] || []), template] });
+  };
+
+  const handleSaveWithConversion = async () => {
+    setSaving(true);
+    try {
+      // Convert price strings to numbers for slider items
+      const processedContent = {
+        ...content,
+        slider: content.slider.map(slide => ({
+          ...slide,
+          price: typeof slide.price === 'string' ? parseInt(slide.price) || 0 : slide.price
+        }))
+      };
+      
+      await api.post('/settings', {
+        key: 'tour_landing',
+        value: processedContent
+      });
+      toast.success('Konten berhasil disimpan');
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast.error('Gagal menyimpan konten');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const removeItem = (type: 'slider' | 'stats' | 'testimonials', index: number) => {
@@ -172,7 +207,7 @@ export default function AdminTourLanding() {
           <p className="text-slate-500 font-medium">Kelola konten utama website Tour & Travel.</p>
         </div>
         <button
-          onClick={handleSave}
+          onClick={handleSaveWithConversion}
           disabled={saving}
           className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 flex items-center space-x-2 disabled:opacity-50"
         >
@@ -220,7 +255,12 @@ export default function AdminTourLanding() {
                   <div className="space-y-6">
                     <InputGroup label="Judul Hero" value={content.hero.title} onChange={(v: string) => updateSection('hero', 'title', v)} placeholder="Explore the Beauty of Lake Toba" />
                     <InputGroup label="Sub-Judul" value={content.hero.subtitle} onChange={(v: string) => updateSection('hero', 'subtitle', v)} placeholder="Nikmati pengalaman tak terlupakan bersama kami." />
-                    <InputGroup label="URL Gambar Hero" value={content.hero.image} onChange={(v: string) => updateSection('hero', 'image', v)} placeholder="https://..." />
+                    <ImageUpload 
+                      label="Gambar Hero Background" 
+                      value={content.hero.image} 
+                      onChange={(v: string) => updateSection('hero', 'image', v)} 
+                      aspectRatio="wide"
+                    />
                   </div>
                 </div>
               )}
@@ -234,7 +274,7 @@ export default function AdminTourLanding() {
                       <div key={idx} className="p-6 bg-slate-50 rounded-3xl border border-slate-100 relative group">
                         <button 
                           onClick={() => removeItem('slider', idx)}
-                          className="absolute -top-3 -right-3 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition-colors shadow-lg z-10Opacity"
+                          className="absolute -top-3 -right-3 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition-colors shadow-lg z-10"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -244,17 +284,27 @@ export default function AdminTourLanding() {
                         </div>
                         <InputGroup label="Deskripsi" value={slide.description} onChange={(v: string) => updateItem('slider', idx, 'description', v)} placeholder="Jelajahi keajaiban..." />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                          <InputGroup label="URL Gambar Background" value={slide.image} onChange={(v: string) => updateItem('slider', idx, 'image', v)} placeholder="https://..." />
-                          <InputGroup label="URL Gambar Kartu" value={slide.cardImage} onChange={(v: string) => updateItem('slider', idx, 'cardImage', v)} placeholder="https://..." />
+                          <ImageUpload 
+                            label="Gambar Background" 
+                            value={slide.image} 
+                            onChange={(v: string) => updateItem('slider', idx, 'image', v)} 
+                            aspectRatio="wide"
+                          />
+                          <ImageUpload 
+                            label="Gambar Kartu" 
+                            value={slide.cardImage} 
+                            onChange={(v: string) => updateItem('slider', idx, 'cardImage', v)} 
+                            aspectRatio="video"
+                          />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                           <InputGroup label="Durasi" value={slide.duration} onChange={(v: string) => updateItem('slider', idx, 'duration', v)} placeholder="4 Hari 3 Malam" />
-                          <InputGroup label="Harga Mulai" value={slide.price} onChange={(v: string) => updateItem('slider', idx, 'price', v)} placeholder="3500000" />
+                          <InputGroupNumber label="Harga Mulai (Rp)" value={slide.price} onChange={(v: number) => updateItem('slider', idx, 'price', v)} placeholder="3500000" />
                         </div>
                       </div>
                     ))}
                     <button 
-                      onClick={() => addItem('slider', { title: '', region: '', description: '', image: '', cardImage: '', duration: '', price: '' })}
+                      onClick={() => addItem('slider', { title: '', region: '', description: '', image: '', cardImage: '', duration: '', price: 0 })}
                       className="w-full py-6 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 font-bold hover:border-toba-green hover:text-toba-green transition-all flex items-center justify-center gap-2"
                     >
                       <Plus size={20} /> Tambah Slide Baru
@@ -366,7 +416,12 @@ export default function AdminTourLanding() {
                           <InputGroup label="Peran / Role" value={t.role} onChange={(v: string) => updateItem('testimonials', idx, 'role', v)} placeholder="Traveler dari Jakarta" />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                          <InputGroup label="URL Avatar" value={t.avatar} onChange={(v: string) => updateItem('testimonials', idx, 'avatar', v)} />
+                          <ImageUpload 
+                            label="Foto Avatar" 
+                            value={t.avatar} 
+                            onChange={(v: string) => updateItem('testimonials', idx, 'avatar', v)} 
+                            aspectRatio="square"
+                          />
                           <InputGroup label="Rating (1-5)" value={t.rating} onChange={(v: string) => updateItem('testimonials', idx, 'rating', parseInt(v))} />
                         </div>
                         <div className="space-y-2 mt-4">
@@ -417,6 +472,21 @@ function InputGroup({ label, value, onChange, placeholder }: { label: string; va
       <input
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
+        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 placeholder:font-medium transition-all"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
+function InputGroupNumber({ label, value, onChange, placeholder }: { label: string; value?: number; onChange: (value: number) => void; placeholder?: string }) {
+  return (
+    <div className="space-y-2">
+      <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+      <input
+        type="number"
+        value={value || ''}
+        onChange={(e) => onChange(parseInt(e.target.value) || 0)}
         className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 placeholder:font-medium transition-all"
         placeholder={placeholder}
       />

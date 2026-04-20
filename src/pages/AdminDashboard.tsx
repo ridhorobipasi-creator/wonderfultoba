@@ -190,74 +190,75 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="p-6 lg:p-10">
-      <div className="space-y-10 pb-12">
+    <div className="p-4 lg:p-6 xl:p-10">
+      <div className="space-y-6 lg:space-y-10 pb-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Pusat Komando</h1>
+            <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Pusat Komando</h1>
             <p className="text-slate-400 font-medium mt-1 text-sm">Selamat datang di panel admin Wonderful Toba 👋</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 lg:gap-3 w-full md:w-auto">
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-toba-green shadow-sm transition-all disabled:opacity-50"
+              className="p-2.5 lg:p-3 bg-white border border-slate-100 rounded-xl lg:rounded-2xl text-slate-400 hover:text-toba-green shadow-sm transition-all disabled:opacity-50"
             >
-              <RefreshCcw className={cn("w-[18px] h-[18px]", refreshing && "animate-spin")} />
+              <RefreshCcw className={cn("w-4 h-4 lg:w-[18px] lg:h-[18px]", refreshing && "animate-spin")} />
             </button>
             <button
               onClick={exportReport}
-              className="flex items-center gap-2 px-6 py-3 bg-toba-green text-white rounded-2xl font-bold text-sm shadow-lg shadow-toba-green/20 hover:bg-toba-green/90 transition-all"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-toba-green text-white rounded-xl lg:rounded-2xl font-bold text-xs lg:text-sm shadow-lg shadow-toba-green/20 hover:bg-toba-green/90 transition-all"
             >
-              <Download className="w-4 h-4" />
-              Ekspor Laporan
+              <Download className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+              <span className="hidden sm:inline">Ekspor Laporan</span>
+              <span className="sm:hidden">Ekspor</span>
             </button>
           </div>
         </div>
 
         {/* Stats Cards */}
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">🏔️ Tour & Travel</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 lg:mb-6">🏔️ Tour & Travel</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {/* Total Reservasi */}
-            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex justify-between mb-8">
-                <div className="w-12 h-12 bg-toba-green text-white rounded-2xl flex items-center justify-center shadow-lg shadow-toba-green/20">
-                  <CalendarCheck className="w-6 h-6" />
+            <div className="bg-white p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex justify-between mb-6 lg:mb-8">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-toba-green text-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg shadow-toba-green/20">
+                  <CalendarCheck className="w-5 h-5 lg:w-6 lg:h-6" />
                 </div>
-                <ArrowUpRight className="text-slate-200" />
+                <ArrowUpRight className="text-slate-200 w-5 h-5" />
               </div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Reservasi</p>
-              <h3 className="text-3xl font-black text-slate-900">{stats.totalBookings.toLocaleString('id-ID')}</h3>
+              <h3 className="text-2xl lg:text-3xl font-black text-slate-900">{stats.totalBookings.toLocaleString('id-ID')}</h3>
               <p className="text-xs text-slate-400 mt-2 font-medium">
                 {stats.pendingBookings} pending bulan ini
               </p>
             </div>
 
             {/* Estimasi Omzet */}
-            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex justify-between mb-8">
-                <div className="w-12 h-12 bg-obaja-blue text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <TrendingUp className="w-6 h-6" />
+            <div className="bg-white p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex justify-between mb-6 lg:mb-8">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-obaja-blue text-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <TrendingUp className="w-5 h-5 lg:w-6 lg:h-6" />
                 </div>
-                <ArrowUpRight className="text-slate-200" />
+                <ArrowUpRight className="text-slate-200 w-5 h-5" />
               </div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Estimasi Omzet</p>
-              <h3 className="text-3xl font-black text-slate-900">{formatCurrency(stats.totalRevenue)}</h3>
+              <h3 className="text-xl lg:text-3xl font-black text-slate-900">{formatCurrency(stats.totalRevenue)}</h3>
               <p className="text-xs text-slate-400 mt-2 font-medium">Berdasarkan total confirmed</p>
             </div>
 
             {/* Paket Tour Aktif */}
-            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex justify-between mb-8">
-                <div className="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                  <Package className="w-6 h-6" />
+            <div className="bg-white p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
+              <div className="flex justify-between mb-6 lg:mb-8">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-amber-500 text-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                  <Package className="w-5 h-5 lg:w-6 lg:h-6" />
                 </div>
-                <ArrowUpRight className="text-slate-200" />
+                <ArrowUpRight className="text-slate-200 w-5 h-5" />
               </div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Paket Aktif</p>
-              <h3 className="text-3xl font-black text-slate-900">
+              <h3 className="text-2xl lg:text-3xl font-black text-slate-900">
                 {stats.tourPackages + stats.outboundPackages} Paket
               </h3>
               <p className="text-xs text-slate-400 mt-2 font-medium">
@@ -268,12 +269,12 @@ export default function AdminDashboard() {
         </div>
 
         {/* Chart & Recent Bookings */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Revenue Chart */}
-          <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
-            <div className="flex justify-between items-center mb-10">
+          <div className="lg:col-span-2 bg-white rounded-2xl lg:rounded-[2.5rem] border border-slate-100 shadow-sm p-5 lg:p-8">
+            <div className="flex justify-between items-center mb-6 lg:mb-10">
               <div>
-                <h3 className="text-xl font-black text-slate-900">Tren Pendapatan</h3>
+                <h3 className="text-lg lg:text-xl font-black text-slate-900">Tren Pendapatan</h3>
                 <p className="text-xs text-slate-400 font-medium mt-1">7 hari terakhir</p>
               </div>
             </div>
@@ -281,23 +282,23 @@ export default function AdminDashboard() {
           </div>
 
           {/* Recent Bookings */}
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
-            <h3 className="text-xl font-black text-slate-900 mb-8">Reservasi Terbaru</h3>
-            <div className="space-y-6">
+          <div className="bg-white rounded-2xl lg:rounded-[2.5rem] border border-slate-100 shadow-sm p-5 lg:p-8">
+            <h3 className="text-lg lg:text-xl font-black text-slate-900 mb-6 lg:mb-8">Reservasi Terbaru</h3>
+            <div className="space-y-4 lg:space-y-6">
               {stats.recentBookings.length > 0 ? (
                 stats.recentBookings.slice(0, 5).map((booking, idx) => (
-                  <div key={idx} className="flex items-center justify-between border-b border-slate-50 pb-4 last:border-0">
-                    <div>
-                      <p className="font-bold text-slate-900">{booking.customer_name}</p>
-                      <p className="text-xs text-slate-400 italic">
+                  <div key={idx} className="flex items-center justify-between border-b border-slate-50 pb-3 lg:pb-4 last:border-0">
+                    <div className="flex-1 min-w-0 pr-3">
+                      <p className="font-bold text-slate-900 text-sm truncate">{booking.customer_name}</p>
+                      <p className="text-[10px] text-slate-400 italic truncate">
                         {booking.type} · {formatDate(booking.start_date)}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-black">{formatCurrency(booking.total_price)}</p>
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-xs lg:text-sm font-black whitespace-nowrap">{formatCurrency(booking.total_price)}</p>
                       <span
                         className={cn(
-                          "px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-lg border",
+                          "inline-block px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-lg border mt-1",
                           booking.status === 'confirmed'
                             ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
                             : booking.status === 'pending'
@@ -316,7 +317,7 @@ export default function AdminDashboard() {
             </div>
             <button
               onClick={() => router.push('/admin/bookings')}
-              className="w-full mt-10 py-4 bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-toba-green hover:text-white transition-all"
+              className="w-full mt-6 lg:mt-10 py-3 lg:py-4 bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-widest rounded-xl lg:rounded-2xl hover:bg-toba-green hover:text-white transition-all"
             >
               Lihat Semua Reservasi
             </button>

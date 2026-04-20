@@ -1,85 +1,75 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { MessageCircle, CheckCircle, Users, Target, Sparkles, ArrowRight, Phone, Star, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
-const packages = [
-  {
-    tier: 'Basic',
-    tagline: 'Paket Hemat Terbaik',
-    badge: null,
-    color: 'from-slate-700 to-slate-800',
-    priceLabel: 'Mulai dari',
-    price: 'Rp 250.000',
-    unit: '/ pax (min. 30 pax)',
-    duration: 'Setengah Hari (4-5 Jam)',
-    capacity: '30 – 100 Pax',
-    location: 'Area Jabodetabek & Sumut',
-    features: [
-      '3 – 5 Jenis Games Outbound',
-      'Trainer & Moderator Berpengalaman',
-      'Perlengkapan Keselamatan Lengkap',
-      'Sertifikat Peserta',
-      'Dokumentasi Foto',
-      'Air Minum & Snack Sederhana',
-    ],
-    excludes: ['Transportasi', 'Biaya Venue', 'Makan Siang'],
-  },
-  {
-    tier: 'Standard',
-    tagline: 'Paling Banyak Dipilih',
-    badge: 'TERPOPULER',
-    color: 'from-toba-green to-emerald-600',
-    priceLabel: 'Mulai dari',
-    price: 'Rp 450.000',
-    unit: '/ pax (min. 30 pax)',
-    duration: 'Full Day (8–9 Jam)',
-    capacity: '30 – 300 Pax',
-    location: 'Seluruh Sumatera Utara',
-    features: [
-      '5 – 8 Jenis Games Outbound',
-      'Senior Trainer Bersertifikasi',
-      'Master of Ceremony (MC) Profesional',
-      'Perlengkapan Outbound Premium',
-      'Dokumentasi Foto & Video',
-      'Konsep Acara Custom',
-      'Sertifikat & Souvenir Peserta',
-      'Makan Siang & Coffee Break 2x',
-    ],
-    excludes: ['Transportasi', 'Biaya Venue / Akomodasi'],
-  },
-  {
-    tier: 'Premium',
-    tagline: 'Paket All-Inclusive',
-    badge: 'ALL-IN',
-    color: 'from-slate-900 to-slate-800',
-    priceLabel: 'Hubungi untuk',
-    price: 'Custom Quote',
-    unit: 'proposal eksklusif',
-    duration: '2 Hari 1 Malam / Custom',
-    capacity: '50 – 500+ Pax',
-    location: 'Resort Premium di Sumut',
-    features: [
-      '8 – 12+ Aktivitas Outbound Eksklusif',
-      'Head Trainer + Tim Profesional Lengkap',
-      'MC + Sound System + Dekorasi Event',
-      'Konsep Tema Event Fully Customized',
-      'Dokumentasi Profesional (Foto + Video Edit)',
-      'Transportasi Group (Bus / ELF)',
-      'Akomodasi Resort Berbintang',
-      'Seluruh Konsumsi (Makan + Snack)',
-      'Suvenir Eksklusif & Merchandise',
-      'Sesi Motivasi & Leadership Talk',
-    ],
-    excludes: [],
-  },
-];
+interface PackageTier {
+  id: number;
+  tier: string;
+  tagline: string;
+  badge: string | null;
+  color: string;
+  priceLabel: string;
+  price: string;
+  unit: string;
+  duration: string;
+  capacity: string;
+  location: string;
+  features: string[];
+  excludes: string[];
+}
 
 export default function OutboundPackages() {
+  const [packages, setPackages] = useState<PackageTier[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPackages() {
+      try {
+        const res = await fetch('/api/package-tiers?category=outbound');
+        const data = await res.json();
+        
+        // Map database fields to component fields
+        const mappedPackages = data.map((tier: any) => ({
+          id: tier.id,
+          tier: tier.tierName,
+          tagline: tier.tagline,
+          badge: tier.badge,
+          color: tier.colorTheme,
+          priceLabel: tier.priceLabel,
+          price: tier.price,
+          unit: tier.unit,
+          duration: tier.duration,
+          capacity: tier.capacity,
+          location: tier.location,
+          features: tier.features || [],
+          excludes: tier.excludes || []
+        }));
+        
+        setPackages(mappedPackages);
+      } catch (error) {
+        console.error('Failed to fetch package tiers:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPackages();
+  }, []);
+
   const waMessage = (tier: string) =>
     encodeURIComponent(`Halo Kak Wonderful Toba, saya tertarik dengan *Paket Outbound ${tier}* untuk kegiatan perusahaan kami. Bisa minta penawaran harga dan proposal kegiatannya?`);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <div className="w-16 h-16 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-4" />
+        <p className="text-slate-600 font-medium">Memuat paket...</p>
+      </div>
+    );
+  }
 
   return (
     <>

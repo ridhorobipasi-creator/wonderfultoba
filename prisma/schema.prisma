@@ -132,3 +132,82 @@ model Setting {
   key   String @unique
   value Json
 }
+
+model OutboundService {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(100)
+  shortDesc     String?  @db.VarChar(200)
+  detailDesc    String?  @db.Text
+  icon          String?  @db.VarChar(50)
+  image         String?  @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OutboundVideo {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(100)
+  youtubeUrl    String   @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OutboundLocation {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  image         String?  @db.VarChar(500)
+  region        String?  @db.VarChar(100)
+  isFeatured    Boolean  @default(false)
+  orderPriority Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Client {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  logo          String?  @db.VarChar(500)
+  websiteUrl    String?  @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model GalleryImage {
+  id            Int      @id @default(autoincrement())
+  imageUrl      String   @db.VarChar(500)
+  caption       String?  @db.Text
+  category      String?  @db.VarChar(50)
+  tags          Json?
+  eventDate     DateTime?
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PackageTier {
+  id            Int      @id @default(autoincrement())
+  category      String   @db.VarChar(50)
+  tierName      String   @db.VarChar(100)
+  tagline       String?  @db.VarChar(200)
+  badge         String?  @db.VarChar(50)
+  colorTheme    String?  @db.VarChar(100)
+  priceLabel    String?  @db.VarChar(50)
+  price         String?  @db.VarChar(100)
+  unit          String?  @db.VarChar(100)
+  duration      String?  @db.VarChar(100)
+  capacity      String?  @db.VarChar(100)
+  location      String?  @db.VarChar(200)
+  features      Json?
+  excludes      Json?
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
