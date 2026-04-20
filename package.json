@@ -17,8 +17,11 @@
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "exceljs": "^4.4.0",
     "framer-motion": "^12.38.0",
     "jose": "^6.2.2",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "lucide-react": "^0.546.0",
     "motion": "^12.38.0",
     "next": "16.2.4",
@@ -32,15 +35,19 @@
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.39",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "prisma": "^6.3.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

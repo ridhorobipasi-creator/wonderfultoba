@@ -34,37 +34,32 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Manajemen Konten (CMS)',
     items: [
-      { label: 'Pengaturan Beranda', href: '/admin/tour/landing-page', icon: Layout },
-      { label: 'Blog / Artikel', href: '/admin/tour/blog', icon: FileText },
-      { label: 'Wilayah & Kota', href: '/admin/tour/cities', icon: MapPin },
+      { label: 'CMS Tour', href: '/admin/cms-tour', icon: Layout },
+      { label: 'CMS Outbound', href: '/admin/cms-outbound', icon: Layout },
+      { label: 'Blog / Artikel', href: '/admin/blog', icon: FileText },
+      { label: 'Wilayah & Kota', href: '/admin/cities', icon: MapPin },
     ]
   },
   {
     title: 'Produk & Layanan',
     items: [
-      { label: 'Paket Wisata', href: '/admin/tour/packages', icon: Package },
-      { label: 'Armada Mobil', href: '/admin/tour/cars', icon: Car },
+      { label: 'Paket Wisata & Outbound', href: '/admin/packages', icon: Package },
+      { label: 'Armada Mobil', href: '/admin/cars', icon: Car },
     ]
   },
   {
     title: 'Transaksi',
     items: [
-      { label: 'Daftar Pesanan', href: '/admin/tour/bookings', icon: CalendarCheck },
-      { label: 'Laporan Keuangan', href: '/admin/tour/finance', icon: Globe }, // Using Globe as fallback for Finance
+      { label: 'Daftar Pesanan', href: '/admin/bookings', icon: CalendarCheck },
+      { label: 'Laporan Keuangan', href: '/admin/finance', icon: Globe },
     ]
   },
   {
     title: 'Pengaturan',
     items: [
-      { label: 'Pengguna', href: '/admin/tour/users', icon: Users },
+      { label: 'Pengguna', href: '/admin/users', icon: Users },
     ]
   }
-];
-
-const OUTBOUND_NAV: NavItem[] = [
-  { label: 'Paket Outbound', href: '/admin/outbound/packages', icon: Layers },
-  { label: 'Blog Outbound', href: '/admin/outbound/blog', icon: FileText },
-  { label: 'Pengaturan Beranda', href: '/admin/outbound/landing-page', icon: Layout },
 ];
 
 function NavItemLink({
@@ -95,14 +90,10 @@ function NavItemLink({
 
 function SidebarContent({
   isActive,
-  outboundOpen,
-  setOutboundOpen,
   closeSidebar,
   handleLogout,
 }: {
   isActive: (href: string, exact?: boolean) => boolean;
-  outboundOpen: boolean;
-  setOutboundOpen: React.Dispatch<React.SetStateAction<boolean>>;
   closeSidebar: () => void;
   handleLogout: () => void;
 }) {
@@ -135,31 +126,6 @@ function SidebarContent({
             ))}
           </div>
         ))}
-
-        {/* Outbound Section — Collapsible */}
-        <div className="mt-4">
-          <button
-            onClick={() => setOutboundOpen(!outboundOpen)}
-            className="w-full flex items-center justify-between px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 hover:text-slate-500 transition-colors"
-          >
-            <span>🏕️ Outbound</span>
-            <ChevronDown size={12} className={cn('transition-transform', outboundOpen && 'rotate-180')} />
-          </button>
-          <AnimatePresence>
-            {outboundOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="space-y-1 overflow-hidden"
-              >
-                {OUTBOUND_NAV.map(item => (
-                  <NavItemLink key={item.href} item={item} isActive={isActive} onClick={closeSidebar} />
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
       </nav>
 
       {/* Footer */}
@@ -182,9 +148,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const router = useRouter();
   const { setUser } = useStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [outboundOpen, setOutboundOpen] = useState(
-    safePathname.startsWith('/admin/outbound')
-  );
 
   const isActive = (href: string, exact?: boolean) => {
     if (exact) return safePathname === href;
@@ -204,8 +167,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       <aside className="hidden lg:flex flex-col w-72 shrink-0 sticky top-0 h-screen">
         <SidebarContent
           isActive={isActive}
-          outboundOpen={outboundOpen}
-          setOutboundOpen={setOutboundOpen}
           closeSidebar={closeSidebar}
           handleLogout={handleLogout}
         />
@@ -231,8 +192,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             >
               <SidebarContent
                 isActive={isActive}
-                outboundOpen={outboundOpen}
-                setOutboundOpen={setOutboundOpen}
                 closeSidebar={closeSidebar}
                 handleLogout={handleLogout}
               />

@@ -65,12 +65,12 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Manajemen Paket Wisata</h2>
-          <p className="text-slate-500 font-medium italic">&ldquo;Berikan pengalaman tak terlupakan bagi wisatawan di setiap detiknya.&rdquo;</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Daftar Paket</h1>
+          <p className="text-slate-400 font-medium mt-1">Kelola paket wisata dan outbound Anda secara real-time.</p>
         </div>
         <button
           onClick={() => router.push('/admin/create-package')}
-          className="bg-obaja-blue text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-2 hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 group"
+          className="bg-toba-green text-white px-8 py-4 rounded-2xl font-black text-sm shadow-lg shadow-toba-green/20 flex items-center gap-3 hover:bg-toba-green/90 transition-all group"
         >
           <Plus size={20} className="transition-transform group-hover:rotate-90" />
           <span>Tambah Paket Baru</span>
@@ -80,9 +80,9 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
       {/* Stats Quick View */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Total Paket', value: packages.length, icon: PackageIcon, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'Total Paket', value: packages.length, icon: PackageIcon, color: 'text-toba-green', bg: 'bg-emerald-50' },
           { label: 'Paket Populer', value: packages.filter(p => p.is_featured).length, icon: Star, color: 'text-amber-500', bg: 'bg-amber-50' },
-          { label: 'Kota Destinasi', value: cities.length, icon: MapPin, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+          { label: 'Kota Destinasi', value: cities.length, icon: MapPin, color: 'text-blue-500', bg: 'bg-blue-50' },
           { label: 'Update Masif', value: 'Today', icon: Zap, color: 'text-purple-500', bg: 'bg-purple-50' },
         ].map((stat, i) => (
           <div key={i} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center space-x-4">
@@ -90,7 +90,7 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
               <stat.icon size={24} className={stat.color} />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
               <p className="text-2xl font-black text-slate-900">{stat.value}</p>
             </div>
           </div>
@@ -106,13 +106,13 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
             placeholder="Cari paket atau wilayah..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 placeholder:font-medium transition-all"
           />
         </div>
         <div className="flex items-center space-x-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none flex items-center justify-center space-x-2 px-6 py-3 bg-slate-50 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-100 transition-all border border-slate-100">
+          <button className="flex-1 md:flex-none flex items-center justify-center space-x-2 px-6 py-3 bg-slate-50 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-100 transition-all border border-slate-100 uppercase tracking-widest">
             <Filter size={18} />
-            <span>Filter</span>
+            <span className="text-[10px] font-black">Filter</span>
           </button>
           <button className="p-3 bg-slate-50 text-slate-400 hover:text-slate-600 rounded-xl border border-slate-100 transition-all">
             <MoreHorizontal size={20} />
@@ -126,11 +126,11 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50">
-                <th className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Informasi Paket</th>
-                <th className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Wilayah</th>
-                <th className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Harga</th>
-                <th className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Status</th>
-                <th className="px-8 py-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Aksi</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Informasi Paket</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Kategori</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Harga</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -138,7 +138,7 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 border-4 border-blue-100 border-t-obaja-blue rounded-full animate-spin mb-4"></div>
+                      <div className="w-12 h-12 border-4 border-emerald-100 border-t-toba-green rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-400 font-medium">Sinkronisasi data...</p>
                     </div>
                   </td>
@@ -149,70 +149,63 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   key={pkg.id} 
-                  className="hover:bg-slate-50/50 transition-colors group"
+                  className="hover:bg-slate-50/30 transition-colors group"
                 >
                   <td className="px-8 py-6">
                     <div className="flex items-center space-x-5">
-                      <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 shrink-0 shadow-lg shadow-slate-200 group-hover:scale-105 transition-transform duration-500 relative">
+                      <div className="w-16 h-12 rounded-xl overflow-hidden bg-slate-50 shrink-0 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
                         <img src={pkg.images?.[0] || 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=400'} alt="" className="w-full h-full object-cover" />
                         {pkg.is_featured && (
-                          <div className="absolute top-1 right-1 bg-amber-400 text-white p-1 rounded-lg">
-                            <Star size={10} fill="currentColor" />
+                          <div className="absolute top-0.5 right-0.5 bg-amber-400 text-white p-0.5 rounded-md shadow-sm">
+                            <Star size={8} fill="currentColor" />
                           </div>
                         )}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors line-clamp-1">{pkg.name}</p>
-                        <div className="flex items-center space-x-3 mt-1 text-slate-400 font-bold text-[10px] uppercase tracking-widest">
-                          <span className="flex items-center gap-1.5"><Calendar size={12} className="text-blue-400" /> {pkg.duration}</span>
-                          <span className="w-1 h-1 bg-slate-200 rounded-full" />
-                          <span className="text-obaja-blue">Samosir</span>
-                        </div>
+                        <p className="font-black text-slate-900 group-hover:text-toba-green transition-colors leading-none mb-1">{pkg.name}</p>
+                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">{pkg.duration}</p>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center space-x-2 text-slate-600">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-                        <MapPin size={14} className="text-emerald-500" />
-                      </div>
-                      <span className="text-sm font-bold">
-                        {cities.find(c => c.id === pkg.city_id || c.id === pkg.cityId)?.name || 'Danau Toba'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex flex-col">
-                      <div className="flex items-center space-x-1">
-                        <span className="text-xs font-bold text-slate-400">IDR</span>
-                        <p className="font-black text-xl text-slate-900 tracking-tight">{Number(pkg.price).toLocaleString('id-ID')}</p>
-                      </div>
-                      <p className="text-[10px] font-bold text-slate-400 mt-0.5 whitespace-nowrap">{pkg.price_display || 'PER ORANG'}</p>
                     </div>
                   </td>
                   <td className="px-8 py-6">
                     <span className={cn(
-                      "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.15em] border",
+                      "px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-lg border",
+                      pkg.category === 'outbound' 
+                        ? "bg-indigo-50 text-indigo-600 border-indigo-100" 
+                        : "bg-blue-50 text-blue-600 border-blue-100"
+                    )}>
+                      {pkg.category || 'Tour'}
+                    </span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex flex-col">
+                      <p className="font-bold text-slate-700">Rp {(Number(pkg.price)/1000).toLocaleString('id-ID')}k</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">{pkg.price_display || 'PER ORANG'}</p>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <span className={cn(
+                      "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border",
                       pkg.status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-400 border-slate-100'
                     )}>
-                      {pkg.status}
+                      Aktif
                     </span>
                   </td>
                   <td className="px-8 py-6 text-right">
-                    <div className="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex justify-end space-x-2">
                       <button 
                         onClick={() => router.push(`/admin/edit-package/${pkg.id}`)} 
-                        className="p-3 text-slate-400 hover:text-obaja-blue hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
-                        title="Detail Edit"
+                        className="p-2 text-slate-400 hover:text-toba-green transition-all"
+                        title="Edit"
                       >
-                        <Edit2 size={18} />
+                        <Edit2 size={16} />
                       </button>
                       <button 
                         onClick={() => handleDelete(pkg.id)} 
-                        className="p-3 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100"
+                        className="p-2 text-slate-400 hover:text-rose-500 transition-all"
                         title="Hapus"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </td>

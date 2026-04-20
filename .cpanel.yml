@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/username/public_html/wonderfultoba
+    - /bin/cp -R * $DEPLOYPATH
+    - cd $DEPLOYPATH
+    - npm install --production
+    - npx prisma generate
+    - npm run build
+    - npx prisma migrate deploy

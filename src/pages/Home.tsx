@@ -8,7 +8,7 @@ import { MapPin, Star, ArrowRight, Shield, Clock, Globe, Award, CheckCircle, Mes
 import Link from 'next/link';
 import { Helmet } from 'react-helmet-async';
 import api from '../lib/api';
-import { fallbackPackages, fallbackBlogs } from '../utils/fallbackData';
+// import { fallbackPackages, fallbackBlogs } from '../utils/fallbackData';
 
 type IconComponent = ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
 
@@ -49,6 +49,14 @@ interface WhyUsItem {
   color?: string;
 }
 
+interface Testimonial {
+  name: string;
+  role: string;
+  text: string;
+  rating: number;
+  avatar?: string;
+}
+
 interface LandingData {
   hero?: {
     title?: string;
@@ -59,76 +67,48 @@ interface LandingData {
     title?: string;
     items?: WhyUsItem[];
   };
-  testimonials?: typeof testimonials;
+  testimonials?: Testimonial[];
 }
 
 const lucideIcons: Record<string, IconComponent> = LucideIcons as unknown as Record<string, IconComponent>;
 
-const testimonials = [
-  {
-    name: 'Andi Pratama',
-    role: 'Traveler dari Jakarta',
-    avatar: 'https://i.pravatar.cc/100?img=11',
-    text: 'Pengalaman luar biasa! Danau Toba jauh lebih indah dari yang saya bayangkan. Pelayanan tim Wonderful Toba sangat profesional.',
-    rating: 5,
-  },
-  {
-    name: 'Sari Dewi',
-    role: 'Fotografer Alam',
-    avatar: 'https://i.pravatar.cc/100?img=5',
-    text: 'Bukit Lawang adalah surga bagi pecinta alam. Bertemu orangutan liar di habitat aslinya adalah pengalaman yang tak terlupakan.',
-    rating: 5,
-  },
-  {
-    name: 'Budi Santoso',
-    role: 'Keluarga dari Surabaya',
-    avatar: 'https://i.pravatar.cc/100?img=15',
-    text: 'Paket keluarga sangat worth it! Anak-anak sangat senang dengan gajah di Tangkahan. Pasti akan kembali lagi.',
-    rating: 5,
-  },
-];
+// testimonials dummy dihapus, semua dari API/settings
 
 export default function Home() {
   const [featuredPackages, setFeaturedPackages] = useState<FeaturedPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [landingData, setLandingData] = useState<LandingData | null>(null);
   const [stats, setStats] = useState<HomeStats | null>(null);
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFeatured = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await api.get('/packages');
-        setFeaturedPackages(Array.isArray(res.data) && res.data.length > 0 ? (res.data as FeaturedPackage[]).slice(0, 3) : (fallbackPackages as FeaturedPackage[]).slice(0, 3));
-      } catch (err) {
-        console.warn('API fetch error, using fallback packages:', err);
-        setFeaturedPackages(fallbackPackages.slice(0, 3));
+        const [pkgRes, landingRes, statsRes, blogRes] = await Promise.all([
+          api.get('/packages'),
+          api.get('/settings?key=tour_landing'),
+          api.get('/stats'),
+          api.get('/blogs'),
+        ]);
+        setFeaturedPackages(Array.isArray(pkgRes.data) ? pkgRes.data.slice(0, 3) : []);
+        setLandingData(landingRes.data || null);
+        setStats(statsRes.data || null);
+        setBlogs(Array.isArray(blogRes.data) ? blogRes.data.filter((b: any) => b.category === 'tour').slice(0, 3) : []);
+      } catch (err: any) {
+        setError('Gagal memuat data utama. Silakan refresh halaman.');
       } finally {
         setLoading(false);
       }
     };
-    
-    const fetchLanding = async () => {
-      try {
-        const res = await api.get('/settings?key=tour_landing');
-        if (res.data) setLandingData(res.data as LandingData);
-      } catch (err) {
-        console.warn('Failed to fetch landing settings:', err);
-      }
-    };
-
-    const fetchStats = async () => {
-      try {
-        const res = await api.get('/stats');
-        setStats(res.data as HomeStats);
-      } catch (err) {
-        console.warn('Failed to fetch real stats:', err);
-      }
-    };
-
-    fetchFeatured();
-    fetchLanding();
-    fetchStats();
+    fetchAll();
   }, []);
+  if (loading) {
+    return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-6" /><p className="text-slate-400 font-medium">Memuat data utama...</p></div>;
+  }
+  if (error) {
+    return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><p className="text-red-500 font-bold text-lg">{error}</p></div>;
+  }
   return (
     <div className="bg-white">
       <Helmet>
@@ -308,7 +288,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {fallbackBlogs.filter(b => b.category === 'tour').map((blog, i) => (
+            {blogs.map((blog, i) => (
               <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="group">
                 <div className="h-56 rounded-[2rem] overflow-hidden mb-6 shadow-md">
                   <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -336,7 +316,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {(landingData?.testimonials || testimonials).map((t, i: number) => (
+            {(landingData?.testimonials || []).map((t: Testimonial, i: number) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300">
                 <div className="flex gap-1 mb-5">

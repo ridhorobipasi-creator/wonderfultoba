@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import { Package, City } from '../types';
-import { fallbackPackages, fallbackCities } from '../utils/fallbackData';
+// import { fallbackPackages, fallbackCities } from '../utils/fallbackData';
 import PackageCard from '../components/PackageCard';
 import { Search, SlidersHorizontal, MapPin, Calendar, Users, ArrowRight, Compass } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +30,7 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
 
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,12 +38,10 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
           api.get('/packages'),
           api.get('/cities'),
         ]);
-        setPackages(Array.isArray(pkgRes.data) && pkgRes.data.length > 0 ? pkgRes.data : fallbackPackages);
-        setCities(Array.isArray(cityRes.data) && cityRes.data.length > 0 ? cityRes.data : fallbackCities);
+        setPackages(Array.isArray(pkgRes.data) ? pkgRes.data : []);
+        setCities(Array.isArray(cityRes.data) ? cityRes.data : []);
       } catch (error) {
-        console.warn('API error, using fallback data:', error);
-        setPackages(fallbackPackages);
-        setCities(fallbackCities);
+        setError('Gagal memuat data paket atau kota. Silakan refresh halaman.');
       } finally {
         setLoading(false);
       }
@@ -71,6 +70,12 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       return 0;
     });
 
+  if (loading) {
+    return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-6" /><p className="text-slate-400 font-medium">Memuat data paket...</p></div>;
+  }
+  if (error) {
+    return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><p className="text-red-500 font-bold text-lg">{error}</p></div>;
+  }
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-24">
       <Helmet>

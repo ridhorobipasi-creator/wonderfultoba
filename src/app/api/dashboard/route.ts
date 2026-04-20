@@ -21,7 +21,7 @@ export async function GET() {
       prisma.car.count(),
       prisma.blog.count(),
       prisma.booking.findMany({
-        take: 5,
+        take: 10,
         orderBy: { createdAt: 'desc' },
         include: {
           package: { select: { name: true, images: true } },
@@ -37,6 +37,36 @@ export async function GET() {
     });
     
     const totalRevenue = confirmedList.reduce((acc, curr) => acc + curr.totalPrice, 0);
+
+    // Generate chart data for last 7 days
+    const chartData = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      
+      const nextDate = new Date(date);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      const dayBookings = await prisma.booking.findMany({
+        where: {
+          status: 'confirmed',
+          createdAt: {
+            gte: date,
+            lt: nextDate,
+          },
+        },
+        select: { totalPrice: true },
+      });
+
+      const dayRevenue = dayBookings.reduce((acc, curr) => acc + curr.totalPrice, 0);
+
+      chartData.push({
+        date: date.toISOString().split('T')[0],
+        revenue: dayRevenue,
+      });
+    }
 
     const recentBookings = bookings.map(b => ({
       id: b.id,
@@ -58,6 +88,7 @@ export async function GET() {
       totalBlogs,
       totalRevenue,
       recentBookings,
+      chartData,
     });
   } catch (error) {
     console.error('Dashboard API Error:', error);

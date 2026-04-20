@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   try {
     const payload = await verifyAuthToken(token);
 
-    if (isAdminPath && payload.role !== 'admin') {
+    if (isAdminPath && !payload.role.startsWith('admin')) {
       return NextResponse.redirect(new URL('/', request.url));
     }
 

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin | Wonderful Toba</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/globals.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../js/admin-sidebar.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        'toba-green': '#15803d',
+                        'toba-accent': '#22c55e',
+                        'obaja-blue': '#005696',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 flex min-h-screen">
+    <main class="flex-1 p-6 lg:p-10">
+        <div class="space-y-10 pb-12">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">Pusat Komando</h1>
+                    <p class="text-slate-400 font-medium mt-1 text-sm">Selamat datang di panel admin Wonderful Toba 👋</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-toba-green shadow-sm transition-all">
+                        <i data-lucide="refresh-ccw" class="w-[18px] h-[18px]"></i>
+                    </button>
+                    <button class="flex items-center gap-2 px-6 py-3 bg-toba-green text-white rounded-2xl font-bold text-sm shadow-lg shadow-toba-green/20">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Ekspor Laporan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Rows -->
+            <div>
+                <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">🏔️ Tour & Travel</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm card-hover">
+                        <div class="flex justify-between mb-8">
+                            <div class="w-12 h-12 bg-toba-green text-white rounded-2xl flex items-center justify-center shadow-lg shadow-toba-green/20">
+                                <i data-lucide="calendar-check"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="text-slate-200"></i>
+                        </div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Reservasi</p>
+                        <h3 class="text-3xl font-black text-slate-900">1,284</h3>
+                        <p class="text-xs text-slate-400 mt-2 font-medium">42 pending bulan ini</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm card-hover">
+                        <div class="flex justify-between mb-8">
+                            <div class="w-12 h-12 bg-obaja-blue text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="text-slate-200"></i>
+                        </div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Estimasi Omzet</p>
+                        <h3 class="text-3xl font-black text-slate-900">Rp 4.500.000.000</h3>
+                        <p class="text-xs text-slate-400 mt-2 font-medium">Berdasarkan total confirmed</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm card-hover">
+                        <div class="flex justify-between mb-8">
+                            <div class="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                                <i data-lucide="package"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="text-slate-200"></i>
+                        </div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Paket Tour Aktif</p>
+                        <h3 class="text-3xl font-black text-slate-900">18 Paket</h3>
+                        <p class="text-xs text-slate-400 mt-2 font-medium">Update terakhir 2 jam lalu</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Simulation & Recent -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
+                    <div class="flex justify-between items-center mb-10">
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Tren Pendapatan</h3>
+                            <p class="text-xs text-slate-400 font-medium mt-1">7 hari terakhir penjualan</p>
+                        </div>
+                        <div class="flex bg-slate-50 p-1 rounded-xl border border-slate-100">
+                            <button class="px-5 py-2 bg-white text-slate-900 rounded-lg text-[10px] font-black uppercase shadow-sm">7H</button>
+                            <button class="px-5 py-2 text-slate-400 rounded-lg text-[10px] font-black uppercase hover:text-slate-900">30H</button>
+                        </div>
+                    </div>
+                    <!-- Chart Simulation SVG -->
+                    <div class="h-72 w-full relative flex items-end justify-between px-4 pb-4">
+                        <div class="absolute inset-0 grid grid-rows-4 divide-y divide-slate-50">
+                            <div></div><div></div><div></div><div></div>
+                        </div>
+                        <div class="w-full h-full absolute inset-0 pt-10 px-8">
+                             <svg viewBox="0 0 1000 300" class="w-full h-full overflow-visible">
+                                <path d="M0,250 Q150,200 300,220 T600,100 T1000,50" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round" />
+                                <circle cx="1000" cy="50" r="6" fill="#15803d" />
+                             </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8">
+                    <h3 class="text-xl font-black text-slate-900 mb-8">Reservasi Terbaru</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-50 pb-4">
+                            <div>
+                                <p class="font-bold text-slate-900">Ariel Noah</p>
+                                <p class="text-xs text-slate-400 italic">Paket Tour · Today</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-black">Rp 12.500.000</p>
+                                <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-100">Confirmed</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-slate-50 pb-4">
+                            <div>
+                                <p class="font-bold text-slate-900">Luna Maya</p>
+                                <p class="text-xs text-slate-400 italic">Armada · Yesterday</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-black">Rp 2.100.000</p>
+                                <span class="px-2 py-0.5 bg-amber-50 text-amber-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-amber-100">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-10 py-4 bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-toba-green hover:text-white transition-all">Lihat Semua Laporan</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

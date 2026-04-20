@@ -1,50 +1,69 @@
-import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { NextRequest, NextResponse } from 'next/server';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { mkdir } from 'fs/promises';
-import { requireAdminFromRequest } from '@/lib/serverAuth';
+import { existsSync } from 'fs';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    await requireAdminFromRequest(request);
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const files = formData.getAll('files') as File[];
 
-    if (!file) {
-      return NextResponse.json({ message: 'No file uploaded' }, { status: 400 });
+    if (!files || files.length === 0) {
+      return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const uploadedUrls: string[] = [];
 
-    // Create unique filename
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const filename = `${uniqueSuffix}-${file.name.replace(/\s+/g, '_')}`;
-    
+    // Create upload directory structure
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const uploadDir = join(process.cwd(), 'public', 'storage', String(year), month);
+
     // Ensure directory exists
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    try {
+    if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true });
-    } catch (e) {}
+    }
 
-    const path = join(uploadDir, filename);
-    await writeFile(path, buffer);
+    for (const file of files) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
 
-    const publicUrl = `/uploads/${filename}`;
+      // Generate unique filename
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(7);
+      const extension = file.name.split('.').pop();
+      const filename = `${timestamp}-${randomString}.${extension}`;
 
-    return NextResponse.json({ 
-      message: 'Upload successful',
-      url: publicUrl 
+      const filepath = join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+
+      // Return public URL
+      const publicUrl = `/storage/${year}/${month}/${filename}`;
+      uploadedUrls.push(publicUrl);
+    }
+
+    return NextResponse.json({
+      success: true,
+      urls: uploadedUrls,
+      count: uploadedUrls.length,
     });
-    
   } catch (error) {
-    if (error instanceof Error && error.message === 'UNAUTHORIZED') {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-    if (error instanceof Error && error.message === 'FORBIDDEN') {
-      return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
-    }
     console.error('Upload error:', error);
-    return NextResponse.json({ message: 'Upload failed' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to upload files' },
+      { status: 500 }
+    );
+  }
+}
+
+// Get uploaded files
+export async function GET() {
+  try {
+    // TODO: Implement file listing from storage directory
+    return NextResponse.json({ files: [] });
+  } catch (error) {
+    console.error('Get files error:', error);
+    return NextResponse.json({ error: 'Failed to get files' }, { status: 500 });
   }
 }
