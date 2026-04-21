@@ -3,11 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../lib/api';
 import { Booking } from '../types';
-import { Search, Filter, CheckCircle, XCircle, Clock, Eye, Calendar, User, CreditCard, MoreHorizontal, X, FileText, Download } from 'lucide-react';
+import { Search, Filter, CheckCircle, XCircle, Clock, Eye, Calendar, User, CreditCard, MoreHorizontal, X, FileText, Download, Download as DownloadIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
 import { toast } from 'sonner';
 import { generateInvoice } from '../lib/generateInvoice';
+import { exportBookingsToExcel } from '../lib/exportUtils';
 
 export default function AdminBookings({ category }: { category?: 'tour' | 'outbound' }) {
   interface ApiBooking {
@@ -107,34 +108,44 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Daftar Reservasi</h1>
           <p className="text-slate-400 font-medium mt-1">Pantau dan kelola reservasi paket wisata & armada Anda.</p>
         </div>
-        <div className="flex gap-2 bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="flex items-center gap-3">
           <button 
-            onClick={() => setFilterStatus('all')}
-            className={cn(
-              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              filterStatus === 'all' ? "bg-toba-green text-white shadow-lg shadow-emerald-100" : "text-slate-400 hover:text-slate-700"
-            )}
+            onClick={() => exportBookingsToExcel(filteredBookings)}
+            className="hidden md:flex bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 rounded-2xl font-bold text-xs items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest"
           >
-            Semua
+            <Download size={16} />
+            Export Excel
           </button>
-          <button 
-            onClick={() => setFilterStatus('pending')}
-            className={cn(
-              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              filterStatus === 'pending' ? "bg-amber-500 text-white shadow-lg shadow-amber-100" : "text-slate-400 hover:text-slate-700"
-            )}
-          >
-            Pending
-          </button>
-          <button 
-            onClick={() => setFilterStatus('confirmed')}
-            className={cn(
-              "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              filterStatus === 'confirmed' ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100" : "text-slate-400 hover:text-slate-700"
-            )}
-          >
-            Sukses
-          </button>
+          
+          <div className="flex gap-2 bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
+            <button 
+              onClick={() => setFilterStatus('all')}
+              className={cn(
+                "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                filterStatus === 'all' ? "bg-toba-green text-white shadow-lg shadow-emerald-100" : "text-slate-400 hover:text-slate-700"
+              )}
+            >
+              Semua
+            </button>
+            <button 
+              onClick={() => setFilterStatus('pending')}
+              className={cn(
+                "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                filterStatus === 'pending' ? "bg-amber-500 text-white shadow-lg shadow-amber-100" : "text-slate-400 hover:text-slate-700"
+              )}
+            >
+              Pending
+            </button>
+            <button 
+              onClick={() => setFilterStatus('confirmed')}
+              className={cn(
+                "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                filterStatus === 'confirmed' ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100" : "text-slate-400 hover:text-slate-700"
+              )}
+            >
+              Sukses
+            </button>
+          </div>
         </div>
       </div>
 
