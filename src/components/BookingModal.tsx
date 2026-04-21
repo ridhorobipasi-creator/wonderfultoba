@@ -10,6 +10,7 @@ import LoadingButton from './admin/LoadingButton';
 import FormField from './admin/FormField';
 import { showErrorToast } from '@/lib/errorHandler';
 import { useForm } from 'react-hook-form';
+import { PhoneInput } from './admin/PhoneInput';
 
 interface BookingModalProps {
   type: 'package' | 'car';
@@ -150,11 +151,11 @@ export default function BookingModal({ type, itemId, itemName, pricePerUnit, onC
             icon={<Phone size={18} />}
             required
           >
-            <input
+            <PhoneInput
               {...register('phone', {
                 required: 'Nomor WhatsApp wajib diisi',
                 pattern: {
-                  value: /^(\+62|62|0)[0-9]{9,12}$/,
+                  value: /^(\+62|62|0)[0-9\s-]{9,18}$/,
                   message: 'Format nomor tidak valid (contoh: 08xxxxxxxxxx)'
                 }
               })}

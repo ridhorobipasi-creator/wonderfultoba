@@ -23,10 +23,11 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
   const [searchQuery, setSearchQuery] = useState('');
   const [editingPriceId, setEditingPriceId] = useState<number | string | null>(null);
   const [editPriceValue, setEditPriceValue] = useState<string>('');
+  const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [category]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -55,6 +56,33 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
         toast.error('Gagal menghapus paket');
       }
     }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!selectedIds.length) return;
+    if (window.confirm(`Apakah Anda yakin ingin menghapus ${selectedIds.length} paket terpilih secara massal?`)) {
+      try {
+        await Promise.all(selectedIds.map(id => api.delete(`/packages/${id}`)));
+        toast.success(`Berhasil menghapus ${selectedIds.length} paket`);
+        setSelectedIds([]);
+        fetchData();
+      } catch {
+        toast.error('Gagal menghapus beberapa paket. Mungkin sedang digunakan.');
+        fetchData();
+      }
+    }
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(filteredPackages.map(p => p.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const toggleSelect = (id: string | number) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
   const savePrice = async (pkg: AdminPackage) => {
@@ -135,11 +163,30 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
 
       {/* Table Container */}
       <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+        {selectedIds.length > 0 && (
+          <div className="bg-emerald-50/60 border-b border-emerald-100 px-8 py-4 flex items-center justify-between animate-in slide-in-from-top-2">
+            <span className="text-sm font-bold text-emerald-800">{selectedIds.length} item terpilih</span>
+            <button 
+              onClick={handleBulkDelete}
+              className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-rose-200 flex items-center gap-2"
+            >
+              <Trash2 size={14} /> Hapus Terpilih
+            </button>
+          </div>
+        )}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50">
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Informasi Paket</th>
+                <th className="px-6 py-5 w-12 text-center">
+                  <input 
+                    type="checkbox"
+                    className="w-4 h-4 rounded text-toba-green focus:ring-toba-green border-slate-300"
+                    onChange={handleSelectAll}
+                    checked={filteredPackages.length > 0 && selectedIds.length === filteredPackages.length}
+                  />
+                </th>
+                <th className="px-2 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Informasi Paket</th>
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Kategori</th>
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Harga</th>
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
@@ -149,7 +196,7 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-8 py-20 text-center">
+                  <td colSpan={6} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 border-4 border-emerald-100 border-t-toba-green rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-400 font-medium">Sinkronisasi data...</p>
@@ -162,9 +209,20 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   key={pkg.id} 
-                  className="hover:bg-slate-50/30 transition-colors group"
+                  className={cn(
+                    "hover:bg-slate-50/30 transition-colors group",
+                    selectedIds.includes(pkg.id) ? "bg-slate-50/50" : ""
+                  )}
                 >
-                  <td className="px-8 py-6">
+                  <td className="px-6 py-6 text-center">
+                    <input 
+                      type="checkbox"
+                      className="w-4 h-4 rounded text-toba-green focus:ring-toba-green border-slate-300"
+                      checked={selectedIds.includes(pkg.id)}
+                      onChange={() => toggleSelect(pkg.id)}
+                    />
+                  </td>
+                  <td className="px-2 py-6">
                     <div className="flex items-center space-x-5">
                       <div className="w-16 h-12 rounded-xl overflow-hidden bg-slate-50 shrink-0 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
                         <img src={pkg.images?.[0] || 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=400'} alt="" className="w-full h-full object-cover" />
@@ -255,7 +313,7 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                 </motion.tr>
               )) : (
                 <tr>
-                  <td colSpan={5} className="px-8 py-20 text-center">
+                  <td colSpan={6} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
                       <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6 text-slate-200">
                         <PackageIcon size={32} />

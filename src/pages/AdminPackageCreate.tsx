@@ -18,6 +18,7 @@ import { showErrorToast } from '@/lib/errorHandler';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import { CurrencyInput } from '@/components/admin/CurrencyInput';
 
 interface PricingDetailForm {
   pax: string;
@@ -471,8 +472,9 @@ export default function AdminPackageCreate() {
                       />
                     </div>
                     <div className="flex-1">
-                      <input
-                        {...register(`pricing_details.${index}.price_per_person`)}
+                      <CurrencyInput
+                        value={watch(`pricing_details.${index}.price_per_person`) || ''}
+                        onChange={(val) => setValue(`pricing_details.${index}.price_per_person`, val.toString() as any, { shouldValidate: true, shouldDirty: true })}
                         placeholder="Harga / Orang (Rp)"
                         className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium"
                       />
@@ -493,16 +495,13 @@ export default function AdminPackageCreate() {
                   required
                   helperText="Masukkan angka tanpa titik atau koma"
                 >
-                  <input
-                    type="number"
-                    {...register('price', { 
-                      required: 'Harga wajib diisi',
-                      min: { value: 0, message: 'Harga tidak boleh negatif' }
-                    })}
+                  <CurrencyInput
+                    value={watch('price') || ''}
+                    onChange={(val) => setValue('price', val, { shouldValidate: true, shouldDirty: true })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.price ? 'border-rose-500' : 'border-transparent'
                     } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
-                    placeholder="500000"
+                    placeholder="500.000"
                   />
                 </FormField>
 
@@ -512,15 +511,13 @@ export default function AdminPackageCreate() {
                   icon={<DollarSign size={20} />}
                   helperText="Opsional, kosongkan jika tidak ada"
                 >
-                  <input
-                    type="number"
-                    {...register('child_price', {
-                      min: { value: 0, message: 'Harga tidak boleh negatif' }
-                    })}
+                  <CurrencyInput
+                    value={watch('child_price') || ''}
+                    onChange={(val) => setValue('child_price', val, { shouldValidate: true, shouldDirty: true })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.child_price ? 'border-rose-500' : 'border-transparent'
                     } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
-                    placeholder="250000"
+                    placeholder="250.000"
                   />
                 </FormField>
               </div>
@@ -586,11 +583,11 @@ export default function AdminPackageCreate() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100 mt-6 md:mt-8!">
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2"><Camera size={14}/> Biaya Tambahan Drone</label>
-                  <input
-                    type="number"
-                    {...register('drone_price')}
+                  <CurrencyInput
+                    value={watch('drone_price') || ''}
+                    onChange={(val) => setValue('drone_price', val, { shouldValidate: true, shouldDirty: true })}
                     className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
-                    placeholder="1500000"
+                    placeholder="1.500.000"
                   />
                 </div>
                 <div className="space-y-3">
