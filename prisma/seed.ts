@@ -1160,6 +1160,201 @@ async function main() {
     })
   }
 
+  console.log('🌱 Seeding Cars...')
+  const cars = [
+    {
+      name: 'Toyota Avanza',
+      type: 'MPV',
+      capacity: 6,
+      transmission: 'Manual/Automatic',
+      fuel: 'Bensin',
+      price: 350000,
+      priceWithDriver: 450000,
+      images: ['/assets/images/2023/10/004.jpg'],
+      description: 'Sewa mobil Avanza untuk perjalanan keluarga atau bisnis di Sumatera Utara. Nyaman dan hemat bahan bakar.',
+      features: ['AC', 'Audio', 'Airbag'],
+      includes: ['Mobil', 'Driver', 'BBM (dalam kota)'],
+      status: 'available',
+      isFeatured: true,
+      sortOrder: 1,
+    },
+    {
+      name: 'Toyota Innova Reborn',
+      type: 'Premium MPV',
+      capacity: 7,
+      transmission: 'Automatic',
+      fuel: 'Diesel/Bensin',
+      price: 600000,
+      priceWithDriver: 800000,
+      images: ['/assets/images/2023/10/005.jpg'],
+      description: 'Perjalanan lebih mewah dan lega dengan Innova Reborn. Cocok untuk VIP dan perjalanan jauh seperti ke Danau Toba.',
+      features: ['AC Double Blower', 'Audio Premium', 'Captain Seat Optional'],
+      includes: ['Mobil', 'Driver', 'BBM', 'Tol'],
+      status: 'available',
+      isFeatured: true,
+      sortOrder: 2,
+    },
+    {
+      name: 'Toyota Hiace Standard',
+      type: 'Minibus',
+      capacity: 14,
+      transmission: 'Manual',
+      fuel: 'Diesel',
+      price: 1000000,
+      priceWithDriver: 1200000,
+      images: ['/assets/images/2023/10/006.jpg'],
+      description: 'Solusi transportasi rombongan yang nyaman dan lega. Ideal untuk acara outbound atau gathering.',
+      features: ['AC', 'Reclining Seat', 'Audio'],
+      includes: ['Mobil', 'Driver'],
+      status: 'available',
+      isFeatured: true,
+      sortOrder: 3,
+    }
+  ]
+
+  for (const car of cars) {
+    await prisma.car.upsert({
+      where: { id: cars.indexOf(car) + 1 },
+      update: car,
+      create: car
+    })
+  }
+
+  console.log('🌱 Seeding Blogs...')
+  const blogs = [
+    // TOUR BLOGS
+    {
+      slug: '5-destinasi-wisata-wajib-di-danau-toba',
+      title: '5 Destinasi Wisata Wajib di Danau Toba',
+      excerpt: 'Danau Toba memiliki banyak tempat wisata menarik. Berikut adalah 5 tempat yang wajib Anda kunjungi saat berkunjung.',
+      content: '<p>Danau Toba adalah salah satu keajaiban alam Indonesia yang menawarkan pemandangan memukau. Jangan lewatkan untuk mengunjungi Pulau Samosir, Air Terjun Sipiso-piso, Bukit Indah Simarjarunjung, dan Desa Tomok.</p><p>Setiap lokasi memiliki keunikannya tersendiri dan sangat cocok untuk dijadikan destinasi liburan keluarga yang tak terlupakan.</p>',
+      image: '/assets/images/2023/10/001-1.jpg',
+      author: 'Admin Tour',
+      category: 'tour',
+      status: 'published',
+    },
+    {
+      slug: 'panduan-wisata-ke-pulau-samosir',
+      title: 'Panduan Lengkap Wisata ke Pulau Samosir',
+      excerpt: 'Menjelajahi kebudayaan Batak dan pesona alam yang ada di tengah-tengah Danau Toba.',
+      content: '<p>Pulau Samosir bukan sekadar pulau di tengah danau, melainkan pusat kebudayaan Batak Toba. Anda dapat melihat Paturtung, Tari Tor-tor, dan berbagai kerajinan khas seperti Ulos.</p><p>Pastikan Anda menyempatkan waktu untuk berkeliling pulau dengan menyewa sepeda motor agar pengalaman liburan Anda lebih maksimal.</p>',
+      image: '/assets/images/2023/10/004.jpg',
+      author: 'Admin Tour',
+      category: 'tour',
+      status: 'published',
+    },
+    {
+      slug: 'kuliner-khas-medan-yang-wajib-dicoba',
+      title: '7 Kuliner Khas Medan yang Wajib Dicoba',
+      excerpt: 'Selain wisatanya, Sumatera Utara juga terkenal dengan kulinernya yang kaya rempah dan menggugah selera.',
+      content: '<p>Ketika Anda mengikuti paket City Tour kami, wajib mencoba Bika Ambon, Soto Kesawan, Mie Gomak, dan Lontong Sayur Medan.</p><p>Setiap gigitan kuliner ini akan melengkapi pengalaman wisata Anda di ibu kota Sumatera Utara.</p>',
+      image: '/assets/images/2023/10/003-1.jpg',
+      author: 'Admin Tour',
+      category: 'tour',
+      status: 'published',
+    },
+    {
+      slug: 'pesona-magis-air-terjun-sipiso-piso',
+      title: 'Pesona Magis Air Terjun Sipiso-piso',
+      excerpt: 'Menyaksikan langsung salah satu air terjun tertinggi di Indonesia yang mengalir langsung ke Danau Toba.',
+      content: '<p>Dengan ketinggian sekitar 120 meter, Air Terjun Sipiso-piso menyajikan pemandangan yang tak tertandingi. Berlokasi di perbukitan hijau, udara di sekitarnya sangat sejuk.</p>',
+      image: '/assets/images/2023/10/008.jpg',
+      author: 'Admin Tour',
+      category: 'tour',
+      status: 'published',
+    },
+
+    // OUTBOUND BLOGS
+    {
+      slug: 'tips-memilih-paket-outbound-perusahaan',
+      title: 'Tips Memilih Paket Outbound untuk Perusahaan',
+      excerpt: 'Panduan lengkap memilih paket outbound yang tepat untuk meningkatkan kinerja dan solidaritas tim Anda',
+      content: '<p>Memilih paket outbound untuk corporate tidak bisa sembarangan. Anda perlu mempertimbangkan tujuan kegiatan, karakteristik peserta, fasilitas, dan anggaran perusahaan.</p><p>Pastikan Anda memilih provider yang memiliki trainer bersertifikat dan mengutamakan faktor keselamatan (safety first).</p>',
+      image: '/assets/images/2023/10/A11-Team-Building.jpg',
+      author: 'Admin Outbound',
+      category: 'outbound',
+      status: 'published',
+    },
+    {
+      slug: 'manfaat-team-building-untuk-karyawan',
+      title: '5 Manfaat Team Building Untuk Produktivitas Karyawan',
+      excerpt: 'Mengapa perusahaan perlu menganggarkan kegiatan team building setidaknya setahun sekali?',
+      content: '<p>Team building bukan sekadar bermain-main di luar ruangan. Dampaknya akan langsung terasa di lingkungan kerja: komunikasi membaik, ego dapat direndam, dan target tim tercapai lebih cepat.</p>',
+      image: '/assets/images/2023/10/A12-Gathering.jpg',
+      author: 'Admin Outbound',
+      category: 'outbound',
+      status: 'published',
+    },
+    {
+      slug: 'ide-games-outbound-seru-dan-aman',
+      title: 'Ide Games Outbound yang Seru Namun Tetap Aman',
+      excerpt: 'Mengenal berbagai jenis permainan yang bisa meramaikan acara gathering perusahaan Anda.',
+      content: '<p>Fun games yang sukses adalah yang memancing tawa sekaligus mengharuskan peserta memutar otak bersama tim. Mulai dari Pipe Line, Spider Web, hingga Trust Fall.</p><p>Games ini juga ramah untuk segala rentang usia dari karyawan junior hingga senior.</p>',
+      image: '/assets/images/2023/10/A12-Fun-Games.jpg',
+      author: 'Admin Outbound',
+      category: 'outbound',
+      status: 'published',
+    },
+    {
+      slug: 'lokasi-gathering-terbaik-di-sumatera-utara',
+      title: 'Rekomendasi Lokasi Corporate Gathering Terbaik di Sumut',
+      excerpt: 'Pemilihan lokasi sangat menentukan kesuksesan sebuah acara gathering dan team building perusahaan.',
+      content: '<p>Beberapa pilihan teratas untuk lokasi gathering di daerah Sumatera Utara mencakup resort di sekitar Samosir, sejuknya udara di Berastagi, atau di area hutan tropis Bukit Lawang.</p><p>Semuanya menawarkan kapasitas peserta mulai dari 50 hingga 500 orang dengan fasilitas premium.</p>',
+      image: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg',
+      author: 'Admin Outbound',
+      category: 'outbound',
+      status: 'published',
+    }
+  ]
+
+  for (const blog of blogs) {
+    await prisma.blog.upsert({
+      where: { slug: blog.slug },
+      update: blog,
+      create: blog
+    })
+  }
+
+  console.log('🌱 Seeding Bookings...')
+  // CARI ITEM YANG ID-NYA ADA DI KEDUA TABEL (Package & Car) KARENA SCHEMA MEMAKSAKAN FOREIGN KEY GANDA DI ITEM_ID
+  const commonId1 = 1;
+  const commonId2 = 2;
+  
+  const bookings = [
+    {
+      type: 'package',
+      itemId: commonId1,
+      startDate: new Date('2026-05-10T00:00:00Z'),
+      endDate: new Date('2026-05-12T00:00:00Z'),
+      totalPrice: 6000000,
+      customerName: 'Budi Santoso',
+      customerEmail: 'budi@example.com',
+      customerPhone: '081234567890',
+      status: 'confirmed',
+      notes: 'Minta kamar berdekatan',
+    },
+    {
+      type: 'package',
+      itemId: commonId2,
+      startDate: new Date('2026-06-15T00:00:00Z'),
+      endDate: new Date('2026-06-16T00:00:00Z'),
+      totalPrice: 13500000,
+      customerName: 'Siti Aminah',
+      customerEmail: 'siti.hrd@company.com',
+      customerPhone: '081987654321',
+      status: 'pending',
+      notes: 'Acara gathering perusahaan 30 orang',
+    }
+  ]
+
+  for (let i = 0; i < bookings.length; i++) {
+        await prisma.booking.upsert({
+            where: { id: i + 1 },
+            update: bookings[i],
+            create: bookings[i]
+        })
+  }
+
   console.log('✅ Seeding completed successfully!')
 }
 

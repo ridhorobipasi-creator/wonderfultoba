@@ -18,9 +18,11 @@ export default function Navbar() {
   const [showPass, setShowPass] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { user, setUser, setToken } = useStore();
 
   useEffect(() => {
+    setMounted(true);
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
   const router = useRouter();
@@ -100,7 +102,7 @@ export default function Navbar() {
   ] : [
     { name: 'Beranda', path: '/tour' },
     { name: 'Paket Wisata', path: '/tour/packages' },
-    { name: 'Galeri', path: '/tour#gallery' },
+    { name: 'Galeri', path: '/tour/gallery' },
     { name: 'Blog', path: '/tour/blog' },
   ];
 
@@ -195,22 +197,25 @@ export default function Navbar() {
 
               <div className={cn("h-6 w-px", (!isScrolled && isDarkHeroPage) ? "bg-white/20" : "bg-slate-200")} />
 
-              {/* Dark Mode Toggle */}
-              <button
-                onClick={toggleDark}
-                className={cn(
-                  "p-2.5 rounded-xl transition-all",
-                  isDark ? "bg-slate-700 text-yellow-400 hover:bg-slate-600" :
-                  (!isScrolled && isDarkHeroPage) ? "bg-white/10 text-white hover:bg-white/20" :
-                  "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                )}
-                aria-label={isDark ? 'Mode Terang' : 'Mode Gelap'}
-                title={isDark ? 'Aktifkan Mode Terang' : 'Aktifkan Mode Gelap'}
-              >
-                {isDark ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
+              {/* Dark Mode Toggle - only render after mount to avoid hydration mismatch */}
+              {mounted && (
+                <button
+                  onClick={toggleDark}
+                  className={cn(
+                    "p-2.5 rounded-xl transition-all",
+                    isDark ? "bg-slate-700 text-yellow-400 hover:bg-slate-600" :
+                    (!isScrolled && isDarkHeroPage) ? "bg-white/10 text-white hover:bg-white/20" :
+                    "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  )}
+                  aria-label={isDark ? 'Mode Terang' : 'Mode Gelap'}
+                  title={isDark ? 'Aktifkan Mode Terang' : 'Aktifkan Mode Gelap'}
+                >
+                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+              )}
 
-              {user ? (
+              {/* User section - only render after mount to avoid hydration mismatch */}
+              {mounted && (user ? (
                 <div className="flex items-center space-x-5">
                   {user.role !== 'user' && (
                     <Link href="/admin"
@@ -247,7 +252,7 @@ export default function Navbar() {
                   <LogIn size={18} />
                   <span>LOGIN / DAFTAR</span>
                 </button>
-              )}
+              ))}
             </div>
 
             {/* Mobile Menu Toggle */}

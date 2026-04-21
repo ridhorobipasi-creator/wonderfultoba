@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '../utils/cn';
@@ -24,6 +24,11 @@ export default function ImageUpload({
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(value || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync preview when value prop changes (e.g. import from package/blog)
+  useEffect(() => {
+    setPreview(value || '');
+  }, [value]);
 
   const aspectRatioClasses = {
     square: 'aspect-square',

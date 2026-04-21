@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -57,8 +58,14 @@ model Package {
 
 model City {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String                        // Nama tampilan (auto-generated atau manual)
   slug      String    @unique
+  type      String    @default("domestic") // domestic | international
+  country   String    @default("Indonesia")
+  region    String?                        // Provinsi (Indonesia) atau Negara Bagian
+  district  String?                        // Kabupaten/Kota (untuk Sumut)
+  place     String?                        // Kota/Tempat spesifik (manual)
+  description String? @db.Text
   packages  Package[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -122,6 +129,7 @@ model Blog {
   excerpt   String   @db.Text
   image     String?
   author    String
+  category  String   @default("tour")
   status    String   @default("published")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -58,16 +58,13 @@ interface Testimonial {
 }
 
 interface LandingData {
-  hero?: {
-    title?: string;
-    subtitle?: string;
-  };
+  hero?: { title?: string; subtitle?: string; };
   slider?: SliderItem[];
-  whyUs?: {
-    title?: string;
-    items?: WhyUsItem[];
-  };
+  whyUs?: { title?: string; items?: WhyUsItem[]; };
+  whyUsImages?: string[];
   testimonials?: Testimonial[];
+  cta?: { title?: string; subtitle?: string; backgroundImage?: string; buttonText?: string; buttonLink?: string; };
+  contact?: { phone?: string; whatsapp?: string; email?: string; address?: string; };
 }
 
 const lucideIcons: Record<string, IconComponent> = LucideIcons as unknown as Record<string, IconComponent>;
@@ -81,20 +78,25 @@ export default function Home() {
   const [stats, setStats] = useState<HomeStats | null>(null);
   const [blogs, setBlogs] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [waNumber, setWaNumber] = useState('6281323888207');
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
         const [pkgRes, landingRes, statsRes, blogRes] = await Promise.all([
-          api.get('/packages'),
+          api.get('/packages?status=active'),
           api.get('/settings?key=tour_landing'),
           api.get('/stats'),
-          api.get('/blogs'),
+          api.get('/blogs?category=tour'),
         ]);
-        setFeaturedPackages(Array.isArray(pkgRes.data) ? pkgRes.data.slice(0, 3) : []);
+        setFeaturedPackages(Array.isArray(pkgRes.data) ? pkgRes.data.filter((p: any) => !p.isOutbound).slice(0, 3) : []);
         setLandingData(landingRes.data || null);
         setStats(statsRes.data || null);
-        setBlogs(Array.isArray(blogRes.data) ? blogRes.data.filter((b: any) => b.category === 'tour').slice(0, 3) : []);
+        setBlogs(Array.isArray(blogRes.data) ? blogRes.data.slice(0, 3) : []);
+        // Load WA number from contact settings
+        if (landingRes.data?.contact?.whatsapp) {
+          setWaNumber(landingRes.data.contact.whatsapp);
+        }
       } catch (err: any) {
         setError('Gagal memuat data utama. Silakan refresh halaman.');
       } finally {
@@ -130,7 +132,7 @@ export default function Home() {
                 Paket Wisata <span className="text-toba-green">Terpopuler</span>
               </h2>
             </div>
-            <Link href="/packages" className="flex items-center space-x-3 text-sm font-black text-slate-900 uppercase tracking-widest hover:text-toba-green transition-colors group shrink-0">
+            <Link href="/tour/packages" className="flex items-center space-x-3 text-sm font-black text-slate-900 uppercase tracking-widest hover:text-toba-green transition-colors group shrink-0">
               <span>Lihat Semua</span>
               <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-toba-green group-hover:text-white transition-all">
                 <ArrowRight size={18} />
@@ -186,10 +188,22 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="relative">
               <div className="grid grid-cols-2 gap-4">
-                <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&q=80&w=800" alt="Lake Toba View" className="rounded-[2.5rem] shadow-2xl w-full h-[450px] object-cover" />
+                <img
+                  src={(landingData as any)?.whyUsImages?.[0] || '/assets/images/2023/10/001-1.jpg'}
+                  alt="Lake Toba View"
+                  className="rounded-[2.5rem] shadow-2xl w-full h-[450px] object-cover"
+                />
                 <div className="space-y-4 pt-12">
-                  <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=800" alt="Bukit Lawang" className="rounded-[1.5rem] shadow-xl w-full h-48 object-cover" />
-                  <img src="https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=800" alt="Tangkahan" className="rounded-[1.5rem] shadow-xl w-full h-48 object-cover" />
+                  <img
+                    src={(landingData as any)?.whyUsImages?.[1] || '/assets/images/2023/10/15-Bukit-Lawang-wonderfultoba_outbound-outbound_medan.jpg'}
+                    alt="Bukit Lawang"
+                    className="rounded-[1.5rem] shadow-xl w-full h-48 object-cover"
+                  />
+                  <img
+                    src={(landingData as any)?.whyUsImages?.[2] || '/assets/images/2023/10/A11-Team-Building.jpg'}
+                    alt="Tangkahan"
+                    className="rounded-[1.5rem] shadow-xl w-full h-48 object-cover"
+                  />
                 </div>
               </div>
               
@@ -291,11 +305,13 @@ export default function Home() {
             {blogs.map((blog, i) => (
               <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="group">
                 <div className="h-56 rounded-[2rem] overflow-hidden mb-6 shadow-md">
-                  <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img src={blog.image || '/assets/images/2023/10/001-1.jpg'} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
-                <p className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-widest">{blog.date}</p>
+                <p className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-widest">
+                  {new Date(blog.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </p>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-toba-green transition-colors">{blog.title}</h3>
-                <p className="text-sm text-slate-500 line-clamp-2">{blog.excerpt}</p>
+                <p className="text-sm text-slate-500 line-clamp-2">{blog.excerpt || blog.content?.slice(0, 120)}</p>
               </motion.div>
             ))}
           </div>
@@ -342,19 +358,23 @@ export default function Home() {
       <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto bg-slate-900 rounded-[3rem] p-12 md:p-20 relative overflow-hidden shadow-2xl">
           <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000" alt="Danau Toba" className="w-full h-full object-cover" />
+            {landingData?.cta?.backgroundImage ? (
+              <img src={landingData.cta.backgroundImage} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000" alt="Danau Toba" className="w-full h-full object-cover" />
+            )}
           </div>
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/40" />
           <div className="relative z-10 text-center max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
-              Siap Menjelajahi <br /><span className="text-toba-accent">Keindahan Sumut?</span>
+              {landingData?.cta?.title || <>Siap Menjelajahi <br /><span className="text-toba-accent">Keindahan Sumut?</span></>}
             </h2>
             <p className="text-lg text-slate-300 mb-10 font-medium leading-relaxed">
-              Bergabunglah dengan ribuan wisatawan yang telah merasakan keajaiban Sumatera Utara bersama kami.
+              {landingData?.cta?.subtitle || 'Bergabunglah dengan ribuan wisatawan yang telah merasakan keajaiban Sumatera Utara bersama kami.'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/tour/packages" className="bg-toba-green text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent transition-all shadow-2xl shadow-toba-green/20">
-                Lihat Paket Wisata
+              <Link href={(landingData?.cta?.buttonLink as string) || '/tour/packages'} className="bg-toba-green text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent transition-all shadow-2xl shadow-toba-green/20">
+                {(landingData?.cta?.buttonText as string) || 'Lihat Paket Wisata'}
               </Link>
             </div>
           </div>
@@ -362,7 +382,7 @@ export default function Home() {
       </section>
       {/* Floating WhatsApp Widget */}
       <a 
-        href="https://wa.me/6281234567890?text=Halo%20Admin%20Wonderful%20Toba,%20saya%20tertarik%20dengan%20layanan%20Anda." 
+        href={`https://wa.me/${waNumber}?text=${encodeURIComponent('Halo Admin Wonderful Toba, saya tertarik dengan layanan Anda.')}`}
         target="_blank" 
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 z-[100] bg-emerald-500 text-white p-5 rounded-full shadow-2xl hover:bg-emerald-600 transition-all hover:scale-110 group animate-bounce"

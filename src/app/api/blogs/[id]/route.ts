@@ -36,7 +36,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         excerpt: data.excerpt,
         image: data.image,
         author: data.author || 'Admin',
-        status: data.is_published ? 'published' : 'draft',
+        category: data.category,
+        status: data.status || (data.is_published ? 'published' : 'draft'),
       },
     });
 

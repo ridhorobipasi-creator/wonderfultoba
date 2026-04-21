@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../lib/api';
 import { Booking } from '../types';
-import { Search, Filter, CheckCircle, XCircle, Clock, Eye, Calendar, User, CreditCard, MoreHorizontal, X } from 'lucide-react';
+import { Search, Filter, CheckCircle, XCircle, Clock, Eye, Calendar, User, CreditCard, MoreHorizontal, X, FileText, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
 import { toast } from 'sonner';
+import { generateInvoice } from '../lib/generateInvoice';
 
 export default function AdminBookings({ category }: { category?: 'tour' | 'outbound' }) {
   interface ApiBooking {
@@ -22,6 +23,8 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
     customer_email: string;
     customer_phone: string;
     status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+    notes?: string;
+    metadata?: { persons?: number; email?: string } | null;
   }
 
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -44,9 +47,11 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
         customerEmail: b.customer_email,
         customerPhone: b.customer_phone,
         createdAt: new Date().toISOString(),
+        notes: b.notes,
+        persons: b.metadata?.persons,
         customerDetails: {
           name: b.customer_name,
-          email: b.customer_email,
+          email: b.customer_email || b.metadata?.email || '',
           phone: b.customer_phone
         }
       }));
@@ -246,9 +251,17 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
           >
             <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <h3 className="text-2xl font-bold text-slate-900">Detail Reservasi</h3>
-              <button onClick={() => setSelectedBooking(null)} className="p-2 hover:bg-white rounded-xl text-slate-400 hover:text-slate-900 transition-all">
-                <X size={22} />
-              </button>
+              <div className="flex items-center gap-2">
+                 <button onClick={() => generateInvoice(selectedBooking, true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-toba-green/10 text-toba-green rounded-xl font-bold text-xs hover:bg-toba-green hover:text-white transition-all">
+                   <FileText size={14} /> Preview Invoice
+                 </button>
+                 <button onClick={() => generateInvoice(selectedBooking, false)} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white rounded-xl font-bold text-xs hover:bg-slate-900 transition-all">
+                   <Download size={14} /> Unduh
+                 </button>
+                 <button onClick={() => setSelectedBooking(null)} className="p-2 ml-2 hover:bg-white rounded-xl text-slate-400 hover:text-slate-900 transition-all">
+                   <X size={22} />
+                 </button>
+              </div>
             </div>
             <div className="p-8 space-y-5">
               <div className="grid grid-cols-2 gap-4">
@@ -268,6 +281,12 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tipe Layanan</p>
                   <p className="font-bold text-slate-900 capitalize">{selectedBooking.type}</p>
                 </div>
+                {(selectedBooking as any).persons && (
+                  <div className="bg-toba-green/5 rounded-2xl p-4 border border-toba-green/20">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Jumlah Orang</p>
+                    <p className="font-black text-toba-green text-lg">{(selectedBooking as any).persons} orang</p>
+                  </div>
+                )}
                 <div className="col-span-2 bg-slate-50 rounded-2xl p-4 flex items-center gap-4">
                   {selectedBooking.itemImage && (
                     <img src={selectedBooking.itemImage} className="w-16 h-12 object-cover rounded-xl" alt="" />
@@ -289,6 +308,44 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
               <div className="bg-obaja-blue/5 rounded-2xl p-5 flex justify-between items-center">
                 <p className="font-bold text-slate-600">Total Pembayaran</p>
                 <p className="text-2xl font-black text-obaja-blue">Rp {selectedBooking.totalPrice.toLocaleString('id-ID')}</p>
+              </div>
+
+              {(selectedBooking as any).notes && (
+                <div className="bg-amber-50 rounded-2xl p-4 border border-amber-100">
+                  <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1">Catatan Pelanggan</p>
+                  <p className="text-sm font-medium text-slate-700">{(selectedBooking as any).notes}</p>
+                </div>
+              )}
+
+              {/* Status Update Buttons */}
+              <div className="border-t border-slate-100 pt-5">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Update Status Reservasi</p>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => { handleStatusUpdate(selectedBooking.id, 'confirmed'); setSelectedBooking(null); }}
+                    disabled={selectedBooking.status === 'confirmed'}
+                    className="flex flex-col items-center gap-1.5 py-3 px-2 bg-emerald-50 text-emerald-700 rounded-2xl font-bold text-xs hover:bg-emerald-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed border border-emerald-100"
+                  >
+                    <CheckCircle size={18} />
+                    Konfirmasi
+                  </button>
+                  <button
+                    onClick={() => { handleStatusUpdate(selectedBooking.id, 'completed'); setSelectedBooking(null); }}
+                    disabled={selectedBooking.status === 'completed'}
+                    className="flex flex-col items-center gap-1.5 py-3 px-2 bg-blue-50 text-blue-700 rounded-2xl font-bold text-xs hover:bg-blue-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed border border-blue-100"
+                  >
+                    <Clock size={18} />
+                    Selesai
+                  </button>
+                  <button
+                    onClick={() => { handleStatusUpdate(selectedBooking.id, 'cancelled'); setSelectedBooking(null); }}
+                    disabled={selectedBooking.status === 'cancelled'}
+                    className="flex flex-col items-center gap-1.5 py-3 px-2 bg-rose-50 text-rose-600 rounded-2xl font-bold text-xs hover:bg-rose-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed border border-rose-100"
+                  >
+                    <XCircle size={18} />
+                    Batalkan
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

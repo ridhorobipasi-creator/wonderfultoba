@@ -346,6 +346,45 @@ export default function AdminPackageCreate() {
                     placeholder="Contoh: Samosir, Sumatera Utara"
                   />
                 </FormField>
+
+                <FormField
+                  label="Wilayah / Destinasi"
+                  error={errors.city_id}
+                  icon={<MapPin size={20} />}
+                  helperText="Pilih wilayah yang sudah didaftarkan di Manajemen Wilayah"
+                >
+                  <select
+                    {...register('city_id')}
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all"
+                  >
+                    <option value="">-- Pilih Wilayah (opsional) --</option>
+                    {/* Group domestic by province */}
+                    {(() => {
+                      const domestic = cities.filter((c: any) => c.type === 'domestic' || !c.type);
+                      const byProvince: Record<string, typeof domestic> = {};
+                      domestic.forEach((c: any) => {
+                        const prov = c.region || 'Indonesia';
+                        if (!byProvince[prov]) byProvince[prov] = [];
+                        byProvince[prov].push(c);
+                      });
+                      return Object.entries(byProvince).map(([prov, items]) => (
+                        <optgroup key={prov} label={`🇮🇩 ${prov}`}>
+                          {items.map((c: any) => (
+                            <option key={c.id} value={c.id}>{c.name}</option>
+                          ))}
+                        </optgroup>
+                      ));
+                    })()}
+                    {/* International */}
+                    {cities.filter((c: any) => c.type === 'international').length > 0 && (
+                      <optgroup label="✈️ Internasional">
+                        {cities.filter((c: any) => c.type === 'international').map((c: any) => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </optgroup>
+                    )}
+                  </select>
+                </FormField>
               </div>
 
               <FormField

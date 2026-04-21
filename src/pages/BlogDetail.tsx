@@ -32,19 +32,25 @@ export default function BlogDetail() {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     if (!id) return;
     const fallback = fallbackPosts.find(p => p.id === id);
     if (fallback) {
       setPost(fallback);
+      setRelatedPosts(fallbackPosts.filter(p => p.id !== id && (isOutbound ? ['Outbound'].includes(p.category) : !['Outbound'].includes(p.category))).slice(0, 3));
       setLoading(false);
       return;
     }
     const fetchPost = async () => {
       try {
-        const res = await api.get(`/posts/${id}`);
-        setPost(res.data);
+        const [postRes, relatedRes] = await Promise.all([
+          api.get(`/blogs/${id}`),
+          api.get(`/blogs?category=${isOutbound ? 'outbound' : 'tour'}`),
+        ]);
+        setPost(postRes.data);
+        setRelatedPosts((relatedRes.data || []).filter((p: BlogPost) => String(p.id) !== String(id)).slice(0, 3));
       } catch {
         router.push(`${scope}/blog`);
       } finally {
@@ -52,7 +58,7 @@ export default function BlogDetail() {
       }
     };
     fetchPost();
-  }, [id, router, scope]);
+  }, [id, router, scope, isOutbound]);
 
   // Estimate read time
   const readTime = post ? Math.max(1, Math.round(post.content.split(' ').length / 200)) : 0;
@@ -66,10 +72,6 @@ export default function BlogDetail() {
     navigator.clipboard.writeText(window.location.href);
     alert('Link disalin! Bisa ditempel di Instagram Story kamu.');
   };
-
-  const relatedPosts = fallbackPosts
-    .filter(p => p.id !== id && (isOutbound ? ['Outbound'].includes(p.category) : !['Outbound'].includes(p.category)))
-    .slice(0, 3);
 
   if (loading) return <BlogDetailSkeleton />;
   if (!post) return null;

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../lib/api';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { 
   FileText, Save, ArrowLeft, Globe, LayoutList, Image as ImageIcon, CheckCircle
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import FileUpload from '@/components/admin/FileUpload';
+import ImageUpload from '@/components/ImageUpload';
 
 interface AdminBlogForm {
   title: string;
@@ -31,19 +32,43 @@ interface AdminBlogForm {
 
 export default function AdminBlogCreate() {
   const router = useRouter();
+  const params = useParams<{ id?: string }>();
+  const id = params?.id;
   const [activeTab, setActiveTab] = useState('info');
-  const { register, handleSubmit, watch, setValue } = useForm<AdminBlogForm>({
+  const { register, handleSubmit, watch, setValue, reset } = useForm<AdminBlogForm>({
     defaultValues: {
       is_published: false,
       view_count: 0,
       translations: { en: {}, ms: {} },
-      category: 'Berita',
+      category: 'tour',
     }
   });
 
+  // Load existing blog data for edit mode
+  useEffect(() => {
+    if (id) {
+      api.get(`/blogs/${id}`).then(res => {
+        const blog = res.data;
+        reset({
+          title: blog.title,
+          slug: blog.slug,
+          author: blog.author,
+          category: blog.category || 'tour',
+          content: blog.content,
+          excerpt: blog.excerpt,
+          image: blog.image,
+          is_published: blog.status === 'published',
+          meta_title: blog.metaTitle,
+          meta_description: blog.metaDescription,
+          translations: blog.translations || { en: {}, ms: {} },
+          view_count: 0,
+        });
+      }).catch(() => toast.error('Gagal memuat data artikel'));
+    }
+  }, [id, reset]);
+
   const onSubmit = async (data: AdminBlogForm) => {
     try {
-      // Split tags by comma
       const tagsArray = data.tags ? data.tags.split(',').map((s: string) => s.trim()) : [];
 
       const payload = {
@@ -52,17 +77,22 @@ export default function AdminBlogCreate() {
         content: data.content,
         category: data.category,
         tags: tagsArray,
-        image: data.image || 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=800',
-        slug: data.slug || data.title.toLowerCase().replace(/ /g, '-').replace(/[^\\w-]+/g, ''),
+        image: data.image || '',
+        slug: data.slug || data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
         excerpt: data.excerpt,
-        is_published: data.is_published,
+        status: data.is_published ? 'published' : 'draft',
         meta_title: data.meta_title,
         meta_description: data.meta_description,
         translations: data.translations,
       };
 
-      await api.post('/blogs', payload);
-      toast.success('Artikel baru berhasil ditambahkan');
+      if (id) {
+        await api.put(`/blogs/${id}`, payload);
+        toast.success('Artikel berhasil diperbarui');
+      } else {
+        await api.post('/blogs', payload);
+        toast.success('Artikel baru berhasil ditambahkan');
+      }
       router.push('/admin/blog');
     } catch (error) {
       console.error('Error saving blog post:', error);
@@ -85,7 +115,9 @@ export default function AdminBlogCreate() {
       <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-sm border border-slate-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">Tulis Artikel Baru</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+              {id ? 'Edit Artikel' : 'Tulis Artikel Baru'}
+            </h2>
             <p className="text-slate-500 font-medium">Buat konten menarik untuk memandu wisatawan.</p>
           </div>
           <button
@@ -93,7 +125,7 @@ export default function AdminBlogCreate() {
             className="bg-obaja-blue text-white px-10 py-4 rounded-2xl font-bold hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
           >
             <Save size={20} />
-            <span>Simpan Artikel</span>
+            <span>{id ? 'Simpan Perubahan' : 'Simpan Artikel'}</span>
           </button>
         </div>
 
@@ -147,12 +179,19 @@ export default function AdminBlogCreate() {
                     {...register('category')}
                     className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
                   >
-                    <option value="Berita">Berita / Update</option>
-                    <option value="Destinasi">Destinasi Populer</option>
-                    <option value="Tips Wisata">Tips Wisata</option>
-                    <option value="Kuliner">Kuliner</option>
-                    <option value="Promo">Promo & Diskon</option>
+                    <optgroup label="Halaman Website">
+                      <option value="tour">Tour & Travel (tampil di /tour/blog)</option>
+                      <option value="outbound">Corporate Outbound (tampil di /outbound/blog)</option>
+                    </optgroup>
+                    <optgroup label="Kategori Konten">
+                      <option value="Berita">Berita / Update</option>
+                      <option value="Destinasi">Destinasi Populer</option>
+                      <option value="Tips Wisata">Tips Wisata</option>
+                      <option value="Kuliner">Kuliner</option>
+                      <option value="Promo">Promo & Diskon</option>
+                    </optgroup>
                   </select>
+                  <p className="text-[10px] text-slate-400 ml-1">Pilih <strong>Tour</strong> atau <strong>Outbound</strong> agar artikel muncul di halaman yang tepat</p>
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Penulis (Author)</label>
@@ -173,22 +212,12 @@ export default function AdminBlogCreate() {
               </div>
 
               <div className="space-y-3">
-                <FileUpload 
-                  label="Gambar Banner Utama (Upload)" 
-                  currentValue={watch('image')} 
-                  onUploadSuccess={(url) => setValue('image', url)} 
+                <ImageUpload
+                  label="Gambar Banner Utama (Upload dari PC/HP - Auto WebP)"
+                  value={watch('image')}
+                  onChange={(url) => setValue('image', url)}
+                  aspectRatio="wide"
                 />
-                <p className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-widest px-1">
-                  Atau masukkan URL manual:
-                </p>
-                <div className="relative">
-                  <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                  <input
-                    {...register('image')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
-                    placeholder="https://example.com/blog-banner.jpg"
-                  />
-                </div>
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-100">

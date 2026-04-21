@@ -61,6 +61,14 @@ export default function PackageDetail() {
     fetch();
   }, [slug, router]);
 
+  // Build display location from city data
+  const locationDisplay = city
+    ? ((city as any).type === 'international'
+        ? `${(city as any).place || (city as any).region || ''}, ${(city as any).country}`.replace(/^, /, '')
+        : city.name)
+    : 'Sumatera Utara';
+  const isInternational = (city as any)?.type === 'international';
+
   const handleBookClick = () => {
     setShowBooking(true);
   };
@@ -244,7 +252,9 @@ export default function PackageDetail() {
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
                 className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 sticky top-28">
                 <div className="flex items-center gap-2 text-toba-green text-xs font-black uppercase tracking-widest mb-3">
-                  <MapPin size={14} /> {city?.name || 'Sumatera Utara'}
+                  <MapPin size={14} />
+                  {locationDisplay}
+                  {isInternational && <span>✈️</span>}
                 </div>
                 <h1 className="text-2xl font-black text-slate-900 mb-2 leading-tight">{pkg.name}</h1>
 
@@ -267,21 +277,33 @@ export default function PackageDetail() {
                   </p>
                 </div>
 
-                <button
-                  onClick={handleBookClick}
-                  disabled={pkg.status !== 'active'}
-                  className="w-full py-4 bg-toba-green text-white rounded-2xl font-black text-sm hover:bg-toba-green/90 transition-all shadow-xl shadow-toba-green/20 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
-                >
-                  {pkg.status === 'active' ? 'Pesan Sekarang' : 'Paket Tidak Tersedia'}
-                </button>
+                {pkg.isOutbound ? (
+                  <a
+                    href={`https://wa.me/6281323888207?text=${encodeURIComponent(`Halo Wonderful Toba, saya tertarik memesan paket Outbound: *${pkg.name}*. Mohon informasi lebih lanjut.`)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 py-4 bg-emerald-600 text-white rounded-2xl font-black text-sm hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 mb-3"
+                  >
+                    <MessageCircle size={18} /> Pesan via WhatsApp
+                  </a>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleBookClick}
+                      disabled={pkg.status !== 'active'}
+                      className="w-full py-4 bg-toba-green text-white rounded-2xl font-black text-sm hover:bg-toba-green/90 transition-all shadow-xl shadow-toba-green/20 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+                    >
+                      {pkg.status === 'active' ? 'Pesan Sekarang' : 'Paket Tidak Tersedia'}
+                    </button>
 
-                <a
-                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo, saya tertarik dengan paket: *${pkg.name}*`)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all border border-emerald-100"
-                >
-                  <MessageCircle size={18} /> Tanya via WhatsApp
-                </a>
+                    <a
+                      href={`https://wa.me/6281323888207?text=${encodeURIComponent(`Halo, saya tertarik dengan paket: *${pkg.name}*`)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-3.5 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all border border-emerald-100"
+                    >
+                      <MessageCircle size={18} /> Tanya via WhatsApp
+                    </a>
+                  </>
+                )}
 
                 <div className="mt-5 flex items-center gap-2 text-xs text-slate-400 font-medium">
                   <Users size={14} /> Sudah dipesan 24+ kali bulan ini

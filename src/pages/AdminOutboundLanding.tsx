@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import { 
   Users, Sparkles, Video, MapPin, ImageIcon, Save, Plus, Trash2, 
-  ArrowLeft, Layout, Type, List, MonitorPlay, Globe
+  ArrowLeft, Layout, Type, List, MonitorPlay, Globe, Image as HeroIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -19,6 +19,10 @@ interface AboutSection {
   mission: string;
   statsLabel: string;
   statsValue: string;
+}
+
+interface HeroSlide {
+  image: string;
 }
 
 interface ServiceItem {
@@ -41,6 +45,7 @@ interface LocationItem {
 
 interface OutboundLandingContent {
   about: AboutSection;
+  heroImages: string[];
   services: ServiceItem[];
   videos: VideoItem[];
   locations: LocationItem[];
@@ -53,6 +58,7 @@ export default function AdminOutboundLanding() {
   const [activeTab, setActiveTab] = useState('about');
   const [content, setContent] = useState<OutboundLandingContent>({
     about: { title: '', description: '', vision: '', mission: '', statsLabel: '', statsValue: '' },
+    heroImages: [],
     services: [],
     videos: [],
     locations: [],
@@ -118,6 +124,7 @@ export default function AdminOutboundLanding() {
 
   const tabs = [
     { id: 'about', label: 'Tentang Kami', icon: Users },
+    { id: 'hero', label: 'Hero Slider', icon: HeroIcon },
     { id: 'services', label: 'Layanan', icon: Sparkles },
     { id: 'videos', label: 'Video Highlight', icon: Video },
     { id: 'locations', label: 'Lokasi', icon: MapPin },
@@ -186,6 +193,46 @@ export default function AdminOutboundLanding() {
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.2 }}
             >
+              {/* HERO SLIDER */}
+              {activeTab === 'hero' && (
+                <div className="space-y-8">
+                  <SectionHeader title="Hero Slider" icon={HeroIcon} desc="Gambar yang berputar di bagian atas halaman Outbound. Upload dari PC/HP, otomatis convert ke WebP." />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {(content.heroImages || []).map((img: string, idx: number) => (
+                      <div key={idx} className="relative">
+                        <ImageUpload
+                          label={`Slide ${idx + 1}`}
+                          value={img}
+                          onChange={(v) => {
+                            const newList = [...(content.heroImages || [])];
+                            newList[idx] = v;
+                            setContent({ ...content, heroImages: newList });
+                          }}
+                          aspectRatio="wide"
+                        />
+                        <button
+                          onClick={() => {
+                            const newList = [...(content.heroImages || [])];
+                            newList.splice(idx, 1);
+                            setContent({ ...content, heroImages: newList });
+                          }}
+                          className="absolute -top-2 -right-2 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-rose-600 transition-colors z-20"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setContent({ ...content, heroImages: [...(content.heroImages || []), ''] })}
+                    className="w-full py-6 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 font-bold hover:text-toba-green hover:border-toba-green transition-all flex items-center justify-center gap-2"
+                  >
+                    <Plus size={20} /> Tambah Slide Hero
+                  </button>
+                  <p className="text-xs text-slate-400 text-center">Jika kosong, akan menggunakan 6 gambar default dari folder assets</p>
+                </div>
+              )}
+
               {/* TENTANG KAMI */}
               {activeTab === 'about' && (
                 <div className="space-y-8">
