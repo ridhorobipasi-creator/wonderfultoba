@@ -8,22 +8,36 @@ export async function GET(req: NextRequest) {
   if (!key) return NextResponse.json({ error: 'Missing key' }, { status: 400 });
   const setting = await prisma.setting.findUnique({ where: { key } });
   if (!setting) return NextResponse.json(null);
-  try {
-    return NextResponse.json(JSON.parse(setting.value as string));
-  } catch {
-    return NextResponse.json(setting.value);
+
+  // Prisma Json field may return a string (double-encoded) or already-parsed object
+  // Handle both cases safely
+  const raw = setting.value;
+  if (typeof raw === 'string') {
+    try {
+      // Double-encoded: stored as JSON string inside Json field
+      const parsed = JSON.parse(raw);
+      // If still a string after first parse, parse again
+      if (typeof parsed === 'string') {
+        return NextResponse.json(JSON.parse(parsed));
+      }
+      return NextResponse.json(parsed);
+    } catch {
+      return NextResponse.json(raw);
+    }
   }
+  // Already an object (Prisma parsed it)
+  return NextResponse.json(raw);
 }
 
 // POST /api/settings
 export async function POST(req: NextRequest) {
   const { key, value } = await req.json();
   if (!key) return NextResponse.json({ error: 'Missing key' }, { status: 400 });
-  const valStr = typeof value === 'string' ? value : JSON.stringify(value);
+  // Always store as plain object in Json field (not double-encoded)
   const setting = await prisma.setting.upsert({
     where: { key },
-    update: { value: valStr as any },
-    create: { key, value: valStr as any },
+    update: { value: value as any },
+    create: { key, value: value as any },
   });
   return NextResponse.json(setting);
 }

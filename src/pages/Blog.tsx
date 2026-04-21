@@ -64,7 +64,9 @@ export default function Blog({ category }: { category?: 'tour' | 'outbound' }) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await api.get('/posts');
+        // Filter by category: 'tour' or 'outbound' based on which page we're on
+        const params = category ? `?category=${category}` : '';
+        const res = await api.get(`/blogs${params}`);
         setPosts(res.data.length > 0 ? res.data : fallbackPosts);
       } catch {
         setPosts(fallbackPosts);
@@ -73,7 +75,7 @@ export default function Blog({ category }: { category?: 'tour' | 'outbound' }) {
       }
     };
     fetchPosts();
-  }, []);
+  }, [category]);
 
   const filtered = posts.filter(p => {
     const matchCat = activeCategory === 'Semua' || p.category === activeCategory;

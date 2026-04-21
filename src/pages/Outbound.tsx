@@ -52,25 +52,52 @@ export default function Outbound() {
   const [locations, setLocations] = useState<OutboundLocation[]>([]);
   const [clients, setClients] = useState<string[]>([]);
   const [gallery, setGallery] = useState<string[]>([]);
+  const [heroImages, setHeroImages] = useState([
+    '/assets/images/2023/10/001-1.jpg',
+    '/assets/images/2023/10/002-1.jpg',
+    '/assets/images/2023/10/003-1.jpg',
+    '/assets/images/2023/10/004.jpg',
+    '/assets/images/2023/10/006.jpg',
+    '/assets/images/2023/10/009-1.jpg',
+  ]);
+  const [about, setAbout] = useState({
+    title: 'Apa itu Outbound?',
+    description: 'Outbound adalah metode pembelajaran berbasis pengalaman di alam terbuka yang dirancang untuk membangun karakter, kepemimpinan, dan kerjasama tim secara efektif.',
+    vision: 'Menjadi provider outbound terpercaya dan terdepan di Sumatera Utara yang menghadirkan pengalaman belajar bermakna.',
+    mission: 'Memberikan layanan outbound berkualitas tinggi dengan trainer tersertifikasi dan venue premium untuk memaksimalkan potensi SDM.',
+    statsLabel: 'Tahun',
+    statsValue: '12+',
+  });
 
   useEffect(() => {
     async function fetchAllData() {
       try {
-        const [servicesRes, videosRes, locationsRes, clientsRes, galleryRes] = await Promise.all([
+        const [servicesRes, videosRes, locationsRes, clientsRes, galleryRes, settingsRes] = await Promise.all([
           fetch('/api/outbound/services'),
           fetch('/api/outbound/videos'),
           fetch('/api/outbound/locations'),
           fetch('/api/clients'),
-          fetch('/api/gallery?category=outbound')
+          fetch('/api/gallery?category=outbound'),
+          fetch('/api/settings?key=outbound_landing'),
         ]);
 
-        const [servicesData, videosData, locationsData, clientsData, galleryData] = await Promise.all([
+        const [servicesData, videosData, locationsData, clientsData, galleryData, settingsData] = await Promise.all([
           servicesRes.json(),
           videosRes.json(),
           locationsRes.json(),
           clientsRes.json(),
-          galleryRes.json()
+          galleryRes.json(),
+          settingsRes.json(),
         ]);
+
+        // Load about section from CMS settings
+        if (settingsData?.about) {
+          setAbout(prev => ({ ...prev, ...settingsData.about }));
+        }
+        // Load hero images from CMS settings if available
+        if (settingsData?.heroImages && Array.isArray(settingsData.heroImages) && settingsData.heroImages.length > 0) {
+          setHeroImages(settingsData.heroImages);
+        }
 
         // Map icon strings to Lucide components
         const iconMap: Record<string, IconComponent> = {
@@ -98,15 +125,6 @@ export default function Outbound() {
     }
     fetchAllData();
   }, []);
-
-  const heroImages = [
-    '/assets/images/2023/10/001-1.jpg',
-    '/assets/images/2023/10/002-1.jpg',
-    '/assets/images/2023/10/003-1.jpg',
-    '/assets/images/2023/10/004.jpg',
-    '/assets/images/2023/10/006.jpg',
-    '/assets/images/2023/10/009-1.jpg',
-  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -232,7 +250,7 @@ export default function Outbound() {
               </div>
               
               <h2 className="text-5xl md:text-6xl lg:text-[4rem] font-black text-slate-900 mb-10 leading-[1.1] tracking-tight">
-                {data.about.title || 'Apa itu Outbound?'} <span className="text-toba-green relative inline-block">
+                {about.title || 'Apa itu Outbound?'} <span className="text-toba-green relative inline-block">
                   Outbound?
                   <svg className="absolute w-[110%] h-4 -bottom-1 left-[-5%] text-toba-green/20" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" stroke="currentColor" strokeWidth="8" fill="none" strokeLinecap="round" /></svg>
                 </span>
@@ -241,7 +259,7 @@ export default function Outbound() {
               <div className="relative mb-12">
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-toba-green to-emerald-200 rounded-full" />
                 <div className="pl-8 text-xl leading-relaxed text-slate-600 font-medium">
-                  {data.about.description}
+                  {about.description}
                 </div>
               </div>
 
@@ -288,10 +306,10 @@ export default function Outbound() {
                 className="absolute top-1/2 -left-8 lg:-left-12 z-30 bg-white/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] border border-white flex items-center gap-4"
               >
                 <div className="bg-gradient-to-br from-toba-green to-emerald-600 text-white w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-2xl shadow-inner shadow-white/20">
-                  {data.about.statsValue || '12+'}
+                  {about.statsValue || '12+'}
                 </div>
                 <div>
-                  <div className="font-black text-slate-900 text-sm md:text-base uppercase tracking-wider leading-none mb-1">{data.about.statsLabel || 'Tahun'}</div>
+                  <div className="font-black text-slate-900 text-sm md:text-base uppercase tracking-wider leading-none mb-1">{about.statsLabel || 'Tahun'}</div>
                   <div className="text-slate-500 font-bold text-xs md:text-sm">Pengalaman Eksekusi</div>
                 </div>
               </motion.div>
@@ -324,7 +342,7 @@ export default function Outbound() {
               </div>
               <h3 className="text-3xl font-black text-slate-900 mb-6">VISI KAMI</h3>
               <p className="text-slate-600 font-medium leading-relaxed text-lg">
-                {data.about.vision}
+                {about.vision}
               </p>
             </motion.div>
             
@@ -334,7 +352,7 @@ export default function Outbound() {
               </div>
               <h3 className="text-3xl font-black text-slate-900 mb-6">MISI KAMI</h3>
               <p className="text-slate-600 font-medium leading-relaxed text-lg mb-4">
-                {data.about.mission}
+                {about.mission}
               </p>
               <p className="text-slate-500 font-medium leading-relaxed text-sm bg-slate-50 p-4 rounded-xl border border-slate-100">
                 Kami juga mengintrodusir pelatihan khusus: <em>Motivation Building</em>, <em>Assessment Center</em>, dan <em>Counselling</em> merespon keluhan kualitas SDM & Etos Kerja.
@@ -365,7 +383,7 @@ export default function Outbound() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {data.services.map((svc, i: number) => (
+            {services.map((svc, i: number) => (
               <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="group relative rounded-[2.5rem] p-1 overflow-hidden bg-gradient-to-b from-white/10 to-white/5 hover:from-toba-green/40 hover:to-toba-green/5 transition-colors duration-500">
                 
@@ -539,3 +557,4 @@ export default function Outbound() {
     </div>
   );
 }
+

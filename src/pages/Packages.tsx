@@ -51,11 +51,10 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
 
   const filteredPackages = packages
     .filter(p => {
-      // If we are in the Outbound scope, strictly show outbound category
-      // If we are in the Tour scope, rigorously show ONLY tour category or things without categories
-      const matchCategory = category === 'outbound' 
-        ? p.category === 'outbound'
-        : (p.category === 'tour' || !p.category);
+      // Use isOutbound boolean field (from API) not category string
+      const matchCategory = category === 'outbound'
+        ? p.isOutbound === true
+        : p.isOutbound !== true;
 
       const matchCity = filterCity === 'all' || String(p.cityId) === filterCity;
       const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -84,16 +83,19 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       </Helmet>
       {/* Hero */}
       <div className="relative h-[65vh] flex items-end overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000"
-          alt="Packages Hero" className="absolute inset-0 w-full h-full object-cover" />
+        <img
+          src={packages[0]?.images?.[0] || '/assets/images/2023/10/001-1.jpg'}
+          alt="Packages Hero"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-[#f8fafc]" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pb-32">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="inline-block px-4 py-1.5 bg-toba-green text-white text-[10px] font-bold uppercase tracking-[0.3em] rounded-full mb-4">
-              Eksplorasi Sumatera Utara
+              {category === 'outbound' ? 'Corporate Outbound' : 'Eksplorasi Indonesia & Dunia'}
             </span>
             <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight leading-tight">
-              Paket Wisata <span className="text-toba-accent">Pilihan</span><br />Terbaik Sumut
+              Paket {category === 'outbound' ? 'Outbound' : 'Wisata'} <span className="text-toba-accent">Pilihan</span><br />Terbaik
             </h1>
           </motion.div>
         </div>
@@ -118,7 +120,27 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
               <select value={filterCity} onChange={e => setFilterCity(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green/20 font-medium text-slate-700 appearance-none cursor-pointer">
                 <option value="all">Semua Wilayah</option>
-                {cities.map(c => <option key={c.id} value={String(c.id)}>{c.name}</option>)}
+                {(() => {
+                  const domestic = cities.filter((c: any) => c.type === 'domestic' || !c.type);
+                  const byProvince: Record<string, typeof domestic> = {};
+                  domestic.forEach((c: any) => {
+                    const prov = c.region || 'Indonesia';
+                    if (!byProvince[prov]) byProvince[prov] = [];
+                    byProvince[prov].push(c);
+                  });
+                  return Object.entries(byProvince).map(([prov, items]) => (
+                    <optgroup key={prov} label={`🇮🇩 ${prov}`}>
+                      {items.map(c => <option key={c.id} value={String(c.id)}>{c.name}</option>)}
+                    </optgroup>
+                  ));
+                })()}
+                {cities.filter((c: any) => c.type === 'international').length > 0 && (
+                  <optgroup label="✈️ Internasional">
+                    {cities.filter((c: any) => c.type === 'international').map(c => (
+                      <option key={c.id} value={String(c.id)}>{c.name}</option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </div>
             {/* Sort */}
@@ -163,12 +185,18 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
               Ditemukan <span className="text-toba-green font-black">{filteredPackages.length}</span> paket wisata
             </p>
           </div>
-          {/* City quick chips */}
+          {/* City quick chips - group by province */}
           <div className="flex gap-2 flex-wrap">
-            {cities.slice(0, 5).map(c => (
+            <button
+              onClick={() => setFilterCity('all')}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all border ${filterCity === 'all' ? 'bg-toba-green text-white border-toba-green' : 'bg-white text-slate-600 border-slate-200 hover:border-toba-green'}`}
+            >
+              Semua
+            </button>
+            {cities.slice(0, 8).map(c => (
               <button key={c.id} onClick={() => setFilterCity(filterCity === String(c.id) ? 'all' : String(c.id))}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all border ${filterCity === String(c.id) ? 'bg-toba-green text-white border-toba-green' : 'bg-white text-slate-600 border-slate-200 hover:border-toba-green'}`}>
-                <MapPin size={11} /> {c.name}
+                {(c as any).type === 'international' ? '✈️' : <MapPin size={11} />} {c.name}
               </button>
             ))}
           </div>
@@ -183,7 +211,11 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPackages.map((pkg, index) => (
                 <motion.div key={pkg.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.06 }}>
-                  <PackageCard package={pkg} locationName={cities.find(c => String(c.id) === String(pkg.cityId))?.name} />
+                  <PackageCard
+                    package={pkg}
+                    locationName={cities.find(c => String(c.id) === String(pkg.cityId))?.name}
+                    locationData={cities.find(c => String(c.id) === String(pkg.cityId))}
+                  />
                 </motion.div>
               ))}
             </motion.div>
@@ -225,10 +257,10 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
             <h3 className="text-2xl md:text-4xl font-black text-white mb-4">Tidak Menemukan Paket yang Cocok?</h3>
             <p className="text-white/80 font-medium mb-8 max-w-xl mx-auto">Kami siap merancang itinerary khusus sesuai kebutuhan dan budget Anda.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+6281234567890" className="flex items-center justify-center gap-2 bg-white text-toba-green px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-xl">
+              <a href="tel:+6281323888207" className="flex items-center justify-center gap-2 bg-white text-toba-green px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-xl">
                 <Users size={18} /> Konsultasi Gratis
               </a>
-              <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/6281323888207" target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-white/20 text-white border border-white/30 px-8 py-4 rounded-2xl font-black hover:bg-white/30 transition-all">
                 WhatsApp Kami
               </a>

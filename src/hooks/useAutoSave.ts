@@ -11,8 +11,8 @@ interface UseAutoSaveOptions {
 }
 
 export function useAutoSave({ data, key, delay = 5000, enabled = true }: UseAutoSaveOptions) {
-  const timerRef = useRef<NodeJS.Timeout>();
-  const previousDataRef = useRef<string>();
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const previousDataRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (!enabled) return;

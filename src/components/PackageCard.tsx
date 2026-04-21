@@ -2,17 +2,26 @@
 
 import { motion } from 'framer-motion';
 import { Star, MapPin, ArrowRight, Heart } from 'lucide-react';
-import { Package } from '../types';
+import { Package, City } from '../types';
 import { useRouter } from 'next/navigation';
 
 interface PackageCardProps {
   package: Package;
   locationName?: string;
+  locationData?: City;
   key?: string | number;
 }
 
-export default function PackageCard({ package: pkg, locationName }: PackageCardProps) {
+export default function PackageCard({ package: pkg, locationName, locationData }: PackageCardProps) {
   const router = useRouter();
+
+  const displayLocation = locationData
+    ? (locationData.type === 'international'
+        ? `${locationData.place || locationData.region || ''}, ${locationData.country}`.replace(/^, /, '')
+        : locationData.name)
+    : (locationName || 'Sumatera Utara');
+
+  const isInternational = locationData?.type === 'international';
 
   return (
     <motion.div
@@ -54,7 +63,8 @@ export default function PackageCard({ package: pkg, locationName }: PackageCardP
       <div className="p-8">
         <div className="flex items-center text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-3">
           <MapPin size={12} className="mr-2" />
-          <span>{locationName || 'Indonesia'}</span>
+          <span>{displayLocation}</span>
+          {isInternational && <span className="ml-1.5">✈️</span>}
         </div>
         
         <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tight">

@@ -2,6 +2,11 @@ export interface City {
   id: number | string;
   name: string;
   slug?: string;
+  type?: 'domestic' | 'international';
+  country?: string;
+  region?: string;
+  district?: string;
+  place?: string;
   description?: string;
 }
 

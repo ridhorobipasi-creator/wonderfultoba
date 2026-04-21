@@ -1,5 +1,5 @@
-import AdminLandingPage from '@/app/components/AdminLandingPage';
+import AdminTourLanding from '@/pages/AdminTourLanding';
 
 export default function Page() {
-  return <AdminLandingPage category="tour" />;
+  return <AdminTourLanding />;
 }

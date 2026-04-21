@@ -43,9 +43,10 @@ export default function AdminSidebar() {
     {
       label: 'MANAJEMEN KONTEN (CMS)',
       items: [
+        { label: '🌐 CMS Halaman Utama', href: '/admin/cms-landing', icon: Globe2, pattern: /\/cms-landing/ },
         { label: '🏠 CMS Beranda Tour', href: '/admin/cms-tour', icon: Home, pattern: /\/cms-tour/ },
         { label: 'Blog / Artikel', href: '/admin/blog', icon: FileText, pattern: /\/blog/ },
-        { label: 'Wilayah & Kota', href: '/admin/cities', icon: MapPin, pattern: /\/cities/ },
+        { label: 'Wilayah & Destinasi', href: '/admin/cities', icon: MapPin, pattern: /\/cities/ },
         { label: 'Media Library', href: '/admin/media', icon: Image, pattern: /\/media/ },
       ],
     },
