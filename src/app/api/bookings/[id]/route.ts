@@ -8,8 +8,8 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    await requireAdminFromRequest(request);
     const body = await request.json();
+    await requireAdminFromRequest(request);
     const booking = await prisma.booking.update({
       where: { id: Number(id) },
       data: { status: body.status },

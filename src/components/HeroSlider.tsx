@@ -106,6 +106,7 @@ interface Destination {
   price: number;
   image: string;
   cardImage: string;
+  link?: string;
 }
 
 export default function HeroSlider({ category = 'tour', destinations: customDestinations }: HeroSliderProps) {
@@ -225,7 +226,7 @@ export default function HeroSlider({ category = 'tour', destinations: customDest
               </p>
 
               {/* Tombol CTA */}
-              <Link href="/packages"
+              <Link href={active.link || "/tour/packages"}
                 className="inline-flex items-center gap-3 bg-toba-green text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.15em] hover:bg-toba-accent transition-all duration-300 shadow-2xl shadow-toba-green/30 group"
               >
                 <span>Pesan Sekarang</span>

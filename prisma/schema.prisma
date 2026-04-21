@@ -101,7 +101,8 @@ model Booking {
   id            Int      @id @default(autoincrement())
   userId        Int?
   type          String
-  itemId        Int
+  packageId     Int?
+  carId         Int?
   startDate     DateTime
   endDate       DateTime
   totalPrice    Float
@@ -112,12 +113,13 @@ model Booking {
   metadata      Json?
   status        String   @default("pending")
   user          User?    @relation(fields: [userId], references: [id])
-  package       Package? @relation(fields: [itemId], references: [id], map: "Booking_Package_fkey")
-  car           Car?     @relation(fields: [itemId], references: [id], map: "Booking_Car_fkey")
+  package       Package? @relation(fields: [packageId], references: [id])
+  car           Car?     @relation(fields: [carId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@index([itemId])
+  @@index([packageId])
+  @@index([carId])
   @@index([userId])
 }
 

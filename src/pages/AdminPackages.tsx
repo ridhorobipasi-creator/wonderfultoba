@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import { Package, City } from '../types';
 import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Search, Package as PackageIcon, Filter, MoreHorizontal, MapPin, Calendar, DollarSign, Star, Zap } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Package as PackageIcon, Filter, MoreHorizontal, MapPin, Calendar, DollarSign, Star, Zap, RefreshCcw } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -25,12 +25,22 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
   const [editPriceValue, setEditPriceValue] = useState<string>('');
   const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     fetchData();
+    
+    // Auto refresh every 30 seconds
+    const intervalId = setInterval(() => {
+      fetchData(true);
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, [category]);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (silent = false) => {
+    if (!silent) setLoading(true);
+    if (silent) setRefreshing(true);
     try {
       const [pkgRes, cityRes] = await Promise.all([
         api.get<AdminPackage[]>('/packages', { params: { category } }),
@@ -40,9 +50,10 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
       setCities(cityRes.data);
     } catch (error) {
       console.error('Error fetching packages:', error);
-      toast.error('Gagal mengambil data');
+      if (!silent) toast.error('Gagal mengambil data');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -106,7 +117,17 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Daftar Paket</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Daftar Paket</h1>
+            <button 
+              onClick={() => fetchData(true)} 
+              disabled={refreshing}
+              className="p-2 text-slate-400 hover:text-toba-green transition-all disabled:opacity-50"
+              title="Refresh data"
+            >
+              <RefreshCcw className={cn("w-5 h-5", refreshing && "animate-spin")} /> 
+            </button>
+          </div>
           <p className="text-slate-400 font-medium mt-1">Kelola paket wisata dan outbound Anda secara real-time.</p>
         </div>
         <button

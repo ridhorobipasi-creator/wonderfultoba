@@ -17,7 +17,8 @@ export async function POST(request: Request) {
     const booking = await prisma.booking.create({
       data: {
         type,
-        itemId: Number(item_id),
+        packageId: type === 'package' ? Number(item_id) : null,
+        carId: type === 'car' ? Number(item_id) : null,
         startDate: new Date(start_date),
         endDate: new Date(end_date),
         totalPrice: Number(total_price),

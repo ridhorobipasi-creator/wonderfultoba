@@ -27,6 +27,7 @@ interface SliderItem {
   cardImage: string;
   duration: string;
   price: number;
+  link?: string;
 }
 
 interface WhyUsItem {
@@ -261,6 +262,7 @@ export default function AdminTourLanding() {
         cardImage: imgs[1] || imgs[0] || '',
         duration: item.duration || '',
         price: typeof item.price === 'number' ? item.price : parseInt(item.price) || 0,
+        link: item.slug ? `/tour/package/${item.slug}` : '/tour/packages'
       };
     } else if (importSource === 'blog') {
       patch = {
@@ -271,6 +273,7 @@ export default function AdminTourLanding() {
         cardImage: item.image || '',
         duration: '',
         price: 0,
+        link: item.slug ? `/tour/blog/${item.slug}` : '/tour/blog'
       };
     } else if (importSource === 'gallery') {
       patch = {
@@ -281,6 +284,7 @@ export default function AdminTourLanding() {
         cardImage: item.imageUrl || '',
         duration: '',
         price: 0,
+        link: '/tour/gallery'
       };
     }
 
@@ -434,9 +438,10 @@ export default function AdminTourLanding() {
                             aspectRatio="video"
                           />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                           <InputGroup label="Durasi" value={slide.duration} onChange={(v: string) => updateItem('slider', idx, 'duration', v)} placeholder="4 Hari 3 Malam" />
                           <InputGroupNumber label="Harga Mulai (Rp)" value={slide.price} onChange={(v: number) => updateItem('slider', idx, 'price', v)} placeholder="3500000" />
+                          <InputGroup label="Link" value={slide.link} onChange={(v: string) => updateItem('slider', idx, 'link', v)} placeholder="/tour/packages" />
                         </div>
                       </div>
                     ))}

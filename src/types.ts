@@ -46,7 +46,8 @@ export interface Booking {
   id: number;
   userId?: number;
   type: 'package' | 'car';
-  itemId?: number | string;
+  packageId?: number | string;
+  carId?: number | string;
   startDate: string;
   endDate: string;
   totalPrice: number;

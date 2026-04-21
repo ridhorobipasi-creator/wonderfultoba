@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import { UserProfile } from '../types';
-import { Search, User as UserIcon, Mail, Edit2, MoreHorizontal, Filter, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { Search, User as UserIcon, Mail, Edit2, MoreHorizontal, Filter, ShieldCheck, ShieldAlert, RefreshCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
 import { toast } from 'sonner';
@@ -21,12 +21,22 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     fetchData();
+    
+    // Auto refresh every 30 seconds
+    const intervalId = setInterval(() => {
+      fetchData(true);
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (silent = false) => {
+    if (!silent) setLoading(true);
+    if (silent) setRefreshing(true);
     try {
       const res = await api.get('/users');
       // Normalize API response to UserProfile shape.
@@ -41,9 +51,10 @@ export default function AdminUsers() {
       setUsers(mapped);
     } catch (error) {
       console.error('Error fetching users:', error);
-      toast.error('Gagal memuat data pengguna');
+      if (!silent) toast.error('Gagal memuat data pengguna');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -68,7 +79,17 @@ export default function AdminUsers() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Manajemen Pengguna</h2>
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Manajemen Pengguna</h2>
+            <button 
+              onClick={() => fetchData(true)} 
+              disabled={refreshing}
+              className="p-2 text-slate-400 hover:text-obaja-blue transition-all disabled:opacity-50"
+              title="Refresh data"
+            >
+              <RefreshCcw className={cn("w-6 h-6", refreshing && "animate-spin")} /> 
+            </button>
+          </div>
           <p className="text-slate-500 font-medium">Kelola peran, hak akses, dan informasi profil pengguna platform Anda.</p>
         </div>
         <div className="flex items-center space-x-3">

@@ -87,6 +87,8 @@ export async function GET(request: Request) {
     // Map to frontend expected structure
     const mapped = bookings.map(b => ({
       ...b,
+      packageId: b.packageId,
+      carId: b.carId,
       itemName: b.type === 'package' ? b.package?.name : b.car?.name,
       itemImage: b.type === 'package' ? firstImage(b.package?.images) : firstImage(b.car?.images),
       item_details: {
@@ -123,7 +125,8 @@ export async function POST(request: Request) {
     const booking = await prisma.booking.create({
       data: {
         type,
-        itemId: Number(item_id),
+        packageId: type === 'package' ? Number(item_id) : null,
+        carId: type === 'car' ? Number(item_id) : null,
         startDate: new Date(start_date),
         endDate: new Date(end_date),
         totalPrice: Number(total_price),

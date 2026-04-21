@@ -41,10 +41,18 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchStats();
+    
+    // Auto refresh every 10 seconds
+    const intervalId = setInterval(() => {
+      fetchStats(true); // pass true for silent refresh
+    }, 10000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
-  const fetchStats = async () => {
-    setLoading(true);
+  const fetchStats = async (silent = false) => {
+    if (!silent) setLoading(true);
+    if (silent) setRefreshing(true);
     setHasError(false);
     try {
       const res = await fetch('/api/dashboard');
@@ -55,14 +63,13 @@ export default function AdminDashboard() {
       } else {
         const errorText = await res.text();
         console.error('Dashboard API error:', errorText);
-        toast.error('Gagal memuat data dashboard. Periksa koneksi database.');
+        if (!silent) toast.error('Gagal memuat data dashboard. Periksa koneksi database.');
         setHasError(true);
       }
     } catch (error) {
       console.error('Dashboard error:', error);
-      toast.error('Database tidak terhubung. Silakan start MySQL server.');
+      if (!silent) toast.error('Database tidak terhubung. Silakan start MySQL server.');
       setHasError(true);
-      // Set default data untuk development
       setStats({
         totalBookings: 0,
         pendingBookings: 0,
@@ -73,7 +80,8 @@ export default function AdminDashboard() {
         chartData: [],
       });
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -195,7 +203,13 @@ export default function AdminDashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Pusat Komando</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Pusat Komando</h1>
+              <div className="bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded-lg flex items-center gap-1.5 border border-emerald-500/20 shadow-sm animate-pulse">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest">Live</span>
+              </div>
+            </div>
             <p className="text-slate-400 font-medium mt-1 text-sm">Selamat datang di panel admin Wonderful Toba 👋</p>
           </div>
           <div className="flex gap-2 lg:gap-3 w-full md:w-auto">
