@@ -155,10 +155,10 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
       );
     }
     switch (sortBy) {
-      case 'oldest': list.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()); break;
+      case 'oldest': list.sort((a, b) => new Date(a.createdAt || '').getTime() - new Date(b.createdAt || '').getTime()); break;
       case 'price_high': list.sort((a, b) => b.totalPrice - a.totalPrice); break;
       case 'price_low': list.sort((a, b) => a.totalPrice - b.totalPrice); break;
-      default: list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      default: list.sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
     }
     return list;
   }, [bookings, filterStatus, filterType, searchQuery, sortBy]);

@@ -5,8 +5,20 @@ import { ChevronLeft, ChevronRight, MapPin, Clock, ArrowRight } from 'lucide-rea
 import { cn } from '../utils/cn';
 import Link from 'next/link';
 
+interface Destination {
+  id: number;
+  region: string;
+  title: string;
+  description: string;
+  duration: string;
+  price: number;
+  image: string;
+  cardImage: string;
+  link?: string;
+}
+
 // Data destinasi wisata Sumatera Utara (Tour)
-const tourDestinations = [
+const tourDestinations: Destination[] = [
   {
     id: 1,
     region: 'Tobasa, Sumatera Utara',
@@ -59,7 +71,7 @@ const tourDestinations = [
   },
 ];
 
-const outboundDestinations = [
+const outboundDestinations: Destination[] = [
   {
     id: 1,
     region: 'Toba & Samosir',
@@ -95,18 +107,6 @@ const outboundDestinations = [
 interface HeroSliderProps {
   category?: 'tour' | 'outbound';
   destinations?: Destination[];
-}
-
-interface Destination {
-  id: number;
-  region: string;
-  title: string;
-  description: string;
-  duration: string;
-  price: number;
-  image: string;
-  cardImage: string;
-  link?: string;
 }
 
 export default function HeroSlider({ category = 'tour', destinations: customDestinations }: HeroSliderProps) {
