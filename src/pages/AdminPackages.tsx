@@ -21,6 +21,8 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [editingPriceId, setEditingPriceId] = useState<number | string | null>(null);
+  const [editPriceValue, setEditPriceValue] = useState<string>('');
 
   useEffect(() => {
     fetchData();
@@ -53,6 +55,17 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
         toast.error('Gagal menghapus paket');
       }
     }
+  };
+
+  const savePrice = async (pkg: AdminPackage) => {
+    try {
+      await api.put(`/packages/${pkg.id}`, { ...pkg, price: Number(editPriceValue) });
+      toast.success('Harga berhasil diperbarui');
+      setPackages(packages.map(p => p.id === pkg.id ? { ...p, price: Number(editPriceValue) } : p));
+    } catch {
+      toast.error('Gagal memperbarui harga');
+    }
+    setEditingPriceId(null);
   };
 
   const filteredPackages = packages.filter(pkg => 
@@ -178,10 +191,40 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                     </span>
                   </td>
                   <td className="px-8 py-6">
-                    <div className="flex flex-col">
-                      <p className="font-bold text-slate-700">Rp {(Number(pkg.price)/1000).toLocaleString('id-ID')}k</p>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">{pkg.price_display || 'PER ORANG'}</p>
-                    </div>
+                    {editingPriceId === pkg.id ? (
+                      <div className="flex flex-col gap-2">
+                        <input
+                          type="number"
+                          value={editPriceValue}
+                          onChange={(e) => setEditPriceValue(e.target.value)}
+                          className="w-28 px-2 py-1 text-sm font-bold bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-toba-green"
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') savePrice(pkg);
+                            if (e.key === 'Escape') setEditingPriceId(null);
+                          }}
+                        />
+                        <div className="flex gap-1">
+                          <button onClick={() => savePrice(pkg)} className="text-[9px] px-2 py-1 bg-toba-green text-white rounded font-bold">Simpan</button>
+                          <button onClick={() => setEditingPriceId(null)} className="text-[9px] px-2 py-1 bg-slate-200 text-slate-600 rounded font-bold">Batal</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div 
+                        className="flex flex-col cursor-pointer hover:bg-slate-50 p-2 -ml-2 rounded-lg transition-colors group relative"
+                        onClick={() => {
+                          setEditingPriceId(pkg.id);
+                          setEditPriceValue(pkg.price.toString());
+                        }}
+                        title="Klik untuk ubah harga (Inline Edit)"
+                      >
+                        <p className="font-bold text-slate-700 group-hover:text-toba-green flex items-center gap-1.5">
+                          Rp {(Number(pkg.price)/1000).toLocaleString('id-ID')}k 
+                          <Edit2 size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </p>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">{pkg.price_display || 'PER ORANG'}</p>
+                      </div>
+                    )}
                   </td>
                   <td className="px-8 py-6">
                     <span className={cn(

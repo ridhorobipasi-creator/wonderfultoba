@@ -17,6 +17,7 @@ import FormField from '@/components/admin/FormField';
 import { showErrorToast } from '@/lib/errorHandler';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 interface PricingDetailForm {
   pax: string;
@@ -423,11 +424,9 @@ export default function AdminPackageCreate() {
                 label="Deskripsi Lengkap"
                 error={errors.description}
               >
-                <textarea
-                  {...register('description')}
-                  rows={6}
-                  className="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
-                  placeholder="Penjelasan lengkap mengenai perjalanan ini..."
+                <RichTextEditor
+                  value={watch('description') || ''}
+                  onChange={(val) => setValue('description', val, { shouldValidate: true, shouldDirty: true })}
                 />
               </FormField>
 
@@ -578,11 +577,9 @@ export default function AdminPackageCreate() {
 
               <div className="space-y-3 pt-4 border-t border-slate-100">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Atau Isi Itinerary Teks Bebas</label>
-                <textarea
-                  {...register('itinerary_text')}
-                  rows={4}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
-                  placeholder="Gunakan kolom ini jika tidak ingin menggunakan format per hari..."
+                <RichTextEditor
+                  value={watch('itinerary_text') || ''}
+                  onChange={(val) => setValue('itinerary_text', val, { shouldValidate: true, shouldDirty: true })}
                 />
               </div>
 

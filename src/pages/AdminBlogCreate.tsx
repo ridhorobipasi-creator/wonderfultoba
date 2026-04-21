@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import FileUpload from '@/components/admin/FileUpload';
 import ImageUpload from '@/components/ImageUpload';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 interface AdminBlogForm {
   title: string;
@@ -220,7 +221,7 @@ export default function AdminBlogCreate() {
                 />
               </div>
 
-              <div className="space-y-3 pt-4 border-t border-slate-100">
+              <div className="space-y-3">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Kutipan Singkat (Excerpt)</label>
                 <textarea
                   {...register('excerpt')}
@@ -232,11 +233,9 @@ export default function AdminBlogCreate() {
 
               <div className="space-y-3">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Isi Artikel Lengkap</label>
-                <textarea
-                  {...register('content', { required: true })}
-                  rows={10}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
-                  placeholder="Tulis konten artikel Anda di sini... Mendukung penulisan paragraf panjang."
+                <RichTextEditor
+                  value={watch('content') || ''}
+                  onChange={(val) => setValue('content', val, { shouldValidate: true, shouldDirty: true })}
                 />
               </div>
             </div>
