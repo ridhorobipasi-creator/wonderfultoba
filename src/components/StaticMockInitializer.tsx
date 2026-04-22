@@ -78,11 +78,11 @@ export default function StaticMockInitializer() {
           tourPackages: mockTours.filter(p => !p.isOutbound).length,
           outboundPackages: mockTours.filter(p => !!p.isOutbound).length,
           recentBookings: mockBookings.map(b => ({
-            customer_name: b.customerName,
-            start_date: b.startDate,
-            total_price: b.totalPrice,
-            status: b.status,
-            type: b.package?.name || 'Tour'
+            customer_name: b.customer_name,
+            start_date: b.booking_date,
+            total_price: b.total_price,
+            status: b.status.toLowerCase() as any,
+            type: b.tour_name || 'Tour'
           })),
           chartData: [
             { date: '2026-04-15', revenue: 15000000 },
