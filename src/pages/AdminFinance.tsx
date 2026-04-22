@@ -1,192 +1,255 @@
 "use client";
 
-import { useState } from 'react';
-import { 
+import { useState, useEffect } from 'react';
+import {
   TrendingUp, Wallet, ArrowUpRight, ArrowDownRight,
-  Download, PieChart,
-  CalendarDays, ChevronRight
+  Download, PieChart, CalendarDays, ChevronRight, Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../utils/cn';
+import api from '../lib/api';
+import { toast } from 'sonner';
 
-interface RevenueByCategory {
-  name: string;
-  value: number;
-  color: string;
-}
-
-interface TransactionItem {
-  id: string;
-  customer: string;
-  item: string;
-  amount: number;
-  date: string;
-  method: string;
+interface BookingItem {
+  id: number;
+  customerName: string;
+  itemName?: string;
+  totalPrice: number;
+  createdAt: string;
+  type: string;
   status: string;
 }
 
-interface FinanceStats {
-  totalOmzet: number;
-  monthlyRevenue: { month: string; amount: number }[];
-  byCategory: RevenueByCategory[];
-  recentTransactions: TransactionItem[];
-}
-
 export default function AdminFinance() {
-  const [stats] = useState<FinanceStats>({
-    totalOmzet: 250000000,
-    monthlyRevenue: [
-      { month: 'Jan', amount: 45000000 },
-      { month: 'Feb', amount: 52000000 },
-      { month: 'Mar', amount: 68000000 },
-      { month: 'Apr', amount: 85000000 },
-    ],
-    byCategory: [
-      { name: 'Tour & Travel', value: 180000000, color: 'bg-toba-green' },
-      { name: 'Corporate Outbound', value: 45000000, color: 'bg-obaja-blue' },
-      { name: 'Rental Mobil', value: 25000000, color: 'bg-amber-500' },
-    ],
-    recentTransactions: [
-      { id: 'TRX001', customer: 'Andi Pratama', item: 'Paket Danau Toba 3D2N', amount: 5500000, date: '12 Apr 2026', method: 'Transfer Bank', status: 'Success' },
-      { id: 'TRX002', customer: 'Budi Santoso', item: 'Sewa Innova Reborn', amount: 1300000, date: '11 Apr 2026', method: 'Cash', status: 'Success' },
-      { id: 'TRX003', customer: 'Citra Kirana', item: 'Outbound Team Building', amount: 15000000, date: '10 Apr 2026', method: 'Transfer Bank', status: 'Success' },
-    ]
+  const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState<BookingItem[]>([]);
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    thisMonthRevenue: 0,
+    avgTransaction: 0,
+    tourRevenue: 0,
+    outboundRevenue: 0,
+    carRevenue: 0,
+    growth: 0,
   });
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get('/bookings');
+      const data: BookingItem[] = res.data || [];
+      setBookings(data);
+
+      // Hitung statistik dari data real
+      const confirmed = data.filter(b => b.status === 'confirmed' || b.status === 'completed');
+      const total = confirmed.reduce((sum, b) => sum + Number(b.totalPrice), 0);
+
+      const now = new Date();
+      const thisMonth = confirmed.filter(b => {
+        const d = new Date(b.createdAt);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+      const thisMonthRev = thisMonth.reduce((sum, b) => sum + Number(b.totalPrice), 0);
+
+      const lastMonth = confirmed.filter(b => {
+        const d = new Date(b.createdAt);
+        const lm = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        return d.getMonth() === lm.getMonth() && d.getFullYear() === lm.getFullYear();
+      });
+      const lastMonthRev = lastMonth.reduce((sum, b) => sum + Number(b.totalPrice), 0);
+
+      const tourRev = confirmed.filter(b => b.type === 'package').reduce((sum, b) => sum + Number(b.totalPrice), 0);
+      const carRev = confirmed.filter(b => b.type === 'car').reduce((sum, b) => sum + Number(b.totalPrice), 0);
+
+      setStats({
+        totalRevenue: total,
+        thisMonthRevenue: thisMonthRev,
+        avgTransaction: confirmed.length > 0 ? Math.round(total / confirmed.length) : 0,
+        tourRevenue: tourRev,
+        outboundRevenue: 0,
+        carRevenue: carRev,
+        growth: lastMonthRev > 0 ? Math.round(((thisMonthRev - lastMonthRev) / lastMonthRev) * 100) : 0,
+      });
+    } catch (error) {
+      console.error('Error fetching finance data:', error);
+      toast.error('Gagal memuat data keuangan');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleExport = () => {
+    toast.info('Fitur ekspor akan segera tersedia');
+  };
+
+  const recentBookings = bookings
+    .filter(b => b.status === 'confirmed' || b.status === 'completed')
+    .slice(0, 10);
+
+  const totalRevenue = stats.tourRevenue + stats.carRevenue + stats.outboundRevenue;
+  const categories = [
+    { name: 'Tour & Travel', value: stats.tourRevenue, color: 'bg-toba-green' },
+    { name: 'Rental Mobil', value: stats.carRevenue, color: 'bg-blue-500' },
+  ].filter(c => c.value > 0);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-10 h-10 animate-spin text-toba-green" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-10 pb-12">
+    <div className="space-y-8 pb-12">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Laporan <span className="text-toba-green">Keuangan</span></h2>
-          <p className="text-slate-500 font-medium">Analisis pendapatan dan performa bisnis Anda.</p>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">Laporan <span className="text-toba-green">Keuangan</span></h2>
+          <p className="text-slate-500 font-medium mt-1">Data real dari transaksi yang terkonfirmasi</p>
         </div>
-        <button className="flex items-center gap-2 px-6 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200">
+        <button onClick={handleExport} className="flex items-center gap-2 px-6 py-3.5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg">
           <Download size={18} />
-          <span>Ekspor Laporan (PDF/Excel)</span>
+          Ekspor Laporan
         </button>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-toba-green/5 rounded-bl-[5rem] -mr-8 -mt-8 transition-all group-hover:scale-110" />
-          <div className="w-12 h-12 bg-toba-green text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-100">
-            <TrendingUp size={22} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {[
+          {
+            label: 'Total Pendapatan',
+            value: `Rp ${stats.totalRevenue.toLocaleString('id-ID')}`,
+            icon: TrendingUp,
+            color: 'bg-toba-green',
+            shadow: 'shadow-emerald-100',
+            trend: null,
+          },
+          {
+            label: 'Bulan Ini',
+            value: `Rp ${stats.thisMonthRevenue.toLocaleString('id-ID')}`,
+            icon: Wallet,
+            color: 'bg-blue-600',
+            shadow: 'shadow-blue-100',
+            trend: stats.growth,
+          },
+          {
+            label: 'Rata-rata Transaksi',
+            value: `Rp ${stats.avgTransaction.toLocaleString('id-ID')}`,
+            icon: CalendarDays,
+            color: 'bg-amber-500',
+            shadow: 'shadow-amber-100',
+            trend: null,
+          },
+        ].map((s, i) => (
+          <div key={i} className="bg-white p-7 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+            <div className={cn('w-12 h-12 text-white rounded-2xl flex items-center justify-center mb-5 shadow-lg', s.color, s.shadow)}>
+              <s.icon size={22} />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{s.label}</p>
+            <h3 className="text-2xl font-black text-slate-900 leading-none">{s.value}</h3>
+            {s.trend !== null && (
+              <div className={cn('flex items-center gap-1 mt-3 font-bold text-xs', s.trend >= 0 ? 'text-emerald-600' : 'text-rose-500')}>
+                {s.trend >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                <span>{Math.abs(s.trend)}% dari bulan lalu</span>
+              </div>
+            )}
           </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Total Omzet Bersih</p>
-          <h3 className="text-3xl font-black text-slate-900 leading-none">Rp {stats.totalOmzet.toLocaleString('id-ID')}</h3>
-          <div className="flex items-center gap-1 mt-4 text-emerald-600 font-bold text-xs">
-            <ArrowUpRight size={14} />
-            <span>+12.5% dari bulan lalu</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-obaja-blue/5 rounded-bl-[5rem] -mr-8 -mt-8 transition-all group-hover:scale-110" />
-          <div className="w-12 h-12 bg-obaja-blue text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-100">
-            <Wallet size={22} />
-          </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Pendapatan Bulan Ini</p>
-          <h3 className="text-3xl font-black text-slate-900 leading-none">Rp 85.000.000</h3>
-          <div className="flex items-center gap-1 mt-4 text-emerald-600 font-bold text-xs">
-            <ArrowUpRight size={14} />
-            <span>+5.2% dari target harian</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-[5rem] -mr-8 -mt-8 transition-all group-hover:scale-110" />
-          <div className="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-100">
-            <CalendarDays size={22} />
-          </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Rata-rata Per Transaksi</p>
-          <h3 className="text-3xl font-black text-slate-900 leading-none">Rp 4.250.000</h3>
-          <div className="flex items-center gap-1 mt-4 text-rose-500 font-bold text-xs">
-            <ArrowDownRight size={14} />
-            <span>-2.1% variasi harga</span>
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Category Breakdown */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm h-full">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-black text-slate-900 tracking-tight">Per Kategori</h3>
-              <PieChart size={20} className="text-slate-300" />
-            </div>
-            <div className="space-y-6">
-              {stats.byCategory.map((cat, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <div className="flex justify-between items-center text-sm font-black">
-                    <span className="text-slate-600">{cat.name}</span>
-                    <span className="text-slate-900">Rp {(cat.value / 1000000).toFixed(1)}jt</span>
+        {categories.length > 0 && (
+          <div className="lg:col-span-4">
+            <div className="bg-white p-7 rounded-[2rem] border border-slate-100 shadow-sm h-full">
+              <div className="flex items-center justify-between mb-7">
+                <h3 className="text-lg font-black text-slate-900">Per Kategori</h3>
+                <PieChart size={18} className="text-slate-300" />
+              </div>
+              <div className="space-y-5">
+                {categories.map((cat, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="flex justify-between items-center text-sm font-bold">
+                      <span className="text-slate-600">{cat.name}</span>
+                      <span className="text-slate-900">Rp {(cat.value / 1000000).toFixed(1)}jt</span>
+                    </div>
+                    <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: totalRevenue > 0 ? `${(cat.value / totalRevenue) * 100}%` : '0%' }}
+                        transition={{ duration: 1, delay: idx * 0.1 }}
+                        className={cn('h-full rounded-full', cat.color)}
+                      />
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      {totalRevenue > 0 ? Math.round((cat.value / totalRevenue) * 100) : 0}% dari total
+                    </p>
                   </div>
-                  <div className="w-full h-3 bg-slate-50 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(cat.value / stats.totalOmzet) * 100}%` }}
-                      transition={{ duration: 1, delay: idx * 0.1 }}
-                      className={cn("h-full rounded-full transition-all", cat.color)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 p-5 bg-slate-50 rounded-2xl border border-slate-100">
-              <p className="text-xs text-slate-500 font-medium leading-relaxed italic">
-                &ldquo;Kategori <b>Tour &amp; Travel</b> masih menjadi penyumbang terbesar omzet, disusul oleh Outbound Korporat.&rdquo;
-              </p>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Transactions List */}
-        <div className="lg:col-span-8 flex flex-col">
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col h-full">
-            <div className="p-8 border-b border-slate-50 flex justify-between items-center">
-              <h3 className="text-xl font-black text-slate-900 tracking-tight">Transaksi Terakhir</h3>
-              <button className="text-xs font-black text-toba-green flex items-center gap-1 hover:underline">
-                Lihat Semua <ChevronRight size={14} />
-              </button>
+        {/* Recent Transactions */}
+        <div className={categories.length > 0 ? 'lg:col-span-8' : 'lg:col-span-12'}>
+          <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+            <div className="p-7 border-b border-slate-50 flex justify-between items-center">
+              <h3 className="text-lg font-black text-slate-900">Transaksi Terkonfirmasi</h3>
+              <span className="text-xs font-bold text-slate-400">{recentBookings.length} transaksi</span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-slate-50/50">
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">ID / Item</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Pelanggan</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Nominal</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {stats.recentTransactions.map((trx, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-8 py-5">
-                        <p className="font-black text-slate-900 text-sm">{trx.id}</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase">{trx.item}</p>
-                      </td>
-                      <td className="px-8 py-5">
-                        <p className="font-bold text-slate-700 text-sm">{trx.customer}</p>
-                        <p className="text-[10px] text-slate-400 font-medium">{trx.date}</p>
-                      </td>
-                      <td className="px-8 py-5">
-                        <p className="font-black text-slate-900">Rp {trx.amount.toLocaleString('id-ID')}</p>
-                        <p className="text-[10px] text-slate-400 font-medium">{trx.method}</p>
-                      </td>
-                      <td className="px-8 py-5">
-                        <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase border border-emerald-100">
-                          {trx.status}
-                        </span>
-                      </td>
+            {recentBookings.length === 0 ? (
+              <div className="py-16 text-center">
+                <TrendingUp size={40} className="mx-auto text-slate-200 mb-3" />
+                <p className="text-slate-400 font-medium">Belum ada transaksi terkonfirmasi</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-slate-50/50">
+                      <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Pelanggan</th>
+                      <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Item</th>
+                      <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nominal</th>
+                      <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Tanggal</th>
+                      <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50">
+                    {recentBookings.map((b, i) => (
+                      <tr key={i} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-slate-900 text-sm">{b.customerName}</p>
+                          <p className="text-[10px] text-slate-400 uppercase font-bold">{b.type}</p>
+                        </td>
+                        <td className="px-6 py-4 hidden md:table-cell">
+                          <p className="text-sm text-slate-600 font-medium truncate max-w-[180px]">{b.itemName || '-'}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="font-black text-slate-900 text-sm">Rp {Number(b.totalPrice).toLocaleString('id-ID')}</p>
+                        </td>
+                        <td className="px-6 py-4 hidden lg:table-cell">
+                          <p className="text-sm text-slate-500">{new Date(b.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={cn(
+                            'px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider',
+                            b.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+                          )}>
+                            {b.status === 'completed' ? 'Selesai' : 'Confirmed'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </div>

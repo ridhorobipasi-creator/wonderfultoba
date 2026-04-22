@@ -154,7 +154,7 @@ export default function CarDetail() {
                 </button>
 
                 <a
-                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo, saya ingin menyewa: *${car.name}*`)}`}
+                  href={`https://wa.me/6281323888207?text=${encodeURIComponent(`Halo, saya ingin menyewa: *${car.name}*`)}`}
                   target="_blank" rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 py-3.5 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all border border-emerald-100"
                 >

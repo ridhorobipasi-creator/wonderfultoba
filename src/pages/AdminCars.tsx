@@ -143,7 +143,7 @@ export default function AdminCars() {
                   <td className="px-8 py-6">
                     <div className="flex items-center space-x-5">
                       <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-50 shrink-0 shadow-lg shadow-slate-200 group-hover:scale-105 transition-transform duration-500 flex items-center justify-center p-2 border border-slate-100">
-                        <img src={car.images?.[0] || 'https://via.placeholder.com/150'} alt="" className="w-full h-full object-contain" />
+                        <img src={car.images?.[0] || '/assets/images/2023/10/001-1.jpg'} alt="" className="w-full h-full object-contain" />
                       </div>
                       <div>
                         <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors line-clamp-1">{car.name}</p>
