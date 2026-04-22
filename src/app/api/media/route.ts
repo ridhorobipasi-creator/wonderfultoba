@@ -121,7 +121,7 @@ export async function GET(req: NextRequest) {
       folderMap.set(f.folder, (folderMap.get(f.folder) || 0) + 1);
     });
     const folders = Array.from(folderMap.entries())
-      .map(([name, count]) => ({ name, count }))
+      .map(([name, count]: [string, number]) => ({ name, count }))
       .sort((a, b) => b.name.localeCompare(a.name));
 
     return NextResponse.json({
@@ -130,7 +130,7 @@ export async function GET(req: NextRequest) {
       page,
       totalPages,
       folders,
-      totalSize: allFiles.reduce((acc, f) => acc + f.size, 0),
+      totalSize: allFiles.reduce((acc: number, f: any) => acc + f.size, 0),
     });
   } catch (error: any) {
     console.error('Media list error:', error);

@@ -26,8 +26,8 @@ const tourDestinations: Destination[] = [
     description: 'Jelajahi keajaiban danau vulkanik terbesar di dunia, nikmati keindahan alam dan kekayaan budaya Batak yang memukau.',
     duration: '4 Hari 3 Malam',
     price: 3500000,
-    image: '/assets/images/2023/10/001-1.jpg',
-    cardImage: '/assets/images/2023/10/001-1.jpg',
+    image: '/storage/2026/04/lake-toba-premium.png',
+    cardImage: '/storage/2026/04/lake-toba-premium.png',
   },
   {
     id: 2,
@@ -36,8 +36,8 @@ const tourDestinations: Destination[] = [
     description: 'Saksikan kemegahan Air Terjun Sipiso-piso setinggi 120m yang langsung mengalir ke Danau Toba.',
     duration: '3 Hari 2 Malam',
     price: 2800000,
-    image: '/assets/images/2023/10/002-1.jpg',
-    cardImage: '/assets/images/2023/10/002-1.jpg',
+    image: '/storage/2026/04/berastagi-highland.png',
+    cardImage: '/storage/2026/04/berastagi-highland.png',
   },
   {
     id: 3,
@@ -46,8 +46,8 @@ const tourDestinations: Destination[] = [
     description: 'Nikmati kesegaran udara pegunungan Karo, pasar buah segar, dan pemandangan Gunung Sinabung yang megah.',
     duration: '2 Hari 1 Malam',
     price: 1900000,
-    image: '/assets/images/2023/10/003-1.jpg',
-    cardImage: '/assets/images/2023/10/003-1.jpg',
+    image: '/storage/2026/04/berastagi-highland.png',
+    cardImage: '/storage/2026/04/berastagi-highland.png',
   },
   {
     id: 4,
@@ -56,8 +56,8 @@ const tourDestinations: Destination[] = [
     description: 'Petualangan seru bersama gajah Sumatera di tepi sungai, mandi lumpur, dan trekking hutan tropis.',
     duration: '3 Hari 2 Malam',
     price: 2500000,
-    image: '/assets/images/2023/10/004.jpg',
-    cardImage: '/assets/images/2023/10/004.jpg',
+    image: '/storage/2026/04/tangkahan-paradise.png',
+    cardImage: '/storage/2026/04/tangkahan-paradise.png',
   },
   {
     id: 5,
@@ -66,8 +66,8 @@ const tourDestinations: Destination[] = [
     description: 'Trekking di hutan Gunung Leuser, bertemu orangutan liar di habitat aslinya.',
     duration: '4 Hari 3 Malam',
     price: 3200000,
-    image: '/assets/images/2023/10/005.jpg',
-    cardImage: '/assets/images/2023/10/005.jpg',
+    image: '/storage/2026/04/bukit-lawang-jungle.png',
+    cardImage: '/storage/2026/04/bukit-lawang-jungle.png',
   },
 ];
 
