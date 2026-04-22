@@ -11,6 +11,7 @@ import {
 export default function StaticMockInitializer() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if ((window.fetch as any).__isMocked) return;
 
     const originalFetch = window.fetch;
 
@@ -115,9 +116,10 @@ export default function StaticMockInitializer() {
       if (url.includes('/api/package-tiers')) {
         return new Response(JSON.stringify(mockPackageTiers), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
-      return originalFetch(...args);
+      return originalFetch.apply(this, args);
     };
 
+    (window.fetch as any).__isMocked = true;
     console.log('[Static Mock] Global fetch patched for static preview');
   }, []);
 
