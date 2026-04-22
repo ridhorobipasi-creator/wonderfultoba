@@ -15,7 +15,17 @@ export default function StaticMockInitializer() {
     const originalFetch = window.fetch;
 
     window.fetch = async (...args) => {
-      const url = typeof args[0] === 'string' ? args[0] : (args[0] as Request).url;
+      const request = args[0];
+      if (!request) return originalFetch(...args);
+
+      let url = '';
+      try {
+        url = typeof request === 'string' ? request : (request as Request).url;
+      } catch (e) {
+        return originalFetch(...args);
+      }
+
+      if (!url || typeof url !== 'string') return originalFetch(...args);
       
       console.log(`[Fetch Debug] ${url}`);
 
