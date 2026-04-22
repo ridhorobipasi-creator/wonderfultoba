@@ -85,7 +85,7 @@ export async function GET(request: Request) {
     });
 
     // Map to frontend expected structure
-    const mapped = bookings.map(b => ({
+    const mapped = bookings.map((b: any) => ({
       ...b,
       packageId: b.packageId,
       carId: b.carId,

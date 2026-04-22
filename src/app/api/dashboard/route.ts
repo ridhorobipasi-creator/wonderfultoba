@@ -36,7 +36,7 @@ export async function GET() {
       select: { totalPrice: true },
     });
     
-    const totalRevenue = confirmedList.reduce((acc, curr) => acc + curr.totalPrice, 0);
+    const totalRevenue = confirmedList.reduce((acc: number, curr: any) => acc + curr.totalPrice, 0);
 
     // Generate chart data for last 7 days
     const chartData = [];
@@ -60,7 +60,7 @@ export async function GET() {
         select: { totalPrice: true },
       });
 
-      const dayRevenue = dayBookings.reduce((acc, curr) => acc + curr.totalPrice, 0);
+      const dayRevenue = dayBookings.reduce((acc: number, curr: any) => acc + curr.totalPrice, 0);
 
       chartData.push({
         date: date.toISOString().split('T')[0],
@@ -68,7 +68,7 @@ export async function GET() {
       });
     }
 
-    const recentBookings = bookings.map(b => ({
+    const recentBookings = bookings.map((b: any) => ({
       id: b.id,
       customer_name: b.customerName,
       type: b.type,
