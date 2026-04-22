@@ -49,8 +49,8 @@ export default function Cars() {
       {/* Hero Header */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000"
-          alt="Danau Toba Road Trip"
+          src={cars[0]?.images?.[0] || '/assets/images/2023/10/001-1.jpg'}
+          alt="Rental Mobil Sumatera Utara"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-[#f8fafc]" />
@@ -187,7 +187,7 @@ export default function Cars() {
       <div className="max-w-7xl mx-auto px-4 mt-20">
         <div className="bg-slate-900 rounded-[2.5rem] p-10 md:p-14 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover" />
+            <img src="/assets/images/2023/10/001-1.jpg" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
@@ -201,7 +201,7 @@ export default function Cars() {
                 ))}
               </div>
             </div>
-            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/6281323888207" target="_blank" rel="noopener noreferrer"
               className="shrink-0 px-10 py-4 bg-toba-green text-white rounded-2xl font-black hover:bg-toba-accent transition-all shadow-xl shadow-toba-green/20 whitespace-nowrap">
               Pesan via WhatsApp
             </a>
