@@ -54,7 +54,7 @@ export default function Landing() {
         {/* Central Logo & Branding */}
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 text-center transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
            <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-full border border-white/10 shadow-2xl shadow-toba-green/20">
-             <div className="w-20 h-20 bg-toba-green rounded-full flex items-center justify-center font-black text-3xl mx-auto shadow-inner mb-4">W</div>
+             <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center font-black text-3xl mx-auto shadow-inner mb-4">W</div>
              <h1 className="text-3xl font-black tracking-tight whitespace-nowrap mb-1">
                {content.brand.name.split(' ').map((w, i) => i === 1 ? <span key={i} className="text-toba-green"> {w}</span> : w)}
              </h1>
