@@ -37,8 +37,8 @@ export default function LoginPage() {
         
         // redirect to admin
         setTimeout(() => {
-          router.push('/admin');
-        }, 1500);
+          window.location.href = '/admin';
+        }, 1000);
       } else {
         toast.error(data.message || data.error || 'Login gagal');
       }
