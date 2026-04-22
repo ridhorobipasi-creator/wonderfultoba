@@ -3,12 +3,10 @@
 import { useState, useEffect, type ComponentType } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, MapPin, CheckCircle, Target, Users, Sparkles, Smile, Compass, Navigation, Swords, Play, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, MapPin, CheckCircle, Target, Users, Sparkles, Smile, Compass, Navigation, Swords, Play, Image as ImageIcon, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { mockOutboundServices, mockVideos, mockLocations, mockClients, mockGallery, mockSettings } from '../data/mockData';
-import ShieldIcon from 'lucide-react'; // Fallback for missing icons
-const Shield = ShieldIcon;
 
 type IconComponent = ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
 
