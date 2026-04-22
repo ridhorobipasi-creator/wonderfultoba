@@ -11,7 +11,8 @@ import {
 export default function StaticMockInitializer() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if ((window.fetch as any).__isMocked) return;
+    if ((window as any).__STATIC_MOCK_INITIALIZED) return;
+    (window as any).__STATIC_MOCK_INITIALIZED = true;
 
     const originalFetch = window.fetch;
 
@@ -119,7 +120,6 @@ export default function StaticMockInitializer() {
       return originalFetch.apply(this, args);
     };
 
-    (window.fetch as any).__isMocked = true;
     console.log('[Static Mock] Global fetch patched for static preview');
   }, []);
 
