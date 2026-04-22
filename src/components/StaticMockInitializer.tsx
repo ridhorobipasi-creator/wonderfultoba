@@ -23,6 +23,7 @@ export default function StaticMockInitializer() {
         return new Response(JSON.stringify(mockBlogs), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
       if (url.includes('/api/packages')) {
+        console.log(`[Fetch Mock] Returning ${mockTours.length} tours for ${url}`);
         return new Response(JSON.stringify(mockTours), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
       const init = args[1] as RequestInit;

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
+import { mockTours } from '../data/mockData';
 import { Package, City } from '../types';
 // import { fallbackPackages, fallbackCities } from '../utils/fallbackData';
 import PackageCard from '../components/PackageCard';
@@ -38,10 +39,13 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
           api.get('/packages'),
           api.get('/cities'),
         ]);
-        setPackages(Array.isArray(pkgRes.data) ? pkgRes.data : []);
+        const pkgData = Array.isArray(pkgRes.data) ? pkgRes.data : [];
+        setPackages(pkgData.length > 0 ? pkgData : mockTours as any);
         setCities(Array.isArray(cityRes.data) ? cityRes.data : []);
       } catch (error) {
-        setError('Gagal memuat data paket atau kota. Silakan refresh halaman.');
+        console.error('API Fetch failed, using fallback:', error);
+        setPackages(mockTours as any);
+        // setError('Gagal memuat data paket atau kota.');
       } finally {
         setLoading(false);
       }

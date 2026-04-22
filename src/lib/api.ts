@@ -32,8 +32,10 @@ api.interceptors.request.use((config) => {
     }
 
     if (url.includes('/blogs')) data = mockBlogs;
-
-    else if (url.includes('/packages')) data = mockTours;
+    else if (url.includes('/packages')) {
+      data = mockTours;
+      console.log(`[Static Mock] Returning ${data.length} tours for ${url}`);
+    }
     else if (url.includes('/bookings')) data = mockBookings;
     else if (url.includes('/cars')) data = mockCars;
     else if (url.includes('/auth/me')) data = mockUser;
@@ -47,22 +49,18 @@ api.interceptors.request.use((config) => {
     else if (url.includes('/cities')) data = mockCities;
     else if (url.includes('/package-tiers')) data = mockPackageTiers;
     else if (url.includes('/settings')) {
-
       const key = new URLSearchParams(url.split('?')[1] || '').get('key');
       data = key ? (mockSettings as any)[key] : mockSettings;
     }
-
-
     
     if (data) {
-      console.log(`[Static Mock] Intercepted ${url}`);
+      // console.log(`[Static Mock] Intercepted Request: ${url} (Method: ${method})`);
       return Promise.resolve({
-        ...config,
         data,
         status: 200,
         statusText: 'OK',
-        headers: {},
-        config
+        headers: config.headers || {},
+        config: { ...config, adapter: undefined } // Ensure axios doesn't try to send it
       } as any);
     }
   }
