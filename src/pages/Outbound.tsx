@@ -6,6 +6,9 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowRight, MapPin, CheckCircle, Target, Users, Sparkles, Smile, Compass, Navigation, Swords, Play, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { mockOutboundServices, mockVideos, mockLocations, mockClients, mockGallery, mockSettings } from '../data/mockData';
+import ShieldIcon from 'lucide-react'; // Fallback for missing icons
+const Shield = ShieldIcon;
 
 type IconComponent = ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
 
@@ -81,44 +84,56 @@ export default function Outbound() {
           fetch('/api/settings?key=outbound_landing'),
         ]);
 
-        const [servicesData, videosData, locationsData, clientsData, galleryData, settingsData] = await Promise.all([
-          servicesRes.json(),
-          videosRes.json(),
-          locationsRes.json(),
-          clientsRes.json(),
-          galleryRes.json(),
-          settingsRes.json(),
-        ]);
+        const servicesData = await servicesRes.json().catch(() => []);
+        const videosData = await videosRes.json().catch(() => []);
+        const locationsData = await locationsRes.json().catch(() => []);
+        const clientsData = await clientsRes.json().catch(() => []);
+        const galleryData = await galleryRes.json().catch(() => []);
+        const settingsData = await settingsRes.json().catch(() => ({}));
 
-        // Load about section from CMS settings
+        // Load about section
         if (settingsData?.about) {
           setAbout(prev => ({ ...prev, ...settingsData.about }));
-        }
-        // Load hero images from CMS settings if available
-        if (settingsData?.heroImages && Array.isArray(settingsData.heroImages) && settingsData.heroImages.length > 0) {
-          setHeroImages(settingsData.heroImages);
+        } else if (mockSettings.outbound_landing?.about) {
+          setAbout(prev => ({ ...prev, ...mockSettings.outbound_landing.about }));
         }
 
-        // Map icon strings to Lucide components
-        const iconMap: Record<string, IconComponent> = {
-          Users, Smile, Sparkles, Compass, Target, Swords
-        };
+        // Services with Icons
+        const finalServices = Array.isArray(servicesData) && servicesData.length > 0 ? servicesData : mockOutboundServices;
+        const processedServices = finalServices.map((s: any) => ({
+          title: s.name || s.title,
+          icon: (LucideIcons as any)[s.icon] || Users,
+          image: s.image,
+          detail: s.detailDesc || s.detail,
+          desc: s.shortDesc || s.desc
+        }));
+        setServices(processedServices);
 
-        const servicesWithIcons = servicesData.map((s: any) => ({
-          ...s,
-          icon: iconMap[s.icon] || Users,
+        // Others
+        const finalVideos = Array.isArray(videosData) && videosData.length > 0 ? videosData : mockVideos;
+        setVideos(finalVideos.map((v: any) => ({ title: v.title, url: v.youtubeUrl || v.url })));
+
+        const finalLocations = Array.isArray(locationsData) && locationsData.length > 0 ? locationsData : mockLocations;
+        setLocations(finalLocations.map((l: any) => ({ title: l.name || l.title, img: l.image || l.img })));
+
+        const finalClients = Array.isArray(clientsData) && clientsData.length > 0 ? clientsData : mockClients;
+        setClients(finalClients.map((c: any) => c.logo));
+
+        const finalGallery = Array.isArray(galleryData) && galleryData.length > 0 ? galleryData : mockGallery;
+        setGallery(finalGallery.map((g: any) => g.imageUrl || g.image));
+      } catch (e) {
+        console.error("Failed to fetch outbound data, using local mock fallbacks", e);
+        setServices(mockOutboundServices.map(s => ({
+          title: s.title,
+          icon: (LucideIcons as any)[s.icon] || Users,
           image: s.image,
           detail: s.detailDesc,
           desc: s.shortDesc
-        }));
-
-        setServices(servicesWithIcons);
-        setVideos(videosData.map((v: any) => ({ title: v.title, url: v.youtubeUrl })));
-        setLocations(locationsData.map((l: any) => ({ title: l.name, img: l.image })));
-        setClients(clientsData.map((c: any) => c.logo));
-        setGallery(galleryData.map((g: any) => g.imageUrl));
-      } catch (e) {
-        console.error("Failed to fetch data", e);
+        })));
+        setVideos(mockVideos.map(v => ({ title: v.title, url: v.youtubeUrl })));
+        setLocations(mockLocations.map(l => ({ title: l.name, img: l.image })));
+        setClients(mockClients.map(c => c.logo));
+        setGallery(mockGallery.map(g => g.imageUrl));
       } finally {
         setLoading(false);
       }

@@ -8,6 +8,7 @@ import { MapPin, Star, ArrowRight, Shield, Clock, Globe, Award, CheckCircle, Mes
 import Link from 'next/link';
 import { Helmet } from 'react-helmet-async';
 import api from '../lib/api';
+import { mockTours, mockBlogs, mockSettings, mockStats } from '../data/mockData';
 // import { fallbackPackages, fallbackBlogs } from '../utils/fallbackData';
 
 type IconComponent = ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
@@ -80,6 +81,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [waNumber, setWaNumber] = useState('6281323888207');
 
+// ...
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -89,16 +91,26 @@ export default function Home() {
           api.get('/stats'),
           api.get('/blogs?category=tour'),
         ]);
-        setFeaturedPackages(Array.isArray(pkgRes.data) ? pkgRes.data.filter((p: any) => !p.isOutbound).slice(0, 3) : []);
-        setLandingData(landingRes.data || null);
-        setStats(statsRes.data || null);
-        setBlogs(Array.isArray(blogRes.data) ? blogRes.data.slice(0, 3) : []);
-        // Load WA number from contact settings
+        
+        const pkgData = Array.isArray(pkgRes.data) ? pkgRes.data.filter((p: any) => !p.isOutbound).slice(0, 3) : [];
+        setFeaturedPackages(pkgData.length > 0 ? pkgData : mockTours.filter(p => !p.isOutbound).slice(0, 3));
+        
+        setLandingData(landingRes.data || mockSettings.tour_landing);
+        setStats(statsRes.data || mockStats);
+        
+        const blogData = Array.isArray(blogRes.data) ? blogRes.data.slice(0, 3) : [];
+        setBlogs(blogData.length > 0 ? blogData : mockBlogs.slice(0, 3));
+
         if (landingRes.data?.contact?.whatsapp) {
           setWaNumber(landingRes.data.contact.whatsapp);
         }
       } catch (err: any) {
-        setError('Gagal memuat data utama. Silakan refresh halaman.');
+        console.error('Home Page fetch failed, using fallbacks:', err);
+        setFeaturedPackages(mockTours.filter(p => !p.isOutbound).slice(0, 3));
+        setLandingData(mockSettings.tour_landing as any);
+        setStats(mockStats);
+        setBlogs(mockBlogs.slice(0, 3));
+        // setError('Gagal memuat data utama.');
       } finally {
         setLoading(false);
       }
