@@ -5,8 +5,8 @@ export const mockTours = [
     name: 'Danau Toba Eksklusif',
     category: 'Relaksasi',
     price: 2500000,
-    images: ['https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200'],
-    image: 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200',
+    images: ['/storage/2026/04/lake-toba-premium.png'],
+    image: '/storage/2026/04/lake-toba-premium.png',
     description: 'Nikmati kemewahan mengitari Danau Toba dengan kapal pesiar pribadi dan menginap di resort terbaik.',
     shortDescription: 'Wisata premium di danau vulkanik terbesar dunia.',
     duration: '3 Hari 2 Malam',
@@ -21,8 +21,8 @@ export const mockTours = [
     name: 'Safari Bukit Lawang',
     category: 'Petualangan',
     price: 3500000,
-    images: ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=1200'],
-    image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=1200',
+    images: ['/storage/2026/04/bukit-lawang-jungle.png'],
+    image: '/storage/2026/04/bukit-lawang-jungle.png',
     description: 'Jelajahi Taman Nasional Gunung Leuser dan temui Orangutan Sumatera di habitat aslinya.',
     shortDescription: 'Trekking hutan hujan tropis & bertemu Orangutan.',
     duration: '2 Hari 1 Malam',
@@ -37,8 +37,8 @@ export const mockTours = [
     name: 'Berastagi Highland Tour',
     category: 'Budaya',
     price: 1500000,
-    images: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1200'],
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1200',
+    images: ['/storage/2026/04/berastagi-highland.png'],
+    image: '/storage/2026/04/berastagi-highland.png',
     description: 'Kunjungi pasar buah Berastagi, Pagoda Taman Alam Lumbini, dan nikmati udara sejuk pegunungan.',
     shortDescription: 'Menikmati udara sejuk & pemandangan gunung api.',
     duration: 'Full Day Tour',
@@ -53,8 +53,8 @@ export const mockTours = [
     name: 'Tangkahan Hidden Paradise',
     category: 'Ekowisata',
     price: 2800000,
-    images: ['https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=1200'],
-    image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=1200',
+    images: ['/storage/2026/04/tangkahan-paradise.png'],
+    image: '/storage/2026/04/tangkahan-paradise.png',
     description: 'Mandi bersama gajah di sungai yang jernih dan jelajahi hutan Tangkahan.',
     shortDescription: 'Interaksi gajah & alam liar Tangkahan.',
     duration: '2 Hari 1 Malam',
@@ -69,8 +69,8 @@ export const mockTours = [
     name: 'Medan Heritage & Foodie',
     category: 'Kuliner',
     price: 950000,
-    images: ['https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200'],
-    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+    images: ['/storage/2026/04/medan-heritage.png'],
+    image: '/storage/2026/04/medan-heritage.png',
     description: 'Menelusuri sejarah Kota Medan dan mencicipi berbagai kuliner legendarisnya.',
     shortDescription: 'Eksplorasi sejarah & rasa di Kota Medan.',
     duration: 'Full Day',
@@ -214,8 +214,8 @@ export const mockSettings = {
         description: 'Jelajahi budaya Batak yang kaya dan pemandangan Danau Toba yang megah langsung dari Pulau Samosir.',
         duration: '3D2N',
         price: 2500000,
-        image: 'https://images.unsplash.com/photo-1615460547219-7419e6231a41?auto=format&fit=crop&q=80&w=2000',
-        cardImage: 'https://images.unsplash.com/photo-1615460547219-7419e6231a41?auto=format&fit=crop&q=80&w=800'
+        image: '/storage/2026/04/lake-toba-premium.png',
+        cardImage: '/storage/2026/04/lake-toba-premium.png'
       },
       {
         id: 2,
@@ -224,18 +224,18 @@ export const mockSettings = {
         description: 'Temui Orangutan Sumatera di habitat aslinya dan nikmati sensasi river tubing di sungai Bahorok.',
         duration: '2D1N',
         price: 3200000,
-        image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=2000',
-        cardImage: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800'
+        image: '/storage/2026/04/bukit-lawang-jungle.png',
+        cardImage: '/storage/2026/04/bukit-lawang-jungle.png'
       },
       {
         id: 3,
         region: 'Berastagi',
         title: 'Udara Sejuk Pegunungan Karo',
-        description: 'Nikmati panorama Gunung Sibayak dan Sinabung, serta keramaies pasar buah legendaris Berastagi.',
+        description: 'Nikmati panorama Gunung Sibayak dan Sinabung, serta keramaian pasar buah legendaris Berastagi.',
         duration: 'Full Day',
         price: 1500000,
-        image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=2000',
-        cardImage: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800'
+        image: '/storage/2026/04/berastagi-highland.png',
+        cardImage: '/storage/2026/04/berastagi-highland.png'
       }
     ],
     whyUs: {
@@ -247,9 +247,9 @@ export const mockSettings = {
       ]
     },
     whyUsImages: [
-      'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=1200',
-      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=1200',
-      'https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&q=80&w=1200'
+      '/storage/2026/04/sumatra-panorama.png',
+      '/storage/2026/04/lake-toba-premium.png',
+      '/storage/2026/04/berastagi-highland.png'
     ],
     testimonials: [
       { name: 'Andi Pratama', role: 'Solo Traveler', text: 'Pelayanan luar biasa! Guide sangat berpengetahuan dan membantu saya menemukan spot foto terbaik di Danau Toba.', rating: 5, avatar: 'https://i.pravatar.cc/150?u=andi' },
