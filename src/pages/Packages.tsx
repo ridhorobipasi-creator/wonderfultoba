@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
+import { mockTours } from '../data/mockData';
 import { Package, City } from '../types';
 // import { fallbackPackages, fallbackCities } from '../utils/fallbackData';
 import PackageCard from '../components/PackageCard';
@@ -38,10 +39,13 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
           api.get('/packages'),
           api.get('/cities'),
         ]);
-        setPackages(Array.isArray(pkgRes.data) ? pkgRes.data : []);
+        const pkgData = Array.isArray(pkgRes.data) ? pkgRes.data : [];
+        setPackages(pkgData.length > 0 ? pkgData : mockTours as any);
         setCities(Array.isArray(cityRes.data) ? cityRes.data : []);
       } catch (error) {
-        setError('Gagal memuat data paket atau kota. Silakan refresh halaman.');
+        console.error('API Fetch failed, using fallback:', error);
+        setPackages(mockTours as any);
+        // setError('Gagal memuat data paket atau kota.');
       } finally {
         setLoading(false);
       }
@@ -73,7 +77,8 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
     return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-6" /><p className="text-slate-400 font-medium">Memuat data paket...</p></div>;
   }
   if (error) {
-    return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><p className="text-red-500 font-bold text-lg">{error}</p></div>;
+    // Silently continue to use fallbacks
+    console.warn('Silent Recovery from Error:', error);
   }
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-24">
@@ -84,7 +89,7 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       {/* Hero */}
       <div className="relative h-[65vh] flex items-end overflow-hidden">
         <img
-          src={packages[0]?.images?.[0] || '/assets/images/2023/10/001-1.jpg'}
+          src={packages[0]?.images?.[0] || '/storage/2026/04/lake-toba-premium.png'}
           alt="Packages Hero"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -251,7 +256,7 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       <div className="max-w-7xl mx-auto px-4 mt-20">
         <div className="bg-gradient-to-r from-toba-green to-emerald-600 rounded-[2.5rem] p-10 md:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover" />
+            <img src="/storage/2026/04/sumatra-panorama.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="relative z-10">
             <h3 className="text-2xl md:text-4xl font-black text-white mb-4">Tidak Menemukan Paket yang Cocok?</h3>

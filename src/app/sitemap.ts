@@ -10,12 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const packages = await prisma.package.findMany({ select: { slug: true, updatedAt: true } })
   const blogs = await prisma.blog.findMany({ select: { slug: true, updatedAt: true } })
 
-  const packageUrls = packages.map((pkg) => ({
+  const packageUrls = packages.map((pkg: any) => ({
     url: `${baseUrl}/packages/${pkg.slug}`,
     lastModified: pkg.updatedAt,
   }))
 
-  const blogUrls = blogs.map((blog) => ({
+  const blogUrls = blogs.map((blog: any) => ({
     url: `${baseUrl}/blog/${blog.slug}`,
     lastModified: blog.updatedAt,
   }))
