@@ -17,7 +17,7 @@ interface Destination {
   link?: string;
 }
 
-// Data destinasi wisata Sumatera Utara (Tour)
+// Data destinasi wisata Sumatera Utara (Tour) - fallback jika tidak ada data dari CMS
 const tourDestinations: Destination[] = [
   {
     id: 1,
@@ -26,18 +26,18 @@ const tourDestinations: Destination[] = [
     description: 'Jelajahi keajaiban danau vulkanik terbesar di dunia, nikmati keindahan alam dan kekayaan budaya Batak yang memukau.',
     duration: '4 Hari 3 Malam',
     price: 3500000,
-    image: 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/001-1.jpg',
+    cardImage: '/assets/images/2023/10/001-1.jpg',
   },
   {
     id: 2,
-    region: 'Samosir, Sumatera Utara',
+    region: 'Karo, Sumatera Utara',
     title: 'Air Terjun Sipiso-piso yang Megah',
-    description: 'Saksikan kemegahan Air Terjun Sipiso-piso setinggi 120m yang langsung mengalir ke Danau Toba — pemandangan paling ikonik Sumatra Utara.',
+    description: 'Saksikan kemegahan Air Terjun Sipiso-piso setinggi 120m yang langsung mengalir ke Danau Toba.',
     duration: '3 Hari 2 Malam',
     price: 2800000,
-    image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/002-1.jpg',
+    cardImage: '/assets/images/2023/10/002-1.jpg',
   },
   {
     id: 3,
@@ -46,28 +46,28 @@ const tourDestinations: Destination[] = [
     description: 'Nikmati kesegaran udara pegunungan Karo, pasar buah segar, dan pemandangan Gunung Sinabung yang megah.',
     duration: '2 Hari 1 Malam',
     price: 1900000,
-    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/003-1.jpg',
+    cardImage: '/assets/images/2023/10/003-1.jpg',
   },
   {
     id: 4,
     region: 'Langkat, Sumatera Utara',
     title: 'Tangkahan & Gajah Sumatera',
-    description: 'Petualangan seru bersama gajah Sumatera di tepi sungai, mandi lumpur, dan trekking hutan tropis yang menakjubkan.',
+    description: 'Petualangan seru bersama gajah Sumatera di tepi sungai, mandi lumpur, dan trekking hutan tropis.',
     duration: '3 Hari 2 Malam',
     price: 2500000,
-    image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/004.jpg',
+    cardImage: '/assets/images/2023/10/004.jpg',
   },
   {
     id: 5,
     region: 'Langkat, Sumatera Utara',
     title: 'Bukit Lawang & Orangutan Liar',
-    description: 'Trekking di hutan Gunung Leuser, bertemu orangutan liar di habitat aslinya, dan menikmati keindahan alam yang masih terjaga.',
+    description: 'Trekking di hutan Gunung Leuser, bertemu orangutan liar di habitat aslinya.',
     duration: '4 Hari 3 Malam',
     price: 3200000,
-    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/005.jpg',
+    cardImage: '/assets/images/2023/10/005.jpg',
   },
 ];
 
@@ -79,28 +79,28 @@ const outboundDestinations: Destination[] = [
     description: 'Tingkatkan solidaritas dan komunikasi tim melalui permainan yang dirancang secara profesional di tepi Danau Toba.',
     duration: '2 Hari 1 Malam',
     price: 1500000,
-    image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/A11-Team-Building.jpg',
+    cardImage: '/assets/images/2023/10/A11-Team-Building.jpg',
   },
   {
     id: 2,
     region: 'Bukit Lawang',
     title: 'Jungle Survival Camp',
-    description: 'Uji batas kemampuan tim dalam kondisi ekstrim namun aman. Ekspedisi yang ditujukan untuk top level management.',
+    description: 'Uji batas kemampuan tim dalam kondisi ekstrim namun aman. Ekspedisi untuk top level management.',
     duration: '3 Hari 2 Malam',
     price: 2100000,
-    image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/A12-Fun-Games.jpg',
+    cardImage: '/assets/images/2023/10/A12-Fun-Games.jpg',
   },
   {
     id: 3,
     region: 'Berastagi',
     title: 'Fun Family Gathering',
-    description: 'Permainan edukatif dan outbond ringan bagi karyawan bersama keluarga. Menciptakan momen kebersamaan tak ternilai.',
+    description: 'Permainan edukatif dan outbond ringan bagi karyawan bersama keluarga.',
     duration: '1 Hari',
     price: 450000,
-    image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=2000',
-    cardImage: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600',
+    image: '/assets/images/2023/10/A12-Gathering.jpg',
+    cardImage: '/assets/images/2023/10/A12-Gathering.jpg',
   },
 ];
 

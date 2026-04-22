@@ -161,7 +161,7 @@ export default function AdminUsers() {
                   <td className="px-8 py-6">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-500 border border-white">
-                        <img src={user.photoURL || `https://picsum.photos/seed/${user.uid}/100`} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        <img src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=10b981&color=fff&size=100`} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                       <div>
                         <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors">{user.name || 'Tanpa Nama'}</p>

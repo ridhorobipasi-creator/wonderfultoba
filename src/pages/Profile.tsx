@@ -49,7 +49,7 @@ export default function Profile() {
           {/* Banner */}
           <div className="h-32 bg-gradient-to-r from-slate-900 via-slate-800 to-toba-green relative overflow-hidden">
             <div className="absolute inset-0 opacity-20">
-              <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200" alt="" className="w-full h-full object-cover" />
+              <img src="/assets/images/2023/10/001-1.jpg" alt="" className="w-full h-full object-cover" />
             </div>
           </div>
           {/* Avatar & Info */}

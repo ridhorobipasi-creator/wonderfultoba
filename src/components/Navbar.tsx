@@ -19,11 +19,25 @@ export default function Navbar() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [contact, setContact] = useState({ phone: '+62 813-2388-8207', email: 'outbound@wonderfultoba.com', whatsapp: '6281323888207' });
   const { user, setUser, setToken } = useStore();
 
   useEffect(() => {
     setMounted(true);
     setIsDark(document.documentElement.classList.contains('dark'));
+    // Load contact from settings
+    fetch('/api/settings?key=tour_landing')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.contact) {
+          setContact(prev => ({
+            phone: d.contact.phone || prev.phone,
+            email: d.contact.email || prev.email,
+            whatsapp: d.contact.whatsapp || prev.whatsapp,
+          }));
+        }
+      })
+      .catch(() => {});
   }, []);
   const router = useRouter();
   const pathname = usePathname();
@@ -115,13 +129,13 @@ export default function Navbar() {
       )}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-[11px] font-semibold tracking-wider uppercase">
           <div className="flex items-center space-x-6">
-            <a href="tel:+6281323888207" className="flex items-center hover:text-toba-accent transition-colors">
+            <a href={`tel:${contact.phone}`} className="flex items-center hover:text-toba-accent transition-colors">
               <Phone size={12} className="mr-2" />
-              +62 813-2388-8207
+              {contact.phone}
             </a>
-            <a href="mailto:outbound@wonderfultoba.com" className="flex items-center hover:text-toba-accent transition-colors">
+            <a href={`mailto:${contact.email}`} className="flex items-center hover:text-toba-accent transition-colors">
               <Mail size={12} className="mr-2" />
-              outbound@wonderfultoba.com
+              {contact.email}
             </a>
           </div>
           <div className="flex items-center space-x-6">
@@ -187,7 +201,7 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-6 shrink-0 ml-8">
-              <a href="https://wa.me/6281323888207" target="_blank" rel="noreferrer" className={cn(
+              <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer" className={cn(
                 "px-5 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all shadow-lg flex items-center space-x-2 whitespace-nowrap",
                 (!isScrolled && isDarkHeroPage) ? "bg-white text-toba-green hover:bg-slate-100" : "bg-toba-green text-white hover:bg-slate-900"
               )}>
@@ -233,7 +247,7 @@ export default function Navbar() {
                       className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-toba-green transition-all shadow-sm"
                       aria-label="Profil saya"
                     >
-                      <img src={user.photoURL || 'https://picsum.photos/seed/user/100'} alt="User" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                      <img src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=10b981&color=fff&size=100`} alt="User" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                     </button>
                     <button onClick={handleLogout} className={cn("flex flex-col items-start transition-colors", (!isScrolled && isDarkHeroPage) ? "text-white/80 hover:text-white" : "text-slate-600 hover:text-rose-600")} aria-label="Keluar">
                       <span className="text-xs font-bold leading-none mb-0.5">Logout</span>
