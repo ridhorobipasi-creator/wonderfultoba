@@ -78,7 +78,7 @@ export default function Home() {
   const [landingData, setLandingData] = useState<LandingData | null>(null);
   const [stats, setStats] = useState<HomeStats | null>(null);
   const [blogs, setBlogs] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [waNumber, setWaNumber] = useState('6281323888207');
 
 // ...
@@ -120,10 +120,7 @@ export default function Home() {
   if (loading) {
     return <div className="flex flex-col items-center justify-center min-h-[400px] py-32"><div className="w-12 h-12 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-6" /><p className="text-slate-400 font-medium">Menyiapkan perjalanan premium...</p></div>;
   }
-  if (error) {
-    // Silently continue to use fallbacks
-    console.warn('Silent Recovery from Error:', error);
-  }
+  /* error block deleted */
   return (
     <div className="bg-white">
       <Helmet>
