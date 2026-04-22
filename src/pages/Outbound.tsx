@@ -3,6 +3,7 @@
 import { useState, useEffect, type ComponentType } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import * as LucideIcons from 'lucide-react';
 import { ArrowRight, MapPin, CheckCircle, Target, Users, Sparkles, Smile, Compass, Navigation, Swords, Play, Image as ImageIcon, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
