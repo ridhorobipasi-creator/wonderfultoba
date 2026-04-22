@@ -60,6 +60,31 @@ export default function StaticMockInitializer() {
       if (url.includes('/api/gallery')) {
         return new Response(JSON.stringify(mockGallery), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
+      if (url.includes('/api/dashboard')) {
+        return new Response(JSON.stringify({ 
+          totalBookings: 124,
+          pendingBookings: 8,
+          totalRevenue: 450000000,
+          tourPackages: mockTours.filter(p => !p.isOutbound).length,
+          outboundPackages: mockTours.filter(p => !!p.isOutbound).length,
+          recentBookings: mockBookings.map(b => ({
+            customer_name: b.customerName,
+            start_date: b.startDate,
+            total_price: b.totalPrice,
+            status: b.status,
+            type: b.package?.name || 'Tour'
+          })),
+          chartData: [
+            { date: '2026-04-15', revenue: 15000000 },
+            { date: '2026-04-16', revenue: 25000000 },
+            { date: '2026-04-17', revenue: 10000000 },
+            { date: '2026-04-18', revenue: 35000000 },
+            { date: '2026-04-19', revenue: 45000000 },
+            { date: '2026-04-20', revenue: 30000000 },
+            { date: '2026-04-21', revenue: 55000000 },
+          ]
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
       if (url.includes('/api/settings')) {
 
 
