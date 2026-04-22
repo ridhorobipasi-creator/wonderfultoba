@@ -11,12 +11,11 @@ import {
 export default function StaticMockInitializer() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if ((window as any).__STATIC_MOCK_INITIALIZED) return;
-    (window as any).__STATIC_MOCK_INITIALIZED = true;
+    if (window.fetch.name === 'patchedFetch') return;
 
     const originalFetch = window.fetch;
 
-    window.fetch = async function(...args) {
+    window.fetch = async function patchedFetch(...args) {
       const request = args[0];
       if (!request) return originalFetch.apply(this, args);
 
