@@ -84,7 +84,7 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       {/* Hero */}
       <div className="relative h-[65vh] flex items-end overflow-hidden">
         <img
-          src={packages[0]?.images?.[0] || '/assets/images/2023/10/001-1.jpg'}
+          src={packages[0]?.images?.[0] || '/storage/2026/04/lake-toba-premium.png'}
           alt="Packages Hero"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -251,7 +251,7 @@ export default function Packages({ category }: { category?: 'tour' | 'outbound' 
       <div className="max-w-7xl mx-auto px-4 mt-20">
         <div className="bg-gradient-to-r from-toba-green to-emerald-600 rounded-[2.5rem] p-10 md:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover" />
+            <img src="/storage/2026/04/sumatra-panorama.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="relative z-10">
             <h3 className="text-2xl md:text-4xl font-black text-white mb-4">Tidak Menemukan Paket yang Cocok?</h3>
