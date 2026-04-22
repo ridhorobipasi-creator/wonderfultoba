@@ -14,18 +14,20 @@ export default function StaticMockInitializer() {
 
     const originalFetch = window.fetch;
 
-    window.fetch = async (...args) => {
+    window.fetch = async function(...args) {
       const request = args[0];
-      if (!request) return originalFetch(...args);
+      if (!request) return originalFetch.apply(this, args);
 
       let url = '';
       try {
         url = typeof request === 'string' ? request : (request as Request).url;
       } catch (e) {
-        return originalFetch(...args);
+        return originalFetch.apply(this, args);
       }
 
-      if (!url || typeof url !== 'string') return originalFetch(...args);
+      if (!url || typeof url !== 'string' || url.includes('_rsc=')) {
+        return originalFetch.apply(this, args);
+      }
       
       console.log(`[Fetch Debug] ${url}`);
 
