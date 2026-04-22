@@ -13,13 +13,13 @@ interface LandingContent {
 
 const defaultContent: LandingContent = {
   outbound: {
-    backgroundImage: '/assets/images/2023/10/006.jpg',
+    backgroundImage: '/storage/2026/04/sumatra-panorama.png',
     title: 'Corporate\nOutbound.',
     subtitle: 'Solusi team building & gathering profesional untuk instansi Anda. Tersedia di puluhan hotel premium Sumut.',
     ctaText: 'Jelajahi Outbound',
   },
   tour: {
-    backgroundImage: 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000',
+    backgroundImage: '/storage/2026/04/lake-toba-premium.png',
     title: 'Tour &\nTravel.',
     subtitle: 'Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.',
     ctaText: 'Jelajahi Wisata',

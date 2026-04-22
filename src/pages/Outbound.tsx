@@ -53,12 +53,12 @@ export default function Outbound() {
   const [clients, setClients] = useState<string[]>([]);
   const [gallery, setGallery] = useState<string[]>([]);
   const [heroImages, setHeroImages] = useState([
-    '/assets/images/2023/10/001-1.jpg',
-    '/assets/images/2023/10/002-1.jpg',
-    '/assets/images/2023/10/003-1.jpg',
-    '/assets/images/2023/10/004.jpg',
-    '/assets/images/2023/10/006.jpg',
-    '/assets/images/2023/10/009-1.jpg',
+    '/storage/2026/04/lake-toba-premium.png',
+    '/storage/2026/04/bukit-lawang-jungle.png',
+    '/storage/2026/04/berastagi-highland.png',
+    '/storage/2026/04/tangkahan-paradise.png',
+    '/storage/2026/04/medan-heritage.png',
+    '/storage/2026/04/sumatra-panorama.png',
   ]);
   const [about, setAbout] = useState({
     title: 'Apa itu Outbound?',
