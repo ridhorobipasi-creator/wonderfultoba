@@ -19,9 +19,20 @@ api.interceptors.request.use((config) => {
   const url = config.url || '';
   
   if (process.env.NEXT_PUBLIC_STATIC_PREVIEW === 'true' || true) { // Force true for now as per user request
+    const method = config.method?.toUpperCase() || 'GET';
     let data: any = null;
     
+    // For non-GET requests (POST, PUT, DELETE), return success instead of fetching list
+    if (method !== 'GET' && !url.includes('/auth/login')) {
+      return Promise.resolve({
+        ...config,
+        data: { success: true, message: 'Simulated success' },
+        status: 200, statusText: 'OK', headers: {}, config
+      } as any);
+    }
+
     if (url.includes('/blogs')) data = mockBlogs;
+
     else if (url.includes('/packages')) data = mockTours;
     else if (url.includes('/bookings')) data = mockBookings;
     else if (url.includes('/cars')) data = mockCars;

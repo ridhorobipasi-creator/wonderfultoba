@@ -25,9 +25,16 @@ export default function StaticMockInitializer() {
       if (url.includes('/api/packages')) {
         return new Response(JSON.stringify(mockTours), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
+      const init = args[1] as RequestInit;
+      const method = init?.method?.toUpperCase() || 'GET';
+
       if (url.includes('/api/bookings')) {
+        if (method === 'POST') {
+          return new Response(JSON.stringify({ success: true, message: 'Booking simulated successfully' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
         return new Response(JSON.stringify(mockBookings), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
+
       if (url.includes('/api/cars')) {
         return new Response(JSON.stringify(mockCars), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
