@@ -48,6 +48,31 @@ api.interceptors.request.use((config) => {
     else if (url.includes('/stats')) data = mockStats;
     else if (url.includes('/cities')) data = mockCities;
     else if (url.includes('/package-tiers')) data = mockPackageTiers;
+    else if (url.includes('/api/dashboard')) {
+      data = { 
+        totalBookings: 124,
+        pendingBookings: 8,
+        totalRevenue: 450000000,
+        tourPackages: mockTours.filter(p => !p.isOutbound).length,
+        outboundPackages: mockTours.filter(p => !!p.isOutbound).length,
+        recentBookings: mockBookings.map(b => ({
+          customer_name: b.customerName,
+          start_date: b.startDate,
+          total_price: b.totalPrice,
+          status: b.status,
+          type: b.package?.name || 'Tour'
+        })),
+        chartData: [
+          { date: '2026-04-15', revenue: 15000000 },
+          { date: '2026-04-16', revenue: 25000000 },
+          { date: '2026-04-17', revenue: 10000000 },
+          { date: '2026-04-18', revenue: 35000000 },
+          { date: '2026-04-19', revenue: 45000000 },
+          { date: '2026-04-20', revenue: 30000000 },
+          { date: '2026-04-21', revenue: 55000000 },
+        ]
+      };
+    }
     else if (url.includes('/settings')) {
       const key = new URLSearchParams(url.split('?')[1] || '').get('key');
       data = key ? (mockSettings as any)[key] : mockSettings;
