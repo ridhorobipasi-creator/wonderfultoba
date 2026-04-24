@@ -461,3 +461,45 @@ Dengan VPS, Anda punya kontrol penuh dan performa lebih baik.
 **Difficulty:** Medium
 
 **Good luck with deployment! 🚀**
+
+
+---
+
+## 🔥 TROUBLESHOOTING: "It Works! NodeJS 18.20.8"
+
+### ❌ Problem
+Domain menampilkan "It works! NodeJS 18.20.8" → Node.js hidup tapi app belum ke-load
+
+### ✅ Solusi Cepat
+
+**1. Fix Application Startup File**
+
+Di cPanel → Setup Node.js App:
+```
+Application startup file: server.js
+```
+
+❗ JANGAN: `app.js / server.js` (salah!)  
+✅ ISI: `server.js` (satu file aja!)
+
+**2. Install Dependencies**
+```bash
+cd ~/nodeapps/wonderfultoba
+npm install
+```
+
+**3. Build App**
+```bash
+npm run build
+```
+
+**4. Restart App**
+Klik tombol **Restart** di Setup Node.js App
+
+**5. Test**
+Buka: `https://wonderfultoba.com`
+
+### 📖 Panduan Lengkap
+Lihat file: `FIX_IT_WORKS_PROBLEM.md` untuk troubleshooting detail
+
+---

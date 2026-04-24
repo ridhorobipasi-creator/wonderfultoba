@@ -1,133 +1,222 @@
-# 🌴 Wonderful Toba - Tour & Outbound Website
+# 🏝️ Wonderful Toba - Tourism Website
 
-Website tour dan outbound profesional untuk Wonderful Toba, Sumatera Utara.
+Website pariwisata untuk Danau Toba yang menampilkan destinasi wisata, kuliner, penginapan, dan informasi lengkap tentang Danau Toba.
 
-## 🚀 Deploy ke cPanel (OTOMATIS)
-
-**👉 MULAI DI SINI:** Baca file **`🚀_MULAI_DARI_SINI.md`**
-
-### 2 Metode Auto-Deploy:
-
-1. **FULL OTOMATIS** (GitHub Actions + SSH)
-   - Push → Deploy otomatis dalam 2-3 menit
-   - Baca: `SETUP_AUTO_DEPLOY.md`
-
-2. **SEMI-OTOMATIS** (cPanel Git + Cron)
-   - Push → Deploy otomatis dalam 5-10 menit
-   - Tidak perlu SSH
-   - Baca: `DEPLOY_TANPA_SSH.md`
-
-**Pilih metode:** Baca `PILIH_METODE_DEPLOY.md`
+**Live Website:** https://www.wonderfultoba.com ✅
 
 ---
 
-## 💻 Development (Lokal)
+## 🚀 Tech Stack
+
+- **Framework:** Next.js 16 (App Router + Pages Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS 4
+- **Database:** PostgreSQL + Prisma ORM
+- **Authentication:** JWT (Jose)
+- **Deployment:** cPanel (Node.js App)
+
+---
+
+## 📁 Project Structure
+
+```
+wonderfultoba/
+├── src/
+│   ├── app/              # Next.js 13+ App Router
+│   ├── pages/            # Next.js Pages Router (hybrid)
+│   ├── components/       # React components
+│   ├── lib/              # Utilities & helpers
+│   ├── hooks/            # Custom React hooks
+│   └── store/            # State management (Zustand)
+├── public/               # Static assets
+├── prisma/               # Database schema & migrations
+├── docs/                 # Documentation
+│   ├── deployment/       # Deployment guides
+│   ├── setup/            # Setup guides
+│   └── ...
+├── scripts/              # Build & deployment scripts
+├── server.js             # Production server
+└── package.json
+```
+
+---
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js ≥20.9.0
+- PostgreSQL database
+- npm or yarn
+
+### Setup Local
 
 ```bash
+# Clone repository
+git clone <repository-url>
+cd wonderfultoba
+
 # Install dependencies
 npm install
 
 # Setup database
-npm run db:setup
+cp .env.example .env
+# Edit .env dengan database credentials
+
+# Generate Prisma client
+npx prisma generate
+
+# Push database schema
+npx prisma db push
+
+# Seed database (optional)
+npm run seed
 
 # Run development server
 npm run dev
 ```
 
-Buka [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000
 
-### Login Admin
+---
 
-- **Email**: `admin@wonderfultoba.com`
-- **Password**: `password123`
+## 📦 Build & Deployment
 
-## 📦 Tech Stack
+### Build Production
 
-- **Framework**: Next.js 16 (App Router)
-- **Database**: MySQL + Prisma ORM
-- **Auth**: JWT (jose)
-- **Styling**: Tailwind CSS 4
-- **UI**: Custom components + Lucide icons
-- **Forms**: React Hook Form + Zod
-
-## 🏗️ Project Structure
-
+```bash
+npm run build
 ```
-wonderfultoba/
-├── src/
-│   ├── app/              # Next.js App Router
-│   │   ├── admin/        # Admin panel
-│   │   ├── api/          # API routes
-│   │   ├── login/        # Login page
-│   │   └── ...
-│   ├── components/       # React components
-│   ├── lib/              # Utilities & helpers
-│   └── types/            # TypeScript types
-├── prisma/
-│   ├── schema.prisma     # Database schema
-│   └── seed.ts           # Seed data
-├── public/               # Static assets
-└── docs/                 # Documentation
-```
+
+### Deployment ke cPanel
+
+**Panduan lengkap:** [docs/deployment/README.md](./docs/deployment/README.md)
+
+**Quick steps:**
+
+1. Build di local:
+   ```bash
+   npm run build
+   ```
+
+2. Zip file untuk upload:
+   ```powershell
+   # Windows
+   .\scripts\zip-for-upload.ps1
+   
+   # Linux/Mac
+   ./scripts/build-and-zip.sh
+   ```
+
+3. Upload ke cPanel File Manager
+4. Extract di `/home/medp7341/nodeapps/wonderfultoba/`
+5. Restart app di Setup Node.js App
+6. Test website
+
+---
 
 ## 📚 Documentation
 
-- **[Deployment Guide](DEPLOYMENT_GUIDE_CPANEL.md)** - Deploy ke cPanel
-- **[Admin Guide](docs/PANDUAN_ADMIN_CMS_LENGKAP.md)** - Panduan admin panel
-- **[Database Setup](docs/DATABASE_SETUP.md)** - Setup database
+### Deployment
+- [Deployment Guide](./docs/deployment/README.md) - Panduan deployment lengkap
+- [Build Windows](./docs/deployment/BUILD_WINDOWS.md) - Build di Windows
+- [Troubleshooting](./docs/deployment/FIX_IT_WORKS_PROBLEM.md) - Fix common errors
 
-## 🔧 Available Scripts
+### Setup
+- [Database Setup](./docs/setup/DATABASE_SETUP_PRODUCTION.md) - Setup database production
+- [Auto Deploy](./docs/setup/SETUP_AUTO_DEPLOY.md) - Setup auto deployment
+
+### Features
+- [Admin Panel Guide](./docs/ADMIN_PANEL_GUIDE.md) - Panduan admin panel
+- [CMS Homepage](./docs/CMS_HOMEPAGE_GUIDE.md) - Manage homepage content
+- [Media Library](./docs/MEDIA_LIBRARY_GUIDE.md) - Upload & manage media
+
+**Index lengkap:** [docs/INDEX.md](./docs/INDEX.md)
+
+---
+
+## 🎯 Features
+
+### Public Features
+- 🏝️ Destinasi wisata dengan detail lengkap
+- 🍽️ Kuliner khas Danau Toba
+- 🏨 Penginapan & hotel
+- 📸 Galeri foto & video
+- 🗺️ Peta interaktif
+- 📱 Responsive design (mobile-friendly)
+
+### Admin Features
+- 📝 CMS untuk manage konten
+- 🖼️ Media library dengan upload gambar
+- 👥 User management
+- 📊 Dashboard analytics
+- 🎨 Homepage slider management
+- ✏️ Rich text editor (TipTap)
+
+---
+
+## 🔧 Scripts
 
 ```bash
-npm run dev          # Development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run db:setup     # Setup database + seed
-npm run db:reset     # Reset database
-npm run prisma:studio # Open Prisma Studio
+# Development
+npm run dev              # Start dev server
+npm run build            # Build production
+npm start                # Start production server
+
+# Database
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:push      # Push schema to database
+npm run prisma:studio    # Open Prisma Studio
+npm run seed             # Seed database
+npm run db:reset         # Reset & seed database
+
+# Deployment
+npm run deploy           # Install, build, push DB
 ```
 
-## 🌐 Deployment
+---
 
-### Auto-Deploy ke cPanel
-
-**📖 Panduan Lengkap:**
-1. **Mulai:** `🚀_MULAI_DARI_SINI.md`
-2. **Pilih Metode:** `PILIH_METODE_DEPLOY.md`
-3. **Setup SSH:** `SETUP_AUTO_DEPLOY.md` (Metode 1)
-4. **Setup Tanpa SSH:** `DEPLOY_TANPA_SSH.md` (Metode 2)
-
-**Quick Deploy:**
-```bash
-# Push ke GitHub
-git push origin main
-
-# Otomatis deploy ke cPanel!
-# - Metode 1 (SSH): 2-3 menit
-# - Metode 2 (Cron): 5-10 menit
-```
-
-### Manual Deployment
-
-Lihat: `DEPLOYMENT_GUIDE_CPANEL.md`
-
-## 🔐 Environment Variables
-
-Copy `.env.example` ke `.env` dan sesuaikan:
+## 🌐 Environment Variables
 
 ```env
-DATABASE_URL="mysql://user:password@localhost:3306/database"
-JWT_SECRET="your-secret-key"
-NEXT_PUBLIC_SITE_URL="https://wonderfultoba.com"
+# Database
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
+
+# App
+NODE_ENV=production
+NEXT_PUBLIC_API_URL=https://www.wonderfultoba.com
+
+# JWT
+JWT_SECRET=your-secret-key
 ```
 
-## 📞 Contact
+**Template:** `.env.example`
 
-- **WhatsApp**: +62 813-2388-8207
-- **Email Tour**: tour@wonderfultoba.com
-- **Email Outbound**: outbound@wonderfultoba.com
-- **Website**: https://wonderfultoba.com
+---
 
-## 📄 License
+## 📝 License
 
-Private - © 2026 Wonderful Toba
+Private project - All rights reserved
+
+---
+
+## 👨‍💻 Developer
+
+Developed by Ridho Pasi
+
+---
+
+## 🆘 Support
+
+Kalau ada masalah:
+1. Cek [Troubleshooting Guide](./docs/deployment/FIX_IT_WORKS_PROBLEM.md)
+2. Lihat dokumentasi di folder `docs/`
+3. Hubungi developer
+
+---
+
+## 🎉 Status
+
+✅ **LIVE & RUNNING** - https://www.wonderfultoba.com
+
+Last updated: April 2026

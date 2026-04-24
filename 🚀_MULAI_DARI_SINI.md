@@ -1,173 +1,96 @@
-# 🚀 MULAI DARI SINI - Wonderfultoba Auto Deploy
+# 🚀 MULAI DARI SINI
 
-Selamat datang! Ini panduan lengkap deploy otomatis ke cPanel.
+## ✅ Website Sudah LIVE!
 
----
-
-## 📍 Kamu Ada di Sini
-
-✅ Code sudah di GitHub: https://github.com/ridhorobipasi-creator/wonderfultoba  
-✅ Server cPanel siap: wonderfultoba.com  
-✅ Auto-deploy sudah dikonfigurasi  
-
-**Tinggal pilih metode dan setup!**
+**URL:** https://www.wonderfultoba.com
 
 ---
 
-## 🎯 Langkah 1: PILIH METODE DEPLOY
+## 📚 Dokumentasi Lengkap
 
-Buka file: **`PILIH_METODE_DEPLOY.md`**
+### 🎯 Quick Links
 
-Ada 2 pilihan:
+1. **[README.md](./README.md)** - Overview project & tech stack
+2. **[docs/deployment/README.md](./docs/deployment/README.md)** - Panduan deployment
+3. **[docs/INDEX.md](./docs/INDEX.md)** - Index semua dokumentasi
 
-### Metode A: FULL OTOMATIS (dengan SSH)
-- Push ke GitHub → Langsung deploy (2-3 menit)
-- Paling cepat dan mudah
-- **Syarat: Hosting support SSH**
+### 📖 Panduan Deployment
 
-### Metode B: SEMI-OTOMATIS (tanpa SSH)  
-- Push ke GitHub → Deploy otomatis via Cron (5-10 menit)
-- Cocok untuk shared hosting
-- **Tidak perlu SSH**
+- **[BUILD_WINDOWS.md](./docs/deployment/BUILD_WINDOWS.md)** - Build di Windows & upload
+- **[FIX_IT_WORKS_PROBLEM.md](./docs/deployment/FIX_IT_WORKS_PROBLEM.md)** - Troubleshooting
 
-**👉 Baca `PILIH_METODE_DEPLOY.md` untuk memilih**
+### 🛠️ Scripts
 
----
-
-## 🎯 Langkah 2: IKUTI PANDUAN SESUAI METODE
-
-### Jika Pilih Metode A (SSH):
-
-1. **Cek SSH**: Baca `ENABLE_SSH_CPANEL.md`
-2. **Setup Auto-Deploy**: Baca `SETUP_AUTO_DEPLOY.md`
-3. **Test Deploy**: Push ke GitHub → Otomatis!
-
-### Jika Pilih Metode B (Tanpa SSH):
-
-1. **Setup cPanel Git**: Baca `DEPLOY_TANPA_SSH.md`
-2. **Setup Cron Job**: Ikuti panduan di file yang sama
-3. **Test Deploy**: Push ke GitHub → Tunggu 5 menit → Otomatis!
+- **[scripts/zip-for-upload.ps1](./scripts/zip-for-upload.ps1)** - Zip file untuk upload (Windows)
+- **[scripts/build-and-zip.sh](./scripts/build-and-zip.sh)** - Build & zip (Linux/Mac)
 
 ---
 
-## 📚 Daftar File Panduan
+## 🔄 Update Kode
 
-| File | Untuk Apa |
-|------|-----------|
-| **`PILIH_METODE_DEPLOY.md`** | 👈 BACA INI DULU - Pilih metode |
-| `SETUP_AUTO_DEPLOY.md` | Setup Metode A (SSH) |
-| `DEPLOY_TANPA_SSH.md` | Setup Metode B (Tanpa SSH) |
-| `ENABLE_SSH_CPANEL.md` | Cara enable SSH |
-| `LANGKAH_DEPLOY_CPANEL.txt` | Backup: Deploy manual |
-| `DEPLOYMENT_GUIDE_CPANEL.md` | Dokumentasi lengkap |
-| `DEPLOY_CHECKLIST.md` | Checklist deployment |
+**Setiap kali ada perubahan:**
 
----
+### Windows:
+```powershell
+npm run build
+.\scripts\zip-for-upload.ps1
+```
 
-## 🔧 File Teknis (Sudah Siap)
-
-| File | Fungsi |
-|------|--------|
-| `server.js` | Entry point Node.js untuk cPanel |
-| `deploy-cpanel.sh` | Script auto-deploy |
-| `.github/workflows/deploy-cpanel-auto.yml` | GitHub Actions workflow |
-| `.env.production.example` | Template environment variables |
-
-**Kamu tidak perlu edit file-file ini!** Sudah siap pakai.
-
----
-
-## ⚡ Quick Start (Ringkas)
-
-### Untuk yang Mau Cepat:
-
-**1. Cek SSH:**
+### Linux/Mac:
 ```bash
-ssh medp7341@wonderfultoba.com
+npm run build
+./scripts/build-and-zip.sh
 ```
 
-**2A. Jika SSH Berhasil:**
-- Baca: `SETUP_AUTO_DEPLOY.md`
-- Setup GitHub Secrets
-- Push → Otomatis deploy!
-
-**2B. Jika SSH Gagal:**
-- Baca: `DEPLOY_TANPA_SSH.md`
-- Setup cPanel Git + Cron
-- Push → Tunggu 5 menit → Otomatis!
+**Upload → Extract → Restart app di cPanel**
 
 ---
 
-## 🎯 Goal Akhir
-
-Setelah setup selesai:
+## 📁 Struktur Folder
 
 ```
-✅ Push code ke GitHub
-✅ Otomatis deploy ke cPanel
-✅ Website langsung update
-✅ Tidak perlu login cPanel lagi
+wonderfultoba/
+├── 🚀_MULAI_DARI_SINI.md    ← File ini
+├── README.md                 ← Overview project
+├── docs/
+│   ├── deployment/           ← Panduan deployment
+│   ├── setup/                ← Panduan setup
+│   └── INDEX.md              ← Index dokumentasi
+├── scripts/                  ← Build & deployment scripts
+├── src/                      ← Source code
+├── public/                   ← Static assets
+├── prisma/                   ← Database schema
+└── server.js                 ← Production server
 ```
 
-**Total effort setelah setup: 0 (tinggal push!)** 🎉
+---
+
+## 🎯 Development
+
+```bash
+# Install dependencies
+npm install
+
+# Setup database
+cp .env.example .env
+npx prisma generate
+npx prisma db push
+
+# Run dev server
+npm run dev
+```
+
+Open http://localhost:3000
 
 ---
 
-## 🆘 Butuh Bantuan?
+## 📞 Support
 
-### Masalah Umum:
-
-**"SSH tidak bisa"**
-→ Baca: `ENABLE_SSH_CPANEL.md`
-
-**"Mau yang paling mudah"**
-→ Pakai Metode B (Tanpa SSH)
-
-**"Mau yang paling cepat"**
-→ Pakai Metode A (SSH)
-
-**"Bingung harus mulai dari mana"**
-→ Baca: `PILIH_METODE_DEPLOY.md`
+Kalau ada masalah, cek:
+1. [Troubleshooting](./docs/deployment/FIX_IT_WORKS_PROBLEM.md)
+2. [Dokumentasi lengkap](./docs/INDEX.md)
 
 ---
 
-## 📞 Info Penting
-
-**GitHub Repo:**  
-https://github.com/ridhorobipasi-creator/wonderfultoba
-
-**Domain:**  
-https://wonderfultoba.com
-
-**Admin Panel:**  
-https://wonderfultoba.com/login
-
-**Default Login:**
-- Email: `admin@wonderfultoba.com`
-- Password: `password123`
-
-**cPanel:**
-- Username: `medp7341`
-- Domain: `wonderfultoba.com`
-
----
-
-## ✅ Checklist Setup
-
-- [ ] Baca `PILIH_METODE_DEPLOY.md`
-- [ ] Pilih metode (A atau B)
-- [ ] Ikuti panduan metode yang dipilih
-- [ ] Setup database di cPanel
-- [ ] Setup environment (.env)
-- [ ] Test deploy pertama kali
-- [ ] Verifikasi website jalan
-- [ ] Test auto-deploy (push ke GitHub)
-
----
-
-## 🚀 Siap Deploy?
-
-**Langkah pertama:**  
-👉 Buka file **`PILIH_METODE_DEPLOY.md`**
-
-Selamat deploy! 🎉
+**Status:** ✅ LIVE & RUNNING  
+**Last updated:** April 2026

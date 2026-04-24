@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand Colors - Wonderful Toba */
+  --color-toba-green: #15803d;      /* Hijau utama */
+  --color-toba-accent: #22c55e;     /* Hijau aksen/terang */
+  --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
+  --color-toba-blue: #005696;       /* Biru (untuk elemen sekunder) */
+  --color-obaja-orange: #f97316;    /* Orange */
+  --color-obaja-light: #0ea5e9;     /* Biru muda */
+}
+
+@layer base {
+  body {
+    @apply text-slate-900 antialiased selection:bg-green-100 selection:text-green-900;
+  }
+
+  /* Dark mode */
+  .dark body {
+    @apply bg-slate-950 text-white selection:bg-toba-green/30 selection:text-toba-green;
+  }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Premium Utilities */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-toba-green to-emerald-500;
+}
+
+.text-gradient-blue {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-toba-green to-sky-500;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-2xl hover:shadow-toba-green/10 hover:-translate-y-2;
+}
+
+.admin-card {
+  @apply bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 hover:bg-slate-700;
+}
+
