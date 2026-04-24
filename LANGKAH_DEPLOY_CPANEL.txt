@@ -1,0 +1,163 @@
+═══════════════════════════════════════════════════════════
+🚀 LANGKAH DEPLOY KE CPANEL - WONDERFULTOBA.COM
+═══════════════════════════════════════════════════════════
+
+✅ SUDAH SELESAI:
+- Code sudah di push ke GitHub
+- File server.js sudah siap
+- Script deployment sudah siap
+- Documentation lengkap sudah ada
+
+═══════════════════════════════════════════════════════════
+📋 YANG HARUS KAMU LAKUKAN DI CPANEL:
+═══════════════════════════════════════════════════════════
+
+STEP 1: BUAT DATABASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Login ke cPanel wonderfultoba.com
+2. Cari "MySQL® Databases"
+3. Buat database baru:
+   Nama: wonderfultoba (akan jadi: medp7341_wonderfultoba)
+   
+4. Buat user baru:
+   Username: wt_user (akan jadi: medp7341_wt_user)
+   Password: [buat password kuat, CATAT!]
+   
+5. Add User To Database:
+   - Pilih user: medp7341_wt_user
+   - Pilih database: medp7341_wonderfultoba
+   - Centang ALL PRIVILEGES
+   - Klik "Make Changes"
+
+CATAT INFO INI:
+Database: medp7341_wonderfultoba
+Username: medp7341_wt_user
+Password: [password yang kamu buat]
+Host: localhost
+
+
+STEP 2: CLONE DARI GITHUB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Buka "Terminal" di cPanel
+2. Jalankan command ini satu per satu:
+
+cd /home/medp7341
+mkdir -p nodeapps
+cd nodeapps
+git clone https://github.com/ridhorobipasi-creator/wonderfultoba.git
+cd wonderfultoba
+
+
+STEP 3: SETUP ENVIRONMENT (.env)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Masih di Terminal, jalankan:
+
+nano .env
+
+2. Copy paste ini (GANTI yang di CAPS):
+
+DATABASE_URL="mysql://medp7341_wt_user:PASSWORD_KAMU@localhost:3306/medp7341_wonderfultoba"
+JWT_SECRET="wonderfultoba-production-secret-2026-very-long-and-secure"
+NODE_ENV="production"
+NEXT_PUBLIC_API_URL="/api"
+PRISMA_CLIENT_ENGINE_TYPE="library"
+NEXT_PUBLIC_WA_NUMBER="6281323888207"
+NEXT_PUBLIC_PHONE="+62 813-2388-8207"
+NEXT_PUBLIC_EMAIL_TOUR="tour@wonderfultoba.com"
+NEXT_PUBLIC_EMAIL_OUTBOUND="outbound@wonderfultoba.com"
+NEXT_PUBLIC_SITE_URL="https://wonderfultoba.com"
+NEXT_PUBLIC_SITE_NAME="Wonderful Toba"
+NEXT_PUBLIC_MAX_FILE_SIZE="5242880"
+NEXT_PUBLIC_UPLOAD_PATH="/storage"
+
+3. Save: Ctrl+O, Enter, Ctrl+X
+
+
+STEP 4: INSTALL & BUILD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Jalankan command ini (TUNGGU SAMPAI SELESAI, bisa 5-10 menit):
+
+npm install
+npx prisma generate
+npm run build
+npm run db:setup
+
+
+STEP 5: SETUP NODE.JS APP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Keluar dari Terminal
+2. Cari "Setup Node.js App" di cPanel
+3. Klik "Create Application"
+4. Isi form:
+   
+   Node.js version: 18.20.5 (atau yang paling tinggi)
+   Application mode: Production
+   Application root: nodeapps/wonderfultoba
+   Application URL: wonderfultoba.com
+   Application startup file: server.js
+   
+5. Klik "Create"
+6. Tunggu sampai status "Running"
+
+
+STEP 6: TEST WEBSITE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Buka browser: https://wonderfultoba.com
+2. Kalau muncul homepage → BERHASIL! ✅
+3. Test login: https://wonderfultoba.com/login
+   Email: admin@wonderfultoba.com
+   Password: password123
+
+
+═══════════════════════════════════════════════════════════
+🔄 CARA UPDATE NANTI (KALAU ADA PERUBAHAN)
+═══════════════════════════════════════════════════════════
+
+1. Buka Terminal di cPanel
+2. Jalankan:
+
+cd /home/medp7341/nodeapps/wonderfultoba
+git pull origin main
+npm install
+npx prisma generate
+npm run build
+npx prisma db push
+
+3. Buka "Setup Node.js App"
+4. Klik "Restart" pada aplikasi wonderfultoba
+
+
+═══════════════════════════════════════════════════════════
+🆘 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════
+
+MASALAH: Website tidak muncul
+SOLUSI:
+- Cek di "Setup Node.js App" → status harus "Running"
+- Klik "View Log" untuk lihat error
+- Klik "Restart"
+
+MASALAH: Database error
+SOLUSI:
+- Cek file .env, pastikan DATABASE_URL benar
+- Test koneksi database di cPanel
+
+MASALAH: Login tidak bisa
+SOLUSI:
+cd /home/medp7341/nodeapps/wonderfultoba
+npx tsx prisma/seed.ts
+
+
+═══════════════════════════════════════════════════════════
+📞 INFO PENTING
+═══════════════════════════════════════════════════════════
+
+Folder aplikasi: /home/medp7341/nodeapps/wonderfultoba
+Domain: wonderfultoba.com
+Entry point: server.js
+Admin email: admin@wonderfultoba.com
+Admin password: password123 (GANTI setelah login!)
+
+GitHub: https://github.com/ridhorobipasi-creator/wonderfultoba
+
+═══════════════════════════════════════════════════════════
