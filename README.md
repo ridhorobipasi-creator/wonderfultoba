@@ -2,9 +2,26 @@
 
 Website tour dan outbound profesional untuk Wonderful Toba, Sumatera Utara.
 
-## 🚀 Quick Start
+## 🚀 Deploy ke cPanel (OTOMATIS)
 
-### Development
+**👉 MULAI DI SINI:** Baca file **`🚀_MULAI_DARI_SINI.md`**
+
+### 2 Metode Auto-Deploy:
+
+1. **FULL OTOMATIS** (GitHub Actions + SSH)
+   - Push → Deploy otomatis dalam 2-3 menit
+   - Baca: `SETUP_AUTO_DEPLOY.md`
+
+2. **SEMI-OTOMATIS** (cPanel Git + Cron)
+   - Push → Deploy otomatis dalam 5-10 menit
+   - Tidak perlu SSH
+   - Baca: `DEPLOY_TANPA_SSH.md`
+
+**Pilih metode:** Baca `PILIH_METODE_DEPLOY.md`
+
+---
+
+## 💻 Development (Lokal)
 
 ```bash
 # Install dependencies
@@ -72,17 +89,27 @@ npm run prisma:studio # Open Prisma Studio
 
 ## 🌐 Deployment
 
-### cPanel Deployment
+### Auto-Deploy ke cPanel
 
-Lihat panduan lengkap di [DEPLOYMENT_GUIDE_CPANEL.md](DEPLOYMENT_GUIDE_CPANEL.md)
+**📖 Panduan Lengkap:**
+1. **Mulai:** `🚀_MULAI_DARI_SINI.md`
+2. **Pilih Metode:** `PILIH_METODE_DEPLOY.md`
+3. **Setup SSH:** `SETUP_AUTO_DEPLOY.md` (Metode 1)
+4. **Setup Tanpa SSH:** `DEPLOY_TANPA_SSH.md` (Metode 2)
 
-**Quick steps:**
+**Quick Deploy:**
+```bash
+# Push ke GitHub
+git push origin main
 
-1. Setup database di cPanel
-2. Clone repo ke `nodeapps/wonderfultoba`
-3. Setup environment variables
-4. Run `npm run deploy`
-5. Start Node.js app
+# Otomatis deploy ke cPanel!
+# - Metode 1 (SSH): 2-3 menit
+# - Metode 2 (Cron): 5-10 menit
+```
+
+### Manual Deployment
+
+Lihat: `DEPLOYMENT_GUIDE_CPANEL.md`
 
 ## 🔐 Environment Variables
 
