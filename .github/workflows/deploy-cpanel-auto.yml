@@ -1,0 +1,86 @@
+name: Auto Deploy to cPanel (Full)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Deploy and Restart via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USERNAME }}
+          password: ${{ secrets.CPANEL_PASSWORD }}
+          port: ${{ secrets.CPANEL_PORT }}
+          script: |
+            echo "════════════════════════════════════════"
+            echo "🚀 WONDERFULTOBA AUTO DEPLOYMENT"
+            echo "════════════════════════════════════════"
+            
+            APP_DIR="/home/medp7341/nodeapps/wonderfultoba"
+            
+            # Check if directory exists
+            if [ ! -d "$APP_DIR" ]; then
+              echo "📁 First time setup - Cloning repository..."
+              cd /home/medp7341
+              mkdir -p nodeapps
+              cd nodeapps
+              git clone https://github.com/ridhorobipasi-creator/wonderfultoba.git
+              cd wonderfultoba
+              
+              echo "⚠️  IMPORTANT: Setup .env file manually!"
+              echo "⚠️  Then run deployment again"
+              exit 1
+            fi
+            
+            cd $APP_DIR
+            
+            echo ""
+            echo "📥 Step 1/6: Pulling latest changes..."
+            git fetch origin
+            git reset --hard origin/main
+            echo "✅ Code updated"
+            
+            echo ""
+            echo "📦 Step 2/6: Installing dependencies..."
+            npm install --production --silent
+            echo "✅ Dependencies installed"
+            
+            echo ""
+            echo "🔧 Step 3/6: Generating Prisma Client..."
+            npx prisma generate --silent
+            echo "✅ Prisma Client generated"
+            
+            echo ""
+            echo "🏗️  Step 4/6: Building Next.js application..."
+            npm run build
+            echo "✅ Build completed"
+            
+            echo ""
+            echo "🗄️  Step 5/6: Updating database schema..."
+            npx prisma db push --accept-data-loss --skip-generate
+            echo "✅ Database updated"
+            
+            echo ""
+            echo "🔄 Step 6/6: Restarting application..."
+            # Try to restart via touch tmp/restart.txt (Passenger)
+            mkdir -p tmp
+            touch tmp/restart.txt
+            echo "✅ Restart signal sent"
+            
+            echo ""
+            echo "════════════════════════════════════════"
+            echo "✅ DEPLOYMENT COMPLETED SUCCESSFULLY!"
+            echo "════════════════════════════════════════"
+            echo "🌐 Website: https://wonderfultoba.com"
+            echo "🔐 Admin: https://wonderfultoba.com/login"
+            echo ""
+            echo "⚠️  If app doesn't restart automatically:"
+            echo "   Go to cPanel → Setup Node.js App → Restart"
+            echo "════════════════════════════════════════"

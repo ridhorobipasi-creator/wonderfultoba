@@ -7,47 +7,45 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # --- FRONTEND BUILD ---
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🚀 Deploy to cPanel via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 24
-
-      - name: Install Frontend Dependencies
-        run: |
-          npm install
-
-      - name: Build Frontend
-        run: |
-          npm run build
-        env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-      # --- DEPLOYMENT MENGGUNAKAN SFTP (PORT 22) ---
-      - name: Upload to public_html (FTP)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.CPANEL_FTP_HOST }}
-          username: ${{ secrets.CPANEL_FTP_USERNAME }}
-          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          local-dir: ./
-          server-dir: ${{ secrets.CPANEL_TARGET_DIR || '/public_html/' }}
-          exclude: |
-            **/.git*
-            **/node_modules/**
-            .env
-            .github/**
-            *.log
-            *.md
-            *.txt
+          host: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USERNAME }}
+          password: ${{ secrets.CPANEL_PASSWORD }}
+          port: ${{ secrets.CPANEL_PORT }}
+          script: |
+            echo "🔄 Starting deployment..."
+            
+            # Navigate to app directory
+            cd /home/medp7341/nodeapps/wonderfultoba || {
+              echo "📁 Directory not found, cloning repository..."
+              cd /home/medp7341
+              mkdir -p nodeapps
+              cd nodeapps
+              git clone https://github.com/ridhorobipasi-creator/wonderfultoba.git
+              cd wonderfultoba
+            }
+            
+            echo "📥 Pulling latest changes..."
+            git fetch origin
+            git reset --hard origin/main
+            
+            echo "📦 Installing dependencies..."
+            npm install --production
+            
+            echo "🔧 Generating Prisma Client..."
+            npx prisma generate
+            
+            echo "🏗️ Building application..."
+            npm run build
+            
+            echo "🗄️ Updating database schema..."
+            npx prisma db push --accept-data-loss
+            
+            echo "✅ Deployment completed!"
+            echo "🔄 Please restart Node.js app from cPanel Setup Node.js App"
