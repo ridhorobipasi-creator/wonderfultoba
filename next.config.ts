@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Standalone output for cPanel deployment
+  output: 'standalone',
+  
   serverExternalPackages: ['@prisma/client'],
   
   // Turbopack config (untuk Next.js 16)
