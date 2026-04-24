@@ -22,7 +22,7 @@ export default function LoadingButton({
   ...props
 }: LoadingButtonProps) {
   const variantStyles = {
-    primary: 'bg-obaja-blue hover:bg-obaja-blue/90 text-white shadow-xl shadow-blue-100',
+    primary: 'bg-toba-green hover:bg-toba-green/90 text-white shadow-xl shadow-blue-100',
     secondary: 'bg-slate-100 hover:bg-slate-200 text-slate-700',
     danger: 'bg-rose-500 hover:bg-rose-600 text-white shadow-xl shadow-rose-100',
   };

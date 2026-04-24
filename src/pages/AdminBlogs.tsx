@@ -81,7 +81,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
             <button 
               onClick={() => fetchData(true)} 
               disabled={refreshing}
-              className="p-2 text-slate-400 hover:text-obaja-blue transition-all disabled:opacity-50"
+              className="p-2 text-slate-400 hover:text-toba-green transition-all disabled:opacity-50"
               title="Refresh data"
             >
               <RefreshCcw className={cn("w-6 h-6", refreshing && "animate-spin")} /> 
@@ -91,7 +91,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
         </div>
         <button
           onClick={() => router.push('/admin/create-blog')}
-          className="bg-obaja-blue text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-2 hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 group"
+          className="bg-toba-green text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-2 hover:bg-toba-green/90 transition-all shadow-xl shadow-blue-100 group"
         >
           <Plus size={20} className="transition-transform group-hover:rotate-90" />
           <span>Tulis Artikel Baru</span>
@@ -107,7 +107,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
             placeholder="Cari judul artikel..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-medium transition-all"
           />
         </div>
         <div className="flex items-center space-x-3 w-full md:w-auto">
@@ -135,7 +135,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 border-4 border-blue-100 border-t-obaja-blue rounded-full animate-spin mb-4"></div>
+                      <div className="w-12 h-12 border-4 border-blue-100 border-t-toba-green rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-400 font-medium">Memuat data artikel...</p>
                     </div>
                   </td>
@@ -158,7 +158,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
                         )}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors line-clamp-1">{blog.title}</p>
+                        <p className="font-bold text-slate-900 text-lg group-hover:text-toba-green transition-colors line-clamp-1">{blog.title}</p>
                         <div className="flex items-center text-xs text-slate-400 font-medium mt-1 gap-3">
                           <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(blog.created_at).toLocaleDateString()}</span>
                           <span className="flex items-center gap-1"><Globe size={12} /> {blog.author?.name || 'Admin'}</span>
@@ -189,7 +189,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
                     <div className="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
                         onClick={() => router.push(`/admin/edit-blog/${blog.id}`)} 
-                        className="p-3 text-slate-400 hover:text-obaja-blue hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
+                        className="p-3 text-slate-400 hover:text-toba-green hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
                         title="Edit Artikel"
                       >
                         <Edit2 size={18} />
@@ -212,7 +212,7 @@ export default function AdminBlogs({ category }: { category?: 'tour' | 'outbound
                         <FileText size={32} />
                       </div>
                       <p className="text-slate-400 font-medium">Belum ada artikel yang ditulis.</p>
-                      <button onClick={() => router.push('/admin/create-blog')} className="mt-4 text-obaja-blue font-bold hover:underline">
+                      <button onClick={() => router.push('/admin/create-blog')} className="mt-4 text-toba-green font-bold hover:underline">
                         Buat artikel pertama
                       </button>
                     </div>

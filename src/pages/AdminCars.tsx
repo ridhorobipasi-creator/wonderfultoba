@@ -59,7 +59,7 @@ export default function AdminCars() {
         </div>
         <button
           onClick={() => router.push('/admin/add-cars')}
-          className="bg-obaja-blue text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-2 hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 group"
+          className="bg-toba-green text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-2 hover:bg-toba-green/90 transition-all shadow-xl shadow-blue-100 group"
         >
           <Plus size={20} className="transition-transform group-hover:rotate-90" />
           <span>Tambah Armada Baru</span>
@@ -95,7 +95,7 @@ export default function AdminCars() {
             placeholder="Cari kendaraan atau tipe..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-medium transition-all"
           />
         </div>
         <div className="flex items-center space-x-3 w-full md:w-auto">
@@ -127,7 +127,7 @@ export default function AdminCars() {
                 <tr>
                   <td colSpan={5} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 border-4 border-blue-100 border-t-obaja-blue rounded-full animate-spin mb-4"></div>
+                      <div className="w-12 h-12 border-4 border-blue-100 border-t-toba-green rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-400 font-medium"> Sinkronisasi armada...</p>
                     </div>
                   </td>
@@ -146,7 +146,7 @@ export default function AdminCars() {
                         <img src={car.images?.[0] || '/assets/images/2023/10/001-1.jpg'} alt="" className="w-full h-full object-contain" />
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors line-clamp-1">{car.name}</p>
+                        <p className="font-bold text-slate-900 text-lg group-hover:text-toba-green transition-colors line-clamp-1">{car.name}</p>
                         <div className="flex items-center space-x-2 mt-1">
                           <span className="px-2 py-0.5 bg-slate-100 text-[10px] font-bold text-slate-500 rounded uppercase tracking-wider">{car.type}</span>
                           <span className="text-[10px] text-slate-300 font-bold tracking-widest uppercase">ID: #{car.id}</span>
@@ -162,7 +162,7 @@ export default function AdminCars() {
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex items-center space-x-1 text-slate-900">
-                      <span className="text-sm font-bold text-obaja-blue">Rp</span>
+                      <span className="text-sm font-bold text-toba-green">Rp</span>
                       <p className="font-black text-xl tracking-tight">{Number(car.price).toLocaleString('id-ID')}</p>
                     </div>
                   </td>
@@ -178,7 +178,7 @@ export default function AdminCars() {
                     <div className="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
                         onClick={() => router.push(`/admin/edit-car/${car.id}`)} 
-                        className="p-3 text-slate-400 hover:text-obaja-blue hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
+                        className="p-3 text-slate-400 hover:text-toba-green hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
                         title="Edit Unit"
                       >
                         <Edit2 size={18} />
@@ -201,7 +201,7 @@ export default function AdminCars() {
                         <CarIcon size={32} />
                       </div>
                       <p className="text-slate-400 font-medium">Belum ada armada mobil.</p>
-                      <button onClick={() => router.push('/admin/add-cars')} className="mt-4 text-obaja-blue font-bold hover:underline">
+                      <button onClick={() => router.push('/admin/add-cars')} className="mt-4 text-toba-green font-bold hover:underline">
                         Tambah armada pertama
                       </button>
                     </div>

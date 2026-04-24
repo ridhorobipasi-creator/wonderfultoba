@@ -9,7 +9,9 @@ async function main() {
   // Create Admin Umum
   await prisma.user.upsert({
     where: { email: 'admin@wonderfultoba.com' },
-    update: {},
+    update: {
+      password: password,
+    },
     create: {
       email: 'admin@wonderfultoba.com',
       name: 'Admin Umum',
@@ -21,7 +23,9 @@ async function main() {
   // Create Admin Tour
   await prisma.user.upsert({
     where: { email: 'tour@wonderfultoba.com' },
-    update: {},
+    update: {
+      password: password,
+    },
     create: {
       email: 'tour@wonderfultoba.com',
       name: 'Admin Tour',
@@ -33,7 +37,9 @@ async function main() {
   // Create Admin Outbound
   await prisma.user.upsert({
     where: { email: 'outbound@wonderfultoba.com' },
-    update: {},
+    update: {
+      password: password,
+    },
     create: {
       email: 'outbound@wonderfultoba.com',
       name: 'Admin Outbound',
@@ -1323,7 +1329,7 @@ async function main() {
   const bookings = [
     {
       type: 'package',
-      itemId: commonId1,
+      packageId: commonId1,
       startDate: new Date('2026-05-10T00:00:00Z'),
       endDate: new Date('2026-05-12T00:00:00Z'),
       totalPrice: 6000000,
@@ -1335,7 +1341,7 @@ async function main() {
     },
     {
       type: 'package',
-      itemId: commonId2,
+      packageId: commonId2,
       startDate: new Date('2026-06-15T00:00:00Z'),
       endDate: new Date('2026-06-16T00:00:00Z'),
       totalPrice: 13500000,

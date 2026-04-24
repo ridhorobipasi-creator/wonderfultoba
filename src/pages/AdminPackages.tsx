@@ -340,7 +340,7 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
                         <PackageIcon size={32} />
                       </div>
                       <p className="text-slate-400 font-medium">Belum ada paket wisata.</p>
-                      <button onClick={() => router.push('/admin/create-package')} className="mt-4 text-obaja-blue font-bold hover:underline">
+                      <button onClick={() => router.push('/admin/create-package')} className="mt-4 text-toba-green font-bold hover:underline">
                         Buat paket pertama
                       </button>
                     </div>

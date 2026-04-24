@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import { HelmetWrapper } from "@/components/HelmetWrapper";
-import StaticMockInitializer from "@/components/StaticMockInitializer";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -23,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${plusJakartaSans.variable} antialiased`}>
       <body>
-        <StaticMockInitializer />
         <HelmetWrapper>
           {children}
         </HelmetWrapper>

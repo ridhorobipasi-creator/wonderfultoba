@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Plus, Edit2, Trash2, Save, X, Package, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../lib/api';
+import ImageUpload from '../components/ImageUpload';
 
 interface PackageTier {
   id: number;
@@ -19,6 +20,7 @@ interface PackageTier {
   duration: string | null;
   capacity: string | null;
   location: string | null;
+  image: string | null;
   features: string[];
   excludes: string[];
   orderPriority: number;
@@ -41,6 +43,7 @@ export default function AdminPackageTiers() {
     duration: '',
     capacity: '',
     location: '',
+    image: null,
     features: [],
     excludes: [],
     orderPriority: 0,
@@ -121,7 +124,7 @@ export default function AdminPackageTiers() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ category: 'outbound', tierName: '', tagline: '', badge: null, colorTheme: 'from-slate-700 to-slate-800', priceLabel: 'Mulai dari', price: '', unit: '', duration: '', capacity: '', location: '', features: [], excludes: [], orderPriority: 0, isActive: true });
+    setFormData({ category: 'outbound', tierName: '', tagline: '', badge: null, colorTheme: 'from-slate-700 to-slate-800', priceLabel: 'Mulai dari', price: '', unit: '', duration: '', capacity: '', location: '', image: null, features: [], excludes: [], orderPriority: 0, isActive: true });
   };
 
   if (loading) {
@@ -183,6 +186,14 @@ export default function AdminPackageTiers() {
               <input type="number" value={formData.orderPriority} onChange={(e) => setFormData({ ...formData, orderPriority: parseInt(e.target.value) })} className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-toba-green" />
             </div>
           </div>
+
+          {/* Image Upload */}
+          <ImageUpload
+            label="Gambar Tier (opsional - tampil di kartu paket)"
+            value={formData.image || ''}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+            aspectRatio="wide"
+          />
 
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-2">Features (Yang Termasuk)</label>

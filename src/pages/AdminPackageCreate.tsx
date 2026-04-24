@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
-import FileUpload from '@/components/admin/FileUpload';
+import BulkUpload from '@/components/BulkUpload';
 import LoadingButton from '@/components/admin/LoadingButton';
 import FormField from '@/components/admin/FormField';
 import { showErrorToast } from '@/lib/errorHandler';
@@ -226,7 +226,7 @@ export default function AdminPackageCreate() {
 
   return (
     <div className="max-w-6xl mx-auto pb-12">
-      <button onClick={() => router.push('/admin/packages')} className="flex items-center gap-2 text-slate-500 hover:text-obaja-blue font-bold mb-6 transition-colors">
+      <button onClick={() => router.push('/admin/packages')} className="flex items-center gap-2 text-slate-500 hover:text-toba-green font-bold mb-6 transition-colors">
         <ArrowLeft size={18} /> Kembali ke Manajemen Paket
       </button>
 
@@ -254,7 +254,7 @@ export default function AdminPackageCreate() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-obaja-blue text-obaja-blue' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-toba-green text-toba-green' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -280,7 +280,7 @@ export default function AdminPackageCreate() {
                     })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.name ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="Contoh: Explore Danau Toba 3D2N"
                   />
                 </FormField>
@@ -294,7 +294,7 @@ export default function AdminPackageCreate() {
                     {...register('category', { required: 'Kategori wajib dipilih' })}
                     className={`w-full px-5 py-4 bg-slate-50 border-2 ${
                       errors.category ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none transition-all`}
                   >
                     <option value="tour">Tour & Travel</option>
                     <option value="outbound">Corporate Outbound</option>
@@ -318,7 +318,7 @@ export default function AdminPackageCreate() {
                     })}
                     className={`w-full px-5 py-4 bg-slate-50 border-2 ${
                       errors.slug ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="Contoh: paket-tour-danau-toba-3d2n"
                   />
                 </FormField>
@@ -333,7 +333,7 @@ export default function AdminPackageCreate() {
                     {...register('duration', { required: 'Durasi wajib diisi' })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.duration ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="3 Hari 2 Malam"
                   />
                 </FormField>
@@ -344,7 +344,7 @@ export default function AdminPackageCreate() {
                 >
                   <input
                     {...register('location_tag')}
-                    className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all"
+                    className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all"
                     placeholder="Contoh: Samosir, Sumatera Utara"
                   />
                 </FormField>
@@ -357,7 +357,7 @@ export default function AdminPackageCreate() {
                 >
                   <select
                     {...register('city_id')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none transition-all"
                   >
                     <option value="">-- Pilih Wilayah (opsional) --</option>
                     {/* Group domestic by province */}
@@ -395,7 +395,7 @@ export default function AdminPackageCreate() {
               >
                 <input
                   {...register('pre_order_info')}
-                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-toba-green font-medium transition-all"
                   placeholder="Contoh: Booking 7 hari sebelum..."
                 />
               </FormField>
@@ -415,7 +415,7 @@ export default function AdminPackageCreate() {
                     rows={2}
                     className={`w-full p-5 bg-slate-50 border-2 ${
                       errors.short_description ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-medium transition-all`}
                     placeholder="Tampil ringkas di bawah harga..."
                   />
                 </FormField>
@@ -432,25 +432,23 @@ export default function AdminPackageCreate() {
               </FormField>
 
               <div className="space-y-3">
-                <FileUpload 
-                  label="Galeri Gambar (Upload)" 
-                  currentValue={watch('image')} 
-                  onUploadSuccess={(url) => {
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Galeri Gambar</label>
+                <p className="text-xs text-slate-400 ml-1">Upload dari PC/HP (auto-convert ke WebP), atau masukkan URL manual dipisah koma</p>
+                <BulkUpload
+                  onUploadComplete={(urls) => {
                     const current = watch('image');
-                    const newVal = current ? `${current}, ${url}` : url;
+                    const newVal = current ? `${current}, ${urls.join(', ')}` : urls.join(', ');
                     setValue('image', newVal);
-                  }} 
+                  }}
+                  maxFiles={10}
                 />
-                <p className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-widest px-1">
-                  Atau masukkan URL manual (pisahkan dengan koma):
-                </p>
-                <div className="relative">
+                <div className="relative mt-2">
                   <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                   <textarea
                     {...register('image')}
                     rows={2}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900 transition-all"
-                    placeholder="https://example.com/tour1.jpg, https://example.com/tour2.jpg"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900 transition-all"
+                    placeholder="URL gambar (pisahkan dengan koma) - atau upload di atas"
                   />
                 </div>
               </div>
@@ -468,7 +466,7 @@ export default function AdminPackageCreate() {
                       <input
                         {...register(`pricing_details.${index}.pax`)}
                         placeholder="Jumlah Orang (mis. 2)"
-                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl focus:ring-2 focus:ring-toba-green font-medium"
                       />
                     </div>
                     <div className="flex-1">
@@ -476,13 +474,13 @@ export default function AdminPackageCreate() {
                         value={watch(`pricing_details.${index}.price_per_person`) || ''}
                         onChange={(val) => setValue(`pricing_details.${index}.price_per_person`, val.toString() as any, { shouldValidate: true, shouldDirty: true })}
                         placeholder="Harga / Orang (Rp)"
-                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl focus:ring-2 focus:ring-toba-green font-medium"
                       />
                     </div>
                     <button type="button" onClick={() => removePricing(index)} className="px-4 text-rose-500 hover:bg-rose-50 rounded-xl transition-colors font-bold">Hapus</button>
                   </div>
                 ))}
-                <button type="button" onClick={() => appendPricing({ pax: '', price_per_person: '' })} className="text-obaja-blue font-bold text-sm bg-blue-50/50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors">
+                <button type="button" onClick={() => appendPricing({ pax: '', price_per_person: '' })} className="text-toba-green font-bold text-sm bg-blue-50/50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors">
                   + Tambah Baris Harga
                 </button>
               </div>
@@ -500,7 +498,7 @@ export default function AdminPackageCreate() {
                     onChange={(val) => setValue('price', val, { shouldValidate: true, shouldDirty: true })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.price ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="500.000"
                   />
                 </FormField>
@@ -516,7 +514,7 @@ export default function AdminPackageCreate() {
                     onChange={(val) => setValue('child_price', val, { shouldValidate: true, shouldDirty: true })}
                     className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${
                       errors.child_price ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="250.000"
                   />
                 </FormField>
@@ -529,7 +527,7 @@ export default function AdminPackageCreate() {
               >
                 <input
                   {...register('price_display')}
-                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+                  className="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:ring-2 focus:ring-toba-green font-medium transition-all"
                   placeholder="Mulai dari Rp 500.000 / pax"
                 />
               </FormField>
@@ -551,23 +549,23 @@ export default function AdminPackageCreate() {
                       <input
                         {...register(`itinerary.${index}.day`)}
                         placeholder="Hari ke-"
-                        className="col-span-1 px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-obaja-blue font-medium"
+                        className="col-span-1 px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-toba-green font-medium"
                       />
                       <input
                         {...register(`itinerary.${index}.title`)}
                         placeholder="Judul / Destinasi Utama"
-                        className="col-span-3 px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-obaja-blue font-medium"
+                        className="col-span-3 px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-toba-green font-medium"
                       />
                     </div>
                     <textarea
                       {...register(`itinerary.${index}.description`)}
                       placeholder="Jelaskan aktivitas hari ini secara detail..."
                       rows={2}
-                      className="w-full px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-obaja-blue font-medium"
+                      className="w-full px-4 py-3 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-toba-green font-medium"
                     />
                   </div>
                 ))}
-                <button type="button" onClick={() => appendItinerary({ day: '', title: '', description: '' })} className="text-obaja-blue font-bold text-sm bg-blue-50/50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors mt-2 text-center w-full">
+                <button type="button" onClick={() => appendItinerary({ day: '', title: '', description: '' })} className="text-toba-green font-bold text-sm bg-blue-50/50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors mt-2 text-center w-full">
                   + Tambah Hari
                 </button>
               </div>
@@ -586,7 +584,7 @@ export default function AdminPackageCreate() {
                   <CurrencyInput
                     value={watch('drone_price') || ''}
                     onChange={(val) => setValue('drone_price', val, { shouldValidate: true, shouldDirty: true })}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="1.500.000"
                   />
                 </div>
@@ -594,7 +592,7 @@ export default function AdminPackageCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Lokasi Drone</label>
                   <input
                     {...register('drone_location')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="Bukit Holbung, Samosir"
                   />
                 </div>
@@ -628,7 +626,7 @@ export default function AdminPackageCreate() {
                 <textarea
                   {...register('notes')}
                   rows={4}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                   placeholder="Peserta minimal 2 orang, anak di atas 8 tahun bayar penuh..."
                 />
               </div>
@@ -648,7 +646,7 @@ export default function AdminPackageCreate() {
                     {...register('status', { required: 'Status wajib dipilih' })}
                     className={`w-full px-5 py-4 bg-slate-50 border-2 ${
                       errors.status ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none transition-all`}
                   >
                     <option value="active">Aktif (Tampil di Web)</option>
                     <option value="inactive">Nonaktif (Draft)</option>
@@ -667,7 +665,7 @@ export default function AdminPackageCreate() {
                     })}
                     className={`w-full px-5 py-4 bg-slate-50 border-2 ${
                       errors.sort_order ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
                     placeholder="0"
                   />
                 </FormField>
@@ -678,7 +676,7 @@ export default function AdminPackageCreate() {
                   type="checkbox"
                   {...register('is_featured')}
                   id="is_featured"
-                  className="w-5 h-5 text-obaja-blue focus:ring-obaja-blue border-slate-300 rounded"
+                  className="w-5 h-5 text-toba-green focus:ring-toba-green border-slate-300 rounded"
                 />
                 <label htmlFor="is_featured" className="font-bold text-slate-900">Jadikan Paket Unggulan (Tampil di Home)</label>
               </div>
@@ -699,7 +697,7 @@ export default function AdminPackageCreate() {
                     })}
                     className={`w-full px-5 py-4 bg-slate-50 border-2 ${
                       errors.meta_title ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-medium transition-all`}
                     placeholder="Paket Wisata Danau Toba Terbaik..."
                   />
                 </FormField>
@@ -718,7 +716,7 @@ export default function AdminPackageCreate() {
                     rows={2}
                     className={`w-full p-5 bg-slate-50 border-2 ${
                       errors.meta_description ? 'border-rose-500' : 'border-transparent'
-                    } rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all`}
+                    } rounded-2xl focus:ring-2 focus:ring-toba-green font-medium transition-all`}
                     placeholder="Nikmati liburan ke Samosir dengan fasilitas lengkap..."
                   />
                 </FormField>

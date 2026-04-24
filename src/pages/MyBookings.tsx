@@ -136,7 +136,7 @@ export default function MyBookings() {
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                     className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0", booking.type === 'package' ? 'bg-toba-green/10 text-toba-green' : 'bg-obaja-blue/10 text-obaja-blue')}>
+                      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0", booking.type === 'package' ? 'bg-toba-green/10 text-toba-green' : 'bg-toba-green/10 text-toba-green')}>
                         {booking.type === 'package' ? <Package size={22} /> : <Car size={22} />}
                       </div>
                       <div>

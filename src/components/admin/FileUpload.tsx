@@ -74,14 +74,14 @@ export default function FileUpload({ onUploadSuccess, label, currentValue }: Fil
             </div>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer hover:border-obaja-blue hover:bg-blue-50/30 transition-all">
+          <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer hover:border-toba-green hover:bg-blue-50/30 transition-all">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               {uploading ? (
-                <div className="w-8 h-8 border-2 border-obaja-blue/20 border-t-obaja-blue rounded-full animate-spin mb-3" />
+                <div className="w-8 h-8 border-2 border-toba-green/20 border-t-toba-green rounded-full animate-spin mb-3" />
               ) : (
-                <Upload className="w-8 h-8 text-slate-300 mb-3 group-hover:text-obaja-blue" />
+                <Upload className="w-8 h-8 text-slate-300 mb-3 group-hover:text-toba-green" />
               )}
-              <p className="text-sm font-bold text-slate-400 group-hover:text-obaja-blue">
+              <p className="text-sm font-bold text-slate-400 group-hover:text-toba-green">
                 {uploading ? 'Mengunggah...' : 'Klik untuk Upload'}
               </p>
               <p className="text-[10px] text-slate-300 mt-1 uppercase font-bold tracking-widest">

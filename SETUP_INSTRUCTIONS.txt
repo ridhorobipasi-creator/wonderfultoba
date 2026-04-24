@@ -1,0 +1,167 @@
+================================================================================
+  WONDERFUL TOBA - DATABASE SETUP INSTRUCTIONS
+  Database Baru Siap untuk Development & Production
+================================================================================
+
+DATABASE LAMA TIDAK DIGUNAKAN LAGI!
+- wonw2577_tobadb (OLD) ❌
+
+DATABASE BARU:
+- wonderfultoba_dev (Development) ✅
+- wonderfultoba_prod (Production) ✅
+
+================================================================================
+  LANGKAH SETUP DEVELOPMENT (LOCAL)
+================================================================================
+
+1. PASTIKAN MYSQL RUNNING
+   - Buka XAMPP Control Panel
+   - Start Apache & MySQL
+   - Atau pastikan MySQL service running di port 3306
+
+2. BUAT DATABASE BARU
+   - Buka phpMyAdmin: http://localhost/phpmyadmin
+   - Atau gunakan MySQL CLI:
+   
+   CREATE DATABASE wonderfultoba_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+3. SETUP DATABASE OTOMATIS
+
+   Windows (PowerShell):
+   .\scripts\setup-dev.ps1
+
+   Atau manual:
+   npm run db:setup
+
+   Ini akan:
+   - Generate Prisma Client ✓ (sudah selesai)
+   - Push schema ke database (buat tabel)
+   - Seed data awal (admin, packages, cities, dll)
+
+4. JALANKAN DEVELOPMENT SERVER
+   npm run dev
+
+5. BUKA BROWSER
+   http://localhost:3000
+
+6. LOGIN ADMIN
+   URL: http://localhost:3000/admin
+   Email: admin@wonderfultoba.com
+   Password: password123
+
+   ⚠️ GANTI PASSWORD SETELAH LOGIN PERTAMA!
+
+================================================================================
+  LANGKAH DEPLOYMENT PRODUCTION (CPANEL)
+================================================================================
+
+Baca file: DEPLOYMENT_CHECKLIST.md
+
+Ringkasan:
+1. Buat database MySQL di cPanel
+2. Update .env.production dengan kredensial database
+3. Upload files ke server (Git/FTP)
+4. SSH ke server dan jalankan:
+   chmod +x scripts/setup-production.sh
+   ./scripts/setup-production.sh
+5. Start dengan PM2:
+   pm2 start ecosystem.config.js
+
+Detail lengkap ada di DEPLOYMENT_CHECKLIST.md
+
+================================================================================
+  NPM COMMANDS PENTING
+================================================================================
+
+npm run dev              - Start development server
+npm run build            - Build for production
+npm run start            - Start production server
+
+npm run db:setup         - Setup database lengkap (generate + push + seed)
+npm run db:reset         - Reset database (drop all + seed ulang)
+
+npm run prisma:generate  - Generate Prisma Client
+npm run prisma:push      - Push schema ke database
+npm run prisma:seed      - Seed data awal
+npm run prisma:studio    - Buka database GUI
+
+================================================================================
+  DEFAULT ADMIN ACCOUNTS
+================================================================================
+
+Admin Umum (Full Access):
+  Email: admin@wonderfultoba.com
+  Password: password123
+
+Admin Tour:
+  Email: tour@wonderfultoba.com
+  Password: password123
+
+Admin Outbound:
+  Email: outbound@wonderfultoba.com
+  Password: password123
+
+⚠️ PENTING: GANTI SEMUA PASSWORD SETELAH LOGIN PERTAMA!
+
+================================================================================
+  TROUBLESHOOTING
+================================================================================
+
+Error: "Can't reach database server"
+  → Pastikan MySQL service running
+  → Cek XAMPP/MySQL sudah start
+  → Cek database wonderfultoba_dev sudah dibuat
+
+Error: "Database does not exist"
+  → CREATE DATABASE wonderfultoba_dev;
+
+Error: "Module not found"
+  → npm install
+  → npm run prisma:generate
+
+Port 3000 sudah digunakan:
+  Windows: netstat -ano | findstr :3000
+           taskkill /PID <PID> /F
+
+================================================================================
+  DOKUMENTASI LENGKAP
+================================================================================
+
+START_HERE_FIRST.md              - Baca ini dulu! Quick start guide
+QUICK_START.md                   - Quick reference
+README.md                        - Project overview
+DEPLOYMENT_CHECKLIST.md          - Deployment ke cPanel (lengkap!)
+DATABASE_SETUP_PRODUCTION.md     - Setup database production
+docs/DATABASE_RESET_GUIDE.md     - Reset & maintenance database
+docs/DATABASE_MIGRATION_SUMMARY.md - Summary perubahan
+
+================================================================================
+  SUPPORT
+================================================================================
+
+Email: admin@wonderfultoba.com
+WhatsApp: +62 813-2388-8207
+
+================================================================================
+  CHECKLIST SETUP
+================================================================================
+
+[ ] MySQL service running
+[ ] Database wonderfultoba_dev sudah dibuat
+[ ] Run: npm run db:setup
+[ ] Run: npm run dev
+[ ] Buka: http://localhost:3000
+[ ] Login admin berhasil
+[ ] Ganti password admin
+
+================================================================================
+
+SELAMAT! DATABASE BARU SIAP DIGUNAKAN! 🎉
+
+Untuk production deployment, lanjut ke: DEPLOYMENT_CHECKLIST.md
+
+================================================================================
+Last Updated: April 24, 2026
+Version: 0.1.1
+Status: Production Ready ✅
+================================================================================

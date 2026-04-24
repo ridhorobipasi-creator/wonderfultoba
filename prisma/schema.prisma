@@ -214,6 +214,7 @@ model PackageTier {
   duration      String?  @db.VarChar(100)
   capacity      String?  @db.VarChar(100)
   location      String?  @db.VarChar(200)
+  image         String?  @db.VarChar(500)
   features      Json?
   excludes      Json?
   orderPriority Int      @default(0)

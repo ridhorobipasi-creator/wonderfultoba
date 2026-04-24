@@ -253,7 +253,7 @@ export default function AdminDashboard() {
             {/* Estimasi Omzet */}
             <div className="bg-white p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between mb-6 lg:mb-8">
-                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-obaja-blue text-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-toba-green text-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                   <TrendingUp className="w-5 h-5 lg:w-6 lg:h-6" />
                 </div>
                 <ArrowUpRight className="text-slate-200 w-5 h-5" />

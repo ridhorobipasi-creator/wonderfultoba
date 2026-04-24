@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 
 const menuItems = [
   { icon: Package, label: 'Pemesanan Saya', desc: 'Lihat riwayat dan status pemesanan', href: '/my-bookings', color: 'text-toba-green bg-toba-green/8' },
-  { icon: Car, label: 'Rental Mobil', desc: 'Kelola sewa kendaraan Anda', href: '/cars', color: 'text-obaja-blue bg-blue-50' },
+  { icon: Car, label: 'Rental Mobil', desc: 'Kelola sewa kendaraan Anda', href: '/cars', color: 'text-toba-green bg-blue-50' },
   { icon: Settings, label: 'Pengaturan Akun', desc: 'Ubah preferensi dan notifikasi', href: '#', color: 'text-slate-500 bg-slate-100' },
 ];
 
@@ -36,7 +36,7 @@ export default function Profile() {
   const roleColor = user.role === 'admin'
     ? 'bg-rose-500/20 text-rose-300'
     : user.role === 'staff'
-    ? 'bg-obaja-blue/20 text-blue-300'
+    ? 'bg-toba-green/20 text-blue-300'
     : 'bg-toba-green/20 text-toba-accent';
 
   return (

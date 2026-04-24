@@ -55,12 +55,12 @@ export default function Outbound() {
   const [clients, setClients] = useState<string[]>([]);
   const [gallery, setGallery] = useState<string[]>([]);
   const [heroImages, setHeroImages] = useState([
-    '/storage/2026/04/lake-toba-premium.png',
-    '/storage/2026/04/bukit-lawang-jungle.png',
-    '/storage/2026/04/berastagi-highland.png',
-    '/storage/2026/04/tangkahan-paradise.png',
-    '/storage/2026/04/medan-heritage.png',
-    '/storage/2026/04/sumatra-panorama.png',
+    '/assets/images/2023/10/001-1.jpg',
+    '/assets/images/2023/10/002-1.jpg',
+    '/assets/images/2023/10/003-1.jpg',
+    '/assets/images/2023/10/004.jpg',
+    '/assets/images/2023/10/006.jpg',
+    '/assets/images/2023/10/009-1.jpg',
   ]);
   const [about, setAbout] = useState({
     title: 'Apa itu Outbound?',
@@ -95,6 +95,11 @@ export default function Outbound() {
           setAbout(prev => ({ ...prev, ...settingsData.about }));
         } else if (mockSettings.outbound_landing?.about) {
           setAbout(prev => ({ ...prev, ...mockSettings.outbound_landing.about }));
+        }
+
+        // Load hero images from settings if available
+        if (settingsData?.heroImages && Array.isArray(settingsData.heroImages) && settingsData.heroImages.filter(Boolean).length > 0) {
+          setHeroImages(settingsData.heroImages.filter(Boolean));
         }
 
         // Services with Icons

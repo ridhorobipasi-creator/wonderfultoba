@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import FileUpload from '@/components/admin/FileUpload';
 import ImageUpload from '@/components/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 
@@ -109,7 +108,7 @@ export default function AdminBlogCreate() {
 
   return (
     <div className="max-w-5xl mx-auto pb-12 animate-in fade-in duration-500">
-      <button onClick={() => router.push('/admin/blog')} className="flex items-center gap-2 text-slate-500 hover:text-obaja-blue font-bold mb-6 transition-colors">
+      <button onClick={() => router.push('/admin/blog')} className="flex items-center gap-2 text-slate-500 hover:text-toba-green font-bold mb-6 transition-colors">
         <ArrowLeft size={18} /> Kembali ke Manajemen Blog
       </button>
 
@@ -123,7 +122,7 @@ export default function AdminBlogCreate() {
           </div>
           <button
             onClick={handleSubmit(onSubmit)}
-            className="bg-obaja-blue text-white px-10 py-4 rounded-2xl font-bold hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
+            className="bg-toba-green text-white px-10 py-4 rounded-2xl font-bold hover:bg-toba-green/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
           >
             <Save size={20} />
             <span>{id ? 'Simpan Perubahan' : 'Simpan Artikel'}</span>
@@ -136,7 +135,7 @@ export default function AdminBlogCreate() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-obaja-blue text-obaja-blue' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-toba-green text-toba-green' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -155,7 +154,7 @@ export default function AdminBlogCreate() {
                     <FileText className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                     <input
                       {...register('title', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                       placeholder="Contoh: 10 Pesona Danau Toba"
                     />
                   </div>
@@ -166,7 +165,7 @@ export default function AdminBlogCreate() {
                     <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                     <input
                       {...register('slug')}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900"
                       placeholder="contoh: 10-pesona-danau-toba"
                     />
                   </div>
@@ -178,7 +177,7 @@ export default function AdminBlogCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Kategori Utama</label>
                   <select
                     {...register('category')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none"
                   >
                     <optgroup label="Halaman Website">
                       <option value="tour">Tour & Travel (tampil di /tour/blog)</option>
@@ -198,7 +197,7 @@ export default function AdminBlogCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Penulis (Author)</label>
                   <input
                     {...register('author')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900"
                     placeholder="Admin Wonderful Toba"
                   />
                 </div>
@@ -206,7 +205,7 @@ export default function AdminBlogCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Tags (Pisahkan dengan koma)</label>
                   <input
                     {...register('tags')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900"
                     placeholder="Samosir, Toba, Sunset..."
                   />
                 </div>
@@ -226,7 +225,7 @@ export default function AdminBlogCreate() {
                 <textarea
                   {...register('excerpt')}
                   rows={2}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                   placeholder="Ringkasan atau paragraf pembuka artikel..."
                 />
               </div>
@@ -263,7 +262,7 @@ export default function AdminBlogCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Meta Title</label>
                   <input
                     {...register('meta_title')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="Akan digunakan sebagai judul di Google..."
                     maxLength={60}
                   />
@@ -274,7 +273,7 @@ export default function AdminBlogCreate() {
                   <textarea
                     {...register('meta_description')}
                     rows={2}
-                    className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="Akan digunakan sebagai deskripsi hasil pencarian di Google..."
                     maxLength={160}
                   />

@@ -85,7 +85,9 @@ export default function AdminBookings({ category }: { category?: 'tour' | 'outbo
         endDate: b.endDate,
         totalPrice: Number(b.totalPrice),
         createdAt: b.createdAt || new Date().toISOString(),
-        persons: b.metadata?.persons,
+        notes: b.notes,
+        // persons comes from API response (mapped from metadata) or fallback to metadata
+        persons: b.persons || b.metadata?.persons || null,
         customerDetails: {
           name: b.customerName,
           email: b.customerEmail || b.metadata?.email || '',

@@ -84,7 +84,7 @@ export default function AdminUsers() {
             <button 
               onClick={() => fetchData(true)} 
               disabled={refreshing}
-              className="p-2 text-slate-400 hover:text-obaja-blue transition-all disabled:opacity-50"
+              className="p-2 text-slate-400 hover:text-toba-green transition-all disabled:opacity-50"
               title="Refresh data"
             >
               <RefreshCcw className={cn("w-6 h-6", refreshing && "animate-spin")} /> 
@@ -94,7 +94,7 @@ export default function AdminUsers() {
         </div>
         <div className="flex items-center space-x-3">
           <div className="bg-white px-5 py-3 rounded-2xl border border-slate-100 shadow-sm flex items-center space-x-3">
-            <div className="w-8 h-8 bg-obaja-blue/10 rounded-lg flex items-center justify-center text-obaja-blue">
+            <div className="w-8 h-8 bg-toba-green/10 rounded-lg flex items-center justify-center text-toba-green">
               <ShieldCheck size={18} />
             </div>
             <div>
@@ -114,7 +114,7 @@ export default function AdminUsers() {
             placeholder="Cari nama atau email pengguna..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-obaja-blue font-medium transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-medium transition-all"
           />
         </div>
         <div className="flex items-center space-x-3 w-full md:w-auto">
@@ -145,7 +145,7 @@ export default function AdminUsers() {
                 <tr>
                   <td colSpan={4} className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 border-4 border-blue-100 border-t-obaja-blue rounded-full animate-spin mb-4"></div>
+                      <div className="w-12 h-12 border-4 border-blue-100 border-t-toba-green rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-400 font-medium">Memuat data pengguna...</p>
                     </div>
                   </td>
@@ -164,7 +164,7 @@ export default function AdminUsers() {
                         <img src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=10b981&color=fff&size=100`} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-lg group-hover:text-obaja-blue transition-colors">{user.name || 'Tanpa Nama'}</p>
+                        <p className="font-bold text-slate-900 text-lg group-hover:text-toba-green transition-colors">{user.name || 'Tanpa Nama'}</p>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">UID: {user.uid.slice(0, 8)}</p>
                       </div>
                     </div>
@@ -182,7 +182,7 @@ export default function AdminUsers() {
                       <span className={cn(
                         "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.15em] border flex items-center space-x-1.5",
                         user.role === 'admin' ? 'bg-rose-50 text-rose-600 border-rose-100' : 
-                        user.role === 'staff' ? 'bg-blue-50 text-obaja-blue border-blue-100' : 'bg-slate-50 text-slate-400 border-slate-100'
+                        user.role === 'staff' ? 'bg-blue-50 text-toba-green border-blue-100' : 'bg-slate-50 text-slate-400 border-slate-100'
                       )}>
                         {user.role === 'admin' ? <ShieldAlert size={10} /> : <UserIcon size={10} />}
                         <span>{user.role}</span>
@@ -194,13 +194,13 @@ export default function AdminUsers() {
                       <select
                         value={user.role}
                         onChange={(e) => handleRoleUpdate(user.uid, e.target.value)}
-                        className="bg-slate-50 border border-slate-100 rounded-xl text-[11px] font-bold px-4 py-2.5 focus:ring-2 focus:ring-obaja-blue transition-all appearance-none cursor-pointer hover:bg-white"
+                        className="bg-slate-50 border border-slate-100 rounded-xl text-[11px] font-bold px-4 py-2.5 focus:ring-2 focus:ring-toba-green transition-all appearance-none cursor-pointer hover:bg-white"
                       >
                         <option value="user">User</option>
                         <option value="staff">Staff</option>
                         <option value="admin">Admin</option>
                       </select>
-                      <button className="p-2.5 text-slate-400 hover:text-obaja-blue hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100 opacity-0 group-hover:opacity-100">
+                      <button className="p-2.5 text-slate-400 hover:text-toba-green hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100 opacity-0 group-hover:opacity-100">
                         <Edit2 size={16} />
                       </button>
                     </div>

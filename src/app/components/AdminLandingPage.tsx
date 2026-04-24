@@ -240,7 +240,7 @@ export default function AdminLandingPage({ category }: { category: "tour" | "out
                         alt="Preview"
                         className="w-full h-48 object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = "https://via.placeholder.com/800x400?text=Image+Not+Found";
+                          e.currentTarget.src = "/assets/images/2023/10/001-1.jpg";
                         }}
                       />
                     </div>

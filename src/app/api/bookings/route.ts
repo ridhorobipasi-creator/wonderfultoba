@@ -95,9 +95,12 @@ export async function GET(request: Request) {
         name: b.type === 'package' ? b.package?.name : b.car?.name,
         image: b.type === 'package' ? firstImage(b.package?.images) : firstImage(b.car?.images),
       },
+      // Include metadata for persons, email etc
+      metadata: b.metadata,
+      persons: (b.metadata as any)?.persons || null,
       customerDetails: {
         name: b.customerName,
-        email: b.customerEmail,
+        email: b.customerEmail || (b.metadata as any)?.email || '',
         phone: b.customerPhone
       }
     }));

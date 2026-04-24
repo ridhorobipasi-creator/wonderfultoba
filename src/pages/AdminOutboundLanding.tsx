@@ -76,7 +76,13 @@ export default function AdminOutboundLanding() {
     try {
       const res = await api.get('/settings?key=outbound_landing');
       if (res.data) {
-        setContent(res.data as OutboundLandingContent);
+        // Merge with defaults to ensure all fields exist
+        setContent(prev => ({
+          ...prev,
+          ...res.data,
+          heroImages: res.data.heroImages || prev.heroImages || [],
+          gallery: res.data.gallery || prev.gallery || [],
+        }));
       }
     } catch (error) {
       console.error('Error fetching settings:', error);

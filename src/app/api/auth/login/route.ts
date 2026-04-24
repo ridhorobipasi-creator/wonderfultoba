@@ -8,6 +8,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, password } = body;
 
+    console.log('Login attempt:', { email, password: '***' });
+
     if (!email || !password) {
       return NextResponse.json(
         { message: 'Email and password are required' },
@@ -19,6 +21,8 @@ export async function POST(request: Request) {
       where: { email },
     });
 
+    console.log('User found:', user ? 'Yes' : 'No');
+
     if (!user) {
       return NextResponse.json(
         { message: 'Invalid credentials' },
@@ -26,7 +30,9 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log('Comparing password...');
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log('Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
       return NextResponse.json(

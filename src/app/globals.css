@@ -3,12 +3,14 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --color-toba-green: #15803d;
-  --color-toba-accent: #22c55e;
-  --color-toba-light: #f0fdf4;
-  --color-obaja-blue: #005696;
-  --color-obaja-orange: #f97316;
-  --color-obaja-light: #0ea5e9;
+
+  /* Brand Colors - Wonderful Toba */
+  --color-toba-green: #15803d;      /* Hijau utama */
+  --color-toba-accent: #22c55e;     /* Hijau aksen/terang */
+  --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
+  --color-toba-blue: #005696;       /* Biru (untuk elemen sekunder) */
+  --color-obaja-orange: #f97316;    /* Orange */
+  --color-obaja-light: #0ea5e9;     /* Biru muda */
 }
 
 @layer base {
@@ -42,7 +44,7 @@
 }
 
 .text-gradient-blue {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-obaja-blue to-sky-500;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-toba-green to-sky-500;
 }
 
 .card-hover {

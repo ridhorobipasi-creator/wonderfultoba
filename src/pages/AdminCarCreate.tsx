@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
-import FileUpload from '@/components/admin/FileUpload';
+import BulkUpload from '@/components/BulkUpload';
 
 interface PricingDetailForm {
   days: string;
@@ -133,7 +133,7 @@ export default function AdminCarCreate() {
 
   return (
     <div className="max-w-6xl mx-auto pb-12">
-      <button onClick={() => router.push('/admin/cars')} className="flex items-center gap-2 text-slate-500 hover:text-obaja-blue font-bold mb-6 transition-colors">
+      <button onClick={() => router.push('/admin/cars')} className="flex items-center gap-2 text-slate-500 hover:text-toba-green font-bold mb-6 transition-colors">
         <ArrowLeft size={18} /> Kembali ke Manajemen Mobil
       </button>
 
@@ -147,7 +147,7 @@ export default function AdminCarCreate() {
           </div>
           <button
             onClick={handleSubmit(onSubmit)}
-            className="bg-obaja-blue text-white px-10 py-4 rounded-2xl font-bold hover:bg-obaja-blue/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
+            className="bg-toba-green text-white px-10 py-4 rounded-2xl font-bold hover:bg-toba-green/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
           >
             <Save size={20} />
             <span>{id ? 'Simpan Perubahan' : 'Simpan Armada'}</span>
@@ -160,7 +160,7 @@ export default function AdminCarCreate() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-obaja-blue text-obaja-blue' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+              className={`flex items-center space-x-2 px-6 py-4 border-b-2 font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'border-toba-green text-toba-green' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -179,7 +179,7 @@ export default function AdminCarCreate() {
                     <CarIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                     <input
                       {...register('name', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                       placeholder="Contoh: Toyota Innova Reborn"
                     />
                   </div>
@@ -190,7 +190,7 @@ export default function AdminCarCreate() {
                     <Tags className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                     <input
                       {...register('type', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                       placeholder="Contoh: SUV, MPV, Sedan"
                     />
                   </div>
@@ -202,30 +202,27 @@ export default function AdminCarCreate() {
                 <textarea
                   {...register('description')}
                   rows={4}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
+                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900"
                   placeholder="Ceritakan kelebihan menyewa mobil ini..."
                 />
               </div>
 
               <div className="space-y-3">
-                <FileUpload 
-                  label="Foto Kendaraan (Upload dari PC)" 
-                  currentValue={watch('image')} 
-                  onUploadSuccess={(url) => {
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Foto Kendaraan</label>
+                <BulkUpload
+                  onUploadComplete={(urls) => {
                     const current = watch('image');
-                    const newVal = current ? `${current}, ${url}` : url;
+                    const newVal = current ? `${current}, ${urls.join(', ')}` : urls.join(', ');
                     setValue('image', newVal);
-                  }} 
+                  }}
+                  maxFiles={5}
                 />
-                <p className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-widest px-1">
-                  Atau masukkan URL manual:
-                </p>
-                <div className="relative">
+                <div className="relative mt-2">
                   <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                   <input
                     {...register('image')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium text-slate-900"
-                    placeholder="https://example.com/mobil.jpg"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium text-slate-900"
+                    placeholder="URL foto (pisahkan koma) - atau upload di atas"
                   />
                 </div>
               </div>
@@ -243,7 +240,7 @@ export default function AdminCarCreate() {
                     <input
                       type="number"
                       {...register('price_per_day', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                       placeholder="500000"
                     />
                   </div>
@@ -255,7 +252,7 @@ export default function AdminCarCreate() {
                     <input
                       type="number"
                       {...register('price_with_driver')}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                       placeholder="650000"
                     />
                   </div>
@@ -271,20 +268,20 @@ export default function AdminCarCreate() {
                         <input
                           {...register(`pricing_details.${index}.days`)}
                           placeholder="Jumlah Hari (mis. 3)"
-                          className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                          className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                         />
                       </div>
                       <div className="flex-1">
                         <input
                           {...register(`pricing_details.${index}.price`)}
                           placeholder="Harga per Hari"
-                          className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                          className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                         />
                       </div>
                       <button type="button" onClick={() => remove(index)} className="px-4 text-rose-500 hover:bg-rose-50 rounded-2xl transition-colors font-bold">Hapus</button>
                     </div>
                   ))}
-                  <button type="button" onClick={() => append({ days: '', price: '' })} className="text-obaja-blue font-bold text-sm bg-blue-50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors">
+                  <button type="button" onClick={() => append({ days: '', price: '' })} className="text-toba-green font-bold text-sm bg-blue-50 px-6 py-3 rounded-xl hover:bg-blue-100 transition-colors">
                     + Tambah Harga Durasi Khusus
                   </button>
                 </div>
@@ -302,7 +299,7 @@ export default function AdminCarCreate() {
                   <input
                     type="number"
                     {...register('seats')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                     placeholder="7"
                   />
                 </div>
@@ -313,7 +310,7 @@ export default function AdminCarCreate() {
                   <Droplet className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                   <select
                     {...register('fuel')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none"
                   >
                     <option value="Bensin">Bensin</option>
                     <option value="Solar">Solar</option>
@@ -328,7 +325,7 @@ export default function AdminCarCreate() {
                   <Settings className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                   <select
                     {...register('transmission')}
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none"
                   >
                     <option value="Manual">Manual</option>
                     <option value="Otomatis">Otomatis</option>
@@ -346,7 +343,7 @@ export default function AdminCarCreate() {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Fitur Kendaraan (Pisahkan dengan koma)</label>
                 <input
                   {...register('features')}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                   placeholder="AC, Audio Premium, USB Charger, Sunroof..."
                 />
               </div>
@@ -354,7 +351,7 @@ export default function AdminCarCreate() {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Termasuk dalam harga (Pisahkan dengan koma)</label>
                 <input
                   {...register('includes')}
-                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                   placeholder="Asuransi pihak ketiga, Masker, Hand Sanitizer..."
                 />
               </div>
@@ -363,7 +360,7 @@ export default function AdminCarCreate() {
                 <textarea
                   {...register('terms')}
                   rows={4}
-                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                  className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                   placeholder="KTP wajib diserahkan, dilarang merokok di dalam..."
                 />
               </div>
@@ -378,7 +375,7 @@ export default function AdminCarCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Status Ketersediaan</label>
                   <select
                     {...register('status')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900 appearance-none"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 appearance-none"
                   >
                     <option value="available">Tersedia</option>
                     <option value="booked">Disewa / Booked</option>
@@ -390,7 +387,7 @@ export default function AdminCarCreate() {
                   <input
                     type="number"
                     {...register('sort_order')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-bold text-slate-900"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
                     placeholder="0"
                   />
                 </div>
@@ -401,7 +398,7 @@ export default function AdminCarCreate() {
                   type="checkbox"
                   {...register('is_featured')}
                   id="is_featured"
-                  className="w-5 h-5 text-obaja-blue focus:ring-obaja-blue border-slate-300 rounded"
+                  className="w-5 h-5 text-toba-green focus:ring-toba-green border-slate-300 rounded"
                 />
                 <label htmlFor="is_featured" className="font-bold text-slate-900">Jadikan Kendaraan Unggulan (Featured)</label>
               </div>
@@ -411,7 +408,7 @@ export default function AdminCarCreate() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Meta Title (SEO)</label>
                   <input
                     {...register('meta_title')}
-                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="Sewa Toyota Innova Murah..."
                   />
                 </div>
@@ -420,7 +417,7 @@ export default function AdminCarCreate() {
                   <textarea
                     {...register('meta_description')}
                     rows={2}
-                    className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-obaja-blue font-medium"
+                    className="w-full p-5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-medium"
                     placeholder="Rental mobil toyota innova lepas kunci harian..."
                   />
                 </div>
