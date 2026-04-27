@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-type Key = 's' | 'S' | 'Escape' | 'Enter';
+type Key = string;
 
 export const useKeyboardShortcut = (
   key: Key,
