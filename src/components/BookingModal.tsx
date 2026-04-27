@@ -34,7 +34,7 @@ export default function BookingModal({ type, itemId, itemName, pricePerUnit, onC
   const { user } = useStore();
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<BookingFormValues>({
+  const { register, handleSubmit, control, watch, formState: { errors } } = useForm<BookingFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: user?.name || '',
