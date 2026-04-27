@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import api from '../lib/api';
+import { getErrorMessage } from '../lib/errorHandler';
 import { RefreshCcw, Download, CalendarCheck, ArrowUpRight, TrendingUp, Package, DollarSign } from 'lucide-react';
 import RevenueTrendChart from '../components/admin/RevenueTrendChart';
 import { cn } from '../utils/cn';
@@ -55,30 +57,18 @@ export default function AdminDashboard() {
     if (silent) setRefreshing(true);
     setHasError(false);
     try {
-      const res = await fetch('/api/dashboard');
-      if (res.ok) {
-        const data = await res.json();
-        setStats(data);
-        setHasError(false);
-      } else {
-        const errorText = await res.text();
-        console.error('Dashboard API error:', errorText);
-        if (!silent) toast.error('Gagal memuat data dashboard. Periksa koneksi database.');
-        setHasError(true);
-      }
+      const res = await api.get('/dashboard');
+      setStats(res.data);
+      setHasError(false);
     } catch (error) {
       console.error('Dashboard error:', error);
-      if (!silent) toast.error('Database tidak terhubung. Silakan start MySQL server.');
-      setHasError(true);
-      setStats({
-        totalBookings: 0,
-        pendingBookings: 0,
-        totalRevenue: 0,
-        tourPackages: 0,
-        outboundPackages: 0,
-        recentBookings: [],
-        chartData: [],
-      });
+      const message = getErrorMessage(error);
+      if (!silent) {
+        if (message.includes('koneksi database') || message.includes('MySQL')) {
+          setHasError(true);
+        }
+        toast.error(message);
+      }
     } finally {
       if (!silent) setLoading(false);
       setRefreshing(false);

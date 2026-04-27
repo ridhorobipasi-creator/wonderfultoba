@@ -7,6 +7,8 @@ import * as LucideIcons from 'lucide-react';
 import { ArrowRight, MapPin, CheckCircle, Target, Users, Sparkles, Smile, Compass, Navigation, Swords, Play, Image as ImageIcon, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import api from '../lib/api';
+import { getErrorMessage } from '../lib/errorHandler';
 import { mockOutboundServices, mockVideos, mockLocations, mockClients, mockGallery, mockSettings } from '../data/mockData';
 
 type IconComponent = ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
@@ -75,20 +77,20 @@ export default function Outbound() {
     async function fetchAllData() {
       try {
         const [servicesRes, videosRes, locationsRes, clientsRes, galleryRes, settingsRes] = await Promise.all([
-          fetch('/api/outbound/services'),
-          fetch('/api/outbound/videos'),
-          fetch('/api/outbound/locations'),
-          fetch('/api/clients'),
-          fetch('/api/gallery?category=outbound'),
-          fetch('/api/settings?key=outbound_landing'),
+          api.get('/outbound/services'),
+          api.get('/outbound/videos'),
+          api.get('/outbound/locations'),
+          api.get('/clients'),
+          api.get('/gallery?category=outbound'),
+          api.get('/settings?key=outbound_landing'),
         ]);
 
-        const servicesData = await servicesRes.json().catch(() => []);
-        const videosData = await videosRes.json().catch(() => []);
-        const locationsData = await locationsRes.json().catch(() => []);
-        const clientsData = await clientsRes.json().catch(() => []);
-        const galleryData = await galleryRes.json().catch(() => []);
-        const settingsData = await settingsRes.json().catch(() => ({}));
+        const servicesData = servicesRes.data;
+        const videosData = videosRes.data;
+        const locationsData = locationsRes.data;
+        const clientsData = clientsRes.data;
+        const galleryData = galleryRes.data;
+        const settingsData = settingsRes.data;
 
         // Load about section
         if (settingsData?.about) {

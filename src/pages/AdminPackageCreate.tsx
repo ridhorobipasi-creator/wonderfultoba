@@ -17,8 +17,11 @@ import FormField from '@/components/admin/FormField';
 import { showErrorToast } from '@/lib/errorHandler';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import { CurrencyInput } from '@/components/admin/CurrencyInput';
+import PackagePreviewModal from '@/components/admin/PackagePreviewModal';
+import { Eye } from 'lucide-react';
 
 interface PricingDetailForm {
   pax: string;
@@ -70,6 +73,7 @@ export default function AdminPackageCreate() {
   const [cities, setCities] = useState<City[]>([]);
   const [activeTab, setActiveTab] = useState('info');
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const router = useRouter();
 
   const { register, handleSubmit, control, reset, watch, setValue, formState: { errors, isDirty } } = useForm<PackageFormValues>({
@@ -238,14 +242,23 @@ export default function AdminPackageCreate() {
             </h2>
             <p className="text-slate-500 font-medium">Buat paket wisata menarik dengan fitur lengkap.</p>
           </div>
-          <LoadingButton
-            onClick={handleSubmit(onSubmit)}
-            loading={loading}
-            loadingText={id ? 'Menyimpan...' : 'Membuat...'}
-            icon={<Save size={20} />}
-          >
-            {id ? 'Simpan Perubahan' : 'Simpan Paket Wisata'}
-          </LoadingButton>
+          <div className="flex flex-wrap gap-2 lg:gap-3 w-full md:w-auto">
+            <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all border border-slate-200"
+            >
+              <Eye size={20} /> Preview
+            </button>
+            <LoadingButton
+              onClick={handleSubmit(onSubmit)}
+              loading={loading}
+              loadingText={id ? 'Menyimpan...' : 'Membuat...'}
+              icon={<Save size={20} />}
+            >
+              {id ? 'Simpan Perubahan' : 'Simpan Paket Wisata'}
+            </LoadingButton>
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -782,6 +795,12 @@ export default function AdminPackageCreate() {
           )}
         </form>
       </div>
+
+      <PackagePreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        data={watch()}
+      />
     </div>
   );
 }

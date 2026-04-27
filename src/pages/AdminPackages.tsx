@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import { Package, City } from '../types';
 import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Search, Package as PackageIcon, Filter, MoreHorizontal, MapPin, Calendar, DollarSign, Star, Zap, RefreshCcw } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Package as PackageIcon, Filter, MoreHorizontal, MapPin, Calendar, DollarSign, Star, Zap, RefreshCcw, CheckCircle, X } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { toast } from 'sonner';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useRouter } from 'next/navigation';
 
 interface AdminPackage extends Package {
@@ -24,6 +25,17 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
   const [editingPriceId, setEditingPriceId] = useState<number | string | null>(null);
   const [editPriceValue, setEditPriceValue] = useState<string>('');
   const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useKeyboardShortcut('k', (e) => {
+    e.preventDefault();
+    searchRef.current?.focus();
+  }, true);
+
+  useKeyboardShortcut('Escape', () => {
+    setSelectedIds([]);
+    setSearchQuery('');
+  });
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -80,6 +92,24 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
       } catch {
         toast.error('Gagal menghapus beberapa paket. Mungkin sedang digunakan.');
         fetchData();
+      }
+    }
+  };
+
+  const handleBulkStatusUpdate = async (status: 'active' | 'inactive') => {
+    if (!selectedIds.length) return;
+    const actionText = status === 'active' ? 'mengaktifkan' : 'menonaktifkan';
+    if (window.confirm(`Yakin ingin ${actionText} ${selectedIds.length} paket terpilih?`)) {
+      setLoading(true);
+      try {
+        await Promise.all(selectedIds.map(id => api.put(`/packages/${id}`, { status })));
+        toast.success(`Berhasil ${actionText} ${selectedIds.length} paket`);
+        setSelectedIds([]);
+        fetchData();
+      } catch {
+        toast.error(`Gagal ${actionText} beberapa paket.`);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -161,16 +191,17 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
 
       {/* Filters & Search */}
       <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input
-            type="text"
-            placeholder="Cari paket atau wilayah..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 placeholder:font-medium transition-all"
-          />
-        </div>
+          <div className="relative flex-1 group w-full md:w-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-toba-green transition-colors" size={18} />
+            <input
+              ref={searchRef}
+              type="text"
+              placeholder="Cari paket (Tekan Ctrl+K)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 placeholder:text-slate-400 transition-all"
+            />
+          </div>
         <div className="flex items-center space-x-3 w-full md:w-auto">
           <button className="flex-1 md:flex-none flex items-center justify-center space-x-2 px-6 py-3 bg-slate-50 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-100 transition-all border border-slate-100 uppercase tracking-widest">
             <Filter size={18} />
@@ -187,12 +218,26 @@ export default function AdminPackages({ category }: { category?: 'tour' | 'outbo
         {selectedIds.length > 0 && (
           <div className="bg-emerald-50/60 border-b border-emerald-100 px-8 py-4 flex items-center justify-between animate-in slide-in-from-top-2">
             <span className="text-sm font-bold text-emerald-800">{selectedIds.length} item terpilih</span>
-            <button 
-              onClick={handleBulkDelete}
-              className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-rose-200 flex items-center gap-2"
-            >
-              <Trash2 size={14} /> Hapus Terpilih
-            </button>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => handleBulkStatusUpdate('active')}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-emerald-200 flex items-center gap-2"
+              >
+                <CheckCircle className="w-3.5 h-3.5" /> Publish
+              </button>
+              <button 
+                onClick={() => handleBulkStatusUpdate('inactive')}
+                className="bg-slate-400 hover:bg-slate-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-slate-200 flex items-center gap-2"
+              >
+                <X className="w-3.5 h-3.5" /> Unpublish
+              </button>
+              <button 
+                onClick={handleBulkDelete}
+                className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-rose-200 flex items-center gap-2"
+              >
+                <Trash2 size={14} /> Hapus Terpilih
+              </button>
+            </div>
           </div>
         )}
         <div className="overflow-x-auto">

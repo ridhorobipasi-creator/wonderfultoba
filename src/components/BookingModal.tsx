@@ -9,7 +9,8 @@ import { toast } from 'sonner';
 import LoadingButton from './admin/LoadingButton';
 import FormField from './admin/FormField';
 import { showErrorToast } from '@/lib/errorHandler';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { PhoneInput } from './admin/PhoneInput';
 
 interface BookingModalProps {
   type: 'package' | 'car';
@@ -150,13 +151,21 @@ export default function BookingModal({ type, itemId, itemName, pricePerUnit, onC
             icon={<Phone size={18} />}
             required
           >
-            <input
-              type="tel"
-              {...register('phone', {
-                required: 'Nomor WhatsApp wajib diisi'
-              })}
-              className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${errors.phone ? 'border-rose-500' : 'border-transparent focus:border-toba-green/30'} focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
-              placeholder="08xxxxxxxxxx"
+            <Controller
+              name="phone"
+              control={control}
+              rules={{ 
+                required: 'Nomor WhatsApp wajib diisi',
+                minLength: { value: 10, message: 'Nomor HP minimal 10 digit' }
+              }}
+              render={({ field }) => (
+                <PhoneInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  className={`w-full pl-11 pr-4 py-4 bg-slate-50 border-2 ${errors.phone ? 'border-rose-500' : 'border-transparent focus:border-toba-green/30'} focus:bg-white rounded-2xl transition-all font-medium text-slate-900`}
+                  placeholder="0812-3456-7890"
+                />
+              )}
             />
           </FormField>
 

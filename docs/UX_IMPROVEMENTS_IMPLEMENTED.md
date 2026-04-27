@@ -390,10 +390,9 @@ npm install react-currency-input-field
 (None currently)
 
 ### Not Started (7/15)
-⏳ Input masking
-⏳ Preview mode
-⏳ Bulk actions
-⏳ Keyboard shortcuts
+- [x] Input masking (phone, price) - **Implemented**
+- [x] Preview mode pada form admin - **Implemented**
+- [/] Bulk actions untuk tabel (delete/publish massal) - **Partially Implemented**
 ⏳ Inline editing
 ⏳ Rich text editor
 ⏳ Field dependencies
@@ -631,3 +630,17 @@ const { restoreDraft, clearDraft } = useAutoSave({
 **Completion:** 53% (8 of 15 features)
 
 **Phase 1 is a huge success! Users are already reporting better experience! 🚀**
+### Phase 2 Improvements (Implemented in Session 2026-04-24)
+
+#### 1. Input Masking
+- **CurrencyInput**: Added auto-formatting with `Rp` prefix.
+- **PhoneInput**: Added auto-formatting for Indonesian WhatsApp numbers (`08xx-xxxx-xxxx`).
+- **Location**: Applied to `BookingModal`, `AdminPackageCreate`, and `AdminCarCreate`.
+
+#### 2. Preview Mode
+- **PackagePreviewModal**: A high-fidelity preview component that mimics the public package detail page.
+- **Integration**: Added to `AdminPackageCreate` allowing admins to verify layout and content before saving.
+
+#### 3. Bulk Actions
+- **Bulk Publish/Unpublish**: Admins can now toggle the status of multiple packages at once from the `AdminPackages` list.
+- **Bulk Delete**: Already existing, now grouped with status updates in a sleek bulk action bar.

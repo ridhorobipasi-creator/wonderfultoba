@@ -11,6 +11,12 @@ import {
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
 import BulkUpload from '@/components/BulkUpload';
+import FileUpload from '@/components/admin/FileUpload';
+import FormField from '@/components/admin/FormField';
+import { CurrencyInput } from '@/components/admin/CurrencyInput';
+import LoadingButton from '@/components/admin/LoadingButton';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { Controller } from 'react-hook-form';
 
 interface PricingDetailForm {
   days: string;
@@ -47,7 +53,9 @@ export default function AdminCarCreate() {
   const id = params?.id;
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('info');
-  const { register, handleSubmit, control, watch, reset, setValue } = useForm<AdminCarForm>({
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm<AdminCarForm>({
+    mode: 'onChange',
     defaultValues: {
       status: 'available',
       is_featured: false,
@@ -81,6 +89,7 @@ export default function AdminCarCreate() {
   }, [id, reset]);
 
   const onSubmit = async (data: AdminCarForm) => {
+    setLoading(true);
     try {
       // Parse arrays from strings
       const featuresArray = data.features ? data.features.split(',').map((s: string) => s.trim()) : [];
@@ -119,6 +128,8 @@ export default function AdminCarCreate() {
     } catch (error) {
       console.error('Error saving car:', error);
       toast.error('Gagal menyimpan mobil');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,13 +156,15 @@ export default function AdminCarCreate() {
             </h2>
             <p className="text-slate-500 font-medium">Lengkapi detail armada dengan fitur premium.</p>
           </div>
-          <button
+          <LoadingButton
             onClick={handleSubmit(onSubmit)}
+            loading={loading}
+            loadingText={id ? 'Menyimpan...' : 'Membuat...'}
+            icon={<Save size={20} />}
             className="bg-toba-green text-white px-10 py-4 rounded-2xl font-bold hover:bg-toba-green/90 transition-all shadow-xl shadow-blue-100 flex items-center space-x-2"
           >
-            <Save size={20} />
-            <span>{id ? 'Simpan Perubahan' : 'Simpan Armada'}</span>
-          </button>
+            {id ? 'Simpan Perubahan' : 'Simpan Armada'}
+          </LoadingButton>
         </div>
 
         {/* Tab Navigation */}
@@ -173,28 +186,21 @@ export default function AdminCarCreate() {
           {activeTab === 'info' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Kendaraan</label>
-                  <div className="relative">
-                    <CarIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      {...register('name', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
-                      placeholder="Contoh: Toyota Innova Reborn"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Kategori / Tipe</label>
-                  <div className="relative">
-                    <Tags className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      {...register('type', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
-                      placeholder="Contoh: SUV, MPV, Sedan"
-                    />
-                  </div>
-                </div>
+                <FormField label="Nama Kendaraan" error={errors.name} icon={<CarIcon size={20} />} required>
+                  <input
+                    {...register('name', { required: 'Nama kendaraan wajib diisi' })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${errors.name ? 'border-rose-500' : 'border-transparent'} rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
+                    placeholder="Contoh: Toyota Innova Reborn"
+                  />
+                </FormField>
+
+                <FormField label="Kategori / Tipe" error={errors.type} icon={<Tags size={20} />} required>
+                  <input
+                    {...register('type', { required: 'Tipe kendaraan wajib diisi' })}
+                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${errors.type ? 'border-rose-500' : 'border-transparent'} rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
+                    placeholder="Contoh: SUV, MPV, Sedan"
+                  />
+                </FormField>
               </div>
               
               <div className="space-y-3">
@@ -233,30 +239,36 @@ export default function AdminCarCreate() {
           {activeTab === 'harga' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Harga per Hari (Lepas Kunci)</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      type="number"
-                      {...register('price_per_day', { required: true })}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
-                      placeholder="500000"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-1">Harga Dengan Supir</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                    <input
-                      type="number"
-                      {...register('price_with_driver')}
-                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900"
-                      placeholder="650000"
-                    />
-                  </div>
-                </div>
+                <FormField label="Harga per Hari (Lepas Kunci)" error={errors.price_per_day} icon={<DollarSign size={20} />} required>
+                  <Controller
+                    name="price_per_day"
+                    control={control}
+                    rules={{ required: 'Harga harian wajib diisi' }}
+                    render={({ field }) => (
+                      <CurrencyInput
+                        value={field.value}
+                        onChange={field.onChange}
+                        className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${errors.price_per_day ? 'border-rose-500' : 'border-transparent'} rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
+                        placeholder="500.000"
+                      />
+                    )}
+                  />
+                </FormField>
+
+                <FormField label="Harga Dengan Supir" error={errors.price_with_driver} icon={<DollarSign size={20} />}>
+                  <Controller
+                    name="price_with_driver"
+                    control={control}
+                    render={({ field }) => (
+                      <CurrencyInput
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                        className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-2 ${errors.price_with_driver ? 'border-rose-500' : 'border-transparent'} rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900 transition-all`}
+                        placeholder="650.000"
+                      />
+                    )}
+                  />
+                </FormField>
               </div>
 
               <div className="pt-4 border-t border-slate-100">
