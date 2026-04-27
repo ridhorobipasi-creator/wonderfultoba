@@ -799,7 +799,7 @@ export default function AdminPackageCreate() {
       <PackagePreviewModal
         isOpen={showPreview}
         onClose={() => setShowPreview(false)}
-        data={watch()}
+        data={watch() as any}
       />
     </div>
   );
