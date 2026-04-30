@@ -6,61 +6,9 @@
 @section('content')
 <div x-data="{ waNumber: '{{ $settings['contact']['whatsapp'] ?? '6281323888207' }}' }">
     
-    <!-- Hero Slider (Swiper.js) -->
-    <section class="relative w-full h-screen min-h-[600px] overflow-hidden bg-slate-900">
-        <div class="swiper hero-swiper h-full w-full">
-            <div class="swiper-wrapper">
-                @foreach($settings['slider'] ?? [] as $dest)
-                <div class="swiper-slide relative">
-                    <img src="{{ $dest['image'] }}" alt="{{ $dest['title'] }}" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-                    
-                    <div class="relative z-10 h-full flex items-center">
-                        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-                            <div class="max-w-2xl text-white">
-                                <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-toba-accent mb-4">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                    {{ $dest['region'] }}
-                                </span>
-                                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight mb-5 drop-shadow-lg">
-                                    {{ $dest['title'] }}
-                                </h1>
-                                <p class="text-slate-300 text-base leading-relaxed mb-6 max-w-md font-medium">
-                                    {{ $dest['description'] }}
-                                </p>
-                                <div class="flex items-center gap-2 text-slate-300 text-sm font-bold mb-3">
-                                    <svg class="w-4 h-4 text-toba-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                    <span>{{ $dest['duration'] }}</span>
-                                </div>
-                                <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mb-1">Mulai Dari</p>
-                                <p class="text-3xl font-black text-white mb-8">
-                                    <span class="text-toba-accent text-lg mr-1">Rp</span>
-                                    {{ number_format($dest['price'], 0, ',', '.') }}
-                                </p>
-                                <a href="/tour/packages" class="inline-flex items-center gap-3 bg-toba-green text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.15em] hover:bg-toba-accent transition-all duration-300 shadow-2xl shadow-toba-green/30 group">
-                                    <span>Pesan Sekarang</span>
-                                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            
-            <!-- Navigation Buttons -->
-            <div class="absolute bottom-12 right-12 z-20 flex items-center gap-4">
-                <div class="hero-pagination !relative !w-auto flex gap-2 mr-4"></div>
-                <button class="hero-prev w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-toba-green transition-all shadow-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <button class="hero-next w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-toba-green transition-all shadow-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-            </div>
-        </div>
-    </section>
+    <!-- Premium Hero Slider -->
+    <x-home-slider />
+
 
     <!-- Featured Packages -->
     <section class="py-24">
@@ -276,30 +224,4 @@
 </div>
 @endsection
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const swiper = new Swiper('.hero-swiper', {
-            modules: [window.SwiperModules.Autoplay, window.SwiperModules.EffectFade, window.SwiperModules.Navigation, window.SwiperModules.Pagination],
-            effect: 'fade',
-            speed: 1000,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            loop: true,
-            pagination: {
-                el: '.hero-pagination',
-                clickable: true,
-                renderBullet: function (index, className) {
-                    return '<span class="' + className + ' w-2 h-2 !bg-white/40 !opacity-100 hover:!bg-white/80 transition-all rounded-full cursor-pointer"></span>';
-                }
-            },
-            navigation: {
-                nextEl: '.hero-next',
-                prevEl: '.hero-prev',
-            },
-        });
-    });
-</script>
-@endpush
+

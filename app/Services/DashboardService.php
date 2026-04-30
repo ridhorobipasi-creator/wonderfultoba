@@ -46,7 +46,25 @@ class DashboardService
                 ->get(),
             'top_packages' => $this->getTopPackages(),
             'monthly_revenue' => $this->getMonthlyRevenue(),
+            'revenue_7d' => $this->get7DayRevenue(),
         ];
+    }
+
+    private function get7DayRevenue()
+    {
+        $days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $total = Booking::where('status', 'confirmed')
+                ->whereDate('createdAt', $date)
+                ->sum('totalPrice');
+            $days[] = [
+                'date' => $date,
+                'label' => now()->subDays($i)->format('D'),
+                'total' => (float)$total
+            ];
+        }
+        return $days;
     }
 
     private function calculateGrowth()

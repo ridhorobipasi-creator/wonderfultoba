@@ -19,10 +19,22 @@ class SettingController extends Controller
         $data = $request->except('_token');
         
         foreach ($data as $key => $value) {
-            Setting::updateOrCreate(
-                ['key' => $key],
-                ['value' => $value]
-            );
+            if (is_array($value)) {
+                // For array values (grouped settings), merge with existing data
+                $setting = Setting::firstOrCreate(['key' => $key]);
+                $existingValue = $setting->value ?? [];
+                
+                // Recursively merge to handle deep structures like tour_landing[hero][title]
+                $newValue = array_replace_recursive($existingValue, $value);
+                
+                $setting->update(['value' => $newValue]);
+            } else {
+                // For simple key-value pairs (if any)
+                Setting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value]
+                );
+            }
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully!');

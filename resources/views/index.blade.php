@@ -3,124 +3,101 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Wonderful Toba | Premium Tour & Corporate Outbound</title>
-    <meta name="description" content="Portal utama Wonderful Toba. Pilih layanan premium Tour Travel Sumatera Utara atau Corporate Outbound & Team Building.">
+    <title>Wonderful Toba | Pilih Layanan Kami</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000; }
+        .central-logo {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body class="font-sans bg-slate-950 text-white overflow-hidden min-h-screen" x-data="{ isLoaded: false }" x-init="setTimeout(() => isLoaded = true, 100)">
+<body class="overflow-hidden">
 
     <main class="h-[100dvh] flex flex-col md:flex-row relative">
         
-        <!-- Central Logo & Branding -->
-        <div 
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 text-center transition-all duration-1000"
-            :class="isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'"
-        >
-           <div class="bg-slate-900/40 backdrop-blur-xl p-8 rounded-full border border-white/10 shadow-2xl shadow-toba-green/20">
-             <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center font-black text-3xl mx-auto shadow-inner mb-4 text-white">W</div>
-             <h1 class="text-3xl font-black tracking-tight whitespace-nowrap mb-1">
-                @php
-                    $nameParts = explode(' ', $content['brand']['name']);
-                @endphp
-                @foreach($nameParts as $index => $part)
-                    @if($index === 1)
-                        <span class="text-toba-green"> {{ $part }}</span>
-                    @else
-                        {{ $part }}
-                    @endif
-                @endforeach
-             </h1>
-             <p class="text-[10px] font-bold tracking-[0.3em] uppercase text-slate-300">{{ $content['brand']['tagline'] }}</p>
-           </div>
+        <!-- Center Logo -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
+            <div class="central-logo p-10 rounded-[3rem] text-center shadow-2xl">
+                <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-white font-black text-3xl mx-auto mb-4 shadow-xl">W</div>
+                <h1 class="text-3xl font-black text-white tracking-tighter leading-tight">
+                    @php
+                        $nameParts = explode(' ', $content['brand_name'] ?? 'Wonderful Toba');
+                    @endphp
+                    @foreach($nameParts as $index => $part)
+                        @if($index === 1)
+                            <span class="text-emerald-500">{{ $part }}</span>
+                        @else
+                            {{ $part }}
+                        @endif
+                    @endforeach
+                </h1>
+                <p class="text-[9px] font-black tracking-[0.4em] text-slate-300 uppercase mt-2">{{ $content['brand_tagline'] ?? 'Sumatera Utara' }}</p>
+            </div>
         </div>
 
-        <!-- Left Side - Corporate Outbound -->
-        <a 
-            href="/outbound" 
-            class="relative w-full md:w-1/2 h-[50vh] md:h-full group cursor-pointer block overflow-hidden border-b-2 gap-4 md:border-b-0 md:border-r-2 border-slate-900"
-        >
-          <div 
-            class="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] ease-out group-hover:scale-110" 
-            style="background-image: url('{{ $content['outbound']['backgroundImage'] }}')"
-          ></div>
-          <div class="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/40 transition-colors duration-500"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
-          
-          <div class="absolute inset-0 flex flex-col justify-end p-10 md:p-16 lg:p-24 text-left transition-transform duration-500 group-hover:-translate-y-4">
-            <div class="flex items-center gap-3 mb-4 text-toba-green opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
-               <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-               <span class="font-bold text-xs uppercase tracking-widest text-white">Event Organizer</span>
+        <!-- Left: Corporate Outbound -->
+        <div class="relative w-full md:w-1/2 h-[50vh] md:h-full group overflow-hidden border-b-2 md:border-b-0 md:border-r border-white/5">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-110" 
+                 style="background-image: url('{{ $content['outbound_image_url'] ?? 'https://images.unsplash.com/photo-1544735049-717bc392183e' }}')"></div>
+            <div class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/40 transition-colors"></div>
+            
+            <div class="absolute inset-0 flex flex-col justify-end p-12 md:p-20 lg:p-24">
+                <h2 class="text-5xl lg:text-7xl font-black text-white leading-none mb-6">
+                    {!! nl2br(e($content['outbound_title'] ?? "Corporate\nOutbound.")) !!}
+                </h2>
+                <p class="text-slate-200 text-sm md:text-base font-bold max-w-sm mb-10 leading-relaxed">
+                    {{ $content['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.' }}
+                </p>
+                <div class="flex items-center space-x-4">
+                    <a href="/outbound" class="px-8 py-4 bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-900/20 transition hover:bg-white hover:text-emerald-700">
+                        Jelajahi Outbound
+                    </a>
+                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white">
+                        <i class="fas fa-arrow-right -rotate-45"></i>
+                    </div>
+                </div>
             </div>
-            <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-4 tracking-tighter leading-[1.1] whitespace-pre-line">
-                @php
-                    $titleLines = explode("\n", $content['outbound']['title']);
-                @endphp
-                @foreach($titleLines as $index => $line)
-                    @if($index > 0)
-                        <br><span class="text-toba-green">{{ $line }}</span>
-                    @else
-                        {{ $line }}
-                    @endif
-                @endforeach
-            </h2>
-            <p class="text-slate-300 font-medium max-w-sm mb-8 text-sm md:text-base leading-relaxed hidden md:block">
-              {{ $content['outbound']['subtitle'] }}
-            </p>
-            <div class="flex items-center gap-4">
-              <div class="bg-toba-green text-white px-8 py-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-xl group-hover:shadow-toba-green/30 group-hover:px-10">
-                 {{ $content['outbound']['ctaText'] }}
-              </div>
-              <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-slate-900 transition-all">
-                <svg class="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
-          </div>
-        </a>
+        </div>
 
-        <!-- Right Side - Tour & Travel -->
-        <a 
-            href="/tour" 
-            class="relative w-full md:w-1/2 h-[50vh] md:h-full group cursor-pointer block overflow-hidden"
-        >
-          <div 
-            class="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] ease-out group-hover:scale-110" 
-            style="background-image: url('{{ $content['tour']['backgroundImage'] }}')"
-          ></div>
-          <div class="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/40 transition-colors duration-500"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
-          
-          <div class="absolute inset-0 flex flex-col justify-end p-10 md:p-16 lg:p-24 text-left md:text-right transition-transform duration-500 group-hover:-translate-y-4">
-            <div class="flex items-center md:justify-end gap-3 mb-4 text-toba-accent opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
-               <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-               <span class="font-bold text-xs uppercase tracking-widest text-white">Travel Agency</span>
+        <!-- Right: Tour & Travel -->
+        <div class="relative w-full md:w-1/2 h-[50vh] md:h-full group overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-110" 
+                 style="background-image: url('{{ $content['tour_image_url'] ?? 'https://images.unsplash.com/photo-1568449039662-3582576da56b' }}')"></div>
+            <div class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/40 transition-colors"></div>
+            
+            <div class="absolute inset-0 flex flex-col justify-end items-end p-12 md:p-20 lg:p-24 text-right">
+                <h2 class="text-5xl lg:text-7xl font-black text-white leading-none mb-6">
+                    {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
+                </h2>
+                <p class="text-slate-200 text-sm md:text-base font-bold max-w-sm mb-10 leading-relaxed">
+                    {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
+                </p>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white">
+                        <i class="fas fa-arrow-right -rotate-45"></i>
+                    </div>
+                    <a href="/tour" class="px-8 py-4 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-500/20 transition hover:bg-white hover:text-emerald-500">
+                        Jelajahi Wisata
+                    </a>
+                </div>
             </div>
-            <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-4 tracking-tighter leading-[1.1] whitespace-pre-line">
-                @php
-                    $titleLines = explode("\n", $content['tour']['title']);
-                @endphp
-                @foreach($titleLines as $index => $line)
-                    @if($index > 0)
-                        <br><span class="text-toba-accent">{{ $line }}</span>
-                    @else
-                        {{ $line }}
-                    @endif
-                @endforeach
-            </h2>
-            <p class="text-slate-300 font-medium max-w-sm mb-8 text-sm md:text-base leading-relaxed md:ml-auto hidden md:block">
-              {{ $content['tour']['subtitle'] }}
-            </p>
-            <div class="flex items-center md:justify-end gap-4 flex-row-reverse md:flex-row">
-              <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-slate-900 transition-all">
-                <svg class="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-              <div class="bg-toba-accent text-white px-8 py-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-xl group-hover:shadow-toba-accent/30 group-hover:px-10">
-                 {{ $content['tour']['ctaText'] }}
-              </div>
-            </div>
-          </div>
-        </a>
-        
+        </div>
+
     </main>
+
+    <!-- Floating UI -->
+    <div class="absolute bottom-10 right-10 z-50 flex flex-col space-y-4">
+        <button class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
+            <i class="fas fa-grid-2"></i>
+        </button>
+        <button class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
 
 </body>
 </html>
