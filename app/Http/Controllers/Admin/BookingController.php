@@ -19,6 +19,9 @@ class BookingController extends Controller
             'status' => $request->get('status'),
             'type' => $request->get('type'),
             'search' => $request->get('search'),
+            'date' => $request->get('date'),
+            'month' => $request->get('month'),
+            'year' => $request->get('year'),
             'per_page' => $request->get('per_page', 15),
         ];
 

@@ -18,8 +18,17 @@ class DashboardController extends Controller
         return view('admin.dashboard', compact('stats'));
     }
 
-    public function api()
+    public function stats()
     {
-        return response()->json($this->dashboardService->getStats());
+        $stats = $this->dashboardService->getStats();
+        
+        return response()->json([
+            'total_reservations' => $stats['bookings']['active'], // includes pending & confirmed
+            'estimated_revenue' => number_format($stats['revenue']['total'], 0, ',', '.'),
+            'active_packages' => $stats['packages']['active'],
+            'total_cars' => $stats['cars']['total'],
+            'revenue_7d' => $stats['revenue_7d'],
+            'recent_bookings' => $stats['recent_bookings']
+        ]);
     }
 }

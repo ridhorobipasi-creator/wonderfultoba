@@ -26,6 +26,18 @@ class BookingRepository
             });
         }
 
+        if (isset($filters['date']) && $filters['date']) {
+            $query->whereDate('startDate', $filters['date']);
+        }
+
+        if (isset($filters['month']) && $filters['month']) {
+            $query->whereMonth('startDate', $filters['month']);
+        }
+
+        if (isset($filters['year']) && $filters['year']) {
+            $query->whereYear('startDate', $filters['year']);
+        }
+
         return $query->latest('createdAt')->paginate($filters['per_page'] ?? 15);
     }
 

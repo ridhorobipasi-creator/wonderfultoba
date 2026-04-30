@@ -23,21 +23,16 @@ class PublicController extends Controller
 
     public function index()
     {
-        $settingsRaw = DB::table('settings')->where('key', 'landing_page')->first();
+        $settingsRaw = DB::table('settings')->where('key', 'cms_landing')->first();
         $content = $settingsRaw ? json_decode($settingsRaw->value, true) : [
-            'outbound' => [
-                'backgroundImage' => '/storage/2026/04/sumatra-panorama.png',
-                'title' => "Corporate\nOutbound.",
-                'subtitle' => 'Solusi team building & gathering profesional untuk instansi Anda. Tersedia di puluhan hotel premium Sumut.',
-                'ctaText' => 'Jelajahi Outbound',
-            ],
-            'tour' => [
-                'backgroundImage' => '/storage/2026/04/lake-toba-premium.png',
-                'title' => "Tour &\nTravel.",
-                'subtitle' => 'Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.',
-                'ctaText' => 'Jelajahi Wisata',
-            ],
-            'brand' => ['name' => 'Wonderful Toba', 'tagline' => 'Sumatera Utara'],
+            'outbound_image_url' => 'https://images.unsplash.com/photo-1544735049-717bc392183e',
+            'outbound_title' => "Corporate\nOutbound.",
+            'outbound_subtitle' => 'Solusi team building & gathering profesional untuk instansi Anda. Tersedia di puluhan hotel premium Sumut.',
+            'tour_image_url' => 'https://images.unsplash.com/photo-1568449039662-3582576da56b',
+            'tour_title' => "Tour &\nTravel.",
+            'tour_subtitle' => 'Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.',
+            'brand_name' => 'Wonderful Toba',
+            'brand_tagline' => 'Sumatera Utara',
         ];
 
         return view('index', compact('content'));
@@ -46,7 +41,7 @@ class PublicController extends Controller
     public function tour()
     {
         // 1. Get Landing Page Settings
-        $settingsRaw = DB::table('settings')->where('key', 'tour_landing')->first();
+        $settingsRaw = DB::table('settings')->where('key', 'cms_tour')->first();
         $settings = $settingsRaw ? json_decode($settingsRaw->value, true) : [];
 
         // 2. Get Featured Packages
@@ -154,7 +149,7 @@ class PublicController extends Controller
         $locations = DB::table('outbound_locations')->get();
         $clients = DB::table('clients')->get();
         $gallery = DB::table('gallery_images')->where('category', 'outbound')->get();
-        $settingsRaw = DB::table('settings')->where('key', 'outbound_landing')->first();
+        $settingsRaw = DB::table('settings')->where('key', 'cms_outbound')->first();
         $settings = $settingsRaw ? json_decode($settingsRaw->value, true) : [];
 
         return view('outbound.index', compact('services', 'videos', 'locations', 'clients', 'gallery', 'settings'));
