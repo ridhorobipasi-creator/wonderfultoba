@@ -21,7 +21,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         protocol: ftp
-        timeout: 900000
+        timeout: 1800000
         log-level: verbose
         server-dir: public_html/
         state-name: .ftp-deploy-sync-state.json
@@ -38,8 +38,8 @@ jobs:
           **/storage/framework/sessions/**
           **/storage/app/public/**
           **/public/storage
+          **/.vscode/**
           optimize.bat
           PRODUKSI.md
           rekap_project.md
           .github/**
-          .ftp-deploy-sync-state.json
