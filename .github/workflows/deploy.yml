@@ -20,7 +20,9 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
+        protocol: ftp
         server-dir: public_html/
+        state-name: .ftp-deploy-sync-state.json
         exclude: |
           **/.git/**
           **/.git*
@@ -37,3 +39,4 @@ jobs:
           PRODUKSI.md
           rekap_project.md
           .github/**
+          .ftp-deploy-sync-state.json
