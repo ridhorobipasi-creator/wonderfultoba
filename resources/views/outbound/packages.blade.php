@@ -130,6 +130,38 @@
             <h3 class="text-2xl font-black text-slate-900 mb-2">Paket tidak ditemukan</h3>
             <p class="text-slate-500 font-medium">Coba gunakan kata kunci atau lokasi yang berbeda.</p>
         </div>
+
+        <!-- Tiers Section -->
+        @if(isset($tiers) && count($tiers) > 0)
+        <div class="mt-32">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-emerald-50 text-toba-green text-xs font-black uppercase tracking-[0.3em] rounded-full mb-5">
+                    Kategori Layanan
+                </span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
+                    Pilihan <span class="text-toba-green">Tingkat Layanan</span>
+                </h2>
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto font-medium">
+                    Sesuaikan paket outbound Anda dengan kebutuhan dan anggaran perusahaan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($tiers as $tier)
+                <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-slate-50 rounded-full group-hover:bg-toba-green/10 transition-colors"></div>
+                    <h3 class="text-2xl font-black text-slate-900 mb-4 relative z-10">{{ $tier->name }}</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed mb-8 relative z-10">
+                        {{ $tier->description }}
+                    </p>
+                    <a href="https://wa.me/6281323888207?text=Halo,%20saya%20tertarik%20dengan%20layanan%20outbound%20tier%20{{ $tier->name }}" class="inline-flex items-center justify-center w-full py-4 rounded-2xl bg-slate-50 text-slate-900 font-black text-xs uppercase tracking-widest hover:bg-toba-green hover:text-white transition-colors">
+                        Konsultasi Tier Ini
+                    </a>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection
