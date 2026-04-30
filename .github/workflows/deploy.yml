@@ -21,6 +21,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: public_html/
         exclude: |
+          **/.git/**
           **/.git*
           **/node_modules/**
           **/tests/**
@@ -33,3 +34,4 @@ jobs:
           optimize.bat
           PRODUKSI.md
           rekap_project.md
+          .github/**
