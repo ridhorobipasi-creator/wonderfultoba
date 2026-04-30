@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
-@section('title', $settings['hero']['title'] ?? 'Wonderful Toba – Wisata Sumatera Utara')
-@section('description', $settings['hero']['subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Wonderful Toba.')
+@section('title', $settings['hero_title'] ?? 'Wonderful Toba – Wisata Sumatera Utara')
+@section('description', $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Wonderful Toba.')
 
 @section('content')
-<div x-data="{ waNumber: '{{ $settings['contact']['whatsapp'] ?? '6281323888207' }}' }">
+<div x-data="{ waNumber: '{{ $settings['contact_wa'] ?? '6281323888207' }}' }">
     
     <!-- Premium Hero Slider -->
     <x-home-slider />
-
 
     <!-- Featured Packages -->
     <section class="py-24">
@@ -80,10 +79,10 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="relative">
                     <div class="grid grid-cols-2 gap-4">
-                        <img src="{{ $settings['whyUsImages'][0] ?? '/storage/2026/04/sumatra-panorama.png' }}" alt="Lake Toba View" class="rounded-[2.5rem] shadow-2xl w-full h-[450px] object-cover">
+                        <img src="https://images.unsplash.com/photo-1544735049-717bc392183e?w=800" alt="Lake Toba View" class="rounded-[2.5rem] shadow-2xl w-full h-[450px] object-cover">
                         <div class="space-y-4 pt-12">
-                            <img src="{{ $settings['whyUsImages'][1] ?? '/storage/2026/04/bukit-lawang-jungle.png' }}" alt="Bukit Lawang" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
-                            <img src="{{ $settings['whyUsImages'][2] ?? '/storage/2026/04/berastagi-highland.png' }}" alt="Tangkahan" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
+                            <img src="https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?w=800" alt="Bukit Lawang" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Tangkahan" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
                         </div>
                     </div>
                 </div>
@@ -94,26 +93,36 @@
                         <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Mengapa Kami</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight leading-tight">
-                        {!! $settings['whyUs']['title'] ?? 'Pengalaman Wisata <br /><span class="text-toba-green">Terbaik di Sumut</span>' !!}
+                        Pengalaman Wisata <br /><span class="text-toba-green">Terbaik di Sumut</span>
                     </h2>
                     <div class="space-y-6 mb-10">
-                        @foreach($settings['whyUs']['items'] ?? [] as $item)
                         <div class="flex items-start space-x-5">
                             <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-toba-green/8 text-toba-green">
-                                @if(($item['icon'] ?? '') === 'Shield')
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                @elseif(($item['icon'] ?? '') === 'Clock')
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                @else
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                                @endif
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-lg font-black text-slate-900 mb-1 tracking-tight">{{ $item['title'] }}</h4>
-                                <p class="text-slate-500 font-medium leading-relaxed text-sm">{{ $item['desc'] }}</p>
+                                <h4 class="text-lg font-black text-slate-900 mb-1 tracking-tight">Harga Transparan</h4>
+                                <p class="text-slate-500 font-medium leading-relaxed text-sm">Tidak ada biaya tersembunyi. Semua fasilitas sudah termasuk sesuai yang tertera di paket penawaran kami.</p>
                             </div>
                         </div>
-                        @endforeach
+                        <div class="flex items-start space-x-5">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-toba-green/8 text-toba-green">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-black text-slate-900 mb-1 tracking-tight">Guide Berpengalaman</h4>
+                                <p class="text-slate-500 font-medium leading-relaxed text-sm">Dipandu oleh local expert yang memahami betul budaya, rute, dan cerita tersembunyi di balik keindahan Danau Toba.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-5">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-toba-green/8 text-toba-green">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-black text-slate-900 mb-1 tracking-tight">Layanan Premium</h4>
+                                <p class="text-slate-500 font-medium leading-relaxed text-sm">Armada transportasi bersih dan penginapan terbaik yang sudah kami kurasi khusus untuk kenyamanan liburan Anda.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,23 +142,36 @@
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                @foreach($settings['testimonials'] ?? [] as $t)
                 <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-left">
                     <div class="flex gap-1 mb-5">
-                        @for($i=0; $i<($t['rating'] ?? 5); $i++)
+                        @for($i=0; $i<5; $i++)
                             <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         @endfor
                     </div>
-                    <p class="text-slate-600 leading-relaxed mb-6 font-medium italic">&ldquo;{{ $t['text'] }}&rdquo;</p>
+                    <p class="text-slate-600 leading-relaxed mb-6 font-medium italic">&ldquo;Pelayanan sangat memuaskan, guide ramah dan sangat informatif. Danau Toba memang luar biasa indahnya.&rdquo;</p>
                     <div class="flex items-center gap-3 pt-5 border-t border-slate-50">
-                        <img src="{{ $t['avatar'] }}" alt="{{ $t['name'] }}" class="w-12 h-12 rounded-full object-cover">
+                        <img src="https://i.pravatar.cc/150?u=1" alt="Budi" class="w-12 h-12 rounded-full object-cover">
                         <div>
-                            <p class="font-black text-slate-900 text-sm">{{ $t['name'] }}</p>
-                            <p class="text-xs text-slate-400 font-medium">{{ $t['role'] }}</p>
+                            <p class="font-black text-slate-900 text-sm">Budi Santoso</p>
+                            <p class="text-xs text-slate-400 font-medium">Keluarga Wisatawan</p>
                         </div>
                     </div>
                 </div>
-                @endforeach
+                <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-left">
+                    <div class="flex gap-1 mb-5">
+                        @for($i=0; $i<5; $i++)
+                            <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        @endfor
+                    </div>
+                    <p class="text-slate-600 leading-relaxed mb-6 font-medium italic">&ldquo;Pengalaman trekking di Bukit Lawang sangat asyik! Ranger berpengalaman dan penginapannya nyaman banget.&rdquo;</p>
+                    <div class="flex items-center gap-3 pt-5 border-t border-slate-50">
+                        <img src="https://i.pravatar.cc/150?u=2" alt="Siska" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <p class="font-black text-slate-900 text-sm">Siska Amelia</p>
+                            <p class="text-xs text-slate-400 font-medium">Solo Traveler</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -200,14 +222,14 @@
             <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/40"></div>
             <div class="relative z-10 text-center max-w-3xl mx-auto text-white">
                 <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">
-                    {!! $settings['cta']['title'] ?? 'Siap Menjelajahi <br /><span class="text-toba-accent">Keindahan Sumut?</span>' !!}
+                    {!! nl2br(e($settings['cta_text'] ?? "Mulai Petualangan Anda\nBersama Kami")) !!}
                 </h2>
                 <p class="text-lg text-slate-300 mb-10 font-medium leading-relaxed">
-                    {{ $settings['cta']['subtitle'] ?? 'Bergabunglah dengan ribuan wisatawan yang telah merasakan keajaiban Sumatera Utara bersama kami.' }}
+                    Lebih dari {{ $settings['stat_customers'] ?? '3000+' }} pelanggan telah mempercayakan perjalanan mereka kepada kami untuk mengeksplorasi {{ $settings['stat_trips'] ?? '500+' }} destinasi.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{{ $settings['cta']['buttonLink'] ?? '/tour/packages' }}" class="bg-toba-green text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent transition-all shadow-2xl shadow-toba-green/20">
-                        {{ $settings['cta']['buttonText'] ?? 'Lihat Paket Wisata' }}
+                    <a href="{{ $settings['cta_link'] ?? '/tour/packages' }}" class="bg-toba-green text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent transition-all shadow-2xl shadow-toba-green/20">
+                        Lihat Paket Wisata
                     </a>
                 </div>
             </div>

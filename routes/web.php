@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PDFController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\WebAuthController;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +13,7 @@ Route::get('/cars', [PublicController::class, 'carRental'])->name('cars');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
-Route::get('/download/itinerary/{slug}', [PDFController::class, 'downloadItinerary'])->name('itinerary.download');
+Route::get('/download/itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
 Route::get('/tour', [PublicController::class, 'tour'])->name('tour');
 
 Route::get('/tour/packages', [PublicController::class, 'tourPackages'])->name('tour.packages');

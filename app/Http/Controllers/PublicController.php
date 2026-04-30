@@ -166,8 +166,9 @@ class PublicController extends Controller
             });
 
         $cities = DB::table('cities')->get();
+        $tiers = DB::table('package_tiers')->get();
 
-        return view('outbound.packages', compact('packages', 'cities'));
+        return view('outbound.packages', compact('packages', 'cities', 'tiers'));
     }
 
     public function outboundBlog(Request $request)

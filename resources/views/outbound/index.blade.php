@@ -8,15 +8,17 @@
     x-data="{ 
         currentSlide: 0, 
         activeVideoTab: 0,
-        heroImages: {{ json_encode($settings['heroImages'] ?? ['/assets/images/2023/10/001-1.jpg', '/assets/images/2023/10/002-1.jpg', '/assets/images/2023/10/003-1.jpg']) }},
-        about: {{ json_encode($settings['about'] ?? [
-            'title' => 'Apa itu Outbound?',
-            'description' => 'Outbound adalah metode pembelajaran berbasis pengalaman di alam terbuka yang dirancang untuk membangun karakter, kepemimpinan, dan kerjasama tim secara efektif.',
-            'vision' => 'Menjadi provider outbound terpercaya dan terdepan di Sumatera Utara.',
-            'mission' => 'Memberikan layanan outbound berkualitas tinggi dengan trainer tersertifikasi.',
-            'statsLabel' => 'Tahun',
-            'statsValue' => '12+'
-        ]) }},
+        heroImages: [
+            '{{ $settings['hero_image'] ?? 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=2000' }}',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?w=2000',
+            'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=2000'
+        ],
+        about: {
+            title: 'Apa itu Outbound?',
+            description: 'Outbound adalah metode pembelajaran berbasis pengalaman di alam terbuka yang dirancang untuk membangun karakter, kepemimpinan, dan kerjasama tim secara efektif.',
+            statsLabel: 'Tahun',
+            statsValue: '12+'
+        },
         init() {
             setInterval(() => {
                 this.currentSlide = (this.currentSlide + 1) % this.heroImages.length;
@@ -47,8 +49,11 @@
                    class="w-auto h-28 md:h-36 mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
                 >
                 
+                <h1 class="text-4xl md:text-5xl lg:text-7xl text-white font-black max-w-4xl mx-auto mb-6 leading-tight drop-shadow-2xl">
+                    {{ $settings['hero_title'] ?? 'Solusi Team Building Terbaik di Sumatera' }}
+                </h1>
                 <p class="text-xl md:text-2xl text-white font-medium max-w-3xl mx-auto mb-12 leading-relaxed drop-shadow-xl">
-                    Pembelajaran ilmu terapan atraktif dan seru di alam terbuka untuk menggabungkan <span class="font-black text-white">intelegensia, fisik, dan mental</span>.
+                    {{ $settings['hero_subtitle'] ?? 'Tingkatkan sinergi dan produktivitas tim Anda dengan program outbound profesional di alam Danau Toba.' }}
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -202,9 +207,16 @@
             
             <div class="aspect-video w-full max-w-5xl mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl bg-slate-900 relative ring-8 ring-white">
                 @foreach($videos as $i => $vid)
+                    @php
+                        $embedUrl = $vid->youtubeUrl;
+                        if(str_contains($embedUrl, 'watch?v=')) {
+                            $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
+                            $embedUrl = explode('&', $embedUrl)[0];
+                        }
+                    @endphp
                     <iframe
                         x-show="activeVideoTab === {{ $i }}"
-                        src="{{ $vid->youtubeUrl }}"
+                        src="{{ $embedUrl }}"
                         class="w-full h-full absolute inset-0 z-10"
                         allowfullscreen
                     ></iframe>
