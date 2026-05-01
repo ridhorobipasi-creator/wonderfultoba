@@ -7,27 +7,27 @@
 <div x-data="{ activeTab: 'hero' }" class="space-y-8">
     
     <!-- Tab Navigation -->
-    <div class="bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center space-x-2 overflow-x-auto no-scrollbar">
-        <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition">Hero</button>
-        <button @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
-        <button @click="activeTab = 'gallery'" :class="activeTab === 'gallery' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition">Galeri</button>
-        <button @click="activeTab = 'social'" :class="activeTab === 'social' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition">Testimoni</button>
-        <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition">Statistik</button>
-        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition">Kontak</button>
+    <div class="bg-white p-2.5 md:p-3 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center space-x-1.5 md:space-x-2 overflow-x-auto no-scrollbar">
+        <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition">Hero</button>
+        <button @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
+        <button @click="activeTab = 'gallery'" :class="activeTab === 'gallery' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition">Galeri</button>
+        <button @click="activeTab = 'social'" :class="activeTab === 'social' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition">Testimoni</button>
+        <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition">Statistik</button>
+        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-5 md:px-6 py-3 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition">Kontak</button>
     </div>
 
     <!-- Tab Contents -->
-    <div class="bg-white rounded-[3.5rem] p-10 lg:p-16 border border-slate-100 shadow-sm min-h-[600px]">
+    <div class="bg-white rounded-[2.5rem] md:rounded-[3.5rem] p-8 lg:p-16 border border-slate-100 shadow-sm min-h-[600px]">
         
         <!-- Hero Section -->
         <div x-show="activeTab === 'hero'" class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div class="flex items-center space-x-6">
-                <div class="w-16 h-16 rounded-3xl bg-toba-green/10 text-toba-green flex items-center justify-center text-xl">
+            <div class="flex items-center space-x-5 md:space-x-6">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-toba-green/10 text-toba-green flex items-center justify-center text-lg">
                     <i class="fas fa-image"></i>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-black text-slate-900 tracking-tight">Hero Section</h3>
-                    <p class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Halaman Utama /tour</p>
+                    <h3 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Hero Section</h3>
+                    <p class="text-[10px] md:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Halaman Utama /tour</p>
                 </div>
             </div>
 
@@ -136,8 +136,8 @@
         </div>
     </div>
 
-    <div class="flex justify-end">
-        <button class="px-12 py-5 bg-slate-900 text-white rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 transition hover:-translate-y-1">Simpan Semua Konfigurasi</button>
+    <div class="flex justify-center md:justify-end">
+        <button class="w-full md:w-auto px-12 py-5 bg-slate-900 text-white rounded-[1.5rem] md:rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 transition hover:-translate-y-1">Simpan Semua Konfigurasi</button>
     </div>
 </div>
 @endsection

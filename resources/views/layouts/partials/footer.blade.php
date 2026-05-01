@@ -1,10 +1,10 @@
-<footer class="bg-slate-900 pt-24 pb-12 px-4 relative overflow-hidden">
+<footer class="bg-slate-900 pt-20 md:pt-24 pb-12 px-6 md:px-8 relative overflow-hidden">
     <!-- Decor -->
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-toba-green via-emerald-400 to-toba-accent"></div>
     <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-toba-green/5 rounded-full blur-3xl"></div>
     
     <div class="max-w-7xl mx-auto relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-16 md:mb-20">
             <!-- Brand -->
             <div class="space-y-6">
                 <div class="flex items-center space-x-3">

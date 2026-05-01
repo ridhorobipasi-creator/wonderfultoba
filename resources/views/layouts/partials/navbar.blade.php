@@ -138,21 +138,51 @@
         <!-- Mobile Nav -->
         <div 
             x-show="isMenuOpen" 
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-100"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="lg:hidden fixed inset-x-0 top-full bg-white border-t border-slate-100 p-6 space-y-4 shadow-2xl z-50"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-4"
+            class="lg:hidden fixed inset-x-0 top-[72px] bottom-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 p-8 space-y-2 shadow-2xl z-50 overflow-y-auto"
         >
-            <a href="/" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Beranda</a>
-            <a href="/tour" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Tour & Wisata</a>
-            <a href="/outbound" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Outbound</a>
-            <a href="/cars" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Rental Mobil</a>
-            <a href="/tour/packages" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Paket Wisata</a>
-            <a href="/tour/gallery" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Galeri</a>
-            <a href="/tour/blog" class="block text-lg font-bold p-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">Blog</a>
+            <a href="/" class="block text-xl font-black p-4 rounded-2xl text-slate-900 bg-slate-50 border border-slate-100 transition-all mb-2">Beranda</a>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="/tour" class="flex flex-col items-center justify-center text-center p-4 rounded-2xl border border-slate-100 hover:border-toba-green group transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-toba-green/10 text-toba-green flex items-center justify-center mb-2 group-hover:bg-toba-green group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">Tour</span>
+                </a>
+                <a href="/outbound" class="flex flex-col items-center justify-center text-center p-4 rounded-2xl border border-slate-100 hover:border-toba-green group transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-toba-green/10 text-toba-green flex items-center justify-center mb-2 group-hover:bg-toba-green group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">Outbound</span>
+                </a>
+                <a href="/cars" class="flex flex-col items-center justify-center text-center p-4 rounded-2xl border border-slate-100 hover:border-toba-green group transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-toba-green/10 text-toba-green flex items-center justify-center mb-2 group-hover:bg-toba-green group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">Rental</span>
+                </a>
+                <a href="/tour/packages" class="flex flex-col items-center justify-center text-center p-4 rounded-2xl border border-slate-100 hover:border-toba-green group transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-toba-green/10 text-toba-green flex items-center justify-center mb-2 group-hover:bg-toba-green group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <span class="text-sm font-bold text-slate-700">Paket</span>
+                </a>
+            </div>
+            <div class="pt-4">
+                <a href="/tour/gallery" class="flex items-center space-x-4 p-4 rounded-2xl text-slate-700 hover:bg-slate-50 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><i class="fas fa-images"></i></div>
+                    <span class="font-bold">Galeri Foto</span>
+                </a>
+                <a href="/tour/blog" class="flex items-center space-x-4 p-4 rounded-2xl text-slate-700 hover:bg-slate-50 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><i class="fas fa-newspaper"></i></div>
+                    <span class="font-bold">Blog & Artikel</span>
+                </a>
+            </div>
 
 
 

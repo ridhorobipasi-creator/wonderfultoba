@@ -47,20 +47,20 @@
     @keydown.right.window="if(lightbox.open) next()"
 >
     <!-- Hero -->
-    <div class="relative bg-slate-900 pt-32 pb-20 px-4 overflow-hidden">
+    <div class="relative bg-slate-900 pt-32 pb-20 px-6 md:px-8 overflow-hidden">
         <div class="absolute inset-0 opacity-20">
             <img src="/storage/2026/04/lake-toba-premium.png" alt="" class="w-full h-full object-cover">
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 to-slate-900/90"></div>
         <div class="relative z-10 max-w-4xl mx-auto text-center">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-toba-green/20 text-toba-green text-xs font-bold uppercase tracking-[0.3em] rounded-full mb-5">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-toba-green/20 text-toba-green text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-5">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                Galeri Foto
+                Galeri Visual
             </span>
-            <h1 class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight leading-tight">
                 Keindahan <span class="text-toba-accent">Sumatera Utara</span>
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8">
+            <p class="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-10">
                 Abadikan setiap momen perjalanan Anda bersama Wonderful Toba.
             </p>
             <!-- Search -->
@@ -78,12 +78,12 @@
 
     <!-- Category Filter -->
     <div class="sticky top-[72px] z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex gap-2 overflow-x-auto scrollbar-hide">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 flex gap-2 overflow-x-auto no-scrollbar">
             <template x-for="cat in categories" :key="cat">
                 <button
                     @click="activeCategory = cat"
                     :class="activeCategory === cat ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'"
-                    class="shrink-0 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all"
+                    class="shrink-0 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all"
                     x-text="cat"
                 ></button>
             </template>
@@ -91,7 +91,7 @@
     </div>
 
     <!-- Gallery Grid -->
-    <div class="max-w-7xl mx-auto px-4 mt-10">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-10">
         <div class="flex items-center justify-between mb-8">
             <p class="text-slate-500 font-medium text-sm">
                 Menampilkan <span class="text-toba-green font-black" x-text="filteredImages.length"></span> foto

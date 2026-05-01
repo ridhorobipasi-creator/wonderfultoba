@@ -9,7 +9,7 @@
         @csrf
         
         <!-- Branding Tengah -->
-        <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm">
+        <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm">
             <div class="flex items-center space-x-4 mb-8">
                 <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white">
                     <i class="fas fa-fingerprint"></i>
@@ -34,7 +34,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Sisi Kiri: Outbound (B2B) -->
-            <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-emerald-600">
+            <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-emerald-600">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -50,7 +50,7 @@
                 <div class="space-y-6">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Judul (Gunakan \n untuk baris baru)</label>
-                        <textarea name="outbound_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-black text-2xl text-slate-900">{{ $settings['outbound_title'] ?? "Corporate\nOutbound." }}</textarea>
+                        <textarea name="outbound_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-black text-xl md:text-2xl text-slate-900">{{ $settings['outbound_title'] ?? "Corporate\nOutbound." }}</textarea>
                     </div>
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sub-judul (Value Proposition)</label>
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Sisi Kanan: Tour & Travel (B2C) -->
-            <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-toba-green">
+            <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-toba-green">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-toba-green flex items-center justify-center">
@@ -85,7 +85,7 @@
                 <div class="space-y-6">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Judul (Gunakan \n untuk baris baru)</label>
-                        <textarea name="tour_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-black text-2xl text-slate-900">{{ $settings['tour_title'] ?? "Tour &\nTravel." }}</textarea>
+                        <textarea name="tour_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-black text-xl md:text-2xl text-slate-900">{{ $settings['tour_title'] ?? "Tour &\nTravel." }}</textarea>
                     </div>
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sub-judul (Value Proposition)</label>
@@ -104,8 +104,8 @@
             </div>
         </div>
 
-        <div class="flex justify-end">
-            <button type="submit" class="px-12 py-5 bg-slate-900 text-white rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 transition hover:-translate-y-1">Simpan Perubahan</button>
+        <div class="flex justify-center md:justify-end">
+            <button type="submit" class="w-full md:w-auto px-12 py-5 bg-slate-900 text-white rounded-[1.5rem] md:rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 transition hover:-translate-y-1">Simpan Perubahan</button>
         </div>
     </form>
 </div>

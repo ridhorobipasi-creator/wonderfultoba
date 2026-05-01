@@ -10,8 +10,26 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000; }
         .central-logo {
             background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .split-overlay {
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.2) 60%, rgba(15, 23, 42, 0) 100%);
+        }
+        .bg-zoom {
+            animation: zoom-slow 20s infinite alternate;
+        }
+        @keyframes zoom-slow {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+        .btn-premium {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-premium:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.3);
         }
     </style>
 </head>
@@ -19,68 +37,55 @@
 
     <main class="h-[100dvh] flex flex-col md:flex-row relative">
         
-        <!-- Center Logo -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
-            <div class="central-logo p-10 rounded-[3rem] text-center shadow-2xl">
-                <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-white font-black text-3xl mx-auto mb-4 shadow-xl">W</div>
-                <h1 class="text-3xl font-black text-white tracking-tighter leading-tight">
-                    @php
-                        $nameParts = explode(' ', $content['brand_name'] ?? 'Wonderful Toba');
-                    @endphp
-                    @foreach($nameParts as $index => $part)
-                        @if($index === 1)
-                            <span class="text-emerald-500">{{ $part }}</span>
-                        @else
-                            {{ $part }}
-                        @endif
-                    @endforeach
-                </h1>
-                <p class="text-[9px] font-black tracking-[0.4em] text-slate-300 uppercase mt-2">{{ $content['brand_tagline'] ?? 'Sumatera Utara' }}</p>
-            </div>
-        </div>
-
+        
         <!-- Left: Corporate Outbound -->
-        <div class="relative w-full md:w-1/2 h-[50vh] md:h-full group overflow-hidden border-b-2 md:border-b-0 md:border-r border-white/5">
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-110" 
-                 style="background-image: url('{{ $content['outbound_image_url'] ?? 'https://images.unsplash.com/photo-1544735049-717bc392183e' }}')"></div>
-            <div class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/40 transition-colors"></div>
+        <div class="relative w-full md:w-1/2 h-[50dvh] md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[5s] group-hover:scale-110 bg-zoom" 
+                 style="background-image: url('{{ !empty($content['outbound_image_url']) ? $content['outbound_image_url'] : asset('images/home/outbound.png') }}')"></div>
+            <div class="absolute inset-0 split-overlay transition-opacity duration-500 group-hover:opacity-80"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-end p-12 md:p-20 lg:p-24">
-                <h2 class="text-5xl lg:text-7xl font-black text-white leading-none mb-6">
-                    {!! nl2br(e($content['outbound_title'] ?? "Corporate\nOutbound.")) !!}
-                </h2>
-                <p class="text-slate-200 text-sm md:text-base font-bold max-w-sm mb-10 leading-relaxed">
+            <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-20 lg:p-24 z-10">
+                <div class="overflow-hidden mb-4">
+                    <span class="inline-block px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 md:mb-4">B2B & Corporate</span>
+                    <h2 class="text-4xl md:text-6xl lg:text-8xl font-black text-white leading-none">
+                        {!! nl2br(e($content['outbound_title'] ?? "Corporate\nOutbound.")) !!}
+                    </h2>
+                </div>
+                <p class="hidden sm:block text-slate-300 text-sm md:text-base font-medium max-w-sm mb-10 leading-relaxed">
                     {{ $content['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.' }}
                 </p>
-                <div class="flex items-center space-x-4">
-                    <a href="/outbound" class="px-8 py-4 bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-900/20 transition hover:bg-white hover:text-emerald-700">
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    <a href="/outbound" class="btn-premium flex-1 sm:flex-none text-center px-6 md:px-10 py-4 md:py-5 bg-emerald-600 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl shadow-emerald-950/40 border border-emerald-500/20">
                         Jelajahi Outbound
                     </a>
-                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white">
-                        <i class="fas fa-arrow-right -rotate-45"></i>
+                    <div class="group/btn relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-right -rotate-45 relative z-10"></i>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Right: Tour & Travel -->
-        <div class="relative w-full md:w-1/2 h-[50vh] md:h-full group overflow-hidden">
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-110" 
-                 style="background-image: url('{{ $content['tour_image_url'] ?? 'https://images.unsplash.com/photo-1568449039662-3582576da56b' }}')"></div>
-            <div class="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/40 transition-colors"></div>
+        <div class="relative w-full md:w-1/2 h-[50dvh] md:h-full group overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[5s] group-hover:scale-110 bg-zoom" 
+                 style="background-image: url('{{ !empty($content['tour_image_url']) ? $content['tour_image_url'] : asset('images/home/tour.png') }}')"></div>
+            <div class="absolute inset-0 split-overlay transition-opacity duration-500 group-hover:opacity-80"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-end items-end p-12 md:p-20 lg:p-24 text-right">
-                <h2 class="text-5xl lg:text-7xl font-black text-white leading-none mb-6">
-                    {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
-                </h2>
-                <p class="text-slate-200 text-sm md:text-base font-bold max-w-sm mb-10 leading-relaxed">
+            <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-20 lg:p-24 text-right z-10">
+                <div class="overflow-hidden mb-4">
+                    <span class="inline-block px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full mb-3 md:mb-4">Premium Leisure</span>
+                    <h2 class="text-4xl md:text-6xl lg:text-8xl font-black text-white leading-none">
+                        {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
+                    </h2>
+                </div>
+                <p class="hidden sm:block text-slate-300 text-sm md:text-base font-medium max-w-sm mb-10 leading-relaxed">
                     {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
                 </p>
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white">
-                        <i class="fas fa-arrow-right -rotate-45"></i>
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    <div class="group/btn relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-right -rotate-45 relative z-10"></i>
                     </div>
-                    <a href="/tour" class="px-8 py-4 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-500/20 transition hover:bg-white hover:text-emerald-500">
+                    <a href="/tour" class="btn-premium flex-1 sm:flex-none text-center px-6 md:px-10 py-4 md:py-5 bg-emerald-500 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl shadow-emerald-500/40 border border-emerald-400/20">
                         Jelajahi Wisata
                     </a>
                 </div>
@@ -89,15 +94,6 @@
 
     </main>
 
-    <!-- Floating UI -->
-    <div class="absolute bottom-10 right-10 z-50 flex flex-col space-y-4">
-        <button class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
-            <i class="fas fa-grid-2"></i>
-        </button>
-        <button class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
-            <i class="fas fa-robot"></i>
-        </button>
-    </div>
 
 </body>
 </html>

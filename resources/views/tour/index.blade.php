@@ -10,15 +10,15 @@
     <x-home-slider />
 
     <!-- Featured Packages -->
-    <section class="py-24">
-        <div class="max-w-7xl mx-auto px-4">
+    <section class="py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                 <div class="max-w-2xl">
                     <div class="flex items-center space-x-2 mb-4">
                         <div class="h-px w-8 bg-toba-green"></div>
                         <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Destinasi Unggulan</span>
                     </div>
-                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
                         Paket Wisata <span class="text-toba-green">Terpopuler</span>
                     </h2>
                 </div>
@@ -30,7 +30,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 @foreach($packages as $pkg)
                 <div class="group cursor-pointer">
                     <div class="relative h-[420px] rounded-[2rem] overflow-hidden mb-6 shadow-xl shadow-slate-200/50">
@@ -74,15 +74,15 @@
     </section>
 
     <!-- Why Us Section -->
-    <section class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+    <section class="py-20 md:py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 <div class="relative">
                     <div class="grid grid-cols-2 gap-4">
-                        <img src="https://images.unsplash.com/photo-1544735049-717bc392183e?w=800" alt="Lake Toba View" class="rounded-[2.5rem] shadow-2xl w-full h-[450px] object-cover">
-                        <div class="space-y-4 pt-12">
-                            <img src="https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?w=800" alt="Bukit Lawang" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
-                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Tangkahan" class="rounded-[1.5rem] shadow-xl w-full h-48 object-cover">
+                        <img src="https://images.unsplash.com/photo-1544735049-717bc392183e?w=800" alt="Lake Toba View" class="rounded-[2rem] md:rounded-[2.5rem] shadow-2xl w-full h-[300px] md:h-[450px] object-cover">
+                        <div class="space-y-4 pt-6 md:pt-12">
+                            <img src="https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?w=800" alt="Bukit Lawang" class="rounded-[1.5rem] shadow-xl w-full h-32 md:h-48 object-cover">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Tangkahan" class="rounded-[1.5rem] shadow-xl w-full h-32 md:h-48 object-cover">
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                         <div class="h-px w-8 bg-toba-green"></div>
                         <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Mengapa Kami</span>
                     </div>
-                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight leading-tight">
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight leading-tight">
                         Pengalaman Wisata <br /><span class="text-toba-green">Terbaik di Sumut</span>
                     </h2>
                     <div class="space-y-6 mb-10">
@@ -130,14 +130,14 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="py-24">
-        <div class="max-w-7xl mx-auto px-4 text-center">
+    <section class="py-20 md:py-24">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 text-center">
             <div class="flex items-center justify-center space-x-2 mb-4">
                 <div class="h-px w-8 bg-toba-green"></div>
                 <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Testimoni</span>
                 <div class="h-px w-8 bg-toba-green"></div>
             </div>
-            <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-16">
+            <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-12 md:mb-16">
                 Kata Mereka <span class="text-toba-green">Tentang Kami</span>
             </h2>
             
@@ -177,15 +177,15 @@
     </section>
 
     <!-- Blog Section -->
-    <section class="py-24 bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4">
+    <section class="py-20 md:py-24 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                 <div class="max-w-2xl">
                     <div class="flex items-center space-x-2 mb-4">
                         <div class="h-px w-8 bg-toba-green"></div>
                         <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Wawasan & Artikel</span>
                     </div>
-                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
                         Jurnal <span class="text-toba-green">Perjalanan Kami</span>
                     </h2>
                 </div>
@@ -214,14 +214,14 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-24 px-4">
-        <div class="max-w-7xl mx-auto bg-slate-900 rounded-[3rem] p-12 md:p-20 relative overflow-hidden shadow-2xl">
+    <section class="py-16 md:py-24 px-6 md:px-8">
+        <div class="max-w-7xl mx-auto bg-slate-900 rounded-[2.5rem] md:rounded-[3rem] p-10 md:p-20 relative overflow-hidden shadow-2xl">
             <div class="absolute inset-0 opacity-20">
                 <img src="{{ $settings['cta']['backgroundImage'] ?? 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000' }}" alt="" class="w-full h-full object-cover">
             </div>
             <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-900/40"></div>
             <div class="relative z-10 text-center max-w-3xl mx-auto text-white">
-                <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">
+                <h2 class="text-3xl md:text-6xl font-black mb-6 tracking-tight leading-tight">
                     {!! nl2br(e($settings['cta_text'] ?? "Mulai Petualangan Anda\nBersama Kami")) !!}
                 </h2>
                 <p class="text-lg text-slate-300 mb-10 font-medium leading-relaxed">
