@@ -9,6 +9,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
+// Temporary Fix for Live Site Images
+Route::get('/debug/sync-images', function() {
+    $s = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'cms_landing')->first();
+    if ($s) {
+        $v = json_decode($s->value, true);
+        $v['outbound_image_url'] = '/images/home/outbound.png';
+        $v['tour_image_url'] = '/images/home/tour.png';
+        \Illuminate\Support\Facades\DB::table('settings')->where('key', 'cms_landing')->update(['value' => json_encode($v)]);
+        return "Sync Complete. Home images updated to local paths. Silakan cek halaman utama.";
+    }
+    return "Setting not found.";
+});
+
 Route::get('/', [PublicController::class, 'index'])->name('index');
 Route::get('/outbound', [PublicController::class, 'outbound'])->name('outbound');
 Route::get('/outbound/packages', [PublicController::class, 'outboundPackages'])->name('outbound.packages');
