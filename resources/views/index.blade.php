@@ -35,13 +35,22 @@
 </head>
 <body class="overflow-hidden">
 
-    <main class="h-[100dvh] flex flex-col md:flex-row relative">
+    <main class="min-h-screen h-screen md:h-[100dvh] flex flex-col md:flex-row relative">
         
         
         <!-- Left: Corporate Outbound -->
-        <div class="relative w-full md:w-1/2 h-[50dvh] md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+        <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+            @php
+                $outboundUrl = !empty($content['outbound_image_url']) 
+                    ? (Str::startsWith($content['outbound_image_url'], ['http', '//']) ? $content['outbound_image_url'] : asset($content['outbound_image_url'])) 
+                    : asset('images/home/outbound.png');
+                // Ensure protocol relative if using http asset on what might be https site
+                if (Str::startsWith($outboundUrl, 'http://')) {
+                    $outboundUrl = str_replace('http://', '//', $outboundUrl);
+                }
+            @endphp
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[5s] group-hover:scale-110 bg-zoom" 
-                 style="background-image: url('{{ !empty($content['outbound_image_url']) ? $content['outbound_image_url'] : asset('images/home/outbound.png') }}')"></div>
+                 style="background-image: url('{{ $outboundUrl }}')"></div>
             <div class="absolute inset-0 split-overlay transition-opacity duration-500 group-hover:opacity-80"></div>
             
             <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-20 lg:p-24 z-10">
@@ -66,9 +75,18 @@
         </div>
 
         <!-- Right: Tour & Travel -->
-        <div class="relative w-full md:w-1/2 h-[50dvh] md:h-full group overflow-hidden">
+        <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden">
+            @php
+                $tourUrl = !empty($content['tour_image_url']) 
+                    ? (Str::startsWith($content['tour_image_url'], ['http', '//']) ? $content['tour_image_url'] : asset($content['tour_image_url'])) 
+                    : asset('images/home/tour.png');
+                // Ensure protocol relative
+                if (Str::startsWith($tourUrl, 'http://')) {
+                    $tourUrl = str_replace('http://', '//', $tourUrl);
+                }
+            @endphp
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[5s] group-hover:scale-110 bg-zoom" 
-                 style="background-image: url('{{ !empty($content['tour_image_url']) ? $content['tour_image_url'] : asset('images/home/tour.png') }}')"></div>
+                 style="background-image: url('{{ $tourUrl }}')"></div>
             <div class="absolute inset-0 split-overlay transition-opacity duration-500 group-hover:opacity-80"></div>
             
             <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-20 lg:p-24 text-right z-10">
