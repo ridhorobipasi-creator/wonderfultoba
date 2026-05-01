@@ -40,26 +40,26 @@
     class="bg-[#f8fafc] min-h-screen pb-24"
 >
     <!-- Hero -->
-    <div class="relative h-[60vh] flex items-end overflow-hidden">
+    <div class="relative h-[60dvh] flex items-end overflow-hidden">
         <img
             src="{{ count($packages) > 0 && count($packages[0]->images) > 0 ? $packages[0]->images[0] : '/storage/2026/04/lake-toba-premium.png' }}"
             alt="Packages Hero"
             class="absolute inset-0 w-full h-full object-cover"
         >
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-[#f8fafc]"></div>
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 pb-32 text-white">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pb-20 md:pb-32 text-white">
             <span class="inline-block px-4 py-1.5 bg-toba-green text-white text-[10px] font-bold uppercase tracking-[0.3em] rounded-full mb-4">
                 Eksplorasi Indonesia & Dunia
             </span>
-            <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-tight">
+            <h1 class="text-4xl md:text-7xl font-black tracking-tight leading-tight">
                 Paket Wisata <span class="text-toba-accent">Pilihan</span><br />Terbaik
             </h1>
         </div>
     </div>
 
     <!-- Search & Filter Card -->
-    <div class="max-w-7xl mx-auto px-4 -mt-20 relative z-20">
-        <div class="bg-white/90 backdrop-blur-2xl p-6 md:p-8 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-white/60">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-12 md:-mt-20 relative z-20">
+        <div class="bg-white/95 backdrop-blur-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-white/60">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Search -->
                 <div class="relative group lg:col-span-2">
@@ -97,32 +97,34 @@
             </div>
 
             <!-- Quick filters row -->
-            <div class="flex flex-wrap gap-2 mt-4">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest self-center mr-1">Durasi:</span>
-                @foreach(['Semua', '1-3 Hari', '4-7 Hari', '7+ Hari'] as $d)
-                <button @click="filterDuration = '{{ $d }}'"
-                    :class="filterDuration === '{{ $d }}' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'"
-                    class="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    {{ $d }}
-                </button>
-                @endforeach
+            <div class="mt-6 flex items-center space-x-3 overflow-x-auto pb-4 md:pb-0 no-scrollbar">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest shrink-0">Durasi:</span>
+                <div class="flex space-x-2">
+                    @foreach(['Semua', '1-3 Hari', '4-7 Hari', '7+ Hari'] as $d)
+                    <button @click="filterDuration = '{{ $d }}'"
+                        :class="filterDuration === '{{ $d }}' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'"
+                        class="flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[11px] font-bold transition-all whitespace-nowrap">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        {{ $d }}
+                    </button>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Results -->
-    <div class="max-w-7xl mx-auto px-4 mt-14">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-10 md:mt-14">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
             <div>
-                <h2 class="text-2xl font-black text-slate-900 mb-1">Menampilkan Hasil</h2>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">Hasil Pencarian</h2>
                 <p class="text-slate-500 font-medium text-sm">
-                    Ditemukan <span class="text-toba-green font-black" x-text="filteredPackages.length"></span> paket wisata
+                    Menemukan <span class="text-toba-green font-black" x-text="filteredPackages.length"></span> paket eksklusif
                 </p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <template x-for="pkg in filteredPackages" :key="pkg.id">
                 <div x-data="{ 
                     locationData: cities.find(c => String(c.id) === String(pkg.cityId)),

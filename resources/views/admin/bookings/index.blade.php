@@ -6,9 +6,9 @@
 @section('content')
 <div class="space-y-8">
     <!-- Action Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 class="text-xl font-black text-slate-900 tracking-tight">Reservations List</h1>
-        <a href="{{ route('admin.bookings.create') }}" class="bg-slate-900 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200">
+        <a href="{{ route('admin.bookings.create') }}" class="w-full sm:w-auto bg-slate-900 text-white px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 text-center">
             <i class="fas fa-plus mr-2"></i> New Booking
         </a>
     </div>
@@ -102,30 +102,35 @@
 
                         @foreach($group as $booking)
                             <tr class="group hover:bg-slate-50/50 transition-all duration-300">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-5">
-                                        <div class="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all">
+                                <td class="px-6 md:px-8 py-5">
+                                    <div class="flex items-center gap-4 md:gap-5">
+                                        <div class="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all shrink-0">
                                             <i class="fas {{ $booking->type === 'package' ? 'fa-box-archive' : 'fa-car-side' }} text-xs"></i>
                                         </div>
-                                        <div>
-                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{{ $booking->bookingCode }}</p>
-                                            <h4 class="text-sm font-black text-slate-900 tracking-tight">{{ $booking->customerName }}</h4>
+                                        <div class="min-w-0">
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5 truncate">{{ $booking->bookingCode }}</p>
+                                            <h4 class="text-sm font-black text-slate-900 tracking-tight truncate">{{ $booking->customerName }}</h4>
+                                            <!-- Mobile visible info -->
+                                            <div class="md:hidden flex flex-wrap items-center gap-2 mt-1">
+                                                <p class="text-[10px] font-bold text-slate-500 truncate max-w-[150px]">{{ $booking->package->name ?? $booking->car->name ?? 'N/A' }}</p>
+                                                <span class="text-[9px] font-black text-slate-900 uppercase">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
                                 
-                                <td class="px-8 py-5">
+                                <td class="px-8 py-5 hidden md:table-cell">
                                     <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Item</p>
                                     <p class="text-xs font-bold text-slate-700 truncate max-w-[200px]">{{ $booking->package->name ?? $booking->car->name ?? 'N/A' }}</p>
                                 </td>
 
-                                <td class="px-8 py-5 text-center">
+                                <td class="px-8 py-5 text-center hidden md:table-cell">
                                     <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Total</p>
                                     <p class="text-xs font-black text-slate-900">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</p>
                                 </td>
 
-                                <td class="px-8 py-5">
-                                    <div class="flex justify-center">
+                                <td class="px-6 md:px-8 py-5">
+                                    <div class="flex justify-center md:justify-center">
                                         @php
                                             $colors = [
                                                 'pending' => 'bg-amber-50 text-amber-600',
@@ -141,15 +146,15 @@
                                     </div>
                                 </td>
 
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <td class="px-6 md:px-8 py-5 text-right">
+                                    <div class="flex items-center justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->customerPhone ?? '') }}" target="_blank" class="w-8 h-8 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="Follow up via WA">
                                             <i class="fab fa-whatsapp text-[12px]"></i>
                                         </a>
                                         <a href="{{ route('admin.bookings.show', $booking) }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View Detail">
                                             <i class="fas fa-chevron-right text-[10px]"></i>
                                         </a>
-                                        <a href="{{ route('admin.bookings.edit', $booking) }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-slate-900 transition shadow-sm" title="Edit Status">
+                                        <a href="{{ route('admin.bookings.edit', $booking) }}" class="hidden md:flex w-8 h-8 items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-slate-900 transition shadow-sm" title="Edit Status">
                                             <i class="fas fa-pencil text-[10px]"></i>
                                         </a>
                                     </div>

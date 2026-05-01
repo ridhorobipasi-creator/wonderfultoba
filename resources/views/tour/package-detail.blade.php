@@ -19,7 +19,7 @@
     }"
     class="bg-slate-50 min-h-screen pb-24 pt-24"
 >
-    <div class="max-w-6xl mx-auto px-4">
+    <div class="max-w-6xl mx-auto px-6 md:px-8">
         <!-- Back -->
         <a href="/tour/packages" class="flex items-center gap-2 text-slate-500 hover:text-toba-green font-bold mb-8 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -30,7 +30,7 @@
             <!-- Left: Images + Info -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Main Image -->
-                <div class="relative h-[420px] rounded-[2rem] overflow-hidden shadow-xl">
+                <div class="relative h-[300px] md:h-[420px] rounded-[2rem] overflow-hidden shadow-xl">
                     <template x-for="(img, i) in package.images" :key="i">
                         <img 
                             x-show="activeImg === i"
@@ -60,13 +60,13 @@
                 </div>
 
                 <!-- Description -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
+                <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100">
                     <h2 class="text-xl font-black text-slate-900 mb-4">Tentang Paket Ini</h2>
                     <p class="text-slate-600 leading-relaxed font-medium" x-text="package.description"></p>
                 </div>
 
                 <!-- Pricing Details Table -->
-                <div x-show="package.pricingDetails && package.pricingDetails.length > 0" class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
+                <div x-show="package.pricingDetails && package.pricingDetails.length > 0" class="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100">
                     <h2 class="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
                         <svg class="w-5 h-5 text-toba-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
                         Rincian Harga Paket
@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Itinerary Section -->
-                <div x-show="package.itinerary || package.itineraryText" class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
+                <div x-show="package.itinerary || package.itineraryText" class="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100">
                     <h2 class="text-xl font-black text-slate-900 mb-8 flex items-center gap-2">
                         <svg class="w-5 h-5 text-toba-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         Jadwal Perjalanan
@@ -104,10 +104,10 @@
                         <template x-for="(day, i) in package.itinerary" :key="i">
                             <div class="relative pl-10 border-l-2 border-slate-100 last:border-0 pb-2">
                                 <div class="absolute -left-[11px] top-0 w-5 h-5 bg-white border-4 border-toba-green rounded-full shadow-sm"></div>
-                                <div class="bg-slate-50 p-6 rounded-2xl">
+                                <div class="bg-slate-50 p-5 md:p-6 rounded-2xl">
                                     <span class="text-[10px] font-black uppercase tracking-widest text-toba-green mb-1 block" x-text="'Hari ' + (day.day || (i + 1))"></span>
-                                    <h4 class="text-lg font-black text-slate-900 mb-2" x-text="day.title"></h4>
-                                    <p class="text-sm text-slate-500 leading-relaxed font-medium" x-text="day.description"></p>
+                                    <h4 class="text-base md:text-lg font-black text-slate-900 mb-2" x-text="day.title"></h4>
+                                    <p class="text-xs md:text-sm text-slate-500 leading-relaxed font-medium" x-text="day.description"></p>
                                 </div>
                             </div>
                         </template>
@@ -149,7 +149,7 @@
 
             <!-- Right: Booking Card -->
             <div class="space-y-5">
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 sticky top-28">
+                <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100 sticky top-28">
                     <div class="flex items-center gap-2 text-toba-green text-xs font-black uppercase tracking-widest mb-3">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         <span x-text="locationDisplay"></span>
@@ -208,9 +208,9 @@
 
     <!-- Simple Booking Modal Overlay -->
     <template x-if="showBooking">
-        <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md" @click="showBooking = false">
+        <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/70 backdrop-blur-md" @click="showBooking = false">
             <div class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden" @click.stop>
-                <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+                <div class="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center">
                     <div>
                         <h3 class="text-2xl font-black text-slate-900">Form Pemesanan</h3>
                         <p class="text-sm text-slate-500 font-medium mt-1" x-text="package.name"></p>

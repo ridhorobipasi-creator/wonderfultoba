@@ -28,7 +28,7 @@
     class="font-sans antialiased text-slate-800 bg-[#fbf9f8] min-h-screen"
 >
     <!-- Hero Section -->
-    <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section class="relative h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0">
             <template x-for="(img, i) in heroImages" :key="i">
                 <img 
@@ -49,11 +49,11 @@
                    class="w-auto h-28 md:h-36 mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
                 >
                 
-                <h1 class="text-4xl md:text-5xl lg:text-7xl text-white font-black max-w-4xl mx-auto mb-6 leading-tight drop-shadow-2xl">
+                <h1 class="text-4xl md:text-5xl lg:text-7xl text-white font-black max-w-4xl mx-auto mb-6 leading-[1.1] md:leading-tight drop-shadow-2xl">
                     {{ $settings['hero_title'] ?? 'Solusi Team Building Terbaik di Sumatera' }}
                 </h1>
-                <p class="text-xl md:text-2xl text-white font-medium max-w-3xl mx-auto mb-12 leading-relaxed drop-shadow-xl">
-                    {{ $settings['hero_subtitle'] ?? 'Tingkatkan sinergi dan produktivitas tim Anda dengan program outbound profesional di alam Danau Toba.' }}
+                <p class="text-lg md:text-2xl text-white font-medium max-w-3xl mx-auto mb-10 md:mb-12 leading-relaxed drop-shadow-xl">
+                    {{ $settings['hero_subtitle'] ?? 'Tingkatkan sinergi dan produktivitas tim Anda dengan program outbound profesional.' }}
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -80,9 +80,9 @@
     </section>
 
     <!-- Apa itu Outbound & Kenapa Kami -->
-    <section id="tentangkami" class="py-32 bg-[#fdfdfd] relative top-0 z-20 -mt-10 rounded-t-[3rem] shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.05)] overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+    <section id="tentangkami" class="py-20 md:py-32 bg-[#fdfdfd] relative top-0 z-20 -mt-10 rounded-t-[3rem] shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.05)] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 lg:gap-8 items-center">
                 <div class="lg:col-span-7 pr-0 lg:pr-12">
                     <div class="inline-flex items-center space-x-3 mb-8 bg-white px-5 py-2.5 rounded-full border border-slate-100 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)]">
                         <span class="relative flex h-3.5 w-3.5">
@@ -92,7 +92,7 @@
                         <span class="text-toba-green font-black text-xs uppercase tracking-[0.25em]">Experiential Learning</span>
                     </div>
                     
-                    <h2 class="text-5xl md:text-6xl lg:text-[4rem] font-black text-slate-900 mb-10 leading-[1.1] tracking-tight">
+                    <h2 class="text-4xl md:text-6xl lg:text-[4rem] font-black text-slate-900 mb-8 md:mb-10 leading-[1.1] tracking-tight">
                         <span x-text="about.title"></span>
                         <span class="text-toba-green relative inline-block">
                             Outbound?
@@ -139,7 +139,7 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 relative mt-16 lg:mt-0">
+                <div class="lg:col-span-5 relative mt-24 lg:mt-0">
                     <div class="relative w-4/5 ml-auto -right-4 top-0 z-10 rounded-[2.5rem] overflow-hidden shadow-2xl hover:-translate-y-2 transition-transform duration-500">
                         <img src="/assets/images/2023/10/A11-Team-Building.jpg" alt="Team Building" class="w-full aspect-[4/5] object-cover">
                     </div>
@@ -159,9 +159,9 @@
     </section>
 
     <!-- Layanan Kami -->
-    <section id="layanan" class="py-32 bg-[#090e17] relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+    <section id="layanan" class="py-20 md:py-32 bg-[#090e17] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 md:mb-20 gap-8">
                 <div class="max-w-2xl">
                     <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">Kapasitas <span class="text-transparent bg-clip-text bg-gradient-to-r from-toba-green to-emerald-400">Layanan Kami</span></h2>
                 </div>

@@ -30,15 +30,15 @@
     }"
     class="bg-slate-50 min-h-screen pb-24 pt-32"
 >
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-16">
-            <span class="inline-block px-4 py-1.5 bg-toba-green/20 text-toba-green text-xs font-black uppercase tracking-[0.3em] rounded-full mb-5">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+        <div class="text-center mb-12 md:mb-16">
+            <span class="inline-block px-4 py-1.5 bg-toba-green/20 text-toba-green text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-5">
                 Corporate & Community
             </span>
-            <h1 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight">
+            <h1 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                 Paket <span class="text-toba-green">Outbound</span>
             </h1>
-            <p class="text-slate-500 text-lg max-w-2xl mx-auto font-medium">
+            <p class="text-slate-500 text-base md:text-lg max-w-2xl mx-auto font-medium">
                 Solusi kegiatan luar ruang profesional untuk instansi, perusahaan, dan komunitas Anda.
             </p>
         </div>
@@ -97,7 +97,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="p-8 flex-1 flex flex-col">
+                    <div class="p-6 md:p-8 flex-1 flex flex-col">
                         <div class="flex items-center gap-4 mb-4">
                             <span class="flex items-center gap-1.5 text-xs font-bold text-slate-400">
                                 <svg class="w-3.5 h-3.5 text-toba-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -138,7 +138,7 @@
                 <span class="inline-block px-4 py-1.5 bg-emerald-50 text-toba-green text-xs font-black uppercase tracking-[0.3em] rounded-full mb-5">
                     Kategori Layanan
                 </span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                     Pilihan <span class="text-toba-green">Tingkat Layanan</span>
                 </h2>
                 <p class="text-slate-500 text-lg max-w-2xl mx-auto font-medium">
@@ -148,13 +148,13 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @foreach($tiers as $tier)
-                <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute -right-6 -top-6 w-24 h-24 bg-slate-50 rounded-full group-hover:bg-toba-green/10 transition-colors"></div>
                     <h3 class="text-2xl font-black text-slate-900 mb-4 relative z-10">{{ $tier->name }}</h3>
                     <p class="text-slate-500 font-medium leading-relaxed mb-8 relative z-10">
                         {{ $tier->description }}
                     </p>
-                    <a href="https://wa.me/6281323888207?text=Halo,%20saya%20tertarik%20dengan%20layanan%20outbound%20tier%20{{ $tier->name }}" class="inline-flex items-center justify-center w-full py-4 rounded-2xl bg-slate-50 text-slate-900 font-black text-xs uppercase tracking-widest hover:bg-toba-green hover:text-white transition-colors">
+                    <a href="https://wa.me/6281323888207?text=Halo,%20saya%20tertarik%20dengan%20layanan%20outbound%20tier%20{{ $tier->name }}" class="inline-flex items-center justify-center w-full py-4 rounded-2xl bg-slate-50 text-slate-900 font-black text-[10px] uppercase tracking-widest hover:bg-toba-green hover:text-white transition-colors">
                         Konsultasi Tier Ini
                     </a>
                 </div>

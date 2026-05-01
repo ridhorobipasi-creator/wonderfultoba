@@ -6,9 +6,9 @@
 @section('content')
 <div class="space-y-8">
     <!-- Action Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 class="text-xl font-black text-slate-900 tracking-tight">Blog Management</h1>
-        <a href="{{ route('admin.blogs.create') }}" class="bg-slate-900 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200">
+        <a href="{{ route('admin.blogs.create') }}" class="w-full sm:w-auto bg-slate-900 text-white px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 text-center">
             <i class="fas fa-plus mr-2"></i> New Article
         </a>
     </div>
@@ -39,31 +39,36 @@
                 <tbody class="divide-y divide-slate-50">
                     @forelse($blogs as $blog)
                         <tr class="group hover:bg-slate-50/50 transition-all duration-300">
-                            <td class="px-8 py-6">
-                                <div class="flex items-center gap-6">
-                                    <div class="w-20 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform overflow-hidden">
+                            <td class="px-6 md:px-8 py-6">
+                                <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                                    <div class="w-full md:w-20 h-32 md:h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform overflow-hidden">
                                         @if($blog->image)
                                             <img src="{{ $blog->image }}" class="w-full h-full object-cover">
                                         @else
                                             <i class="fas fa-newspaper text-slate-300 text-xs"></i>
                                         @endif
                                     </div>
-                                    <div>
+                                    <div class="flex-1">
                                         <h4 class="text-sm font-black text-slate-900 tracking-tight leading-tight mb-1">{{ $blog->title }}</h4>
-                                        <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">{{ $blog->author ?? 'Admin' }} &bull; {{ $blog->createdAt->diffForHumans() }}</p>
+                                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                            <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">{{ $blog->author ?? 'Admin' }} &bull; {{ $blog->createdAt->diffForHumans() }}</p>
+                                            <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-400 text-[8px] font-black uppercase tracking-widest md:hidden">
+                                                {{ $blog->status }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
 
-                            <td class="px-8 py-6">
+                            <td class="px-8 py-6 hidden md:table-cell">
                                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Status</p>
                                 <span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest {{ $blog->status === 'published' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600' }}">
                                     {{ $blog->status }}
                                 </span>
                             </td>
 
-                            <td class="px-8 py-6 text-right">
-                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <td class="px-6 md:px-8 py-6 text-right">
+                                <div class="flex items-center justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('admin.blogs.edit', $blog) }}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-slate-900 transition shadow-sm">
                                         <i class="fas fa-pencil text-[10px]"></i>
                                     </a>

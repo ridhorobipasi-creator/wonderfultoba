@@ -25,7 +25,7 @@
     class="bg-slate-50 min-h-screen pb-24"
 >
     <!-- Hero Header -->
-    <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-4">
+    <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-6 md:px-8">
         <div class="absolute inset-0 opacity-20">
             <img src="/storage/2026/04/sumatra-panorama.png" alt="" class="w-full h-full object-cover">
         </div>
@@ -34,30 +34,30 @@
             <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-toba-green/20 text-toba-accent text-xs font-black uppercase tracking-[0.3em] rounded-full mb-5">
                 Premium Car Rental
             </span>
-            <h1 class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight leading-tight">
                 Sewa <span class="text-toba-green">Mobil</span>
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8">
+            <p class="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-10 md:mb-12">
                 Pilihan armada terbaik untuk perjalanan bisnis atau wisata Anda di Sumatera Utara.
             </p>
             
             <!-- Filters -->
-            <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/20 shadow-2xl flex flex-col md:flex-row gap-4">
-                <div class="flex-1 relative">
+            <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-md p-3 md:p-4 rounded-[2rem] md:rounded-3xl border border-white/20 shadow-2xl flex flex-col gap-4">
+                <div class="relative">
                     <svg class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input
                         type="text"
-                        placeholder="Cari armada (Avanza, Innova, Hiace...)"
+                        placeholder="Cari armada..."
                         x-model="searchQuery"
                         class="w-full pl-14 pr-6 py-4 bg-white/10 border-none rounded-2xl text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-toba-green/50 font-medium"
                     >
                 </div>
-                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                     <template x-for="type in carTypes" :key="type">
                         <button 
                             @click="activeType = type"
                             :class="activeType === type ? 'bg-toba-green text-white shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'"
-                            class="px-6 py-4 rounded-2xl font-bold text-sm transition-all whitespace-nowrap"
+                            class="px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-xs md:text-sm transition-all whitespace-nowrap"
                             x-text="type"
                         ></button>
                     </template>
@@ -66,9 +66,9 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 mt-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-12">
         <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <template x-for="car in filteredCars" :key="car.id">
                 <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full">
                     <div class="relative h-64 overflow-hidden bg-slate-100">
