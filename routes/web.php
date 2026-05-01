@@ -11,13 +11,20 @@ Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Temporary Fix for Live Site Images
 Route::get('/debug/sync-images', function() {
+    // Clear route cache since we can't run artisan
+    try {
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+    } catch (\Exception $e) {}
+
     $s = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'cms_landing')->first();
     if ($s) {
         $v = json_decode($s->value, true);
         $v['outbound_image_url'] = '/images/home/outbound.png';
         $v['tour_image_url'] = '/images/home/tour.png';
         \Illuminate\Support\Facades\DB::table('settings')->where('key', 'cms_landing')->update(['value' => json_encode($v)]);
-        return "Sync Complete. Home images updated to local paths. Silakan cek halaman utama.";
+        return "Sync Complete. Cache Cleared. Home images updated to local paths. Silakan cek halaman utama.";
     }
     return "Setting not found.";
 });
