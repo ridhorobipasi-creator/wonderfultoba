@@ -3,16 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Booking extends Model
 {
+    use Notifiable, SoftDeletes;
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @return string
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->customerEmail;
+    }
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';
 
     protected $fillable = [
-        'userId', 'type', 'packageId', 'carId', 'startDate', 'endDate',
-        'totalPrice', 'customerName', 'customerEmail', 'customerPhone',
+        'userId', 'customerId', 'type', 'packageId', 'startDate', 'endDate',
+        'totalPrice', 'total_cost', 'customerName', 'customerEmail', 'customerPhone',
         'notes', 'metadata', 'status', 'bookingCode',
     ];
 
@@ -28,15 +41,17 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customerId');
+    }
+
     public function package()
     {
         return $this->belongsTo(Package::class, 'packageId');
     }
 
-    public function car()
-    {
-        return $this->belongsTo(Car::class, 'carId');
-    }
+
 
     // Scopes
     public function scopeConfirmed($query)

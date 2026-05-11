@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\OutboundService;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OutboundServiceController extends Controller
 {
+    use HandlesImageUploads;
     public function index()
     {
         $services = OutboundService::orderBy('orderPriority')->get();
@@ -21,8 +24,17 @@ class OutboundServiceController extends Controller
             'shortDesc' => 'nullable|string|max:200',
             'detailDesc' => 'nullable|string',
             'icon' => 'nullable|string|max:50',
-            'image' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $this->uploadAndConvert($request->file('image'), 'outbound/services');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
+        }
 
         $validated['orderPriority'] = OutboundService::max('orderPriority') + 1;
         OutboundService::create($validated);
@@ -37,8 +49,20 @@ class OutboundServiceController extends Controller
             'shortDesc' => 'nullable|string|max:200',
             'detailDesc' => 'nullable|string',
             'icon' => 'nullable|string|max:50',
-            'image' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($service->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $service->image));
+            }
+            $path = $this->uploadAndConvert($request->file('image'), 'outbound/services');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
+        }
 
         $service->update($validated);
         return redirect()->back()->with('success', 'Layanan berhasil diperbarui!');

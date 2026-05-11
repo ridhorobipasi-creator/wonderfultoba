@@ -3,19 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Car extends Model
 {
-    const CREATED_AT = 'createdAt';
+    use SoftDeletes;
 
-    const UPDATED_AT = 'updatedAt';
-
-    protected $fillable = [
-        'name', 'type', 'capacity', 'transmission', 'fuel', 'price',
-        'priceWithDriver', 'images', 'description', 'terms', 'features',
-        'includes', 'status', 'isFeatured', 'sortOrder', 'metaTitle',
-        'metaDescription', 'pricingDetails', 'translations',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'images' => 'array',
@@ -24,7 +18,27 @@ class Car extends Model
         'pricingDetails' => 'array',
         'translations' => 'array',
         'isFeatured' => 'boolean',
-        'price' => 'double',
-        'priceWithDriver' => 'double',
     ];
+
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'carId');
+    }
+
+    public function resolveImageUrl($path)
+    {
+        if (empty($path)) {
+            return asset('images/placeholder-car.webp');
+        }
+        
+        if (str_starts_with($path, 'http')) {
+            return $path;
+        }
+
+        // Standard storage path
+        return asset('storage/' . $path);
+    }
 }

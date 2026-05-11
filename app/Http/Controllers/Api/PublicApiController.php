@@ -3,25 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBookingRequest;
+use App\Models\Blog;
+use App\Models\Booking;
+use App\Models\City;
+use App\Models\Client;
+use App\Models\GalleryImage;
+use App\Models\OutboundLocation;
+use App\Models\OutboundService;
+use App\Models\OutboundVideo;
+use App\Models\Package;
+use App\Models\PackageTier;
+use App\Models\Setting;
+use App\Services\BookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PublicApiController extends Controller
 {
-    private function decodeJsonFields($item, $fields)
-    {
-        if (! $item) {
-            return $item;
-        }
-        foreach ($fields as $field) {
-            if (isset($item->$field) && is_string($item->$field)) {
-                $item->$field = json_decode($item->$field, true);
-            }
-        }
-
-        return $item;
-    }
-
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -36,12 +35,12 @@ class PublicApiController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'role' => strtoupper($user->role), // Match mockUser "ADMIN"
+                    'role' => strtoupper($user->role),
                 ],
             ]);
         }
 
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Email atau password salah.'], 401);
     }
 
     public function getMe(Request $request)
@@ -58,9 +57,9 @@ class PublicApiController extends Controller
 
     public function getBlogs()
     {
-        $blogs = DB::table('blogs')->get()->map(function ($b) {
+        $blogs = Blog::all()->map(function ($b) {
             $b->is_published = $b->status === 'published';
-            $b->author = ['name' => $b->author]; // Mock data expects object
+            $b->author = ['name' => $b->author];
 
             return $b;
         });
@@ -70,11 +69,10 @@ class PublicApiController extends Controller
 
     public function getPackages()
     {
-        $packages = DB::table('packages')->get()->map(function ($p) {
-            $p = $this->decodeJsonFields($p, ['images', 'includes', 'excludes', 'pricingDetails', 'itinerary', 'translations']);
+        $packages = Package::with(['packageImages', 'city'])->get()->map(function ($p) {
             $p->is_published = $p->status === 'active';
             $p->isOutbound = (bool) $p->isOutbound;
-            $p->image = count($p->images) > 0 ? $p->images[0] : null; // Provide default image
+            $p->image = $p->packageImages->first()?->image_path;
 
             return $p;
         });
@@ -84,11 +82,11 @@ class PublicApiController extends Controller
 
     public function getBookings()
     {
-        $bookings = DB::table('bookings')->get()->map(function ($b) {
+        $bookings = Booking::all()->map(function ($b) {
             return [
                 'id' => 'BK-'.str_pad($b->id, 3, '0', STR_PAD_LEFT),
                 'customer_name' => $b->customerName,
-                'tour_name' => $b->type === 'package' ? 'Tour Package' : 'Car Rental',
+                'tour_name' => $b->type === 'package' ? 'Tour Package' : 'Custom Service',
                 'status' => ucfirst($b->status),
                 'total_price' => $b->totalPrice,
                 'booking_date' => $b->startDate,
@@ -98,54 +96,79 @@ class PublicApiController extends Controller
         return response()->json($bookings);
     }
 
-    public function getCars()
+    public function submitBooking(StoreBookingRequest $request)
     {
-        $cars = DB::table('cars')->get()->map(function ($c) {
-            $c = $this->decodeJsonFields($c, ['images', 'features', 'includes', 'pricingDetails', 'translations']);
-            $c->is_available = $c->status === 'available';
-            $c->image = count($c->images) > 0 ? $c->images[0] : null;
+        $validated = $request->validated();
+        $package = Package::find($validated['packageId']);
+        
+        if ($package && $package->isOutbound) {
+            return response()->json(['error' => 'Pemesanan paket outbound hanya dapat dilakukan melalui WhatsApp.'], 400);
+        }
 
-            return $c;
-        });
+        try {
+            $bookingService = app(BookingService::class);
+            
+            $bookingData = [
+                'type' => 'package',
+                'packageId' => $validated['packageId'],
+                'customerName' => $validated['customerName'],
+                'customerEmail' => $validated['customerEmail'],
+                'customerPhone' => $validated['customerPhone'],
+                'startDate' => $validated['startDate'],
+                'endDate' => $validated['startDate'],
+                'notes' => $validated['notes'],
+                'status' => 'pending',
+                'metadata' => [
+                    'pax' => $validated['pax'],
+                ],
+            ];
 
-        return response()->json($cars);
+            $booking = $bookingService->create($bookingData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil dikirim!',
+                'data' => $booking
+            ], 201);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('API Booking Error: ' . $e->getMessage(), ['request' => $request->all()]);
+            return response()->json(['error' => 'Maaf, terjadi kesalahan sistem saat memproses booking Anda.'], 500);
+        }
     }
+
+
+
+
 
     public function getOutboundServices()
     {
-        return response()->json(DB::table('outbound_services')->get());
+        return response()->json(OutboundService::all());
     }
 
     public function getOutboundVideos()
     {
-        return response()->json(DB::table('outbound_videos')->get());
+        return response()->json(OutboundVideo::all());
     }
 
     public function getOutboundLocations()
     {
-        return response()->json(DB::table('outbound_locations')->get());
+        return response()->json(OutboundLocation::all());
     }
 
     public function getClients()
     {
-        return response()->json(DB::table('clients')->get());
+        return response()->json(Client::all());
     }
 
     public function getGallery()
     {
-        $gallery = DB::table('gallery_images')->get()->map(function ($g) {
-            $g = $this->decodeJsonFields($g, ['tags']);
-
-            return $g;
-        });
-
-        return response()->json($gallery);
+        return response()->json(GalleryImage::all());
     }
 
     public function getCities()
     {
-        $cities = DB::table('cities')->get()->map(function ($c) {
-            $c->province = $c->region; // Mock data uses province
+        $cities = City::all()->map(function ($c) {
+            $c->province = $c->region;
 
             return $c;
         });
@@ -155,7 +178,7 @@ class PublicApiController extends Controller
 
     public function getPackageTiers()
     {
-        $tiers = DB::table('package_tiers')->get()->map(function ($t) {
+        $tiers = PackageTier::all()->map(function ($t) {
             return [
                 'id' => $t->id,
                 'name' => $t->tierName,
@@ -171,16 +194,15 @@ class PublicApiController extends Controller
         $key = $request->query('key');
 
         if ($key) {
-            $setting = DB::table('settings')->where('key', $key)->first();
+            $setting = Setting::where('key', $key)->first();
 
-            return response()->json($setting ? json_decode($setting->value) : null);
+            return response()->json($setting ? $setting->value : null);
         }
 
-        // Return all combined (mockData format)
-        $settings = DB::table('settings')->get();
+        $settings = Setting::all();
         $result = [];
         foreach ($settings as $s) {
-            $result[$s->key] = json_decode($s->value, true);
+            $result[$s->key] = $s->value;
         }
 
         return response()->json($result);
@@ -189,20 +211,20 @@ class PublicApiController extends Controller
     public function getStats()
     {
         return response()->json([
-            'packages' => DB::table('packages')->count(),
-            'happyClients' => 1540, // Static for now as in mock
+            'packages' => Package::count(),
+            'happyClients' => 1540,
         ]);
     }
 
     public function getDashboard()
     {
         return response()->json([
-            'totalBookings' => DB::table('bookings')->count(),
-            'pendingBookings' => DB::table('bookings')->where('status', 'pending')->count(),
-            'totalRevenue' => DB::table('bookings')->sum('totalPrice'),
-            'tourPackages' => DB::table('packages')->where('isOutbound', 0)->count(),
-            'outboundPackages' => DB::table('packages')->where('isOutbound', 1)->count(),
-            'recentBookings' => DB::table('bookings')->orderBy('createdAt', 'desc')->take(5)->get()->map(function ($b) {
+            'totalBookings' => Booking::count(),
+            'pendingBookings' => Booking::where('status', 'pending')->count(),
+            'totalRevenue' => Booking::sum('totalPrice'),
+            'tourPackages' => Package::where('isOutbound', false)->count(),
+            'outboundPackages' => Package::where('isOutbound', true)->count(),
+            'recentBookings' => Booking::orderBy('createdAt', 'desc')->take(5)->get()->map(function ($b) {
                 return [
                     'customer_name' => $b->customerName,
                     'start_date' => $b->startDate,

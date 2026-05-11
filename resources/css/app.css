@@ -14,13 +14,14 @@
   --color-toba-accent: #22c55e;     /* Hijau aksen/terang */
   --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
   --color-toba-blue: #005696;       /* Biru (untuk elemen sekunder) */
-  --color-obaja-orange: #f97316;    /* Orange */
-  --color-obaja-light: #0ea5e9;     /* Biru muda */
+  /* Premium Shadows */
+  --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
+  --shadow-glass: 0 8px 32px 0 rgba(15, 23, 42, 0.1);
 }
 
 @layer base {
   body {
-    @apply text-slate-900 antialiased selection:bg-green-100 selection:text-green-900;
+    @apply text-slate-900 antialiased selection:bg-green-100 selection:text-green-900 bg-[#fbfbfd];
   }
 
   /* Dark mode */
@@ -29,17 +30,60 @@
   }
 }
 
+/* Home Split Layout Utilities */
+@layer utilities {
+  .central-logo {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3);
+  }
+
+  .split-overlay {
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 50%, rgba(15, 23, 42, 0) 100%);
+  }
+
+  .bg-zoom {
+    animation: zoom-slow 30s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  @keyframes zoom-slow {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden transition-all duration-500 ease-in-out;
+  }
+
+  .btn-premium:hover {
+    @apply -translate-y-1.5 scale-[1.03];
+    box-shadow: 0 25px 40px -10px rgba(16, 185, 129, 0.4);
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-glass;
+  }
+  
+  .glass-dark {
+    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-glass;
+  }
+  .premium-shadow {
+    box-shadow: var(--shadow-premium);
+  }
+}
+
 /* Premium Utilities */
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-toba-green to-emerald-500;
+  @apply bg-clip-text text-transparent bg-gradient-to-br from-toba-green via-emerald-500 to-teal-400;
 }
 
-.text-gradient-blue {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-toba-green to-sky-500;
+.text-gradient-gold {
+  @apply bg-clip-text text-transparent bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-600;
 }
 
-.card-hover {
-  @apply transition-all duration-300 hover:shadow-2xl hover:shadow-toba-green/10 hover:-translate-y-2;
+.card-premium {
+  @apply bg-white rounded-[2.5rem] border border-slate-100/60 shadow-sm transition-all duration-500 hover:shadow-premium hover:-translate-y-3;
 }
 
 .admin-card {
@@ -48,23 +92,61 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-slate-800 hover:bg-slate-700;
+  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors border-4 border-[#f1f5f9];
 }
 
 /* Swiper Fixes */
-.swiper-pagination-bullet-active {
-  background-color: var(--color-toba-green);
+.swiper-pagination-bullet {
+  @apply w-2.5 h-2.5 bg-white/40 opacity-100 transition-all duration-500;
 }
+
+.swiper-pagination-bullet-active {
+  @apply bg-toba-green w-10 rounded-full shadow-[0_0_15px_rgba(21,128,61,0.5)];
+}
+
+.swiper-button-next::after, .swiper-button-prev::after {
+  @apply hidden;
+}
+
+.swiper-slide {
+  @apply transition-opacity duration-1000;
+}
+
+@keyframes subtle-zoom {
+  0% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.animate-subtle-zoom { animation: subtle-zoom 12s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.animate-fade-in-up { animation: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-in-down { animation: fade-in-down 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
 

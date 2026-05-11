@@ -31,52 +31,50 @@
     class="bg-slate-50 min-h-screen pb-24 pt-32"
 >
     <div class="max-w-7xl mx-auto px-6 md:px-8">
-        <div class="text-center mb-12 md:mb-16">
-            <span class="inline-block px-4 py-1.5 bg-toba-green/20 text-toba-green text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-5">
+        <div class="text-center mb-16 md:mb-20">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6 animate-fade-in-down">
                 Corporate & Community
             </span>
-            <h1 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                Paket <span class="text-toba-green">Outbound</span>
+            <h1 class="text-5xl md:text-8xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9] animate-fade-in-up">
+                Paket <span class="text-gradient">Outbound.</span>
             </h1>
-            <p class="text-slate-500 text-base md:text-lg max-w-2xl mx-auto font-medium">
+            <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto font-medium animate-fade-in-up delay-200">
                 Solusi kegiatan luar ruang profesional untuk instansi, perusahaan, dan komunitas Anda.
             </p>
         </div>
 
         <!-- Filters -->
-        <div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 mb-12 sticky top-[80px] z-30">
-            <div class="flex flex-col lg:flex-row gap-6">
+        <div class="glass-card p-8 md:p-10 rounded-[3rem] shadow-2xl border-white/40 mb-16 sticky top-[80px] z-30 animate-fade-in-up delay-300">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Search -->
-                <div class="flex-1 relative">
-                    <svg class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input
-                        type="text"
-                        placeholder="Cari paket outbound..."
-                        x-model="searchQuery"
-                        class="w-full pl-14 pr-6 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-toba-green/50 font-medium"
-                    >
+                <div class="relative group lg:col-span-2">
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-focus-within:bg-toba-green group-focus-within:text-white transition-all duration-500">
+                        <i class="fas fa-search text-xs"></i>
+                    </div>
+                    <input type="text" placeholder="Cari paket outbound..." x-model="searchQuery"
+                        class="w-full pl-20 pr-6 py-5 bg-slate-50/50 border-none rounded-[1.5rem] focus:ring-2 focus:ring-toba-green/20 font-medium text-slate-700 placeholder:text-slate-400 text-sm">
                 </div>
-
                 <!-- City -->
-                <div class="lg:w-64">
-                    <select 
-                        x-model="activeCity"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-bold appearance-none cursor-pointer focus:ring-2 focus:ring-toba-green/50"
-                    >
+                <div class="relative group">
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-toba-green transition-colors">
+                        <i class="fas fa-location-dot text-xs"></i>
+                    </div>
+                    <select x-model="activeCity"
+                        class="w-full pl-14 pr-6 py-5 bg-slate-50/50 border-none rounded-[1.5rem] focus:ring-2 focus:ring-toba-green/20 font-black uppercase tracking-widest text-[10px] text-slate-700 appearance-none cursor-pointer">
                         <option value="Semua">Semua Lokasi</option>
                         <template x-for="city in cities" :key="city.id">
                             <option :value="city.id" x-text="city.name"></option>
                         </template>
                     </select>
                 </div>
-
                 <!-- Sort -->
-                <div class="lg:w-64">
-                    <select 
-                        x-model="sortBy"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-bold appearance-none cursor-pointer focus:ring-2 focus:ring-toba-green/50"
-                    >
-                        <option value="default">Urutkan</option>
+                <div class="relative group">
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-toba-green transition-colors">
+                        <i class="fas fa-sort-amount-down text-xs"></i>
+                    </div>
+                    <select x-model="sortBy"
+                        class="w-full pl-14 pr-6 py-5 bg-slate-50/50 border-none rounded-[1.5rem] focus:ring-2 focus:ring-toba-green/20 font-black uppercase tracking-widest text-[10px] text-slate-700 appearance-none cursor-pointer">
+                        <option value="default">Urutan Default</option>
                         <option value="price-asc">Harga Terendah</option>
                         <option value="price-desc">Harga Tertinggi</option>
                     </select>
@@ -85,38 +83,40 @@
         </div>
 
         <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <template x-for="pkg in filteredPackages" :key="pkg.id">
-                <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full">
-                    <div class="relative h-64 overflow-hidden">
-                        <img :src="pkg.images[0]" :alt="pkg.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="card-premium h-full group flex flex-col overflow-hidden">
+                    <div class="relative h-72 overflow-hidden shrink-0">
+                        <img :src="pkg.first_image" :alt="pkg.name" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         <div class="absolute top-5 left-5">
-                            <span class="bg-white/90 backdrop-blur-md text-slate-900 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1.5">
-                                <svg class="w-3 h-3 text-toba-green" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span class="bg-white/95 backdrop-blur-md text-slate-900 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl border border-white/20 flex items-center gap-2">
+                                <i class="fas fa-location-dot text-toba-green text-[9px]"></i>
                                 <span x-text="cities.find(c => c.id == pkg.cityId)?.name || 'Sumatera Utara'"></span>
                             </span>
                         </div>
                     </div>
-                    <div class="p-6 md:p-8 flex-1 flex flex-col">
+                    <div class="p-8 flex flex-col flex-grow">
                         <div class="flex items-center gap-4 mb-4">
-                            <span class="flex items-center gap-1.5 text-xs font-bold text-slate-400">
-                                <svg class="w-3.5 h-3.5 text-toba-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                <span x-text="pkg.duration"></span>
+                            <span class="flex items-center gap-2 text-[10px] font-black text-toba-green uppercase tracking-[0.2em]">
+                                <i class="far fa-clock"></i>
+                                <span x-text="pkg.duration || '-'"></span>
                             </span>
                         </div>
-                        <h3 class="text-xl font-black text-slate-900 mb-3 group-hover:text-toba-green transition-colors leading-tight" x-text="pkg.name"></h3>
-                        <p class="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3 font-medium" x-text="pkg.description"></p>
+                        <h3 class="text-2xl font-black text-slate-900 mb-4 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tighter" x-text="pkg.name"></h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-10 line-clamp-2 font-medium" x-text="pkg.description || '-'"></p>
                         
-                        <div class="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                        <div class="mt-auto pt-8 border-t border-slate-50 flex items-center justify-between">
                             <div>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Mulai Dari</p>
-                                <p class="text-xl font-black text-slate-900">
-                                    <span class="text-xs font-bold text-slate-400 mr-1">Rp</span>
-                                    <span x-text="new Intl.NumberFormat('id-ID').format(pkg.price)"></span>
-                                </p>
+                                <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Mulai Dari</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-xs font-black text-slate-900">Rp</span>
+                                    <span class="text-2xl font-black text-slate-900 tracking-tighter" x-text="pkg.price ? new Intl.NumberFormat('id-ID').format(pkg.price) : '-'"></span>
+                                </div>
                             </div>
-                            <a :href="'/tour/package/' + pkg.slug" class="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-toba-green transition-all shadow-lg shadow-slate-900/10">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-toba-green hover:scale-110 transition-all duration-300 shadow-xl shadow-slate-200 group/btn">
+                                <i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
                             </a>
                         </div>
                     </div>
@@ -125,36 +125,40 @@
         </div>
 
         <!-- Empty State -->
-        <div x-show="filteredPackages.length === 0" class="text-center py-24 bg-white rounded-[3rem] border border-slate-100">
-            <svg class="w-16 h-16 mx-auto text-slate-200 mb-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <h3 class="text-2xl font-black text-slate-900 mb-2">Paket tidak ditemukan</h3>
-            <p class="text-slate-500 font-medium">Coba gunakan kata kunci atau lokasi yang berbeda.</p>
+        <div x-show="filteredPackages.length === 0" class="text-center py-40 glass-card rounded-[3rem] animate-fade-in-up">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-200">
+                <i class="fas fa-search-minus text-4xl"></i>
+            </div>
+            <h3 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Paket tidak ditemukan</h3>
+            <p class="text-slate-500 font-medium max-w-sm mx-auto mb-12">Coba gunakan kata kunci atau lokasi yang berbeda untuk menemukan paket yang sesuai.</p>
         </div>
 
         <!-- Tiers Section -->
         @if(isset($tiers) && count($tiers) > 0)
-        <div class="mt-32">
+        <div class="mt-32 pb-16">
             <div class="text-center mb-16">
-                <span class="inline-block px-4 py-1.5 bg-emerald-50 text-toba-green text-xs font-black uppercase tracking-[0.3em] rounded-full mb-5">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-toba-green/10 text-toba-green text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-6">
                     Kategori Layanan
                 </span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                    Pilihan <span class="text-toba-green">Tingkat Layanan</span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter">
+                    Pilihan <span class="text-gradient">Tingkat Layanan</span>
                 </h2>
-                <p class="text-slate-500 text-lg max-w-2xl mx-auto font-medium">
-                    Sesuaikan paket outbound Anda dengan kebutuhan dan anggaran perusahaan.
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+                    Sesuaikan paket outbound Anda dengan kebutuhan dan anggaran perusahaan untuk hasil yang maksimal.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 @foreach($tiers as $tier)
-                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
-                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-slate-50 rounded-full group-hover:bg-toba-green/10 transition-colors"></div>
-                    <h3 class="text-2xl font-black text-slate-900 mb-4 relative z-10">{{ $tier->name }}</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed mb-8 relative z-10">
+                <div class="card-premium p-10 group flex flex-col h-full">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-50 text-slate-900 flex items-center justify-center mb-8 group-hover:bg-toba-green group-hover:text-white transition-all duration-500 shadow-inner">
+                        <i class="fas fa-layer-group text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">{{ $tier->name }}</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed mb-10 flex-1">
                         {{ $tier->description }}
                     </p>
-                    <a href="https://wa.me/6281323888207?text=Halo,%20saya%20tertarik%20dengan%20layanan%20outbound%20tier%20{{ $tier->name }}" class="inline-flex items-center justify-center w-full py-4 rounded-2xl bg-slate-50 text-slate-900 font-black text-[10px] uppercase tracking-widest hover:bg-toba-green hover:text-white transition-colors">
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}?text=Halo,%20saya%20tertarik%20dengan%20layanan%20outbound%20tier%20{{ $tier->name }}" class="btn-premium w-full py-4 rounded-2xl bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest text-center">
                         Konsultasi Tier Ini
                     </a>
                 </div>
@@ -162,6 +166,7 @@
             </div>
         </div>
         @endif
+    </div>
     </div>
 </div>
 @endsection

@@ -6,16 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
+    use \App\Traits\HasImageFallback;
+
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';
 
+    protected $appends = ['image_url'];
+
     protected $fillable = [
-        'name', 'slug', 'type', 'country', 'region', 'district', 'place', 'description',
+        'regency_id', 'name', 'slug', 'type', 'country', 'region', 'district', 'place', 'description', 'image',
     ];
+
+    public function regency()
+    {
+        return $this->belongsTo(Regency::class);
+    }
 
     public function packages()
     {
         return $this->hasMany(Package::class, 'cityId');
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return $this->resolveImageUrl($this->image ?? null);
     }
 }

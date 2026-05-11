@@ -3,14 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasImageFallback;
 
 class Blog extends Model
 {
-    const CREATED_AT = 'createdAt';
+    use HasImageFallback, SoftDeletes, \App\Traits\Syncable;
 
+    const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
 
     protected $fillable = [
-        'slug', 'title', 'content', 'excerpt', 'image', 'author', 'category', 'status',
+        'slug', 'title', 'content', 'excerpt', 'image', 'author', 'category', 'status', 'tags',
     ];
+
+    protected $appends = ['image_url'];
+
+    protected $casts = [
+        'tags' => 'array',
+        'published_at' => 'datetime',
+    ];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->resolveImageUrl($this->image);
+    }
 }

@@ -4,7 +4,7 @@
 @section('page-title', 'Tier Paket Outbound')
 
 @section('content')
-<div x-data="{ addOpen: false, editOpen: false, editData: {} }" class="space-y-8">
+<div x-data="{ addOpen: false, editOpen: false, editData: {}, isSubmitting: false }" class="space-y-8">
 
     <!-- Header -->
     <div class="flex items-center justify-between">
@@ -64,7 +64,7 @@
          class="fixed inset-0 z-[150] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-6">
         <div class="bg-white rounded-[3rem] p-12 w-full max-w-lg shadow-2xl">
             <h3 class="text-xl font-black text-slate-900 mb-8">Tambah Tier Baru</h3>
-            <form action="{{ route('admin.outbound.tiers.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('admin.outbound.tiers.store') }}" method="POST" class="space-y-6" @submit="isSubmitting = true">
                 @csrf
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Tier</label>
@@ -75,8 +75,11 @@
                     <textarea name="tagline" rows="3" placeholder="Jelaskan keunggulan tier ini..." class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold"></textarea>
                 </div>
                 <div class="flex gap-4 pt-4">
-                    <button type="button" @click="addOpen = false" class="flex-1 py-4 rounded-2xl border border-slate-200 text-slate-500 font-black text-xs uppercase tracking-widest">Batal</button>
-                    <button type="submit" class="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest">Simpan</button>
+                    <button type="button" @click="addOpen = false" :disabled="isSubmitting" class="flex-1 py-4 rounded-2xl border border-slate-200 text-slate-500 font-black text-xs uppercase tracking-widest disabled:opacity-50">Batal</button>
+                    <button type="submit" :disabled="isSubmitting" class="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-50 flex items-center justify-center gap-2">
+                        <span x-show="!isSubmitting">Simpan</span>
+                        <svg x-show="isSubmitting" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
                 </div>
             </form>
         </div>
@@ -87,7 +90,7 @@
          class="fixed inset-0 z-[150] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-6">
         <div class="bg-white rounded-[3rem] p-12 w-full max-w-lg shadow-2xl">
             <h3 class="text-xl font-black text-slate-900 mb-8">Edit Tier</h3>
-            <form :action="`/admin/outbound/tiers/${editData.id}`" method="POST" class="space-y-6">
+            <form :action="`/admin/outbound/tiers/${editData.id}`" method="POST" class="space-y-6" @submit="isSubmitting = true">
                 @csrf @method('PUT')
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Tier</label>
@@ -98,8 +101,11 @@
                     <textarea name="tagline" rows="3" :value="editData.tagline" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold"></textarea>
                 </div>
                 <div class="flex gap-4 pt-4">
-                    <button type="button" @click="editOpen = false" class="flex-1 py-4 rounded-2xl border border-slate-200 text-slate-500 font-black text-xs uppercase tracking-widest">Batal</button>
-                    <button type="submit" class="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest">Update</button>
+                    <button type="button" @click="editOpen = false" :disabled="isSubmitting" class="flex-1 py-4 rounded-2xl border border-slate-200 text-slate-500 font-black text-xs uppercase tracking-widest disabled:opacity-50">Batal</button>
+                    <button type="submit" :disabled="isSubmitting" class="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-50 flex items-center justify-center gap-2">
+                        <span x-show="!isSubmitting">Update</span>
+                        <svg x-show="isSubmitting" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
                 </div>
             </form>
         </div>

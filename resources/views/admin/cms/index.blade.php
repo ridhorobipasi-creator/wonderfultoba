@@ -4,109 +4,267 @@
 @section('page-title', 'CMS Halaman Utama')
 
 @section('content')
-<div class="space-y-8">
-    <form action="{{ route('admin.cms.save', 'cms_landing') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
-        @csrf
+@php
+    $resolve = function($path, $default = '') {
+        return imageUrl($path, $default);
+    };
+@endphp
+
+<div x-cloak x-data="cmsLandingHandler()" class="flex flex-col xl:flex-row gap-8 min-h-[85vh]">
+
+@push('scripts')
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('cmsLandingHandler', () => ({
+        activeTab: 'branding',
+        brandName: @json($settings['brand_name'] ?? 'Wonderful Toba'),
+        brandTagline: @json($settings['brand_tagline'] ?? 'SUMATERA UTARA'),
+        brandIcon: @json($resolve($settings['brand_icon_url'] ?? '', 'https://ui-avatars.com/api/?name=W&background=0f172a&color=fff')),
+        brandLogo: @json($resolve($settings['brand_logo_url'] ?? '')),
+        metaTitle: @json($settings['meta_title'] ?? 'Wonderful Toba | Premium Tour & Corporate Outbound'),
+        metaDescription: @json($settings['meta_description'] ?? 'Portal utama Wonderful Toba. Pilih layanan premium Tour Travel Sumatera Utara atau Corporate Outbound & Team Building.'),
+        outboundTitle: @json($settings['outbound_title'] ?? "Corporate\nOutbound."),
+        outboundSubtitle: @json($settings['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.'),
+        outboundImage: @json($resolve($settings['outbound_image_url'] ?? '', 'https://images.unsplash.com/photo-1522071823991-b580970ad00d?auto=format&fit=crop&q=80&w=800')),
+        tourTitle: @json($settings['tour_title'] ?? "Tour &\nTravel."),
+        tourSubtitle: @json($settings['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif.'),
+        tourImage: @json($resolve($settings['tour_image_url'] ?? '', 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600')),
         
-        <!-- Branding Tengah -->
-        <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm">
-            <div class="flex items-center space-x-4 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white">
-                    <i class="fas fa-fingerprint"></i>
-                </div>
-                <div>
-                    <h3 class="text-lg font-black text-slate-900 tracking-tight">Branding Tengah</h3>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Logo & Identitas Utama</p>
-                </div>
-            </div>
+        updatePreview(e, type) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                if (type === 'brand') this.brandIcon = url;
+                if (type === 'logo') this.brandLogo = url;
+                if (type === 'outbound') this.outboundImage = url;
+                if (type === 'tour') this.tourImage = url;
+            }
+        },
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Logo Text (Contoh: Wonderful Toba)</label>
-                    <input type="text" name="brand_name" value="{{ $settings['brand_name'] ?? 'Wonderful Toba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900">
-                </div>
-                <div class="space-y-4">
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tagline (Contoh: SUMATERA UTARA)</label>
-                    <input type="text" name="brand_tagline" value="{{ $settings['brand_tagline'] ?? 'SUMATERA UTARA' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900">
-                </div>
-            </div>
+        openCMSMediaPicker(type) {
+            window.dispatchEvent(new CustomEvent('open-media-picker', { 
+                detail: { 
+                    callback: (item) => {
+                        // Unified Path Logic
+                        let path = item.path;
+                        if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
+                        if (path.startsWith('storage/')) path = path.replace('storage/', '');
+                        
+                        const finalUrl = '/storage/' + path;
+                        if (type === 'outbound') this.outboundImage = finalUrl;
+                        if (type === 'tour') this.tourImage = finalUrl;
+                    } 
+                } 
+            }));
+        }
+    }));
+});
+</script>
+@endpush
+    
+    <!-- LEFT: CONTROL PANEL (Form) -->
+    <div class="w-full xl:w-[400px] flex-shrink-0 space-y-6">
+        <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1">
+            <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Brand</button>
+            <button @click="activeTab = 'outbound'" :class="activeTab === 'outbound' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Outbound</button>
+            <button @click="activeTab = 'tour'" :class="activeTab === 'tour' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Tour</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">SEO</button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Sisi Kiri: Outbound (B2B) -->
-            <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-emerald-600">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-building"></i>
+        <form action="{{ route('admin.cms.save', 'cms_landing') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm overflow-hidden">
+                <!-- Branding Tab -->
+                <div x-show="activeTab === 'branding'" x-transition class="space-y-6">
+                    <div class="bg-amber-50 border border-amber-100 p-8 rounded-[2rem] flex flex-col items-center text-center gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-200">
+                            <i class="fas fa-arrows-rotate text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-black text-slate-900 tracking-tight">Sisi Kiri (Outbound)</h3>
-                            <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mt-1">Target B2B / Corporate</p>
+                            <h3 class="text-base font-black text-amber-900 uppercase tracking-widest">Pengaturan Dipindahkan</h3>
+                            <p class="text-[10px] font-bold text-amber-700/70 mt-2">Logo, Icon, dan Identitas Brand kini telah dipusatkan di menu **Pengaturan Sistem**.</p>
+                        </div>
+                        <a href="{{ route('admin.settings.general.index') }}" class="px-6 py-3 bg-amber-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-700 transition-all">
+                            Buka Pengaturan Sistem
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Outbound Tab -->
+                <div x-show="activeTab === 'outbound'" x-transition class="space-y-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-sm font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Sisi Outbound
+                        </h4>
+                        <label class="flex items-center cursor-pointer gap-2">
+                            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
+                            <div class="relative inline-block w-8 h-4">
+                                <input type="checkbox" name="show_outbound" value="1" {{ ($settings['show_outbound'] ?? true) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Judul Utama</label>
+                            <textarea name="outbound_title" x-model="outboundTitle" rows="3" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-black text-sm text-slate-900"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deskripsi</label>
+                            <textarea name="outbound_subtitle" x-model="outboundSubtitle" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-bold text-slate-600 text-xs leading-relaxed"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="relative group h-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-600 transition-all cursor-pointer">
+                                    <input type="file" name="outbound_image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="updatePreview($event, 'outbound')">
+                                    <i class="fas fa-cloud-arrow-up text-lg text-slate-300 group-hover:text-emerald-600 mb-1"></i>
+                                    <span class="text-[8px] font-black text-slate-400 uppercase">Lokal</span>
+                                </div>
+                                <div @click="openCMSMediaPicker('outbound')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
+                                    <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
+                                    <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full h-32 rounded-2xl overflow-hidden border border-slate-100 shadow-sm mt-4">
+                                <img :src="outboundImage" class="w-full h-full object-cover">
+                                <input type="hidden" name="outbound_image_url" :value="outboundImage">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Judul (Gunakan \n untuk baris baru)</label>
-                        <textarea name="outbound_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-black text-xl md:text-2xl text-slate-900">{{ $settings['outbound_title'] ?? "Corporate\nOutbound." }}</textarea>
-                    </div>
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sub-judul (Value Proposition)</label>
-                        <textarea name="outbound_subtitle" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-bold text-slate-600">{{ $settings['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda. Tersedia di puluhan hotel premium Sumut.' }}</textarea>
-                    </div>
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Latar Belakang (URL atau Upload)</label>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <input type="text" name="outbound_image_url" value="{{ $settings['outbound_image_url'] ?? 'https://images.unsplash.com/photo-1544735049-717bc392183e' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-bold text-xs text-slate-400">
+                <!-- Tour Tab -->
+                <div x-show="activeTab === 'tour'" x-transition class="space-y-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-sm font-black text-toba-green uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-toba-green"></span> Sisi Tour Travel
+                        </h4>
+                        <label class="flex items-center cursor-pointer gap-2">
+                            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
+                            <div class="relative inline-block w-8 h-4">
+                                <input type="checkbox" name="show_tour" value="1" {{ ($settings['show_tour'] ?? true) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-toba-green transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
                             </div>
-                            <button type="button" class="px-6 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest">Ganti</button>
+                        </label>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Judul Utama</label>
+                            <textarea name="tour_title" x-model="tourTitle" rows="3" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-black text-sm text-slate-900"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deskripsi</label>
+                            <textarea name="tour_subtitle" x-model="tourSubtitle" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-600 text-xs leading-relaxed"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="relative group h-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-toba-green transition-all cursor-pointer">
+                                    <input type="file" name="tour_image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="updatePreview($event, 'tour')">
+                                    <i class="fas fa-cloud-arrow-up text-lg text-slate-300 group-hover:text-toba-green mb-1"></i>
+                                    <span class="text-[8px] font-black text-slate-400 uppercase">Lokal</span>
+                                </div>
+                                <div @click="openCMSMediaPicker('tour')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-toba-green hover:bg-emerald-50 transition-all group cursor-pointer">
+                                    <i class="fas fa-images text-lg text-slate-300 group-hover:text-toba-green mb-1"></i>
+                                    <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-toba-green">Media Pusat</span>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full h-32 rounded-2xl overflow-hidden border border-slate-100 shadow-sm mt-4">
+                                <img :src="tourImage" class="w-full h-full object-cover">
+                                <input type="hidden" name="tour_image_url" :value="tourImage">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Tab -->
+                <div x-show="activeTab === 'seo'" x-transition class="space-y-6">
+                    <h4 class="text-sm font-black text-indigo-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-indigo-600"></span> SEO & Meta Tags
+                    </h4>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Meta Title (Browser Tab)</label>
+                            <input type="text" name="meta_title" x-model="metaTitle" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-sm">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Meta Description</label>
+                            <textarea name="meta_description" x-model="metaDescription" rows="5" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-medium text-slate-600 text-xs leading-relaxed"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Sisi Kanan: Tour & Travel (B2C) -->
-            <div class="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 border border-slate-100 shadow-sm border-l-[8px] border-l-toba-green">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-toba-green flex items-center justify-center">
-                            <i class="fas fa-compass"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-black text-slate-900 tracking-tight">Sisi Kanan (Tour)</h3>
-                            <p class="text-[10px] font-black text-toba-green uppercase tracking-widest mt-1">Target B2C / Retail</p>
-                        </div>
-                    </div>
-                </div>
+            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
+                <i class="fas fa-cloud-arrow-up"></i> Simpan Publikasi
+            </button>
+        </form>
+    </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Judul (Gunakan \n untuk baris baru)</label>
-                        <textarea name="tour_title" rows="2" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-black text-xl md:text-2xl text-slate-900">{{ $settings['tour_title'] ?? "Tour &\nTravel." }}</textarea>
-                    </div>
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sub-judul (Value Proposition)</label>
-                        <textarea name="tour_subtitle" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-600">{{ $settings['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.' }}</textarea>
-                    </div>
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Latar Belakang (URL atau Upload)</label>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <input type="text" name="tour_image_url" value="{{ $settings['tour_image_url'] ?? 'https://images.unsplash.com/photo-1568449039662-3582576da56b' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-xs text-slate-400">
-                            </div>
-                            <button type="button" class="px-6 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest">Ganti</button>
-                        </div>
-                    </div>
+    <!-- RIGHT: LIVE INTERACTIVE PREVIEW (Mirroring http://127.0.0.1:8000) -->
+    <div class="flex-1 bg-black rounded-[3.5rem] overflow-hidden relative shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-8 border-slate-900/50 min-h-[600px] xl:h-[85vh] sticky top-8">
+        
+        <div class="absolute inset-0 flex flex-col md:flex-row">
+            <!-- Left: Outbound -->
+            <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/5">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] scale-105" 
+                     :style="`background-image: url('${outboundImage}')`"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
+                
+                <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-12 z-10">
+                    <span class="inline-block px-3 py-1 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full mb-4 w-fit">Corporate</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white leading-[0.85] tracking-tighter whitespace-pre-line mb-6" x-text="outboundTitle"></h2>
+                    <p class="text-slate-200 text-[10px] font-medium max-w-[200px] leading-relaxed opacity-80" x-text="outboundSubtitle"></p>
                 </div>
             </div>
+
+            <!-- Right: Tour -->
+            <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] scale-105" 
+                     :style="`background-image: url('${tourImage}')`"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
+                
+                <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-12 text-right z-10">
+                    <span class="inline-block px-3 py-1 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full mb-4 w-fit">Premium Travel</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white leading-[0.85] tracking-tighter whitespace-pre-line mb-6" x-text="tourTitle"></h2>
+                    <p class="text-slate-200 text-[10px] font-medium max-w-[200px] leading-relaxed opacity-80" x-text="tourSubtitle"></p>
+                </div>
+            </div>
+
+
         </div>
 
-        <div class="flex justify-center md:justify-end">
-            <button type="submit" class="w-full md:w-auto px-12 py-5 bg-slate-900 text-white rounded-[1.5rem] md:rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 transition hover:-translate-y-1">Simpan Perubahan</button>
+        <!-- Center Brand (Mirroring Portal) -->
+        <div class="absolute top-12 left-1/2 -translate-x-1/2 z-[60] pointer-events-none flex flex-col items-center">
+            <template x-if="brandLogo">
+                <img :src="brandLogo" class="h-12 md:h-16 w-auto object-contain drop-shadow-2xl">
+            </template>
+            <template x-if="!brandLogo">
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-2xl mb-3">W</div>
+                    <h1 class="text-white font-black text-xs tracking-[0.2em] uppercase" x-text="brandName"></h1>
+                </div>
+            </template>
         </div>
-    </form>
+
+        <!-- Overlay Status -->
+        <div class="absolute top-6 left-6 z-50 flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-emerald-500/20">
+                <span class="w-1 h-1 rounded-full bg-white animate-pulse"></span> Live Sync
+            </div>
+            <div class="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 text-white text-[8px] font-black uppercase tracking-widest rounded-lg">Landing Preview</div>
+        </div>
+    </div>
 </div>
+
+<style>
+    [x-cloak] { display: none !important; }
+    textarea { resize: none; }
+</style>
 @endsection

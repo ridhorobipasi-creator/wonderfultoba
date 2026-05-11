@@ -14,13 +14,25 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# /public/build   <-- Commented out to allow deployment to cPanel without npm build
 /public/hot
 /public/storage
 /storage/*.key
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
 /storage/pail
 /vendor
 _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# File deployment & temp
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.tt
+*.tmp

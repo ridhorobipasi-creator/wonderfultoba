@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
+    use \App\Traits\Syncable;
+    
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';

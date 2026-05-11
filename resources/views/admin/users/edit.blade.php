@@ -4,7 +4,7 @@
 @section('page-title', 'Edit User')
 
 @section('content')
-<div class="max-w-4xl">
+<div class="w-full max-w-full">
     <div class="mb-6">
         <a href="{{ route('admin.users.index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 font-semibold transition">
             <i class="fas fa-arrow-left mr-2"></i> Back to Users
@@ -66,15 +66,18 @@
                     </div>
                 </div>
 
-                <!-- Role -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">Role *</label>
                     <select name="role" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
-                        <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
-                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>Standard User</option>
+                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Tour Manager (Admin)</option>
+                        <option value="superadmin" {{ old('role', $user->role) == 'superadmin' ? 'selected' : '' }}>Superadmin (Full Access)</option>
                     </select>
-                    <p class="mt-1 text-xs text-gray-500">Admin users have full access to the admin panel</p>
+                    <div class="mt-2 space-y-1">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest"><i class="fas fa-info-circle mr-1"></i> Superadmin: Akses penuh ke seluruh sistem termasuk Outbound & Pengaturan.</p>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest"><i class="fas fa-info-circle mr-1"></i> Admin: Hanya akses ke Manajemen Tour, Paket Wisata, dan Blog.</p>
+                    </div>
                 </div>
 
                 <!-- Submit Buttons -->

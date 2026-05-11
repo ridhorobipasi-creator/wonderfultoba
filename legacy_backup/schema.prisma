@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  phone     String?
+  photoURL  String?
+  metadata  Json?
+  role      String   @default("user")
+  bookings  Booking[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Package {
+  id               Int       @id @default(autoincrement())
+  slug             String    @unique
+  name             String
+  shortDescription String?   @db.Text
+  description      String    @db.LongText
+  locationTag      String?
+  price            Float     @default(0)
+  childPrice       Float?    @default(0)
+  priceDisplay     String?
+  duration         String
+  images           Json      // Array of strings
+  includes         Json      // Array of strings
+  excludes         Json      // Array of strings
+  pricingDetails   Json?     // Array of {pax, price_per_person}
+  itinerary        Json?     // Array of {day, title, description}
+  itineraryText    String?   @db.LongText
+  dronePrice       Float?    @default(0)
+  droneLocation    String?
+  notes            String?   @db.Text
+  status           String    @default("active")
+  isFeatured       Boolean   @default(false)
+  isOutbound       Boolean   @default(false)
+  sortOrder        Int       @default(0)
+  metaTitle        String?
+  metaDescription  String?   @db.Text
+  translations     Json?     // {en: {}, ms: {}}
+  cityId           Int?
+  city             City?     @relation(fields: [cityId], references: [id])
+  bookings         Booking[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model City {
+  id        Int       @id @default(autoincrement())
+  name      String                        // Nama tampilan (auto-generated atau manual)
+  slug      String    @unique
+  type      String    @default("domestic") // domestic | international
+  country   String    @default("Indonesia")
+  region    String?                        // Provinsi (Indonesia) atau Negara Bagian
+  district  String?                        // Kabupaten/Kota (untuk Sumut)
+  place     String?                        // Kota/Tempat spesifik (manual)
+  description String? @db.Text
+  packages  Package[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Car {
+  id               Int       @id @default(autoincrement())
+  name             String
+  type             String
+  capacity         Int
+  transmission     String
+  fuel             String
+  price            Float     @default(0)
+  priceWithDriver  Float?    @default(0)
+  images           Json      // Array of strings
+  description      String?   @db.LongText
+  terms            String?   @db.Text
+  features         Json?     // Array of strings
+  includes         Json?     // Array of strings
+  status           String    @default("available")
+  isFeatured       Boolean   @default(false)
+  sortOrder        Int       @default(0)
+  metaTitle        String?
+  metaDescription  String?   @db.Text
+  pricingDetails   Json?     // Custom duration pricing
+  translations     Json?     // {en: {}, ms: {}}
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  bookings         Booking[]
+}
+
+model Booking {
+  id            Int      @id @default(autoincrement())
+  userId        Int?
+  type          String
+  packageId     Int?
+  carId         Int?
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Float
+  customerName  String
+  customerEmail String
+  customerPhone String
+  notes         String?  @db.Text
+  metadata      Json?
+  status        String   @default("pending")
+  user          User?    @relation(fields: [userId], references: [id])
+  package       Package? @relation(fields: [packageId], references: [id])
+  car           Car?     @relation(fields: [carId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([packageId])
+  @@index([carId])
+  @@index([userId])
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  content   String   @db.LongText
+  excerpt   String   @db.Text
+  image     String?
+  author    String
+  category  String   @default("tour")
+  status    String   @default("published")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value Json
+}
+
+model OutboundService {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(100)
+  shortDesc     String?  @db.VarChar(200)
+  detailDesc    String?  @db.Text
+  icon          String?  @db.VarChar(50)
+  image         String?  @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OutboundVideo {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(100)
+  youtubeUrl    String   @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OutboundLocation {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  image         String?  @db.VarChar(500)
+  region        String?  @db.VarChar(100)
+  isFeatured    Boolean  @default(false)
+  orderPriority Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Client {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  logo          String?  @db.VarChar(500)
+  websiteUrl    String?  @db.VarChar(500)
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model GalleryImage {
+  id            Int      @id @default(autoincrement())
+  imageUrl      String   @db.VarChar(500)
+  caption       String?  @db.Text
+  category      String?  @db.VarChar(50)
+  tags          Json?
+  eventDate     DateTime?
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PackageTier {
+  id            Int      @id @default(autoincrement())
+  category      String   @db.VarChar(50)
+  tierName      String   @db.VarChar(100)
+  tagline       String?  @db.VarChar(200)
+  badge         String?  @db.VarChar(50)
+  colorTheme    String?  @db.VarChar(100)
+  priceLabel    String?  @db.VarChar(50)
+  price         String?  @db.VarChar(100)
+  unit          String?  @db.VarChar(100)
+  duration      String?  @db.VarChar(100)
+  capacity      String?  @db.VarChar(100)
+  location      String?  @db.VarChar(200)
+  image         String?  @db.VarChar(500)
+  features      Json?
+  excludes      Json?
+  orderPriority Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -13,20 +13,77 @@ class BookingService
         private BookingRepository $repository
     ) {}
 
+    public function isAvailable(array $data)
+    {
+        $startDate = $data['startDate'];
+        $endDate = $data['endDate'];
+
+
+
+        return true;
+    }
+
     public function create(array $data)
     {
-        return DB::transaction(function () use ($data) {
-            // Generate booking code
-            $data['bookingCode'] = $this->generateBookingCode();
-            
-            // Calculate total price
-            $data['totalPrice'] = $this->calculateTotalPrice($data);
-            
-            // Set default status
-            $data['status'] = $data['status'] ?? 'pending';
-            
-            return $this->repository->create($data);
-        });
+        try {
+            return DB::transaction(function () use ($data) {
+                if (!$this->isAvailable($data)) {
+                    throw new \Exception("Armada atau Paket tidak tersedia pada tanggal yang dipilih.");
+                }
+
+                // Generate booking code
+                $data['bookingCode'] = $this->generateBookingCode();
+                
+                // Calculate total price & cost
+                $prices = $this->calculateTotalPriceAndCost($data);
+                $data['totalPrice'] = $prices['price'];
+                $data['total_cost'] = $prices['cost'];
+                
+                // Set default status
+                $data['status'] = $data['status'] ?? 'pending';
+                
+                // Sync Customer
+                $customer = \App\Models\Customer::updateOrCreate(
+                    ['email' => $data['customerEmail']],
+                    [
+                        'name' => $data['customerName'],
+                        'phone' => $data['customerPhone'] ?? null,
+                    ]
+                );
+                $data['customerId'] = $customer->id;
+
+                $booking = $this->repository->create($data);
+                
+                // Update customer stats
+                $customer->update([
+                    'total_bookings' => $customer->bookings()->count(),
+                    'total_spent' => $customer->bookings()->where('status', 'confirmed')->sum('totalPrice'),
+                    'last_booking_at' => now()
+                ]);
+
+                // Notify Admins
+                try {
+                    $admins = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+                    \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewBookingNotification($booking));
+                } catch (\Exception $ne) {
+                    \Illuminate\Support\Facades\Log::warning('Failed to send admin booking notification: ' . $ne->getMessage());
+                }
+
+                // Notify Customer with Invoice
+                try {
+                    $booking->notify(new \App\Notifications\CustomerBookingNotification($booking));
+                } catch (\Exception $ce) {
+                    \Illuminate\Support\Facades\Log::warning('Failed to send customer booking notification: ' . $ce->getMessage());
+                }
+
+                \Illuminate\Support\Facades\Log::info('New booking created: ' . $booking->bookingCode, ['booking_id' => $booking->id]);
+
+                return $booking;
+            });
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Booking Creation Failed: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function update(Booking $booking, array $data)
@@ -46,6 +103,13 @@ class BookingService
         return $this->repository->delete($booking);
     }
 
+    public function bulkDelete(array $ids)
+    {
+        return DB::transaction(function () use ($ids) {
+            return Booking::whereIn('id', $ids)->delete();
+        });
+    }
+
     private function generateBookingCode(): string
     {
         do {
@@ -55,22 +119,38 @@ class BookingService
         return $code;
     }
 
-    private function calculateTotalPrice(array $data): float
+    private function calculateTotalPriceAndCost(array $data): array
     {
-        $basePrice = 0;
+        $price = 0;
+        $cost = 0;
+        $pax = $data['metadata']['pax'] ?? 1;
 
         if (isset($data['packageId'])) {
             $package = \App\Models\Package::find($data['packageId']);
-            $basePrice = $package->price ?? 0;
-        } elseif (isset($data['carId'])) {
-            $car = \App\Models\Car::find($data['carId']);
-            $days = isset($data['startDate']) && isset($data['endDate']) 
-                ? now()->parse($data['endDate'])->diffInDays(now()->parse($data['startDate'])) + 1
-                : 1;
-            $basePrice = ($car->price ?? 0) * $days;
+            $pricePerPerson = $package->price ?? 0;
+            $costPerPerson = $package->cost_price ?? 0;
+
+            // Check if there are pricing details for specific pax count
+            if ($package->pricingDetails && is_array($package->pricingDetails)) {
+                // Find matching pax tier
+                $match = null;
+                foreach ($package->pricingDetails as $detail) {
+                    if ($detail['pax'] == $pax) {
+                        $match = $detail;
+                        break;
+                    }
+                }
+                
+                if ($match) {
+                    $pricePerPerson = $match['price_per_person'] ?? $match['price'] ?? $match['pricePerPerson'] ?? $pricePerPerson;
+                }
+            }
+
+            $price = $pricePerPerson * $pax;
+            $cost = $costPerPerson * $pax;
         }
 
-        return $basePrice;
+        return ['price' => $price, 'cost' => $cost];
     }
 
     public function getAll(array $filters = [])

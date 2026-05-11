@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
+    use HandlesImageUploads;
     public function index()
     {
         $clients = Client::orderBy('sortOrder')->get();
@@ -23,7 +25,7 @@ class ClientController extends Controller
             'website' => 'nullable|url',
         ]);
 
-        $path = $request->file('logo')->store('clients', 'public');
+        $path = $this->uploadAndConvert($request->file('logo'), 'clients');
 
         Client::create([
             'name' => $request->name,

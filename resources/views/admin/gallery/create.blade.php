@@ -42,7 +42,7 @@
                         <label for="image" class="cursor-pointer">
                             <i class="fas fa-cloud-upload-alt text-5xl text-gray-300 group-hover:text-toba-green transition mb-4"></i>
                             <p class="text-sm font-bold text-gray-700">Click to select an image</p>
-                            <p class="text-xs text-gray-400 mt-2 font-medium">JPEG, PNG, JPG, WEBP (Max 5MB)</p>
+                            <p class="text-xs text-gray-400 mt-2 font-medium">webp, webp, webp, WEBP (Max 5MB)</p>
                         </label>
                     </div>
                     <div id="image-preview" class="mt-6 hidden">

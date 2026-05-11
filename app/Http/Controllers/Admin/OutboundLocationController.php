@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\OutboundLocation;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class OutboundLocationController extends Controller
 {
+    use HandlesImageUploads;
     public function index()
     {
         $locations = OutboundLocation::latest()->get();
@@ -17,20 +20,47 @@ class OutboundLocationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('outbound/locations', 'public');
-            OutboundLocation::create([
-                'name' => $request->name,
-                'image' => '/storage/' . $path
-            ]);
+            $path = $this->uploadAndConvert($request->file('image'), 'outbound/locations');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
         }
 
-        return redirect()->back()->with('success', 'Location added!');
+        OutboundLocation::create($validated);
+        Cache::forget('outbound_locations');
+        return redirect()->back()->with('success', 'Lokasi berhasil ditambahkan!');
+    }
+
+    public function update(Request $request, OutboundLocation $location)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($location->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $location->image));
+            }
+            $path = $this->uploadAndConvert($request->file('image'), 'outbound/locations');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
+        }
+
+        $location->update($validated);
+        Cache::forget('outbound_locations');
+        return redirect()->back()->with('success', 'Lokasi berhasil diperbarui!');
     }
 
     public function destroy(OutboundLocation $location)
@@ -39,6 +69,7 @@ class OutboundLocationController extends Controller
             Storage::disk('public')->delete(str_replace('/storage/', '', $location->image));
         }
         $location->delete();
-        return redirect()->back()->with('success', 'Location removed!');
+        Cache::forget('outbound_locations');
+        return redirect()->back()->with('success', 'Lokasi berhasil dihapus!');
     }
 }

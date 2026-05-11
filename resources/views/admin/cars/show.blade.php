@@ -109,7 +109,7 @@
                 <div class="space-y-4">
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-400 font-bold uppercase">Created At</span>
-                        <span class="font-black">{{ $car->createdAt->format('d/m/Y') }}</span>
+                        <span class="font-black">{{ $car->createdAt ? $car->createdAt->format('d/m/Y') : '-' }}</span>
                     </div>
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-400 font-bold uppercase">Featured</span>

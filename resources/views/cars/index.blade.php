@@ -17,6 +17,16 @@
                 return matchType && matchSearch;
             });
         },
+        showModal: false,
+        selectedCar: null,
+        openBookingModal(car) {
+            this.selectedCar = car;
+            this.showModal = true;
+        },
+        closeBookingModal() {
+            this.showModal = false;
+            this.selectedCar = null;
+        },
 
         get carTypes() {
             return ['Semua', ...new Set(this.cars.map(c => c.type))];
@@ -27,7 +37,7 @@
     <!-- Hero Header -->
     <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-6 md:px-8">
         <div class="absolute inset-0 opacity-20">
-            <img src="/storage/2026/04/sumatra-panorama.png" alt="" class="w-full h-full object-cover">
+            <img src="/storage/2026/04/sumatra-panorama.webp" alt="" class="w-full h-full object-cover">
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 to-slate-900/90"></div>
         <div class="relative z-10 max-w-7xl mx-auto text-center">
@@ -72,7 +82,7 @@
             <template x-for="car in filteredCars" :key="car.id">
                 <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full">
                     <div class="relative h-64 overflow-hidden bg-slate-100">
-                        <img :src="car.images[0]" :alt="car.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img :src="car.images && car.images[0] ? (car.images[0].startsWith('http') ? car.images[0] : '/storage/' + car.images[0].replace('/storage/', '')) : '/images/placeholder-car.webp'" :alt="car.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-5 right-5">
                             <span class="bg-white/90 backdrop-blur-md text-slate-900 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm" x-text="car.type"></span>
                         </div>
@@ -120,10 +130,10 @@
                                     <span class="text-xs font-bold text-slate-400">/hari</span>
                                 </p>
                             </div>
-                            <a :href="'https://wa.me/6281323888207?text=' + encodeURIComponent('Halo Wonderful Toba, saya ingin sewa ' + car.name)" 
+                            <button @click="openBookingModal(car)" 
                                class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-toba-green transition-all shadow-lg shadow-slate-900/10 whitespace-nowrap">
                                 Sewa Sekarang
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -135,6 +145,91 @@
             <svg class="w-16 h-16 mx-auto text-slate-200 mb-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <h3 class="text-2xl font-black text-slate-900 mb-2">Armada tidak ditemukan</h3>
             <p class="text-slate-500 font-medium">Coba gunakan kata kunci atau kategori yang berbeda.</p>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div x-show="showModal" 
+        style="display: none;" 
+        class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        
+        <div x-show="showModal" 
+            @click.away="closeBookingModal"
+            class="bg-white w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative"
+            x-transition>
+            
+            <div class="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-2xl font-black text-slate-900">
+                    Form Pemesanan Mobil
+                </h3>
+                <button @click="closeBookingModal" class="p-2 bg-white text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form @submit.prevent="
+                    const phone = '{{ $siteSettings['general']['whatsapp'] ?? '6281323888207' }}'.replace(/[^0-9]/g,'');
+                    const msg = 'Halo Wonderful Toba, saya ingin memesan *' + (selectedCar?.name ?? 'mobil') + '* dari tanggal ' + $el.startDate.value + ' s/d ' + $el.endDate.value + '. Nama: ' + $el.customerName.value;
+                    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+                " class="p-6 md:p-8 space-y-6">
+
+                <input type="hidden" name="carId" :value="selectedCar?.id" />
+
+                <!-- Detail Mobil -->
+                <div class="bg-blue-50/50 p-4 border border-blue-100 rounded-2xl flex gap-4 items-center">
+                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-sm border border-blue-50">
+                        🚗
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-blue-500 uppercase tracking-wider mb-1">Unit Dipilih</p>
+                        <p class="font-black text-slate-900" x-text="selectedCar?.name"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap</label>
+                        <input type="text" name="customerName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" placeholder="Nama Anda" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Email</label>
+                        <input type="email" name="customerEmail" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" placeholder="Email aktif" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Nomor WhatsApp</label>
+                        <input type="text" name="customerPhone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" placeholder="08..." />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Tanggal Mulai</label>
+                        <input type="date" name="startDate" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" />
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Tanggal Selesai</label>
+                        <input type="date" name="endDate" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Kota Penjemputan</label>
+                        <input type="text" name="pickupLocation" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" placeholder="Contoh: Kualanamu, Medan" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Catatan Tambahan (Opsional)</label>
+                    <textarea name="notes" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-toba-green/20" placeholder="Informasi tambahan..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-toba-green hover:bg-toba-dark text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-toba-green/30">
+                    Kirim Pemesanan
+                </button>
+            </form>
         </div>
     </div>
 </div>

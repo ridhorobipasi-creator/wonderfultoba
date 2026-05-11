@@ -6,12 +6,23 @@
     <title>Login - Wonderful Toba Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gradient-to-br from-toba-green to-emerald-700 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-toba-green to-emerald-700 min-h-screen flex items-center justify-center p-4" x-data="{ isSubmitting: false }">
     <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-black text-white mb-2">Wonderful Toba</h1>
-            <p class="text-white/80">Admin Panel</p>
+            @php
+                $logoUrl = $siteSettings['general']['logo_url'] ?? ($siteSettings['cms_landing']['brand_logo_url'] ?? null);
+                if ($logoUrl && !Str::startsWith($logoUrl, ['http', '//', 'data:', 'blob:'])) {
+                    $logoUrl = asset('storage/' . ltrim(str_replace('storage/', '', $logoUrl), '/'));
+                }
+            @endphp
+
+            @if(!empty($logoUrl))
+                <img src="{{ $logoUrl }}" class="h-16 w-auto object-contain mx-auto brightness-0 invert drop-shadow-xl mb-2">
+            @else
+                <h1 class="text-4xl font-black text-white mb-2">{{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }}</h1>
+            @endif
+            <p class="text-white/80 font-black uppercase tracking-[0.3em] text-[10px]">Management Panel</p>
         </div>
 
         <!-- Login Card -->
@@ -28,7 +39,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6" @submit="isSubmitting = true">
                 @csrf
 
                 <!-- Email -->
@@ -79,9 +90,14 @@
                 <!-- Submit Button -->
                 <button 
                     type="submit"
-                    class="w-full bg-toba-green text-white py-3 rounded-lg font-bold hover:bg-toba-green/90 transition transform hover:scale-105"
+                    :disabled="isSubmitting"
+                    class="w-full bg-toba-green text-white py-3 rounded-lg font-bold hover:bg-toba-green/90 transition transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                    Login
+                    <span x-show="!isSubmitting">Login</span>
+                    <div x-show="isSubmitting" class="flex items-center gap-2">
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Authenticating...
+                    </div>
                 </button>
             </form>
 
