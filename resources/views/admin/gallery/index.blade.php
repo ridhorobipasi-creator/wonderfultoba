@@ -1,78 +1,362 @@
 @extends('admin.layout')
 
-@section('title', 'Gallery')
-@section('page-title', 'Media Library')
+@section('title', 'Manajemen Galeri ' . (request('category') == 'outbound' ? 'Outbound' : 'Tour'))
+
+@section('breadcrumbs')
+    <i class="fas fa-chevron-right text-[6px] opacity-40"></i>
+    <span class="text-slate-400">Galeri {{ request('category') == 'outbound' ? 'Outbound' : 'Tour' }}</span>
+@endsection
 
 @section('content')
-<div class="space-y-8">
-    <!-- Action Header -->
-    <div class="flex items-center justify-between">
-        <h1 class="text-xl font-black text-slate-900 tracking-tight">Gallery Assets</h1>
-        <a href="{{ route('admin.gallery.create') }}" class="bg-slate-900 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200">
-            <i class="fas fa-plus mr-2"></i> Upload Image
-        </a>
+@php
+    $isOutbound = request('category') == 'outbound';
+    $themeColor = $isOutbound ? 'orange' : 'indigo';
+    $bgColor = $isOutbound ? 'bg-orange-600' : 'bg-indigo-600';
+    $textColor = $isOutbound ? 'text-orange-600' : 'text-indigo-600';
+    $shadowColor = $isOutbound ? 'shadow-orange-100' : 'shadow-indigo-100';
+    $darkBg = $isOutbound ? 'bg-orange-950' : 'bg-indigo-950';
+@endphp
+
+<div x-data="{
+    dragging: false,
+    preview: null,
+    previewUrl: '',
+    previews: [],
+    selected: [],
+    
+    toggleAll(ids) {
+        let allChecked = ids.every(id => this.selected.includes(id));
+        if (allChecked) {
+            this.selected = this.selected.filter(id => !ids.includes(id));
+        } else {
+            this.selected = [...new Set([...this.selected, ...ids])];
+        }
+    },
+    
+    isAllChecked(ids) {
+        return ids.length > 0 && ids.every(id => this.selected.includes(id));
+    },
+
+    async bulkDelete() {
+        if (!confirm(`Apakah Anda yakin ingin menghapus ${this.selected.length} foto yang dipilih?`)) return;
+        
+        try {
+            const response = await fetch('{{ route('admin.gallery.bulk-destroy') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ ids: this.selected })
+            });
+            
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Gagal menghapus beberapa foto.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menghapus.');
+        }
+    },
+
+    showPreview(url) { this.previewUrl = url; this.preview = true; },
+    handleFiles(e) {
+        const files = e.target.files;
+        this.previews = [];
+        if (files) {
+            Array.from(files).forEach(file => {
+                this.previews.push(URL.createObjectURL(file));
+            });
+        }
+        // Auto submit after a short delay to let user see previews
+        setTimeout(() => e.target.closest('form').submit(), 1500);
+    },
+    async copyUrl(url) {
+        const fullUrl = window.location.origin + url;
+        await navigator.clipboard.writeText(fullUrl);
+        alert('URL Galeri disalin!');
+    },
+
+    openMediaPickerForGallery() {
+        window.dispatchEvent(new CustomEvent('open-media-picker', { 
+            detail: { 
+                callback: (item) => {
+                    this.addMediaToGallery([item.id]);
+                } 
+            } 
+        }));
+    },
+
+    async addMediaToGallery(ids) {
+        try {
+            const response = await fetch('{{ route('admin.gallery.store-from-media') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ 
+                    media_ids: ids,
+                    category: '{{ request('category', 'tour') }}'
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.reload();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}" class="space-y-10 w-full max-w-none">
+
+    <!-- Previews Floating Bar (only when files selected) -->
+    <template x-if="previews.length > 0">
+        <div class="fixed top-10 left-1/2 -translate-x-1/2 z-[200] bg-white/90 backdrop-blur-xl p-4 rounded-[2rem] shadow-2xl border border-slate-100 flex items-center gap-4 animate-bounce-in">
+            <div class="flex -space-x-4">
+                <template x-for="url in previews.slice(0, 5)" :key="url">
+                    <img :src="url" class="w-12 h-12 rounded-xl object-cover border-4 border-white shadow-sm">
+                </template>
+                <template x-if="previews.length > 5">
+                    <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center text-[10px] font-black border-4 border-white shadow-sm">
+                        +<span x-text="previews.length - 5"></span>
+                    </div>
+                </template>
+            </div>
+            <div class="pr-4">
+                <p class="text-[10px] font-black text-slate-900 uppercase tracking-widest">Mengunggah <span x-text="previews.length"></span> Foto...</p>
+                <div class="w-full h-1 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                    <div class="h-full bg-toba-green animate-progress"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Hero Header (Differentiated) -->
+    <div class="bg-white p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] shadow-sm border border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
+        <div class="flex items-center gap-4 md:gap-5">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl {{ $bgColor }} flex items-center justify-center text-white shadow-xl {{ $shadowColor }}">
+                <i class="fas {{ $isOutbound ? 'fa-mountain-sun' : 'fa-camera-retro' }} text-xl md:text-2xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Galeri {{ $isOutbound ? 'Outbound' : 'Tour' }}</h2>
+                <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                    {{ $isOutbound ? 'Aset Visual Kegiatan & Team Building' : 'Dokumentasi Perjalanan Wisatawan' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+
+            <a href="{{ route('admin.gallery.export', request()->all()) }}" class="bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
+                <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
+            </a>
+        </div>
     </div>
 
-    <!-- Gallery Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-        @forelse($images as $image)
-            <div class="group relative bg-white rounded-3xl border border-slate-50 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500">
-                <div class="aspect-square bg-slate-50 relative overflow-hidden">
-                    <img src="{{ $image->imageUrl }}" alt="{{ $image->caption }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    
-                    <!-- Subtle Overlay -->
-                    <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <button onclick="copyToClipboard('{{ $image->imageUrl }}')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/40 transition backdrop-blur-md" title="Copy URL">
-                            <i class="fas fa-link text-xs"></i>
-                        </button>
-                        <form action="{{ route('admin.gallery.destroy', $image) }}" method="POST" onsubmit="return confirm('Delete?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-500/80 text-white hover:bg-rose-500 transition backdrop-blur-md" title="Delete">
-                                <i class="fas fa-trash text-xs"></i>
-                            </button>
-                        </form>
+    <!-- Enhanced Filter Bar -->
+    <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-50 shadow-sm">
+        <form method="GET" class="flex flex-col lg:flex-row lg:items-end gap-6">
+            <input type="hidden" name="category" value="{{ request('category', 'tour') }}">
+            <div class="flex-1 w-full">
+                <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Rentang Tanggal Unggah</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="relative">
+                        <i class="fas fa-calendar-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-[10px]"></i>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-900 transition focus:ring-4 focus:ring-toba-green/10">
                     </div>
-
-                    <!-- Minimal Badge -->
-                    <div class="absolute top-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[8px] font-black uppercase tracking-widest text-slate-900 shadow-sm">
-                        {{ $image->category }}
+                    <div class="relative">
+                        <i class="fas fa-calendar-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-[10px]"></i>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-900 transition focus:ring-4 focus:ring-toba-green/10">
                     </div>
                 </div>
-                <div class="p-4">
-                    <p class="text-[10px] font-black text-slate-900 truncate tracking-tight mb-1">{{ $image->caption }}</p>
-                    <div class="flex items-center gap-1 overflow-hidden">
-                        @php $tags = is_string($image->tags) ? json_decode($image->tags, true) : $image->tags; @endphp
-                        @forelse($tags ?? [] as $tag)
-                            <span class="text-[8px] font-bold text-slate-400">#{{ $tag }}</span>
-                        @empty
-                            <span class="text-[8px] font-bold text-slate-300 italic">No tags</span>
-                        @endforelse
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                <button type="submit" class="flex-1 lg:flex-none bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-lg shadow-slate-100">
+                    Filter Galeri
+                </button>
+                @if(request()->anyFilled(['start_date', 'end_date']))
+                    <a href="{{ route('admin.gallery.index', ['category' => request('category')]) }}" class="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl hover:bg-slate-200 transition">
+                        <i class="fas fa-rotate-left text-xs"></i>
+                    </a>
+                @endif
+                <button type="button" @click="toggleAll(@js($images->pluck('id')->toArray()))" class="flex-1 lg:flex-none px-6 py-3.5 bg-slate-100 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition">
+                    <span x-text="isAllChecked(@js($images->pluck('id')->toArray())) ? 'Batal' : 'Pilih Semua'"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Upload Hub (Themed) -->
+    <div class="{{ $darkBg }} rounded-[2.5rem] md:rounded-[3.5rem] p-8 md:p-14 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+        
+        <div class="relative z-10 flex flex-col lg:flex-row gap-10 md:gap-14 items-center">
+            <div class="w-full lg:w-1/3 space-y-6 text-center lg:text-left">
+                <div>
+                    <span class="px-3 py-1 bg-white/10 rounded-full text-[9px] font-black text-white/60 uppercase tracking-widest">Multi Upload Hub</span>
+                    <h3 class="text-3xl md:text-4xl font-black text-white mt-4 tracking-tight leading-tight">Update Visual <br class="hidden lg:block">
+                        <span class="{{ $isOutbound ? 'text-orange-400' : 'text-indigo-300' }}">{{ $isOutbound ? 'Outbound' : 'Tour' }}</span>
+                    </h3>
+                </div>
+                <p class="text-white/40 text-sm font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
+                    Unggah dokumentasi terbaru untuk mempercantik halaman {{ $isOutbound ? 'Outbound' : 'Tour' }}. Mendukung banyak file sekaligus.
+                </p>
+            </div>
+
+            <div class="w-full lg:w-2/3 flex flex-col gap-4">
+                <form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="category" value="{{ $isOutbound ? 'outbound' : 'tour' }}">
+                    <div 
+                        @dragover.prevent="dragging = true"
+                        @dragleave.prevent="dragging = false"
+                        @drop.prevent="dragging = false; $refs.fileInput.files = $event.dataTransfer.files; handleFiles({target: $refs.fileInput})"
+                        :class="dragging ? 'border-{{ $themeColor }}-400 bg-white/10' : 'border-white/10 bg-white/5 hover:bg-white/10'"
+                        class="border-2 border-dashed rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 text-center transition-all cursor-pointer group"
+                        @click="$refs.fileInput.click()"
+                    >
+                        <div class="w-12 h-12 rounded-2xl bg-white shadow-xl flex items-center justify-center mx-auto mb-4 transform group-hover:-translate-y-2 transition-all">
+                            <i class="fas fa-cloud-arrow-up {{ $textColor }} text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-white mb-1 tracking-tight">Upload Baru</h4>
+                        <p class="text-[8px] font-black text-white/30 uppercase tracking-[0.3em]">Klik atau seret file</p>
+                        <input type="file" name="files[]" multiple accept="image/*" x-ref="fileInput" class="hidden" @change="handleFiles">
+                    </div>
+                </form>
+
+                <div class="flex items-center gap-4">
+                    <div class="h-px flex-1 bg-white/10"></div>
+                    <span class="text-[8px] font-black text-white/20 uppercase tracking-[0.5em]">Atau</span>
+                    <div class="h-px flex-1 bg-white/10"></div>
+                </div>
+
+                <button type="button" @click="openMediaPickerForGallery()" class="w-full py-6 bg-white/5 border border-white/10 rounded-[2.5rem] text-white flex flex-col items-center justify-center gap-2 hover:bg-white/10 transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em]">Pilih dari Galeri Pusat</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery View -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+        @forelse($images as $image)
+            <div class="group bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 relative"
+                 :class="selected.includes({{ $image->id }}) ? 'ring-4 ring-{{ $themeColor }}-500' : ''">
+                
+                {{-- Bulk Checkbox --}}
+                <div class="absolute top-4 left-4 z-20">
+                    <input type="checkbox" 
+                        value="{{ $image->id }}" 
+                        x-model="selected"
+                        class="w-5 h-5 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-{{ $themeColor }}-500 focus:ring-{{ $themeColor }}-500/20 transition-all cursor-pointer">
+                </div>
+
+                <div class="aspect-[4/5] relative overflow-hidden bg-slate-50">
+                    <img src="{{ $image->image_url }}" alt="{{ $image->caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    
+                    <!-- Smart Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 p-6 flex flex-col justify-between">
+                        <div class="flex justify-end gap-2">
+                            <a href="{{ route('admin.gallery.edit', $image) }}" class="w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-{{ $themeColor }}-600 transition">
+                                <i class="fas fa-pencil text-xs"></i>
+                            </a>
+                            <button @click="copyUrl('{{ $image->image_url }}')" class="w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-{{ $themeColor }}-600 transition">
+                                <i class="fas fa-link text-xs"></i>
+                            </button>
+                            <form action="{{ route('admin.gallery.destroy', $image) }}" method="POST" onsubmit="return confirm('Hapus?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-9 h-9 rounded-xl bg-rose-500/80 text-white flex items-center justify-center hover:bg-rose-600 transition">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <p class="text-[10px] font-black text-white uppercase tracking-widest truncate">{{ $image->caption ?? 'No Caption' }}</p>
+                             <button @click="showPreview('{{ $image->image_url }}')" class="w-full py-3 bg-white text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-{{ $themeColor }}-600 hover:text-white transition">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Date Badge -->
+                    <div class="absolute top-4 right-4">
+                        <span class="px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[7px] font-black uppercase tracking-widest text-white/80">
+                            {{ $image->createdAt ? $image->createdAt->format('d M Y') : 'N/A' }}
+                        </span>
                     </div>
                 </div>
             </div>
         @empty
-            <div class="col-span-full py-32 text-center bg-white rounded-[2.5rem] border border-dashed border-slate-200">
-                <i class="fas fa-images text-3xl text-slate-100 mb-4"></i>
-                <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Empty Gallery</p>
+            <div class="col-span-full py-40 text-center bg-white rounded-[3.5rem] border border-dashed border-slate-200">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
+                    <i class="fas {{ $isOutbound ? 'fa-mountain-sun' : 'fa-camera-retro' }} text-3xl"></i>
+                </div>
+                <h5 class="text-xl font-black text-slate-900 mb-2">Galeri {{ $isOutbound ? 'Outbound' : 'Tour' }} Kosong</h5>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ayo unggah momen terbaik!</p>
             </div>
         @endforelse
     </div>
 
     <!-- Pagination -->
     @if($images->hasPages())
-        <div class="pt-10">
-            {{ $images->links() }}
+        <div class="px-10 py-8 bg-white rounded-[3rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Menampilkan <span class="text-slate-900">{{ $images->firstItem() }}</span> - <span class="text-slate-900">{{ $images->lastItem() }}</span> dari <span class="text-slate-900">{{ $images->total() }}</span> Foto
+            </p>
+            {{ $images->appends(request()->all())->links() }}
         </div>
     @endif
-</div>
 
-<script>
-    function copyToClipboard(text) {
-        const fullUrl = window.location.origin + text;
-        navigator.clipboard.writeText(fullUrl).then(() => {
-            // Optional: Add a subtle toast instead of alert
-            alert('Image URL copied!');
-        });
-    }
-</script>
+    <!-- Floating Bulk Actions -->
+    <div x-show="selected.length > 0" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-10"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4"
+         x-cloak>
+        <div class="bg-slate-900 text-white rounded-[2.5rem] p-5 shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
+            <div class="flex items-center gap-4 pl-4">
+                <div class="w-10 h-10 rounded-2xl {{ $bgColor }} flex items-center justify-center text-white text-sm font-black shadow-lg">
+                    <span x-text="selected.length"></span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Terpilih</p>
+                    <p class="text-xs font-bold text-white">Siap dihapus</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 pr-2">
+                <button @click="selected = []" class="px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition">
+                    Batal
+                </button>
+                <button @click="bulkDelete()" class="bg-rose-600 hover:bg-rose-700 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition shadow-xl shadow-rose-900/30">
+                    <i class="fas fa-trash-can mr-2 text-xs"></i> Hapus Massal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Preview Modal -->
+    <template x-if="preview">
+        <div class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-8"
+             @click.self="preview = false">
+            <div class="relative max-w-5xl max-h-full">
+                <img :src="previewUrl" class="max-h-[85vh] w-auto rounded-[2rem] shadow-2xl border-4 border-white/10">
+                <button @click="preview = false" class="absolute -top-4 -right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-2xl hover:bg-rose-500 hover:text-white transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
+</div>
 @endsection

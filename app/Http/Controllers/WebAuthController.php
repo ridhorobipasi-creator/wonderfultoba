@@ -24,8 +24,8 @@ class WebAuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Redirect admin to admin panel
-            if (auth()->user()->role === 'admin') {
+            // Redirect admin or superadmin to admin panel
+            if (auth()->user()->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             }
 

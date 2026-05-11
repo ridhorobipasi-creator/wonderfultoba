@@ -5,125 +5,89 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use App\Traits\HandlesImageUploads;
 
 class CarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    use HandlesImageUploads;
+
+    public function index()
     {
-        $query = Car::query();
-
-        // Search
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('type', 'like', "%{$search}%");
-            });
-        }
-
-        // Filter by type
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        // Filter by status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // Filter by featured
-        if ($request->filled('featured')) {
-            $query->where('isFeatured', $request->featured === 'yes');
-        }
-
-        $cars = $query->orderBy('sortOrder')->orderBy('createdAt', 'desc')->paginate(15);
-
+        $cars = Car::latest('createdAt')->paginate(10);
         return view('admin.cars.index', compact('cars'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.cars.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:100',
+            'type' => 'required|string|max:255',
             'capacity' => 'required|integer|min:1',
-            'transmission' => 'required|in:manual,automatic',
-            'fuel' => 'required|string|max:50',
+            'transmission' => 'required|string|in:manual,automatic',
+            'fuel' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'priceWithDriver' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
-            'isFeatured' => 'boolean',
+            'status' => 'required|string|in:active,inactive',
+            'isFeatured' => 'nullable|boolean',
         ]);
 
-        Car::create($validated);
+        $data = $validated;
+        $data['isFeatured'] = $request->has('isFeatured');
+        $data['images'] = $request->input('images', []); 
 
-        return redirect()->route('admin.cars.index')
-            ->with('success', 'Car created successfully!');
+        Car::create($data);
+        Cache::forget('cars_active');
+
+        return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Car $car)
-    {
-        return view('admin.cars.show', compact('car'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Car $car)
     {
         return view('admin.cars.edit', compact('car'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Car $car)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:100',
+            'type' => 'required|string|max:255',
             'capacity' => 'required|integer|min:1',
-            'transmission' => 'required|in:manual,automatic',
-            'fuel' => 'required|string|max:50',
+            'transmission' => 'required|string|in:manual,automatic',
+            'fuel' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'priceWithDriver' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
-            'isFeatured' => 'boolean',
+            'status' => 'required|string|in:active,inactive',
+            'isFeatured' => 'nullable|boolean',
         ]);
 
-        $car->update($validated);
+        $data = $validated;
+        $data['isFeatured'] = $request->has('isFeatured');
+        $data['images'] = $request->input('images', []);
 
-        return redirect()->route('admin.cars.index')
-            ->with('success', 'Car updated successfully!');
+        $car->update($data);
+        Cache::forget('cars_active');
+
+        return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Car $car)
     {
         $car->delete();
+        Cache::forget('cars_active');
+        return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasil dihapus.');
+    }
 
-        return redirect()->route('admin.cars.index')
-            ->with('success', 'Car deleted successfully!');
+    public function show(Car $car)
+    {
+        return view('admin.cars.show', compact('car'));
     }
 }

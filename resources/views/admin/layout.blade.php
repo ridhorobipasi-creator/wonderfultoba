@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html lang="id" x-data="{ 
     sidebarOpen: window.innerWidth >= 1024,
-    isMobile: window.innerWidth < 1024
-}" @resize.window="isMobile = window.innerWidth < 1024; if (!isMobile && !sidebarOpen) sidebarOpen = false">
+    isMobile: window.innerWidth < 1024,
+    loading: false
+}" @resize.window="let prevMobile = isMobile; isMobile = window.innerWidth < 1024; if (isMobile && !prevMobile) sidebarOpen = false; if (!isMobile && prevMobile) sidebarOpen = true"
+   @submit.window="loading = true">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - Wonderful Toba Admin</title>
+    @php
+        $iconUrl = $siteSettings['general']['icon_url'] ?? ($siteSettings['cms_landing']['brand_icon_url'] ?? asset('favicon.ico'));
+        if ($iconUrl && !Str::startsWith($iconUrl, ['http', '//', 'data:', 'blob:'])) {
+            $cleanIcon = ltrim($iconUrl, '/');
+            if (Str::startsWith($cleanIcon, 'assets/')) {
+                $iconUrl = asset($cleanIcon);
+            } else {
+                $iconUrl = asset('storage/' . ltrim(str_replace('storage/', '', $cleanIcon), '/'));
+            }
+        }
+    @endphp
+    <link rel="icon" type="image/x-icon" href="{{ $iconUrl }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
@@ -26,12 +39,12 @@
 
         /* --- Core Layout --- */
         #admin-wrapper {
-            display: flex;
+            display: block;
             min-height: 100vh;
             position: relative;
         }
 
-        /* Sidebar is fixed, always off-canvas by default on mobile */
+        /* Sidebar is fixed overlay - does not affect document flow */
         #sidebar {
             position: fixed;
             top: 0;
@@ -59,45 +72,65 @@
             overflow-y: auto;
         }
 
-        /* Content area shifts via margin-left on large screens */
+        /* Content area is always 100% wide; shifts via padding-left on desktop when sidebar open */
         #content-area {
-            flex: 1;
-            min-width: 0;
-            transition: margin-left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            transition: padding-left 0.3s ease;
         }
 
         @media (min-width: 1024px) {
             #content-area.sidebar-visible {
-                margin-left: 272px;
-            }
-            #content-area.sidebar-hidden {
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 1023px) {
-            #content-area {
-                margin-left: 0 !important;
+                padding-left: 272px;
             }
         }
     </style>
 </head>
-<body class="antialiased text-slate-900 overflow-x-hidden">
+<body class="antialiased text-slate-900">
 
     <div id="admin-wrapper">
+
 
         {{-- ====== SIDEBAR ====== --}}
         <aside id="sidebar"
             :style="sidebarOpen ? 'transform: translateX(0)' : 'transform: translateX(-100%)'"
+            class="z-[100]"
         >
             <div class="flex flex-col h-full">
 
                 {{-- Branding --}}
-                <div class="px-6 pt-8 pb-6 flex flex-col items-center text-center flex-shrink-0 border-b border-slate-50">
-                    <div class="w-12 h-12 bg-toba-green rounded-2xl flex items-center justify-center shadow-lg shadow-toba-green/30 mb-3">
-                        <span class="text-white font-black text-xl">W</span>
-                    </div>
-                    <h1 class="text-base font-black text-slate-900 tracking-tight leading-tight mb-3">Wonderful<br>Toba</h1>
+                <div class="px-6 pt-8 pb-6 flex flex-col items-center text-center flex-shrink-0 border-b border-slate-50 relative">
+                    {{-- Mobile Close Button --}}
+                    <button @click="sidebarOpen = false" class="lg:hidden absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:bg-slate-100 transition">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+
+                    @php
+                        $logoUrl = $siteSettings['general']['logo_url'] ?? ($siteSettings['cms_landing']['brand_logo_url'] ?? null);
+                        if ($logoUrl && !Str::startsWith($logoUrl, ['http', '//', 'data:', 'blob:'])) {
+                            $cleanLogo = ltrim($logoUrl, '/');
+                            if (Str::startsWith($cleanLogo, 'assets/')) {
+                                $logoUrl = asset($cleanLogo);
+                            } else {
+                                $logoUrl = asset('storage/' . ltrim(str_replace('storage/', '', $cleanLogo), '/'));
+                            }
+                        }
+                    @endphp
+
+                    @if(!empty($logoUrl))
+                        <div class="mb-4">
+                            <img src="{{ $logoUrl }}" class="h-10 w-auto object-contain">
+                        </div>
+                    @else
+                        <div class="w-12 h-12 bg-toba-green rounded-2xl flex items-center justify-center shadow-lg shadow-toba-green/30 mb-3">
+                            <span class="text-white font-black text-xl">W</span>
+                        </div>
+                        <h1 class="text-base font-black text-slate-900 tracking-tight leading-tight mb-3">
+                            {{ $siteSettings['general']['site_name'] ?? ($siteSettings['cms_landing']['brand_name'] ?? 'Wonderful Toba') }}
+                        </h1>
+                    @endif
                     <a href="{{ route('index') }}" target="_blank"
                        class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-400 hover:text-toba-green rounded-xl text-[10px] font-black uppercase tracking-widest transition">
                         <i class="fas fa-external-link text-[8px]"></i>
@@ -114,160 +147,187 @@
                         <a href="{{ route('admin.dashboard') }}"
                            class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                   {{ request()->routeIs('admin.dashboard') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                            <i class="fas fa-grid-2 w-5 text-sm {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-toba-green' }}"></i>
+                            <i class="fas fa-chart-line w-5 text-sm {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-toba-green' }}"></i>
                             Dashboard
                         </a>
                     </div>
 
-                    {{-- MANAJEMEN KONTEN (CMS) --}}
-                    <div class="mb-5">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Manajemen Konten (CMS)</p>
-                        <div class="space-y-0.5">
-                            <a href="{{ route('admin.cms.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cms.index') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-globe w-5 text-sm {{ request()->routeIs('admin.cms.index') ? 'text-white' : 'text-sky-400' }}"></i>
-                                CMS Halaman Utama
-                            </a>
-                            <a href="{{ route('admin.cms.tour') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cms.tour') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-house-chimney w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-amber-500' }}"></i>
-                                CMS Beranda Tour
-                            </a>
-                            <a href="{{ route('admin.blogs.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.blogs.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-file-lines w-5 text-sm {{ request()->routeIs('admin.blogs.*') ? 'text-white' : 'text-emerald-500' }}"></i>
-                                Blog / Artikel
-                            </a>
-                            <a href="{{ route('admin.cities.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cities.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.cities.*') ? 'text-white' : 'text-teal-500' }}"></i>
-                                Wilayah & Destinasi
-                            </a>
-                            <a href="{{ route('admin.media.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.media.index') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.media.index') ? 'text-white' : 'text-purple-400' }}"></i>
-                                Media Library
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- PRODUK & LAYANAN --}}
-                    <div class="mb-5">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Produk & Layanan</p>
-                        <div class="space-y-0.5">
-                            <a href="{{ route('admin.packages.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.packages.*') && !request()->has('type') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-box-archive w-5 text-sm {{ request()->routeIs('admin.packages.*') && !request()->has('type') ? 'text-white' : 'text-orange-400' }}"></i>
-                                Paket Wisata
-                            </a>
-                            <a href="{{ route('admin.cars.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cars.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-van-shuttle w-5 text-sm {{ request()->routeIs('admin.cars.*') ? 'text-white' : 'text-blue-400' }}"></i>
-                                Armada Mobil
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- TRANSAKSI --}}
+                    {{-- TRANSAKSI (MOVED TO TOP) --}}
                     <div class="mb-5">
                         <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Transaksi</p>
                         <div class="space-y-0.5">
                             <a href="{{ route('admin.bookings.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.bookings.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-calendar-check w-5 text-sm {{ request()->routeIs('admin.bookings.*') ? 'text-white' : 'text-toba-green' }}"></i>
+                                <i class="fas fa-clipboard-list w-5 text-sm {{ request()->routeIs('admin.bookings.*') ? 'text-white' : 'text-emerald-500' }}"></i>
                                 Daftar Pesanan
                             </a>
-                            <a href="{{ route('admin.finance.index') }}"
+
+                            <a href="{{ route('admin.customers.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.finance.index') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-money-bill-trend-up w-5 text-sm {{ request()->routeIs('admin.finance.index') ? 'text-white' : 'text-emerald-600' }}"></i>
+                                      {{ request()->routeIs('admin.customers.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-user-group w-5 text-sm {{ request()->routeIs('admin.customers.*') ? 'text-white' : 'text-indigo-500' }}"></i>
+                                Daftar Pelanggan
+                            </a>
+
+                            @if(auth()->user()->isSuperAdmin())
+                            <a href="{{ route('admin.reports.financial') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.reports.financial') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-file-invoice-dollar w-5 text-sm {{ request()->routeIs('admin.reports.financial') ? 'text-white' : 'text-rose-500' }}"></i>
                                 Laporan Keuangan
                             </a>
+                            @endif
                         </div>
                     </div>
 
-                    {{-- PENGATURAN --}}
+                    {{-- MANAJEMEN KONTEN (CMS) --}}
                     <div class="mb-5">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Pengaturan</p>
+                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Manajemen Konten (CMS)</p>
                         <div class="space-y-0.5">
-                            <a href="{{ route('admin.users.index') }}"
+                            @if(auth()->user()->isSuperAdmin())
+                            <a href="{{ route('admin.cms.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.users.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-users-gear w-5 text-sm {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-indigo-400' }}"></i>
-                                Pengguna
+                                      {{ request()->routeIs('admin.cms.index') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.index') ? 'text-white' : 'text-sky-400' }}"></i>
+                                CMS Halaman Utama
+                            </a>
+                            @endif
+                            <a href="{{ route('admin.cms.tour') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.cms.tour') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-mountain-sun w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-amber-500' }}"></i>
+                                CMS Beranda Tour
+                            </a>
+                            <a href="{{ route('admin.blogs.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.blogs.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-pen-nib w-5 text-sm {{ request()->routeIs('admin.blogs.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                                Blog / Artikel
+                            </a>
+                             @if(auth()->user()->isSuperAdmin())
+                             <a href="{{ route('admin.cities.index') }}"
+                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                       {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'text-white' : 'text-teal-500' }}"></i>
+                                 Wilayah & Destinasi
+                             </a>
+                             @endif
+                             <a href="{{ route('admin.gallery.index', ['category' => 'tour']) }}"
+                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                       {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'text-white' : 'text-indigo-400' }}"></i>
+                                 Galeri Tour
+                             </a>
+                             @if(auth()->user()->isSuperAdmin())
+                             <a href="{{ route('admin.cms.pages') }}"
+                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                       {{ request()->routeIs('admin.cms.pages') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-file-invoice w-5 text-sm {{ request()->routeIs('admin.cms.pages') ? 'text-white' : 'text-rose-500' }}"></i>
+                                 Halaman Statis
+                             </a>
+                             @endif
+                        </div>
+                    </div>
+
+                    {{-- PRODUK & LAYANAN --}}
+                    <div class="mb-5">
+                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Produk & Layanan (Tour)</p>
+                        <div class="space-y-0.5">
+                            <a href="{{ route('admin.packages.index', ['type' => 'tour']) }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-map w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'text-white' : 'text-emerald-500' }}"></i>
+                                 Paket Tour Wisata
+                            </a>
+                            <a href="{{ route('admin.cars.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.cars.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-car w-5 text-sm {{ request()->routeIs('admin.cars.*') ? 'text-white' : 'text-blue-500' }}"></i>
+                                 Manajemen Armada Mobil
                             </a>
                         </div>
                     </div>
 
-                    {{-- OUTBOUND --}}
-                    <div class="mb-5">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Outbound</p>
+                    {{-- OUTBOUND (FULL MANAGEMENT) - Restricted to Superadmin --}}
+                    @if(auth()->user()->isSuperAdmin())
+                    <div class="mb-5 bg-orange-50/50 p-4 rounded-3xl border border-orange-100">
+                        <p class="px-4 mb-3 text-[9px] font-black text-orange-400 uppercase tracking-[0.25em]">Master Outbound</p>
                         <div class="space-y-0.5">
                             <a href="{{ route('admin.outbound.cms') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.cms') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-building-user w-5 text-sm {{ request()->routeIs('admin.outbound.cms') ? 'text-white' : 'text-slate-400' }}"></i>
-                                CMS Beranda Outbound
+                                      {{ request()->routeIs('admin.outbound.cms') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-laptop-code w-5 text-sm {{ request()->routeIs('admin.outbound.cms') ? 'text-white' : 'text-orange-400' }}"></i>
+                                CMS Beranda
                             </a>
                             <a href="{{ route('admin.packages.index', ['type' => 'outbound']) }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.packages.*') && request()->get('type') === 'outbound' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-layer-group w-5 text-sm {{ request()->routeIs('admin.packages.*') && request()->get('type') === 'outbound' ? 'text-white' : 'text-emerald-500' }}"></i>
+                                      {{ request()->routeIs('admin.packages.*') && request('type') == 'outbound' ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-compass w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type') == 'outbound' ? 'text-white' : 'text-orange-500' }}"></i>
                                 Paket Outbound
                             </a>
-                        </div>
-                    </div>
 
-                    {{-- KONTEN OUTBOUND --}}
-                    <div class="mb-4">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Konten Outbound</p>
-                        <div class="space-y-0.5">
+                            <div class="h-px bg-orange-100 my-2 mx-4"></div>
                             <a href="{{ route('admin.outbound.services.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.services.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-list-check w-5 text-sm {{ request()->routeIs('admin.outbound.services.*') ? 'text-white' : 'text-cyan-500' }}"></i>
-                                Layanan Outbound
+                                      {{ request()->routeIs('admin.outbound.services.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-screwdriver-wrench w-5 text-sm {{ request()->routeIs('admin.outbound.services.*') ? 'text-white' : 'text-cyan-500' }}"></i>
+                                Layanan
                             </a>
                             <a href="{{ route('admin.outbound.videos.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.videos.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                      {{ request()->routeIs('admin.outbound.videos.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
                                 <i class="fas fa-video w-5 text-sm {{ request()->routeIs('admin.outbound.videos.*') ? 'text-white' : 'text-red-400' }}"></i>
                                 Video Highlight
                             </a>
-                            <a href="{{ route('admin.outbound.locations.index') }}"
+                            <a href="{{ route('admin.gallery.index', ['category' => 'outbound']) }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.locations.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.outbound.locations.*') ? 'text-white' : 'text-teal-400' }}"></i>
-                                Lokasi Venue
-                            </a>
-                            <a href="{{ route('admin.clients.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.clients.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-building-columns w-5 text-sm {{ request()->routeIs('admin.clients.*') ? 'text-white' : 'text-amber-600' }}"></i>
-                                Logo Klien
-                            </a>
-                            <a href="{{ route('admin.gallery.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.gallery.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') ? 'text-white' : 'text-pink-400' }}"></i>
+                                      {{ request()->routeIs('admin.gallery.*') && request('category') == 'outbound' ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category') == 'outbound' ? 'text-white' : 'text-orange-400' }}"></i>
                                 Galeri Foto
                             </a>
-                            <a href="{{ route('admin.outbound.tiers') }}"
+                            <a href="{{ route('admin.outbound.locations.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.tiers') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-ranking-star w-5 text-sm {{ request()->routeIs('admin.outbound.tiers') ? 'text-white' : 'text-yellow-500' }}"></i>
-                                Tier Paket
+                                      {{ request()->routeIs('admin.outbound.locations.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-location-arrow w-5 text-sm {{ request()->routeIs('admin.outbound.locations.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                                Lokasi Outbound
                             </a>
                         </div>
                     </div>
+                    @endif
+
+                    {{-- SYSTEM MANAGEMENT - Restricted to Superadmin --}}
+                    @if(auth()->user()->isSuperAdmin())
+                    <div class="mb-5 pt-4 border-t border-slate-50">
+                        <p class="px-4 mb-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]">System Engine</p>
+                        <div class="space-y-0.5">
+                            <a href="{{ route('admin.settings.general.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.settings.general.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-sliders w-5 text-sm {{ request()->routeIs('admin.settings.general.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                                Pengaturan Umum
+                            </a>
+                            <a href="{{ route('admin.users.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-user-shield w-5 text-sm {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-indigo-400' }}"></i>
+                                Manajemen Pengguna
+                            </a>
+                            <a href="{{ route('admin.media.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.media.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                                Media Library (Global)
+                            </a>
+                            <a href="{{ route('admin.logs.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.logs.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-clock-rotate-left w-5 text-sm {{ request()->routeIs('admin.logs.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                                Log Aktivitas
+                            </a>
+                        </div>
+                    </div>
+                    @endif
 
                 </nav>
 
@@ -288,8 +348,7 @@
 
         {{-- ====== MAIN CONTENT ====== --}}
         <div id="content-area"
-             :class="sidebarOpen && !isMobile ? 'sidebar-visible' : 'sidebar-hidden'"
-             class="flex flex-col min-h-screen min-w-0">
+             :class="sidebarOpen && !isMobile ? 'sidebar-visible' : ''">
 
             {{-- Top Header --}}
             <header class="glass sticky top-0 z-50 border-b border-slate-100 px-5 lg:px-8 py-4 flex items-center justify-between flex-shrink-0">
@@ -300,66 +359,193 @@
                         <i class="fas fa-bars text-xs"></i>
                     </button>
                     <div>
-                        <h2 class="text-sm font-black text-slate-900 tracking-tight">@yield('page-title', 'Dashboard')</h2>
-                        <div class="flex items-center gap-1.5 mt-0.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-toba-green"></span>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{{ now()->format('l, d F Y') }}</p>
+                        <div class="hidden sm:flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest text-slate-300 mb-1">
+                            <a href="{{ route('admin.dashboard') }}" class="hover:text-toba-green transition">Admin</a>
+                            @hasSection('breadcrumbs')
+                                <i class="fas fa-chevron-right text-[6px] opacity-40"></i>
+                                @yield('breadcrumbs')
+                            @endif
+                        </div>
+                        <h2 class="text-xs sm:text-sm font-black text-slate-900 tracking-tight">@yield('page-title', 'Dashboard')</h2>
+                    </div>
+
+                    {{-- Global Search / Command Bar --}}
+                    <div class="hidden md:flex items-center ml-8 relative group" x-data="{ commandOpen: false }">
+                        <div class="relative">
+                            <i class="fas fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 text-[10px] group-focus-within:text-toba-green transition-colors"></i>
+                            <input type="text" 
+                                   @focus="commandOpen = true"
+                                   @click.away="commandOpen = false"
+                                   placeholder="Cari Pesanan, Paket, atau Berita... (CTRL+K)" 
+                                   class="w-80 lg:w-[400px] pl-12 pr-12 py-3 bg-slate-50 border-none rounded-[1.2rem] text-[11px] font-bold text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-toba-green/20 focus:bg-white transition-all shadow-sm group-hover:shadow-md">
+                            <div class="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-0.5 bg-white border border-slate-100 rounded-md text-[8px] font-black text-slate-300 tracking-tighter">
+                                CTRL K
+                            </div>
+                        </div>
+
+                        {{-- Search Results Dropdown (Static Preview for now) --}}
+                        <div x-show="commandOpen" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-4"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="absolute top-full left-0 mt-3 w-[500px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-50 p-6 z-[100]" x-cloak>
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-3 px-2">Shortcut Cepat</h4>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="{{ route('admin.packages.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+                                            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs"><i class="fas fa-plus"></i></div>
+                                            <span class="text-[10px] font-black uppercase text-slate-700">Buat Paket Baru</span>
+                                        </a>
+                                        <a href="{{ route('admin.blogs.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-indigo-50 transition border border-transparent hover:border-indigo-100">
+                                            <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs"><i class="fas fa-feather"></i></div>
+                                            <span class="text-[10px] font-black uppercase text-slate-700">Tulis Artikel</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-3 px-2">Pencarian Terakhir</h4>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 cursor-pointer transition">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-history text-slate-300 text-xs"></i>
+                                                <span class="text-xs font-bold text-slate-600 italic">Belum ada riwayat...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3">
+                    <!-- Notification Bell -->
+                    <div class="relative group">
+                        <a href="{{ route('admin.bookings.index', ['status' => 'pending']) }}" 
+                           class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition">
+                            <i class="fas fa-bell text-xs"></i>
+                            @if($pendingBookingsCount > 0)
+                                <span class="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 text-white text-[9px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-lg animate-bounce">
+                                    {{ $pendingBookingsCount }}
+                                </span>
+                            @endif
+                        </a>
+                        <!-- Tooltip -->
+                        <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
+                            {{ $pendingBookingsCount }} Pesanan Baru
+                        </div>
+                    </div>
+
                     <a href="{{ route('index') }}" target="_blank"
                        class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 text-[10px] font-black text-slate-400 hover:text-slate-900 hover:border-slate-300 uppercase tracking-widest transition">
                         View Site
-                        <i class="fas fa-external-link text-[8px]"></i>
+                        <i class="fas fa-arrow-up-right-from-square text-[8px]"></i>
                     </a>
+
+                    <!-- User Dropdown -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" @click.away="open = false" 
+                                class="flex items-center gap-2 md:gap-3 p-1 rounded-2xl md:bg-slate-50 hover:bg-slate-100 transition group">
+                            <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-[10px] font-black group-hover:bg-toba-green transition">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </div>
+                            <div class="hidden lg:block text-left pr-2">
+                                <p class="text-[10px] font-black text-slate-900 leading-none mb-1">{{ auth()->user()->name }}</p>
+                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{{ auth()->user()->role }}</p>
+                            </div>
+                            <i class="hidden sm:block fas fa-chevron-down text-[8px] text-slate-300 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                        </button>
+
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+                             class="absolute right-0 mt-3 w-56 bg-white rounded-[2rem] shadow-2xl border border-slate-50 py-3 z-[100]"
+                             x-cloak>
+                            <div class="px-6 py-4 border-b border-slate-50 mb-2">
+                                <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-1">Signed in as</p>
+                                <p class="text-xs font-black text-slate-900 truncate">{{ auth()->user()->email }}</p>
+                            </div>
+                            <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-3 px-6 py-3 text-[11px] font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition">
+                                <i class="fas fa-user-gear text-slate-300"></i>
+                                Pengaturan Profil
+                            </a>
+                            <div class="h-px bg-slate-50 my-2 mx-6"></div>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center gap-3 px-6 py-3 text-[11px] font-bold text-rose-500 hover:bg-rose-50 transition">
+                                    <i class="fas fa-power-off text-rose-300"></i>
+                                    Keluar (Logout)
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </header>
 
             {{-- Page Content --}}
-            <main class="flex-1 p-5 lg:p-10">
+            <main class="flex-1 p-5 lg:p-10 w-full max-w-full">
 
-                {{-- Notifications --}}
-                @if(session('success'))
-                    <div x-data="{ show: true }"
-                         x-init="setTimeout(() => show = false, 5000)"
-                         x-show="show"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 -translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0"
-                         class="mb-8 bg-white border border-slate-100 border-l-[5px] border-l-toba-green p-5 rounded-2xl flex items-center justify-between shadow-lg shadow-slate-100/50">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-toba-green/10 text-toba-green flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-check text-xs"></i>
+                {{-- Floating Toast Notifications --}}
+                <div class="fixed top-24 right-8 z-[9999] flex flex-col gap-4 w-80 pointer-events-none">
+                    @if(session('success'))
+                        <div x-data="{ show: true }"
+                             x-init="setTimeout(() => show = false, 5000)"
+                             x-show="show"
+                             x-transition:enter="transition ease-out duration-500"
+                             x-transition:enter-start="opacity-0 translate-x-20 scale-95"
+                             x-transition:enter-end="opacity-100 translate-x-0 scale-100"
+                             x-transition:leave="transition ease-in duration-300"
+                             x-transition:leave-start="opacity-100 translate-x-0 scale-100"
+                             x-transition:leave-end="opacity-0 translate-x-20 scale-95"
+                             class="bg-white/90 backdrop-blur-2xl border border-emerald-100 p-6 rounded-[2rem] flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.1)] pointer-events-auto overflow-hidden relative group">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-toba-green"></div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-toba-green text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-toba-green/20">
+                                    <i class="fas fa-check-double text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black uppercase tracking-[0.2em] text-toba-green mb-0.5">Success</p>
+                                    <p class="font-bold text-xs text-slate-900 leading-tight">{{ session('success') }}</p>
+                                </div>
                             </div>
-                            <span class="font-bold text-sm text-slate-700">{{ session('success') }}</span>
+                            <button @click="show = false" class="text-slate-300 hover:text-slate-900 transition ml-4">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </button>
                         </div>
-                        <button @click="show = false" class="text-slate-300 hover:text-slate-500 ml-4 flex-shrink-0">
-                            <i class="fas fa-times text-xs"></i>
-                        </button>
-                    </div>
-                @endif
+                    @endif
 
-                @if(session('error'))
-                    <div x-data="{ show: true }"
-                         x-show="show"
-                         x-transition
-                         class="mb-8 bg-white border border-slate-100 border-l-[5px] border-l-rose-500 p-5 rounded-2xl flex items-center justify-between shadow-lg shadow-slate-100/50">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-exclamation-triangle text-xs"></i>
+                    @if(session('error'))
+                        <div x-data="{ show: true }"
+                             x-init="setTimeout(() => show = false, 7000)"
+                             x-show="show"
+                             x-transition:enter="transition ease-out duration-500"
+                             x-transition:enter-start="opacity-0 translate-x-20 scale-95"
+                             x-transition:enter-end="opacity-100 translate-x-0 scale-100"
+                             x-transition:leave="transition ease-in duration-300"
+                             x-transition:leave-start="opacity-100 translate-x-0 scale-100"
+                             x-transition:leave-end="opacity-0 translate-x-20 scale-95"
+                             class="bg-white/90 backdrop-blur-2xl border border-rose-100 p-6 rounded-[2rem] flex items-center justify-between shadow-[0_20px_50px_rgba(225,29,72,0.1)] pointer-events-auto overflow-hidden relative group">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rose-500"></div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-rose-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-rose-200">
+                                    <i class="fas fa-triangle-exclamation text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black uppercase tracking-[0.2em] text-rose-500 mb-0.5">Error</p>
+                                    <p class="font-bold text-xs text-slate-900 leading-tight">{{ session('error') }}</p>
+                                </div>
                             </div>
-                            <span class="font-bold text-sm text-slate-700">{{ session('error') }}</span>
+                            <button @click="show = false" class="text-slate-300 hover:text-slate-900 transition ml-4">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </button>
                         </div>
-                        <button @click="show = false" class="text-slate-300 hover:text-slate-500 ml-4 flex-shrink-0">
-                            <i class="fas fa-times text-xs"></i>
-                        </button>
-                    </div>
-                @endif
+                    @endif
+                </div>
 
                 {{-- Page Content Yield --}}
                 <div class="animate-in fade-in slide-in-from-bottom-3 duration-500">
@@ -395,6 +581,23 @@
 
     </div>
 
+    <!-- Global Loading Spinner -->
+    <div x-show="loading" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex flex-col items-center justify-center"
+         x-cloak>
+        <div class="relative">
+            <div class="w-20 h-20 border-4 border-toba-green/20 border-t-toba-green rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-white font-black text-xs">W</span>
+            </div>
+        </div>
+        <p class="mt-6 text-[10px] font-black text-white uppercase tracking-[0.5em] animate-pulse">Sedang Memproses...</p>
+    </div>
+
+    <x-media-modal />
     @stack('scripts')
 </body>
 </html>

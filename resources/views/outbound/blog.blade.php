@@ -29,7 +29,7 @@
     <!-- Hero Header -->
     <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-4">
         <div class="absolute inset-0 opacity-20">
-            <img src="/assets/images/2023/10/001-1.jpg" alt="" class="w-full h-full object-cover">
+            <img src="/assets/images/2023/10/001-1.webp" alt="" class="w-full h-full object-cover">
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 to-slate-900/90"></div>
         <div class="relative z-10 max-w-7xl mx-auto text-center">
@@ -65,7 +65,7 @@
         <template x-if="featured">
             <article class="group bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 mb-10 md:flex">
                 <div class="relative md:w-1/2 h-72 md:h-auto overflow-hidden">
-                    <img :src="featured.image || '/assets/images/2023/10/001-1.jpg'" :alt="featured.title"
+                    <img :src="featured.image || '/assets/images/2023/10/001-1.webp'" :alt="featured.title"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute top-5 left-5">
                         <span class="bg-slate-900 text-white px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg" x-text="featured.category"></span>
@@ -93,7 +93,7 @@
             <template x-for="post in rest" :key="post.id">
                 <article class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 group">
                     <div class="relative h-52 overflow-hidden">
-                        <img :src="post.image || '/assets/images/2023/10/001-1.jpg'" :alt="post.title"
+                        <img :src="post.image || '/assets/images/2023/10/001-1.webp'" :alt="post.title"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7">

@@ -6,4 +6,4 @@ echo ========================================
 echo.
 echo Starting Laravel development server...
 echo.
-php artisan serve
+php artisan serve --port=7000

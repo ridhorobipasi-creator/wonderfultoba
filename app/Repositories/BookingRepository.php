@@ -8,7 +8,7 @@ class BookingRepository
 {
     public function getAll(array $filters = [])
     {
-        $query = Booking::with(['package', 'car']);
+        $query = Booking::with(['package']);
 
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -16,6 +16,19 @@ class BookingRepository
 
         if (isset($filters['type'])) {
             $query->where('type', $filters['type']);
+        }
+
+        if (isset($filters['category'])) {
+            $category = $filters['category'];
+            if ($category === 'outbound') {
+                $query->whereHas('package', function($q) {
+                    $q->where('isOutbound', true);
+                });
+            } elseif ($category === 'tour') {
+                $query->whereHas('package', function($q) {
+                    $q->where('isOutbound', false);
+                });
+            }
         }
 
         if (isset($filters['search'])) {
@@ -38,12 +51,20 @@ class BookingRepository
             $query->whereYear('startDate', $filters['year']);
         }
 
+        if (isset($filters['date_from']) && $filters['date_from']) {
+            $query->whereDate('startDate', '>=', $filters['date_from']);
+        }
+
+        if (isset($filters['date_to']) && $filters['date_to']) {
+            $query->whereDate('startDate', '<=', $filters['date_to']);
+        }
+
         return $query->latest('createdAt')->paginate($filters['per_page'] ?? 15);
     }
 
     public function find(int $id)
     {
-        return Booking::with(['package', 'car'])->findOrFail($id);
+        return Booking::with(['package'])->findOrFail($id);
     }
 
     public function create(array $data)

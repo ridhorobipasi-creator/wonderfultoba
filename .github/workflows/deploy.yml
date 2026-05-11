@@ -1,19 +1,69 @@
-name: Deploy to cPanel via FTP 🚀
+name: Test & Deploy to Production 🚀
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  PHP_VERSION: '8.3'
 
 jobs:
-  web-deploy:
-    name: 🚚 Deploying to Server
+  # Test Laravel Application
+  tests:
+    name: 🧪 Run Tests & Code Quality
     runs-on: ubuntu-latest
+    
     steps:
-    - name: 🚚 Get latest code
+    - name: 🚀 Checkout code
       uses: actions/checkout@v4
 
-    - name: 📂 Sync files to cPanel
+    - name: 🐘 Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_VERSION }}
+        extensions: pdo, pdo_sqlite, mbstring, openssl, json, tokenizer, xml, fileinfo
+
+    - name: 📦 Install Composer dependencies
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    - name: 🔐 Generate application key
+      run: php artisan key:generate --env=testing
+
+    - name: 🧪 Run Unit Tests
+      run: php artisan test --testsuite=Unit
+
+    - name: 🧪 Run Feature Tests
+      run: php artisan test --testsuite=Feature
+
+    - name: 🎨 Check code style (PSR-12)
+      run: ./vendor/bin/pint --test
+      continue-on-error: true
+
+  # Deploy to Production
+  deploy:
+    name: 🚀 Deploy to Production
+    needs: tests
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚀 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐘 Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_VERSION }}
+        extensions: pdo, pdo_mysql, mbstring, openssl, json, tokenizer, xml, fileinfo
+
+    - name: 📦 Install Composer dependencies
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+    - name: 📂 Deploy via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.FTP_SERVER }}
@@ -43,3 +93,13 @@ jobs:
           PRODUKSI.md
           rekap_project.md
           .github/**
+          .env.example
+          .env.production.example
+          composer.json
+          composer.lock
+          package.json
+          package-lock.json
+          vite.config.js
+
+    - name: 🔔 Deployment Notification
+      run: echo "✅ Deployment completed at $(date)"

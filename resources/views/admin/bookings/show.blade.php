@@ -13,6 +13,9 @@
             <a href="{{ route('admin.bookings.edit', $booking) }}" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition text-sm">
                 <i class="fas fa-edit mr-2"></i> Edit Booking
             </a>
+            <a href="{{ route('invoice.download', $booking->bookingCode) }}" target="_blank" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 hover:shadow-lg transition text-sm">
+                <i class="fas fa-file-pdf mr-2"></i> Invoice
+            </a>
             <form action="{{ route('admin.bookings.status', $booking) }}" method="POST">
                 @csrf
                 @method('PATCH')
@@ -37,7 +40,7 @@
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Service Type</p>
                         <div class="flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3 text-toba-green">
-                                <i class="fas fa-{{ $booking->type === 'package' ? 'box' : 'car' }}"></i>
+                                <i class="fas fa-box"></i>
                             </span>
                             <p class="font-black text-gray-900 uppercase text-sm">{{ $booking->type }}</p>
                         </div>
@@ -48,11 +51,11 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Start Date</p>
-                        <p class="font-bold text-gray-900">{{ $booking->startDate->format('l, d F Y') }}</p>
+                        <p class="font-bold text-gray-900">{{ $booking->startDate ? $booking->startDate->format('l, d F Y') : '-' }}</p>
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">End Date</p>
-                        <p class="font-bold text-gray-900">{{ $booking->endDate->format('l, d F Y') }}</p>
+                        <p class="font-bold text-gray-900">{{ $booking->endDate ? $booking->endDate->format('l, d F Y') : '-' }}</p>
                     </div>
                 </div>
 

@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase">Booking Date</p>
-                        <p class="text-sm font-bold text-gray-900">{{ $booking->startDate->format('d M Y') }}</p>
+                        <p class="text-sm font-bold text-gray-900">{{ $booking->startDate ? $booking->startDate->format('d M Y') : '-' }}</p>
                     </div>
                 </div>
             </div>

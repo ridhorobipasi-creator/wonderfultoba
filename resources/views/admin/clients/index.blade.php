@@ -22,7 +22,7 @@
                     <input type="text" name="name" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green transition text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Logo (PNG/SVG)</label>
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Logo (webp/SVG)</label>
                     <input type="file" name="logo" required class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-toba-green file:text-white hover:file:bg-emerald-600 cursor-pointer">
                 </div>
                 <button type="submit" class="bg-toba-green text-white px-6 py-2.5 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition text-sm">
