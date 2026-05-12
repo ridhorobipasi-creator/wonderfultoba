@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # 1. BLOKIR AKSES KE FOLDER .git (Sangat Penting!)
+    RewriteRule ^\.git - [F,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -26,3 +29,4 @@
     RewriteRule ^storage/logs/(.*)$ - [F,L]
     RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor)/(.*)$ - [F,L]
 </IfModule>
+
