@@ -30,6 +30,13 @@ trait HandlesImageUploads
         $image = null;
 
         try {
+            // Get Image Size without loading to memory
+            $size = @getimagesize($file->getRealPath());
+            if (!$size || $size[0] > 5000 || $size[1] > 5000) {
+                // If resolution is too huge (>5000px), just store without conversion to save RAM
+                return $file->store($directory, 'public');
+            }
+
             switch ($extension) {
                 case 'jpeg':
                 case 'jpg': $image = @\imagecreatefromjpeg($file->getRealPath()); break;
@@ -42,10 +49,6 @@ trait HandlesImageUploads
                     }
                     break;
                 case 'webp': $image = @\imagecreatefromwebp($file->getRealPath()); break;
-                case 'gif':
-                    $image = @\imagecreatefromgif($file->getRealPath());
-                    if ($image) \imagepalettetotruecolor($image);
-                    break;
             }
 
             if ($image) {
@@ -73,6 +76,7 @@ trait HandlesImageUploads
                 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
+                unset($webpData, $thumbData); // Force free memory
 
                 return $path;
             }
