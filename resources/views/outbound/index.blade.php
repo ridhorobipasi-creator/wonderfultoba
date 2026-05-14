@@ -5,16 +5,6 @@
 @section('keywords', $settings['seo_keywords'] ?? 'outbound danau toba, outbound medan, team building toba')
 
 @section('content')
-@php
-    $fixPath = function($path) {
-        if (!$path || $path === 'null') return asset('images/home/tour.webp');
-        if (Str::startsWith($path, ['http', '//'])) return $path;
-        $clean = ltrim($path, '/');
-        if (Str::startsWith($clean, 'assets/')) return asset($clean);
-        $clean = preg_replace('/^storage\//', '', $clean);
-        $clean = ltrim($clean, '/');
-        return asset('storage/' . $clean);
-    };
 @endphp
 
 <div 
@@ -22,9 +12,9 @@
         currentSlide: 0, 
         activeVideoTab: 0,
         heroImages: [
-            '{{ $fixPath($settings['hero_image_url'] ?? null) ?? 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=2000' }}',
-            '{{ $fixPath($settings['about_image_1_url'] ?? null) ?? 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=2000' }}',
-            '{{ $fixPath($settings['about_image_2_url'] ?? null) ?? 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=2000' }}'
+            '{{ imageUrl($settings['hero_image_url'] ?? null) }}',
+            '{{ imageUrl($settings['about_image_1_url'] ?? null) }}',
+            '{{ imageUrl($settings['about_image_2_url'] ?? null) }}'
         ],
         about: {
             title: '{{ $settings['about_hero_title'] ?? 'Apa itu Outbound?' }}',
@@ -153,10 +143,10 @@
 
                 <div class="lg:col-span-5 relative mt-32 lg:mt-0">
                     <div class="relative w-full md:w-4/5 ml-auto md:-right-4 top-0 z-10 rounded-[2.5rem] overflow-hidden shadow-2xl hover:-translate-y-2 transition-transform duration-500">
-                        <img src="{{ $fixPath($settings['about_image_1_url'] ?? null) ?? asset('assets/images/2023/10/A11-Team-Building.webp') }}" alt="Team Building" class="w-full aspect-[4/5] object-cover">
+                        <img src="{{ imageUrl($settings['about_image_1_url'] ?? null, asset('assets/images/2023/10/A11-Team-Building.webp')) }}" alt="Team Building" class="w-full aspect-[4/5] object-cover">
                     </div>
                     <div class="absolute w-3/4 -bottom-12 -left-4 z-20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[6px] border-white hover:scale-105 transition-transform duration-500">
-                        <img src="{{ $fixPath($settings['about_image_2_url'] ?? null) ?? asset('assets/images/2023/10/003-1.webp') }}" alt="Corporate Activity" class="w-full aspect-square object-cover">
+                        <img src="{{ imageUrl($settings['about_image_2_url'] ?? null, asset('assets/images/2023/10/003-1.webp')) }}" alt="Corporate Activity" class="w-full aspect-square object-cover">
                     </div>
                     <div class="absolute top-1/2 -left-8 lg:-left-12 z-30 bg-white/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] border border-white flex items-center gap-4">
                         <div class="bg-gradient-to-br from-toba-green to-emerald-600 text-white w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-2xl shadow-inner shadow-white/20" x-text="about.statsValue"></div>
@@ -171,13 +161,33 @@
     </section>
     @endif
 
+    <!-- Client Portfolio -->
+    @if(count($clients) > 0)
+    <section class="py-20 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="text-center mb-12">
+                <span class="text-toba-green font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Trusted By</span>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Klien Portofolio Kami</h2>
+            </div>
+            
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+                @foreach($clients as $client)
+                <div class="w-32 md:w-40 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110">
+                    <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain">
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     @if($settings['show_services'] ?? true)
     <!-- Layanan Kami -->
     <section id="layanan" class="py-32 bg-[#090e17] relative overflow-hidden">
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-toba-green/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute inset-0 bg-cover bg-center opacity-[0.03] mix-blend-overlay grayscale pointer-events-none"
-             style="background-image: url('{{ $fixPath($settings['services_bg_url'] ?? null) ?? asset('assets/images/2023/10/outbound-hadena-indonesia-experience-1024x723-1-1024x430.webp') }}')"></div>
+             style="background-image: url('{{ imageUrl($settings['services_bg_url'] ?? null, asset('assets/images/2023/10/outbound-hadena-indonesia-experience-1024x723-1-1024x430.webp')) }}')"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
@@ -259,6 +269,36 @@
     @endif
     @endif
 
+    <!-- Lokasi Outbound -->
+    @if(count($locations) > 0)
+    <section id="lokasi" class="py-32 bg-[#f8fafc] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-2xl">
+                    <span class="inline-flex items-center space-x-2 text-toba-green font-black uppercase tracking-[0.3em] text-xs mb-6">
+                        <i class="fas fa-map-marker-alt text-[10px]"></i>
+                        <span>Destinasi Pilihan</span>
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">Lokasi <span class="text-toba-green">Kegiatan</span></h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($locations as $loc)
+                <div class="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all duration-500">
+                    <img src="{{ imageUrl($loc->image) }}" alt="{{ $loc->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-8 left-8 right-8">
+                        <h3 class="text-xl font-black text-white mb-2">{{ $loc->name }}</h3>
+                        <div class="w-8 h-1 bg-toba-green rounded-full group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     <!-- Video Highlights -->
     <section class="py-24 bg-slate-50 border-y border-slate-200">
         <div class="max-w-7xl mx-auto px-4">
@@ -308,6 +348,32 @@
             </div>
         </div>
     </section>
+    
+    <!-- Gallery Foto -->
+    @if(count($gallery) > 0)
+    <section id="gallery" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="text-center mb-20">
+                <span class="inline-flex items-center space-x-2 text-toba-green font-black uppercase tracking-[0.3em] text-xs mb-6 bg-toba-green/10 px-4 py-2 rounded-full">
+                    <i class="fas fa-camera text-[10px]"></i>
+                    <span>Moment Gallery</span>
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">Dokumentasi <span class="text-toba-green">Kegiatan</span></h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach($gallery as $i => $img)
+                <div class="group relative overflow-hidden rounded-[2rem] shadow-lg {{ $i % 5 == 0 ? 'md:col-span-2 md:row-span-2 aspect-square' : 'aspect-square' }}">
+                    <img src="{{ imageUrl($img->imageUrl) }}" alt="{{ $img->caption }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-6 text-center">
+                        <p class="text-white font-bold text-sm">{{ $img->caption }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
 
     @if($settings['show_testimonials'] ?? true)
     <!-- Testimonials -->
@@ -340,7 +406,7 @@
                     </p>
                     <div class="flex items-center gap-5 pt-8 border-t border-slate-200/60">
                         <div class="w-16 h-16 rounded-2xl bg-white shadow-sm overflow-hidden border border-slate-100">
-                            <img src="{{ $fixPath($t['image'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=10b981&color=fff'">
+                            <img src="{{ imageUrl($t['image'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=10b981&color=fff'">
                         </div>
                         <div>
                             <h4 class="font-black text-slate-900 text-lg leading-none mb-2">{{ $t['name'] }}</h4>
@@ -355,6 +421,87 @@
 
 
     @endif
+
+    <!-- Form Minta Penawaran -->
+    <section id="penawaran" class="py-32 bg-slate-50 border-y border-slate-100">
+        <div class="max-w-4xl mx-auto px-6">
+            @if(session('success'))
+                <div class="mb-8 p-8 bg-emerald-500 text-white rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <p class="font-black uppercase tracking-widest text-xs opacity-80 mb-1">Berhasil!</p>
+                            <p class="font-bold text-lg leading-tight">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                    @if(session('whatsappUrl'))
+                        <a href="{{ session('whatsappUrl') }}" target="_blank" class="px-8 py-4 bg-white text-emerald-600 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-emerald-50 transition-colors shadow-lg">
+                            Konfirmasi WhatsApp
+                        </a>
+                    @endif
+                </div>
+            @endif
+
+            <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
+                <div class="bg-toba-green p-12 text-white text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-black mb-4">Minta Penawaran</h2>
+                        <p class="text-emerald-100 font-medium">Dapatkan penawaran harga terbaik yang disesuaikan dengan kebutuhan instansi Anda.</p>
+                    </div>
+                </div>
+                
+                <form action="{{ route('outbound.quote.submit') }}" method="POST" class="p-12 space-y-8">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Nama Instansi/Perusahaan/PIC</label>
+                            <input type="text" name="company_name" required placeholder="Contoh: PT. Maju Bersama / Bapak Heru" 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Jumlah Peserta</label>
+                            <input type="number" name="participants" required placeholder="Contoh: 50" 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Lokasi Kegiatan</label>
+                            <input type="text" name="location" required placeholder="Contoh: Danau Toba / Medan" 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Jenis Kegiatan</label>
+                            <select name="activity_type" required 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium appearance-none">
+                                <option value="" disabled selected>Pilih Jenis Kegiatan</option>
+                                <option value="Team Building">Team Building</option>
+                                <option value="Fun Games">Fun Games</option>
+                                <option value="Outbound Kids">Outbound Kids</option>
+                                <option value="Family Gathering">Family Gathering</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Estimasi Tanggal</label>
+                            <input type="date" name="estimated_date" required 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">No. Whatsapp</label>
+                            <input type="tel" name="whatsapp" required placeholder="Contoh: 081234567890" 
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-5 bg-toba-green text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-toba-green/20 hover:bg-emerald-600 transition-all transform hover:-translate-y-1">
+                        Kirim Permintaan Penawaran
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
 
     @if($settings['show_stats'] ?? true)
     <!-- Stats Section -->
@@ -396,7 +543,7 @@
                     <div class="bg-white/10 p-6 rounded-[2rem] border border-white/20">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 rounded-full border-2 border-toba-green overflow-hidden shrink-0">
-                                <img src="{{ $fixPath($settings['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
+                                <img src="{{ imageUrl($settings['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
                             </div>
                             <div>
                                 <p class="text-[9px] font-black text-toba-green uppercase tracking-[0.2em]">{{ $settings['specialist_title'] ?? 'Corporate Expert' }}</p>

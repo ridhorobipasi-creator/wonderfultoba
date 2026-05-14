@@ -316,5 +316,45 @@ class PublicController extends Controller
         return view('pages.privacy', compact('content', 'siteSettings'));
     }
 
+    public function submitQuote(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'company_name' => 'required|string|max:255',
+                'participants' => 'required|string|max:255',
+                'location' => 'required|string|max:255',
+                'activity_type' => 'required|string|max:255',
+                'estimated_date' => 'required|date',
+                'whatsapp' => 'required|string|max:255',
+            ]);
+
+            // Construct WhatsApp Message
+            $waMessage = "*PERMINTAAN PENAWARAN OUTBOUND*\n\n" .
+                         "Nama Instansi/PIC: " . $validated['company_name'] . "\n" .
+                         "Jumlah Peserta: " . $validated['participants'] . "\n" .
+                         "Lokasi Kegiatan: " . $validated['location'] . "\n" .
+                         "Jenis Kegiatan: " . $validated['activity_type'] . "\n" .
+                         "Estimasi Tanggal: " . date('d F Y', strtotime($validated['estimated_date'])) . "\n" .
+                         "WhatsApp: " . $validated['whatsapp'] . "\n\n" .
+                         "Mohon segera dibuatkan penawarannya. Terima kasih!";
+
+            $settings = Setting::where('key', 'cms_outbound')->first()?->value ?? [];
+            $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
+            $waNumber = preg_replace('/[^0-9]/', '', $settings['cta_whatsapp_number'] ?? $genSettings['whatsapp'] ?? '6281323888207');
+            
+            $waUrl = "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
+
+            // Here you could also send an email if needed
+            // Mail::to($settings['contact_email'] ?? 'hello@wonderfultoba.id')->send(new QuoteRequestMail($validated));
+
+            return back()->with([
+                'success' => 'Permintaan penawaran berhasil dikirim! Klik tombol di bawah untuk konfirmasi via WhatsApp.',
+                'whatsappUrl' => $waUrl
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Quote Submission Error: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengirim permintaan penawaran.');
+        }
+    }
 }
 
