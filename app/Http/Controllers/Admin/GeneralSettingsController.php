@@ -29,13 +29,13 @@ class GeneralSettingsController extends Controller
 
         // Handle File Uploads
         if ($request->hasFile('logo_light_file')) {
-            $data['logo_light_url'] = $this->uploadAndConvert($request->file('logo_light_file'), 'branding');
+            $data['logo_light_url'] = $this->uploadAndIndex($request->file('logo_light_file'), 'branding', 'branding');
         }
         if ($request->hasFile('logo_dark_file')) {
-            $data['logo_dark_url'] = $this->uploadAndConvert($request->file('logo_dark_file'), 'branding');
+            $data['logo_dark_url'] = $this->uploadAndIndex($request->file('logo_dark_file'), 'branding', 'branding');
         }
         if ($request->hasFile('icon_file')) {
-            $data['icon_url'] = $this->uploadAndConvert($request->file('icon_file'), 'branding');
+            $data['icon_url'] = $this->uploadAndIndex($request->file('icon_file'), 'branding', 'branding');
         }
 
         // Handle Media Library Selections
