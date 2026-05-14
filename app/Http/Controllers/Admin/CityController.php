@@ -80,11 +80,10 @@ class CityController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         
         if ($request->hasFile('image')) {
-            $path = $this->uploadAndConvert($request->file('image'), 'cities');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'cities', 'destinations', $validated['name']);
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
         
         $regency = Regency::with('province')->find($validated['regency_id']);
@@ -127,14 +126,10 @@ class CityController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            if ($city->image) {
-                Storage::disk('public')->delete($city->image);
-            }
-            $path = $this->uploadAndConvert($request->file('image'), 'cities');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'cities', 'destinations', $validated['name']);
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
 
         if ($validated['name'] !== $city->name) {

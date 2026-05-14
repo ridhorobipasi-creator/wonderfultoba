@@ -26,12 +26,12 @@ class SettingController extends Controller
             if (is_array($files)) {
                 foreach ($files as $subKey => $file) {
                     if ($file instanceof \Illuminate\Http\UploadedFile) {
-                        $path = $this->uploadAndConvert($file, 'branding');
+                        $path = $this->uploadAndIndex($file, 'branding', 'branding');
                         $data[$key][$subKey . '_url'] = $path;
                     }
                 }
             } else if ($files instanceof \Illuminate\Http\UploadedFile) {
-                $path = $this->uploadAndConvert($files, 'branding');
+                $path = $this->uploadAndIndex($files, 'branding', 'branding');
                 // If the key is 'general', we might want to store it as 'logo_url' inside general
                 $data[$key . '_url'] = $path;
             }
