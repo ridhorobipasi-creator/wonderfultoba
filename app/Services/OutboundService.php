@@ -2,105 +2,34 @@
 
 namespace App\Services;
 
-use App\Models\Client;
-use App\Models\GalleryImage;
-use App\Models\OutboundLocation;
-use App\Models\OutboundService as OutboundServiceModel;
-use App\Models\OutboundVideo;
-use App\Models\Package;
-use App\Models\PackageTier;
 use App\Models\Setting;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class OutboundService
 {
     /**
-     * Get outbound landing page settings
+     * Process an outbound quote request and generate WA Message.
+     *
+     * @param array $data
+     * @return string WhatsApp URL
      */
-    public function getOutboundSettings(): array
+    public function processQuoteRequest(array $data)
     {
-        return Setting::where('key', 'cms_outbound')->first()?->value ?? [];
-    }
+        // 1. Construct WhatsApp Message
+        $waMessage = "*PERMINTAAN PENAWARAN OUTBOUND*\n\n" .
+                     "Nama Instansi/PIC: " . $data['company_name'] . "\n" .
+                     "Jumlah Peserta: " . $data['participants'] . "\n" .
+                     "Lokasi Kegiatan: " . $data['location'] . "\n" .
+                     "Jenis Kegiatan: " . $data['activity_type'] . "\n" .
+                     "Estimasi Tanggal: " . date('d F Y', strtotime($data['estimated_date'])) . "\n" .
+                     "WhatsApp: " . $data['whatsapp'] . "\n\n" .
+                     "Mohon segera dibuatkan penawarannya. Terima kasih!";
 
-    /**
-     * Get all active outbound packages
-     */
-    public function getPackages(): Collection
-    {
-        return Package::where('status', 'active')
-            ->where('isOutbound', true)
-            ->get();
-    }
-
-    /**
-     * Get featured/pinned outbound packages
-     */
-    public function getFeaturedPackages($limit = 3): Collection
-    {
-        $settings = $this->getOutboundSettings();
-        $pinnedIds = $settings['featured_package_ids'] ?? [];
-
-        if (!empty($pinnedIds)) {
-            return Package::whereIn('id', (array)$pinnedIds)
-                ->where('status', 'active')
-                ->where('isOutbound', true)
-                ->get();
-        }
-
-        return Package::where('status', 'active')
-            ->where('isOutbound', true)
-            ->where('isFeatured', true)
-            ->latest()
-            ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Get outbound-specific services
-     */
-    public function getServices(): Collection
-    {
-        return OutboundServiceModel::all();
-    }
-
-    /**
-     * Get video highlights
-     */
-    public function getVideos(): Collection
-    {
-        return OutboundVideo::all();
-    }
-
-    /**
-     * Get outbound locations
-     */
-    public function getLocations(): Collection
-    {
-        return OutboundLocation::all();
-    }
-
-    /**
-     * Get corporate clients
-     */
-    public function getClients(): Collection
-    {
-        return Client::all();
-    }
-
-    /**
-     * Get outbound gallery
-     */
-    public function getGallery(): Collection
-    {
-        return GalleryImage::where('category', 'outbound')->get();
-    }
-
-    /**
-     * Get service tiers
-     */
-    public function getTiers(): Collection
-    {
-        return PackageTier::all();
+        // 2. Get Admin Phone Number from Settings
+        $settings = Setting::where('key', 'cms_outbound')->first()?->value ?? [];
+        $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
+        $waNumber = preg_replace('/[^0-9]/', '', $settings['cta_whatsapp_number'] ?? $genSettings['whatsapp'] ?? '6281323888207');
+        
+        return "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
     }
 }
