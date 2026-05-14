@@ -21,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Fix for cPanel Uploads: Auto create storage link if not exists
+        if (!file_exists(public_path('storage')) && function_exists('symlink')) {
+            @symlink(storage_path('app/public'), public_path('storage'));
+        }
+
         // Register Observers
         \App\Models\Package::observe(\App\Observers\PackageObserver::class);
         \App\Models\Blog::observe(\App\Observers\BlogObserver::class);

@@ -148,6 +148,7 @@ Route::prefix('outbound')->name('outbound.')->group(function() {
     Route::get('/', [App\Http\Controllers\PublicController::class, 'outbound'])->name('index');
     Route::get('/packages', [App\Http\Controllers\PublicController::class, 'outboundPackages'])->name('packages');
     Route::get('/blog', [App\Http\Controllers\PublicController::class, 'outboundBlog'])->name('blog');
+    Route::post('/quote/submit', [App\Http\Controllers\PublicController::class, 'submitQuote'])->name('quote.submit');
 });
 
 // Other Public Pages
