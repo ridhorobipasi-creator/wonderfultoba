@@ -104,4 +104,20 @@ class TourService
             'alt_text' => $packageName
         ]);
     }
+
+    /**
+     * Clear tour related cache.
+     */
+    public function clearCache($slug = null)
+    {
+        \Illuminate\Support\Facades\Cache::forget('tour_packages_all');
+        \Illuminate\Support\Facades\Cache::forget('featured_packages');
+        
+        if ($slug) {
+            \Illuminate\Support\Facades\Cache::forget("package_detail_{$slug}");
+        }
+
+        \Illuminate\Support\Facades\Log::info("Cache cleared for " . ($slug ?? 'all packages'));
+        return true;
+    }
 }

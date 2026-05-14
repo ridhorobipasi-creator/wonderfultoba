@@ -334,6 +334,8 @@ class PublicController extends Controller
                 'success' => 'Permintaan penawaran berhasil dikirim! Klik tombol di bawah untuk konfirmasi via WhatsApp.',
                 'whatsappUrl' => $waUrl
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             Log::error('Quote Submission Error: ' . $e->getMessage());
             return back()->with('error', 'Gagal mengirim permintaan penawaran.');
