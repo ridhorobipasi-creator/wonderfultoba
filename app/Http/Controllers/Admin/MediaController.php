@@ -128,18 +128,10 @@ class MediaController extends Controller
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $path = $this->uploadAndConvert($file, 'gallery/' . $category);
+                $path = $this->uploadAndIndex($file, 'gallery/' . $category, $category);
                 
                 if ($path) {
-                    $media = Media::create([
-                        'filename' => basename($path),
-                        'original_name' => $file->getClientOriginalName(),
-                        'path' => $path,
-                        'category' => $category,
-                        'mime_type' => $file->getClientMimeType(),
-                        'size' => $file->getSize(),
-                    ]);
-                    $uploadedMedia[] = $media;
+                    $uploadedMedia[] = \App\Models\Media::where('path', $path)->first();
                 }
             }
         }

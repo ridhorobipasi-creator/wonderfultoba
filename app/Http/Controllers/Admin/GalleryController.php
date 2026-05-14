@@ -64,20 +64,10 @@ class GalleryController extends Controller
         $uploaded = 0;
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                // Convert to WebP and resize
-                $path = $this->uploadAndConvert($file, 'gallery');
+                // Convert to WebP, resize, and Index into Media Library
+                $path = $this->uploadAndIndex($file, 'gallery', $request->category, $file->getClientOriginalName());
 
                 if ($path) {
-                    // Sempurnakan: Index into Media Library
-                    \App\Models\Media::create([
-                        'filename' => basename($path),
-                        'original_name' => $file->getClientOriginalName(),
-                        'path' => $path,
-                        'category' => 'gallery',
-                        'mime_type' => $file->getClientMimeType(),
-                        'size' => $file->getSize(),
-                    ]);
-
                     $img = GalleryImage::create([
                         'caption' => $file->getClientOriginalName(),
                         'category' => $request->category,

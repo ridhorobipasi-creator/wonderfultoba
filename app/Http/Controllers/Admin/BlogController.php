@@ -61,20 +61,7 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $this->uploadAndConvert($request->file('image'), 'blogs');
-            
-            // Sempurnakan: Index into Media Library
-            \App\Models\Media::create([
-                'filename' => basename($path),
-                'original_name' => $request->file('image')->getClientOriginalName(),
-                'path' => $path,
-                'category' => 'blog',
-                'mime_type' => $request->file('image')->getClientMimeType(),
-                'size' => $request->file('image')->getSize(),
-                'alt_text' => $validated['title']
-            ]);
-
-            $validated['image'] = $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'blogs', 'blog', $validated['title']);
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->image_url;
         }
@@ -113,20 +100,7 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $this->uploadAndConvert($request->file('image'), 'blogs');
-            
-            // Sempurnakan: Index into Media Library
-            \App\Models\Media::create([
-                'filename' => basename($path),
-                'original_name' => $request->file('image')->getClientOriginalName(),
-                'path' => $path,
-                'category' => 'blog',
-                'mime_type' => $request->file('image')->getClientMimeType(),
-                'size' => $request->file('image')->getSize(),
-                'alt_text' => $validated['title']
-            ]);
-
-            $validated['image'] = $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'blogs', 'blog', $validated['title']);
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->image_url;
         }

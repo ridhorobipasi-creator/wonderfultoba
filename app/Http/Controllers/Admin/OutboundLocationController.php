@@ -27,11 +27,10 @@ class OutboundLocationController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $this->uploadAndConvert($request->file('image'), 'outbound/locations');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/locations', 'outbound');
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
 
         OutboundLocation::create($validated);
@@ -49,13 +48,12 @@ class OutboundLocationController extends Controller
 
         if ($request->hasFile('image')) {
             if ($location->image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $location->image));
+                Storage::disk('public')->delete($location->image);
             }
-            $path = $this->uploadAndConvert($request->file('image'), 'outbound/locations');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/locations', 'outbound');
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
 
         $location->update($validated);
