@@ -63,7 +63,7 @@ class PackageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, \App\Services\TourService $tourService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -82,64 +82,18 @@ class PackageController extends Controller
             'itinerary' => 'nullable|array',
             'cost_price' => 'nullable|numeric|min:0',
             'includes' => 'nullable|array',
-            'includes.*' => 'nullable|string|max:255',
             'excludes' => 'nullable|array',
-            'excludes.*' => 'nullable|string|max:255',
+            'media_ids' => 'nullable|array',
         ]);
 
         try {
-            return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $validated) {
-                // Sanitize: remove empty items from includes/excludes
-                $validated['includes'] = array_values(array_filter($request->input('includes', []), fn($v) => !empty(trim((string)$v))));
-                $validated['excludes'] = array_values(array_filter($request->input('excludes', []), fn($v) => !empty(trim((string)$v))));
+            $validated['image_files'] = $request->file('images');
+            $package = $tourService->savePackage($validated);
 
-                $validated['images'] = [];
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        $path = $this->uploadAndConvert($image, 'packages');
-                        
-                        // Index into Media Library
-                        \App\Models\Media::create([
-                            'filename' => basename($path),
-                            'original_name' => $image->getClientOriginalName(),
-                            'path' => $path,
-                            'category' => 'packages',
-                            'mime_type' => $image->getClientMimeType(),
-                            'size' => $image->getSize(),
-                            'alt_text' => $validated['name']
-                        ]);
+            $this->logActivity('created', "Created new package: {$package->name}", $package);
+            \App\Http\Controllers\Api\SyncController::triggerSync();
 
-                        $validated['images'][] = $path;
-                    }
-                }
-
-                // Handle images from Media Library
-                if ($request->filled('media_ids')) {
-                    $mediaItems = \App\Models\Media::whereIn('id', $request->media_ids)->get();
-                    foreach ($mediaItems as $item) {
-                        $validated['images'][] = $item->path;
-                    }
-                }
-
-                // Generate slug
-                $validated['slug'] = Str::slug($validated['name']);
-
-                $package = Package::create($validated);
-
-                // Sync with relational PackageImage table for new frontend
-                foreach ($validated['images'] as $index => $imgPath) {
-                    $package->packageImages()->create([
-                        'image_path' => $imgPath,
-                        'sort_order' => $index
-                    ]);
-                }
-
-                $this->logActivity('created', "Created new package: {$package->name}", $package);
-                \App\Http\Controllers\Api\SyncController::triggerSync();
-
-                return redirect()->route('admin.packages.index')
-                    ->with('success', 'Package created successfully!');
-            });
+            return redirect()->route('admin.packages.index')->with('success', 'Package created successfully!');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Package Creation Failed: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Failed to create package. ' . $e->getMessage());
@@ -147,27 +101,9 @@ class PackageController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Package $package)
-    {
-        $package->load('city');
-        return view('admin.packages.show', compact('package'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Package $package)
-    {
-        $cities = City::orderBy('name')->get();
-        return view('admin.packages.edit', compact('package', 'cities'));
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Package $package)
+    public function update(Request $request, Package $package, \App\Services\TourService $tourService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -187,78 +123,18 @@ class PackageController extends Controller
             'itinerary' => 'nullable|array',
             'cost_price' => 'nullable|numeric|min:0',
             'includes' => 'nullable|array',
-            'includes.*' => 'nullable|string|max:255',
             'excludes' => 'nullable|array',
-            'excludes.*' => 'nullable|string|max:255',
+            'media_ids' => 'nullable|array',
         ]);
 
         try {
-            return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $package, $validated) {
-                // Sanitize: remove empty items from includes/excludes
-                $validated['includes'] = array_values(array_filter($request->input('includes', []), fn($v) => !empty(trim((string)$v))));
-                $validated['excludes'] = array_values(array_filter($request->input('excludes', []), fn($v) => !empty(trim((string)$v))));
+            $validated['image_files'] = $request->file('images');
+            $tourService->savePackage($validated, $package);
 
-                $currentImages = $package->images ?? [];
-                if ($request->filled('remove_images')) {
-                    foreach ($request->remove_images as $imgToRemove) {
-                        if (($key = array_search($imgToRemove, $currentImages)) !== false) {
-                            unset($currentImages[$key]);
-                            Storage::disk('public')->delete($imgToRemove);
-                        }
-                    }
-                }
+            $this->logActivity('updated', "Updated package: {$package->name}", $package);
+            \App\Http\Controllers\Api\SyncController::triggerSync();
 
-                // Handle New Image Uploads
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        $path = $this->uploadAndConvert($image, 'packages');
-
-                        // Index into Media Library
-                        \App\Models\Media::create([
-                            'filename' => basename($path),
-                            'original_name' => $image->getClientOriginalName(),
-                            'path' => $path,
-                            'category' => 'packages',
-                            'mime_type' => $image->getClientMimeType(),
-                            'size' => $image->getSize(),
-                            'alt_text' => $validated['name']
-                        ]);
-
-                        $currentImages[] = $path;
-                    }
-                }
-
-                // Handle images from Media Library
-                if ($request->filled('media_ids')) {
-                    $mediaItems = \App\Models\Media::whereIn('id', $request->media_ids)->get();
-                    foreach ($mediaItems as $item) {
-                        $currentImages[] = $item->path;
-                    }
-                }
-                $validated['images'] = array_values($currentImages);
-
-                // Update slug if name changed
-                if ($validated['name'] !== $package->name) {
-                    $validated['slug'] = Str::slug($validated['name']);
-                }
-
-                $package->update($validated);
-
-                // Sync with relational PackageImage table for new frontend
-                $package->packageImages()->delete();
-                foreach ($validated['images'] as $index => $imgPath) {
-                    $package->packageImages()->create([
-                        'image_path' => $imgPath,
-                        'sort_order' => $index
-                    ]);
-                }
-
-                $this->logActivity('updated', "Updated package: {$package->name}", $package);
-                \App\Http\Controllers\Api\SyncController::triggerSync();
-
-                return redirect()->route('admin.packages.index')
-                    ->with('success', 'Package updated successfully!');
-            });
+            return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully!');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Package Update Failed: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Failed to update package. ' . $e->getMessage());
@@ -268,23 +144,15 @@ class PackageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Package $package)
+    public function destroy(Package $package, \App\Services\TourService $tourService)
     {
-        // Delete all images
-        if ($package->images) {
-            foreach ($package->images as $image) {
-                Storage::disk('public')->delete($image);
-            }
-        }
-        
         $name = $package->name;
-        $package->delete();
+        $tourService->deletePackage($package);
 
         $this->logActivity('deleted', "Deleted package: {$name}");
         \App\Http\Controllers\Api\SyncController::triggerSync();
 
-        return redirect()->route('admin.packages.index')
-            ->with('success', 'Package deleted successfully!');
+        return redirect()->route('admin.packages.index')->with('success', 'Package deleted successfully!');
     }
 
     public function bulkDestroy(Request $request)
