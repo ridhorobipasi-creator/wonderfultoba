@@ -1,0 +1,6 @@
+[12-May-2026 07:10:26 Asia/Jakarta] PHP Warning:  require(/home/wony7598/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/wony7598/public_html/public/index.php on line 14
+[12-May-2026 07:10:26 Asia/Jakarta] PHP Warning:  require(/home/wony7598/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/wony7598/public_html/public/index.php on line 14
+[12-May-2026 07:10:26 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/wony7598/public_html/public/../vendor/autoload.php' (include_path='.:/opt/alt/php85/usr/share/pear:/opt/alt/php85/usr/share/php:/usr/share/pear:/usr/share/php') in /home/wony7598/public_html/public/index.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/wony7598/public_html/public/index.php on line 14
