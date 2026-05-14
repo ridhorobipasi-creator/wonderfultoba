@@ -1,2 +1,8 @@
+# Allow all files in this directory
+!*
 !.gitignore
-!2026/
+
+# Exclude large zip files to keep git light
+*.zip
+*.tar.gz
+*.rar
