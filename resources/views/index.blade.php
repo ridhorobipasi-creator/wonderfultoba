@@ -9,7 +9,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Deferred -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
     <style>
         .split-overlay {
             background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
@@ -77,7 +81,7 @@
                     {{ $content['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-600 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-500/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-700 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-500/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
                         Jelajahi Outbound
                     </a>
                     <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
@@ -115,7 +119,7 @@
                     <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
                         <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500"></i>
                     </div>
-                    <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-500 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-400/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-800 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-400/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
                         Jelajahi Wisata
                     </a>
                 </div>

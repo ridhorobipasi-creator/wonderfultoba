@@ -9,11 +9,11 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand Colors - Wonderful Toba */
-  --color-toba-green: #15803d;      /* Hijau utama */
-  --color-toba-accent: #22c55e;     /* Hijau aksen/terang */
+  /* Brand Colors - Wonderful Toba (Darkened for Accessibility) */
+  --color-toba-green: #166534;      /* Emerald 800 - Lebih kontras */
+  --color-toba-accent: #15803d;     /* Emerald 700 - Lebih solid */
   --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
-  --color-toba-blue: #005696;       /* Biru (untuk elemen sekunder) */
+  --color-toba-blue: #075985;       /* Sky 800 */
   /* Premium Shadows */
   --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-glass: 0 8px 32px 0 rgba(15, 23, 42, 0.1);
