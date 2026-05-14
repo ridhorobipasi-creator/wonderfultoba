@@ -25,11 +25,11 @@ class ClientController extends Controller
             'website' => 'nullable|url',
         ]);
 
-        $path = $this->uploadAndConvert($request->file('logo'), 'clients');
+        $path = $this->uploadAndIndex($request->file('logo'), 'clients', 'branding');
 
         Client::create([
             'name' => $request->name,
-            'logo' => '/storage/' . $path,
+            'logo' => $path,
             'website' => $request->website,
             'sortOrder' => Client::max('sortOrder') + 1
         ]);

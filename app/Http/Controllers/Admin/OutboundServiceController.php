@@ -29,11 +29,10 @@ class OutboundServiceController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $this->uploadAndConvert($request->file('image'), 'outbound/services');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/services', 'outbound');
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
 
         $validated['orderPriority'] = OutboundService::max('orderPriority') + 1;
@@ -55,13 +54,12 @@ class OutboundServiceController extends Controller
 
         if ($request->hasFile('image')) {
             if ($service->image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $service->image));
+                Storage::disk('public')->delete($service->image);
             }
-            $path = $this->uploadAndConvert($request->file('image'), 'outbound/services');
-            $validated['image'] = '/storage/' . $path;
+            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/services', 'outbound');
         } elseif ($request->filled('media_id')) {
             $media = \App\Models\Media::find($request->media_id);
-            $validated['image'] = '/storage/' . $media->path;
+            $validated['image'] = $media->path;
         }
 
         $service->update($validated);

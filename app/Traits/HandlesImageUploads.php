@@ -8,15 +8,48 @@ use Illuminate\Support\Str;
 trait HandlesImageUploads
 {
     /**
-     * Upload an image and convert it to WebP.
+     * Upload an image, convert to WebP, generate thumbnail, and optionally index to Media Library.
      *
      * @param \Illuminate\Http\UploadedFile $file
      * @param string $directory
-     * @param int $quality
-     * @return string|false Path to the uploaded file relative to storage/public
+     * @param string|null $category For Media Library
+     * @param string|null $altText For Media Library
+     * @return string Path to the file relative to storage/public
      */
+    protected function uploadAndIndex($file, $directory = 'uploads', $category = null, $altText = null)
+    {
+        $path = $this->uploadAndConvert($file, $directory);
+        
+        if ($path) {
+            // Automatically index to Media Library if category is provided or if we want global tracking
+            \App\Models\Media::updateOrCreate(
+                ['path' => $path],
+                [
+                    'filename' => basename($path),
+                    'original_name' => $file->getClientOriginalName(),
+                    'category' => $category ?? $directory,
+                    'mime_type' => 'image/webp',
+                    'size' => Storage::disk('public')->size($path),
+                    'alt_text' => $altText
+                ]
+            );
+        }
+
+        return $path;
+    }
+
     protected function uploadAndConvert($file, $directory = 'uploads', $quality = 80)
     {
+        // Ensure directory exists
+        if (!Storage::disk('public')->exists($directory)) {
+            Storage::disk('public')->makeDirectory($directory);
+        }
+        
+        // Ensure thumbnails directory exists
+        if (!Storage::disk('public')->exists($directory . '/thumbnails')) {
+            Storage::disk('public')->makeDirectory($directory . '/thumbnails');
+        }
+
         // Fallback if GD extension is not loaded
         if (!extension_loaded('gd')) {
             return $file->store($directory, 'public');
@@ -30,10 +63,11 @@ trait HandlesImageUploads
         $image = null;
 
         try {
-            // Get Image Size without loading to memory
+            @ini_set('memory_limit', '256M');
+            @set_time_limit(300);
+
             $size = @getimagesize($file->getRealPath());
             if (!$size || $size[0] > 5000 || $size[1] > 5000) {
-                // If resolution is too huge (>5000px), just store without conversion to save RAM
                 return $file->store($directory, 'public');
             }
 
@@ -52,13 +86,12 @@ trait HandlesImageUploads
             }
 
             if ($image) {
-                // 1. Save Full Size
                 ob_start();
                 \imagewebp($image, null, $quality);
                 $webpData = ob_get_clean();
                 Storage::disk('public')->put($path, $webpData);
 
-                // 2. Save Thumbnail (400px width)
+                // Thumbnail
                 $width = imagesx($image);
                 $height = imagesy($image);
                 $targetWidth = 400;
@@ -76,11 +109,12 @@ trait HandlesImageUploads
                 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
-                unset($webpData, $thumbData); // Force free memory
+                unset($webpData, $thumbData);
 
                 return $path;
             }
         } catch (\Exception $e) {
+            \Log::error('Upload Error: ' . $e->getMessage());
             return $file->store($directory, 'public');
         }
 

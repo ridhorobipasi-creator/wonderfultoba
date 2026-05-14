@@ -44,9 +44,8 @@ class TourService
         // 4. Handle New File Uploads
         if (isset($data['image_files']) && is_array($data['image_files'])) {
             foreach ($data['image_files'] as $file) {
-                $path = $this->uploadAndConvert($file, 'packages');
+                $path = $this->uploadAndIndex($file, 'packages', 'packages', $data['name']);
                 if ($path) {
-                    $this->indexToMedia($path, $file->getClientOriginalName(), $data['name']);
                     $currentImages[] = $path;
                 }
             }

@@ -63,17 +63,7 @@ class CMSController extends Controller
                         if (!isset($targetData[$key])) $targetData[$key] = [];
                         $processFiles($file, $targetData[$key]);
                     } else if ($file instanceof \Illuminate\Http\UploadedFile) {
-                        $path = $this->uploadAndConvert($file, 'cms');
-                        
-                        // Sempurnakan: Index into Media Library automatically for reuse
-                        \App\Models\Media::create([
-                            'filename' => basename($path),
-                            'original_name' => $file->getClientOriginalName(),
-                            'path' => $path,
-                            'category' => 'cms_upload',
-                            'mime_type' => $file->getClientMimeType(),
-                            'size' => $file->getSize(),
-                        ]);
+                        $path = $this->uploadAndIndex($file, 'cms', 'cms_upload');
 
                         // Handle path convention for settings JSON
                         $savedPath = $path; // We'll keep path relative to storage
