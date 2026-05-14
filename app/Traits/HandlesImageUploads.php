@@ -30,6 +30,7 @@ trait HandlesImageUploads
                     'category' => $category ?? $directory,
                     'mime_type' => 'image/webp',
                     'size' => Storage::disk('public')->size($path),
+                    'thumb' => $directory . '/thumbnails/' . basename($path),
                     'alt_text' => $altText
                 ]
             );
@@ -63,11 +64,12 @@ trait HandlesImageUploads
         $image = null;
 
         try {
-            @ini_set('memory_limit', '256M');
-            @set_time_limit(300);
+            // INCREASE LIMITS FOR LARGE IMAGES
+            @ini_set('memory_limit', '512M');
+            @set_time_limit(600);
 
             $size = @getimagesize($file->getRealPath());
-            if (!$size || $size[0] > 5000 || $size[1] > 5000) {
+            if (!$size || $size[0] > 6000 || $size[1] > 6000) {
                 return $file->store($directory, 'public');
             }
 
@@ -91,7 +93,7 @@ trait HandlesImageUploads
                 $webpData = ob_get_clean();
                 Storage::disk('public')->put($path, $webpData);
 
-                // Thumbnail
+                // Thumbnail (400px width)
                 $width = imagesx($image);
                 $height = imagesy($image);
                 $targetWidth = 400;
@@ -109,7 +111,7 @@ trait HandlesImageUploads
                 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
-                unset($webpData, $thumbData);
+                unset($webpData, $thumbData, $image, $thumbImg);
 
                 return $path;
             }
