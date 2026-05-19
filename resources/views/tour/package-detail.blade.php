@@ -202,6 +202,100 @@
                             </div>
                         </div>
                     @else
+                    @if($package->isOutbound)
+                    <!-- Premium Outbound / Corporate Quote Form -->
+                    <form action="{{ route('outbound.quote.submit') }}" method="POST" class="relative z-10" @submit="isSubmitting = true">
+                        @csrf
+                        <input type="hidden" name="activity_type" value="Team Building">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mb-12">
+                            <!-- Nama Instansi -->
+                            <div class="space-y-4 md:col-span-2">
+                                <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                    <i class="fas fa-building text-slate-300"></i> Nama Instansi / Perusahaan / PIC <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="company_name" required value="{{ old('company_name') }}" placeholder="Contoh: PT. Maju Bersama / Bapak Heru" 
+                                        class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('company_name') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
+                                </div>
+                                @error('company_name') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- WhatsApp PIC -->
+                            <div class="space-y-4">
+                                <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                    <i class="fab fa-whatsapp text-slate-300"></i> No. WhatsApp PIC <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="tel" name="whatsapp" required value="{{ old('whatsapp') }}" placeholder="0812-xxxx-xxxx" 
+                                        class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('whatsapp') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
+                                </div>
+                                @error('whatsapp') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Jumlah Peserta -->
+                            <div class="space-y-4">
+                                <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                    <i class="fas fa-users text-slate-300"></i> Estimasi Jumlah Peserta <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="number" name="participants" required min="1" value="{{ old('participants') }}" placeholder="Jumlah orang" 
+                                        class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('participants') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
+                                    <div class="absolute right-6 top-1/2 -translate-y-1/2 px-4 py-2 bg-slate-200/50 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest pointer-events-none">
+                                        Orang
+                                    </div>
+                                </div>
+                                @error('participants') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Lokasi Kegiatan -->
+                            <div class="space-y-4">
+                                <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                    <i class="fas fa-map-marker-alt text-slate-300"></i> Pilihan Lokasi Kegiatan <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="location" required value="{{ old('location', $city->name ?? $package->locationTag ?? '') }}" placeholder="Contoh: Danau Toba / Medan" 
+                                        class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('location') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
+                                </div>
+                                @error('location') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Tanggal -->
+                            <div class="space-y-4">
+                                <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                    <i class="fas fa-calendar-alt text-slate-300"></i> Estimasi Tanggal <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="date" name="estimated_date" required value="{{ old('estimated_date') }}" 
+                                        class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('estimated_date') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 uppercase">
+                                </div>
+                                @error('estimated_date') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
+                            </div>
+                        </div>
+
+                        <div class="max-w-2xl mx-auto pt-4">
+                            <button 
+                                type="submit" 
+                                :disabled="isSubmitting"
+                                class="w-full h-[5.5rem] bg-toba-green text-white rounded-[2.5rem] font-black text-sm md:text-base uppercase tracking-[0.4em] hover:bg-slate-900 hover:-translate-y-2 active:scale-95 transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.4)] flex items-center justify-center gap-6 group overflow-hidden relative border border-emerald-500"
+                            >
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+                                
+                                <div x-show="!isSubmitting" class="relative z-10 flex items-center justify-center gap-6 w-full px-10">
+                                    <span class="flex-1 text-center md:pl-16">MINTA PENAWARAN HARGA</span>
+                                    <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-toba-green transition-all duration-500 group-hover:translate-x-4 shadow-sm">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </div>
+
+                                <span x-show="isSubmitting" class="flex items-center gap-4 relative z-10 text-white bg-slate-900/50 backdrop-blur-sm w-full h-full justify-center">
+                                    <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    MENYIMPAN DATA...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                    @else
                     <form action="{{ route('tour.booking.submit') }}" method="POST" class="relative z-10" @submit="isSubmitting = true">
                         @csrf
                         <input type="hidden" name="packageId" :value="package.id">
@@ -306,7 +400,7 @@
                             </button>
                         </div>
                     </form>
-                    
+                    @endif  
                     <!-- Horizontal Trust Bar replacing the old dark side section -->
                     <div class="mt-16 pt-12 border-t border-slate-100">
                         <h4 class="text-center text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-8">Eksklusivitas Wonderful Toba</h4>

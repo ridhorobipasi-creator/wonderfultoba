@@ -5,16 +5,15 @@
 @section('keywords', $settings['seo_keywords'] ?? 'outbound danau toba, outbound medan, team building toba')
 
 @section('content')
-@endphp
 
 <div 
     x-data="{ 
         currentSlide: 0, 
         activeVideoTab: 0,
         heroImages: [
-            '{{ imageUrl($settings['hero_image_url'] ?? null) }}',
-            '{{ imageUrl($settings['about_image_1_url'] ?? null) }}',
-            '{{ imageUrl($settings['about_image_2_url'] ?? null) }}'
+            '{{ imageUrl($settings['hero_image_url'] ?? $settings['hero_image'] ?? null, 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200') }}',
+            '{{ imageUrl($settings['about_image_1_url'] ?? $settings['about_image_1'] ?? null, 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=1200') }}',
+            '{{ imageUrl($settings['about_image_2_url'] ?? $settings['about_image_2'] ?? null, 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200') }}'
         ],
         about: {
             title: '{{ $settings['about_hero_title'] ?? 'Apa itu Outbound?' }}',
@@ -103,11 +102,18 @@
                     </div>
                     
                     <h2 class="text-4xl md:text-6xl lg:text-[4rem] font-black text-slate-900 mb-8 md:mb-10 leading-[1.1] tracking-tight">
-                        <span x-text="about.title"></span>
-                        <span class="text-toba-green relative inline-block">
-                            Outbound?
-                            <svg class="absolute w-[110%] h-4 -bottom-1 left-[-5%] text-toba-green/20" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" /></svg>
-                        </span>
+                        <template x-if="about.title.toLowerCase().includes('outbound')">
+                            <span>
+                                <span x-text="about.title.replace(/outbound\??/i, '').trim()"></span>
+                                <span class="text-toba-green relative inline-block">
+                                    <span x-text="about.title.match(/outbound\??/i)?.[0] || 'Outbound?'"></span>
+                                    <svg class="absolute w-[110%] h-4 -bottom-1 left-[-5%] text-toba-green/20" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 15 Q 50 0 100 15" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" /></svg>
+                                </span>
+                            </span>
+                        </template>
+                        <template x-if="!about.title.toLowerCase().includes('outbound')">
+                            <span x-text="about.title"></span>
+                        </template>
                     </h2>
                     
                     <div class="relative mb-12">
@@ -123,18 +129,50 @@
                             Kenapa Harus Kami?
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                            @php
+                                $defaults = [
+                                    1 => [
+                                        'title' => 'Trainer Bersertifikasi',
+                                        'icon' => 'fas fa-award',
+                                        'desc' => 'Tim trainer profesional bersertifikasi resmi BNSP dan AELI dengan pengalaman puluhan tahun.'
+                                    ],
+                                    2 => [
+                                        'title' => 'Program Custom',
+                                        'icon' => 'fas fa-sliders',
+                                        'desc' => 'Program dirancang khusus berbasis Experiential Learning yang disesuaikan dengan corporate goals.'
+                                    ],
+                                    3 => [
+                                        'title' => 'Keamanan Terjamin',
+                                        'icon' => 'fas fa-shield-halved',
+                                        'desc' => 'Peralatan berstandar internasional, asuransi, serta instruktur K3 tersertifikasi.'
+                                    ],
+                                    4 => [
+                                        'title' => 'Kemitraan Resort',
+                                        'icon' => 'fas fa-hotel',
+                                        'desc' => 'Koneksi luas dengan resort premium di Samosir, Sibolangit, Simalem, & Bukit Lawang.'
+                                    ]
+                                ];
+                            @endphp
                             @for($i=1; $i<=4; $i++)
-                                @if(isset($settings['about_title_'.$i]))
-                                    <div class="flex items-start gap-4 group cursor-default">
-                                        <div class="w-10 h-10 rounded-xl bg-slate-50 text-toba-green flex items-center justify-center shrink-0 group-hover:bg-toba-green group-hover:text-white transition-colors duration-300">
-                                            <i class="{{ $settings['about_icon_'.$i] ?? 'fas fa-check' }}"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-slate-900 mb-1 text-sm">{{ $settings['about_title_'.$i] }}</h4>
-                                            <p class="text-slate-500 text-[10px] leading-relaxed line-clamp-2">{{ $settings['about_desc_'.$i] ?? '' }}</p>
-                                        </div>
+                                @php
+                                    $title = $settings['about_title_'.$i] ?? $defaults[$i]['title'];
+                                    $icon = $settings['about_icon_'.$i] ?? $defaults[$i]['icon'];
+                                    $desc = $settings['about_desc_'.$i] ?? $defaults[$i]['desc'];
+                                    if ($icon && !str_starts_with($icon, 'fa')) {
+                                        $icon = 'fas fa-' . $icon;
+                                    } elseif ($icon && str_starts_with($icon, 'fa-')) {
+                                        $icon = 'fas ' . $icon;
+                                    }
+                                @endphp
+                                <div class="flex items-start gap-4 group cursor-default">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 text-toba-green flex items-center justify-center shrink-0 group-hover:bg-toba-green group-hover:text-white transition-colors duration-300">
+                                        <i class="{{ $icon }}"></i>
                                     </div>
-                                @endif
+                                    <div>
+                                        <h4 class="font-black text-slate-900 mb-1 text-sm">{{ $title }}</h4>
+                                        <p class="text-slate-500 text-[10px] leading-relaxed line-clamp-2">{{ $desc }}</p>
+                                    </div>
+                                </div>
                             @endfor
                         </div>
                     </div>
@@ -143,10 +181,10 @@
 
                 <div class="lg:col-span-5 relative mt-32 lg:mt-0">
                     <div class="relative w-full md:w-4/5 ml-auto md:-right-4 top-0 z-10 rounded-[2.5rem] overflow-hidden shadow-2xl hover:-translate-y-2 transition-transform duration-500">
-                        <img src="{{ imageUrl($settings['about_image_1_url'] ?? null, asset('assets/images/2023/10/A11-Team-Building.webp')) }}" alt="Team Building" class="w-full aspect-[4/5] object-cover">
+                        <img src="{{ imageUrl($settings['about_image_1_url'] ?? $settings['about_image_1'] ?? null, 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=800') }}" alt="Team Building" class="w-full aspect-[4/5] object-cover">
                     </div>
                     <div class="absolute w-3/4 -bottom-12 -left-4 z-20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[6px] border-white hover:scale-105 transition-transform duration-500">
-                        <img src="{{ imageUrl($settings['about_image_2_url'] ?? null, asset('assets/images/2023/10/003-1.webp')) }}" alt="Corporate Activity" class="w-full aspect-square object-cover">
+                        <img src="{{ imageUrl($settings['about_image_2_url'] ?? $settings['about_image_2'] ?? null, 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800') }}" alt="Corporate Activity" class="w-full aspect-square object-cover">
                     </div>
                     <div class="absolute top-1/2 -left-8 lg:-left-12 z-30 bg-white/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] border border-white flex items-center gap-4">
                         <div class="bg-gradient-to-br from-toba-green to-emerald-600 text-white w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-2xl shadow-inner shadow-white/20" x-text="about.statsValue"></div>
@@ -203,6 +241,23 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 @foreach($services as $i => $svc)
+                    @php
+                        $iconMap = [
+                            'Users' => 'fas fa-users',
+                            'Smile' => 'fas fa-smile',
+                            'Sparkles' => 'fas fa-sparkles',
+                            'Compass' => 'fas fa-compass',
+                            'Award' => 'fas fa-award',
+                            'Shield' => 'fas fa-shield-halved',
+                            'Heart' => 'fas fa-heart',
+                            'Map' => 'fas fa-map',
+                            'Trophy' => 'fas fa-trophy'
+                        ];
+                        $iconClass = $iconMap[$svc->icon] ?? $svc->icon ?? 'fas fa-users';
+                        if ($iconClass && !str_starts_with($iconClass, 'fa')) {
+                            $iconClass = 'fas fa-' . $iconClass;
+                        }
+                    @endphp
                     <div class="group relative rounded-[2.5rem] p-1 overflow-hidden bg-gradient-to-b from-white/10 to-white/5 hover:from-toba-green/40 hover:to-toba-green/5 transition-colors duration-500">
                         <div class="absolute inset-0 bg-toba-green/0 group-hover:bg-toba-green/10 blur-xl transition-all duration-700"></div>
                         <div class="relative w-full h-full bg-[#0d131f] rounded-[2.3rem] overflow-hidden flex flex-col items-start border border-white/5">
@@ -210,7 +265,7 @@
                                 <img src="{{ $svc->image }}" alt="{{ $svc->title }}" class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100">
                                 <div class="absolute inset-0 bg-gradient-to-b from-black/0 via-[#0d131f]/10 to-[#0d131f] translate-y-2"></div>
                                 <div class="absolute top-5 right-5 bg-black/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 shadow-2xl group-hover:bg-toba-green group-hover:border-toba-green transition-colors duration-300">
-                                    <i class="{{ $svc->icon ?? 'fas fa-users' }} text-toba-green group-hover:text-white transition-colors text-lg"></i>
+                                    <i class="{{ $iconClass }} text-toba-green group-hover:text-white transition-colors text-lg"></i>
                                 </div>
                             </div>
                             <div class="p-8 pt-4 flex-1 flex flex-col z-10 w-full relative">
@@ -444,6 +499,24 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="mb-8 p-6 bg-rose-500 text-white rounded-[2.5rem] shadow-xl">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0 mt-1">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <p class="font-black uppercase tracking-widest text-xs opacity-90 mb-2">Mohon Periksa Kembali Form Anda:</p>
+                            <ul class="list-disc list-inside text-sm font-medium space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
                 <div class="bg-toba-green p-12 text-white text-center relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
@@ -458,17 +531,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
                             <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Nama Instansi/Perusahaan/PIC</label>
-                            <input type="text" name="company_name" required placeholder="Contoh: PT. Maju Bersama / Bapak Heru" 
+                            <input type="text" name="company_name" required value="{{ old('company_name') }}" placeholder="Contoh: PT. Maju Bersama / Bapak Heru" 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Jumlah Peserta</label>
-                            <input type="number" name="participants" required placeholder="Contoh: 50" 
+                            <input type="number" name="participants" required value="{{ old('participants') }}" placeholder="Contoh: 50" 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Lokasi Kegiatan</label>
-                            <input type="text" name="location" required placeholder="Contoh: Danau Toba / Medan" 
+                            <input type="text" name="location" required value="{{ old('location') }}" placeholder="Contoh: Danau Toba / Medan" 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
                         </div>
                         <div class="space-y-2">
@@ -476,21 +549,21 @@
                             <select name="activity_type" required 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium appearance-none">
                                 <option value="" disabled selected>Pilih Jenis Kegiatan</option>
-                                <option value="Team Building">Team Building</option>
-                                <option value="Fun Games">Fun Games</option>
-                                <option value="Outbound Kids">Outbound Kids</option>
-                                <option value="Family Gathering">Family Gathering</option>
-                                <option value="Lainnya">Lainnya</option>
+                                <option value="Team Building" {{ old('activity_type') == 'Team Building' ? 'selected' : '' }}>Team Building</option>
+                                <option value="Fun Games" {{ old('activity_type') == 'Fun Games' ? 'selected' : '' }}>Fun Games</option>
+                                <option value="Outbound Kids" {{ old('activity_type') == 'Outbound Kids' ? 'selected' : '' }}>Outbound Kids</option>
+                                <option value="Family Gathering" {{ old('activity_type') == 'Family Gathering' ? 'selected' : '' }}>Family Gathering</option>
+                                <option value="Lainnya" {{ old('activity_type') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Estimasi Tanggal</label>
-                            <input type="date" name="estimated_date" required 
+                            <input type="date" name="estimated_date" required value="{{ old('estimated_date') }}" 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">No. Whatsapp</label>
-                            <input type="tel" name="whatsapp" required placeholder="Contoh: 081234567890" 
+                            <input type="tel" name="whatsapp" required value="{{ old('whatsapp') }}" placeholder="Contoh: 081234567890" 
                                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-toba-green focus:border-toba-green transition-all outline-none font-medium">
                         </div>
                     </div>
@@ -508,13 +581,23 @@
     <section class="py-24 bg-white overflow-hidden relative">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
+                @php
+                    $statsDefaults = [
+                        0 => ['value' => '500+', 'label' => 'Instansi Terlayani'],
+                        1 => ['value' => '10k+', 'label' => 'Peserta Outbound'],
+                        2 => ['value' => '99%', 'label' => 'Tingkat Kepuasan'],
+                        3 => ['value' => '15+', 'label' => 'Tahun Pengalaman']
+                    ];
+                @endphp
                 @for($i=0; $i<4; $i++)
-                @if(isset($settings['stat_value_'.$i]))
-                <div class="space-y-4">
-                    <div class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">{{ $settings['stat_value_'.$i] }}</div>
-                    <div class="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">{{ $settings['stat_label_'.$i] }}</div>
-                </div>
-                @endif
+                    @php
+                        $val = $settings['stat_value_'.$i] ?? $statsDefaults[$i]['value'];
+                        $lbl = $settings['stat_label_'.$i] ?? $statsDefaults[$i]['label'];
+                    @endphp
+                    <div class="space-y-4">
+                        <div class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">{{ $val }}</div>
+                        <div class="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">{{ $lbl }}</div>
+                    </div>
                 @endfor
             </div>
         </div>
