@@ -185,19 +185,11 @@
                     <div class="mb-5">
                         <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Manajemen Konten (CMS)</p>
                         <div class="space-y-0.5">
-                            @if(auth()->user()->isSuperAdmin())
-                            <a href="{{ route('admin.cms.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cms.index') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.index') ? 'text-white' : 'text-sky-400' }}"></i>
-                                CMS Halaman Utama
-                            </a>
-                            @endif
                             <a href="{{ route('admin.cms.tour') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.cms.tour') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-mountain-sun w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-amber-500' }}"></i>
-                                CMS Beranda Tour
+                                <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-sky-400' }}"></i>
+                                CMS Halaman Utama
                             </a>
                             <a href="{{ route('admin.blogs.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
@@ -249,52 +241,6 @@
                         </div>
                     </div>
 
-                    {{-- OUTBOUND (FULL MANAGEMENT) - Restricted to Superadmin --}}
-                    @if(auth()->user()->isSuperAdmin())
-                    <div class="mb-5 bg-orange-50/50 p-4 rounded-3xl border border-orange-100">
-                        <p class="px-4 mb-3 text-[9px] font-black text-orange-400 uppercase tracking-[0.25em]">Master Outbound</p>
-                        <div class="space-y-0.5">
-                            <a href="{{ route('admin.outbound.cms') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.cms') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-laptop-code w-5 text-sm {{ request()->routeIs('admin.outbound.cms') ? 'text-white' : 'text-orange-400' }}"></i>
-                                CMS Beranda
-                            </a>
-                            <a href="{{ route('admin.packages.index', ['type' => 'outbound']) }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.packages.*') && request('type') == 'outbound' ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-compass w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type') == 'outbound' ? 'text-white' : 'text-orange-500' }}"></i>
-                                Paket Outbound
-                            </a>
-
-                            <div class="h-px bg-orange-100 my-2 mx-4"></div>
-                            <a href="{{ route('admin.outbound.services.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.services.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-screwdriver-wrench w-5 text-sm {{ request()->routeIs('admin.outbound.services.*') ? 'text-white' : 'text-cyan-500' }}"></i>
-                                Layanan
-                            </a>
-                            <a href="{{ route('admin.outbound.videos.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.videos.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-video w-5 text-sm {{ request()->routeIs('admin.outbound.videos.*') ? 'text-white' : 'text-red-400' }}"></i>
-                                Video Highlight
-                            </a>
-                            <a href="{{ route('admin.gallery.index', ['category' => 'outbound']) }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.gallery.*') && request('category') == 'outbound' ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category') == 'outbound' ? 'text-white' : 'text-orange-400' }}"></i>
-                                Galeri Foto
-                            </a>
-                            <a href="{{ route('admin.outbound.locations.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.outbound.locations.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
-                                <i class="fas fa-location-arrow w-5 text-sm {{ request()->routeIs('admin.outbound.locations.*') ? 'text-white' : 'text-emerald-500' }}"></i>
-                                Lokasi Outbound
-                            </a>
-                        </div>
-                    </div>
-                    @endif
 
                     {{-- SYSTEM MANAGEMENT - Restricted to Superadmin --}}
                     @if(auth()->user()->isSuperAdmin())

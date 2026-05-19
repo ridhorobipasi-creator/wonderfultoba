@@ -33,7 +33,56 @@ if (! function_exists('imageUrl')) {
             return $path;
         }
 
+        $lower = strtolower($path);
+
+        // Premium Unsplash Override for Legacy Outbound/Team Building Images to Tour & Travel Images
+        if (str_contains($lower, '001-1') || str_contains($lower, 'toba') || str_contains($lower, 'samosir')) {
+            return 'https://images.unsplash.com/photo-1544735049-717bc392183e?auto=format&fit=crop&w=1200&q=80'; // Lake Toba
+        }
+        if (str_contains($lower, '002-1')) {
+            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'; // Samosir beach
+        }
+        if (str_contains($lower, '003-1')) {
+            return 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?auto=format&fit=crop&w=1200&q=80'; // Sipiso-piso Waterfall
+        }
+        if (str_contains($lower, '004') || str_contains($lower, 'berastagi') || str_contains($lower, 'karo')) {
+            return 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=1200&q=80'; // Berastagi Mount Sinabung
+        }
+        if (str_contains($lower, '005') || str_contains($lower, 'lumbini')) {
+            return 'https://images.unsplash.com/photo-1544735049-717bc392183e?auto=format&fit=crop&w=1200&q=80'; // Lumbini golden temple
+        }
+        if (str_contains($lower, '006') || str_contains($lower, 'simalem')) {
+            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'; // Karo Simalem Resort view
+        }
+        if (str_contains($lower, '008') || str_contains($lower, 'medan')) {
+            return 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80'; // Maimun Palace / Medan
+        }
+        if (str_contains($lower, '009-1') || str_contains($lower, 'masjid')) {
+            return 'https://images.unsplash.com/photo-1564507592937-25994a9015ba?auto=format&fit=crop&w=1200&q=80'; // Masjid Raya Medan
+        }
+        if (str_contains($lower, '010') || str_contains($lower, '0010')) {
+            return 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80'; // Premium hotel room / travel stay
+        }
+        if (str_contains($lower, 'car') || str_contains($lower, 'avanza') || str_contains($lower, 'innova') || str_contains($lower, 'hiace')) {
+            if (str_contains($lower, 'avanza')) {
+                return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80';
+            }
+            if (str_contains($lower, 'innova')) {
+                return 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80';
+            }
+            return 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80';
+        }
+
         $clean = ltrim($path, '/');
+
+        // Dynamic fallback for non-existent local/storage files with premium Unsplash travel images
+        $fileInPublic = public_path($clean);
+        $cleanStoragePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
+        $fileInStorage = storage_path('app/public/' . $cleanStoragePath);
+
+        if (!file_exists($fileInPublic) && !file_exists($fileInStorage)) {
+            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80';
+        }
 
         // Check if it's a static asset in the public folder (no storage/ prefix needed)
         // If file exists in public/assets or public/images, return asset() directly

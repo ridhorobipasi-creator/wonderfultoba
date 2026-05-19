@@ -15,8 +15,10 @@ use App\Http\Controllers\PublicController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [App\Http\Controllers\PublicController::class, 'index'])->name('index');
-Route::get('/home', [App\Http\Controllers\PublicController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\PublicController::class, 'tour'])->name('index');
+Route::get('/home', function () {
+    return redirect()->route('index');
+})->name('home');
 
 // Auth routes
 Route::get('/login', [App\Http\Controllers\WebAuthController::class, 'showLoginForm'])->name('login');
@@ -130,7 +132,9 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
 
 // Public Tour Routes
 Route::prefix('tour')->name('tour.')->group(function() {
-    Route::get('/', [App\Http\Controllers\PublicController::class, 'tour'])->name('index');
+    Route::get('/', function() {
+        return redirect()->route('index');
+    })->name('index');
     Route::get('/packages', [App\Http\Controllers\PublicController::class, 'tourPackages'])->name('packages');
     Route::get('/gallery', [App\Http\Controllers\PublicController::class, 'tourGallery'])->name('gallery');
     Route::get('/blog', [App\Http\Controllers\PublicController::class, 'tourBlog'])->name('blog');
@@ -143,12 +147,11 @@ Route::prefix('tour')->name('tour.')->group(function() {
         ->name('booking.submit');
 });
 
-// Outbound Routes
+// Outbound Routes (Redirected)
 Route::prefix('outbound')->name('outbound.')->group(function() {
-    Route::get('/', [App\Http\Controllers\PublicController::class, 'outbound'])->name('index');
-    Route::get('/packages', [App\Http\Controllers\PublicController::class, 'outboundPackages'])->name('packages');
-    Route::get('/blog', [App\Http\Controllers\PublicController::class, 'outboundBlog'])->name('blog');
-    Route::post('/quote/submit', [App\Http\Controllers\PublicController::class, 'submitQuote'])->name('quote.submit');
+    Route::get('/', function() { return redirect()->route('index'); })->name('index');
+    Route::get('/packages', function() { return redirect()->route('index'); })->name('packages');
+    Route::get('/blog', function() { return redirect()->route('index'); })->name('blog');
 });
 
 // Other Public Pages

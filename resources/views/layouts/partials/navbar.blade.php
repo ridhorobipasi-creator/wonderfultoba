@@ -104,10 +104,6 @@
                     <a href="/" 
                         :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
                         class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Beranda</a>
-                    
-                    <a href="/tour" 
-                        :class="isScrolled ? ({{ request()->is('tour') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Tour & Wisata</a>
 
                     <a href="/tour/packages" 
                         :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
@@ -181,9 +177,7 @@
                         <span class="text-toba-accent font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">Eksplorasi</span>
                         <div class="space-y-6">
                             <a href="/" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Beranda</a>
-                            <a href="/tour" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Tour & Wisata</a>
                             <a href="/tour/packages" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Paket Wisata</a>
-                            <a href="/outbound" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Outbound</a>
                         </div>
                     </div>
 
