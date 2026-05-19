@@ -199,25 +199,6 @@
     </section>
     @endif
 
-    <!-- Client Portfolio -->
-    @if(count($clients) > 0)
-    <section class="py-20 bg-white border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-6 md:px-8">
-            <div class="text-center mb-12">
-                <span class="text-toba-green font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Trusted By</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Klien Portofolio Kami</h2>
-            </div>
-            
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-                @foreach($clients as $client)
-                <div class="w-32 md:w-40 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110">
-                    <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain">
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    @endif
 
     <!-- Partner Portfolio -->
     @if(count($partners) > 0)
@@ -706,6 +687,26 @@
                     <span class="inline-block px-4 py-1.5 bg-toba-green text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-3 shadow-lg shadow-toba-green/20" x-text="'Outbound Dokumentasi'"></span>
                     <h4 class="text-white text-2xl md:text-3xl font-black tracking-tight leading-tight" x-text="lightbox.caption"></h4>
                 </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- Client Portfolio -->
+    @if(count($clients) > 0)
+    <section class="py-20 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="text-center mb-12">
+                <span class="text-toba-green font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Trusted By</span>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Klien Portofolio Kami</h2>
+            </div>
+            
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+                @foreach($clients as $client)
+                <div class="w-32 md:w-40 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110">
+                    <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain">
+                </div>
+                @endforeach
             </div>
         </div>
     </section>
