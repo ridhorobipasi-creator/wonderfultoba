@@ -1,5 +1,12 @@
 <?php
 
+// Auto-restore .env file from tracked .env.sujai if it gets deleted by Hostinger/GitHub deployments
+if (!file_exists(__DIR__ . '/../.env')) {
+    if (file_exists(__DIR__ . '/../.env.sujai')) {
+        @copy(__DIR__ . '/../.env.sujai', __DIR__ . '/../.env');
+    }
+}
+
 // Auto-create essential storage subdirectories if they are missing (prevents 'valid cache path' errors on cPanel/Hostinger)
 $storagePaths = [
     __DIR__ . '/../storage/framework/views',
