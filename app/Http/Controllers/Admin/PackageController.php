@@ -61,6 +61,23 @@ class PackageController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Package $package)
+    {
+        return view('admin.packages.show', compact('package'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Package $package)
+    {
+        $cities = City::orderBy('name')->get();
+        return view('admin.packages.edit', compact('package', 'cities'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, \App\Services\TourService $tourService)

@@ -119,4 +119,104 @@ class TourService
         \Illuminate\Support\Facades\Log::info("Cache cleared for " . ($slug ?? 'all packages'));
         return true;
     }
+
+    /**
+     * Get CMS Tour Settings.
+     */
+    public function getTourSettings()
+    {
+        return \App\Models\Setting::where('key', 'cms_tour')->first()?->value ?? [];
+    }
+
+    /**
+     * Get featured active tour packages.
+     */
+    public function getFeaturedPackages()
+    {
+        return Package::where('status', 'active')
+            ->where('isOutbound', false)
+            ->where('isFeatured', true)
+            ->orderBy('sortOrder')
+            ->get();
+    }
+
+    /**
+     * Get tour blog posts.
+     */
+    public function getBlogs($limit = null)
+    {
+        $query = \App\Models\Blog::where('status', 'published')
+            ->where('category', 'Tour')
+            ->latest('createdAt');
+
+        if ($limit) {
+            return $query->limit($limit)->get();
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Get all active tour packages.
+     */
+    public function getAllPackages()
+    {
+        return Package::where('status', 'active')
+            ->where('isOutbound', false)
+            ->orderBy('sortOrder')
+            ->get();
+    }
+
+    /**
+     * Get all cities.
+     */
+    public function getCities()
+    {
+        return \App\Models\City::orderBy('name')->get();
+    }
+
+    /**
+     * Get active gallery images for Tour.
+     */
+    public function getGallery()
+    {
+        return \App\Models\GalleryImage::where('isActive', true)
+            ->where('category', 'Tour')
+            ->orderBy('orderPriority')
+            ->get();
+    }
+
+    /**
+     * Get active package by slug.
+     */
+    public function getPackageBySlug($slug)
+    {
+        return Package::where('slug', $slug)
+            ->where('status', 'active')
+            ->first();
+    }
+
+    /**
+     * Get active blog post by slug.
+     */
+    public function getBlogPost($slug)
+    {
+        return \App\Models\Blog::where('slug', $slug)
+            ->where('status', 'published')
+            ->first();
+    }
+
+    /**
+     * Get related blog posts.
+     */
+    public function getRelatedBlogs($currentId, $limit = 3)
+    {
+        return \App\Models\Blog::where('status', 'published')
+            ->where('category', 'Tour')
+            ->where('id', '!=', $currentId)
+            ->latest('createdAt')
+            ->limit($limit)
+            ->get();
+    }
 }
+
