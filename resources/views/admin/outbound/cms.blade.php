@@ -160,6 +160,54 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Stats Section Inputs inside About Tab -->
+                        <div class="border-t border-slate-100 pt-6 space-y-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest">Statistik Utama</h5>
+                                <label class="flex items-center cursor-pointer gap-2">
+                                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
+                                    <div class="relative inline-block w-8 h-4">
+                                        <input type="checkbox" name="show_stats" value="1" x-model="showStats" class="sr-only peer">
+                                        <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-slate-900 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 1 Value</label>
+                                    <input type="text" name="stat_value_0" value="{{ $settings['stat_value_0'] ?? '500+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 1 Label</label>
+                                    <input type="text" name="stat_label_0" value="{{ $settings['stat_label_0'] ?? 'Instansi Terlayani' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-bold text-[10px] text-slate-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 2 Value</label>
+                                    <input type="text" name="stat_value_1" value="{{ $settings['stat_value_1'] ?? '10k+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 2 Label</label>
+                                    <input type="text" name="stat_label_1" value="{{ $settings['stat_label_1'] ?? 'Peserta Outbound' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-bold text-[10px] text-slate-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 3 Value</label>
+                                    <input type="text" name="stat_value_2" value="{{ $settings['stat_value_2'] ?? '99%' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 3 Label</label>
+                                    <input type="text" name="stat_label_2" value="{{ $settings['stat_label_2'] ?? 'Tingkat Kepuasan' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-bold text-[10px] text-slate-500">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 4 Value</label>
+                                    <input type="text" name="stat_value_3" value="{{ $settings['stat_value_3'] ?? '15+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 4 Label</label>
+                                    <input type="text" name="stat_label_3" value="{{ $settings['stat_label_3'] ?? 'Tahun Pengalaman' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-bold text-[10px] text-slate-500">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -626,6 +674,7 @@
             showServices: @json($settings['show_services'] ?? true),
             showValues: @json($settings['show_values'] ?? true),
             showCta: @json($settings['show_cta'] ?? true),
+            showStats: @json($settings['show_stats'] ?? true),
 
             addTestimonial() {
                 this.testimonials.push({
