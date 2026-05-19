@@ -83,6 +83,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
             Route::resource('videos', App\Http\Controllers\Admin\OutboundVideoController::class);
             Route::resource('locations', App\Http\Controllers\Admin\OutboundLocationController::class);
             Route::resource('tiers', App\Http\Controllers\Admin\OutboundTierController::class);
+            Route::resource('partners', App\Http\Controllers\Admin\OutboundPartnerController::class);
         });
         
         Route::get('/finance', [App\Http\Controllers\Admin\FinanceController::class, 'index'])->name('finance.index');

@@ -292,6 +292,12 @@
                                 <i class="fas fa-location-arrow w-5 text-sm {{ request()->routeIs('admin.outbound.locations.*') ? 'text-white' : 'text-emerald-500' }}"></i>
                                 Lokasi Outbound
                             </a>
+                            <a href="{{ route('admin.outbound.partners.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.outbound.partners.*') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'text-slate-500 hover:bg-white hover:text-orange-600' }}">
+                                <i class="fas fa-handshake w-5 text-sm {{ request()->routeIs('admin.outbound.partners.*') ? 'text-white' : 'text-amber-500' }}"></i>
+                                Partner Outbound
+                            </a>
                         </div>
                     </div>
                     @endif

@@ -219,6 +219,112 @@
     </section>
     @endif
 
+    <!-- Partner Portfolio -->
+    @if(count($partners) > 0)
+    <section class="py-24 bg-[#fcfbfb] border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-toba-green font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Our Partners</span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">Mitra & Rekanan Resmi</h2>
+                <p class="text-slate-500 font-medium text-sm max-w-2xl mx-auto">Kami bekerjasama dengan resort terbaik, akomodasi premium, dan berbagai mitra strategis untuk menyukseskan event Anda.</p>
+            </div>
+            
+            <div x-data="{
+                activePartnerPage: 0,
+                visibleCount: 5,
+                touchStartX: 0,
+                touchEndX: 0,
+                partnersCount: {{ count($partners) }},
+                get totalSlides() {
+                    return Math.max(1, this.partnersCount - this.visibleCount + 1);
+                },
+                updateVisibleCount() {
+                    if (window.innerWidth < 640) {
+                        this.visibleCount = 1;
+                    } else if (window.innerWidth < 768) {
+                        this.visibleCount = 2;
+                    } else if (window.innerWidth < 1024) {
+                        this.visibleCount = 3;
+                    } else {
+                        this.visibleCount = 5;
+                    }
+                    if (this.activePartnerPage >= this.totalSlides) {
+                        this.activePartnerPage = this.totalSlides - 1;
+                    }
+                },
+                handleTouchStart(e) {
+                    this.touchStartX = e.changedTouches[0].screenX;
+                },
+                handleTouchEnd(e) {
+                    this.touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                },
+                handleSwipe() {
+                    const threshold = 50;
+                    if (this.touchStartX - this.touchEndX > threshold) {
+                        this.next();
+                    } else if (this.touchEndX - this.touchStartX > threshold) {
+                        this.prev();
+                    }
+                },
+                next() {
+                    if (this.activePartnerPage < this.totalSlides - 1) {
+                        this.activePartnerPage++;
+                    } else {
+                        this.activePartnerPage = 0;
+                    }
+                },
+                prev() {
+                    if (this.activePartnerPage > 0) {
+                        this.activePartnerPage--;
+                    } else {
+                        this.activePartnerPage = this.totalSlides - 1;
+                    }
+                }
+            }"
+            x-init="
+                updateVisibleCount();
+                window.addEventListener('resize', () => updateVisibleCount());
+                setInterval(() => {
+                    next();
+                }, 4000);
+            "
+            class="relative w-full overflow-hidden"
+            >
+                <div class="flex transition-transform duration-500 ease-out" 
+                     :style="`transform: translateX(-${activePartnerPage * (100 / visibleCount)}%)`"
+                     @touchstart="handleTouchStart"
+                     @touchend="handleTouchEnd">
+                    @foreach($partners as $partner)
+                    <div class="px-4 shrink-0" :style="`width: ${100 / visibleCount}%`">
+                        <div class="bg-white rounded-3xl border border-slate-100/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.05)] transition-all duration-500 h-28 flex items-center justify-center p-6 group">
+                            @if($partner->websiteUrl)
+                                <a href="{{ $partner->websiteUrl }}" target="_blank" class="w-full h-full flex items-center justify-center">
+                                    <img src="{{ imageUrl($partner->logo) }}" alt="{{ $partner->name }}" class="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500">
+                                </a>
+                            @else
+                                <img src="{{ imageUrl($partner->logo) }}" alt="{{ $partner->name }}" class="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 opacity-80 hover:opacity-100 transition-all duration-500">
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                <!-- Slider Pagination -->
+                <div class="flex justify-center mt-10 gap-2" x-show="totalSlides > 1">
+                    <template x-for="i in totalSlides" :key="i">
+                        <button 
+                           @click="activePartnerPage = i - 1" 
+                           class="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                           :class="activePartnerPage === (i - 1) ? 'bg-toba-green w-8 shadow-[0_0_10px_#10B981]' : 'bg-slate-200 hover:bg-slate-300'"
+                        ></button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
     @if($settings['show_services'] ?? true)
     <!-- Layanan Kami -->
     <section id="layanan" class="py-32 bg-[#090e17] relative overflow-hidden">

@@ -234,10 +234,11 @@ class PublicController extends Controller
             $videos = $this->outboundService->getVideos();
             $locations = $this->outboundService->getLocations();
             $clients = $this->outboundService->getClients();
+            $partners = \App\Models\OutboundPartner::where('isActive', true)->orderBy('orderPriority')->get();
             $gallery = $this->outboundService->getGallery();
             $featuredPackages = $this->outboundService->getFeaturedPackages(3);
 
-            return view('outbound.index', compact('services', 'videos', 'locations', 'clients', 'gallery', 'settings', 'featuredPackages', 'siteSettings'));
+            return view('outbound.index', compact('services', 'videos', 'locations', 'clients', 'partners', 'gallery', 'settings', 'featuredPackages', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error('Outbound Page Error: ' . $e->getMessage());
             return back()->with('error', 'Gagal memuat halaman Outbound.');
