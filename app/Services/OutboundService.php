@@ -32,4 +32,92 @@ class OutboundService
         
         return "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
     }
+
+    /**
+     * Get CMS Outbound Settings.
+     */
+    public function getOutboundSettings()
+    {
+        return Setting::where('key', 'cms_outbound')->first()?->value ?? [];
+    }
+
+    /**
+     * Get all active outbound services.
+     */
+    public function getServices()
+    {
+        return \App\Models\OutboundService::where('isActive', true)
+            ->orderBy('orderPriority')
+            ->get();
+    }
+
+    /**
+     * Get all outbound videos.
+     */
+    public function getVideos()
+    {
+        return \App\Models\OutboundVideo::latest('createdAt')->get();
+    }
+
+    /**
+     * Get all outbound locations.
+     */
+    public function getLocations()
+    {
+        return \App\Models\OutboundLocation::all();
+    }
+
+    /**
+     * Get all active clients.
+     */
+    public function getClients()
+    {
+        return \App\Models\Client::where('isActive', true)
+            ->orderBy('orderPriority')
+            ->get();
+    }
+
+    /**
+     * Get active gallery images for Outbound.
+     */
+    public function getGallery()
+    {
+        return \App\Models\GalleryImage::where('isActive', true)
+            ->where('category', 'Outbound')
+            ->orderBy('orderPriority')
+            ->get();
+    }
+
+    /**
+     * Get featured outbound active packages.
+     */
+    public function getFeaturedPackages($limit = 3)
+    {
+        return \App\Models\Package::where('status', 'active')
+            ->where('isOutbound', true)
+            ->where('isFeatured', true)
+            ->orderBy('sortOrder')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get all active outbound packages.
+     */
+    public function getPackages()
+    {
+        return \App\Models\Package::where('status', 'active')
+            ->where('isOutbound', true)
+            ->orderBy('sortOrder')
+            ->get();
+    }
+
+    /**
+     * Get all outbound package tiers.
+     */
+    public function getTiers()
+    {
+        return \App\Models\PackageTier::where('category', 'outbound')->get();
+    }
 }
+
