@@ -444,14 +444,32 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach($locations as $loc)
-                <div class="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all duration-500">
-                    <img src="{{ imageUrl($loc->image) }}" alt="{{ $loc->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-8 left-8 right-8">
-                        <h3 class="text-xl font-black text-white mb-2">{{ $loc->name }}</h3>
-                        <div class="w-8 h-1 bg-toba-green rounded-full group-hover:w-full transition-all duration-500"></div>
+                <div class="bg-white rounded-[2.5rem] overflow-hidden border border-slate-100/80 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 group h-full flex flex-col">
+                    <div class="relative h-64 overflow-hidden shrink-0">
+                        <img src="{{ imageUrl($loc->image) }}" alt="{{ $loc->name }}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.2s] ease-out">
+                        <div class="absolute top-5 left-5">
+                            <div class="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-lg">
+                                <i class="fas fa-map-marker-alt text-toba-green text-xs"></i>
+                                <span class="font-black text-slate-800 text-[10px] uppercase tracking-wider">Outbound Venue</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center text-toba-green text-[10px] font-black uppercase tracking-[0.2em] mb-2">
+                            <i class="fas fa-hotel mr-2 text-[10px]"></i>
+                            <span>Premium Location</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-3 group-hover:text-toba-green transition-colors tracking-tight uppercase line-clamp-1 leading-tight">{{ $loc->name }}</h3>
+                        <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-auto mb-2"><i class="fas fa-check-circle text-emerald-500 mr-1.5"></i>Fasilitas Terlengkap</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">Rekomendasi Event</span>
+                            <a href="#penawaran" class="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-toba-green transition-all shadow-md group/btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -512,25 +530,182 @@
     
     <!-- Gallery Foto -->
     @if(count($gallery) > 0)
-    <section id="gallery" class="py-32 bg-white">
+    <section id="gallery" class="py-32 bg-white" 
+             x-data="{
+                activeGalleryPage: 0,
+                visibleCount: 3,
+                touchStartX: 0,
+                touchEndX: 0,
+                galleryCount: {{ count($gallery) }},
+                lightbox: { open: false, imageUrl: '', caption: '' },
+                get totalSlides() {
+                    return Math.max(1, this.galleryCount - this.visibleCount + 1);
+                },
+                updateVisibleCount() {
+                    if (window.innerWidth < 640) {
+                        this.visibleCount = 1;
+                    } else if (window.innerWidth < 1024) {
+                        this.visibleCount = 2;
+                    } else {
+                        this.visibleCount = 3;
+                    }
+                    if (this.activeGalleryPage >= this.totalSlides) {
+                        this.activeGalleryPage = this.totalSlides - 1;
+                    }
+                },
+                handleTouchStart(e) {
+                    this.touchStartX = e.changedTouches[0].screenX;
+                },
+                handleTouchEnd(e) {
+                    this.touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                },
+                handleSwipe() {
+                    const threshold = 50;
+                    if (this.touchStartX - this.touchEndX > threshold) {
+                        this.next();
+                    } else if (this.touchEndX - this.touchStartX > threshold) {
+                        this.prev();
+                    }
+                },
+                next() {
+                    if (this.activeGalleryPage < this.totalSlides - 1) {
+                        this.activeGalleryPage++;
+                    } else {
+                        this.activeGalleryPage = 0;
+                    }
+                },
+                prev() {
+                    if (this.activeGalleryPage > 0) {
+                        this.activeGalleryPage--;
+                    } else {
+                        this.activeGalleryPage = this.totalSlides - 1;
+                    }
+                },
+                openLightbox(imgUrl, caption) {
+                    this.lightbox.imageUrl = imgUrl;
+                    this.lightbox.caption = caption;
+                    this.lightbox.open = true;
+                    document.body.classList.add('overflow-hidden');
+                },
+                closeLightbox() {
+                    this.lightbox.open = false;
+                    document.body.classList.remove('overflow-hidden');
+                }
+             }"
+             x-init="
+                updateVisibleCount();
+                window.addEventListener('resize', () => updateVisibleCount());
+                setInterval(() => {
+                    if(!lightbox.open) next();
+                }, 5000);
+             "
+             @keydown.escape.window="closeLightbox()"
+    >
         <div class="max-w-7xl mx-auto px-6 md:px-8">
-            <div class="text-center mb-20">
-                <span class="inline-flex items-center space-x-2 text-toba-green font-black uppercase tracking-[0.3em] text-xs mb-6 bg-toba-green/10 px-4 py-2 rounded-full">
-                    <i class="fas fa-camera text-[10px]"></i>
-                    <span>Moment Gallery</span>
-                </span>
-                <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">Dokumentasi <span class="text-toba-green">Kegiatan</span></h2>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                <div class="max-w-2xl">
+                    <span class="inline-flex items-center space-x-2 text-toba-green font-black uppercase tracking-[0.3em] text-xs mb-6 bg-toba-green/10 px-4 py-2 rounded-full">
+                        <i class="fas fa-camera text-[10px]"></i>
+                        <span>Moment Gallery</span>
+                    </span>
+                    <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">Dokumentasi <span class="text-toba-green">Kegiatan</span></h2>
+                </div>
+                
+                <!-- Nav Arrows for manual control -->
+                <div class="flex gap-3" x-show="totalSlides > 1">
+                    <button @click="prev()" class="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-toba-green hover:text-white hover:border-toba-green transition-all shadow-sm">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <button @click="next()" class="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-toba-green hover:text-white hover:border-toba-green transition-all shadow-sm">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @foreach($gallery as $i => $img)
-                <div class="group relative overflow-hidden rounded-[2rem] shadow-lg {{ $i % 5 == 0 ? 'md:col-span-2 md:row-span-2 aspect-square' : 'aspect-square' }}">
-                    <img src="{{ imageUrl($img->imageUrl) }}" alt="{{ $img->caption }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-6 text-center">
-                        <p class="text-white font-bold text-sm">{{ $img->caption }}</p>
+            <!-- Slider Viewport -->
+            <div class="relative w-full overflow-hidden">
+                <div class="flex transition-transform duration-500 ease-out" 
+                     :style="`transform: translateX(-${activeGalleryPage * (100 / visibleCount)}%)`"
+                     @touchstart="handleTouchStart"
+                     @touchend="handleTouchEnd">
+                    @foreach($gallery as $img)
+                    <div class="px-4 shrink-0" :style="`width: ${100 / visibleCount}%`">
+                        <div class="group relative aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-xl border border-slate-100 cursor-pointer bg-slate-50"
+                             @click="openLightbox('{{ imageUrl($img->imageUrl) }}', '{{ $img->caption }}')">
+                            <img src="{{ imageUrl($img->imageUrl) }}" alt="{{ $img->caption }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s] ease-out">
+                            
+                            <!-- Premium Cinematic Hover Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col justify-end p-8">
+                                <div class="transform translate-y-6 group-hover:translate-y-0 transition-all duration-500">
+                                    <span class="inline-block px-3 py-1 bg-toba-green text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-lg mb-3 shadow-lg" x-text="'Outbound Momen'"></span>
+                                    <p class="text-white text-base font-black leading-tight tracking-tight mb-2">{{ $img->caption }}</p>
+                                    <div class="flex items-center gap-2 text-white/70 text-[9px] font-black uppercase tracking-[0.2em]">
+                                        <i class="fas fa-expand-alt text-[10px]"></i>
+                                        <span>Perbesar Foto</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Floating Zoom Icon -->
+                            <div class="absolute top-6 right-6 scale-0 group-hover:scale-100 transition-all duration-500 delay-100 pointer-events-none">
+                                <div class="w-10 h-10 bg-white/20 backdrop-blur-xl border border-white/20 rounded-xl flex items-center justify-center text-white shadow-2xl">
+                                    <i class="fas fa-search-plus text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    @endforeach
                 </div>
-                @endforeach
+
+                <!-- Slider Pagination -->
+                <div class="flex justify-center mt-12 gap-2" x-show="totalSlides > 1">
+                    <template x-for="i in totalSlides" :key="i">
+                        <button 
+                           @click="activeGalleryPage = i - 1" 
+                           class="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                           :class="activeGalleryPage === (i - 1) ? 'bg-toba-green w-8 shadow-[0_0_10px_#10B981]' : 'bg-slate-200 hover:bg-slate-300'"
+                        ></button>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox Zoom Modal Overlay -->
+        <div 
+            x-show="lightbox.open" 
+            x-cloak
+            class="fixed inset-0 z-[200] bg-slate-950/98 backdrop-blur-3xl flex flex-col items-center justify-center p-6 md:p-12"
+            @click="closeLightbox()"
+            x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+        >
+            <!-- Close Button -->
+            <button
+                @click="closeLightbox()"
+                class="absolute top-8 right-8 w-14 h-14 bg-white/5 hover:bg-rose-500 hover:text-white rounded-2xl flex items-center justify-center text-white transition-all z-[210] border border-white/10 group"
+            >
+                <i class="fas fa-times group-hover:rotate-90 transition-transform duration-500 text-lg"></i>
+            </button>
+
+            <!-- Lightbox Image Content -->
+            <div class="relative max-w-5xl w-full h-full flex flex-col items-center justify-center" @click.stop>
+                <img
+                    :src="lightbox.imageUrl"
+                    class="max-w-full max-h-[70vh] object-contain rounded-[2.5rem] shadow-[0_50px_150px_-30px_rgba(0,0,0,1)] border border-white/10"
+                    x-transition:enter="transition ease-out duration-500 delay-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                >
+                <!-- Caption (Bottom) -->
+                <div class="mt-8 text-center max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-500">
+                    <span class="inline-block px-4 py-1.5 bg-toba-green text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-3 shadow-lg shadow-toba-green/20" x-text="'Outbound Dokumentasi'"></span>
+                    <h4 class="text-white text-2xl md:text-3xl font-black tracking-tight leading-tight" x-text="lightbox.caption"></h4>
+                </div>
             </div>
         </div>
     </section>
