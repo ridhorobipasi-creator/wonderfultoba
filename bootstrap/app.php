@@ -1,5 +1,19 @@
 <?php
 
+// Auto-create essential storage subdirectories if they are missing (prevents 'valid cache path' errors on cPanel/Hostinger)
+$storagePaths = [
+    __DIR__ . '/../storage/framework/views',
+    __DIR__ . '/../storage/framework/cache/data',
+    __DIR__ . '/../storage/framework/sessions',
+    __DIR__ . '/../storage/logs',
+    __DIR__ . '/../storage/app/public',
+];
+foreach ($storagePaths as $path) {
+    if (!file_exists($path)) {
+        @mkdir($path, 0755, true);
+    }
+}
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
