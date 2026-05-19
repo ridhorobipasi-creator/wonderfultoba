@@ -1,0 +1,169 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\City;
+use App\Models\Province;
+use App\Models\Regency;
+use Illuminate\Http\Request;
+use App\Traits\HandlesImageUploads;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class CityController extends Controller
+{
+    use HandlesImageUploads;
+    public function index(Request $request)
+    {
+        $query = City::with('regency.province');
+        
+        if ($request->filled('search')) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+        
+        if ($request->filled('province_id')) {
+            $query->whereHas('regency', function($q) use ($request) {
+                $q->where('province_id', $request->province_id);
+            });
+        }
+
+        if ($request->filled('regency_id')) {
+            $query->where('regency_id', $request->regency_id);
+        }
+
+        $cities = $query->orderBy('name')->paginate(15);
+        $provinces = Province::orderBy('name')->get();
+        $regencies = $request->filled('province_id') 
+            ? Regency::where('province_id', $request->province_id)->orderBy('name')->get() 
+            : collect();
+        
+        // For the Categories Tab
+        $all_regencies = Regency::with('province')->orderBy('name')->get();
+        if ($request->filled('cat_province_id')) {
+            $all_regencies = Regency::with('province')
+                ->where('province_id', $request->cat_province_id)
+                ->orderBy('name')
+                ->get();
+        }
+
+        return view('admin.cities.index', compact('cities', 'provinces', 'regencies', 'all_regencies'));
+    }
+
+    public function create()
+    {
+        $provinces = Province::orderBy('name')->get();
+        return view('admin.cities.create', compact('provinces'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'regency_id' => 'required',
+            'regency_name_manual' => 'required_if:regency_id,manual|nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'type' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
+            'province_id' => 'required_if:regency_id,manual|nullable|exists:provinces,id',
+        ]);
+
+        if ($request->regency_id === 'manual') {
+            $regency = Regency::firstOrCreate([
+                'name' => $request->regency_name_manual,
+                'province_id' => $request->province_id
+            ]);
+            $validated['regency_id'] = $regency->id;
+        }
+
+        $validated['slug'] = Str::slug($validated['name']);
+        
+        if ($request->hasFile('image')) {
+            $path = $this->uploadAndConvert($request->file('image'), 'cities');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
+        }
+        
+        $regency = Regency::with('province')->find($validated['regency_id']);
+        $validated['region'] = $regency->province->name;
+        $validated['district'] = $regency->name;
+        $validated['country'] = 'Indonesia';
+
+        City::create($validated);
+
+        return redirect()->route('admin.cities.index')
+            ->with('success', 'Destinasi/Tempat berhasil ditambahkan!');
+    }
+
+    public function edit(City $city)
+    {
+        $provinces = Province::orderBy('name')->get();
+        $regencies = Regency::where('province_id', $city->regency->province_id ?? 0)->orderBy('name')->get();
+        return view('admin.cities.edit', compact('city', 'provinces', 'regencies'));
+    }
+
+    public function update(Request $request, City $city)
+    {
+        $validated = $request->validate([
+            'regency_id' => 'required',
+            'regency_name_manual' => 'required_if:regency_id,manual|nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'type' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'media_id' => 'nullable|exists:media,id',
+            'province_id' => 'required_if:regency_id,manual|nullable|exists:provinces,id',
+        ]);
+
+        if ($request->regency_id === 'manual') {
+            $regency = Regency::firstOrCreate([
+                'name' => $request->regency_name_manual,
+                'province_id' => $request->province_id
+            ]);
+            $validated['regency_id'] = $regency->id;
+        }
+
+        if ($request->hasFile('image')) {
+            if ($city->image) {
+                Storage::disk('public')->delete($city->image);
+            }
+            $path = $this->uploadAndConvert($request->file('image'), 'cities');
+            $validated['image'] = '/storage/' . $path;
+        } elseif ($request->filled('media_id')) {
+            $media = \App\Models\Media::find($request->media_id);
+            $validated['image'] = '/storage/' . $media->path;
+        }
+
+        if ($validated['name'] !== $city->name) {
+            $validated['slug'] = Str::slug($validated['name']);
+        }
+        
+        $regency = Regency::with('province')->find($validated['regency_id']);
+        $validated['region'] = $regency->province->name;
+        $validated['district'] = $regency->name;
+
+        $city->update($validated);
+
+        return redirect()->route('admin.cities.index')
+            ->with('success', 'Data destinasi berhasil diperbarui!');
+    }
+
+    public function getRegencies(Request $request)
+    {
+        $regencies = Regency::where('province_id', $request->province_id)
+            ->orderBy('name')
+            ->get();
+            
+        return response()->json($regencies);
+    }
+
+    public function destroy(City $city)
+    {
+        $city->delete();
+        return redirect()->route('admin.cities.index')
+            ->with('success', 'Destinasi berhasil dihapus!');
+    }
+}

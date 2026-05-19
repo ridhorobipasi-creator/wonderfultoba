@@ -1,0 +1,317 @@
+@extends('admin.layout')
+
+@section('title', 'Pengaturan Umum')
+@section('page-title', 'Pengaturan Umum')
+
+@section('content')
+<div x-data="{ activeTab: 'branding' }" class="space-y-8">
+
+    <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 inline-flex items-center space-x-1">
+        <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-palette mr-2"></i> Branding
+        </button>
+        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-address-book mr-2"></i> Kontak & WA
+        </button>
+        <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-search mr-2"></i> SEO Global
+        </button>
+        <button @click="activeTab = 'financial'" :class="activeTab === 'financial' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-money-bill-transfer mr-2"></i> Finansial
+        </button>
+    </div>
+
+    <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        @csrf
+        
+        <!-- Branding Tab -->
+        <div x-show="activeTab === 'branding'" x-transition class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div class="xl:col-span-2 space-y-6">
+                <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm space-y-8">
+                    <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-lake-blue rounded-full"></span> Identitas Visual
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Logo Utama (Light Mode)</label>
+                            <div class="relative group h-32 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 overflow-hidden flex flex-col items-center justify-center p-4">
+                                <img src="{{ $general['logo_light_url'] ?? asset('assets/img/logo.png') }}" class="max-h-full object-contain" id="preview-logo-light">
+                                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                    <button type="button" @click="$refs.logoLight.click()" class="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-lake-blue hover:text-white transition-all"><i class="fas fa-camera"></i></button>
+                                    <button type="button" @click="openMedia('logo_light')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition-all"><i class="fas fa-images"></i></button>
+                                </div>
+                                <input type="file" name="logo_light_file" x-ref="logoLight" class="hidden" onchange="previewImage(this, 'preview-logo-light')">
+                                <input type="hidden" name="logo_light_url" value="{{ $general['logo_light_url'] ?? '' }}">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Logo Footer (Dark Mode)</label>
+                            <div class="relative group h-32 rounded-3xl bg-slate-900 border-2 border-dashed border-slate-700 overflow-hidden flex flex-col items-center justify-center p-4">
+                                <img src="{{ $general['logo_dark_url'] ?? asset('assets/img/logo-white.png') }}" class="max-h-full object-contain" id="preview-logo-dark">
+                                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                    <button type="button" @click="$refs.logoDark.click()" class="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-lake-blue hover:text-white transition-all"><i class="fas fa-camera"></i></button>
+                                    <button type="button" @click="openMedia('logo_dark')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition-all"><i class="fas fa-images"></i></button>
+                                </div>
+                                <input type="file" name="logo_dark_file" x-ref="logoDark" class="hidden" onchange="previewImage(this, 'preview-logo-dark')">
+                                <input type="hidden" name="logo_dark_url" value="{{ $general['logo_dark_url'] ?? '' }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Site Favicon</label>
+                            <div class="flex items-center gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                                <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center overflow-hidden border border-slate-200">
+                                    <img src="{{ $general['icon_url'] ?? asset('favicon.ico') }}" class="w-8 h-8 object-contain" id="preview-favicon">
+                                </div>
+                                <div class="flex-1 space-y-2">
+                                    <button type="button" @click="$refs.iconFile.click()" class="text-[10px] font-black text-lake-blue uppercase tracking-widest hover:underline">Unggah Baru</button>
+                                    <p class="text-[8px] text-slate-400 leading-relaxed font-bold uppercase tracking-tighter">Format .ico atau .png (64x64px)</p>
+                                    <input type="file" name="icon_file" x-ref="iconFile" class="hidden" onchange="previewImage(this, 'preview-favicon')">
+                                    <input type="hidden" name="icon_url" value="{{ $general['icon_url'] ?? '' }}">
+                                </div>
+                                <button type="button" @click="openMedia('favicon')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 transition-all shadow-sm">
+                                    <i class="fas fa-images text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Situs</label>
+                            <input type="text" name="site_name" value="{{ $general['site_name'] ?? 'Sujailake Toba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-lake-blue font-bold text-slate-900">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
+                    <h4 class="text-sm font-black text-slate-900 mb-6 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-lake-blue"></i> Informasi Tambahan
+                    </h4>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Slogan Situs</label>
+                            <input type="text" name="site_tagline" value="{{ $general['site_tagline'] ?? 'Temukan Keindahan Danau Toba Bersama Kami' }}" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deskripsi Singkat Footer</label>
+                            <textarea name="site_footer_desc" rows="4" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-500 leading-relaxed">{{ $general['site_footer_desc'] ?? 'Platform tour & travel terpercaya untuk eksplorasi Danau Toba dan sekitarnya.' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Tab -->
+        <div x-show="activeTab === 'contact'" x-transition class="space-y-8">
+            <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
+                <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                    <span class="w-2 h-8 bg-lake-blue rounded-full"></span> Konfigurasi Kontak & WA
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="p-8 bg-blue-50 rounded-[2.5rem] space-y-4">
+                            <div class="flex items-center gap-4 text-blue-600">
+                                <i class="fab fa-whatsapp text-3xl"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">WhatsApp Main Number</span>
+                            </div>
+                            <input type="text" name="wa_number" value="{{ $general['wa_number'] ?? '628123456789' }}" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm">
+                            <p class="text-[8px] font-bold text-blue-400 uppercase tracking-widest italic">Mulai dengan kode negara (misal: 62813...)</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">WA Welcome Message</label>
+                            <input type="text" name="wa_message" value="{{ $general['wa_message'] ?? 'Halo Sujailake Toba, saya ingin bertanya tentang...' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-700 text-xs">
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-envelope text-slate-300"></i> Email Kontak
+                            </label>
+                            <input type="email" name="contact_email" value="{{ $general['contact_email'] ?? 'hello@sujailaketoba.com' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                        </div>
+                        <div class="space-y-4">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-location-dot text-slate-300"></i> Alamat Kantor Utama
+                            </label>
+                            <textarea name="office_address" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-600 text-xs leading-relaxed">{{ $general['office_address'] ?? 'Jl. Sipoholon No. 45, Balige, Toba, Sumatera Utara.' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Instagram</label>
+                        <input type="text" name="social_instagram" value="{{ $general['social_instagram'] ?? '' }}" placeholder="@sujailake.toba" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Facebook</label>
+                        <input type="text" name="social_facebook" value="{{ $general['social_facebook'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">TikTok</label>
+                        <input type="text" name="social_tiktok" value="{{ $general['social_tiktok'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Youtube</label>
+                        <input type="text" name="social_youtube" value="{{ $general['social_youtube'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Tab -->
+        <div x-show="activeTab === 'seo'" x-transition class="space-y-8">
+            <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-indigo-500 rounded-full"></span> Global SEO & Indexing
+                    </h3>
+                    <div class="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full">
+                        <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                        <span class="text-[8px] font-black text-indigo-600 uppercase tracking-widest">Live Optimization</span>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Meta Title Global (Brand)</label>
+                        <input type="text" name="seo_meta_title" value="{{ $general['seo_meta_title'] ?? 'Sujailake Toba - Tour & Travel Agency' }}" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-black text-slate-900 text-lg shadow-inner">
+                        <p class="text-[9px] text-slate-400 font-bold italic">Rekomendasi: 50-60 karakter.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Meta Description Global</label>
+                        <textarea name="seo_meta_desc" rows="4" class="w-full px-8 py-6 bg-slate-50 border-none rounded-3xl font-bold text-slate-600 text-sm leading-relaxed">{{ $general['seo_meta_desc'] ?? 'Agen perjalanan terpercaya untuk wisata Danau Toba, Samosir, dan Sumatera Utara. Paket tour lengkap dengan akomodasi terbaik.' }}</textarea>
+                        <p class="text-[9px] text-slate-400 font-bold italic">Rekomendasi: 150-160 karakter.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Meta Keywords</label>
+                            <textarea name="seo_meta_keywords" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-500 text-xs">{{ $general['seo_meta_keywords'] ?? 'danau toba, tour samosir, travel medan, paket wisata sumatera utara' }}</textarea>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Google Analytics / GTM ID</label>
+                            <input type="text" name="seo_ga_id" value="{{ $general['seo_ga_id'] ?? '' }}" placeholder="G-XXXXXXXXXX" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-black text-slate-400 text-xs tracking-widest">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Input ID saja, skrip akan ditambahkan otomatis.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 border-t border-slate-100">
+                        <div class="flex items-center justify-between p-8 bg-slate-50 rounded-[2.5rem]">
+                            <div>
+                                <h4 class="text-sm font-black text-slate-900 mb-1">Index Mesin Pencari</h4>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Terakhir diperbarui: <span class="text-indigo-500">{{ file_exists(public_path('sitemap.xml')) ? date('d M Y, H:i', filemtime(public_path('sitemap.xml'))) : 'Belum Pernah' }}</span></p>
+                            </div>
+                            <button type="button" @click="generateSitemap()" class="px-8 py-4 bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:bg-indigo-600 transition-all flex items-center gap-3">
+                                <i class="fas fa-sitemap"></i> Perbarui Sitemap.xml
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Tab -->
+        <div x-show="activeTab === 'financial'" x-transition class="space-y-8">
+            <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
+                <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                    <span class="w-2 h-8 bg-emerald-500 rounded-full"></span> Pengaturan Mata Uang & Kurs
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="p-8 bg-emerald-50 rounded-[2.5rem] space-y-4">
+                            <div class="flex items-center gap-4 text-emerald-600">
+                                <i class="fas fa-dollar-sign text-3xl"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">Kurs USD (ke IDR)</span>
+                            </div>
+                            <input type="number" name="usd_rate" value="{{ $general['usd_rate'] ?? '15500' }}" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-2xl shadow-sm">
+                            <p class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest italic">Contoh: 15500 (Tanpa titik/koma)</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 flex flex-col justify-center">
+                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                            <h4 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fas fa-info-circle text-lake-blue"></i> Cara Kerja
+                            </h4>
+                            <p class="text-[10px] text-slate-500 font-medium leading-relaxed">
+                                Nilai ini akan digunakan untuk menghitung otomatis harga paket dari **IDR** ke **USD** di halaman publik. Pengunjung dapat mengganti mata uang di bagian navigasi atas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Save Button -->
+        <div class="fixed bottom-10 right-10 z-[100]">
+            <button type="submit" class="group flex items-center gap-4 bg-slate-900 text-white px-8 py-5 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-lake-blue hover:scale-105 transition-all duration-300">
+                <i class="fas fa-save text-lg group-hover:rotate-12 transition-transform"></i>
+                Simpan Semua Perubahan
+            </button>
+        </div>
+    </form>
+</div>
+
+@push('scripts')
+<script>
+    function previewImage(input, previewId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(previewId).src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function openMedia(target) {
+        window.dispatchEvent(new CustomEvent('open-media-picker', { 
+            detail: { 
+                callback: (item) => {
+                    const url = '/storage/' + item.path;
+                    if (target === 'logo_light') {
+                        document.getElementById('preview-logo-light').src = url;
+                        document.querySelector('input[name="logo_light_url"]').value = url;
+                    } else if (target === 'logo_dark') {
+                        document.getElementById('preview-logo-dark').src = url;
+                        document.querySelector('input[name="logo_dark_url"]').value = url;
+                    } else if (target === 'favicon') {
+                        document.getElementById('preview-favicon').src = url;
+                        document.querySelector('input[name="icon_url"]').value = url;
+                    }
+                } 
+            } 
+        }));
+    }
+    function generateSitemap() {
+        if(!confirm('Anda yakin ingin memperbarui sitemap.xml sekarang?')) return;
+        
+        fetch('{{ route("admin.settings.sitemap") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Gagal memperbarui sitemap. Silakan coba lagi.');
+        });
+    }
+</script>
+@endpush
+@endsection

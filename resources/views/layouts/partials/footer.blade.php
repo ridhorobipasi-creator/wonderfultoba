@@ -49,8 +49,7 @@
             <div>
                 <h4 class="text-white font-black text-xs uppercase tracking-[0.3em] mb-8">Layanan Kami</h4>
                 <ul class="space-y-4">
-                    <li><a href="/tour" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Paket Wisata (B2C)</a></li>
-                    <li><a href="/outbound" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Corporate Outbound (B2B)</a></li>
+                    <li><a href="/" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Paket Wisata</a></li>
                     <li><a href="/tour/packages" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Semua Destinasi</a></li>
                 </ul>
             </div>

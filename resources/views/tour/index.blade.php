@@ -37,9 +37,6 @@
                 @foreach($packages->take(3) as $index => $pkg)
                 @php
                     $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
-                    if (str_contains($pkgImage, 'unsplash')) {
-                        $pkgImage = asset('images/home/tour.webp');
-                    }
                 @endphp
                 <div class="group cursor-pointer animate-in fade-in slide-in-from-bottom-12 duration-1000" style="animation-delay: {{ $index * 150 }}ms">
                     <div class="relative h-[420px] rounded-[2rem] overflow-hidden mb-6 premium-shadow transition-all duration-700 hover:-translate-y-2 hover:shadow-toba-green/10">
@@ -85,61 +82,213 @@
     </section>
     @endif
 
-    <!-- Why Us Section (Premium Asymmetric Design) -->
+    <!-- Why Us Section (Interactive Dark Mode Canvas Explorer) -->
     @if($settings['show_about'] ?? true)
-    <section class="py-24 md:py-40 bg-slate-50 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-1/3 h-full bg-slate-100/50 skew-x-12 translate-x-20"></div>
+    @php
+        $whyImg1 = imageUrl($settings['why_image_1_url'] ?? null, asset('images/home/tour.webp'));
+        $whyImg2 = imageUrl($settings['why_image_2_url'] ?? null, asset('images/home/outbound.webp'));
+        $whyImg3 = imageUrl($settings['why_image_3_url'] ?? null, asset('images/home/tour.webp'));
         
+        $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000');
+    @endphp
+    <section x-data="{ activeTab: 1 }" class="py-24 md:py-40 bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950 text-white relative overflow-hidden">
+        <!-- Luxury Glowing Atmosphere & Cosmic Grid -->
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 32px 32px;"></div>
+        <div class="absolute -top-48 -right-48 w-[600px] h-[600px] bg-toba-green/20 rounded-full blur-[150px] pointer-events-none animate-pulse duration-[8s]"></div>
+        <div class="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-sky-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
         <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
-                <div class="lg:col-span-7 relative">
-                    <div class="grid grid-cols-12 gap-6">
-                        @php
-                            $whyImg1 = imageUrl($settings['why_image_1_url'] ?? null, asset('images/home/tour.webp'));
-                            $whyImg2 = imageUrl($settings['why_image_2_url'] ?? null, asset('images/home/outbound.webp'));
-                            $whyImg3 = imageUrl($settings['why_image_3_url'] ?? null, asset('images/home/tour.webp'));
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center lg:items-stretch">
+                
+                <!-- Left Column: Dynamic Visual Canvas (Morphing Showcase Stack) -->
+                <div class="lg:col-span-7 relative flex items-center justify-center min-h-[460px] md:min-h-[640px] px-8 md:px-12 select-none">
+                    
+                    <!-- Ambient Dynamic Blurred Reflection Backdrop -->
+                    <div class="absolute inset-0 -z-10 opacity-35 blur-[120px] scale-110 pointer-events-none transition-all duration-[1.2s] ease-out">
+                        <div x-show="activeTab === 1" x-transition:enter="transition opacity duration-1000" x-transition:leave="transition opacity duration-500 absolute" class="absolute inset-0 bg-gradient-to-tr from-toba-green to-emerald-500 rounded-full"></div>
+                        <div x-show="activeTab === 2" x-transition:enter="transition opacity duration-1000" x-transition:leave="transition opacity duration-500 absolute" class="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-sky-500 rounded-full"></div>
+                        <div x-show="activeTab === 3" x-transition:enter="transition opacity duration-1000" x-transition:leave="transition opacity duration-500 absolute" class="absolute inset-0 bg-gradient-to-tr from-amber-500 to-toba-accent rounded-full"></div>
+                    </div>
+
+                    <div class="relative w-full max-w-[480px] lg:max-w-none mx-auto aspect-[4/3] sm:aspect-[1.2] md:aspect-[1.25] lg:aspect-[0.95] xl:aspect-[1.05]">
+                        
+                        <!-- Visual Card 1 (Layanan Exclusive) -->
+                        <div class="absolute inset-0 w-full h-full rounded-[3.5rem] overflow-hidden border border-white/10 group/canvas1 transition-all duration-700 ease-out"
+                             :class="{
+                                 'z-30 opacity-100 scale-100 translate-x-0 translate-y-0 rotate-0 pointer-events-auto shadow-[0_30px_80px_rgba(0,0,0,0.6)]': activeTab === 1,
+                                 'z-20 opacity-50 scale-95 translate-x-6 md:translate-x-10 translate-y-4 rotate-3 blur-[0.5px] pointer-events-none shadow-[0_15px_30px_rgba(0,0,0,0.3)]': activeTab === 2,
+                                 'z-10 opacity-30 scale-90 -translate-x-6 md:-translate-x-10 -translate-y-4 -rotate-3 blur-[1.5px] pointer-events-none shadow-[0_10px_20px_rgba(0,0,0,0.2)]': activeTab === 3
+                             }">
+                            <img src="{{ $whyImg1 }}" alt="Layanan Exclusive" class="w-full h-full object-cover transition-transform duration-[4s] group-hover/canvas1:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
                             
-                            $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000');
-                        @endphp
-                        <div class="col-span-8 animate-in fade-in zoom-in duration-1000">
-                            <img src="{{ $whyImg1 }}" alt="Wisata Danau Toba" class="rounded-[3rem] shadow-2xl w-full h-[400px] md:h-[600px] object-cover ring-8 ring-white">
-                        </div>
-                        <div class="col-span-4 space-y-6 pt-12">
-                            <img src="{{ $whyImg2 }}" alt="Destinasi 2" class="rounded-[2rem] shadow-xl w-full h-48 md:h-72 object-cover animate-in fade-in slide-in-from-top-8 duration-1000 delay-300">
-                            <div class="bg-toba-green p-8 rounded-[2rem] shadow-2xl text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-                                <p class="text-4xl font-black mb-1">{{ $settings['stat_value_0'] ?? '10k+' }}</p>
-                                <p class="text-[10px] font-black uppercase tracking-widest opacity-80 leading-tight">{{ $settings['stat_label_0'] ?? 'Wisatawan Puas' }}</p>
+                            <!-- Floating Trust Banner inside image -->
+                            <div class="absolute bottom-6 left-6 right-6 bg-slate-950/70 backdrop-blur-xl p-5 rounded-[2rem] border border-white/10 flex items-center justify-between shadow-2xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-toba-green/20 flex items-center justify-center text-toba-accent">
+                                        <i class="fas fa-hotel"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Standardisasi</p>
+                                        <h4 class="text-sm font-black text-white leading-tight">Hotel & Armada Premium</h4>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 font-bold leading-none mb-1">Trip Selesai</p>
+                                    <span class="text-sm font-black text-white">1.5K+ Klien</span>
+                                </div>
                             </div>
+                        </div>
+
+                        <!-- Visual Card 2 (Keamanan Tanpa Cela) -->
+                        <div class="absolute inset-0 w-full h-full rounded-[3.5rem] overflow-hidden border border-white/10 group/canvas2 transition-all duration-700 ease-out"
+                             :class="{
+                                 'z-30 opacity-100 scale-100 translate-x-0 translate-y-0 rotate-0 pointer-events-auto shadow-[0_30px_80px_rgba(0,0,0,0.6)]': activeTab === 2,
+                                 'z-20 opacity-50 scale-95 translate-x-6 md:translate-x-10 translate-y-4 rotate-3 blur-[0.5px] pointer-events-none shadow-[0_15px_30px_rgba(0,0,0,0.3)]': activeTab === 3,
+                                 'z-10 opacity-30 scale-90 -translate-x-6 md:-translate-x-10 -translate-y-4 -rotate-3 blur-[1.5px] pointer-events-none shadow-[0_10px_20px_rgba(0,0,0,0.2)]': activeTab === 1
+                             }">
+                            <img src="{{ $whyImg2 }}" alt="Keamanan Terjamin" class="w-full h-full object-cover transition-transform duration-[4s] group-hover/canvas2:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            
+                            <div class="absolute bottom-6 left-6 right-6 bg-slate-950/70 backdrop-blur-xl p-5 rounded-[2rem] border border-white/10 flex items-center justify-between shadow-2xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                        <i class="fas fa-shield-halved"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Proteksi</p>
+                                        <h4 class="text-sm font-black text-white leading-tight">Asuransi & Pemandu Resmi</h4>
+                                    </div>
+                                </div>
+                                <div class="bg-toba-green/20 border border-toba-green/30 px-3 py-1 rounded-lg text-toba-accent font-black text-[10px] uppercase tracking-wider">
+                                    Aman & Legal
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visual Card 3 (Kearifan Lokal) -->
+                        <div class="absolute inset-0 w-full h-full rounded-[3.5rem] overflow-hidden border border-white/10 group/canvas3 transition-all duration-700 ease-out"
+                             :class="{
+                                 'z-30 opacity-100 scale-100 translate-x-0 translate-y-0 rotate-0 pointer-events-auto shadow-[0_30px_80px_rgba(0,0,0,0.6)]': activeTab === 3,
+                                 'z-20 opacity-50 scale-95 translate-x-6 md:translate-x-10 translate-y-4 rotate-3 blur-[0.5px] pointer-events-none shadow-[0_15px_30px_rgba(0,0,0,0.3)]': activeTab === 1,
+                                 'z-10 opacity-30 scale-90 -translate-x-6 md:-translate-x-10 -translate-y-4 -rotate-3 blur-[1.5px] pointer-events-none shadow-[0_10px_20px_rgba(0,0,0,0.2)]': activeTab === 2
+                             }">
+                            <img src="{{ $whyImg3 }}" alt="Budaya Danau Toba" class="w-full h-full object-cover transition-transform duration-[4s] group-hover/canvas3:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            
+                            <div class="absolute bottom-6 left-6 right-6 bg-slate-950/70 backdrop-blur-xl p-5 rounded-[2rem] border border-white/10 flex items-center justify-between shadow-2xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                                        <i class="fas fa-heart-circle-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Autentisitas</p>
+                                        <h4 class="text-sm font-black text-white leading-tight">Interaksi Budaya Asli</h4>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 font-bold leading-none mb-1">Kepuasan</p>
+                                    <span class="text-sm font-black text-amber-400"><i class="fas fa-star mr-1"></i>4.9 / 5.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Outer Floating Glass Accent Badge -->
+                        <div class="absolute -bottom-6 -left-6 bg-white/5 backdrop-blur-xl p-4.5 rounded-[2rem] border border-white/10 flex items-center gap-3 shadow-2xl animate-float z-40">
+                            <div class="w-10 h-10 rounded-xl bg-toba-green/20 flex items-center justify-center text-toba-accent shadow-inner">
+                                <i class="fas fa-compass text-lg animate-spin" style="animation-duration: 15s;"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">{{ $settings['stat_label_0'] ?? 'Wisatawan' }}</p>
+                                <p class="text-xl font-black text-white leading-none">{{ $settings['stat_value_0'] ?? '10k+' }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Outer Glowing Accent Ring -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 rounded-full border-2 border-white/10 flex items-center justify-center opacity-30 animate-pulse z-40">
+                            <div class="w-16 h-16 rounded-full border border-dashed border-white/20"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="lg:col-span-5">
-                    <div class="flex items-center space-x-3 mb-8">
-                        <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                        <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Komitmen Kami</span>
+                <!-- Right Column: Interactive Deck Trigger & Typography -->
+                <div class="lg:col-span-5 flex flex-col justify-center py-4">
+                    <div class="inline-flex items-center gap-2.5 px-4.5 py-2 bg-white/5 border border-white/10 text-toba-accent rounded-full font-black text-xs uppercase tracking-[0.2em] mb-6">
+                        <span class="w-2 h-2 rounded-full bg-toba-accent animate-ping"></span>
+                        <span>Standard of Excellence</span>
                     </div>
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-10 tracking-tight leading-[1.1]">
-                        Standar Wisata <br /><span class="text-toba-green">Tanpa Kompromi</span>
+                    
+                    <h2 class="text-4xl md:text-5xl lg:text-[3.25rem] font-black text-white mb-6 tracking-tight leading-[1.05]">
+                        Eksplorasi dengan <br />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-toba-accent via-emerald-400 to-teal-300">Kemewahan Sejati</span>
                     </h2>
                     
-                    <div class="space-y-10 mb-12">
+                    <p class="text-slate-400 font-medium leading-relaxed text-sm md:text-base mb-10 max-w-xl opacity-90">
+                        Kami merancang setiap detail perjalanan Anda dengan presisi tinggi demi menghadirkan kenyamanan mutlak dan kebahagiaan sejati selama menjelajahi pesona legendaris Danau Toba.
+                    </p>
+                    
+                    <!-- Dynamic Interactive Tab Space -->
+                    <div class="space-y-4">
                         @for($i=1; $i<=3; $i++)
                         @php
                             $icon = $i == 1 ? 'fa-award' : ($i == 2 ? 'fa-shield-halved' : 'fa-heart-circle-check');
+                            $titles = [
+                                1 => 'Layanan Exclusive',
+                                2 => 'Keamanan Tanpa Cela',
+                                3 => 'Kearifan Lokal Autentik'
+                            ];
+                            $descriptions = [
+                                1 => 'Standar kenyamanan kelas satu dengan akomodasi hotel premium serta armada transportasi terawat luar dalam.',
+                                2 => 'Perjalanan terproteksi penuh bersama pemandu lokal berlisensi resmi dan asuransi perjalanan terpercaya.',
+                                3 => 'Menghubungkan Anda langsung ke jantung kebudayaan Batak melalui aktivitas kultural dan kuliner asli.'
+                            ];
+                            $title = $settings['about_title_'.$i] ?? $titles[$i];
+                            $desc = $settings['about_desc_'.$i] ?? $descriptions[$i];
                         @endphp
-                        <div class="flex items-start space-x-6 group">
-                            <div class="w-16 h-16 rounded-[1.5rem] flex items-center justify-center shrink-0 bg-white shadow-xl text-toba-green group-hover:bg-toba-green group-hover:text-white transition-all duration-500 border border-slate-100">
-                                <i class="fas {{ $icon }} text-2xl"></i>
+                        
+                        <div 
+                            @mouseenter="activeTab = {{ $i }}" 
+                            @click="activeTab = {{ $i }}"
+                            class="group cursor-pointer relative rounded-[2rem] p-6.5 border transition-all duration-500 flex items-start gap-5 select-none"
+                            :class="activeTab === {{ $i }} ? 'bg-white/10 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] translate-x-3.5' : 'bg-transparent border-transparent opacity-40 hover:opacity-85 hover:translate-x-1.5'"
+                        >
+                            <!-- Elegant Left Colored Bar for Active tab -->
+                            <div x-show="activeTab === {{ $i }}" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 scale-y-0"
+                                 x-transition:enter-end="opacity-100 scale-y-100"
+                                 class="absolute left-0 top-6 bottom-6 w-1.5 bg-gradient-to-b from-toba-accent to-emerald-400 rounded-full">
                             </div>
-                            <div>
-                                <h4 class="text-xl font-black text-slate-900 mb-2 tracking-tight">{{ $settings['about_title_'.$i] ?? 'Kualitas Premium' }}</h4>
-                                <p class="text-slate-500 font-medium leading-relaxed text-sm opacity-80">{{ $settings['about_desc_'.$i] ?? 'Kami memastikan setiap aspek akomodasi, transportasi, dan layanan makan memenuhi standar kenyamanan tertinggi bagi Anda.' }}</p>
+
+                            <!-- Animated Glowing Icon Container -->
+                            <div class="w-13 h-13 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 relative z-10"
+                                 :class="activeTab === {{ $i }} ? 'bg-toba-accent text-white shadow-[0_0_25px_rgba(21,128,61,0.5)] ring-2 ring-white/10 scale-105' : 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white'">
+                                <i class="fas {{ $icon }} text-xl transition-transform duration-500 group-hover:rotate-[10deg]"></i>
+                            </div>
+                            
+                            <!-- Tab Body Content -->
+                            <div class="relative z-10 flex-1">
+                                <h4 class="text-lg font-black tracking-tight transition-colors duration-300"
+                                    :class="activeTab === {{ $i }} ? 'text-white' : 'text-slate-300 group-hover:text-white'">
+                                    {{ $title }}
+                                </h4>
+                                <p class="font-medium leading-relaxed text-xs md:text-sm mt-1 transition-colors duration-300"
+                                   :class="activeTab === {{ $i }} ? 'text-slate-200' : 'text-slate-500'">
+                                    {{ $desc }}
+                                </p>
+                            </div>
+
+                            <!-- Tiny Chevron indicator -->
+                            <div class="self-center text-slate-600 transition-all duration-300"
+                                 :class="activeTab === {{ $i }} ? 'translate-x-0 opacity-100 text-toba-accent' : 'opacity-0 -translate-x-2'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
                             </div>
                         </div>
                         @endfor
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

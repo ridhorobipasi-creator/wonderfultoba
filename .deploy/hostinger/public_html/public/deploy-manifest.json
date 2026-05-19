@@ -1,0 +1,9 @@
+{
+    "app":  "sujailaketoba.com",
+    "commit":  "4a67716295cf5e6bbb0d31f6fbcc7ce4ef94cafd",
+    "branch":  "main",
+    "built_at_utc":  "2026-05-09T16:21:59.7329026Z",
+    "deployment_target":  "hostinger-hpanel",
+    "web_root":  "public_html",
+    "runtime_layout":  "laravel-project-in-public_html-with-root-htaccess-rewrite"
+}
