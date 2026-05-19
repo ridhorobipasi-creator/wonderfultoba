@@ -167,3 +167,13 @@ Route::get('/itinerary/{slug}', [App\Http\Controllers\PdfController::class, 'dow
 
 // Sitemap
 Route::get('/sitemap.xml', [App\Http\Controllers\Admin\SettingController::class, 'generateSitemap']);
+
+// Temporary route to migrate and seed database on Hostinger
+Route::get('/setup-database-sujai', function() {
+    try {
+        \Artisan::call('migrate:fresh', ['--seed' => true]);
+        return "Sukses! Database telah berhasil dimigrasi dan di-seed dengan data paket wisata.";
+    } catch (\Exception $e) {
+        return "Gagal: " . $e->getMessage();
+    }
+});
