@@ -61,26 +61,6 @@
         init() {
             if (this.totalOriginal > 1) {
                 this.startAutoplay();
-                
-                // Watcher for seamless infinite jump
-                this.$watch('activeIndex', (val) => {
-                    // Jump forward: from end clone to real start
-                    if (val >= this.totalOriginal + this.clonesCount) {
-                        setTimeout(() => {
-                            this.isTransitioning = false;
-                            this.activeIndex = this.clonesCount;
-                            setTimeout(() => { this.isTransitioning = true; }, 50);
-                        }, 1000);
-                    }
-                    // Jump backward: from start clone to real end
-                    if (val <= 0) {
-                        setTimeout(() => {
-                            this.isTransitioning = false;
-                            this.activeIndex = this.totalOriginal + this.clonesCount - 1;
-                            setTimeout(() => { this.isTransitioning = true; }, 50);
-                        }, 1000);
-                    }
-                });
             }
         },
         
@@ -96,7 +76,7 @@
         },
         
         next() {
-            if (this.activeIndex >= this.totalOriginal + this.clonesCount) return;
+            if (this.activeIndex >= this.slides.length - 1) return;
             this.isTransitioning = true;
             this.activeIndex++;
             this.startAutoplay();
@@ -123,6 +103,18 @@
             let touchEndX = e.changedTouches[0].clientX;
             if (this.touchStartX - touchEndX > 50) this.next();
             if (this.touchStartX - touchEndX < -50) this.prev();
+        },
+
+        handleTransitionEnd() {
+            if (this.activeIndex >= this.totalOriginal + this.clonesCount || this.activeIndex < this.clonesCount) {
+                this.isTransitioning = false;
+                let offset = this.activeIndex - this.clonesCount;
+                let realIndex = ((offset % this.totalOriginal) + this.totalOriginal) % this.totalOriginal + this.clonesCount;
+                this.activeIndex = realIndex;
+                setTimeout(() => {
+                    this.isTransitioning = true;
+                }, 50);
+            }
         }
     }">
     
@@ -183,6 +175,7 @@
     {{-- Main Carousel Strip --}}
     <div class="absolute inset-0 z-10">
         <div class="flex h-full carousel-strip" 
+             @transitionend="handleTransitionEnd()"
              :class="isTransitioning ? 'duration-[1000ms]' : 'duration-0'"
              :style="'width: ' + (slides.length * 100) + '%; transform: translateX(-' + (activeIndex * (100 / slides.length)) + '%)'">
             
@@ -264,6 +257,7 @@
             {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
             <div class="hidden lg:block w-[588px] overflow-hidden pointer-events-auto py-4">
                 <div class="card-container flex items-center gap-6 carousel-strip"
+                     @transitionend.stop=""
                      :class="isTransitioning ? 'duration-[800ms]' : 'duration-0'"
                      :style="'transform: translateX(-' + (activeIndex * 204) + 'px)'">
                     <template x-for="(slide, i) in slides" :key="'card-' + i">
