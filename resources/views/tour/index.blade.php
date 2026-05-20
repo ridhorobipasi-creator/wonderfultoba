@@ -2,6 +2,7 @@
 
 @section('title', $settings['meta_title'] ?? $settings['hero_title'] ?? 'Sujai Laketoba – Wisata Sumatera Utara')
 @section('description', $settings['meta_description'] ?? $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Sujai Laketoba.')
+@section('keywords', __('paket wisata danau toba, layanan premium danau toba, private tour samosir, travel vip medan, wisata sumatera utara, sujai laketoba'))
 
 @section('content')
 <div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6281323888207') }}' }">

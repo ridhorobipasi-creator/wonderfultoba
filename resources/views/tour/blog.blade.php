@@ -2,6 +2,7 @@
 
 @section('title', __('Blog & Inspirasi Wisata – Sujai Laketoba'))
 @section('description', __('Tips, panduan, dan cerita menarik untuk rencana liburan Anda ke Sumatera Utara.'))
+@section('keywords', 'blog wisata toba, artikel travel sumatera utara, tips liburan danau toba, cerita perjalanan sujai')
 
 @section('content')
 <div 
@@ -17,8 +18,10 @@
         get filteredPosts() {
             return this.posts.filter(p => {
                 const matchCat = this.activeCategory === '{{ __('Semua') }}' || p.category === this.activeCategory;
-                const matchSearch = p.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                                   (p.content && p.content.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                const searchLower = (this.searchQuery || '').toLowerCase();
+                const titleLower = (p.title || '').toLowerCase();
+                const contentLower = (p.content || '').toLowerCase();
+                const matchSearch = titleLower.includes(searchLower) || contentLower.includes(searchLower);
                 return matchCat && matchSearch;
             });
         },

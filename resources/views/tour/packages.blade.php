@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Paket Wisata Sumatera Utara – Sujai Laketoba')
-@section('description', 'Temukan paket wisata terbaik ke Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang. Harga terjangkau, pelayanan premium.')
+@section('description', 'Pilihan paket wisata Danau Toba terbaik mulai dari private tour, group gathering, hingga corporate outing dengan layanan premium.')
+@section('keywords', 'paket wisata murah danau toba, private tour danau toba, paket gathering medan, harga paket wisata toba')
 
 @section('content')
 <div 

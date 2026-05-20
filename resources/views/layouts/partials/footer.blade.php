@@ -52,7 +52,6 @@
                     <li><a href="/tour/packages" class="text-slate-400 hover:text-white text-xs transition-colors">Semua Destinasi</a></li>
                     <li><a href="/tour/gallery" class="text-slate-400 hover:text-white text-xs transition-colors">Galeri Foto</a></li>
                     <li><a href="/tour/blog" class="text-slate-400 hover:text-white text-xs transition-colors">Blog Perjalanan</a></li>
-                    <li><a href="/sewa-mobil" class="text-slate-400 hover:text-white text-xs transition-colors">Sewa Mobil</a></li>
                 </ul>
             </div>
 

@@ -2,6 +2,7 @@
 
 @section('title', 'Tentang Kami – Sujai Laketoba')
 @section('description', 'Sujai Laketoba adalah provider perjalanan wisata premium di Sumatera Utara yang berdedikasi memberikan pengalaman terbaik.')
+@section('keywords', 'tentang sujai laketoba, travel terpercaya danau toba, biro perjalanan medan, profil travel toba')
 
 @section('content')
 
