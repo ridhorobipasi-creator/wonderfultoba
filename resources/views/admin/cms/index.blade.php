@@ -17,15 +17,12 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('cmsLandingHandler', () => ({
         activeTab: 'branding',
-        brandName: @json($settings['brand_name'] ?? 'Wonderful Toba'),
+        brandName: @json($settings['brand_name'] ?? 'Sujai Laketoba'),
         brandTagline: @json($settings['brand_tagline'] ?? 'SUMATERA UTARA'),
         brandIcon: @json($resolve($settings['brand_icon_url'] ?? '', 'https://ui-avatars.com/api/?name=W&background=0f172a&color=fff')),
         brandLogo: @json($resolve($settings['brand_logo_url'] ?? '')),
-        metaTitle: @json($settings['meta_title'] ?? 'Wonderful Toba | Premium Tour & Corporate Outbound'),
-        metaDescription: @json($settings['meta_description'] ?? 'Portal utama Wonderful Toba. Pilih layanan premium Tour Travel Sumatera Utara atau Corporate Outbound & Team Building.'),
-        outboundTitle: @json($settings['outbound_title'] ?? "Corporate\nOutbound."),
-        outboundSubtitle: @json($settings['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.'),
-        outboundImage: @json($resolve($settings['outbound_image_url'] ?? '', 'https://images.unsplash.com/photo-1522071823991-b580970ad00d?auto=format&fit=crop&q=80&w=800')),
+        metaTitle: @json($settings['meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel'),
+        metaDescription: @json($settings['meta_description'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.'),
         tourTitle: @json($settings['tour_title'] ?? "Tour &\nTravel."),
         tourSubtitle: @json($settings['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif.'),
         tourImage: @json($resolve($settings['tour_image_url'] ?? '', 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600')),
@@ -36,7 +33,6 @@ document.addEventListener('alpine:init', () => {
                 const url = URL.createObjectURL(file);
                 if (type === 'brand') this.brandIcon = url;
                 if (type === 'logo') this.brandLogo = url;
-                if (type === 'outbound') this.outboundImage = url;
                 if (type === 'tour') this.tourImage = url;
             }
         },
@@ -45,13 +41,11 @@ document.addEventListener('alpine:init', () => {
             window.dispatchEvent(new CustomEvent('open-media-picker', { 
                 detail: { 
                     callback: (item) => {
-                        // Unified Path Logic
                         let path = item.path;
                         if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
                         if (path.startsWith('storage/')) path = path.replace('storage/', '');
                         
                         const finalUrl = '/storage/' + path;
-                        if (type === 'outbound') this.outboundImage = finalUrl;
                         if (type === 'tour') this.tourImage = finalUrl;
                     } 
                 } 
@@ -66,7 +60,6 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full xl:w-[400px] flex-shrink-0 space-y-6">
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1">
             <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Brand</button>
-            <button @click="activeTab = 'outbound'" :class="activeTab === 'outbound' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Outbound</button>
             <button @click="activeTab = 'tour'" :class="activeTab === 'tour' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Tour</button>
             <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">SEO</button>
         </div>
@@ -91,65 +84,12 @@ document.addEventListener('alpine:init', () => {
                     </div>
                 </div>
 
-                <!-- Outbound Tab -->
-                <div x-show="activeTab === 'outbound'" x-transition class="space-y-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h4 class="text-sm font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Sisi Outbound
-                        </h4>
-                        <label class="flex items-center cursor-pointer gap-2">
-                            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
-                            <div class="relative inline-block w-8 h-4">
-                                <input type="checkbox" name="show_outbound" value="1" {{ ($settings['show_outbound'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="space-y-2">
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Judul Utama</label>
-                            <textarea name="outbound_title" x-model="outboundTitle" rows="3" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-black text-sm text-slate-900"></textarea>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deskripsi</label>
-                            <textarea name="outbound_subtitle" x-model="outboundSubtitle" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-600 font-bold text-slate-600 text-xs leading-relaxed"></textarea>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
-                            
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="relative group h-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-600 transition-all cursor-pointer">
-                                    <input type="file" name="outbound_image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="updatePreview($event, 'outbound')">
-                                    <i class="fas fa-cloud-arrow-up text-lg text-slate-300 group-hover:text-emerald-600 mb-1"></i>
-                                    <span class="text-[8px] font-black text-slate-400 uppercase">Lokal</span>
-                                </div>
-                                <div @click="openCMSMediaPicker('outbound')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
-                                    <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
-                                    <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>
-                                </div>
-                            </div>
-
-                            <div class="relative w-full h-32 rounded-2xl overflow-hidden border border-slate-100 shadow-sm mt-4">
-                                <img :src="outboundImage" class="w-full h-full object-cover">
-                                <input type="hidden" name="outbound_image_url" :value="outboundImage">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Tour Tab -->
                 <div x-show="activeTab === 'tour'" x-transition class="space-y-6">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-sm font-black text-toba-green uppercase tracking-widest flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-toba-green"></span> Sisi Tour Travel
                         </h4>
-                        <label class="flex items-center cursor-pointer gap-2">
-                            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
-                            <div class="relative inline-block w-8 h-4">
-                                <input type="checkbox" name="show_tour" value="1" {{ ($settings['show_tour'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-toba-green transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
-                            </div>
-                        </label>
                     </div>
                     <div class="space-y-4">
                         <div class="space-y-2">
@@ -163,15 +103,10 @@ document.addEventListener('alpine:init', () => {
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="relative group h-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-toba-green transition-all cursor-pointer">
-                                    <input type="file" name="tour_image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="updatePreview($event, 'tour')">
-                                    <i class="fas fa-cloud-arrow-up text-lg text-slate-300 group-hover:text-toba-green mb-1"></i>
-                                    <span class="text-[8px] font-black text-slate-400 uppercase">Lokal</span>
-                                </div>
+                            <div class="grid grid-cols-1 gap-4">
                                 <div @click="openCMSMediaPicker('tour')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-toba-green hover:bg-emerald-50 transition-all group cursor-pointer">
                                     <i class="fas fa-images text-lg text-slate-300 group-hover:text-toba-green mb-1"></i>
-                                    <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-toba-green">Media Pusat</span>
+                                    <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-toba-green">Pilih dari Media Library</span>
                                 </div>
                             </div>
 
@@ -207,40 +142,25 @@ document.addEventListener('alpine:init', () => {
         </form>
     </div>
 
-    <!-- RIGHT: LIVE INTERACTIVE PREVIEW (Mirroring http://127.0.0.1:8000) -->
+    <!-- RIGHT: LIVE INTERACTIVE PREVIEW -->
     <div class="flex-1 bg-black rounded-[3.5rem] overflow-hidden relative shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-8 border-slate-900/50 min-h-[600px] xl:h-[85vh] sticky top-8">
         
         <div class="absolute inset-0 flex flex-col md:flex-row">
-            <!-- Left: Outbound -->
-            <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/5">
-                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] scale-105" 
-                     :style="`background-image: url('${outboundImage}')`"></div>
-                <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
-                
-                <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-12 z-10">
-                    <span class="inline-block px-3 py-1 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full mb-4 w-fit">Corporate</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white leading-[0.85] tracking-tighter whitespace-pre-line mb-6" x-text="outboundTitle"></h2>
-                    <p class="text-slate-200 text-[10px] font-medium max-w-[200px] leading-relaxed opacity-80" x-text="outboundSubtitle"></p>
-                </div>
-            </div>
-
-            <!-- Right: Tour -->
-            <div class="relative w-full md:w-1/2 h-1/2 md:h-full group overflow-hidden">
+            <!-- Full Preview: Tour -->
+            <div class="relative w-full h-full group overflow-hidden">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] scale-105" 
                      :style="`background-image: url('${tourImage}')`"></div>
                 <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80"></div>
                 
-                <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-12 text-right z-10">
+                <div class="absolute inset-0 flex flex-col justify-end items-center p-8 md:p-12 text-center z-10">
                     <span class="inline-block px-3 py-1 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full mb-4 w-fit">Premium Travel</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white leading-[0.85] tracking-tighter whitespace-pre-line mb-6" x-text="tourTitle"></h2>
-                    <p class="text-slate-200 text-[10px] font-medium max-w-[200px] leading-relaxed opacity-80" x-text="tourSubtitle"></p>
+                    <h2 class="text-4xl md:text-6xl font-black text-white leading-[0.85] tracking-tighter whitespace-pre-line mb-6" x-text="tourTitle"></h2>
+                    <p class="text-slate-200 text-xs font-medium max-w-[400px] leading-relaxed opacity-80" x-text="tourSubtitle"></p>
                 </div>
             </div>
-
-
         </div>
 
-        <!-- Center Brand (Mirroring Portal) -->
+        <!-- Center Brand -->
         <div class="absolute top-12 left-1/2 -translate-x-1/2 z-[60] pointer-events-none flex flex-col items-center">
             <template x-if="brandLogo">
                 <img :src="brandLogo" class="h-12 md:h-16 w-auto object-contain drop-shadow-2xl">

@@ -1,19 +1,18 @@
 @extends('admin.layout')
 
-@section('title', 'Manajemen Paket ' . (request('type') == 'outbound' ? 'Outbound' : 'Tour'))
+@section('title', 'Manajemen Paket Tour')
 
 @section('breadcrumbs')
     <i class="fas fa-chevron-right text-[6px] opacity-40"></i>
-    <span class="text-slate-400">Paket {{ request('type') == 'outbound' ? 'Outbound' : 'Tour' }}</span>
+    <span class="text-slate-400">Paket Tour</span>
 @endsection
 
 @section('content')
 @php
-    $isOutbound = request('type') == 'outbound';
-    $primaryColor = $isOutbound ? 'orange' : 'emerald';
-    $primaryHex = $isOutbound ? '#f97316' : '#10b981';
-    $bgColor = $isOutbound ? 'bg-orange-500' : 'bg-emerald-500';
-    $shadowColor = $isOutbound ? 'shadow-orange-100' : 'shadow-emerald-100';
+    $primaryColor = 'emerald';
+    $primaryHex = '#10b981';
+    $bgColor = 'bg-emerald-500';
+    $shadowColor = 'shadow-emerald-100';
 @endphp
 
 <div class="space-y-10 w-full max-w-none" x-data="{ 
@@ -60,12 +59,12 @@
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] shadow-sm border border-slate-50 gap-6">
         <div class="flex items-center gap-4 md:gap-6">
             <div class="w-12 h-12 md:w-16 md:h-16 rounded-[1.25rem] md:rounded-[1.5rem] {{ $bgColor }} flex items-center justify-center text-white shadow-xl {{ $shadowColor }}">
-                <i class="fas {{ $isOutbound ? 'fa-mountain-sun' : 'fa-box-archive' }} text-xl md:text-2xl"></i>
+                <i class="fas fa-box-archive text-xl md:text-2xl"></i>
             </div>
             <div>
-                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Katalog Paket {{ $isOutbound ? 'Outbound' : 'Tour' }}</h1>
+                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Katalog Paket Tour</h1>
                 <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                    {{ $isOutbound ? 'Program Team Building & Group Activities' : 'Dokumentasi Perjalanan Wisatawan' }}
+                    Dokumentasi Perjalanan Wisatawan
                 </p>
             </div>
         </div>
@@ -73,7 +72,7 @@
             <a href="{{ route('admin.packages.export', request()->all()) }}" class="flex-1 md:flex-none bg-white border border-slate-200 text-slate-600 px-5 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
             </a>
-            <a href="{{ route('admin.packages.create', ['isOutbound' => $isOutbound ? 1 : 0]) }}" class="flex-1 md:flex-none bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
+            <a href="{{ route('admin.packages.create') }}" class="flex-1 md:flex-none bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
                 <i class="fas fa-plus-circle text-sm"></i> Baru
             </a>
         </div>
@@ -82,7 +81,7 @@
     <!-- Quick Stats Summary (Themed) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="bg-white p-8 rounded-[2.5rem] border border-slate-50 shadow-sm relative overflow-hidden group">
-            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Total {{ $isOutbound ? 'Outbound' : 'Tour' }}</p>
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Total Tour</p>
             <h3 class="text-3xl font-black text-slate-900 tracking-tighter">{{ $packages->total() }}</h3>
         </div>
         <div class="{{ $bgColor }} p-8 rounded-[2.5rem] shadow-xl {{ $shadowColor }} relative overflow-hidden group text-white">
@@ -101,7 +100,6 @@
     <!-- Enhanced Filter Bar -->
     <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-50 shadow-sm">
         <form method="GET" class="flex flex-col lg:flex-row lg:items-center gap-6">
-            <input type="hidden" name="type" value="{{ request('type', 'tour') }}">
             <div class="flex-1 relative w-full">
                 <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 text-xs"></i>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama paket..." 
@@ -121,7 +119,7 @@
                 </select>
 
                 @if(request()->anyFilled(['search', 'status', 'featured']))
-                    <a href="{{ route('admin.packages.index', ['type' => request('type')]) }}" class="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-500 rounded-xl hover:bg-slate-200 transition">
+                    <a href="{{ route('admin.packages.index') }}" class="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-500 rounded-xl hover:bg-slate-200 transition">
                         <i class="fas fa-rotate-left text-xs"></i>
                     </a>
                 @endif
@@ -133,14 +131,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         @forelse($packages as $package)
             <div class="group bg-white rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 flex flex-col relative"
-                 :class="selected.includes({{ $package->id }}) ? 'ring-4 ring-{{ $primaryColor }}-500' : ''">
+                 :class="selected.includes({{ $package->id }}) ? 'ring-4 ring-emerald-500' : ''">
                 
                 {{-- Bulk Checkbox --}}
                 <div class="absolute top-6 left-6 z-20">
                     <input type="checkbox" 
                         value="{{ $package->id }}" 
                         x-model="selected"
-                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-{{ $primaryColor }}-500 focus:ring-{{ $primaryColor }}-500/20 transition-all cursor-pointer">
+                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-emerald-500 focus:ring-emerald-500/20 transition-all cursor-pointer">
                 </div>
 
                 <div class="h-64 relative overflow-hidden bg-slate-50">
@@ -177,12 +175,12 @@
 
                 <div class="p-6 md:p-10 flex-1 flex flex-col">
                     <div class="flex items-center gap-3 mb-4 text-slate-400">
-                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-2 {{ $isOutbound ? 'text-orange-500' : 'text-emerald-500' }}"></i> {{ $package->locationTag ?? 'Sumatera Utara' }}</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-2 text-emerald-500"></i> {{ $package->locationTag ?? 'Sumatera Utara' }}</span>
                         <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-clock mr-2 {{ $isOutbound ? 'text-orange-500' : 'text-emerald-500' }}"></i> {{ $package->duration ?? '3D2N' }}</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-clock mr-2 text-emerald-500"></i> {{ $package->duration ?? '3D2N' }}</span>
                     </div>
                     
-                    <h3 class="text-xl font-black text-slate-900 tracking-tight mb-4 leading-tight group-hover:text-{{ $primaryColor }}-600 transition-colors">{{ $package->name }}</h3>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tight mb-4 leading-tight group-hover:text-emerald-600 transition-colors">{{ $package->name }}</h3>
                     <p class="text-sm font-medium text-slate-400 line-clamp-2 leading-relaxed mb-8 flex-1">
                         {{ $package->shortDescription ?? 'Deskripsi paket belum tersedia.' }}
                     </p>
@@ -208,10 +206,10 @@
         @empty
             <div class="col-span-full py-40 text-center bg-white rounded-[4rem] border border-dashed border-slate-200">
                 <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-200">
-                    <i class="fas {{ $isOutbound ? 'fa-mountain-sun' : 'fa-box-open' }} text-4xl"></i>
+                    <i class="fas fa-box-open text-4xl"></i>
                 </div>
-                <h5 class="text-2xl font-black text-slate-900 mb-2">Daftar Paket {{ $isOutbound ? 'Outbound' : 'Tour' }} Kosong</h5>
-                <a href="{{ route('admin.packages.create', ['isOutbound' => $isOutbound ? 1 : 0]) }}" class="mt-10 inline-block bg-slate-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition">Buat Paket Sekarang</a>
+                <h5 class="text-2xl font-black text-slate-900 mb-2">Daftar Paket Tour Kosong</h5>
+                <a href="{{ route('admin.packages.create') }}" class="mt-10 inline-block bg-slate-900 text-white px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition">Buat Paket Sekarang</a>
             </div>
         @endforelse
     </div>
@@ -255,6 +253,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 @endsection

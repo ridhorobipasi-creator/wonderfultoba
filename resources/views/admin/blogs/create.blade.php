@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Editor Artikel Mandiri - Wonderful Toba')
+@section('title', 'Editor Artikel Mandiri - Sujai Laketoba')
 
 @section('content')
 <div class="w-full max-w-full">
@@ -78,12 +78,7 @@
                         Foto Sampul
                     </h3>
                     
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="relative group h-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-600 transition-all cursor-pointer">
-                            <input type="file" name="image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="previewLocalImage">
-                            <i class="fas fa-cloud-arrow-up text-lg text-slate-300 group-hover:text-emerald-600 mb-1"></i>
-                            <span class="text-[8px] font-black text-slate-400 uppercase">Lokal</span>
-                        </div>
+                    <div class="grid grid-cols-1 gap-4 mb-6">
                         <div @click="openMediaPicker()" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
                             <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
                             <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>

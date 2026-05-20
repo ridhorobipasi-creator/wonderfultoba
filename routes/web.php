@@ -30,7 +30,7 @@ Route::post('/register', [App\Http\Controllers\WebAuthController::class, 'regist
 Route::get('/api/sync/version', [SyncController::class, 'getVersion'])->name('api.sync.version');
 
 // Admin Group
-Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum'])->prefix('admin')->name('admin.')->group(function() {
+Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('admin')->name('admin.')->group(function() {
     
     // Dashboard
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
@@ -75,18 +75,10 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
     Route::get('/cms-halaman-utama', [CMSController::class, 'index'])->name('cms.index');
     Route::get('/cms-beranda-tour', [CMSController::class, 'tour'])->name('cms.tour');
     Route::get('/cms-halaman-statis', [CMSController::class, 'pages'])->name('cms.pages');
-    Route::get('/cms-outbound', [CMSController::class, 'outbound'])->name('outbound.cms');
     Route::post('/cms-save/{key}', [CMSController::class, 'save'])->name('cms.save');
 
-    // Outbound Services (Restricted)
+    // Financial Reports (Restricted)
     Route::middleware('role:superadmin,admin_umum')->group(function() {
-        Route::prefix('outbound')->name('outbound.')->group(function () {
-            Route::resource('services', App\Http\Controllers\Admin\OutboundServiceController::class);
-            Route::resource('videos', App\Http\Controllers\Admin\OutboundVideoController::class);
-            Route::resource('locations', App\Http\Controllers\Admin\OutboundLocationController::class);
-            Route::resource('tiers', App\Http\Controllers\Admin\OutboundTierController::class);
-        });
-        
         Route::get('/finance', [App\Http\Controllers\Admin\FinanceController::class, 'index'])->name('finance.index');
         Route::get('/finance/export', [App\Http\Controllers\Admin\FinanceController::class, 'export'])->name('finance.export');
         
@@ -148,18 +140,6 @@ Route::prefix('tour')->name('tour.')->group(function() {
     Route::post('/booking/submit', [App\Http\Controllers\PublicController::class, 'submitBooking'])
         ->middleware('throttle:5,1')
         ->name('booking.submit');
-});
-
-// Outbound Routes (Redirected)
-Route::prefix('outbound')->name('outbound.')->group(function() {
-    Route::get('/', function() { return redirect()->route('index'); })->name('index');
-    Route::get('/packages', function() { return redirect()->route('index'); })->name('packages');
-    Route::get('/blog', function() { return redirect()->route('index'); })->name('blog');
-    
-    // Outbound Quote Submission
-    Route::post('/quote/submit', [App\Http\Controllers\PublicController::class, 'submitQuote'])
-        ->middleware('throttle:5,1')
-        ->name('quote.submit');
 });
 
 // Other Public Pages

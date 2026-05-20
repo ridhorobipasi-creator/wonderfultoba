@@ -13,7 +13,7 @@
     </div>
 
     <div class="bg-white rounded-[2rem] border border-gray-100 p-8 shadow-sm">
-        <form action="{{ route('admin.clients.store') }}" method="POST" enctype="multipart/form-data" class="mb-10 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+        <form action="{{ route('admin.clients.store') }}" method="POST" x-data="clientForm()" class="mb-10 p-6 bg-gray-50 rounded-2xl border border-gray-100">
             @csrf
             <h3 class="text-sm font-black text-gray-900 uppercase tracking-widest mb-4">Add New Client</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
@@ -23,7 +23,13 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Logo (webp/SVG)</label>
-                    <input type="file" name="logo" required class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-toba-green file:text-white hover:file:bg-emerald-600 cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <button type="button" @click="openMediaPicker()" class="w-full px-4 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs hover:border-toba-green flex items-center justify-center gap-2 transition">
+                            <i class="fas fa-images text-gray-400"></i> Pilih dari Media
+                        </button>
+                        <input type="hidden" name="logo_url" :value="logoUrl">
+                        <img x-show="logoUrl" :src="logoUrl" class="h-10 w-10 object-contain rounded-lg border border-gray-200 bg-white" style="display: none;">
+                    </div>
                 </div>
                 <button type="submit" class="bg-toba-green text-white px-6 py-2.5 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition text-sm">
                     Upload Client
@@ -52,3 +58,25 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function clientForm() {
+        return {
+            logoUrl: '',
+            openMediaPicker() {
+                window.dispatchEvent(new CustomEvent('open-media-picker', { 
+                    detail: { 
+                        callback: (item) => {
+                            let path = item.path;
+                            if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
+                            if (path.startsWith('storage/')) path = path.replace('storage/', '');
+                            this.logoUrl = '/storage/' + path;
+                        } 
+                    } 
+                }));
+            }
+        }
+    }
+</script>
+@endpush

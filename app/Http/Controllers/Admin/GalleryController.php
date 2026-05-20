@@ -21,7 +21,7 @@ class GalleryController extends Controller
     {
         $validated = $request->validate([
             'caption' => 'required|string|max:255',
-            'category' => 'required|in:tour,outbound',
+            'category' => 'required|in:tour',
             'isActive' => 'boolean'
         ]);
 
@@ -57,11 +57,25 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'files.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image_url' => 'nullable|string',
+            'caption' => 'nullable|string',
             'category' => 'required|in:tour,outbound',
         ]);
 
         $uploaded = 0;
+        
+        if ($request->filled('image_url')) {
+            $img = GalleryImage::create([
+                'caption' => $request->caption ?? 'Gallery Image',
+                'category' => $request->category,
+                'imageUrl' => $request->image_url,
+                'isActive' => true,
+            ]);
+            $this->logActivity('created', "Added gallery image: {$img->caption}", $img);
+            $uploaded++;
+        }
+
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 // Convert to WebP, resize, and Index into Media Library
@@ -121,7 +135,7 @@ class GalleryController extends Controller
     {
         $request->validate([
             'media_ids' => 'required|array',
-            'category' => 'required|in:tour,outbound',
+            'category' => 'required|in:tour',
         ]);
 
         $added = 0;

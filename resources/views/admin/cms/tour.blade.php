@@ -94,7 +94,7 @@ document.addEventListener('alpine:init', () => {
                 ...this.slides[this.activeSlideIdx],
                 type: 'gallery',
                 id: img.id,
-                title: img.title || 'Wonderful Toba Gallery',
+                title: img.title || 'Sujai Laketoba Gallery',
                 subtitle: img.description || '',
                 image_url: img.image_path,
                 cta_link: '#',
@@ -155,7 +155,7 @@ document.addEventListener('alpine:init', () => {
         @php
             $defaultTestimonials = [
                 ['name' => 'Andini Wijaya', 'location' => 'Jakarta, Indonesia', 'text' => 'Pelayanan sangat profesional. Tour guide ramah dan sangat menguasai medan. Itinerary juga tidak terlalu padat sehingga kami bisa benar-benar menikmati waktu.', 'image' => 'https://i.pravatar.cc/100?u=user1'],
-                ['name' => 'Budi Santoso', 'location' => 'Surabaya, Indonesia', 'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Wonderful Toba benar-benar kurasi yang terbaik untuk tamunya. Highly recommended!', 'image' => 'https://i.pravatar.cc/100?u=user2']
+                ['name' => 'Budi Santoso', 'location' => 'Surabaya, Indonesia', 'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Sujai Laketoba benar-benar kurasi yang terbaik untuk tamunya. Highly recommended!', 'image' => 'https://i.pravatar.cc/100?u=user2']
             ];
         @endphp
         testimonials: (() => {
@@ -272,14 +272,8 @@ document.addEventListener('alpine:init', () => {
                                 <img :src="heroImage" class="w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-110">
                                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover/hero:opacity-100 transition-all flex flex-col items-center justify-center gap-3">
                                     <button type="button" @click="openMedia('hero')" class="px-6 py-3 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform flex items-center gap-2">
-                                        <i class="fas fa-images"></i> Pilih dari Galeri
+                                        <i class="fas fa-images"></i> Pilih dari Media Library
                                     </button>
-                                    <div class="flex items-center gap-2">
-                                        <input type="file" name="hero_image_file" id="hero_image_file" class="hidden" @change="updatePreview($event)">
-                                        <button type="button" @click="document.getElementById('hero_image_file').click()" class="px-4 py-2 bg-slate-800 text-white rounded-xl font-black text-[8px] uppercase tracking-widest hover:bg-slate-700 transition-colors">
-                                            <i class="fas fa-upload mr-1"></i> Upload File
-                                        </button>
-                                    </div>
                                 </div>
                                 <input type="hidden" name="hero_image_url" x-ref="heroUrl" :value="heroImage.replace('/storage/', '').replace(/^\//, '')">
                             </div>
@@ -339,7 +333,7 @@ document.addEventListener('alpine:init', () => {
                 <!-- Why Us Tab -->
                 <div x-show="activeTab === 'about'" x-transition class="space-y-6">
                     <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-slate-900"></span> Kelebihan Wonderful Toba
+                        <span class="w-2 h-2 rounded-full bg-slate-900"></span> Kelebihan Sujai Laketoba
                     </h4>
                     <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
                         @for($i = 1; $i <= 3; $i++)
@@ -384,7 +378,7 @@ document.addEventListener('alpine:init', () => {
                 <div x-show="activeTab === 'stats'" x-transition class="space-y-6">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-slate-900"></span> Statistik Wonderful Toba
+                            <span class="w-2 h-2 rounded-full bg-slate-900"></span> Statistik Sujai Laketoba
                         </h4>
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
@@ -516,7 +510,7 @@ document.addEventListener('alpine:init', () => {
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SEO Meta Title</label>
-                            <input type="text" name="meta_title" value="{{ $settings['meta_title'] ?? '' }}" placeholder="Wonderful Toba | Paket Wisata Terbaik" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-xs shadow-inner">
+                            <input type="text" name="meta_title" value="{{ $settings['meta_title'] ?? '' }}" placeholder="Sujai Laketoba | Paket Wisata Terbaik" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-xs shadow-inner">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SEO Meta Description</label>
@@ -674,14 +668,11 @@ document.addEventListener('alpine:init', () => {
                                         </div>
                                         <div class="grid grid-cols-2 gap-3">
                                             <div class="space-y-1">
-                                                <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Upload Image (WebP Auto)</label>
-                                                <div class="relative group">
-                                                    <input type="file" :name="'homepage_slides['+index+'][image_file]'" @change="handleSlideImage($event, index)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*">
-                                                    <div class="w-full px-3 py-2 bg-white rounded-xl border-none flex items-center gap-2 hover:bg-slate-100 transition">
-                                                        <i class="fas fa-cloud-arrow-up text-slate-300 text-[10px]"></i>
-                                                        <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Pilih File...</span>
-                                                    </div>
-                                                </div>
+                                                <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
+                                                <button type="button" @click="openMedia('slider', index)" class="w-full px-3 py-2 bg-white rounded-xl border-none flex items-center gap-2 hover:bg-slate-100 transition">
+                                                    <i class="fas fa-images text-slate-300 text-[10px]"></i>
+                                                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Pilih dari Galeri</span>
+                                                </button>
                                             </div>
                                             <div class="space-y-1" x-show="slide.type === 'package' || slide.type === 'manual'">
                                                 <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Harga</label>
@@ -790,7 +781,7 @@ document.addEventListener('alpine:init', () => {
                 <div class="relative z-10 max-w-2xl space-y-8">
                     <div class="flex items-center gap-3">
                         <span class="w-8 h-px bg-emerald-500"></span>
-                        <span class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">Wonderful Toba Tour</span>
+                        <span class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">Sujai Laketoba Tour</span>
                     </div>
                     <h1 class="text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter" x-text="heroTitle"></h1>
                     <p class="text-slate-200 text-sm font-medium leading-relaxed max-w-lg opacity-80" x-text="heroSubtitle"></p>
@@ -939,7 +930,7 @@ document.addEventListener('alpine:init', () => {
 
             importFromGallery(img) {
                 const slide = this.slides[this.activeSlideIdx];
-                slide.title = img.title || 'Wonderful Toba';
+                slide.title = img.title || 'Sujai Laketoba';
                 slide.subtitle = img.description;
                 slide.image_url = img.image_path;
             },

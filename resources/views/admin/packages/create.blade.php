@@ -35,44 +35,26 @@
                     @enderror
                 </div>
 
-                <!-- Type & Status Row -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Type *</label>
-                        <select name="isOutbound" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
-                            <option value="0" {{ old('isOutbound') == '0' ? 'selected' : '' }}>Tour Package</option>
-                            <option value="1" {{ old('isOutbound') == '1' ? 'selected' : '' }}>Outbound Package</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Status *</label>
-                        <select name="status" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
-                            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        </select>
-                    </div>
+                <!-- Status -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Status *</label>
+                    <select name="status" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
+                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    </select>
                 </div>
 
                 <!-- Images Upload -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">Package Images</label>
-                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
-                        <div class="flex-1 border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-toba-green transition group bg-gray-50/50 cursor-pointer relative">
-                            <input type="file" name="images[]" multiple id="images" class="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*" @change="previewImages">
-                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 group-hover:text-toba-green transition mb-3"></i>
-                            <p class="text-sm font-bold text-gray-700">Upload dari Perangkat</p>
-                            <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest font-black">Seret file atau klik</p>
-                        </div>
-                        
-                        <button type="button" @click="openPackageMediaPicker()" class="flex-1 border-2 border-gray-200 rounded-2xl p-8 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition group bg-white flex flex-col items-center justify-center gap-3">
-                            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-images text-2xl"></i>
+                    <div class="flex flex-col gap-4 mb-4">
+                        <button type="button" @click="openPackageMediaPicker()" class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                                <i class="fas fa-images text-3xl"></i>
                             </div>
-                            <p class="text-sm font-bold text-slate-700 uppercase tracking-tight">Pilih dari Galeri Pusat</p>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Gunakan Aset yang Sudah Ada</p>
+                            <p class="text-lg font-black text-slate-800 tracking-tight mt-2">Pilih dari Galeri Pusat</p>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Pilih satu atau lebih aset untuk paket ini</p>
                         </button>
                     </div>
 
@@ -90,10 +72,23 @@
                             </div>
                         </template>
                     </div>
-                    <div id="image-preview" class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-4">
-                        <template x-for="url in previews" :key="url">
-                            <div class="relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-                                <img :src="url" class="w-full h-full object-cover">
+
+                    <div class="mt-4 flex flex-col gap-2">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Atau Upload Gambar Baru dari Perangkat (Lokal)</label>
+                        <input type="file" name="images[]" multiple @change="handleLocalFiles($event)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition cursor-pointer">
+                    </div>
+
+                    <!-- Local Images Preview -->
+                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-4" x-show="localPreviews.length > 0">
+                        <template x-for="(preview, idx) in localPreviews" :key="'local'+idx">
+                            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-emerald-500 shadow-lg group">
+                                <img :src="preview.url" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                    <button type="button" @click="removeLocalFile(idx)" class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </button>
+                                </div>
+                                <div class="absolute top-1 right-1 bg-emerald-600 text-[7px] text-white px-1.5 py-0.5 rounded-full font-black tracking-widest">LOCAL</div>
                             </div>
                         </template>
                     </div>
@@ -302,24 +297,14 @@
         promotion: false
     });
 
-    function initPackageForm() {
-        if (typeof Alpine === 'undefined') return;
-        
+    document.addEventListener('alpine:init', () => {
         Alpine.data('packageForm', () => ({
             previews: [],
             itinerary: [],
             includes: [],
             excludes: [],
-
-            previewImages(e) {
-                const files = e.target.files;
-                this.previews = [];
-                if (files) {
-                    Array.from(files).forEach(file => {
-                        this.previews.push(URL.createObjectURL(file));
-                    });
-                }
-            },
+            localFiles: [],
+            localPreviews: [],
 
             addDay() { this.itinerary.push({ title: '', description: '' }); },
             removeDay(index) { this.itinerary.splice(index, 1); },
@@ -341,14 +326,34 @@
                         } 
                     } 
                 }));
+            },
+
+            handleLocalFiles(e) {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    this.localFiles.push(file);
+                    this.localPreviews.push({
+                        url: URL.createObjectURL(file),
+                        name: file.name
+                    });
+                });
+                this.updateFileInput();
+            },
+
+            removeLocalFile(idx) {
+                this.localFiles.splice(idx, 1);
+                this.localPreviews.splice(idx, 1);
+                this.updateFileInput();
+            },
+
+            updateFileInput() {
+                const fileInput = document.querySelector('input[type="file"][name="images[]"]');
+                if (!fileInput) return;
+                const dataTransfer = new DataTransfer();
+                this.localFiles.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
             }
         }));
-    }
-
-    if (window.Alpine) {
-        initPackageForm();
-    } else {
-        document.addEventListener('alpine:init', initPackageForm);
-    }
+    });
 </script>
 @endpush

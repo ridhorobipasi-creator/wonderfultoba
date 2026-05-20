@@ -14,7 +14,7 @@ class WhatsAppHelper
         $phone = config('services.whatsapp.phone', '6281323888207');
         $packageName = $booking->package ? $booking->package->name : 'Paket Wisata';
         
-        $message = "Halo Wonderful Toba,\n\n";
+        $message = "Halo Sujai Laketoba,\n\n";
         $message .= "Saya ingin konfirmasi pesanan saya:\n";
         $message .= "🆔 *Kode Booking:* {$booking->bookingCode}\n";
         $message .= "👤 *Nama:* {$booking->customerName}\n";

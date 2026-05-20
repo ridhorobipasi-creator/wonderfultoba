@@ -1,4 +1,4 @@
-﻿@extends('admin.layout')
+@extends('admin.layout')
 
 @section('title', 'Pengaturan Umum')
 @section('page-title', 'Pengaturan Umum')
@@ -35,10 +35,8 @@
                             <div class="relative group h-32 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 overflow-hidden flex flex-col items-center justify-center p-4">
                                 <img src="{{ $general['logo_light_url'] ?? asset('assets/img/logo.png') }}" class="max-h-full object-contain" id="preview-logo-light">
                                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                                    <button type="button" @click="$refs.logoLight.click()" class="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-toba-green hover:text-white transition-all"><i class="fas fa-camera"></i></button>
                                     <button type="button" @click="openMedia('logo_light')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition-all"><i class="fas fa-images"></i></button>
                                 </div>
-                                <input type="file" name="logo_light_file" x-ref="logoLight" class="hidden" onchange="previewImage(this, 'preview-logo-light')">
                                 <input type="hidden" name="logo_light_url" value="{{ $general['logo_light_url'] ?? '' }}">
                             </div>
                         </div>
@@ -48,10 +46,8 @@
                             <div class="relative group h-32 rounded-3xl bg-slate-900 border-2 border-dashed border-slate-700 overflow-hidden flex flex-col items-center justify-center p-4">
                                 <img src="{{ $general['logo_dark_url'] ?? asset('assets/img/logo-white.png') }}" class="max-h-full object-contain" id="preview-logo-dark">
                                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                                    <button type="button" @click="$refs.logoDark.click()" class="w-10 h-10 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-toba-green hover:text-white transition-all"><i class="fas fa-camera"></i></button>
                                     <button type="button" @click="openMedia('logo_dark')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition-all"><i class="fas fa-images"></i></button>
                                 </div>
-                                <input type="file" name="logo_dark_file" x-ref="logoDark" class="hidden" onchange="previewImage(this, 'preview-logo-dark')">
                                 <input type="hidden" name="logo_dark_url" value="{{ $general['logo_dark_url'] ?? '' }}">
                             </div>
                         </div>
@@ -65,9 +61,7 @@
                                     <img src="{{ $general['icon_url'] ?? asset('favicon.ico') }}" class="w-8 h-8 object-contain" id="preview-favicon">
                                 </div>
                                 <div class="flex-1 space-y-2">
-                                    <button type="button" @click="$refs.iconFile.click()" class="text-[10px] font-black text-toba-green uppercase tracking-widest hover:underline">Unggah Baru</button>
                                     <p class="text-[8px] text-slate-400 leading-relaxed font-bold uppercase tracking-tighter">Format .ico atau .png (64x64px)</p>
-                                    <input type="file" name="icon_file" x-ref="iconFile" class="hidden" onchange="previewImage(this, 'preview-favicon')">
                                     <input type="hidden" name="icon_url" value="{{ $general['icon_url'] ?? '' }}">
                                 </div>
                                 <button type="button" @click="openMedia('favicon')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 transition-all shadow-sm">
@@ -77,7 +71,7 @@
                         </div>
                         <div class="space-y-4">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Situs</label>
-                            <input type="text" name="site_name" value="{{ $general['site_name'] ?? 'Wonderful Toba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900">
+                            <input type="text" name="site_name" value="{{ $general['site_name'] ?? 'Sujai Laketoba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-toba-green font-bold text-slate-900">
                         </div>
                     </div>
                 </div>
@@ -121,7 +115,7 @@
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">WA Welcome Message</label>
-                            <input type="text" name="wa_message" value="{{ $general['wa_message'] ?? 'Halo Wonderful Toba, saya ingin bertanya tentang...' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-700 text-xs">
+                            <input type="text" name="wa_message" value="{{ $general['wa_message'] ?? 'Halo Sujai Laketoba, saya ingin bertanya tentang...' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-700 text-xs">
                         </div>
                     </div>
 
@@ -144,7 +138,7 @@
                 <div class="pt-8 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div class="space-y-2">
                         <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Instagram</label>
-                        <input type="text" name="social_instagram" value="{{ $general['social_instagram'] ?? '' }}" placeholder="@wonderful.toba" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                        <input type="text" name="social_instagram" value="{{ $general['social_instagram'] ?? '' }}" placeholder="@sujailaketoba" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
                     </div>
                     <div class="space-y-2">
                         <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Facebook</label>
@@ -178,7 +172,7 @@
                 <div class="space-y-8">
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Meta Title Global (Brand)</label>
-                        <input type="text" name="seo_meta_title" value="{{ $general['seo_meta_title'] ?? 'Wonderful Toba - Tour & Travel Agency' }}" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-black text-slate-900 text-lg shadow-inner">
+                        <input type="text" name="seo_meta_title" value="{{ $general['seo_meta_title'] ?? 'Sujai Laketoba - Tour & Travel Agency' }}" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-black text-slate-900 text-lg shadow-inner">
                         <p class="text-[9px] text-slate-400 font-bold italic">Rekomendasi: 50-60 karakter.</p>
                     </div>
 

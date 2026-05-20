@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard') - Wonderful Toba Admin</title>
+    <title>@yield('title', 'Dashboard') - Sujai Laketoba Admin</title>
     @php
         $iconUrl = $siteSettings['general']['icon_url'] ?? ($siteSettings['cms_landing']['brand_icon_url'] ?? asset('favicon.ico'));
         if ($iconUrl && !Str::startsWith($iconUrl, ['http', '//', 'data:', 'blob:'])) {
@@ -128,7 +128,7 @@
                             <span class="text-white font-black text-xl">W</span>
                         </div>
                         <h1 class="text-base font-black text-slate-900 tracking-tight leading-tight mb-3">
-                            {{ $siteSettings['general']['site_name'] ?? ($siteSettings['cms_landing']['brand_name'] ?? 'Wonderful Toba') }}
+                            {{ $siteSettings['general']['site_name'] ?? ($siteSettings['cms_landing']['brand_name'] ?? 'Sujai Laketoba') }}
                         </h1>
                     @endif
                     <a href="{{ route('index') }}" target="_blank"
@@ -197,6 +197,12 @@
                                 <i class="fas fa-pen-nib w-5 text-sm {{ request()->routeIs('admin.blogs.*') ? 'text-white' : 'text-emerald-500' }}"></i>
                                 Blog / Artikel
                             </a>
+                            <a href="{{ route('admin.media.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.media.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-fuchsia-500' }}"></i>
+                                Media Library (Global)
+                            </a>
                              @if(auth()->user()->isSuperAdmin())
                              <a href="{{ route('admin.cities.index') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
@@ -258,12 +264,6 @@
                                       {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                 <i class="fas fa-user-shield w-5 text-sm {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-indigo-400' }}"></i>
                                 Manajemen Pengguna
-                            </a>
-                            <a href="{{ route('admin.media.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.media.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-slate-400' }}"></i>
-                                Media Library (Global)
                             </a>
                             <a href="{{ route('admin.logs.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
@@ -503,7 +503,7 @@
             {{-- Footer --}}
             <footer class="px-8 py-5 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-2 flex-shrink-0">
                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">
-                    Wonderful Toba Engine &bull; Management v3.0
+                    Sujai Laketoba Engine &bull; Management v3.0
                 </p>
                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">
                     Crafted with <i class="fas fa-heart text-rose-400"></i> for Wonderful Indonesia

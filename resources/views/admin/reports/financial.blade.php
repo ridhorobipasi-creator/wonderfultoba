@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Laporan Keuangan - Wonderful Toba')
+@section('title', 'Laporan Keuangan - Sujai Laketoba')
 
 @section('content')
 <div class="space-y-6">
@@ -38,7 +38,7 @@
     </div>
 
     {{-- Monthly Summary Grid --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm">
             <div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
                 <i class="fas fa-clipboard-list"></i>
@@ -54,24 +54,6 @@
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendapatan</p>
             <p class="text-xl font-black text-slate-900 mt-1">Rp {{ number_format($stats['revenue'], 0, ',', '.') }}</p>
         </div>
-
-        <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm">
-            <div class="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 mb-4">
-                <i class="fas fa-mountain-sun"></i>
-            </div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Paket Tour</p>
-            <p class="text-2xl font-black text-slate-900 mt-1">{{ number_format($stats['tour']) }}</p>
-        </div>
-
-        <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm">
-            <div class="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 mb-4">
-                <i class="fas fa-users-gear"></i>
-            </div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Outbound</p>
-            <p class="text-2xl font-black text-slate-900 mt-1">{{ number_format($stats['outbound']) }}</p>
-        </div>
-
-
     </div>
 
     {{-- Status Breakdown --}}
@@ -101,22 +83,14 @@
                 <p class="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-2">📊 Ringkasan Tahunan {{ $year }}</p>
                 <h3 class="text-3xl font-black tracking-tight">Performa Bisnis</h3>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 w-full md:w-auto">
-                <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+            <div class="grid grid-cols-2 gap-8 w-full md:w-auto">
+                <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-[150px]">
                     <p class="text-[28px] font-black leading-none text-white">{{ number_format($yearlySummary['orders']) }}</p>
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Total Pesanan</p>
                 </div>
-                <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-[150px]">
                     <p class="text-[20px] font-black leading-none text-white">Rp {{ number_format($yearlySummary['revenue'] / 1000000, 1) }}jt</p>
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Pendapatan</p>
-                </div>
-                <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
-                    <p class="text-[28px] font-black leading-none text-white">{{ $yearlySummary['tour'] }}</p>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Paket Tour</p>
-                </div>
-                <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
-                    <p class="text-[28px] font-black leading-none text-white">{{ $yearlySummary['outbound'] }}</p>
-                    <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Outbound</p>
                 </div>
             </div>
         </div>
@@ -124,7 +98,7 @@
 
     {{-- Chart & Table Section --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {{-- Chart Placeholder (Simple CSS Columns) --}}
+        {{-- Chart Placeholder --}}
         <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
             <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-8">📈 Tren Pesanan {{ $year }}</h3>
             <div class="flex items-end justify-between h-48 gap-1.5 px-2 bg-slate-50/50 rounded-2xl py-4">
@@ -166,7 +140,7 @@
                         <tr class="bg-slate-50/50">
                             <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">ID</th>
                             <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Pelanggan</th>
-                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Layanan</th>
+                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Paket</th>
                             <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                             <th class="px-6 py-4 text-right text-[9px] font-black text-slate-400 uppercase tracking-widest">Total</th>
                         </tr>
@@ -183,7 +157,7 @@
                                     <p class="text-[9px] text-slate-400">{{ $booking->customer?->email }}</p>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest {{ $booking->package?->isOutbound ? 'bg-orange-100 text-orange-700' : 'bg-indigo-100 text-indigo-700' }}">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-indigo-100 text-indigo-700">
                                         {{ $booking->package?->name ?? 'Custom' }}
                                     </span>
                                 </td>

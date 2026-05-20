@@ -19,7 +19,7 @@ class Package extends Model
         'price', 'childPrice', 'cost_price', 'priceDisplay', 'duration', 'images',
         'includes', 'excludes', 'pricingDetails', 'itinerary', 'itineraryText',
         'dronePrice', 'droneLocation', 'notes', 'status', 'isFeatured',
-        'isOutbound', 'sortOrder', 'metaTitle', 'metaDescription',
+        'sortOrder', 'metaTitle', 'metaDescription',
         'translations', 'cityId',
     ];
 
@@ -33,7 +33,6 @@ class Package extends Model
         'itinerary' => 'array',
         'translations' => 'array',
         'isFeatured' => 'boolean',
-        'isOutbound' => 'boolean',
         'price' => 'double',
         'childPrice' => 'double',
         'dronePrice' => 'double',

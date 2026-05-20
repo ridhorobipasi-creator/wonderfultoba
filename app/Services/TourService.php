@@ -135,7 +135,6 @@ class TourService
     public function getFeaturedPackages()
     {
         return Package::where('status', 'active')
-            ->where('isOutbound', false)
             ->where('isFeatured', true)
             ->orderBy('sortOrder')
             ->get();
@@ -162,7 +161,6 @@ class TourService
     public function getAllPackages()
     {
         return Package::where('status', 'active')
-            ->where('isOutbound', false)
             ->with(['packageImages'])
             ->orderBy('sortOrder')
             ->get();

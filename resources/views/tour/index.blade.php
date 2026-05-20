@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $settings['meta_title'] ?? $settings['hero_title'] ?? 'Wonderful Toba – Wisata Sumatera Utara')
-@section('description', $settings['meta_description'] ?? $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Wonderful Toba.')
+@section('title', $settings['meta_title'] ?? $settings['hero_title'] ?? 'Sujai Laketoba – Wisata Sumatera Utara')
+@section('description', $settings['meta_description'] ?? $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Sujai Laketoba.')
 
 @section('content')
 <div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6281323888207') }}' }">
@@ -86,7 +86,7 @@
     @if($settings['show_about'] ?? true)
     @php
         $whyImg1 = imageUrl($settings['why_image_1_url'] ?? null, asset('images/home/tour.webp'));
-        $whyImg2 = imageUrl($settings['why_image_2_url'] ?? null, asset('images/home/outbound.webp'));
+        $whyImg2 = imageUrl($settings['why_image_2_url'] ?? null, asset('images/home/tour.webp'));
         $whyImg3 = imageUrl($settings['why_image_3_url'] ?? null, asset('images/home/tour.webp'));
         
         $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000');
@@ -325,7 +325,7 @@
                         [
                             'name' => 'Farhan Haris',
                             'location' => 'Kuala Lumpur, Malaysia',
-                            'text' => 'Wonderful Toba arranged a perfect 4D3N trip for our family. The view from Samosir Island was breathtaking, and the private transport was extremely comfortable. Highly recommended for Malaysian travelers!',
+                            'text' => 'Sujai Laketoba arranged a perfect 4D3N trip for our family. The view from Samosir Island was breathtaking, and the private transport was extremely comfortable. Highly recommended for Malaysian travelers!',
                             'image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80'
                         ],
                         [
@@ -424,7 +424,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="relative">
                         <div class="aspect-square rounded-[3rem] overflow-hidden relative z-10 ring-8 ring-white/5">
-                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80') }}" alt="Travel Specialist Wonderful Toba" class="w-full h-full object-cover">
+                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80') }}" alt="Travel Specialist Sujai Laketoba" class="w-full h-full object-cover">
                         </div>
                         <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                     </div>
@@ -537,11 +537,11 @@
                     $faqs = [
                         [
                             'q' => 'Bagaimana cara terbaik menuju Danau Toba dari Bandara Kualanamu (KNO)?',
-                            'a' => 'Cara terbaik dan paling nyaman adalah menggunakan layanan transfer private (armada premium dengan supir pribadi) yang disediakan oleh Wonderful Toba. Perjalanan darat memakan waktu sekitar 3.5 hingga 4 jam melalui jalan tol Medan-Tebing Tinggi, lalu dilanjutkan ke Parapat, pintu gerbang utama menuju Pulau Samosir.'
+                            'a' => 'Cara terbaik dan paling nyaman adalah menggunakan layanan transfer private (armada premium dengan supir pribadi) yang disediakan oleh Sujai Laketoba. Perjalanan darat memakan waktu sekitar 3.5 hingga 4 jam melalui jalan tol Medan-Tebing Tinggi, lalu dilanjutkan ke Parapat, pintu gerbang utama menuju Pulau Samosir.'
                         ],
                         [
                             'q' => 'Apakah makanan halal mudah ditemukan di sekitar Danau Toba?',
-                            'a' => 'Ya, sangat mudah. Di Parapat dan Pulau Samosir (terutama daerah wisata Tuk-tuk dan Tomok), terdapat banyak restoran Muslim lokal yang bersertifikat halal atau menyajikan menu ramah Muslim seperti ikan mas bakar, ayam penyet, dan masakan khas Minang/Padang. Supir dan pemandu Wonderful Toba akan selalu mengarahkan Anda ke tempat makan halal pilihan.'
+                            'a' => 'Ya, sangat mudah. Di Parapat dan Pulau Samosir (terutama daerah wisata Tuk-tuk dan Tomok), terdapat banyak restoran Muslim lokal yang bersertifikat halal atau menyajikan menu ramah Muslim seperti ikan mas bakar, ayam penyet, dan masakan khas Minang/Padang. Supir dan pemandu Sujai Laketoba akan selalu mengarahkan Anda ke tempat makan halal pilihan.'
                         ],
                         [
                             'q' => 'Mata uang apa yang digunakan, dan apakah kartu kredit diterima?',
@@ -612,7 +612,7 @@
                         ];
                         @endphp
                         @foreach($avatarPhotos as $avatarUrl)
-                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-slate-900 shadow-xl object-cover" alt="Pelanggan Wonderful Toba">
+                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-slate-900 shadow-xl object-cover" alt="Pelanggan Sujai Laketoba">
                         @endforeach
                         <div class="w-14 h-14 rounded-full border-4 border-slate-900 bg-toba-green flex items-center justify-center text-white text-[10px] font-black">
                             1.5K+

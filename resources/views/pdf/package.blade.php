@@ -117,7 +117,7 @@
 <body>
 
     <div class="header">
-        <h1>Wonderful Toba</h1>
+        <h1>Sujai Laketoba</h1>
         <p>Solusi Perjalanan & Outbound Terbaik di Sumatera Utara</p>
         <p>Telp: {{ $settings['contact_wa'] ?? '+6281234567890' }} | Email: {{ $settings['contact_email'] ?? 'hello@medantobatravel.id' }}</p>
     </div>
@@ -183,7 +183,7 @@
     @endforelse
 
     <div class="footer">
-        Dokumen ini digenerate secara otomatis oleh sistem Wonderful Toba.<br>
+        Dokumen ini digenerate secara otomatis oleh sistem Sujai Laketoba.<br>
         Harga dan ketersediaan dapat berubah sewaktu-waktu. Silakan hubungi admin untuk konfirmasi.
     </div>
 

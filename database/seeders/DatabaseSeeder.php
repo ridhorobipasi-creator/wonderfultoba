@@ -55,7 +55,6 @@ class DatabaseSeeder extends Seeder
                     'excludes' => json_encode($pkg['excludes'] ?? []),
                     'itinerary' => isset($pkg['itinerary']) ? json_encode($pkg['itinerary']) : null,
                     'status' => $pkg['status'] ?? 'active',
-                    'isOutbound' => $pkg['isOutbound'] ? 1 : 0,
                     'cityId' => $pkg['cityId'] ?? null,
                     'createdAt' => date('Y-m-d H:i:s', strtotime($pkg['createdAt'] ?? 'now')),
                     'updatedAt' => date('Y-m-d H:i:s', strtotime($pkg['createdAt'] ?? 'now')),
@@ -112,42 +111,6 @@ class DatabaseSeeder extends Seeder
                     'status' => ($blog['is_published'] ?? true) ? 'published' : 'draft',
                     'createdAt' => date('Y-m-d H:i:s', strtotime($blog['createdAt'] ?? 'now')),
                     'updatedAt' => date('Y-m-d H:i:s', strtotime($blog['createdAt'] ?? 'now')),
-                ]);
-            }
-        }
-
-        // 7. OUTBOUND SERVICES
-        if (isset($data['outbound_services'])) {
-            foreach ($data['outbound_services'] as $key => $obs) {
-                DB::table('outbound_services')->insert([
-                    'id' => $key + 1,
-                    'title' => $obs['title'],
-                    'shortDesc' => $obs['shortDesc'] ?? null,
-                    'detailDesc' => $obs['detailDesc'] ?? null,
-                    'icon' => $obs['icon'] ?? null,
-                    'image' => $obs['image'] ?? null,
-                ]);
-            }
-        }
-
-        // 8. OUTBOUND VIDEOS
-        if (isset($data['outbound_videos'])) {
-            foreach ($data['outbound_videos'] as $key => $obv) {
-                DB::table('outbound_videos')->insert([
-                    'id' => $key + 1,
-                    'title' => $obv['title'],
-                    'youtubeUrl' => $obv['youtubeUrl'],
-                ]);
-            }
-        }
-
-        // 9. OUTBOUND LOCATIONS
-        if (isset($data['outbound_locations'])) {
-            foreach ($data['outbound_locations'] as $key => $obl) {
-                DB::table('outbound_locations')->insert([
-                    'id' => $key + 1,
-                    'name' => $obl['name'],
-                    'image' => $obl['image'] ?? null,
                 ]);
             }
         }

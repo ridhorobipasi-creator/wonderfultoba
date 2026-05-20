@@ -77,7 +77,6 @@ class SettingController extends Controller
             '/tour',
             '/tour/packages',
             '/tour/blog',
-            '/outbound',
             '/about',
             '/terms',
             '/privacy',

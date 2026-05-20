@@ -1,4 +1,4 @@
-﻿{
+{
   "users": [
     {
       "id": 1,
@@ -11,12 +11,6 @@
       "name": "Admin Tour",
       "email": "tour@medantobatravel.com",
       "role": "admin_tour"
-    },
-    {
-      "id": 3,
-      "name": "Admin Outbound",
-      "email": "outbound@medantobatravel.com",
-      "role": "admin_outbound"
     }
   ],
   "cities": [
@@ -61,7 +55,6 @@
       ],
       "status": "active",
       "isFeatured": true,
-      "isOutbound": false,
       "cityId": 2,
       "createdAt": "2026-04-01"
     },
@@ -98,7 +91,6 @@
       ],
       "status": "active",
       "isFeatured": true,
-      "isOutbound": false,
       "cityId": 3,
       "createdAt": "2026-04-05"
     },
@@ -134,122 +126,8 @@
       ],
       "status": "active",
       "isFeatured": false,
-      "isOutbound": false,
       "cityId": 1,
       "createdAt": "2026-04-10"
-    },
-    {
-      "id": 4,
-      "name": "Outbound Team Building - Basic",
-      "slug": "outbound-team-building-basic",
-      "shortDescription": "Paket outbound hemat untuk team building perusahaan Anda",
-      "description": "Program team building dengan 3-5 jenis games outbound yang dirancang untuk meningkatkan kerjasama tim. Dipandu oleh trainer berpengalaman dengan perlengkapan keselamatan lengkap.",
-      "locationTag": "Area Jabodetabek & Sumut",
-      "price": 250000,
-      "priceDisplay": "per pax (min. 30 pax)",
-      "duration": "Setengah Hari (4-5 Jam)",
-      "images": [
-        "assets/images/2023/10/A11-Team-Building.jpg",
-        "assets/images/2023/10/A12-Fun-Games.jpg",
-        "assets/images/2023/10/005.jpg"
-      ],
-      "includes": [
-        "3 – 5 Jenis Games Outbound",
-        "Trainer & Moderator Berpengalaman",
-        "Perlengkapan Keselamatan Lengkap",
-        "Sertifikat Peserta",
-        "Dokumentasi Foto",
-        "Air Minum & Snack Sederhana"
-      ],
-      "excludes": [
-        "Transportasi",
-        "Biaya Venue",
-        "Makan Siang"
-      ],
-      "itinerary": [
-        { "day": 1, "title": "Half Day Outbound", "activities": ["Ice Breaking", "Games 1-3", "Break Time", "Games 4-5", "Closing Ceremony"] }
-      ],
-      "status": "active",
-      "isFeatured": false,
-      "isOutbound": true,
-      "cityId": 1,
-      "createdAt": "2026-04-15"
-    },
-    {
-      "id": 5,
-      "name": "Outbound Team Building - Standard",
-      "slug": "outbound-team-building-standard",
-      "shortDescription": "Paket paling populer dengan full day activities dan konsumsi lengkap",
-      "description": "Program outbound full day dengan 5-8 jenis games, senior trainer bersertifikasi, MC profesional, dan konsumsi lengkap. Paket terpopuler untuk corporate gathering.",
-      "locationTag": "Seluruh Sumatera Utara",
-      "price": 450000,
-      "priceDisplay": "per pax (min. 30 pax)",
-      "duration": "Full Day (8–9 Jam)",
-      "images": [
-        "assets/images/2023/10/A12-Gathering.jpg",
-        "assets/images/2023/10/006.jpg",
-        "assets/images/2023/10/008.jpg"
-      ],
-      "includes": [
-        "5 – 8 Jenis Games Outbound",
-        "Senior Trainer Bersertifikasi",
-        "Master of Ceremony (MC) Profesional",
-        "Perlengkapan Outbound Premium",
-        "Dokumentasi Foto & Video",
-        "Konsep Acara Custom",
-        "Sertifikat & Souvenir Peserta",
-        "Makan Siang & Coffee Break 2x"
-      ],
-      "excludes": [
-        "Transportasi",
-        "Biaya Venue / Akomodasi"
-      ],
-      "itinerary": [
-        { "day": 1, "title": "Full Day Program", "activities": ["Registration", "Ice Breaking", "Games Session 1", "Lunch Break", "Games Session 2", "Awarding"] }
-      ],
-      "status": "active",
-      "isFeatured": true,
-      "isOutbound": true,
-      "cityId": 1,
-      "createdAt": "2026-04-20"
-    },
-    {
-      "id": 6,
-      "name": "Outbound Team Building - Premium",
-      "slug": "outbound-team-building-premium",
-      "shortDescription": "Paket all-inclusive dengan akomodasi resort dan aktivitas eksklusif",
-      "description": "Program outbound premium 2D1N di resort berbintang dengan 8-12+ aktivitas eksklusif, transportasi group, full board meals, dan sesi motivasi. Cocok untuk perusahaan yang menginginkan pengalaman terbaik.",
-      "locationTag": "Resort Premium di Sumut",
-      "price": 1500000,
-      "priceDisplay": "Custom (hubungi kami)",
-      "duration": "2 Hari 1 Malam / Custom",
-      "images": [
-        "assets/images/2023/10/A13a-Outbound-Kids.jpg",
-        "assets/images/2023/10/009-1.jpg",
-        "assets/images/2023/10/0010.jpg"
-      ],
-      "includes": [
-        "8 – 12+ Aktivitas Outbound Eksklusif",
-        "Head Trainer + Tim Profesional Lengkap",
-        "MC + Sound System + Dekorasi Event",
-        "Konsep Tema Event Fully Customized",
-        "Dokumentasi Profesional (Foto + Video Edit)",
-        "Transportasi Group (Bus / ELF)",
-        "Akomodasi Resort Berbintang",
-        "Seluruh Konsumsi (Makan + Snack)",
-        "Suvenir Eksklusif & Merchandise",
-        "Sesi Motivasi & Leadership Talk"
-      ],
-      "excludes": [],
-      "itinerary": [
-        { "day": 1, "title": "Day 1: Arrival & Gathering", "activities": ["Pickup", "Check-in", "Games Session", "Gala Dinner"] },
-        { "day": 2, "title": "Day 2: Motivation & Closing", "activities": ["Breakfast", "Morning Activity", "Motivation Session", "Return Transfer"] }
-      ],
-      "status": "active",
-      "isFeatured": true,
-      "isOutbound": true,
-      "cityId": 2,
-      "createdAt": "2026-04-25"
     }
   ],
   "cars": [
@@ -290,16 +168,6 @@
       "createdAt": "2026-04-01"
     },
     {
-      "id": 2,
-      "title": "Tips Memilih Paket Outbound untuk Perusahaan",
-      "excerpt": "Panduan lengkap memilih paket outbound yang tepat untuk meningkatkan kinerja dan solidaritas tim Anda",
-      "image": "assets/images/2023/10/A11-Team-Building.jpg",
-      "author": { "name": "Admin Outbound" },
-      "category": "Outbound",
-      "is_published": true,
-      "createdAt": "2026-04-05"
-    },
-    {
       "id": 3,
       "title": "Kuliner Khas Medan yang Wajib Dicoba",
       "excerpt": "Selain wisatanya, Sumatera Utara juga terkenal dengan kulinernya yang kaya rempah dan menggugah selera.",
@@ -330,22 +198,6 @@
       "createdAt": "2026-04-15"
     }
   ],
-  "outbound_services": [
-    { "title": "TEAM BUILDING", "shortDesc": "Sinergi dan kolaborasi personal", "detailDesc": "Lewat team building, setiap personal bisa memberi respek dan menghargai perbedaan. Selanjutnya mereka bisa berbagi tujuan dan meraih ekspektasi bersama.", "icon": "Users", "image": "assets/images/2023/10/A11-Team-Building.jpg" },
-    { "title": "FUN GAMES", "shortDesc": "Bermain seru dengan tujuan", "detailDesc": "Dipimpin oleh seorang Game Master dan beberapa orang moderator agar tercipta suasana 'seru' tanpa meninggalkan tujuan dari outbound sendiri.", "icon": "Smile", "image": "assets/images/2023/10/A12-Fun-Games.jpg" },
-    { "title": "GATHERING", "shortDesc": "Acara kebersamaan perusahaan", "detailDesc": "Ragam kegiatan seru yang disusun profesional oleh tim kreatif. Acara gathering dapat diisi dengan kegiatan rewards untuk pegawai terbaik.", "icon": "Sparkles", "image": "assets/images/2023/10/A12-Gathering.jpg" },
-    { "title": "OUTBOUND KIDS", "shortDesc": "Kreativitas dan keberanian anak", "detailDesc": "Bertujuan mengembangkan kepercayaan diri, keberanian dan daya kreatifitas anak-anak mulai dari umur 5 hingga 15 tahun keatas.", "icon": "Compass", "image": "assets/images/2023/10/A13a-Outbound-Kids.jpg" }
-  ],
-  "outbound_videos": [
-    { "title": "Highlight Tour 2026", "youtubeUrl": "https://www.youtube.com/embed/J59m32QV0rM" },
-    { "title": "Event Pelindo 1", "youtubeUrl": "https://www.youtube.com/embed/0iQn9cHj1Sk" }
-  ],
-  "outbound_locations": [
-    { "name": "Marianna Resort, Samosir", "image": "assets/images/2023/10/00-Marianna-Resort-Samosir-medantobatravel_outbound-outbound_medan.jpg" },
-    { "name": "The Hill Resort, Sibolangit", "image": "assets/images/2023/10/01-The-Hill-Resort-Sibolangit-medantobatravel_outbound-outbound_medan.jpg" },
-    { "name": "Taman Simalem Resort", "image": "assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-medantobatravel_outbound-outbound_medan.jpg" },
-    { "name": "Bukit Lawang", "image": "assets/images/2023/10/15-Bukit-Lawang-medantobatravel_outbound-outbound_medan.jpg" }
-  ],
   "clients": [
     { "logo": "assets/images/2023/10/Mandiri-taspen-wondefultoba-outbound-medan.png" },
     { "logo": "assets/images/2023/10/USU-medantobatravel-outbound-medan.png" },
@@ -354,9 +206,7 @@
   ],
   "gallery_images": [
     { "imageUrl": "assets/images/2023/10/medantobatravel_0922.jpg", "category": "Tour", "caption": "Menikmati indahnya Danau Toba dari ketinggian" },
-    { "imageUrl": "assets/images/2023/10/medantobatravel_0924.jpg", "category": "Outbound", "caption": "Kegiatan outbound seru team building korporat" },
-    { "imageUrl": "assets/images/2023/10/medantobatravel_0925.jpg", "category": "Tour", "caption": "Eksplorasi budaya suku Batak di Samosir" },
-    { "imageUrl": "assets/images/2023/10/medantobatravel_0926.jpg", "category": "Outbound", "caption": "Gathering perusahaan dan games kepemimpinan" }
+    { "imageUrl": "assets/images/2023/10/medantobatravel_0925.jpg", "category": "Tour", "caption": "Eksplorasi budaya suku Batak di Samosir" }
   ],
   "package_tiers": [
     { "id": 1, "name": "Basic", "description": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas." },
@@ -368,24 +218,21 @@
     {
       "key": "general",
       "value": {
-        "site_name": "Wonderful Toba",
+        "site_name": "Sujai Laketoba",
         "site_tagline": "Sumatera Utara Travel Experience",
         "wa_number": "+62 813-2388-8207",
         "contact_email": "info@sujailaketoba.com",
-        "seo_meta_title": "Wonderful Toba | Premium Tour & Corporate Outbound",
-        "seo_meta_desc": "Portal utama Wonderful Toba. Pilih layanan premium Tour Travel Sumatera Utara atau Corporate Outbound & Team Building.",
-        "seo_meta_keywords": "tour danau toba, outbound medan, travel sumatera utara"
+        "seo_meta_title": "Sujai Laketoba | Premium Tour Travel",
+        "seo_meta_desc": "Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.",
+        "seo_meta_keywords": "tour danau toba, travel sumatera utara"
       }
     },
     {
       "key": "cms_landing",
       "value": {
-        "brand_name": "Wonderful Toba",
+        "brand_name": "Sujai Laketoba",
         "brand_tagline": "Sumatera Utara",
         "brand_icon": "icons/icon-192x192.png",
-        "outbound_title": "Corporate\nOutbound.",
-        "outbound_subtitle": "Solusi team building & gathering profesional untuk instansi Anda. Tersedia di puluhan hotel premium Sumut.",
-        "outbound_image_url": "2026/04/lake-toba-premium.png",
         "tour_title": "Tour &\nTravel.",
         "tour_subtitle": "Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.",
         "tour_image_url": "2026/04/sumatra-panorama.png"
@@ -406,33 +253,12 @@
         "stat_customers": "5000+",
         "stat_destinations": "50+",
         "stat_awards": "10+",
-        "why_us_title": "Mengapa Memilih Wonderful Toba?",
+        "why_us_title": "Mengapa Memilih Sujai Laketoba?",
         "why_us_items": [
           { "title": "Pemandu Berpengalaman", "icon": "Shield", "desc": "Tim guide profesional dengan sertifikasi resmi dan pengalaman lebih dari 10 tahun" },
           { "title": "Harga Terjangkau", "icon": "DollarSign", "desc": "Paket wisata dengan harga kompetitif tanpa mengurangi kualitas pelayanan" },
           { "title": "Layanan 24/7", "icon": "Clock", "desc": "Customer service siap membantu Anda kapan saja selama perjalanan" },
           { "title": "Asuransi Perjalanan", "icon": "Heart", "desc": "Setiap paket dilengkapi dengan asuransi perjalanan untuk keamanan Anda" }
-        ]
-      }
-    },
-    {
-      "key": "cms_outbound",
-      "value": {
-        "hero_title": "Corporate Outbound & Team Building",
-        "hero_subtitle": "Tingkatkan solidaritas dan produktivitas tim melalui program outbound profesional",
-        "hero_image": "2026/04/lake-toba-premium.png",
-        "why_us_title": "Mengapa Memilih Kami untuk Outbound?",
-        "why_us_items": [
-          { "title": "Trainer Bersertifikat", "icon": "Award", "desc": "Tim trainer profesional dengan sertifikasi internasional dan pengalaman puluhan tahun" },
-          { "title": "Program Custom", "icon": "Settings", "desc": "Setiap program dirancang khusus sesuai kebutuhan dan tujuan perusahaan Anda" },
-          { "title": "Safety First", "icon": "Shield", "desc": "Perlengkapan keselamatan lengkap dan standar operasional yang ketat" },
-          { "title": "Full Support", "icon": "Headphones", "desc": "Tim support siap membantu dari perencanaan hingga eksekusi acara" }
-        ],
-        "stats": [
-          { "icon": "Building", "value": "200+", "label": "Perusahaan Klien" },
-          { "icon": "Users", "value": "5000+", "label": "Peserta Terlatih" },
-          { "icon": "Trophy", "value": "15+", "label": "Tahun Pengalaman" },
-          { "icon": "Star", "value": "4.9/5", "label": "Rating Kepuasan" }
         ]
       }
     }

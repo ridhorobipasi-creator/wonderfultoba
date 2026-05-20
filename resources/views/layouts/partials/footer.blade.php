@@ -9,7 +9,7 @@
                 <div class="flex items-center">
                     @php
                         $logoDark = $siteSettings['general']['logo_dark_url'] ?? ($siteSettings['general']['logo_light_url'] ?? null);
-                        $brandName = $siteSettings['general']['site_name'] ?? 'Wonderful Toba';
+                        $brandName = $siteSettings['general']['site_name'] ?? 'Sujai Laketoba';
                     @endphp
 
                     @if($logoDark)
@@ -20,13 +20,13 @@
                         />
                     @else
                         <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg">W</div>
-                            <span class="text-lg font-bold text-white tracking-tight uppercase">Wonderful <span class="text-toba-green">Toba</span></span>
+                            <div class="w-9 h-9 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
+                            <span class="text-lg font-bold text-white tracking-tight uppercase">Sujai <span class="text-toba-green">Laketoba</span></span>
                         </div>
                     @endif
                 </div>
                 <p class="text-slate-400 text-xs leading-relaxed font-normal">
-                    {{ $siteSettings['general']['site_footer_desc'] ?? 'Penyedia layanan perjalanan wisata premium dan outbound korporat terbaik di Sumatera Utara. Kami menghadirkan pengalaman tak terlupakan di setiap destinasi.' }}
+                    {{ $siteSettings['general']['site_footer_desc'] ?? 'Penyedia layanan perjalanan wisata premium terbaik di Sumatera Utara. Kami menghadirkan pengalaman tak terlupakan di setiap destinasi.' }}
                 </p>
                 <div class="flex items-center space-x-3">
                     @if($siteSettings['general']['social_instagram'] ?? false)
@@ -90,7 +90,7 @@
 
         <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p class="text-slate-500 text-[10px] font-semibold uppercase tracking-wider">
-                &copy; {{ date('Y') }} <span class="text-white">Wonderful Toba</span>. Dikelola Secara Profesional.
+                &copy; {{ date('Y') }} <span class="text-white">Sujai Laketoba</span>. Dikelola Secara Profesional.
             </p>
             <div class="flex items-center gap-4">
                 @php

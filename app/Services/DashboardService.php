@@ -12,14 +12,9 @@ class DashboardService
     public function getStats()
     {
         return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_stats', 300, function() {
-            $tourBookings = Booking::whereHas('package', fn($q) => $q->where('isOutbound', false));
-            $outboundBookings = Booking::whereHas('package', fn($q) => $q->where('isOutbound', true));
-
             return [
                 'revenue' => [
                     'total' => Booking::where('status', 'confirmed')->sum('totalPrice'),
-                    'tour' => (clone $tourBookings)->where('status', 'confirmed')->sum('totalPrice'),
-                    'outbound' => (clone $outboundBookings)->where('status', 'confirmed')->sum('totalPrice'),
                     'monthly' => Booking::where('status', 'confirmed')
                         ->whereMonth('createdAt', now()->month)
                         ->sum('totalPrice'),
@@ -35,8 +30,6 @@ class DashboardService
                     'active' => Booking::whereIn('status', ['pending', 'confirmed'])->count(),
                     'pending' => Booking::where('status', 'pending')->count(),
                     'confirmed' => Booking::where('status', 'confirmed')->count(),
-                    'tour' => (clone $tourBookings)->count(),
-                    'outbound' => (clone $outboundBookings)->count(),
                 ],
                 'users' => [
                     'total' => User::count(),
@@ -45,8 +38,6 @@ class DashboardService
                 'packages' => [
                     'total' => Package::count(),
                     'active' => Package::where('status', 'active')->count(),
-                    'tour' => Package::where('isOutbound', false)->count(),
-                    'outbound' => Package::where('isOutbound', true)->count(),
                 ],
                 'media' => [
                     'total_count' => \App\Models\Media::count(),

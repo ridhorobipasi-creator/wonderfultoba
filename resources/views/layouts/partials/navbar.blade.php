@@ -26,7 +26,7 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-full"
-        class="hidden sm:block bg-slate-900 text-white py-2 overflow-hidden"
+        class="hidden sm:block bg-slate-900 text-white py-2"
     >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-[11px] font-semibold tracking-wider uppercase">
             <div class="flex items-center space-x-6">
@@ -82,7 +82,7 @@
                     @php
                         $logoLight = $siteSettings['general']['logo_light_url'] ?? null;
                         $logoDark = $siteSettings['general']['logo_dark_url'] ?? null;
-                        $brandName = $siteSettings['general']['site_name'] ?? 'Wonderful Toba';
+                        $brandName = $siteSettings['general']['site_name'] ?? 'Sujai Laketoba';
                     @endphp
 
                     @if($logoLight)
@@ -101,7 +101,7 @@
                     @else
                         <div class="flex items-center space-x-2 md:space-x-3">
                             <div class="w-9 h-9 md:w-10 md:h-10 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl shrink-0 overflow-hidden">
-                                W
+                                S
                             </div>
                             <div class="flex flex-col whitespace-nowrap">
                                 <span 
@@ -179,8 +179,8 @@
             <!-- Mobile Header inside Menu -->
             <div class="flex justify-between items-center px-6 py-5 border-b border-white/5">
                 <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg">W</div>
-                    <span class="text-white font-bold uppercase tracking-tight text-sm">Wonderful <span class="text-toba-green">Toba</span></span>
+                    <div class="w-9 h-9 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
+                    <span class="text-white font-bold uppercase tracking-tight text-sm">Sujai <span class="text-toba-green">Laketoba</span></span>
                 </div>
                 <button @click="isMenuOpen = false" class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -248,7 +248,7 @@
 
             <!-- Footer Decor -->
             <div class="p-6 text-center">
-                <p class="text-white/20 text-[8px] font-bold uppercase tracking-[0.4em]">&copy; Wonderful Toba Premium Experience</p>
+                <p class="text-white/20 text-[8px] font-bold uppercase tracking-[0.4em]">&copy; Sujai Laketoba Premium Experience</p>
             </div>
         </div>
     </nav>

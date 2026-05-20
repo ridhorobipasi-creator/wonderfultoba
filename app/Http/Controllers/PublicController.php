@@ -6,7 +6,6 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Models\Setting;
 use App\Models\City;
 use App\Services\BookingService;
-use App\Services\OutboundService;
 use App\Services\TourService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,16 +14,13 @@ use Illuminate\Support\Facades\Cache;
 class PublicController extends Controller
 {
     protected $tourService;
-    protected $outboundService;
     protected $bookingService;
 
     public function __construct(
         TourService $tourService,
-        OutboundService $outboundService,
         BookingService $bookingService
     ) {
         $this->tourService = $tourService;
-        $this->outboundService = $outboundService;
         $this->bookingService = $bookingService;
     }
 
@@ -38,7 +34,6 @@ class PublicController extends Controller
                 return [
                     'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
                     'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
-                    'cms_outbound' => Setting::where('key', 'cms_outbound')->first()?->value ?? [],
                     'general' => Setting::where('key', 'general')->first()?->value ?? [],
                 ];
             });
@@ -189,10 +184,6 @@ class PublicController extends Controller
                 $package = \App\Models\Package::find($validated['packageId']);
             }
 
-            if ($package && $package->isOutbound) {
-                return back()->with('error', __('Paket outbound hanya dapat dipesan melalui WhatsApp.'));
-            }
-
             $endDate = $validated['startDate'];
             if ($package && $package->duration) {
                 if (preg_match('/(\d+)\s*(Hari|Days|D|H)/i', $package->duration, $matches)) {
@@ -218,7 +209,7 @@ class PublicController extends Controller
                 ->translatedFormat('d F Y');
 
             // Construct WhatsApp Message
-            $waMessage = __("Halo Wonderful Toba, saya ingin memesan paket wisata.") . "\n\n" .
+            $waMessage = __("Halo Sujai Laketoba, saya ingin memesan paket wisata.") . "\n\n" .
                          "*" . __("Detail Pesanan:") . "*\n" .
                          "- " . __("Kode Booking") . ": " . $booking->bookingCode . "\n" .
                          "- " . __("Paket") . ": " . $package->name . "\n" .
@@ -249,64 +240,6 @@ class PublicController extends Controller
             Log::error('Booking Submission Error: ' . $e->getMessage(), ['request' => $request->all()]);
             return back()->with('error', __('Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.'));
         }
-    }
-
-    public function outbound()
-    {
-        try {
-            $siteSettings = [
-                'cms_outbound' => $this->outboundService->getOutboundSettings(),
-                'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-                'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
-            $settings = $siteSettings['cms_outbound'];
-            $services = $this->outboundService->getServices();
-            $videos = $this->outboundService->getVideos();
-            $locations = $this->outboundService->getLocations();
-            $clients = $this->outboundService->getClients();
-            $gallery = $this->outboundService->getGallery();
-            $featuredPackages = $this->outboundService->getFeaturedPackages(3);
-
-            return view('outbound.index', compact('services', 'videos', 'locations', 'clients', 'gallery', 'settings', 'featuredPackages', 'siteSettings'));
-        } catch (\Exception $e) {
-            Log::error('Outbound Page Error: ' . $e->getMessage());
-            return back()->with('error', 'Gagal memuat halaman Outbound.');
-        }
-    }
-
-    public function outboundPackages()
-    {
-        try {
-            $siteSettings = [
-                'cms_outbound' => $this->outboundService->getOutboundSettings(),
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
-            $packages = $this->outboundService->getPackages();
-            $cities = $this->tourService->getCities();
-            $tiers = $this->outboundService->getTiers();
-
-            return view('outbound.packages', compact('packages', 'cities', 'tiers', 'siteSettings'));
-        } catch (\Exception $e) {
-            Log::error('Outbound Packages Error: ' . $e->getMessage());
-            return back()->with('error', 'Gagal memuat daftar paket outbound.');
-        }
-    }
-
-    public function outboundBlog()
-    {
-        $siteSettings = [
-            'cms_outbound' => $this->outboundService->getOutboundSettings(),
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
-        $posts = \App\Models\Blog::where('status', 'published')->where('category', 'Outbound')->latest('createdAt')->get();
-        $posts->each(function($post) {
-            $post->title = __($post->title);
-            $post->excerpt = __($post->excerpt);
-            $post->content = __($post->content);
-            $post->category = __($post->category);
-        });
-        return view('outbound.blog', compact('posts', 'siteSettings'));
     }
 
     public function cars()
@@ -361,32 +294,6 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         return view('pages.payment', compact('siteSettings'));
-    }
-
-    public function submitQuote(Request $request, \App\Services\OutboundService $outboundService)
-    {
-        try {
-            $validated = $request->validate([
-                'company_name' => 'required|string|max:255',
-                'participants' => 'required|string|max:255',
-                'location' => 'required|string|max:255',
-                'activity_type' => 'required|string|max:255',
-                'estimated_date' => 'required|date',
-                'whatsapp' => 'required|string|max:255',
-            ]);
-
-            $waUrl = $outboundService->processQuoteRequest($validated);
-
-            return back()->with([
-                'success' => 'Permintaan penawaran berhasil dikirim! Klik tombol di bawah untuk konfirmasi via WhatsApp.',
-                'whatsappUrl' => $waUrl
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('Quote Submission Error: ' . $e->getMessage());
-            return back()->with('error', 'Gagal mengirim permintaan penawaran.');
-        }
     }
 }
 

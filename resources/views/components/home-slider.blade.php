@@ -9,7 +9,7 @@
             'title' => $settings['hero_title'],
             'subtitle' => $settings['hero_subtitle'] ?? '',
             'image_url' => $settings['hero_image_url'] ?? null,
-            'location' => 'Wonderful Toba',
+            'location' => 'Sujai Laketoba',
             'price' => 0,
             'cta_link' => $settings['hero_cta_link'] ?? '/tour/packages',
             'cta_text' => $settings['hero_cta_text'] ?? 'Lihat Paket'

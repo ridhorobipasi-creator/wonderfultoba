@@ -49,7 +49,7 @@ if (! function_exists('imageUrl')) {
             return asset('images/partners/hyundai.svg');
         }
 
-        // Premium Unsplash Override for Legacy Outbound/Team Building Images to Tour & Travel Images
+        // Premium Unsplash Override for Travel Images
         if (str_contains($lower, 'lake-toba-premium')) {
             return 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=1200&q=80'; // Samosir hills aerial landscape
         }

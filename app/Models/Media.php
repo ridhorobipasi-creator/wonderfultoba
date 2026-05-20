@@ -46,41 +46,97 @@ class Media extends Model
         return $this->url; // Fallback to full size
     }
 
+    protected static $usedPathsCache = null;
+
+    public static function getUsedPaths()
+    {
+        if (self::$usedPathsCache !== null) {
+            return self::$usedPathsCache;
+        }
+
+        $direct = [];
+        $substrings = [];
+
+        // 1. Settings
+        try {
+            $settings = Setting::all();
+            foreach ($settings as $setting) {
+                $val = $setting->value;
+                if (is_array($val)) {
+                    $substrings[] = json_encode($val);
+                } else if (is_string($val)) {
+                    $substrings[] = $val;
+                }
+            }
+        } catch (\Exception $e) {}
+
+        // 2. Blogs
+        try {
+            $blogImages = Blog::pluck('image')->filter()->toArray();
+            foreach ($blogImages as $img) {
+                $direct[$img] = ($direct[$img] ?? 0) + 1;
+            }
+        } catch (\Exception $e) {}
+
+        // 3. Packages
+        try {
+            $packageImages = Package::pluck('images')->filter()->toArray();
+            foreach ($packageImages as $imgs) {
+                if (is_array($imgs)) {
+                    foreach ($imgs as $img) {
+                        $direct[$img] = ($direct[$img] ?? 0) + 1;
+                    }
+                } else if (is_string($imgs)) {
+                    $decoded = json_decode($imgs, true);
+                    if (is_array($decoded)) {
+                        foreach ($decoded as $img) {
+                            $direct[$img] = ($direct[$img] ?? 0) + 1;
+                        }
+                    } else {
+                        $direct[$imgs] = ($direct[$imgs] ?? 0) + 1;
+                    }
+                }
+            }
+        } catch (\Exception $e) {}
+
+        // 4. Gallery
+        try {
+            $galleryImages = GalleryImage::pluck('imageUrl')->filter()->toArray();
+            foreach ($galleryImages as $img) {
+                $direct[$img] = ($direct[$img] ?? 0) + 1;
+            }
+        } catch (\Exception $e) {}
+
+        self::$usedPathsCache = [
+            'direct' => $direct,
+            'substrings' => $substrings
+        ];
+
+        return self::$usedPathsCache;
+    }
+
     public function getUsageCountAttribute()
     {
         $rawPath = $this->path;
         $storagePath = '/storage/' . $this->path;
         $count = 0;
 
-        // 1. Check Settings (Slider & Brand)
-        $settings = Setting::all();
-        foreach ($settings as $setting) {
-            if (is_array($setting->value)) {
-                $stringified = json_encode($setting->value);
-                if (str_contains($stringified, $rawPath) || str_contains($stringified, $storagePath)) {
-                    $count++;
-                }
-            } else if (is_string($setting->value)) {
-                if (str_contains($setting->value, $rawPath) || str_contains($setting->value, $storagePath)) {
-                    $count++;
-                }
-            }
+        $cache = self::getUsedPaths();
+
+        // Count direct matches
+        if (isset($cache['direct'][$rawPath])) {
+            $count += $cache['direct'][$rawPath];
+        }
+        if (isset($cache['direct'][$storagePath])) {
+            $count += $cache['direct'][$storagePath];
         }
 
-        // 2. Check Blogs
-        $count += Blog::where('image', $rawPath)
-                    ->orWhere('image', $storagePath)
-                    ->count();
-
-        // 3. Check Packages
-        $count += Package::where('images', 'LIKE', "%$rawPath%")
-                    ->orWhere('images', 'LIKE', "%$storagePath%")
-                    ->count();
-
-        // 4. Check Gallery
-        $count += GalleryImage::where('imageUrl', $rawPath)
-                    ->orWhere('imageUrl', $storagePath)
-                    ->count();
+        // Count substring matches in settings
+        foreach ($cache['substrings'] as $str) {
+            if (str_contains($str, $rawPath) || str_contains($str, $storagePath)) {
+                $count++;
+            }
+        }
 
         return $count;
     }
