@@ -31,11 +31,6 @@ class PackageController extends Controller
             });
         }
 
-        // Filter by type
-        if ($request->filled('type')) {
-            $query->where('isOutbound', $request->type === 'outbound');
-        }
-
         // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -92,7 +87,6 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:100',
             'status' => 'required|in:active,inactive',
             'isFeatured' => 'boolean',
-            'isOutbound' => 'boolean',
             'cityId' => 'nullable|exists:cities,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -132,7 +126,6 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:100',
             'status' => 'required|in:active,inactive',
             'isFeatured' => 'boolean',
-            'isOutbound' => 'boolean',
             'cityId' => 'nullable|exists:cities,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -189,7 +182,6 @@ class PackageController extends Controller
         $filename = 'packages-export-' . date('Y-m-d') . '.' . $format;
         
         $query = Package::query();
-        if ($request->filled('type')) $query->where('isOutbound', $request->type === 'outbound');
         if ($request->filled('status')) $query->where('status', $request->status);
         
         $packages = $query->get();
@@ -199,7 +191,7 @@ class PackageController extends Controller
             public function __construct($data) { $this->data = $data; }
             public function collection() { return $this->data; }
             public function headings(): array {
-                return ['ID', 'Nama', 'Lokasi', 'Harga', 'Durasi', 'Status', 'Tipe', 'Featured', 'Dibuat Pada'];
+                return ['ID', 'Nama', 'Lokasi', 'Harga', 'Durasi', 'Status', 'Featured', 'Dibuat Pada'];
             }
             public function map($row): array {
                 return [
@@ -209,7 +201,6 @@ class PackageController extends Controller
                     $row->price,
                     $row->duration,
                     strtoupper($row->status),
-                    $row->isOutbound ? 'Outbound' : 'Tour',
                     $row->isFeatured ? 'Ya' : 'Tidak',
                     $row->createdAt->format('Y-m-d H:i')
                 ];

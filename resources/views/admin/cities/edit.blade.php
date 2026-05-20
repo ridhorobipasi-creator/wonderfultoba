@@ -83,16 +83,7 @@
                 <div class="space-y-4">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Foto Wilayah / Destinasi</label>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Direct Upload -->
-                        <div class="relative group cursor-pointer h-40 border-2 border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center bg-slate-50 hover:border-toba-green transition-all">
-                            <input type="file" name="image" class="absolute inset-0 opacity-0 cursor-pointer z-10" @change="previewImage">
-                            <div class="text-center group-hover:scale-110 transition-transform">
-                                <i class="fas fa-cloud-arrow-up text-3xl text-slate-300 group-hover:text-toba-green mb-2"></i>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Upload Baru</p>
-                            </div>
-                        </div>
-
+                    <div class="grid grid-cols-1 gap-6">
                         <!-- Media Picker -->
                         <div @click="openMediaPicker()" class="cursor-pointer h-40 border-2 border-slate-200 rounded-[2rem] flex flex-col items-center justify-center bg-white hover:border-indigo-500 hover:bg-indigo-50/20 transition-all group">
                             <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">

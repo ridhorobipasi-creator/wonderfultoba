@@ -20,19 +20,13 @@ class CMSController extends Controller
         $settings = \App\Models\Setting::where('key', 'cms_tour')->first()?->value ?? [];
         
         // Fetch data for selection lists
-        $packages = \App\Models\Package::where('isOutbound', false)->where('status', 'active')->get();
+        $packages = \App\Models\Package::where('status', 'active')->get();
         $blogs = \App\Models\Blog::where('status', 'published')->orderBy('createdAt', 'desc')->get();
         $gallery = \App\Models\GalleryImage::orderBy('orderPriority', 'asc')->get();
 
         // Logic for auto-populating slides removed to allow clean reset.
 
         return view('admin.cms.tour', compact('settings', 'packages', 'blogs', 'gallery'));
-    }
-
-    public function outbound()
-    {
-        $settings = \App\Models\Setting::where('key', 'cms_outbound')->first()?->value ?? [];
-        return view('admin.outbound.cms', compact('settings'));
     }
 
     public function pages()

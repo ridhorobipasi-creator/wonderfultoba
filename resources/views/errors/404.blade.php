@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404 — Halaman Tidak Ditemukan | Wonderful Toba</title>
+    <title>404 — Halaman Tidak Ditemukan | Sujai Laketoba</title>
     <meta name="robots" content="noindex, nofollow">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,11 +34,11 @@
             @endphp
 
             @if(!empty($logoUrl))
-                <img src="{{ $logoUrl }}" class="h-12 w-auto object-contain brightness-0 invert opacity-70" alt="Wonderful Toba">
+                <img src="{{ $logoUrl }}" class="h-12 w-auto object-contain brightness-0 invert opacity-70" alt="Sujai Laketoba">
             @else
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-toba-green rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-2xl shadow-toba-green/30">W</div>
-                    <span class="text-white font-black text-xl uppercase tracking-widest opacity-80">Wonderful Toba</span>
+                    <span class="text-white font-black text-xl uppercase tracking-widest opacity-80">Sujai Laketoba</span>
                 </div>
             @endif
         </div>
@@ -78,8 +78,6 @@
         {{-- Quick Links --}}
         <div class="mt-16 flex flex-wrap items-center justify-center gap-6">
             <a href="/tour" class="text-slate-500 hover:text-toba-green text-xs font-bold uppercase tracking-widest transition-colors">Tour & Wisata</a>
-            <span class="text-slate-700 text-xs">•</span>
-            <a href="/outbound" class="text-slate-500 hover:text-toba-green text-xs font-bold uppercase tracking-widest transition-colors">Corporate Outbound</a>
             <span class="text-slate-700 text-xs">•</span>
             <a href="/tour/blog" class="text-slate-500 hover:text-toba-green text-xs font-bold uppercase tracking-widest transition-colors">Blog & Artikel</a>
             <span class="text-slate-700 text-xs">•</span>

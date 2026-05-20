@@ -41,8 +41,6 @@ class ReportController extends Controller
         $stats = [
             'total_orders' => $monthlyBookings->count(),
             'revenue' => $monthlyBookings->sum('totalPrice'),
-            'tour' => $monthlyBookings->filter(fn($b) => $b->package && !$b->package->isOutbound)->count(),
-            'outbound' => $monthlyBookings->filter(fn($b) => $b->package && $b->package->isOutbound)->count(),
         ];
 
         // 2. Status Summary (Monthly/Filtered)
@@ -75,8 +73,6 @@ class ReportController extends Controller
         $yearlySummary = [
             'orders' => $yearlyBookings->count(),
             'revenue' => $yearlyBookings->sum('totalPrice'),
-            'tour' => $yearlyBookings->filter(fn($b) => $b->package && !$b->package->isOutbound)->count(),
-            'outbound' => $yearlyBookings->filter(fn($b) => $b->package && $b->package->isOutbound)->count(),
         ];
 
         // 4. Monthly Chart Data
@@ -155,14 +151,13 @@ class ReportController extends Controller
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 
-        fputcsv($handle, ['No', 'Tgl Pesan', 'ID Transaksi', 'Tipe', 'Item', 'Pelanggan', 'Total', 'Status']);
+        fputcsv($handle, ['No', 'Tgl Pesan', 'ID Transaksi', 'Item', 'Pelanggan', 'Total', 'Status']);
 
         foreach ($bookings as $index => $booking) {
             fputcsv($handle, [
                 $index + 1,
                 $booking->createdAt->format('d/m/Y'),
                 $booking->bookingCode,
-                $booking->package?->isOutbound ? 'Outbound' : 'Tour',
                 $booking->package?->name ?? 'Custom',
                 $booking->customer?->name ?? 'Demo User',
                 $booking->totalPrice,

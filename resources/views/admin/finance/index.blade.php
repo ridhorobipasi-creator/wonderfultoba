@@ -5,32 +5,14 @@
 
 @section('content')
 <div class="space-y-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Revenue Tour -->
         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm transition hover:shadow-xl hover:shadow-emerald-50 group">
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-map-location-dot"></i>
             </div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Omzet Tour</p>
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->where('package.isOutbound', false)->sum('totalPrice'), 0, ',', '.') }}</h3>
-        </div>
-
-        <!-- Revenue Outbound -->
-        <div class="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm transition hover:shadow-xl hover:shadow-amber-50 group">
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <i class="fas fa-mountain-sun"></i>
-            </div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Omzet Outbound</p>
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->where('package.isOutbound', true)->sum('totalPrice'), 0, ',', '.') }}</h3>
-        </div>
-
-        <!-- Total Omzet -->
-        <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl shadow-slate-200 group text-white">
-            <div class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <i class="fas fa-wallet"></i>
-            </div>
-            <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Total Omzet Keseluruhan</p>
-            <h3 class="text-2xl font-black tracking-tight">Rp {{ number_format($transactions->sum('totalPrice'), 0, ',', '.') }}</h3>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Omzet Tour</p>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->sum('totalPrice'), 0, ',', '.') }}</h3>
         </div>
 
         <!-- Average Value -->
@@ -40,6 +22,15 @@
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rata-rata Transaksi</p>
             <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->avg('totalPrice'), 0, ',', '.') }}</h3>
+        </div>
+
+        <!-- Total Bookings -->
+        <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl shadow-slate-200 group text-white">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+            <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Total Pesanan</p>
+            <h3 class="text-2xl font-black tracking-tight">{{ $transactions->total() }} Booking</h3>
         </div>
     </div>
 

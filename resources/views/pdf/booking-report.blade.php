@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="title">LAPORAN PEMESANAN WONDERFUL TOBA</div>
+        <div class="title">LAPORAN PEMESANAN SUJAI LAKETOBA</div>
         <div style="margin-top: 5px;">Periode: {{ $startDate }} s/d {{ $endDate }}</div>
     </div>
 
@@ -69,7 +69,7 @@
     </table>
 
     <div class="footer">
-        © {{ date('Y') }} Wonderful Toba – Laporan Sistem Internal. Rahasia & Terbatas.
+        © {{ date('Y') }} Sujai Laketoba – Laporan Sistem Internal. Rahasia & Terbatas.
     </div>
 </body>
 </html>

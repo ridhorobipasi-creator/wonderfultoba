@@ -18,19 +18,6 @@ class BookingRepository
             $query->where('type', $filters['type']);
         }
 
-        if (isset($filters['category'])) {
-            $category = $filters['category'];
-            if ($category === 'outbound') {
-                $query->whereHas('package', function($q) {
-                    $q->where('isOutbound', true);
-                });
-            } elseif ($category === 'tour') {
-                $query->whereHas('package', function($q) {
-                    $q->where('isOutbound', false);
-                });
-            }
-        }
-
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('bookingCode', 'like', "%{$filters['search']}%")

@@ -46,7 +46,6 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->string('status')->default('active');
             $table->boolean('isFeatured')->default(false);
-            $table->boolean('isOutbound')->default(false);
             $table->integer('sortOrder')->default(0);
             $table->string('metaTitle')->nullable();
             $table->text('metaDescription')->nullable();
@@ -126,20 +125,6 @@ return new class extends Migration
             $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate();
         });
 
-        // 8. OUTBOUND SERVICES
-        Schema::create('outbound_services', function (Blueprint $table) {
-            $table->id();
-            $table->string('title', 100);
-            $table->string('shortDesc', 200)->nullable();
-            $table->text('detailDesc')->nullable();
-            $table->string('icon', 50)->nullable();
-            $table->string('image', 500)->nullable();
-            $table->integer('orderPriority')->default(0);
-            $table->boolean('isActive')->default(true);
-            $table->dateTime('createdAt')->useCurrent();
-            $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate();
-        });
-
         // 9. CLIENTS
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
@@ -166,24 +151,6 @@ return new class extends Migration
             $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate();
         });
 
-        // 11. OUTBOUND VIDEOS
-        Schema::create('outbound_videos', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('youtubeUrl');
-            $table->dateTime('createdAt')->useCurrent();
-            $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate();
-        });
-
-        // 12. OUTBOUND LOCATIONS
-        Schema::create('outbound_locations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->dateTime('createdAt')->useCurrent();
-            $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate();
-        });
-
         // 13. PACKAGE TIERS
         Schema::create('package_tiers', function (Blueprint $table) {
             $table->id();
@@ -197,9 +164,9 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('package_tiers');
         Schema::dropIfExists('gallery_images');
         Schema::dropIfExists('clients');
-        Schema::dropIfExists('outbound_services');
         Schema::dropIfExists('settings');
         Schema::dropIfExists('blogs');
         Schema::dropIfExists('bookings');

@@ -26,8 +26,8 @@
 </head>
 <body>
     @php
-        $companyName     = $siteSettings['general']['site_name'] ?? 'Wonderful Toba';
-        $legalName       = $siteSettings['company']['legal_name'] ?? 'PT Wonderful Toba Experience';
+        $companyName     = $siteSettings['general']['site_name'] ?? 'Sujai Laketoba';
+        $legalName       = $siteSettings['company']['legal_name'] ?? 'PT Sujai Laketoba Experience';
         $bankAccount     = $siteSettings['company']['bank_account'] ?? null;
         $bankAccountName = $siteSettings['company']['bank_account_name'] ?? $legalName;
         $taxId           = $siteSettings['company']['tax_id'] ?? null;

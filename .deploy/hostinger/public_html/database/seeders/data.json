@@ -348,7 +348,7 @@
     {
       "key": "cms_landing",
       "value": {
-        "brand_name": "Wonderful Toba",
+        "brand_name": "Sujai Laketoba",
         "brand_tagline": "Sumatera Utara",
         "brand_icon": "icons/icon-192x192.png",
         "outbound_title": "Corporate\nOutbound.",
@@ -374,7 +374,7 @@
         "stat_customers": "5000+",
         "stat_destinations": "50+",
         "stat_awards": "10+",
-        "why_us_title": "Mengapa Memilih Wonderful Toba?",
+        "why_us_title": "Mengapa Memilih Sujai Laketoba?",
         "why_us_items": [
           { "title": "Pemandu Berpengalaman", "icon": "Shield", "desc": "Tim guide profesional dengan sertifikasi resmi dan pengalaman lebih dari 10 tahun" },
           { "title": "Harga Terjangkau", "icon": "DollarSign", "desc": "Paket wisata dengan harga kompetitif tanpa mengurangi kualitas pelayanan" },

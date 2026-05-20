@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('packages', function (Blueprint $table) {
-            $table->index(['status', 'isOutbound']);
+            $table->index(['status']);
             $table->index('slug');
         });
 
@@ -39,7 +39,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('packages', function (Blueprint $table) {
-            $table->dropIndex(['status', 'isOutbound']);
+            $table->dropIndex(['status']);
             $table->dropIndex(['slug']);
         });
 

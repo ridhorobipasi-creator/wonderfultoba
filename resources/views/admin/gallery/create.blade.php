@@ -35,18 +35,15 @@
                 </div>
 
                 <!-- File -->
-                <div>
+                <div x-data="galleryForm()">
                     <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Select Image *</label>
-                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-toba-green transition group bg-gray-50/50">
-                        <input type="file" name="image" id="image" class="hidden" accept="image/*" onchange="previewImage(event)" required>
-                        <label for="image" class="cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-300 group-hover:text-toba-green transition mb-4"></i>
-                            <p class="text-sm font-bold text-gray-700">Click to select an image</p>
-                            <p class="text-xs text-gray-400 mt-2 font-medium">webp, webp, webp, WEBP (Max 5MB)</p>
-                        </label>
+                    <div @click="openMediaPicker()" class="border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-toba-green transition group bg-gray-50/50 cursor-pointer">
+                        <i class="fas fa-images text-5xl text-gray-300 group-hover:text-toba-green transition mb-4"></i>
+                        <p class="text-sm font-bold text-gray-700">Click to select an image from Media Library</p>
                     </div>
-                    <div id="image-preview" class="mt-6 hidden">
-                        <img src="" class="max-h-64 rounded-2xl mx-auto shadow-xl border-4 border-white">
+                    <input type="hidden" name="image_url" :value="imageUrl">
+                    <div x-show="imageUrl" class="mt-6" style="display: none;">
+                        <img :src="imageUrl" class="max-h-64 rounded-2xl mx-auto shadow-xl border-4 border-white">
                     </div>
                 </div>
 
@@ -72,19 +69,22 @@
 </div>
 
 <script>
-    function previewImage(event) {
-        const preview = document.querySelector('#image-preview');
-        const img = preview.querySelector('img');
-        const file = event.target.files[0];
-        
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-                preview.classList.remove('hidden');
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('galleryForm', () => ({
+            imageUrl: '',
+            openMediaPicker() {
+                window.dispatchEvent(new CustomEvent('open-media-picker', { 
+                    detail: { 
+                        callback: (item) => {
+                            let path = item.path;
+                            if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
+                            if (path.startsWith('storage/')) path = path.replace('storage/', '');
+                            this.imageUrl = '/storage/' + path;
+                        } 
+                    } 
+                }));
             }
-            reader.readAsDataURL(file);
-        }
-    }
+        }));
+    });
 </script>
 @endsection

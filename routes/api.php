@@ -9,9 +9,6 @@ Route::middleware(['throttle:60,1'])->group(function () {
     Route::get('/packages', [PublicApiController::class, 'getPackages']);
     Route::get('/bookings', [PublicApiController::class, 'getBookings']);
     Route::post('/bookings', [PublicApiController::class, 'submitBooking'])->middleware('throttle:5,1');
-    Route::get('/outbound/services', [PublicApiController::class, 'getOutboundServices']);
-    Route::get('/outbound/videos', [PublicApiController::class, 'getOutboundVideos']);
-    Route::get('/outbound/locations', [PublicApiController::class, 'getOutboundLocations']);
     Route::get('/clients', [PublicApiController::class, 'getClients']);
     Route::get('/gallery', [PublicApiController::class, 'getGallery']);
     Route::get('/cities', [PublicApiController::class, 'getCities']);

@@ -84,7 +84,7 @@
 <body>
     <div class="header">
         <h1>{{ $package->name }}</h1>
-        <p>{{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }} – Sumatera Utara</p>
+        <p>{{ $siteSettings['general']['site_name'] ?? 'Sujai Laketoba' }} – Sumatera Utara</p>
     </div>
 
     <div class="section">
@@ -146,7 +146,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; {{ date('Y') }} {{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }}. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ $siteSettings['general']['site_name'] ?? 'Sujai Laketoba' }}. All rights reserved.</p>
         <p>Hubungi kami: {{ $siteSettings['general']['contact_wa_1'] ?? '+62 813-2388-8207' }} | {{ $siteSettings['general']['contact_email'] ?? 'info@medantobatravel.com' }}</p>
     </div>
 </body>

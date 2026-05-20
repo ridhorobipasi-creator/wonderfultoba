@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'welcome' => 'Selamat Datang di Wonderful Toba',
+    'welcome' => 'Selamat Datang di Sujai Laketoba',
     'outbound_title' => 'Layanan Outbound & Team Building',
     'tour_packages' => 'Paket Tour Pilihan',
     'contact_us' => 'Hubungi Kami',

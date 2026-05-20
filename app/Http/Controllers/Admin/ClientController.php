@@ -21,11 +21,11 @@ class ClientController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:png,svg,webp|max:1024',
+            'logo_url' => 'required|string',
             'website' => 'nullable|url',
         ]);
 
-        $path = $this->uploadAndIndex($request->file('logo'), 'clients', 'branding');
+        $path = $request->logo_url;
 
         Client::create([
             'name' => $request->name,

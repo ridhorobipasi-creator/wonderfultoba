@@ -20,8 +20,34 @@
         <p class="text-sm font-bold text-slate-400">Kelola konten untuk halaman Tentang Kami, Syarat & Ketentuan, dan Kebijakan Privasi.</p>
     </div>
 
+@push('scripts')
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('cmsPagesHandler', () => ({
+        imageUrl: @json($resolve($about['image_url'] ?? '', asset('assets/images/2023/10/003-1.webp'))),
+        
+        openMedia() {
+            window.dispatchEvent(new CustomEvent('open-media-picker', { 
+                detail: { 
+                    callback: (item) => {
+                        let path = item.path;
+                        if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
+                        if (path.startsWith('storage/')) path = path.replace('storage/', '');
+                        this.imageUrl = '/storage/' + path;
+                        if (this.$refs.imageUrlInput) {
+                            this.$refs.imageUrlInput.value = path;
+                        }
+                    }
+                } 
+            }));
+        }
+    }));
+});
+</script>
+@endpush
+
     <!-- About Us -->
-    <div class="bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-sm">
+    <div x-cloak x-data="cmsPagesHandler()" class="bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-sm">
         <form action="{{ route('admin.cms.save', 'page_about') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="flex items-center justify-between mb-10">
@@ -41,11 +67,11 @@
                 <div class="space-y-6">
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Judul Utama</label>
-                        <input type="text" name="title" value="{{ $about['title'] ?? 'Mengenal Lebih Dekat Wonderful Toba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">
+                        <input type="text" name="title" value="{{ $about['title'] ?? 'Mengenal Lebih Dekat Sujai Laketoba' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">
                     </div>
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Deskripsi Singkat</label>
-                        <textarea name="description" rows="4" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['description'] ?? 'Berawal dari kecintaan terhadap keindahan alam Sumatera Utara, Wonderful Toba hadir untuk memberikan pengalaman perjalanan yang tak terlupakan bagi setiap wisatawan.' }}</textarea>
+                        <textarea name="description" rows="4" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['description'] ?? 'Berawal dari kecintaan terhadap keindahan alam Sumatera Utara, Sujai Laketoba hadir untuk memberikan pengalaman perjalanan yang tak terlupakan bagi setiap wisatawan.' }}</textarea>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-6 space-y-4">
                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">📊 Statistik Pencapaian</p>
@@ -72,22 +98,22 @@
                         <div class="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-6 flex items-center justify-between group hover:border-toba-green transition-all">
                             <div class="flex items-center gap-4">
                                 <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden shadow-inner">
-                                    <img src="{{ $resolve($about['image_url'] ?? '', asset('assets/images/2023/10/003-1.webp')) }}" class="w-full h-full object-cover">
+                                    <img :src="imageUrl" class="w-full h-full object-cover">
                                 </div>
                                 <div>
                                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Gambar Utama</p>
                                     <p class="text-[8px] font-bold text-slate-300 uppercase">800x1000px</p>
                                 </div>
                             </div>
-                            <div class="relative">
-                                <input type="file" name="image_file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                <span class="px-3 py-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest rounded-lg group-hover:bg-toba-green transition">Upload</span>
+                            <div class="relative cursor-pointer" @click="openMedia()">
+                                <input type="hidden" name="image_url" x-ref="imageUrlInput" value="{{ $about['image_url'] ?? '' }}">
+                                <span class="px-3 py-2 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest rounded-lg group-hover:bg-toba-green transition">Pilih dari Galeri</span>
                             </div>
                         </div>
                         <div class="bg-slate-50 rounded-2xl p-6 space-y-3">
                             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">💬 Testimoni / Kutipan</p>
                             <textarea name="testimonial_quote" rows="2" placeholder="Isi kutipan testimoni..." class="w-full px-4 py-2 bg-white border-none rounded-xl font-bold text-[11px] leading-tight">{{ $about['testimonial_quote'] ?? 'Layanan terbaik, armada baru, dan guide yang sangat informatif.' }}</textarea>
-                            <input type="text" name="testimonial_name" value="{{ $about['testimonial_name'] ?? 'Pelanggan Setia Wonderful Toba' }}" placeholder="Nama pelanggan..." class="w-full px-4 py-2 bg-white border-none rounded-xl font-bold text-[11px]">
+                            <input type="text" name="testimonial_name" value="{{ $about['testimonial_name'] ?? 'Pelanggan Setia Sujai Laketoba' }}" placeholder="Nama pelanggan..." class="w-full px-4 py-2 bg-white border-none rounded-xl font-bold text-[11px]">
                         </div>
                     </div>
                 </div>
@@ -124,7 +150,7 @@
 
             <div class="space-y-3">
                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Konten Halaman (HTML didukung)</label>
-                <textarea name="content" rows="15" class="w-full px-8 py-6 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed">{{ $terms['content'] ?? "<h3>1. Ketentuan Umum</h3><p>Seluruh layanan yang disediakan oleh Wonderful Toba tunduk pada syarat dan ketentuan yang berlaku...</p>" }}</textarea>
+                <textarea name="content" rows="15" class="w-full px-8 py-6 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed">{{ $terms['content'] ?? "<h3>1. Ketentuan Umum</h3><p>Seluruh layanan yang disediakan oleh Sujai Laketoba tunduk pada syarat dan ketentuan yang berlaku...</p>" }}</textarea>
             </div>
         </form>
     </div>

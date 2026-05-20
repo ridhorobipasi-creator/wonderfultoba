@@ -9,9 +9,6 @@ use App\Models\Booking;
 use App\Models\City;
 use App\Models\Client;
 use App\Models\GalleryImage;
-use App\Models\OutboundLocation;
-use App\Models\OutboundService;
-use App\Models\OutboundVideo;
 use App\Models\Package;
 use App\Models\PackageTier;
 use App\Models\Setting;
@@ -71,7 +68,6 @@ class PublicApiController extends Controller
     {
         $packages = Package::with(['packageImages', 'city'])->get()->map(function ($p) {
             $p->is_published = $p->status === 'active';
-            $p->isOutbound = (bool) $p->isOutbound;
             $p->image = $p->packageImages->first()?->image_path;
 
             return $p;
@@ -99,12 +95,7 @@ class PublicApiController extends Controller
     public function submitBooking(StoreBookingRequest $request)
     {
         $validated = $request->validated();
-        $package = Package::find($validated['packageId']);
         
-        if ($package && $package->isOutbound) {
-            return response()->json(['error' => 'Pemesanan paket outbound hanya dapat dilakukan melalui WhatsApp.'], 400);
-        }
-
         try {
             $bookingService = app(BookingService::class);
             
@@ -134,25 +125,6 @@ class PublicApiController extends Controller
             \Illuminate\Support\Facades\Log::error('API Booking Error: ' . $e->getMessage(), ['request' => $request->all()]);
             return response()->json(['error' => 'Maaf, terjadi kesalahan sistem saat memproses booking Anda.'], 500);
         }
-    }
-
-
-
-
-
-    public function getOutboundServices()
-    {
-        return response()->json(OutboundService::all());
-    }
-
-    public function getOutboundVideos()
-    {
-        return response()->json(OutboundVideo::all());
-    }
-
-    public function getOutboundLocations()
-    {
-        return response()->json(OutboundLocation::all());
     }
 
     public function getClients()
@@ -222,8 +194,7 @@ class PublicApiController extends Controller
             'totalBookings' => Booking::count(),
             'pendingBookings' => Booking::where('status', 'pending')->count(),
             'totalRevenue' => Booking::sum('totalPrice'),
-            'tourPackages' => Package::where('isOutbound', false)->count(),
-            'outboundPackages' => Package::where('isOutbound', true)->count(),
+            'tourPackages' => Package::count(),
             'recentBookings' => Booking::orderBy('createdAt', 'desc')->take(5)->get()->map(function ($b) {
                 return [
                     'customer_name' => $b->customerName,

@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class SyncMediaCommand extends Command
 {
     protected $signature = 'media:sync {--force : Force overwrite existing entries}';
-    protected $description = 'Smart sync all physical storage files to Media and Gallery tables (Tour & Outbound)';
+    protected $description = 'Smart sync all physical storage files to Media and Gallery tables (Tour)';
 
     public function handle()
     {
@@ -45,18 +45,18 @@ class SyncMediaCommand extends Command
             }
 
             // 2. Cek/Simpan ke Tabel GalleryImage (Jika relevan)
-            // Kriteria: Jika berada di folder gallery, atau mengandung keyword tour/outbound
+            // Kriteria: Jika berada di folder gallery, atau mengandung keyword tour
             if ($this->shouldGoToGallery($path)) {
                 $existsInGallery = GalleryImage::where('imageUrl', $path)->exists();
                 if (!$existsInGallery) {
                     GalleryImage::create([
                         'caption' => Str::title(str_replace(['-', '_', '.webp', '.jpg', '.png'], ' ', $filename)),
-                        'category' => $this->detectGalleryCategory($path),
+                        'category' => 'tour',
                         'imageUrl' => $path,
                         'isActive' => true,
                     ]);
                     $gallerySynced++;
-                    $this->line("✅ Gallery Added: {$filename} (" . $this->detectGalleryCategory($path) . ")");
+                    $this->line("✅ Gallery Added: {$filename} (tour)");
                 }
             }
         }
@@ -74,25 +74,14 @@ class SyncMediaCommand extends Command
         if (Str::contains($path, 'cms')) return 'cms';
         if (Str::contains($path, 'gallery')) return 'gallery';
         if (Str::contains($path, 'tour')) return 'tour';
-        if (Str::contains($path, 'outbound')) return 'outbound';
         return 'other';
     }
 
     private function shouldGoToGallery($path)
     {
         // Masukkan ke galeri jika di folder gallery atau mengandung kata kunci kegiatan
-        $keywords = ['outbound', 'tour', 'kegiatan', 'wisata', 'gallery', '2023', '2026'];
+        $keywords = ['tour', 'kegiatan', 'wisata', 'gallery', '2023', '2026'];
         return Str::contains(Str::lower($path), $keywords) && !Str::contains($path, ['branding', 'icons', 'cms']);
-    }
-
-    private function detectGalleryCategory($path)
-    {
-        $pathLower = Str::lower($path);
-        if (Str::contains($pathLower, 'outbound')) return 'outbound';
-        if (Str::contains($pathLower, 'tour')) return 'tour';
-        
-        // Default berdasarkan folder atau tahun
-        return 'tour'; 
     }
 
     private function getMime($path)

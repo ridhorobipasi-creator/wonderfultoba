@@ -44,6 +44,6 @@ class User extends Authenticatable
     // Legacy check
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'superadmin', 'admin_umum', 'admin_tour', 'admin_outbound']);
+        return in_array($this->role, ['admin', 'superadmin', 'admin_umum', 'admin_tour']);
     }
 }

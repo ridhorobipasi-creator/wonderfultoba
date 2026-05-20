@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Wonderful Toba Admin</title>
+    <title>Login - Sujai Laketoba Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gradient-to-br from-toba-green to-emerald-700 min-h-screen flex items-center justify-center p-4" x-data="{ isSubmitting: false }">
@@ -20,7 +20,7 @@
             @if(!empty($logoUrl))
                 <img src="{{ $logoUrl }}" class="h-16 w-auto object-contain mx-auto brightness-0 invert drop-shadow-xl mb-2">
             @else
-                <h1 class="text-4xl font-black text-white mb-2">{{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }}</h1>
+                <h1 class="text-4xl font-black text-white mb-2">{{ $siteSettings['general']['site_name'] ?? 'Sujai Laketoba' }}</h1>
             @endif
             <p class="text-white/80 font-black uppercase tracking-[0.3em] text-[10px]">Management Panel</p>
         </div>
@@ -111,7 +111,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-8 text-white/60 text-sm">
-            <p>&copy; {{ date('Y') }} Wonderful Toba. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Sujai Laketoba. All rights reserved.</p>
         </div>
     </div>
 </body>

@@ -1,7 +1,7 @@
-# Informasi Proyek: Wonderful Toba
+# Informasi Proyek: Sujai Laketoba
 
 ## Deskripsi Singkat
-Wonderful Toba adalah platform digital pariwisata yang fokus pada penyediaan layanan tour dan outbound di kawasan Danau Toba dan Sumatera Utara. Website ini dirancang untuk memberikan pengalaman visual yang premium serta fungsionalitas pemesanan yang mudah bagi klien korporat maupun perorangan.
+Sujai Laketoba adalah platform digital pariwisata yang fokus pada penyediaan layanan tour travel premium di kawasan Danau Toba dan Sumatera Utara. Website ini dirancang untuk memberikan pengalaman visual yang elegan serta fungsionalitas pemesanan yang mudah bagi wisatawan mancanegara maupun domestik.
 
 ---
 
@@ -11,7 +11,7 @@ Wonderful Toba adalah platform digital pariwisata yang fokus pada penyediaan lay
 - **Frontend Logic**: Alpine.js
 - **Database**: 
   - Pengembangan: SQLite
-  - Produksi (cPanel): MySQL
+  - Produksi (hostinger): MySQL
 - **Icons**: FontAwesome 6 (Pro/Free)
 - **Image Processing**: GD Extension (Konversi otomatis ke WebP)
 
@@ -19,26 +19,21 @@ Wonderful Toba adalah platform digital pariwisata yang fokus pada penyediaan lay
 
 ## Fitur Utama
 
-### 1. Modul Outbound (Update Terbaru)
-- **Landing Page Dinamis**: Menampilkan keunggulan layanan dengan animasi premium.
-- **Lokasi Kegiatan**: Daftar destinasi outbound pilihan dengan grid foto.
-- **Client Portfolio**: Logo cloud perusahaan yang pernah menggunakan jasa Wonderful Toba.
-- **Gallery Momen**: Galeri dokumentasi kegiatan menggunakan layout masonry.
-- **Form Permintaan Penawaran**: Form khusus untuk korporat yang terintegrasi langsung dengan notifikasi WhatsApp Admin.
+### 1. Modul Tour & Travel
+- **Manajemen Paket**: Pengaturan destinasi, durasi, dan harga paket wisata secara dinamis.
+- **Sistem Booking**: Form pemesanan yang responsif dan mudah digunakan dengan konfirmasi otomatis via WhatsApp.
+- **Katalog Destinasi**: Penayangan objek wisata unggulan dengan visual premium.
 
-### 2. Modul Tour & Travel
-- **Manajemen Paket**: Pengaturan destinasi, durasi, dan harga paket wisata.
-- **Sistem Booking**: Form pemesanan yang responsif dan mudah digunakan.
-
-### 3. Media Library & Optimasi
-- **WebP Converter**: Unggahan gambar otomatis dikonversi ke format WebP untuk kecepatan loading.
+### 2. Media Library & Optimasi
+- **WebP Converter**: Unggahan gambar otomatis dikonversi ke format WebP untuk kecepatan loading maksimal.
 - **Auto-Thumbnail**: Pembuatan thumbnail otomatis untuk memperingan beban server.
 - **Syncable Media**: Sinkronisasi aset media antara database dan penyimpanan fisik.
 
-### 4. Admin Dashboard
+### 3. Admin Dashboard
 - **CMS Settings**: Pengaturan teks, gambar hero, dan data statistik tanpa menyentuh kode.
-- **Booking Management**: Pantau semua reservasi yang masuk dalam satu panel.
-- **Blog & Berita**: Sistem manajemen artikel untuk SEO.
+- **Booking Management**: Pantau semua reservasi yang masuk dalam satu panel dengan status real-time.
+- **Blog & Berita**: Sistem manajemen artikel untuk SEO dan wawasan perjalanan.
+- **Finance Reports**: Laporan omzet dan performa transaksi bulanan/tahunan.
 
 ---
 
@@ -61,5 +56,5 @@ Proyek ini telah dikonfigurasi khusus agar bisa berjalan di hosting cPanel tanpa
 
 ---
 
-**Dikembangkan oleh**: Ridho Robbi Pasi (Mitralabs Studio) & Wonderful Toba Team.
+**Dikembangkan oleh**: Ridho Robbi Pasi (Mitralabs Studio) & Sujai Laketoba Team.
 **Terakhir Diperbarui**: 14 Mei 2026
