@@ -43,10 +43,37 @@
             <img src="{{ imageUrl($logoUrl) }}" class="h-10 md:h-12 w-auto object-contain">
         @else
             <div class="flex flex-col items-center">
-                <div class="w-12 h-12 bg-emerald-800 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-md mb-2">W</div>
+                <div class="w-12 h-12 bg-emerald-800 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-md mb-2">S</div>
                 <h1 class="text-white font-semibold text-sm tracking-[0.25em] uppercase">{{ $brandName }}</h1>
             </div>
         @endif
+    </div>
+
+    <!-- Language Toggle -->
+    <div class="fixed top-8 right-8 z-[100]" x-data="{ open: false }">
+        <button @click="open = !open" class="flex items-center bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-white hover:bg-white/20 transition-all focus:outline-none">
+            <span class="mr-2 text-xs font-bold uppercase tracking-widest">
+                @if(session('locale', 'my') === 'my')
+                    🇲🇾 MYR
+                @elseif(session('locale', 'my') === 'id')
+                    🇮🇩 IDR
+                @else
+                    🇸🇬 SGD
+                @endif
+            </span>
+            <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-3 w-48 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden">
+            <a href="{{ route('change-locale', 'my') }}" class="flex items-center px-5 py-3 text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest {{ session('locale', 'my') === 'my' ? 'text-emerald-400 bg-white/5' : '' }}">
+                <span class="mr-3 text-base">🇲🇾</span> MYR (Melayu)
+            </a>
+            <a href="{{ route('change-locale', 'id') }}" class="flex items-center px-5 py-3 text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest {{ session('locale', 'my') === 'id' ? 'text-emerald-400 bg-white/5' : '' }}">
+                <span class="mr-3 text-base">🇮🇩</span> IDR (Indonesia)
+            </a>
+            <a href="{{ route('change-locale', 'en') }}" class="flex items-center px-5 py-3 text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest {{ session('locale', 'my') === 'en' ? 'text-emerald-400 bg-white/5' : '' }}">
+                <span class="mr-3 text-base">🇸🇬</span> SGD (English)
+            </a>
+        </div>
     </div>
 
     <main class="min-h-screen h-screen md:h-[100dvh] flex flex-col md:flex-row relative">

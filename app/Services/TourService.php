@@ -181,7 +181,8 @@ class TourService
     {
         return \App\Models\GalleryImage::where('isActive', true)
             ->where(function($query) {
-                $query->where('category', 'Tour')
+                $query->where('category', 'tour')
+                      ->orWhere('category', 'Tour')
                       ->orWhereNull('category')
                       ->orWhere('category', '');
             })

@@ -8,9 +8,9 @@
     x-data="{ 
         activeCategory: 'Semua', 
         searchQuery: '', 
-        images: {{ json_encode($images) }},
+        images: @js($images),
         lightbox: { open: false, index: 0 },
-        categories: ['Semua', ...new Set({{ json_encode($images->pluck('category')->unique()->toArray()) }})],
+        categories: ['Semua', ...new Set(@js($images->pluck('category')->unique()->toArray()))],
         
         get filteredImages() {
             return this.images.filter(img => {

@@ -61,12 +61,12 @@
         activeTab: 'itinerary',
         showBooking: {{ session('success') || session('error') || $errors->any() ? 'true' : 'false' }},
         isSubmitting: false,
-        package: {{ json_encode($package) }},
-        package_images: {{ json_encode($packageImagesArray) }},
-        city: {{ json_encode($city) }},
+        package: @js($package),
+        package_images: @js($packageImagesArray),
+        city: @js($city),
         contact: {
             whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['whatsapp'] ?? '6281323888207' }}',
-            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@medantobatravel.id' }}'
+            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com' }}'
         },
         get waNumber() {
             return (this.contact.whatsapp || '6281323888207').replace(/[^0-9]/g, '');

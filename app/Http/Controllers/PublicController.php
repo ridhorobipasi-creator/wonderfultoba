@@ -250,7 +250,7 @@ class PublicController extends Controller
             ];
         });
         $cars = Cache::remember('cars_active', 3600, function() {
-            return \App\Models\Car::where('status', 'active')->orderBy('sortOrder')->get();
+            return \App\Models\Car::where('status', 'available')->orderBy('sortOrder')->get();
         });
         return view('cars.index', compact('cars', 'siteSettings'));
     }

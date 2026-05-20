@@ -10,8 +10,8 @@
         filterCity: 'all', 
         filterDuration: 'Semua', 
         sortBy: 'default',
-        packages: {{ json_encode($packages) }},
-        cities: {{ json_encode($cities) }},
+        packages: @js($packages),
+        cities: @js($cities),
         
         get filteredPackages() {
             let filtered = this.packages.filter(p => {
