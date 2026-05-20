@@ -1,4 +1,4 @@
-@extends('admin.layout')
+﻿@extends('admin.layout')
 
 @section('title', 'Pengaturan Umum')
 @section('page-title', 'Pengaturan Umum')
@@ -130,7 +130,7 @@
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <i class="fas fa-envelope text-slate-300"></i> Email Kontak
                             </label>
-                            <input type="email" name="contact_email" value="{{ $general['contact_email'] ?? 'hello@wonderfultoba.com' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                            <input type="email" name="contact_email" value="{{ $general['contact_email'] ?? 'hello@medantobatravel.com' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
                         </div>
                         <div class="space-y-4">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">

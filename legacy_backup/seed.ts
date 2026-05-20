@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+﻿import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -8,12 +8,12 @@ async function main() {
 
   // Create Admin Umum
   await prisma.user.upsert({
-    where: { email: 'admin@wonderfultoba.com' },
+    where: { email: 'admin@medantobatravel.com' },
     update: {
       password: password,
     },
     create: {
-      email: 'admin@wonderfultoba.com',
+      email: 'admin@medantobatravel.com',
       name: 'Admin Umum',
       password: password,
       role: 'admin_umum',
@@ -22,12 +22,12 @@ async function main() {
 
   // Create Admin Tour
   await prisma.user.upsert({
-    where: { email: 'tour@wonderfultoba.com' },
+    where: { email: 'tour@medantobatravel.com' },
     update: {
       password: password,
     },
     create: {
-      email: 'tour@wonderfultoba.com',
+      email: 'tour@medantobatravel.com',
       name: 'Admin Tour',
       password: password,
       role: 'admin_tour',
@@ -36,12 +36,12 @@ async function main() {
 
   // Create Admin Outbound
   await prisma.user.upsert({
-    where: { email: 'outbound@wonderfultoba.com' },
+    where: { email: 'outbound@medantobatravel.com' },
     update: {
       password: password,
     },
     create: {
-      email: 'outbound@wonderfultoba.com',
+      email: 'outbound@medantobatravel.com',
       name: 'Admin Outbound',
       password: password,
       role: 'admin_outbound',
@@ -987,22 +987,22 @@ async function main() {
 
   console.log('🌱 Seeding Outbound Locations...')
   const locations = [
-    { name: 'Marianna Resort, Samosir', image: '/assets/images/2023/10/00-Marianna-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg', region: 'Samosir', isFeatured: true, orderPriority: 1 },
-    { name: 'The Hill Resort, Sibolangit', image: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg', region: 'Sibolangit', isFeatured: false, orderPriority: 2 },
-    { name: 'Grand Mutiara Hotel, Berastagi', image: '/assets/images/2023/10/02-Grand-Mutiara-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: true, orderPriority: 3 },
-    { name: 'Mikie Holiday Hotel, Berastagi', image: '/assets/images/2023/10/03-Mikie-Holiday-Hotel-Resort-Berastagi-wonderfultoba_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 4 },
-    { name: 'Sinabung Hills Hotel, Berastagi', image: '/assets/images/2023/10/04-Sinabung-Hills-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 5 },
-    { name: 'Sibayak Hotel, Berastagi', image: '/assets/images/2023/10/05-Sibayak-Hotel-Berastagi-wonderfultoba_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 6 },
-    { name: 'Taman Simalem Resort', image: '/assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-wonderfultoba_outbound-outbound_medan.jpg', region: 'Sidikalang', isFeatured: true, orderPriority: 7 },
-    { name: 'Hotel Niagara, Parapat', image: '/assets/images/2023/10/07-Hotel-Niagara-Parapat-wonderfultoba_outbound-outbound_medan.jpg', region: 'Parapat', isFeatured: false, orderPriority: 8 },
-    { name: 'KHAS Parapat Hotel', image: '/assets/images/2023/10/08-KHAS-Parapat-Hotel-Parapat-wonderfultoba_outbound-outbound_medan.jpeg', region: 'Parapat', isFeatured: false, orderPriority: 9 },
-    { name: 'Labersa Toba Hotel, Balige', image: '/assets/images/2023/10/09-Labersa-Toba-Hotel-Balige-wonderfultoba_outbound-outbound_medan.jpg', region: 'Balige', isFeatured: false, orderPriority: 10 },
-    { name: 'Pancur Gading Resort', image: '/assets/images/2023/10/10-Pancur-Gading-Hotel-Resort-Delitua-wonderfultoba_outbound-outbound_medan.jpg', region: 'Delitua', isFeatured: false, orderPriority: 11 },
-    { name: 'Kampung Outbound, Pancur Batu', image: '/assets/images/2023/10/12-Kampung-Outbound-Pancur-Batu-wonderfultoba_outbound-outbound_medan.jpg', region: 'Pancur Batu', isFeatured: false, orderPriority: 12 },
-    { name: 'Singapore Land, Batubara', image: '/assets/images/2023/10/13-Singapore-Land-Batubara-wonderfultoba_outbound-outbound_medan.jpg', region: 'Batubara', isFeatured: false, orderPriority: 13 },
-    { name: 'Bukit Lawang', image: '/assets/images/2023/10/15-Bukit-Lawang-wonderfultoba_outbound-outbound_medan.jpg', region: 'Langkat', isFeatured: true, orderPriority: 14 },
-    { name: 'Hillpark Sibolangit', image: '/assets/images/2023/10/17-Hillpark-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg', region: 'Sibolangit', isFeatured: false, orderPriority: 15 },
-    { name: 'Samosir Villa Resort', image: '/assets/images/2023/10/20-Samosir-Villa-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg', region: 'Samosir', isFeatured: false, orderPriority: 16 }
+    { name: 'Marianna Resort, Samosir', image: '/assets/images/2023/10/00-Marianna-Resort-Samosir-medantobatravel_outbound-outbound_medan.jpg', region: 'Samosir', isFeatured: true, orderPriority: 1 },
+    { name: 'The Hill Resort, Sibolangit', image: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-medantobatravel_outbound-outbound_medan.jpg', region: 'Sibolangit', isFeatured: false, orderPriority: 2 },
+    { name: 'Grand Mutiara Hotel, Berastagi', image: '/assets/images/2023/10/02-Grand-Mutiara-Hotel-Berastagi-medantobatravel_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: true, orderPriority: 3 },
+    { name: 'Mikie Holiday Hotel, Berastagi', image: '/assets/images/2023/10/03-Mikie-Holiday-Hotel-Resort-Berastagi-medantobatravel_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 4 },
+    { name: 'Sinabung Hills Hotel, Berastagi', image: '/assets/images/2023/10/04-Sinabung-Hills-Hotel-Berastagi-medantobatravel_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 5 },
+    { name: 'Sibayak Hotel, Berastagi', image: '/assets/images/2023/10/05-Sibayak-Hotel-Berastagi-medantobatravel_outbound-outbound_medan.jpg', region: 'Berastagi', isFeatured: false, orderPriority: 6 },
+    { name: 'Taman Simalem Resort', image: '/assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-medantobatravel_outbound-outbound_medan.jpg', region: 'Sidikalang', isFeatured: true, orderPriority: 7 },
+    { name: 'Hotel Niagara, Parapat', image: '/assets/images/2023/10/07-Hotel-Niagara-Parapat-medantobatravel_outbound-outbound_medan.jpg', region: 'Parapat', isFeatured: false, orderPriority: 8 },
+    { name: 'KHAS Parapat Hotel', image: '/assets/images/2023/10/08-KHAS-Parapat-Hotel-Parapat-medantobatravel_outbound-outbound_medan.jpeg', region: 'Parapat', isFeatured: false, orderPriority: 9 },
+    { name: 'Labersa Toba Hotel, Balige', image: '/assets/images/2023/10/09-Labersa-Toba-Hotel-Balige-medantobatravel_outbound-outbound_medan.jpg', region: 'Balige', isFeatured: false, orderPriority: 10 },
+    { name: 'Pancur Gading Resort', image: '/assets/images/2023/10/10-Pancur-Gading-Hotel-Resort-Delitua-medantobatravel_outbound-outbound_medan.jpg', region: 'Delitua', isFeatured: false, orderPriority: 11 },
+    { name: 'Kampung Outbound, Pancur Batu', image: '/assets/images/2023/10/12-Kampung-Outbound-Pancur-Batu-medantobatravel_outbound-outbound_medan.jpg', region: 'Pancur Batu', isFeatured: false, orderPriority: 12 },
+    { name: 'Singapore Land, Batubara', image: '/assets/images/2023/10/13-Singapore-Land-Batubara-medantobatravel_outbound-outbound_medan.jpg', region: 'Batubara', isFeatured: false, orderPriority: 13 },
+    { name: 'Bukit Lawang', image: '/assets/images/2023/10/15-Bukit-Lawang-medantobatravel_outbound-outbound_medan.jpg', region: 'Langkat', isFeatured: true, orderPriority: 14 },
+    { name: 'Hillpark Sibolangit', image: '/assets/images/2023/10/17-Hillpark-Sibolangit-medantobatravel_outbound-outbound_medan.jpg', region: 'Sibolangit', isFeatured: false, orderPriority: 15 },
+    { name: 'Samosir Villa Resort', image: '/assets/images/2023/10/20-Samosir-Villa-Resort-Samosir-medantobatravel_outbound-outbound_medan.jpg', region: 'Samosir', isFeatured: false, orderPriority: 16 }
   ]
 
   for (const location of locations) {
@@ -1016,24 +1016,24 @@ async function main() {
   console.log('🌱 Seeding Clients...')
   const clients = [
     { name: 'Mandiri Taspen', logo: '/assets/images/2023/10/Mandiri-taspen-wondefultoba-outbound-medan.png', websiteUrl: null, orderPriority: 1, isActive: true },
-    { name: 'Universitas Sumatera Utara', logo: '/assets/images/2023/10/USU-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 2, isActive: true },
-    { name: 'Charoen Pokphand', logo: '/assets/images/2023/10/Charoen-pokphand-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 3, isActive: true },
-    { name: 'Lions Club', logo: '/assets/images/2023/10/Lions-club-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 4, isActive: true },
-    { name: 'Pelindo 1', logo: '/assets/images/2023/10/Pelindo-1-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 5, isActive: true },
-    { name: 'TPI', logo: '/assets/images/2023/10/tpi-wonderfultoba-outbound-medan0.png', websiteUrl: null, orderPriority: 6, isActive: true },
-    { name: 'Oriflame', logo: '/assets/images/2023/10/Oriflame-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 7, isActive: true },
-    { name: 'Otsuka', logo: '/assets/images/2023/10/Otsuka-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 8, isActive: true },
-    { name: 'Al Amjad', logo: '/assets/images/2023/10/Al-amjad-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 9, isActive: true },
-    { name: 'High Scope', logo: '/assets/images/2023/10/High-scope-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 10, isActive: true },
-    { name: 'Hyundai', logo: '/assets/images/2023/10/Hyundai-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 11, isActive: true },
-    { name: 'PKK Dairi', logo: '/assets/images/2023/10/PKK-dairi-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 12, isActive: true },
-    { name: 'BBPPTP', logo: '/assets/images/2023/10/bbpptp-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 13, isActive: true },
-    { name: 'BMW', logo: '/assets/images/2023/10/bmw-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 14, isActive: true },
-    { name: 'Hutama Karya', logo: '/assets/images/2023/10/hutama-karya-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 15, isActive: true },
-    { name: 'MAN Insan Cendekia', logo: '/assets/images/2023/10/man-insan-cendekia-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 16, isActive: true },
-    { name: 'Nirvana Memorial Park', logo: '/assets/images/2023/10/nirvana-memorial-park-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 17, isActive: true },
-    { name: 'Nissan', logo: '/assets/images/2023/10/nissan-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 18, isActive: true },
-    { name: 'Samudera Lautan Luas', logo: '/assets/images/2023/10/samudera-lautan-luas-wonderfultoba-outbound-medan.png', websiteUrl: null, orderPriority: 19, isActive: true }
+    { name: 'Universitas Sumatera Utara', logo: '/assets/images/2023/10/USU-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 2, isActive: true },
+    { name: 'Charoen Pokphand', logo: '/assets/images/2023/10/Charoen-pokphand-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 3, isActive: true },
+    { name: 'Lions Club', logo: '/assets/images/2023/10/Lions-club-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 4, isActive: true },
+    { name: 'Pelindo 1', logo: '/assets/images/2023/10/Pelindo-1-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 5, isActive: true },
+    { name: 'TPI', logo: '/assets/images/2023/10/tpi-medantobatravel-outbound-medan0.png', websiteUrl: null, orderPriority: 6, isActive: true },
+    { name: 'Oriflame', logo: '/assets/images/2023/10/Oriflame-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 7, isActive: true },
+    { name: 'Otsuka', logo: '/assets/images/2023/10/Otsuka-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 8, isActive: true },
+    { name: 'Al Amjad', logo: '/assets/images/2023/10/Al-amjad-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 9, isActive: true },
+    { name: 'High Scope', logo: '/assets/images/2023/10/High-scope-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 10, isActive: true },
+    { name: 'Hyundai', logo: '/assets/images/2023/10/Hyundai-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 11, isActive: true },
+    { name: 'PKK Dairi', logo: '/assets/images/2023/10/PKK-dairi-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 12, isActive: true },
+    { name: 'BBPPTP', logo: '/assets/images/2023/10/bbpptp-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 13, isActive: true },
+    { name: 'BMW', logo: '/assets/images/2023/10/bmw-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 14, isActive: true },
+    { name: 'Hutama Karya', logo: '/assets/images/2023/10/hutama-karya-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 15, isActive: true },
+    { name: 'MAN Insan Cendekia', logo: '/assets/images/2023/10/man-insan-cendekia-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 16, isActive: true },
+    { name: 'Nirvana Memorial Park', logo: '/assets/images/2023/10/nirvana-memorial-park-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 17, isActive: true },
+    { name: 'Nissan', logo: '/assets/images/2023/10/nissan-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 18, isActive: true },
+    { name: 'Samudera Lautan Luas', logo: '/assets/images/2023/10/samudera-lautan-luas-medantobatravel-outbound-medan.png', websiteUrl: null, orderPriority: 19, isActive: true }
   ]
 
   for (const client of clients) {
@@ -1046,12 +1046,12 @@ async function main() {
 
   console.log('🌱 Seeding Gallery Images...')
   const galleryImages = [
-    'wonderfultoba_0922.jpg', 'wonderfultoba_0924.jpg', 'wonderfultoba_0925.jpg', 'wonderfultoba_0926.jpg',
-    'wonderfultoba_0927.jpg', 'wonderfultoba_0935.jpg', 'wonderfultoba_0939.jpg', 'wonderfultoba_0940.jpg',
-    'wonderfultoba_0942.jpg', 'wonderfultoba_0944.jpg', 'wonderfultoba_0946.jpg', 'wonderfultoba_0948.jpg',
-    'wonderfultoba_0950.jpg', 'wonderfultoba_0954.jpg', 'wonderfultoba_0963.jpg', 'wonderfultoba_0965.jpg',
-    'wonderfultoba_0970.jpg', 'wonderfultoba_0976.jpg', 'wonderfultoba_0977.jpg', 'wonderfultoba_0978.jpg',
-    'wonderfultoba_0979.jpg', 'wonderfultoba_0981.jpg', 'wonderfultoba_0982.jpg', 'wonderfultoba_0984.jpg'
+    'medantobatravel_0922.jpg', 'medantobatravel_0924.jpg', 'medantobatravel_0925.jpg', 'medantobatravel_0926.jpg',
+    'medantobatravel_0927.jpg', 'medantobatravel_0935.jpg', 'medantobatravel_0939.jpg', 'medantobatravel_0940.jpg',
+    'medantobatravel_0942.jpg', 'medantobatravel_0944.jpg', 'medantobatravel_0946.jpg', 'medantobatravel_0948.jpg',
+    'medantobatravel_0950.jpg', 'medantobatravel_0954.jpg', 'medantobatravel_0963.jpg', 'medantobatravel_0965.jpg',
+    'medantobatravel_0970.jpg', 'medantobatravel_0976.jpg', 'medantobatravel_0977.jpg', 'medantobatravel_0978.jpg',
+    'medantobatravel_0979.jpg', 'medantobatravel_0981.jpg', 'medantobatravel_0982.jpg', 'medantobatravel_0984.jpg'
   ]
 
   for (let i = 0; i < galleryImages.length; i++) {
@@ -1306,7 +1306,7 @@ async function main() {
       title: 'Rekomendasi Lokasi Corporate Gathering Terbaik di Sumut',
       excerpt: 'Pemilihan lokasi sangat menentukan kesuksesan sebuah acara gathering dan team building perusahaan.',
       content: '<p>Beberapa pilihan teratas untuk lokasi gathering di daerah Sumatera Utara mencakup resort di sekitar Samosir, sejuknya udara di Berastagi, atau di area hutan tropis Bukit Lawang.</p><p>Semuanya menawarkan kapasitas peserta mulai dari 50 hingga 500 orang dengan fasilitas premium.</p>',
-      image: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg',
+      image: '/assets/images/2023/10/01-The-Hill-Resort-Sibolangit-medantobatravel_outbound-outbound_medan.jpg',
       author: 'Admin Outbound',
       category: 'outbound',
       status: 'published',
