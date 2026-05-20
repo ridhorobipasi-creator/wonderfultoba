@@ -1,4 +1,4 @@
-@extends('admin.layout')
+﻿@extends('admin.layout')
 
 @section('title', 'CMS Master Outbound')
 @section('page-title', 'CMS Master Outbound')
@@ -272,7 +272,7 @@
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Email Official</label>
-                            <input type="email" name="contact_email" value="{{ $settings['contact_email'] ?? 'hello@wonderfultoba.id' }}" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-slate-900 text-xs">
+                            <input type="email" name="contact_email" value="{{ $settings['contact_email'] ?? 'hello@medantobatravel.id' }}" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-slate-900 text-xs">
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2">

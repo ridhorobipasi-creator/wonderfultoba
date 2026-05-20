@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -119,7 +119,7 @@
     <div class="header">
         <h1>Wonderful Toba</h1>
         <p>Solusi Perjalanan & Outbound Terbaik di Sumatera Utara</p>
-        <p>Telp: {{ $settings['contact_wa'] ?? '+6281234567890' }} | Email: {{ $settings['contact_email'] ?? 'hello@wonderfultoba.id' }}</p>
+        <p>Telp: {{ $settings['contact_wa'] ?? '+6281234567890' }} | Email: {{ $settings['contact_email'] ?? 'hello@medantobatravel.id' }}</p>
     </div>
 
     <div class="package-title">{{ $package->name }}</div>

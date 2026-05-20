@@ -1,21 +1,21 @@
-{
+﻿{
   "users": [
     {
       "id": 1,
       "name": "Admin Umum",
-      "email": "admin@wonderfultoba.com",
+      "email": "admin@medantobatravel.com",
       "role": "admin_umum"
     },
     {
       "id": 2,
       "name": "Admin Tour",
-      "email": "tour@wonderfultoba.com",
+      "email": "tour@medantobatravel.com",
       "role": "admin_tour"
     },
     {
       "id": 3,
       "name": "Admin Outbound",
-      "email": "outbound@wonderfultoba.com",
+      "email": "outbound@medantobatravel.com",
       "role": "admin_outbound"
     }
   ],
@@ -321,22 +321,22 @@
     { "title": "Event Pelindo 1", "youtubeUrl": "https://www.youtube.com/embed/0iQn9cHj1Sk" }
   ],
   "outbound_locations": [
-    { "name": "Marianna Resort, Samosir", "image": "assets/images/2023/10/00-Marianna-Resort-Samosir-wonderfultoba_outbound-outbound_medan.jpg" },
-    { "name": "The Hill Resort, Sibolangit", "image": "assets/images/2023/10/01-The-Hill-Resort-Sibolangit-wonderfultoba_outbound-outbound_medan.jpg" },
-    { "name": "Taman Simalem Resort", "image": "assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-wonderfultoba_outbound-outbound_medan.jpg" },
-    { "name": "Bukit Lawang", "image": "assets/images/2023/10/15-Bukit-Lawang-wonderfultoba_outbound-outbound_medan.jpg" }
+    { "name": "Marianna Resort, Samosir", "image": "assets/images/2023/10/00-Marianna-Resort-Samosir-medantobatravel_outbound-outbound_medan.jpg" },
+    { "name": "The Hill Resort, Sibolangit", "image": "assets/images/2023/10/01-The-Hill-Resort-Sibolangit-medantobatravel_outbound-outbound_medan.jpg" },
+    { "name": "Taman Simalem Resort", "image": "assets/images/2023/10/06-Taman-Simalem-Resort-Sidikalang-medantobatravel_outbound-outbound_medan.jpg" },
+    { "name": "Bukit Lawang", "image": "assets/images/2023/10/15-Bukit-Lawang-medantobatravel_outbound-outbound_medan.jpg" }
   ],
   "clients": [
     { "logo": "assets/images/2023/10/Mandiri-taspen-wondefultoba-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/USU-wonderfultoba-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/Pelindo-1-wonderfultoba-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/Hyundai-wonderfultoba-outbound-medan.png" }
+    { "logo": "assets/images/2023/10/USU-medantobatravel-outbound-medan.png" },
+    { "logo": "assets/images/2023/10/Pelindo-1-medantobatravel-outbound-medan.png" },
+    { "logo": "assets/images/2023/10/Hyundai-medantobatravel-outbound-medan.png" }
   ],
   "gallery_images": [
-    { "imageUrl": "assets/images/2023/10/wonderfultoba_0922.jpg" },
-    { "imageUrl": "assets/images/2023/10/wonderfultoba_0924.jpg" },
-    { "imageUrl": "assets/images/2023/10/wonderfultoba_0925.jpg" },
-    { "imageUrl": "assets/images/2023/10/wonderfultoba_0926.jpg" }
+    { "imageUrl": "assets/images/2023/10/medantobatravel_0922.jpg" },
+    { "imageUrl": "assets/images/2023/10/medantobatravel_0924.jpg" },
+    { "imageUrl": "assets/images/2023/10/medantobatravel_0925.jpg" },
+    { "imageUrl": "assets/images/2023/10/medantobatravel_0926.jpg" }
   ],
   "package_tiers": [
     { "id": 1, "name": "Basic", "description": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas." },
@@ -366,7 +366,7 @@
         "hero_subtitle": "Nikmati pengalaman tak terlupakan menjelajahi keindahan Sumatera Utara bersama kami",
         "hero_image": "2026/04/lake-toba-premium.png",
         "contact_wa_1": "+6281323888207",
-        "contact_email": "hello@wonderfultoba.com",
+        "contact_email": "hello@medantobatravel.com",
         "contact_address": "Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara",
         "cta_text": "Mulai Petualangan Anda",
         "cta_link": "/tour/packages",

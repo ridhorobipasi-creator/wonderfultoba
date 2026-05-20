@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -147,7 +147,7 @@
 
     <div class="footer">
         <p>&copy; {{ date('Y') }} {{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }}. All rights reserved.</p>
-        <p>Hubungi kami: {{ $siteSettings['general']['contact_wa_1'] ?? '+62 813-2388-8207' }} | {{ $siteSettings['general']['contact_email'] ?? 'info@wonderfultoba.com' }}</p>
+        <p>Hubungi kami: {{ $siteSettings['general']['contact_wa_1'] ?? '+62 813-2388-8207' }} | {{ $siteSettings['general']['contact_email'] ?? 'info@medantobatravel.com' }}</p>
     </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', $settings['seo_title'] ?? $settings['meta_title'] ?? 'Wonderful Toba Outbound - Provider Outbound Terbaik di Sumatera Utara')
 @section('description', $settings['seo_description'] ?? $settings['meta_description'] ?? 'Wonderful Toba Outbound: Provider terbaik untuk Team Building, Gathering, Fun Games di Medan & Sumatera Utara.')
@@ -647,7 +647,7 @@
                         <div class="flex items-center gap-6">
                             <a href="https://instagram.com/{{ str_replace('@', '', $settings['social_instagram'] ?? 'wonderful.outbound') }}" class="text-slate-500 hover:text-white transition-colors text-2xl" target="_blank"><i class="fab fa-instagram"></i></a>
                             <a href="{{ $settings['social_facebook'] ?? '#' }}" class="text-slate-500 hover:text-white transition-colors text-2xl" target="_blank"><i class="fab fa-facebook"></i></a>
-                            <a href="mailto:{{ $settings['contact_email'] ?? 'hello@wonderfultoba.id' }}" class="text-slate-500 hover:text-white transition-colors text-2xl"><i class="fas fa-envelope"></i></a>
+                            <a href="mailto:{{ $settings['contact_email'] ?? 'hello@medantobatravel.id' }}" class="text-slate-500 hover:text-white transition-colors text-2xl"><i class="fas fa-envelope"></i></a>
                         </div>
                     </div>
                 </div>

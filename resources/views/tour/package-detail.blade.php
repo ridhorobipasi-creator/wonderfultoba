@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @php
     $heroImages = collect();
@@ -66,7 +66,7 @@
         city: {{ json_encode($city) }},
         contact: {
             whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['whatsapp'] ?? '6281323888207' }}',
-            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@wonderfultoba.id' }}'
+            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@medantobatravel.id' }}'
         },
         get waNumber() {
             return (this.contact.whatsapp || '6281323888207').replace(/[^0-9]/g, '');
