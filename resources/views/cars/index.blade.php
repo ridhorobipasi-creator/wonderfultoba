@@ -6,7 +6,7 @@
 @section('content')
 <div 
     x-data="{ 
-        cars: {{ json_encode($cars) }},
+        cars: @js($cars),
         searchQuery: '',
         activeType: 'Semua',
         

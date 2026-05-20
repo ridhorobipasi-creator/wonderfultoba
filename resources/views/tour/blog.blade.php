@@ -8,7 +8,7 @@
     x-data="{ 
         activeCategory: '{{ __('Semua') }}', 
         searchQuery: '', 
-        posts: {{ json_encode($posts) }},
+        posts: @js($posts),
         get categories() {
             const cats = ['{{ __('Semua') }}', ...new Set(this.posts.map(p => p.category).filter(Boolean))];
             return cats;

@@ -138,9 +138,9 @@
                                     <p class="text-[9px] text-slate-400 font-bold leading-none mb-1">{{ __('Trip Selesai') }}</p>
                                     <span class="text-sm font-black text-white">
                                         @php
-                                            $touristsCount = $settings['stat_customers'] ?? '5000+';
-                                            if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
-                                                $touristsCount = __('5.000+');
+                                            $touristsCount = $settings['stat_customers'] ?? '1.500+';
+                                            if (strpos($touristsCount, '1500') !== false || strpos($touristsCount, '1.5K') !== false) {
+                                                $touristsCount = __('1.500+');
                                             }
                                         @endphp
                                         {{ $touristsCount }} {{ __('Wisatawan Puas') }}

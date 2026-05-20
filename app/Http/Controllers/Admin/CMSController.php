@@ -97,6 +97,10 @@ class CMSController extends Controller
 
             \Illuminate\Support\Facades\DB::commit();
             
+            // Clear related caches so frontend updates immediately
+            \Illuminate\Support\Facades\Cache::forget('cms_tour_settings');
+            \Illuminate\Support\Facades\Cache::forget('site_settings_all');
+            
             \Illuminate\Support\Facades\Log::alert("CMS SUCCESS: Saved '{$key}' with fields: " . implode(', ', array_keys($data)));
 
             \App\Http\Controllers\Api\SyncController::triggerSync();

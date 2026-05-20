@@ -7,7 +7,7 @@
         formLoading: false,
         contact: { 
             phone: '{{ $siteSettings['general']['wa_number'] ?? '+62 813-2388-8207' }}', 
-            email: '{{ $siteSettings['general']['contact_email'] ?? 'info@medantobatravel.com' }}', 
+            email: '{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}', 
             whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6281323888207') }}' 
         }
     }"

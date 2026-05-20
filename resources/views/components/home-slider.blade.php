@@ -56,7 +56,7 @@
         isTransitioning: true,
         autoplayInterval: null,
         touchStartX: 0,
-        slides: {{ json_encode($infiniteSlides) }},
+        slides: @js($infiniteSlides),
         
         init() {
             if (this.totalOriginal > 1) {
