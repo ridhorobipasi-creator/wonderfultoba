@@ -169,6 +169,10 @@ class DatabaseSeeder extends Seeder
                 DB::table('gallery_images')->insert([
                     'id' => $key + 1,
                     'imageUrl' => $img['imageUrl'],
+                    'category' => $img['category'] ?? 'Tour',
+                    'caption' => $img['caption'] ?? null,
+                    'isActive' => $img['isActive'] ?? 1,
+                    'orderPriority' => $img['orderPriority'] ?? 0,
                 ]);
             }
         }

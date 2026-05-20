@@ -203,9 +203,9 @@
                                 
                                 <div class="flex items-center gap-8 mb-12 lg:justify-start justify-center" x-show="slide.type !== 'blog' && slide.price > 0">
                                     <div class="flex flex-col text-left">
-                                        <span class="text-[10px] text-toba-accent uppercase tracking-widest mb-1 font-bold">Investasi Wisata</span>
+                                        <span class="text-[10px] text-toba-accent uppercase tracking-widest mb-1 font-bold">{{ __('Investasi Wisata') }}</span>
                                         <div class="flex items-baseline gap-1">
-                                            <span class="text-2xl font-black" x-text="'Rp ' + (slide.price ? new Intl.NumberFormat('id-ID').format(slide.price) : '-')"></span>
+                                            <span class="text-2xl font-black" x-text="AppCurrency.format(slide.price)"></span>
                                         </div>
                                     </div>
                                     <a :href="slide.cta_link" class="inline-flex items-center gap-4 bg-toba-green text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 shadow-2xl hover:-translate-y-1">

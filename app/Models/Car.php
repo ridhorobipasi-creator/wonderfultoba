@@ -11,6 +11,8 @@ class Car extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['formatted_price'];
+
     protected $casts = [
         'images' => 'array',
         'features' => 'array',
@@ -40,5 +42,10 @@ class Car extends Model
 
         // Standard storage path
         return asset('storage/' . $path);
+    }
+
+    public function getFormattedPriceAttribute()
+    {
+        return \App\Helpers\CurrencyHelper::formatPrice($this->price);
     }
 }

@@ -181,7 +181,11 @@ class TourService
     public function getGallery()
     {
         return \App\Models\GalleryImage::where('isActive', true)
-            ->where('category', 'Tour')
+            ->where(function($query) {
+                $query->where('category', 'Tour')
+                      ->orWhereNull('category')
+                      ->orWhere('category', '');
+            })
             ->orderBy('orderPriority')
             ->get();
     }

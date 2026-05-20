@@ -130,6 +130,9 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
     });
 });
 
+// Locale Route
+Route::get('/change-locale/{locale}', [App\Http\Controllers\LocaleController::class, 'changeLocale'])->name('change-locale');
+
 // Public Tour Routes
 Route::prefix('tour')->name('tour.')->group(function() {
     Route::get('/', function() {
@@ -152,6 +155,11 @@ Route::prefix('outbound')->name('outbound.')->group(function() {
     Route::get('/', function() { return redirect()->route('index'); })->name('index');
     Route::get('/packages', function() { return redirect()->route('index'); })->name('packages');
     Route::get('/blog', function() { return redirect()->route('index'); })->name('blog');
+    
+    // Outbound Quote Submission
+    Route::post('/quote/submit', [App\Http\Controllers\PublicController::class, 'submitQuote'])
+        ->middleware('throttle:5,1')
+        ->name('quote.submit');
 });
 
 // Other Public Pages

@@ -40,7 +40,7 @@
                     <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-toba-green group-hover:border-toba-green transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </div>
-                    Kembali ke Jurnal
+                    {{ __('Kembali ke Jurnal') }}
                 </a>
                 
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-8">
@@ -48,7 +48,7 @@
                         {{ $post->category }}
                     </span>
                     <span class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
-                        {{ date('d F Y', strtotime($post->createdAt)) }}
+                        {{ \Carbon\Carbon::parse($post->createdAt)->locale(session('locale', 'my') === 'my' ? 'ms' : session('locale', 'my'))->translatedFormat('d F Y') }}
                     </span>
                 </div>
 
@@ -68,8 +68,8 @@
                     <div class="flex items-center gap-4 mb-16 pb-10 border-b border-slate-50">
                         <div class="w-16 h-16 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-2xl shadow-xl">W</div>
                         <div>
-                            <p class="text-[10px] font-black text-toba-green uppercase tracking-[0.3em] mb-1">Ditulis Oleh</p>
-                            <p class="text-lg font-black text-slate-900 tracking-tight">Tim Redaksi Wonderful Toba</p>
+                            <p class="text-[10px] font-black text-toba-green uppercase tracking-[0.3em] mb-1">{{ __('Ditulis Oleh') }}</p>
+                            <p class="text-lg font-black text-slate-900 tracking-tight">{{ __('Tim Redaksi Wonderful Toba') }}</p>
                         </div>
                     </div>
 
@@ -90,11 +90,11 @@
                     <!-- Premium Share Bar -->
                     <div class="mt-16 p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div>
-                            <h4 class="text-xl font-black text-slate-900 tracking-tight mb-1">Bagikan Inspirasi Ini</h4>
-                            <p class="text-sm text-slate-500 font-medium">Bantu orang lain menemukan petualangan impian mereka.</p>
+                            <h4 class="text-xl font-black text-slate-900 tracking-tight mb-1">{{ __('Bagikan Inspirasi Ini') }}</h4>
+                            <p class="text-sm text-slate-500 font-medium">{{ __('Bantu orang lain menemukan petualangan impian mereka.') }}</p>
                         </div>
                         <div class="flex items-center gap-4">
-                            <a href="https://wa.me/?text={{ urlencode('Baca artikel ini dari Wonderful Toba: ' . $post->title . ' ' . url()->current()) }}" 
+                            <a href="https://wa.me/?text={{ urlencode(__('Baca artikel ini dari Wonderful Toba: ') . $post->title . ' ' . url()->current()) }}" 
                                target="_blank"
                                class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-emerald-200 hover:scale-110 transition-all">
                                 <i class="fab fa-whatsapp text-2xl"></i>
@@ -104,7 +104,7 @@
                                class="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-blue-200 hover:scale-110 transition-all">
                                 <i class="fab fa-facebook-f text-xl"></i>
                             </a>
-                            <button @click="navigator.clipboard.writeText(window.location.href); alert('Link disalin!')"
+                            <button @click="navigator.clipboard.writeText(window.location.href); alert('{{ __('Link disalin!') }}')"
                                class="w-14 h-14 bg-white text-slate-400 border border-slate-100 rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-all">
                                 <i class="fas fa-link text-xl"></i>
                             </button>
@@ -121,13 +121,13 @@
                     <div class="bg-slate-900 rounded-[3.5rem] p-10 md:p-12 text-white shadow-[0_50px_100px_-20px_rgba(15,23,42,0.4)] relative overflow-hidden">
                         <div class="absolute -top-24 -right-24 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                         <div class="relative z-10">
-                            <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">Eksplorasi Sekarang</span>
-                            <h3 class="text-3xl font-black text-white mb-6 tracking-tighter leading-tight">Siap Untuk <br/>Menjelajah?</h3>
+                            <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">{{ __('Eksplorasi Sekarang') }}</span>
+                            <h3 class="text-3xl font-black text-white mb-6 tracking-tighter leading-tight">{!! __('Siap Untuk <br/>Menjelajah?') !!}</h3>
                             <p class="text-slate-400 text-sm font-medium mb-10 leading-relaxed">
-                                Wujudkan cerita petualangan Anda sendiri. Pilih paket wisata yang paling sesuai dengan jiwa petualang Anda.
+                                {{ __('Wujudkan cerita petualangan Anda sendiri. Pilih paket wisata yang paling sesuai dengan jiwa petualang Anda.') }}
                             </p>
                             <a href="/tour/packages" class="w-full flex items-center justify-center gap-3 py-6 bg-toba-green text-white rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/20 group">
-                                Lihat Paket Wisata
+                                {{ __('Lihat Paket Wisata') }}
                                 <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
                         </div>
@@ -135,18 +135,18 @@
 
                     <!-- Social proof box -->
                     <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Penulis Resmi</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">{{ __('Penulis Resmi') }}</p>
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-14 h-14 rounded-2xl bg-toba-green/10 text-toba-green flex items-center justify-center">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             </div>
                             <div>
                                 <p class="font-black text-slate-900">Wonderful Toba</p>
-                                <p class="text-[9px] font-black text-toba-green uppercase tracking-widest">Editorial Team</p>
+                                <p class="text-[9px] font-black text-toba-green uppercase tracking-widest">{{ __('Editorial Team') }}</p>
                             </div>
                         </div>
                         <p class="text-sm text-slate-500 font-medium leading-relaxed">
-                            Kami berdedikasi untuk memberikan panduan perjalanan paling akurat dan inspiratif di Sumatera Utara.
+                            {{ __('Kami berdedikasi untuk memberikan panduan perjalanan paling akurat dan inspiratif di Sumatera Utara.') }}
                         </p>
                     </div>
                 </div>
@@ -158,7 +158,9 @@
             <div class="mt-32">
                 <div class="flex items-center space-x-3 mb-12">
                     <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                    <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Inspirasi Lainnya</span>
+                    <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">
+                        {{ __('Inspirasi Lainnya') }}
+                    </span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                     @foreach($relatedPosts as $rp)
@@ -172,7 +174,7 @@
                                     <span class="text-[10px] font-black text-toba-green uppercase tracking-[0.3em] mb-3 block">{{ $rp->category }}</span>
                                     <h4 class="text-xl font-black text-slate-900 mb-4 group-hover:text-toba-green transition-colors leading-tight tracking-tight line-clamp-2">{{ $rp->title }}</h4>
                                     <div class="flex items-center gap-2 text-slate-900 font-black text-[9px] uppercase tracking-widest group-hover:gap-4 transition-all">
-                                        Selanjutnya
+                                        {{ __('Selanjutnya') }}
                                         <svg class="w-4 h-4 text-toba-green" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </div>
                                 </div>

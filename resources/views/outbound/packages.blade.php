@@ -109,10 +109,9 @@
                         
                         <div class="mt-auto pt-8 border-t border-slate-50 flex items-center justify-between">
                             <div>
-                                <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Mulai Dari</p>
+                                <p class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">{{ __('Mulai dari') }}</p>
                                 <div class="flex items-baseline gap-1">
-                                    <span class="text-xs font-black text-slate-900">Rp</span>
-                                    <span class="text-2xl font-black text-slate-900 tracking-tighter" x-text="pkg.price ? new Intl.NumberFormat('id-ID').format(pkg.price) : '-'"></span>
+                                    <span class="text-2xl font-black text-slate-900 tracking-tighter" x-text="pkg.formatted_price || '-'"></span>
                                 </div>
                             </div>
                             <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-toba-green hover:scale-110 transition-all duration-300 shadow-xl shadow-slate-200 group/btn">

@@ -23,7 +23,7 @@ class Package extends Model
         'translations', 'cityId',
     ];
 
-    protected $appends = ['first_image', 'image_url'];
+    protected $appends = ['first_image', 'image_url', 'formatted_price'];
 
     protected $casts = [
         'images' => 'array',
@@ -74,5 +74,10 @@ class Package extends Model
     public function getImageUrlAttribute()
     {
         return $this->first_image;
+    }
+
+    public function getFormattedPriceAttribute()
+    {
+        return \App\Helpers\CurrencyHelper::formatPrice($this->price);
     }
 }

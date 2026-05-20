@@ -35,7 +35,27 @@ if (! function_exists('imageUrl')) {
 
         $lower = strtolower($path);
 
+        // Intercept Partner Logos first to prevent 'toba' substring matching
+        if (str_contains($lower, 'mandiri')) {
+            return asset('images/partners/mandiri.svg');
+        }
+        if (str_contains($lower, 'usu-') || str_contains($lower, 'usu.')) {
+            return asset('images/partners/usu.svg');
+        }
+        if (str_contains($lower, 'pelindo')) {
+            return asset('images/partners/pelindo.svg');
+        }
+        if (str_contains($lower, 'hyundai')) {
+            return asset('images/partners/hyundai.svg');
+        }
+
         // Premium Unsplash Override for Legacy Outbound/Team Building Images to Tour & Travel Images
+        if (str_contains($lower, 'lake-toba-premium')) {
+            return 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=1200&q=80'; // Samosir hills aerial landscape
+        }
+        if (str_contains($lower, 'sumatra-panorama')) {
+            return 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'; // Wide mountain panorama
+        }
         if (str_contains($lower, '001-1') || str_contains($lower, 'toba') || str_contains($lower, 'samosir')) {
             return 'https://images.unsplash.com/photo-1544735049-717bc392183e?auto=format&fit=crop&w=1200&q=80'; // Lake Toba
         }
@@ -102,7 +122,7 @@ if (! function_exists('imageUrl')) {
         $extension = strtolower(pathinfo($clean, PATHINFO_EXTENSION));
         if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
             $webpPath = preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $clean);
-            if (Storage::disk('public')->exists($webpPath)) {
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($webpPath)) {
                 return asset('storage/' . $webpPath);
             }
         }
@@ -134,3 +154,14 @@ if (! function_exists('imageFallback')) {
         return $fallback ?? asset('images/home/tour.webp');
     }
 }
+
+if (! function_exists('formatPrice')) {
+    /**
+     * Convert and format price based on active locale/currency dynamic exchange rate.
+     */
+    function formatPrice($priceInIdr, $locale = null): string
+    {
+        return \App\Helpers\CurrencyHelper::formatPrice($priceInIdr, $locale);
+    }
+}
+

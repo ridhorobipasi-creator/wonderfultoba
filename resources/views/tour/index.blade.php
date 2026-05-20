@@ -19,14 +19,14 @@
                 <div class="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-1000">
                     <div class="flex items-center space-x-2 mb-4">
                         <div class="h-px w-8 bg-toba-green"></div>
-                        <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">Destinasi Unggulan</span>
+                        <span class="text-toba-green font-black text-xs uppercase tracking-[0.3em]">{{ __('Destinasi Unggulan') }}</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-                        Paket Wisata <span class="text-toba-green">Terpopuler</span>
+                        {{ __('Paket Wisata') }} <span class="text-toba-green">{{ __('Terpopuler') }}</span>
                     </h2>
                 </div>
                 <a class="flex items-center space-x-3 text-sm font-black text-slate-900 uppercase tracking-widest hover:text-toba-green transition-colors group shrink-0 animate-in fade-in slide-in-from-right-8 duration-1000" href="/tour/packages">
-                    <span>Lihat Semua</span>
+                    <span>{{ __('Lihat Semua') }}</span>
                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center group-hover:bg-toba-green group-hover:text-white transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                     </div>
@@ -55,25 +55,25 @@
                         <div class="absolute bottom-6 left-6 right-6">
                             <div class="flex items-center text-toba-accent text-[10px] font-black uppercase tracking-[0.2em] mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                {{ $pkg->locationTag ?? 'Sumatera Utara' }}
+                                {{ __($pkg->locationTag ?? 'Sumatera Utara') }}
                             </div>
                             <h3 class="text-2xl font-black text-white mb-2 tracking-tight leading-tight group-hover:text-toba-accent transition-colors">{{ $pkg->name }}</h3>
                             <p class="text-slate-300 text-xs font-medium mb-4 line-clamp-2">{{ $pkg->shortDescription }}</p>
                             
                             <div class="flex justify-between items-end">
                                 <div>
-                                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-0.5">Durasi</p>
+                                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-0.5">{{ __('Durasi') }}</p>
                                     <p class="text-white font-bold text-sm">{{ $pkg->duration }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-0.5">Mulai Dari</p>
-                                    <p class="text-xl font-black text-white"><span class="text-xs font-bold text-toba-accent mr-1">Rp</span>{{ number_format($pkg->price, 0, ',', '.') }}</p>
+                                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-0.5">{{ __('Mulai dari') }}</p>
+                                    <p class="text-xl font-black text-white">{{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <a class="flex items-center justify-center gap-2 w-full py-3.5 bg-slate-50 hover:bg-toba-green hover:text-white text-slate-700 rounded-2xl font-bold text-sm transition-all duration-300 group-hover:bg-toba-green group-hover:text-white" href="/tour/package/{{ $pkg->slug ?: $pkg->id }}">
-                        Lihat Detail <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        {{ __('Lihat Detail') }} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                     </a>
                 </div>
                 @endforeach
@@ -135,8 +135,16 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-[9px] text-slate-400 font-bold leading-none mb-1">Trip Selesai</p>
-                                    <span class="text-sm font-black text-white">1.5K+ Klien</span>
+                                    <p class="text-[9px] text-slate-400 font-bold leading-none mb-1">{{ __('Trip Selesai') }}</p>
+                                    <span class="text-sm font-black text-white">
+                                        @php
+                                            $touristsCount = $settings['stat_customers'] ?? '5000+';
+                                            if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
+                                                $touristsCount = __('5.000+');
+                                            }
+                                        @endphp
+                                        {{ $touristsCount }} {{ __('Wisatawan Puas') }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -216,16 +224,16 @@
                 <div class="lg:col-span-5 flex flex-col justify-center py-4">
                     <div class="inline-flex items-center gap-2.5 px-4.5 py-2 bg-white/5 border border-white/10 text-toba-accent rounded-full font-black text-xs uppercase tracking-[0.2em] mb-6">
                         <span class="w-2 h-2 rounded-full bg-toba-accent animate-ping"></span>
-                        <span>Standard of Excellence</span>
+                        <span>{{ __('Standard of Excellence') }}</span>
                     </div>
                     
                     <h2 class="text-4xl md:text-5xl lg:text-[3.25rem] font-black text-white mb-6 tracking-tight leading-[1.05]">
-                        Eksplorasi dengan <br />
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-toba-accent via-emerald-400 to-teal-300">Kemewahan Sejati</span>
+                        {{ __('Eksplorasi dengan') }} <br />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-toba-accent via-emerald-400 to-teal-300">{{ __('Kemewahan Sejati') }}</span>
                     </h2>
                     
                     <p class="text-slate-400 font-medium leading-relaxed text-sm md:text-base mb-10 max-w-xl opacity-90">
-                        Kami merancang setiap detail perjalanan Anda dengan presisi tinggi demi menghadirkan kenyamanan mutlak dan kebahagiaan sejati selama menjelajahi pesona legendaris Danau Toba.
+                        {{ __('Kami merancang setiap detail perjalanan Anda dengan presisi tinggi demi menghadirkan kenyamanan mutlak dan kebahagiaan sejati selama menjelajahi pesona legendaris Danau Toba.') }}
                     </p>
                     
                     <!-- Dynamic Interactive Tab Space -->
@@ -271,11 +279,11 @@
                             <div class="relative z-10 flex-1">
                                 <h4 class="text-lg font-black tracking-tight transition-colors duration-300"
                                     :class="activeTab === {{ $i }} ? 'text-white' : 'text-slate-300 group-hover:text-white'">
-                                    {{ $title }}
+                                    {{ __($title) }}
                                 </h4>
                                 <p class="font-medium leading-relaxed text-xs md:text-sm mt-1 transition-colors duration-300"
                                    :class="activeTab === {{ $i }} ? 'text-slate-200' : 'text-slate-500'">
-                                    {{ $desc }}
+                                    {{ __($desc) }}
                                 </p>
                             </div>
 
@@ -304,18 +312,28 @@
         <div class="max-w-7xl mx-auto px-6 md:px-8 text-center relative z-10">
             <div class="flex items-center justify-center space-x-3 mb-6">
                 <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Testimoni</span>
+                <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">{{ __('Testimoni') }}</span>
                 <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
             </div>
             <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tight mb-20 md:mb-28 leading-tight">
-                Momen Indah <br /> <span class="text-toba-green">Dari Pelanggan Kami</span>
+                {{ __('Momen Indah') }} <br /> <span class="text-toba-green">{{ __('Dari Pelanggan Kami') }}</span>
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
                 @php
                     $testimonials = $settings['testimonials'] ?? [
-                        ['name' => 'Budi Santoso', 'text' => 'Pelayanan sangat memuaskan, hotel bintang 4 sesuai janji. Tour guide sangat ramah dan sabar.', 'image' => null],
-                        ['name' => 'Ani Wijaya', 'text' => 'Paket Danau Toba 3D2N sangat berkesan. Anak-anak senang sekali dengan kegiatannya.', 'image' => null]
+                        [
+                            'name' => 'Farhan Haris',
+                            'location' => 'Kuala Lumpur, Malaysia',
+                            'text' => 'Wonderful Toba arranged a perfect 4D3N trip for our family. The view from Samosir Island was breathtaking, and the private transport was extremely comfortable. Highly recommended for Malaysian travelers!',
+                            'image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80'
+                        ],
+                        [
+                            'name' => 'Cheryl Lim',
+                            'location' => 'Singapore',
+                            'text' => 'Very professional service. The tour guide was very knowledgeable, spoke fluent English, and the lakefront resort in Samosir was stunning. Smooth booking and hassle-free payment via Wise. A 5-star experience!',
+                            'image' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&h=150&q=80'
+                        ]
                     ];
                 @endphp
                 @foreach($testimonials as $t)
@@ -328,7 +346,7 @@
                                 <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             @endfor
                         </div>
-                        <p class="text-slate-700 text-lg md:text-xl leading-relaxed mb-10 font-medium italic relative z-10">&ldquo;{{ $t['text'] }}&rdquo;</p>
+                        <p class="text-slate-700 text-lg md:text-xl leading-relaxed mb-10 font-medium italic relative z-10">&ldquo;{{ __($t['text']) }}&rdquo;</p>
                         <div class="flex items-center gap-5 pt-8 border-t border-slate-100">
                             <div class="relative">
                                 <img src="{{ !empty($t['image']) ? (Str::startsWith($t['image'], 'http') ? $t['image'] : asset('storage/'.$t['image'])) : 'https://ui-avatars.com/api/?name='.urlencode($t['name']).'&background=10b981&color=fff' }}" alt="{{ $t['name'] }}" class="w-16 h-16 rounded-2xl object-cover shadow-lg" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=10b981&color=fff'">
@@ -338,12 +356,62 @@
                             </div>
                             <div>
                                 <p class="font-black text-slate-900 text-lg tracking-tight">{{ $t['name'] }}</p>
-                                <p class="text-[10px] text-toba-green font-black uppercase tracking-[0.2em]">{{ $t['location'] ?? 'Wisatawan Terverifikasi' }}</p>
+                                <p class="text-[10px] text-toba-green font-black uppercase tracking-[0.2em]">{{ __($t['location'] ?? 'Wisatawan Terverifikasi') }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 @endforeach
+            </div>
+
+            <!-- TripAdvisor & Google review badges row (Temuan #14) -->
+            <div class="mt-20 pt-10 border-t border-slate-100 flex flex-wrap items-center justify-center gap-8 md:gap-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <!-- Google Badge -->
+                <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-200 px-6 py-4 rounded-[2rem] transition-all group shadow-sm">
+                    <div class="w-10 h-10 flex items-center justify-center bg-white rounded-2xl shadow-sm">
+                        <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22c-.24-.63-.37-1.3-.37-2.09z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="flex items-center gap-1">
+                            <span class="font-black text-slate-900 text-sm">4.9</span>
+                            <div class="flex text-amber-400">
+                                <i class="fas fa-star text-[10px]"></i>
+                                <i class="fas fa-star text-[10px]"></i>
+                                <i class="fas fa-star text-[10px]"></i>
+                                <i class="fas fa-star text-[10px]"></i>
+                                <i class="fas fa-star text-[10px]"></i>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none group-hover:text-toba-green transition-colors">{{ __('Ulasan Google') }}</span>
+                    </div>
+                </a>
+
+                <!-- TripAdvisor Badge -->
+                <a href="https://tripadvisor.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-200 px-6 py-4 rounded-[2rem] transition-all group shadow-sm">
+                    <div class="w-10 h-10 flex items-center justify-center bg-white rounded-2xl shadow-sm text-[#00AF87]">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-3.5 13c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-4c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5zm7 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-4c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5zm-3.5-2.5c-.83 0-1.5-.67-1.5-1.5S11.17 6 12 6s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="flex items-center gap-1">
+                            <span class="font-black text-slate-900 text-sm">5.0</span>
+                            <div class="flex text-[#00AF87] gap-0.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#00AF87]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#00AF87]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#00AF87]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#00AF87]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#00AF87]"></span>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none group-hover:text-[#00AF87] transition-colors">{{ __('Ulasan TripAdvisor') }}</span>
+                    </div>
+                </a>
             </div>
         </div>
     @endif
@@ -447,6 +515,66 @@
     </section>
     @endif
 
+    <!-- FAQ Section (Temuan #12) -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 md:px-8">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
+                    <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">{{ __('FAQ Internasional') }}</span>
+                    <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+                    {{ __('Ada Pertanyaan?') }} <span class="text-toba-green">{{ __('Kami Punya Jawabannya') }}</span>
+                </h2>
+                <p class="mt-4 text-slate-500 font-medium max-w-2xl mx-auto text-sm md:text-base">
+                    {{ __('Informasi penting dan praktikal bagi pelancong dari Malaysia, Singapura, dan mancanegara sebelum berkunjung ke Danau Toba.') }}
+                </p>
+            </div>
+
+            <div x-data="{ activeFaq: null }" class="space-y-4">
+                @php
+                    $faqs = [
+                        [
+                            'q' => 'Bagaimana cara terbaik menuju Danau Toba dari Bandara Kualanamu (KNO)?',
+                            'a' => 'Cara terbaik dan paling nyaman adalah menggunakan layanan transfer private (armada premium dengan supir pribadi) yang disediakan oleh Wonderful Toba. Perjalanan darat memakan waktu sekitar 3.5 hingga 4 jam melalui jalan tol Medan-Tebing Tinggi, lalu dilanjutkan ke Parapat, pintu gerbang utama menuju Pulau Samosir.'
+                        ],
+                        [
+                            'q' => 'Apakah makanan halal mudah ditemukan di sekitar Danau Toba?',
+                            'a' => 'Ya, sangat mudah. Di Parapat dan Pulau Samosir (terutama daerah wisata Tuk-tuk dan Tomok), terdapat banyak restoran Muslim lokal yang bersertifikat halal atau menyajikan menu ramah Muslim seperti ikan mas bakar, ayam penyet, dan masakan khas Minang/Padang. Supir dan pemandu Wonderful Toba akan selalu mengarahkan Anda ke tempat makan halal pilihan.'
+                        ],
+                        [
+                            'q' => 'Mata uang apa yang digunakan, dan apakah kartu kredit diterima?',
+                            'a' => 'Mata uang resmi yang digunakan adalah Rupiah Indonesia (IDR). Di kota besar seperti Medan, kartu kredit/debit internasional diterima secara luas. Namun, di sekitar Danau Toba, disarankan membawa uang tunai Rupiah untuk transaksi kecil di warung makan atau toko suvenir. Anda juga dapat melakukan pembayaran transfer bank internasional via Wise.'
+                        ],
+                        [
+                            'q' => 'Kapan waktu terbaik untuk berkunjung ke Danau Toba?',
+                            'a' => 'Danau Toba indah sepanjang tahun karena iklimnya yang sejuk di dataran tinggi. Waktu terbaik adalah antara bulan Mei hingga September saat curah hujan cenderung lebih rendah, memberikan pemandangan langit yang cerah dan danau yang biru. Hindari musim liburan nasional jika Anda menyukai suasana yang tenang.'
+                        ],
+                        [
+                            'q' => 'Apakah tersedia paket kustom (private tour) untuk rombongan keluarga?',
+                            'a' => 'Tentu saja! Semua paket wisata kami bersifat private dan dapat disesuaikan (customized) sepenuhnya sesuai keinginan Anda. Mulai dari pemilihan hotel premium, penyesuaian rute perjalanan, hingga akomodasi kebutuhan khusus untuk lansia atau anak-anak.'
+                        ]
+                    ];
+                @endphp
+
+                @foreach($faqs as $index => $faq)
+                <div class="border border-slate-100 rounded-3xl bg-white overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:border-slate-200">
+                    <button @click="activeFaq = activeFaq === {{ $index }} ? null : {{ $index }}" class="w-full flex items-center justify-between p-6 md:p-8 text-left font-black text-slate-900 text-base md:text-lg hover:text-toba-green transition-colors focus:outline-none">
+                        <span>{{ __($faq['q']) }}</span>
+                        <svg class="w-5 h-5 text-slate-400 transition-transform duration-300 shrink-0 ml-4" :class="activeFaq === {{ $index }} ? 'rotate-180 text-toba-green' : ''" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="activeFaq === {{ $index }}" x-transition.opacity.duration.300ms x-cloak>
+                        <div class="p-6 md:p-8 pt-0 border-t border-slate-50 text-slate-600 font-medium leading-relaxed text-sm md:text-base">
+                            {{ __($faq['a']) }}
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <!-- Cinema CTA -->
     <section class="py-24 md:py-32 px-6 md:px-8 bg-white">
         <div class="max-w-7xl mx-auto bg-slate-900 rounded-[4rem] p-12 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(15,23,42,0.3)]">
@@ -464,7 +592,13 @@
                     Siap Untuk <br/> <span class="text-toba-green">Petualangan Nyata?</span>
                 </h2>
                 <p class="text-xl text-slate-300 mb-12 font-medium leading-relaxed max-w-2xl">
-                    Bergabunglah dengan <span class="text-white font-black">{{ $settings['stat_value_1'] ?? '10K+' }}</span> petualang lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.
+                    @php
+                        $touristsCount = $settings['stat_customers'] ?? '5000+';
+                        if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
+                            $touristsCount = __('5.000+');
+                        }
+                    @endphp
+                    {{ __('Bergabunglah dengan') }} <span class="text-white font-black">{{ $touristsCount }}</span> {{ __('wisatawan lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row items-center gap-6">
                     <a href="/tour/packages" class="bg-toba-green text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/30 group flex items-center gap-3">

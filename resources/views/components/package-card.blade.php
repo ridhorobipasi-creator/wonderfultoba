@@ -60,11 +60,10 @@
         
         <div class="flex items-center justify-between pt-6 border-t border-slate-50 mt-auto">
             <div>
-                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Mulai Dari</p>
+                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">{{ __('Mulai dari') }}</p>
                 <div class="flex items-baseline space-x-1">
-                    <span class="text-xs font-bold text-slate-400">IDR</span>
                     <span class="text-xl md:text-2xl font-black text-slate-900">
-                        {{ number_format($package->price, 0, ',', '.') }}
+                        {{ \App\Helpers\CurrencyHelper::formatPrice($package->price) }}
                     </span>
                 </div>
             </div>

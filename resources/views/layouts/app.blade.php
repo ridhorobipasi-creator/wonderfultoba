@@ -40,6 +40,36 @@
     </script>
     @endif
 
+    @php
+        $activeLocale = session('locale', 'my');
+        $rate = \App\Helpers\CurrencyHelper::getRate($activeLocale === 'en' ? 'SGD' : ($activeLocale === 'my' ? 'MYR' : 'IDR'));
+        $symbol = $activeLocale === 'en' ? 'S$ ' : ($activeLocale === 'my' ? 'RM ' : 'Rp ');
+        $decimals = $activeLocale === 'id' ? 0 : 2;
+        $thousandsSep = $activeLocale === 'id' ? '.' : ',';
+        $decPoint = $activeLocale === 'id' ? ',' : '.';
+    @endphp
+    <script>
+        window.AppCurrency = {
+            locale: @json($activeLocale),
+            rate: {{ $rate }},
+            symbol: @json($symbol),
+            decimals: {{ $decimals }},
+            thousandsSep: @json($thousandsSep),
+            decPoint: @json($decPoint),
+            format: function(priceInIdr) {
+                if (priceInIdr === null || priceInIdr === undefined || priceInIdr === '') return '-';
+                let converted = priceInIdr * this.rate;
+                let formatted = parseFloat(converted).toFixed(this.decimals);
+                
+                // Format thousands separator
+                let parts = formatted.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, this.thousandsSep);
+                
+                return this.symbol + parts.join(this.decPoint);
+            }
+        };
+    </script>
+
     @stack('styles')
     @stack('head')
     @stack('schema')

@@ -103,11 +103,11 @@
                     <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-toba-green group-hover:border-toba-green transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </div>
-                    Kembali ke Katalog
+                    {{ __('Kembali ke Katalog') }}
                 </a>
                 
                 <div class="flex items-center gap-3 mb-6">
-                    <span class="px-4 py-1.5 bg-toba-green text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-toba-green/30" x-text="package.status === 'active' ? 'Paket Tersedia' : 'Coming Soon'"></span>
+                    <span class="px-4 py-1.5 bg-toba-green text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-toba-green/30" x-text="package.status === 'active' ? '{{ __('Paket Tersedia') }}' : '{{ __('Coming Soon') }}'"></span>
                     <span class="px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-toba-accent rounded-full text-[10px] font-black uppercase tracking-widest" x-text="locationDisplay"></span>
                 </div>
 
@@ -115,24 +115,23 @@
                 
                 <div class="flex flex-wrap items-center gap-10">
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Durasi Wisata</span>
+                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">{{ __('Durasi Wisata') }}</span>
                         <div class="flex items-center gap-2 text-white font-black text-2xl tracking-tight">
                             <svg class="w-6 h-6 text-toba-green" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                             <span x-text="package.duration"></span>
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Rating Wisatawan</span>
+                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">{{ __('Rating Wisatawan') }}</span>
                         <div class="flex items-center gap-2 text-white font-black text-2xl tracking-tight">
                             <svg class="w-6 h-6 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             <span>4.9</span>
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Mulai Dari</span>
+                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">{{ __('Mulai dari') }}</span>
                         <div class="flex items-baseline gap-1 text-white font-black text-3xl tracking-tighter">
-                            <span class="text-toba-accent text-lg font-black mr-0.5">Rp</span>
-                            <span x-text="package.price ? new Intl.NumberFormat('id-ID').format(package.price) : '-'"></span>
+                            <span x-text="AppCurrency.format(package.price)"></span>
                         </div>
                     </div>
                 </div>
@@ -167,12 +166,12 @@
                     <div class="relative z-10 mb-14 flex flex-col items-center text-center">
                         <div class="inline-flex items-center gap-3 px-5 py-2.5 bg-toba-green/10 text-toba-green rounded-full mb-8 border border-toba-green/20">
                             <div class="w-2 h-2 bg-toba-green rounded-full animate-pulse"></div>
-                            <span class="text-[10px] font-black uppercase tracking-[0.3em]">Form Reservasi Resmi</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em]">{{ __('Form Reservasi Resmi') }}</span>
                         </div>
                         <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight mb-4">
-                            Lengkapi Data <span class="text-toba-green">Perjalanan Anda</span>
+                            {{ __('Lengkapi Data') }} <span class="text-toba-green">{{ __('Perjalanan Anda') }}</span>
                         </h3>
-                        <p class="text-slate-500 font-medium text-base max-w-xl leading-relaxed">Keamanan data Anda adalah prioritas kami. Semua informasi dienkripsi dengan standar keamanan tertinggi.</p>
+                        <p class="text-slate-500 font-medium text-base max-w-xl leading-relaxed">{{ __('Keamanan data Anda adalah prioritas kami. Semua informasi dienkripsi dengan standar keamanan tertinggi.') }}</p>
                     </div>
 
                     @if(session('success'))
@@ -183,8 +182,8 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                             </div>
-                            <h4 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Reservasi Diterima!</h4>
-                            <p class="text-slate-500 font-medium mb-12 max-w-sm mx-auto text-base">Kami telah menyimpan data pesanan Anda. Anda akan diarahkan ke WhatsApp dalam 3 detik...</p>
+                            <h4 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">{{ __('Reservasi Diterima!') }}</h4>
+                            <p class="text-slate-500 font-medium mb-12 max-w-sm mx-auto text-base">{{ __('Kami telah menyimpan data pesanan Anda. Anda akan diarahkan ke WhatsApp dalam 3 detik...') }}</p>
                             
                             <div class="inline-flex flex-col items-center px-16 py-10 bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 mb-14">
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Official Booking ID</p>
@@ -197,7 +196,7 @@
                                     class="w-full py-6 bg-emerald-500 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-2xl shadow-emerald-500/30 hover:bg-emerald-600 hover:-translate-y-2 transition-all flex items-center justify-center gap-4 group"
                                 >
                                     <i class="fab fa-whatsapp text-3xl group-hover:scale-110 transition-transform"></i>
-                                    LANJUTKAN KE WHATSAPP SEKARANG
+                                    {{ __('LANJUTKAN KE WHATSAPP SEKARANG') }}
                                 </a>
                             </div>
                         </div>
@@ -212,10 +211,10 @@
                             <!-- Nama Instansi -->
                             <div class="space-y-4 md:col-span-2">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-building text-slate-300"></i> Nama Instansi / Perusahaan / PIC <span class="text-red-500">*</span>
+                                    <i class="fas fa-building text-slate-300"></i> {{ __('Nama Instansi / Perusahaan / PIC') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="text" name="company_name" required value="{{ old('company_name') }}" placeholder="Contoh: PT. Maju Bersama / Bapak Heru" 
+                                    <input type="text" name="company_name" required value="{{ old('company_name') }}" placeholder="{{ __('Contoh: PT. Maju Bersama / Bapak Heru') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('company_name') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                 </div>
                                 @error('company_name') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -224,7 +223,7 @@
                             <!-- WhatsApp PIC -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fab fa-whatsapp text-slate-300"></i> No. WhatsApp PIC <span class="text-red-500">*</span>
+                                    <i class="fab fa-whatsapp text-slate-300"></i> {{ __('No. WhatsApp PIC') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <input type="tel" name="whatsapp" required value="{{ old('whatsapp') }}" placeholder="0812-xxxx-xxxx" 
@@ -236,13 +235,13 @@
                             <!-- Jumlah Peserta -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-users text-slate-300"></i> Estimasi Jumlah Peserta <span class="text-red-500">*</span>
+                                    <i class="fas fa-users text-slate-300"></i> {{ __('Estimasi Jumlah Peserta') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="number" name="participants" required min="1" value="{{ old('participants') }}" placeholder="Jumlah orang" 
+                                    <input type="number" name="participants" required min="1" value="{{ old('participants') }}" placeholder="{{ __('Jumlah orang') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('participants') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                     <div class="absolute right-6 top-1/2 -translate-y-1/2 px-4 py-2 bg-slate-200/50 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest pointer-events-none">
-                                        Orang
+                                        {{ __('Orang') }}
                                     </div>
                                 </div>
                                 @error('participants') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -251,10 +250,10 @@
                             <!-- Lokasi Kegiatan -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-map-marker-alt text-slate-300"></i> Pilihan Lokasi Kegiatan <span class="text-red-500">*</span>
+                                    <i class="fas fa-map-marker-alt text-slate-300"></i> {{ __('Pilihan Lokasi Kegiatan') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="text" name="location" required value="{{ old('location', $city->name ?? $package->locationTag ?? '') }}" placeholder="Contoh: Danau Toba / Medan" 
+                                    <input type="text" name="location" required value="{{ old('location', $city->name ?? $package->locationTag ?? '') }}" placeholder="{{ __('Contoh: Danau Toba / Medan') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('location') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                 </div>
                                 @error('location') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -263,7 +262,7 @@
                             <!-- Tanggal -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-calendar-alt text-slate-300"></i> Estimasi Tanggal <span class="text-red-500">*</span>
+                                    <i class="fas fa-calendar-alt text-slate-300"></i> {{ __('Estimasi Tanggal') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <input type="date" name="estimated_date" required value="{{ old('estimated_date') }}" 
@@ -282,7 +281,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                                 
                                 <div x-show="!isSubmitting" class="relative z-10 flex items-center justify-center gap-6 w-full px-10">
-                                    <span class="flex-1 text-center md:pl-16">MINTA PENAWARAN HARGA</span>
+                                    <span class="flex-1 text-center md:pl-16">{{ __('MINTA PENAWARAN HARGA') }}</span>
                                     <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-toba-green transition-all duration-500 group-hover:translate-x-4 shadow-sm">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </div>
@@ -290,7 +289,7 @@
 
                                 <span x-show="isSubmitting" class="flex items-center gap-4 relative z-10 text-white bg-slate-900/50 backdrop-blur-sm w-full h-full justify-center">
                                     <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    MENYIMPAN DATA...
+                                    {{ __('MENYIMPAN DATA...') }}
                                 </span>
                             </button>
                         </div>
@@ -305,10 +304,10 @@
                             <!-- Nama Lengkap -->
                             <div class="space-y-4 md:col-span-2">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-user-circle text-slate-300"></i> Nama Sesuai Identitas <span class="text-red-500">*</span>
+                                    <i class="fas fa-user-circle text-slate-300"></i> {{ __('Nama Sesuai Identitas') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="text" name="customerName" required value="{{ old('customerName') }}" placeholder="Masukkan nama lengkap" 
+                                    <input type="text" name="customerName" required value="{{ old('customerName') }}" placeholder="{{ __('Masukkan nama lengkap') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('customerName') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                 </div>
                                 @error('customerName') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -317,10 +316,10 @@
                             <!-- Email -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-envelope text-slate-300"></i> Alamat Email <span class="text-red-500">*</span>
+                                    <i class="fas fa-envelope text-slate-300"></i> {{ __('Alamat Email') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="email" name="customerEmail" required value="{{ old('customerEmail') }}" placeholder="email@contoh.com" 
+                                    <input type="email" name="customerEmail" required value="{{ old('customerEmail') }}" placeholder="{{ __('email@contoh.com') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('customerEmail') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                 </div>
                                 @error('customerEmail') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -329,10 +328,10 @@
                             <!-- WhatsApp -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fab fa-whatsapp text-slate-300"></i> Nomor WhatsApp <span class="text-red-500">*</span>
+                                    <i class="fab fa-whatsapp text-slate-300"></i> {{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="tel" name="customerPhone" required value="{{ old('customerPhone') }}" placeholder="0812-xxxx-xxxx" 
+                                    <input type="tel" name="customerPhone" required value="{{ old('customerPhone') }}" placeholder="{{ __('0812-xxxx-xxxx') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('customerPhone') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                 </div>
                                 @error('customerPhone') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -341,7 +340,7 @@
                             <!-- Tanggal -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-calendar-alt text-slate-300"></i> Tanggal Keberangkatan <span class="text-red-500">*</span>
+                                    <i class="fas fa-calendar-alt text-slate-300"></i> {{ __('Tanggal Keberangkatan') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <input type="date" name="startDate" required value="{{ old('startDate') }}" 
@@ -353,13 +352,13 @@
                             <!-- Pax -->
                             <div class="space-y-4">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-users text-slate-300"></i> Jumlah Peserta <span class="text-red-500">*</span>
+                                    <i class="fas fa-users text-slate-300"></i> {{ __('Jumlah Peserta') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="number" name="pax" required min="1" value="{{ old('pax') }}" placeholder="Jumlah orang" 
+                                    <input type="number" name="pax" required min="1" value="{{ old('pax') }}" placeholder="{{ __('Jumlah orang') }}" 
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('pax') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium">
                                     <div class="absolute right-6 top-1/2 -translate-y-1/2 px-4 py-2 bg-slate-200/50 rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest pointer-events-none">
-                                        Orang
+                                        {{ __('Orang') }}
                                     </div>
                                 </div>
                                 @error('pax') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -368,10 +367,10 @@
                             <!-- Notes -->
                             <div class="space-y-4 md:col-span-2">
                                 <label class="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                    <i class="fas fa-comment-dots text-slate-300"></i> Catatan Tambahan <span class="text-[9px] text-slate-300 ml-1">(Opsional)</span>
+                                    <i class="fas fa-comment-dots text-slate-300"></i> {{ __('Catatan Tambahan') }} <span class="text-[9px] text-slate-300 ml-1">({{ __('Opsional') }})</span>
                                 </label>
                                 <div class="relative">
-                                    <textarea name="notes" placeholder="Misal: Permintaan hotel khusus, alergi makanan, layanan penjemputan bandara, dll." rows="3"
+                                    <textarea name="notes" placeholder="{{ __('Misal: Permintaan hotel khusus, alergi makanan, layanan penjemputan bandara, dll.') }}" rows="3"
                                         class="w-full px-8 py-6 bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 {{ $errors->has('notes') ? 'border-red-500' : 'border-slate-100' }} focus:border-toba-green rounded-3xl outline-none font-bold text-slate-900 text-lg transition-all shadow-sm focus:shadow-xl focus:shadow-toba-green/10 placeholder:text-slate-300 placeholder:font-medium resize-none leading-relaxed">{{ old('notes') }}</textarea>
                                 </div>
                                 @error('notes') <p class="text-[11px] text-red-500 font-bold flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p> @enderror
@@ -387,7 +386,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                                 
                                 <div x-show="!isSubmitting" class="relative z-10 flex items-center justify-center gap-6 w-full px-10">
-                                    <span class="flex-1 text-center md:pl-16">KONFIRMASI RESERVASI</span>
+                                    <span class="flex-1 text-center md:pl-16">{{ __('KONFIRMASI RESERVASI') }}</span>
                                     <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-toba-green transition-all duration-500 group-hover:translate-x-4 shadow-sm">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </div>
@@ -395,7 +394,7 @@
 
                                 <span x-show="isSubmitting" class="flex items-center gap-4 relative z-10 text-toba-green bg-slate-900/50 backdrop-blur-sm w-full h-full justify-center">
                                     <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    MENYIMPAN DATA...
+                                    {{ __('MENYIMPAN DATA...') }}
                                 </span>
                             </button>
                         </div>
@@ -403,28 +402,28 @@
                     @endif  
                     <!-- Horizontal Trust Bar replacing the old dark side section -->
                     <div class="mt-16 pt-12 border-t border-slate-100">
-                        <h4 class="text-center text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-8">Eksklusivitas Wonderful Toba</h4>
+                        <h4 class="text-center text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-8">{{ __('Eksklusivitas Wonderful Toba') }}</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                             <div class="flex flex-col items-center group">
                                 <div class="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center text-toba-green mb-5 group-hover:bg-toba-green group-hover:text-white transition-all shadow-sm">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z"/></svg>
                                 </div>
-                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">Premium Curator</p>
-                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">Destinasi eksklusif untuk pengalaman bintang lima.</p>
+                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">{{ __('Premium Curator') }}</p>
+                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">{{ __('Destinasi eksklusif untuk pengalaman bintang lima.') }}</p>
                             </div>
                             <div class="flex flex-col items-center group">
                                 <div class="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center text-toba-green mb-5 group-hover:bg-toba-green group-hover:text-white transition-all shadow-sm">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                                 </div>
-                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">Local Heritage</p>
-                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">Dipandu oleh putra daerah berpengalaman.</p>
+                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">{{ __('Local Heritage') }}</p>
+                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">{{ __('Dipandu oleh putra daerah berpengalaman.') }}</p>
                             </div>
                             <div class="flex flex-col items-center group">
                                 <div class="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center text-toba-green mb-5 group-hover:bg-toba-green group-hover:text-white transition-all shadow-sm">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                                 </div>
-                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">Safe & Secure</p>
-                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">Transaksi dan privasi Anda terjamin 100%.</p>
+                                <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">{{ __('Safe & Secure') }}</p>
+                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">{{ __('Transaksi dan privasi Anda terjamin 100%.') }}</p>
                             </div>
                         </div>
                     </div>
@@ -436,19 +435,19 @@
                             :class="activeTab === 'itinerary' ? 'text-toba-green border-b-4 border-toba-green pb-6' : 'text-slate-400 hover:text-slate-600 pb-6'"
                             class="text-[10px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap flex items-center gap-3">
                             <i class="fas fa-map-marked-alt text-sm"></i>
-                            AGENDA PERJALANAN
+                            {{ __('AGENDA PERJALANAN') }}
                         </button>
                         <button @click="activeTab = 'pricing'" 
                             :class="activeTab === 'pricing' ? 'text-toba-green border-b-4 border-toba-green pb-6' : 'text-slate-400 hover:text-slate-600 pb-6'"
                             class="text-[10px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap flex items-center gap-3">
                             <i class="fas fa-tags text-sm"></i>
-                            BIAYA & FASILITAS
+                            {{ __('BIAYA & FASILITAS') }}
                         </button>
                         <button @click="activeTab = 'reviews'" 
                             :class="activeTab === 'reviews' ? 'text-toba-green border-b-4 border-toba-green pb-6' : 'text-slate-400 hover:text-slate-600 pb-6'"
                             class="text-[10px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap flex items-center gap-3">
                             <i class="fas fa-star text-sm"></i>
-                            ULASAN
+                            {{ __('ULASAN') }}
                         </button>
                     </div>
                 </div>
@@ -459,9 +458,9 @@
                     <div class="bg-white rounded-[3rem] p-10 md:p-14 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-50">
                         <div class="flex items-center space-x-3 mb-8">
                             <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                            <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Tentang Paket</span>
+                            <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">{{ __('Tentang Paket') }}</span>
                         </div>
-                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-8 tracking-tight">Ringkasan <span class="text-toba-green">Pengalaman</span></h2>
+                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-8 tracking-tight">{{ __('Ringkasan') }} <span class="text-toba-green">{{ __('Pengalaman') }}</span></h2>
                         <div class="prose prose-lg prose-slate max-w-none text-slate-600 font-medium leading-relaxed" x-html="package.description"></div>
                     </div>
 
@@ -482,7 +481,7 @@
                                 <div class="relative pl-0 md:pl-20 group">
                                     <!-- Indicator -->
                                     <div class="absolute left-0 top-0 w-16 h-16 rounded-3xl bg-slate-900 text-white flex flex-col items-center justify-center shadow-2xl z-10 transition-transform duration-500 group-hover:scale-110 group-hover:bg-toba-green hidden md:flex">
-                                        <span class="text-[10px] font-black uppercase opacity-60">Day</span>
+                                        <span class="text-[10px] font-black uppercase opacity-60" x-text="AppCurrency.locale === 'en' ? 'Day' : 'Hari'"></span>
                                         <span class="text-2xl font-black" x-text="day.day || (i + 1)"></span>
                                     </div>
                                     
@@ -491,7 +490,7 @@
                                             <div class="w-12 h-12 rounded-2xl bg-toba-green text-white flex items-center justify-center font-black">
                                                 <span x-text="day.day || (i + 1)"></span>
                                             </div>
-                                            <span class="text-xs font-black text-toba-green uppercase tracking-widest">Agenda Hari Ini</span>
+                                            <span class="text-xs font-black text-toba-green uppercase tracking-widest" x-text="AppCurrency.locale === 'en' ? 'Today\'s Agenda' : 'Agenda Hari Ini'"></span>
                                         </div>
                                         <h4 class="text-2xl font-black text-slate-900 mb-6 tracking-tight" x-text="day.title"></h4>
                                         <p x-show="day.description" class="text-slate-600 font-medium leading-relaxed mb-8" x-text="day.description"></p>
@@ -521,13 +520,13 @@
                             <div>
                                 <div class="flex items-center space-x-3 mb-4">
                                     <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                                    <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Rincian Biaya</span>
+                                    <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">{{ __('Rincian Biaya') }}</span>
                                 </div>
-                                <h3 class="text-3xl font-black text-slate-900 tracking-tight">Investasi <span class="text-toba-green">Perjalanan</span></h3>
+                                <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('Investasi') }} <span class="text-toba-green">{{ __('Perjalanan') }}</span></h3>
                             </div>
                             <div class="px-6 py-3 bg-slate-900 rounded-2xl text-white">
-                                <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Update</span>
-                                <p class="text-sm font-black tracking-tight">Musim 2026</p>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">{{ __('Update') }}</span>
+                                <p class="text-sm font-black tracking-tight">{{ __('Musim 2026') }}</p>
                             </div>
                         </div>
                         
@@ -539,14 +538,14 @@
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                                         </div>
                                         <div>
-                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Peserta</p>
-                                            <p class="text-lg font-black text-slate-900" x-text="price.label || (price.pax + ' Orang')"></p>
+                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ __('Peserta') }}</p>
+                                            <p class="text-lg font-black text-slate-900" x-text="price.label || (price.pax + ' ' + (AppCurrency.locale === 'en' ? 'People' : 'Orang'))"></p>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Per Orang</p>
+                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ __('Per Orang') }}</p>
                                         <p class="text-xl font-black text-toba-green">
-                                            <span class="text-sm">Rp</span><span x-text="new Intl.NumberFormat('id-ID').format(price.price || price.price_per_person || price.pricePerPerson)"></span>
+                                            <span x-text="AppCurrency.format(price.price || price.price_per_person || price.pricePerPerson)"></span>
                                         </p>
                                     </div>
                                 </div>
@@ -558,8 +557,8 @@
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-black text-slate-900 mb-1 uppercase tracking-wider">Catatan Penting</p>
-                                <p class="text-sm text-slate-600 font-medium leading-relaxed">Harga di atas bersifat dinamis dan dapat berubah sewaktu-waktu tergantung musim dan ketersediaan akomodasi. Untuk grup besar (>15 pax), kami memiliki penawaran harga khusus.</p>
+                                <p class="text-sm font-black text-slate-900 mb-1 uppercase tracking-wider">{{ __('Catatan Penting') }}</p>
+                                <p class="text-sm text-slate-600 font-medium leading-relaxed">{{ __('Harga di atas bersifat dinamis dan dapat berubah sewaktu-waktu tergantung musim dan ketersediaan akomodasi. Untuk grup besar (>15 pax), kami memiliki penawaran harga khusus.') }}</p>
                             </div>
                         </div>
                     </div>
@@ -571,7 +570,7 @@
                                 <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-200">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
                                 </div>
-                                Termasuk
+                                {{ __('Termasuk') }}
                             </h3>
                             <ul class="space-y-5">
                                 <template x-for="item in package.package_includes" :key="item.id">
@@ -587,7 +586,7 @@
                                 <div class="w-12 h-12 rounded-2xl bg-slate-200 text-slate-500 flex items-center justify-center">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
                                 </div>
-                                Tidak Termasuk
+                                {{ __('Tidak Termasuk') }}
                             </h3>
                             <ul class="space-y-5">
                                 <template x-for="item in package.package_excludes" :key="item.id">
@@ -610,8 +609,8 @@
 
                         @if(!empty($testimonials))
                             <div class="mb-12">
-                                <h3 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Ulasan <span class="text-toba-green">Pengunjung</span></h3>
-                                <p class="text-slate-500 font-medium">Apa kata mereka yang telah menjelajahi Danau Toba bersama kami.</p>
+                                <h3 class="text-3xl font-black text-slate-900 tracking-tight mb-2">{{ __('Ulasan') }} <span class="text-toba-green">{{ __('Pengunjung') }}</span></h3>
+                                <p class="text-slate-500 font-medium">{{ __('Apa kata mereka yang telah menjelajahi Danau Toba bersama kami.') }}</p>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 @foreach($testimonials as $t)
@@ -626,10 +625,10 @@
                                         @endif
                                         <div>
                                             <p class="font-black text-slate-900 text-sm">{{ $t['name'] }}</p>
-                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $t['location'] }}</p>
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __($t['location'] ?? '') }}</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm text-slate-600 font-medium leading-relaxed italic">"{{ $t['text'] }}"</p>
+                                    <p class="text-sm text-slate-600 font-medium leading-relaxed italic">"{{ __($t['text'] ?? '') }}"</p>
                                 </div>
                                 @endforeach
                             </div>
@@ -639,12 +638,12 @@
                                 <div class="w-24 h-24 bg-toba-green/5 rounded-full flex items-center justify-center mx-auto mb-8">
                                     <svg class="w-10 h-10 text-toba-green/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5l-5 5v-5z"/></svg>
                                 </div>
-                                <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Bagikan Pengalaman Anda</h4>
-                                <p class="text-slate-500 font-medium max-w-md mx-auto mb-10 leading-relaxed">Sudah pernah berwisata bersama kami? Kami sangat menghargai cerita perjalanan Anda.</p>
+                                <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">{{ __('Bagikan Pengalaman Anda') }}</h4>
+                                <p class="text-slate-500 font-medium max-w-md mx-auto mb-10 leading-relaxed">{{ __('Sudah pernah berwisata bersama kami? Kami sangat menghargai cerita perjalanan Anda.') }}</p>
                                 <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo Wonderful Toba, saya ingin berbagi pengalaman wisata bersama kalian 😊')" target="_blank"
                                    class="inline-flex items-center gap-3 bg-toba-green text-white px-10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-toba-green/20">
                                     <i class="fab fa-whatsapp text-xl"></i>
-                                    Ceritakan Perjalananmu
+                                    {{ __('Ceritakan Perjalananmu') }}
                                 </a>
                             </div>
                         @endif
@@ -662,25 +661,25 @@
                         <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-toba-accent/10 rounded-full blur-[80px]"></div>
                         
                         <div class="relative z-10">
-                            <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">Reservasi Sekarang</span>
+                            <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">{{ __('Reservasi Sekarang') }}</span>
                             <h3 class="text-3xl font-black text-white mb-4 tracking-tighter leading-tight" x-text="package.name"></h3>
                             
                             <div class="flex items-center gap-6 mb-10 border-b border-white/10 pb-10">
                                 <div class="flex flex-col">
-                                    <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1.5">Durasi</span>
+                                    <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1.5">{{ __('Durasi') }}</span>
                                     <span class="text-lg font-black tracking-tight" x-text="package.duration"></span>
                                 </div>
                                 <div class="w-px h-10 bg-white/10"></div>
                                 <div class="flex flex-col">
-                                    <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1.5">Lokasi</span>
+                                    <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1.5">{{ __('Lokasi') }}</span>
                                     <span class="text-lg font-black tracking-tight" x-text="locationDisplay"></span>
                                 </div>
                             </div>
 
                             <div class="mb-10">
-                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-3">Harga Estimasi Per Orang</p>
+                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-3">{{ __('Harga Estimasi Per Orang') }}</p>
                                 <p class="text-5xl font-black text-white tracking-tighter">
-                                    <span class="text-toba-accent text-xl font-black mr-1">Rp</span><span x-text="package.price ? new Intl.NumberFormat('id-ID').format(package.price) : '-'"></span>
+                                    <span x-text="AppCurrency.format(package.price)"></span>
                                 </p>
                             </div>
 
@@ -689,10 +688,10 @@
                                 class="w-full py-6 bg-toba-green text-white rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/20 flex items-center justify-center gap-3 group"
                             >
                                 <i class="fas fa-calendar-check text-xl"></i>
-                                <span>ISI FORM BOOKING</span>
+                                <span>{{ __('ISI FORM BOOKING') }}</span>
                             </a>
 
-                            <p class="text-center text-[9px] font-black uppercase tracking-widest text-white/30 mt-6">Atau hubungi kami langsung via</p>
+                            <p class="text-center text-[9px] font-black uppercase tracking-widest text-white/30 mt-6">{{ __('Atau hubungi kami langsung via') }}</p>
                             <a
                                 :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo Wonderful Toba, saya ingin bertanya tentang paket: *' + package.name + '*') "
                                 target="_blank"
@@ -708,7 +707,7 @@
                     <div class="flex flex-col gap-4">
                         <a href="{{ route('itinerary.download', $package->slug) }}" class="flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            Download Itinerary PDF
+                            {{ __('Download Itinerary PDF') }}
                         </a>
                         
                         <!-- Contact Specialist Card -->
@@ -719,14 +718,14 @@
                                     <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
                                 </div>
                                 <div>
-                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $siteSettings['cms_tour']['specialist_title'] ?? 'Travel Specialist' }}</p>
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __($siteSettings['cms_tour']['specialist_title'] ?? 'Travel Specialist') }}</p>
                                     <p class="text-sm font-black text-slate-900">{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah Anggraini' }}</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-slate-500 font-medium leading-relaxed mb-8 relative z-10">{{ $siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Saya siap membantu merencanakan liburan impian Anda.' }}</p>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed mb-8 relative z-10">{{ __($siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
                             <a :href="'https://wa.me/' + waNumber" class="flex items-center justify-center gap-2 py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-[9px] uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all relative z-10">
                                 <i class="fab fa-whatsapp text-lg"></i>
-                                TANYA {{ strtoupper(explode(' ', $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah')[0]) }} SEKARANG
+                                {{ __('TANYA') }} {{ strtoupper(explode(' ', $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah')[0]) }} {{ __('SEKARANG') }}
                             </a>
                         </div>
 

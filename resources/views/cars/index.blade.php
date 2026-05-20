@@ -125,9 +125,8 @@
                             <div>
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Lepas Kunci</p>
                                 <p class="text-xl font-black text-slate-900">
-                                    <span class="text-xs font-bold text-slate-400 mr-1">Rp</span>
-                                    <span x-text="new Intl.NumberFormat('id-ID').format(car.price)"></span>
-                                    <span class="text-xs font-bold text-slate-400">/hari</span>
+                                    <span x-text="car.formatted_price"></span>
+                                    <span class="text-xs font-bold text-slate-400">/{{ __('hari') }}</span>
                                 </p>
                             </div>
                             <button @click="openBookingModal(car)" 
