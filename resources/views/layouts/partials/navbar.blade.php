@@ -40,10 +40,32 @@
                 </a>
             </div>
             <div class="flex items-center space-x-6">
-                <span class="flex items-center">
-                    <svg class="w-3 h-3 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    ID | EN
-                </span>
+                <!-- Language & Currency Toggle Dropdown -->
+                <div x-data="{ open: false }" class="relative z-[110]">
+                    <button @click="open = !open" class="flex items-center hover:text-toba-accent text-white transition-colors focus:outline-none py-1 text-[11px] font-black tracking-wider uppercase">
+                        <span class="mr-1.5 flex items-center gap-1.5">
+                            @if(session('locale', 'my') === 'my')
+                                <span class="text-sm">🇲🇾</span> MYR (Melayu)
+                            @elseif(session('locale', 'my') === 'id')
+                                <span class="text-sm">🇮🇩</span> IDR (Indonesia)
+                            @else
+                                <span class="text-sm">🇸🇬</span> SGD (English)
+                            @endif
+                        </span>
+                        <svg class="w-3 h-3 text-white transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-52 bg-slate-800 rounded-xl shadow-xl py-2 border border-slate-700 text-[11px] z-[200]">
+                        <a href="{{ route('change-locale', 'my') }}" class="flex items-center px-4 py-2.5 text-white hover:bg-toba-green/20 hover:text-toba-accent transition-colors {{ session('locale', 'my') === 'my' ? 'bg-toba-green/10 text-toba-accent font-bold' : '' }}">
+                            <span class="mr-2 text-sm">🇲🇾</span> MYR (Melayu - Malaysia)
+                        </a>
+                        <a href="{{ route('change-locale', 'id') }}" class="flex items-center px-4 py-2.5 text-white hover:bg-toba-green/20 hover:text-toba-accent transition-colors {{ session('locale', 'my') === 'id' ? 'bg-toba-green/10 text-toba-accent font-bold' : '' }}">
+                            <span class="mr-2 text-sm">🇮🇩</span> IDR (Rupiah - Indonesia)
+                        </a>
+                        <a href="{{ route('change-locale', 'en') }}" class="flex items-center px-4 py-2.5 text-white hover:bg-toba-green/20 hover:text-toba-accent transition-colors {{ session('locale', 'my') === 'en' ? 'bg-toba-green/10 text-toba-accent font-bold' : '' }}">
+                            <span class="mr-2 text-sm">🇸🇬</span> SGD (Dollar - English)
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -103,26 +125,24 @@
                 <div class="hidden lg:flex items-center space-x-8 shrink-0 w-max">
                     <a href="/" 
                         :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Beranda</a>
+                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">{{ __('Beranda') }}</a>
 
                     <a href="/tour/packages" 
                         :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Paket</a>
+                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">{{ __('Paket Wisata') }}</a>
                     
                     <a href="/tour/gallery" 
                         :class="isScrolled ? ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Galeri</a>
+                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">{{ __('Galeri') }}</a>
                     
                     <a href="/tour/blog" 
                         :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Blog</a>
+                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">{{ __('Blog') }}</a>
                     
                     <a href="/about" 
                         :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Tentang Kami</a>
+                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">{{ __('Tentang Kami') }}</a>
                 </div>
-
-
 
                 <!-- Desktop Actions -->
                 <div class="hidden lg:flex items-center space-x-6 shrink-0 ml-8">
@@ -131,10 +151,8 @@
                         class="px-5 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all shadow-lg flex items-center space-x-2 whitespace-nowrap"
                     >
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        <span>HUBUNGI KAMI</span>
+                        <span>{{ __('HUBUNGI KAMI') }}</span>
                     </a>
-
-
                 </div>
 
                 <!-- Mobile Menu Toggle -->
@@ -174,39 +192,56 @@
                 <!-- Navigation Sections -->
                 <div class="space-y-10">
                     <div>
-                        <span class="text-toba-accent font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">Eksplorasi</span>
+                        <span class="text-toba-accent font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">{{ __('Eksplorasi') }}</span>
                         <div class="space-y-6">
-                            <a href="/" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Beranda</a>
-                            <a href="/tour/packages" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Paket Wisata</a>
+                            <a href="/" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">{{ __('Beranda') }}</a>
+                            <a href="/tour/packages" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">{{ __('Paket Wisata') }}</a>
                         </div>
                     </div>
 
                     <div>
-                        <span class="text-white/40 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">Informasi</span>
+                        <span class="text-white/40 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">{{ __('Informasi') }}</span>
                         <div class="grid grid-cols-1 gap-6">
                             <a href="/tour/gallery" @click="isMenuOpen = false" class="flex items-center gap-4 text-white/80 font-bold text-lg">
                                 <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-toba-green"><i class="fas fa-images"></i></div>
-                                Galeri Foto
+                                {{ __('Galeri') }}
                             </a>
                             <a href="/tour/blog" @click="isMenuOpen = false" class="flex items-center gap-4 text-white/80 font-bold text-lg">
                                 <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-toba-green"><i class="fas fa-newspaper"></i></div>
-                                Blog & Artikel
+                                {{ __('Blog') }}
                             </a>
                             <a href="/about" @click="isMenuOpen = false" class="flex items-center gap-4 text-white/80 font-bold text-lg">
                                 <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-toba-green"><i class="fas fa-info-circle"></i></div>
-                                Tentang Kami
+                                {{ __('Tentang Kami') }}
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="pt-10 border-t border-white/5 space-y-4">
+                <!-- Mobile Language Selection -->
+                <div class="pt-8 border-t border-white/5">
+                    <span class="text-white/40 font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">{{ __('Pilih Bahasa & Mata Uang') }}</span>
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="{{ route('change-locale', 'my') }}" class="flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all {{ session('locale', 'my') === 'my' ? 'border-toba-green bg-toba-green/10 text-white font-bold' : 'border-white/5 text-white/60 hover:bg-white/5' }}">
+                            <span class="text-2xl mb-1">🇲🇾</span>
+                            <span class="text-[10px] font-bold">MYR (RM)</span>
+                        </a>
+                        <a href="{{ route('change-locale', 'id') }}" class="flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all {{ session('locale', 'my') === 'id' ? 'border-toba-green bg-toba-green/10 text-white font-bold' : 'border-white/5 text-white/60 hover:bg-white/5' }}">
+                            <span class="text-2xl mb-1">🇮🇩</span>
+                            <span class="text-[10px] font-bold">IDR (Rp)</span>
+                        </a>
+                        <a href="{{ route('change-locale', 'en') }}" class="flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all {{ session('locale', 'my') === 'en' ? 'border-toba-green bg-toba-green/10 text-white font-bold' : 'border-white/5 text-white/60 hover:bg-white/5' }}">
+                            <span class="text-2xl mb-1">🇸🇬</span>
+                            <span class="text-[10px] font-bold">SGD (S$)</span>
+                        </a>
+                    </div>
+                </div>
 
-                    
-                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" class="w-full py-6 bg-white text-slate-900 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3">
+                <!-- Action Buttons -->
+                <div class="pt-8 border-t border-white/5 space-y-4">
+                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" class="w-full py-5 bg-white text-slate-900 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg">
                         <i class="fab fa-whatsapp text-xl"></i>
-                        Hubungi Kami
+                        {{ __('Hubungi Kami') }}
                     </a>
                 </div>
             </div>

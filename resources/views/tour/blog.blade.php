@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Blog & Inspirasi Wisata – Wonderful Toba')
-@section('description', 'Tips, panduan, dan cerita menarik untuk rencana liburan Anda ke Sumatera Utara.')
+@section('title', __('Blog & Inspirasi Wisata – Wonderful Toba'))
+@section('description', __('Tips, panduan, dan cerita menarik untuk rencana liburan Anda ke Sumatera Utara.'))
 
 @section('content')
 <div 
     x-data="{ 
-        activeCategory: 'Semua', 
+        activeCategory: '{{ __('Semua') }}', 
         searchQuery: '', 
         posts: {{ json_encode($posts) }},
         get categories() {
-            const cats = ['Semua', ...new Set(this.posts.map(p => p.category).filter(Boolean))];
+            const cats = ['{{ __('Semua') }}', ...new Set(this.posts.map(p => p.category).filter(Boolean))];
             return cats;
         },
         
         get filteredPosts() {
             return this.posts.filter(p => {
-                const matchCat = this.activeCategory === 'Semua' || p.category === this.activeCategory;
+                const matchCat = this.activeCategory === '{{ __('Semua') }}' || p.category === this.activeCategory;
                 const matchSearch = p.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
                                    (p.content && p.content.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 return matchCat && matchSearch;
@@ -29,7 +29,8 @@
         
         get rest() {
             return this.filteredPosts.slice(1);
-        }
+        },
+        locale: '{{ session('locale', 'my') === 'my' ? 'ms-MY' : (session('locale') === 'en' ? 'en-SG' : 'id-ID') }}'
     }"
     class="bg-white min-h-screen pb-32"
 >
@@ -66,14 +67,14 @@
             <div class="max-w-4xl animate-in fade-in slide-in-from-left-12 duration-1000">
                 <div class="flex items-center space-x-3 mb-8">
                     <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                    <span class="text-toba-accent font-black text-xs uppercase tracking-[0.4em]">Jurnal Perjalanan</span>
+                    <span class="text-toba-accent font-black text-xs uppercase tracking-[0.4em]">{{ __('Jurnal Perjalanan') }}</span>
                 </div>
                 <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-10">
-                    Inspirasi <br />
-                    <span class="text-toba-green">Eksplorasi</span>
+                    {{ __('Inspirasi') }} <br />
+                    <span class="text-toba-green">{{ __('Eksplorasi') }}</span>
                 </h1>
                 <p class="text-slate-300 text-lg md:text-2xl font-medium max-w-2xl leading-relaxed">
-                    Temukan tips, panduan mendalam, dan cerita inspiratif dari setiap sudut Sumatera Utara untuk menemani rencana petualangan Anda.
+                    {{ __('Temukan tips, panduan mendalam, dan cerita inspiratif dari setiap sudut Sumatera Utara untuk menemani rencana petualangan Anda.') }}
                 </p>
             </div>
         </div>
@@ -102,7 +103,7 @@
                     </div>
                     <input
                         type="text"
-                        placeholder="Cari topik atau artikel..."
+                        placeholder="{{ __('Cari topik atau artikel...') }}"
                         x-model="searchQuery"
                         class="w-full pl-16 pr-8 py-5 bg-slate-50 border-none rounded-2xl focus:ring-4 focus:ring-toba-green/10 font-bold text-slate-900 placeholder:text-slate-400 text-sm transition-all"
                     >
@@ -126,13 +127,13 @@
                 <div class="relative z-10 p-10 md:p-20 max-w-4xl animate-in fade-in slide-in-from-bottom-12 duration-1000">
                     <div class="flex items-center gap-6 text-toba-accent text-xs font-black uppercase tracking-[0.4em] mb-8">
                         <span class="px-4 py-1.5 bg-toba-green text-white rounded-full" x-text="featured.category"></span>
-                        <span class="text-white/60" x-text="new Date(featured.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })"></span>
+                        <span class="text-white/60" x-text="new Date(featured.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })"></span>
                     </div>
                     <h2 class="text-4xl md:text-7xl font-black text-white mb-8 group-hover:text-toba-green transition-colors leading-[1.05] tracking-tighter" x-text="featured.title"></h2>
                     <p class="text-slate-300 text-lg md:text-xl font-medium mb-12 line-clamp-2 leading-relaxed opacity-80" x-text="featured.excerpt || featured.content"></p>
                     
                     <a :href="'/tour/blog/' + (featured.slug || featured.id)" class="inline-flex items-center gap-4 bg-white text-slate-900 px-10 py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] hover:bg-toba-green hover:text-white transition-all duration-500 shadow-2xl group/btn">
-                        Baca Cerita Lengkap
+                        {{ __('Baca Cerita Lengkap') }}
                         <svg class="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -154,14 +155,14 @@
                     
                     <div class="flex-1 flex flex-col px-2">
                         <div class="flex items-center gap-3 text-toba-green text-[10px] font-black uppercase tracking-[0.3em] mb-4">
-                            <span x-text="new Date(post.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })"></span>
+                            <span x-text="new Date(post.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' })"></span>
                         </div>
                         <h2 class="text-2xl font-black text-slate-900 mb-4 group-hover:text-toba-green transition-colors leading-tight line-clamp-2 tracking-tight" x-text="post.title"></h2>
                         <p class="text-slate-500 text-sm leading-relaxed mb-8 line-clamp-3 font-medium flex-1 opacity-80" x-text="post.excerpt || post.content"></p>
                         
                         <div class="pt-8 border-t border-slate-100">
                             <a :href="'/tour/blog/' + (post.slug || post.id)" class="flex items-center gap-3 text-slate-900 font-black text-[10px] uppercase tracking-widest group/link">
-                                Baca Selengkapnya
+                                {{ __('Baca Selengkapnya') }}
                                 <svg class="w-4 h-4 text-toba-green group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
                         </div>
@@ -175,11 +176,11 @@
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-slate-200 text-slate-300">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             </div>
-            <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">Artikel Belum Tersedia</h3>
-            <p class="text-slate-500 font-medium max-w-md mx-auto mb-12 leading-relaxed">Kami sedang menyusun cerita perjalanan menarik untuk Anda. Silakan coba kategori lain atau reset pencarian.</p>
-            <button @click="activeCategory = 'Semua'; searchQuery = ''"
+            <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">{{ __('Artikel Belum Tersedia') }}</h3>
+            <p class="text-slate-500 font-medium max-w-md mx-auto mb-12 leading-relaxed">{{ __('Kami sedang menyusun cerita perjalanan menarik untuk Anda. Silakan coba kategori lain atau reset pencarian.') }}</p>
+            <button @click="activeCategory = '{{ __('Semua') }}'; searchQuery = ''"
                 class="bg-slate-900 text-white px-12 py-6 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-toba-green transition-all duration-500">
-                Reset Jurnal
+                {{ __('Reset Jurnal') }}
             </button>
         </div>
     </div>

@@ -65,6 +65,12 @@ class PublicController extends Controller
             $settings = $siteSettings['cms_tour'];
             $packages = $this->tourService->getFeaturedPackages();
             $blogs = $this->tourService->getBlogs(3);
+            $blogs->each(function($b) {
+                $b->title = __($b->title);
+                $b->excerpt = __($b->excerpt);
+                $b->content = __($b->content);
+                $b->category = __($b->category);
+            });
 
             return view('tour.index', compact('settings', 'packages', 'blogs', 'siteSettings'));
         } catch (\Exception $e) {
@@ -106,6 +112,12 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $posts = $this->tourService->getBlogs();
+        $posts->each(function($post) {
+            $post->title = __($post->title);
+            $post->excerpt = __($post->excerpt);
+            $post->content = __($post->content);
+            $post->category = __($post->category);
+        });
         return view('tour.blog', compact('posts', 'siteSettings'));
     }
 
@@ -147,7 +159,19 @@ class PublicController extends Controller
             // Increment Views
             $post->increment('views_count');
 
+            $post->title = __($post->title);
+            $post->excerpt = __($post->excerpt);
+            $post->content = __($post->content);
+            $post->category = __($post->category);
+
             $relatedPosts = $this->tourService->getRelatedBlogs($post->id);
+            $relatedPosts->each(function($rp) {
+                $rp->title = __($rp->title);
+                $rp->excerpt = __($rp->excerpt);
+                $rp->content = __($rp->content);
+                $rp->category = __($rp->category);
+            });
+
             return view('tour.blog-detail', compact('post', 'relatedPosts', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error("Error loading blog detail ($slug): " . $e->getMessage());
@@ -166,7 +190,7 @@ class PublicController extends Controller
             }
 
             if ($package && $package->isOutbound) {
-                return back()->with('error', 'Paket outbound hanya dapat dipesan melalui WhatsApp.');
+                return back()->with('error', __('Paket outbound hanya dapat dipesan melalui WhatsApp.'));
             }
 
             $endDate = $validated['startDate'];
@@ -186,22 +210,29 @@ class PublicController extends Controller
                 'metadata' => ['pax' => $validated['pax']],
             ]));
 
+            // Set Carbon locale for date formatting
+            $locale = session('locale', 'my');
+            $carbonLocale = $locale === 'my' ? 'ms' : $locale;
+            $formattedDate = \Carbon\Carbon::parse($validated['startDate'])
+                ->locale($carbonLocale)
+                ->translatedFormat('d F Y');
+
             // Construct WhatsApp Message
-            $waMessage = "Halo Wonderful Toba, saya ingin memesan paket wisata.\n\n" .
-                         "*Detail Pesanan:*\n" .
-                         "- Kode Booking: " . $booking->bookingCode . "\n" .
-                         "- Paket: " . $package->name . "\n" .
-                         "- Nama: " . $validated['customerName'] . "\n" .
-                         "- Email: " . $validated['customerEmail'] . "\n" .
-                         "- WhatsApp: " . $validated['customerPhone'] . "\n" .
-                         "- Tanggal: " . date('d F Y', strtotime($validated['startDate'])) . "\n" .
-                         "- Peserta: " . $validated['pax'] . " Orang\n";
+            $waMessage = __("Halo Wonderful Toba, saya ingin memesan paket wisata.") . "\n\n" .
+                         "*" . __("Detail Pesanan:") . "*\n" .
+                         "- " . __("Kode Booking") . ": " . $booking->bookingCode . "\n" .
+                         "- " . __("Paket") . ": " . $package->name . "\n" .
+                         "- " . __("Nama") . ": " . $validated['customerName'] . "\n" .
+                         "- " . __("Email") . ": " . $validated['customerEmail'] . "\n" .
+                         "- " . __("WhatsApp") . ": " . $validated['customerPhone'] . "\n" .
+                         "- " . __("Tanggal") . ": " . $formattedDate . "\n" .
+                         "- " . __("Peserta") . ": " . $validated['pax'] . " " . __("Orang") . "\n";
             
             if (!empty($validated['notes'])) {
-                $waMessage .= "- Catatan: " . $validated['notes'] . "\n";
+                $waMessage .= "- " . __("Catatan") . ": " . $validated['notes'] . "\n";
             }
 
-            $waMessage .= "\nMohon konfirmasinya. Terima kasih!";
+            $waMessage .= "\n" . __("Mohon konfirmasinya. Terima kasih!");
 
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
@@ -210,13 +241,13 @@ class PublicController extends Controller
             $waUrl = "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
 
             return back()->with([
-                'success' => 'Booking berhasil dikirim! Kami akan menghubungi Anda segera.',
+                'success' => __('Booking berhasil dikirim! Kami akan menghubungi Anda segera.'),
                 'bookingCode' => $booking->bookingCode,
                 'whatsappUrl' => $waUrl
             ]);
         } catch (\Exception $e) {
             Log::error('Booking Submission Error: ' . $e->getMessage(), ['request' => $request->all()]);
-            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.');
+            return back()->with('error', __('Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.'));
         }
     }
 
@@ -269,6 +300,12 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $posts = \App\Models\Blog::where('status', 'published')->where('category', 'Outbound')->latest('createdAt')->get();
+        $posts->each(function($post) {
+            $post->title = __($post->title);
+            $post->excerpt = __($post->excerpt);
+            $post->content = __($post->content);
+            $post->category = __($post->category);
+        });
         return view('outbound.blog', compact('posts', 'siteSettings'));
     }
 
@@ -289,6 +326,7 @@ class PublicController extends Controller
     {
         $siteSettings = [
             'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
+            'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $content = Setting::where('key', 'page_about')->first()?->value ?? [];

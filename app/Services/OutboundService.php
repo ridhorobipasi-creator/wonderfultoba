@@ -83,7 +83,11 @@ class OutboundService
     public function getGallery()
     {
         return \App\Models\GalleryImage::where('isActive', true)
-            ->where('category', 'Outbound')
+            ->where(function($query) {
+                $query->where('category', 'Outbound')
+                      ->orWhereNull('category')
+                      ->orWhere('category', '');
+            })
             ->orderBy('orderPriority')
             ->get();
     }

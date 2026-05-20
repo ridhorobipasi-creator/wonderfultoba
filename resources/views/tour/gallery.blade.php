@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Galeri Foto Wisata – Wonderful Toba')
-@section('description', 'Koleksi foto perjalanan wisata ke Danau Toba, Berastagi, Bukit Lawang, Tangkahan, dan destinasi indah Sumatera Utara lainnya.')
+@section('title', __('Galeri Foto Wisata – Wonderful Toba'))
+@section('description', __('Koleksi foto perjalanan wisata ke Danau Toba, Berastagi, Bukit Lawang, Tangkahan, dan destinasi indah Sumatera Utara lainnya.'))
 
 @section('content')
 <div 
@@ -63,14 +63,14 @@
             <div class="max-w-4xl animate-in fade-in slide-in-from-left-12 duration-1000">
                 <div class="flex items-center space-x-3 mb-8">
                     <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
-                    <span class="text-toba-accent font-black text-xs uppercase tracking-[0.4em]">Visual Storytelling</span>
+                    <span class="text-toba-accent font-black text-xs uppercase tracking-[0.4em]">{{ __('Visual Storytelling') }}</span>
                 </div>
                 <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-10">
-                    Galeri <br />
-                    <span class="text-toba-green">Momen Indah</span>
+                    {{ __('Galeri') }} <br />
+                    <span class="text-toba-green">{{ __('Momen Indah') }}</span>
                 </h1>
                 <p class="text-slate-300 text-lg md:text-2xl font-medium max-w-2xl leading-relaxed">
-                    Setiap jepretan adalah cerita yang menanti untuk dijelajahi. Lihat keindahan Sumatera Utara melalui mata para petualang kami.
+                    {{ __('Setiap jepretan adalah cerita yang menanti untuk dijelajahi. Lihat keindahan Sumatera Utara melalui mata para petualang kami.') }}
                 </p>
             </div>
         </div>
@@ -87,7 +87,7 @@
                             @click="activeCategory = cat"
                             :class="activeCategory === cat ? 'bg-slate-900 text-white shadow-2xl scale-105' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-100'"
                             class="px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 whitespace-nowrap"
-                            x-text="cat"
+                            x-text="cat === 'Semua' ? '{{ __('Semua') }}' : cat"
                         ></button>
                     </template>
                 </div>
@@ -99,7 +99,7 @@
                     </div>
                     <input
                         type="text"
-                        placeholder="Cari foto atau momen..."
+                        :placeholder="'{{ __('Cari foto atau momen...') }}'"
                         x-model="searchQuery"
                         class="w-full pl-16 pr-8 py-5 bg-slate-50 border-none rounded-2xl focus:ring-4 focus:ring-toba-green/10 font-bold text-slate-900 placeholder:text-slate-400 text-sm transition-all"
                     >
@@ -112,9 +112,9 @@
     <div class="max-w-7xl mx-auto px-6 md:px-8 mt-24">
         <div class="flex items-center justify-between mb-16">
             <div>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">Koleksi <span class="text-toba-green">Visual</span></h2>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">{{ __('Koleksi') }} <span class="text-toba-green">{{ __('Visual') }}</span></h2>
                 <p class="text-slate-500 font-medium text-sm mt-2">
-                    Menampilkan <span class="text-toba-green font-black" x-text="filteredImages.length"></span> mahakarya alam Sumatera Utara
+                    {{ __('Menampilkan') }} <span class="text-toba-green font-black" x-text="filteredImages.length"></span> {{ __('mahakarya alam Sumatera Utara') }}
                 </p>
             </div>
         </div>
@@ -143,7 +143,7 @@
                             <p x-show="img.caption" class="text-white text-lg font-black leading-tight tracking-tight mb-2" x-text="img.caption"></p>
                             <div class="flex items-center gap-2 text-white/60 text-[9px] font-black uppercase tracking-[0.2em]">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
-                                Lihat Detail
+                                {{ __('Lihat Detail') }}
                             </div>
                         </div>
                     </div>
@@ -163,11 +163,11 @@
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-slate-200 text-slate-300">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
-            <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">Koleksi Belum Ditemukan</h3>
-            <p class="text-slate-500 font-medium max-w-md mx-auto mb-12 leading-relaxed">Kami belum menemukan foto yang sesuai dengan filter atau kata kunci Anda. Cobalah kategori lain atau kata kunci yang lebih umum.</p>
+            <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">{{ __('Koleksi Belum Ditemukan') }}</h3>
+            <p class="text-slate-500 font-medium max-w-md mx-auto mb-12 leading-relaxed">{{ __('Kami belum menemukan foto yang sesuai dengan filter atau kata kunci Anda. Cobalah kategori lain atau kata kunci yang lebih umum.') }}</p>
             <button @click="activeCategory = 'Semua'; searchQuery = ''"
                 class="bg-slate-900 text-white px-12 py-6 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-toba-green transition-all duration-500">
-                Reset Galeri
+                {{ __('Reset Galeri') }}
             </button>
         </div>
     </div>
@@ -194,7 +194,7 @@
 
             <!-- Counter Info -->
             <div class="absolute top-10 left-10 bg-white/5 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-[1.5rem] text-white text-[10px] font-black uppercase tracking-[0.4em] z-[210] hidden md:block">
-                IMAGE <span x-text="lightbox.index + 1" class="text-toba-accent text-lg"></span> OF <span x-text="filteredImages.length" class="text-lg opacity-40"></span>
+                {{ __('FOTO') }} <span x-text="lightbox.index + 1" class="text-toba-accent text-lg"></span> {{ __('DARI') }} <span x-text="filteredImages.length" class="text-lg opacity-40"></span>
             </div>
 
             <!-- Navigation Controls -->
@@ -236,7 +236,7 @@
                                 <a :href="filteredImages[lightbox.index].type === 'package' ? '/tour/package/' + filteredImages[lightbox.index].slug : '/tour/blog/' + filteredImages[lightbox.index].slug" 
                                    class="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-toba-green hover:text-white transition-all shadow-2xl">
                                     <i class="fas fa-external-link-alt"></i>
-                                    <span x-text="filteredImages[lightbox.index].type === 'package' ? 'Lihat Paket Wisata' : 'Baca Artikel Selengkapnya'"></span>
+                                    <span x-text="filteredImages[lightbox.index].type === 'package' ? '{{ __('Lihat Paket Wisata') }}' : '{{ __('Baca Artikel Selengkapnya') }}'"></span>
                                 </a>
                             </div>
                         </template>

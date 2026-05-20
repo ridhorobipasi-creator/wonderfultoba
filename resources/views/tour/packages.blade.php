@@ -151,10 +151,9 @@
                                 
                                 <div class="flex items-center justify-between pt-6 border-t border-slate-50">
                                     <div>
-                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Mulai Dari</p>
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">{{ __('Mulai dari') }}</p>
                                         <div class="flex items-baseline space-x-1">
-                                            <span class="text-xs font-bold text-slate-400">IDR</span>
-                                            <span class="text-2xl font-black text-slate-900" x-text="pkg.price ? new Intl.NumberFormat('id-ID').format(pkg.price) : '-'"></span>
+                                            <span class="text-2xl font-black text-slate-900" x-text="pkg.formatted_price || '-'"></span>
                                         </div>
                                     </div>
                                     <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-toba-green transition-all shadow-xl shadow-slate-200 group/btn" aria-label="Lihat detail">

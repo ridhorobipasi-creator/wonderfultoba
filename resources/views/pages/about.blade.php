@@ -66,11 +66,17 @@
                     <div class="grid grid-cols-2 gap-10 pt-10 border-t border-slate-100">
                         <div>
                             <p class="text-5xl font-black text-toba-green mb-2 tracking-tighter">{{ $content['stat_years'] ?? '12+' }}</p>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $content['stat_years_label'] ?? 'Tahun Pengalaman' }}</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ __('Tahun Pengalaman') }}</p>
                         </div>
                         <div>
-                            <p class="text-5xl font-black text-toba-green mb-2 tracking-tighter">{{ $content['stat_tourists'] ?? '5K+' }}</p>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $content['stat_tourists_label'] ?? 'Wisatawan Puas' }}</p>
+                            @php
+                                $touristsCount = $siteSettings['cms_tour']['stat_customers'] ?? $content['stat_tourists'] ?? '5000+';
+                                if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
+                                    $touristsCount = __('5.000+');
+                                }
+                            @endphp
+                            <p class="text-5xl font-black text-toba-green mb-2 tracking-tighter">{{ $touristsCount }}</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ __('Wisatawan Puas') }}</p>
                         </div>
                     </div>
                 </div>
