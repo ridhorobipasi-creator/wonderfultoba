@@ -209,7 +209,7 @@
                             </div>
                             <div>
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">{{ $settings['stat_label_0'] ?? 'Wisatawan' }}</p>
-                                <p class="text-xl font-black text-white leading-none">{{ $settings['stat_value_0'] ?? '10k+' }}</p>
+                                <p class="text-xl font-black text-white leading-none">{{ $settings['stat_value_0'] ?? '1.500+' }}</p>
                             </div>
                         </div>
 
@@ -349,7 +349,7 @@
                         <p class="text-slate-700 text-lg md:text-xl leading-relaxed mb-10 font-medium italic relative z-10">&ldquo;{{ __($t['text']) }}&rdquo;</p>
                         <div class="flex items-center gap-5 pt-8 border-t border-slate-100">
                             <div class="relative">
-                                <img src="{{ !empty($t['image']) ? (Str::startsWith($t['image'], 'http') ? $t['image'] : asset('storage/'.$t['image'])) : 'https://ui-avatars.com/api/?name='.urlencode($t['name']).'&background=10b981&color=fff' }}" alt="{{ $t['name'] }}" class="w-16 h-16 rounded-2xl object-cover shadow-lg" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=10b981&color=fff'">
+                                <img src="{{ !empty($t['image']) ? (Str::startsWith($t['image'], 'http') ? $t['image'] : asset('storage/'.$t['image'])) : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&h=150&q=80' }}" alt="{{ $t['name'] }}" class="w-16 h-16 rounded-2xl object-cover shadow-lg" onerror="this.src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&h=150&q=80'">
                                 <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-toba-accent rounded-full border-4 border-white flex items-center justify-center">
                                     <svg class="w-3 h-3 text-slate-900" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
                                 </div>
@@ -424,7 +424,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="relative">
                         <div class="aspect-square rounded-[3rem] overflow-hidden relative z-10 ring-8 ring-white/5">
-                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://i.pravatar.cc/600?u=staff1') }}" alt="Specialist" class="w-full h-full object-cover">
+                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80') }}" alt="Travel Specialist Wonderful Toba" class="w-full h-full object-cover">
                         </div>
                         <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                     </div>
@@ -593,10 +593,7 @@
                 </h2>
                 <p class="text-xl text-slate-300 mb-12 font-medium leading-relaxed max-w-2xl">
                     @php
-                        $touristsCount = $settings['stat_customers'] ?? '5000+';
-                        if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
-                            $touristsCount = __('5.000+');
-                        }
+                        $touristsCount = $settings['stat_customers'] ?? '1.500+';
                     @endphp
                     {{ __('Bergabunglah dengan') }} <span class="text-white font-black">{{ $touristsCount }}</span> {{ __('wisatawan lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.') }}
                 </p>
@@ -606,11 +603,19 @@
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                     <div class="flex -space-x-4">
-                        @for($i=1; $i<=4; $i++)
-                            <img src="https://i.pravatar.cc/100?u={{ $i }}" class="w-14 h-14 rounded-full border-4 border-slate-900 shadow-xl" alt="User avatar">
-                        @endfor
-                        <div class="w-14 h-14 rounded-full border-4 border-slate-900 bg-slate-800 flex items-center justify-center text-white text-[10px] font-black">
-                            +99
+                        @php
+                        $avatarPhotos = [
+                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80',
+                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80',
+                            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80',
+                            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
+                        ];
+                        @endphp
+                        @foreach($avatarPhotos as $avatarUrl)
+                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-slate-900 shadow-xl object-cover" alt="Pelanggan Wonderful Toba">
+                        @endforeach
+                        <div class="w-14 h-14 rounded-full border-4 border-slate-900 bg-toba-green flex items-center justify-center text-white text-[10px] font-black">
+                            1.5K+
                         </div>
                     </div>
                 </div>

@@ -111,6 +111,7 @@ class TourService
     {
         \Illuminate\Support\Facades\Cache::forget('tour_packages_all');
         \Illuminate\Support\Facades\Cache::forget('featured_packages');
+        \Illuminate\Support\Facades\Cache::forget('tour_blogs_all');
         
         if ($slug) {
             \Illuminate\Support\Facades\Cache::forget("package_detail_{$slug}");
@@ -141,12 +142,11 @@ class TourService
     }
 
     /**
-     * Get tour blog posts.
+     * Get tour blog posts. Does NOT filter by category so all published posts appear.
      */
     public function getBlogs($limit = null)
     {
         $query = \App\Models\Blog::where('status', 'published')
-            ->where('category', 'Tour')
             ->latest('createdAt');
 
         if ($limit) {
@@ -157,12 +157,13 @@ class TourService
     }
 
     /**
-     * Get all active tour packages.
+     * Get all active tour packages with eager loaded images and city.
      */
     public function getAllPackages()
     {
         return Package::where('status', 'active')
             ->where('isOutbound', false)
+            ->with(['packageImages'])
             ->orderBy('sortOrder')
             ->get();
     }
@@ -211,12 +212,11 @@ class TourService
     }
 
     /**
-     * Get related blog posts.
+     * Get related blog posts (any category).
      */
     public function getRelatedBlogs($currentId, $limit = 3)
     {
         return \App\Models\Blog::where('status', 'published')
-            ->where('category', 'Tour')
             ->where('id', '!=', $currentId)
             ->latest('createdAt')
             ->limit($limit)

@@ -354,6 +354,15 @@ class PublicController extends Controller
         return view('pages.privacy', compact('content', 'siteSettings'));
     }
 
+    public function payment()
+    {
+        $siteSettings = [
+            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
+            'general' => Setting::where('key', 'general')->first()?->value ?? [],
+        ];
+        return view('pages.payment', compact('siteSettings'));
+    }
+
     public function submitQuote(Request $request, \App\Services\OutboundService $outboundService)
     {
         try {
