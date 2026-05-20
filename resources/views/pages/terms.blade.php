@@ -2,7 +2,7 @@
 
 @section('title', 'Syarat & Ketentuan – Sujai Laketoba | Lake Toba Tour Operator')
 @section('description', 'Syarat dan ketentuan layanan paket wisata Sujai Laketoba. Terms & conditions for Lake Toba tour packages including payment, cancellation, and liability policies.')
-@section('keywords', 'syarat ketentuan sujai laketoba, tour terms conditions lake toba, kebijakan pemesanan wisata')
+@section('keywords', 'syarat ketentuan sujai laketoba, tour terms conditions lake toba, kebijakan pemesanan wisata, refund policy, lake toba tour package')
 
 @section('content')
 <div class="bg-slate-50 min-h-screen pt-32 pb-24">

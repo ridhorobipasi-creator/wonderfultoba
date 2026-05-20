@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', __('Galeri Foto Wisata – Sujai Laketoba'))
-@section('description', __('Koleksi foto perjalanan wisata ke Danau Toba, Berastagi, Bukit Lawang, Tangkahan, dan destinasi indah Sumatera Utara lainnya.'))
+@section('description', 'Koleksi momen perjalanan dan foto-foto eksklusif wisata Danau Toba, Samosir, dan destinasi Sumatera Utara lainnya bersama Sujai Laketoba.')
+@section('keywords', 'galeri danau toba, foto wisata sumatera utara, dokumentasi sujai laketoba, gambar pemandangan toba')
 
 @section('content')
 <div 
