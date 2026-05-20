@@ -16,18 +16,18 @@
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
     <style>
         .split-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%);
         }
         .bg-zoom {
-            animation: ken-burns 20s infinite alternate;
+            animation: ken-burns 30s infinite alternate cubic-bezier(0.25, 1, 0.5, 1);
         }
         @keyframes ken-burns {
-            from { transform: scale(1) translate(0,0); }
-            to { transform: scale(1.15) translate(-2%, -2%); }
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
         }
     </style>
 </head>
-<body class="overflow-x-hidden bg-black">
+<body class="overflow-x-hidden bg-black text-slate-100 selection:bg-emerald-950 selection:text-emerald-300">
     <!-- Preload Hero Images for LCP -->
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['outbound_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600' }}" fetchpriority="high">
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['tour_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600' }}" fetchpriority="high">
@@ -40,11 +40,11 @@
         @endphp
 
         @if($logoUrl)
-            <img src="{{ imageUrl($logoUrl) }}" class="h-12 md:h-16 w-auto object-contain drop-shadow-2xl">
+            <img src="{{ imageUrl($logoUrl) }}" class="h-10 md:h-12 w-auto object-contain">
         @else
             <div class="flex flex-col items-center">
-                <div class="w-16 h-16 bg-emerald-600 rounded-[2rem] flex items-center justify-center text-white font-black text-3xl shadow-2xl mb-4">W</div>
-                <h1 class="text-white font-black text-xl tracking-[0.2em] uppercase">{{ $brandName }}</h1>
+                <div class="w-12 h-12 bg-emerald-800 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-md mb-2">W</div>
+                <h1 class="text-white font-semibold text-sm tracking-[0.25em] uppercase">{{ $brandName }}</h1>
             </div>
         @endif
     </div>
@@ -59,33 +59,33 @@
         
         @if($showOutbound)
         <!-- Left: Corporate Outbound -->
-        <div class="relative {{ $outboundWidth }} h-1/2 md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/5 flex-grow">
+        <div class="relative {{ $outboundWidth }} h-1/2 md:h-full group overflow-hidden border-b md:border-b-0 md:border-r border-white/10 flex-grow">
             @php
                 $outboundUrl = imageUrl($content['outbound_image_url'] ?? null);
                 if (empty($outboundUrl) || str_contains($outboundUrl, 'unsplash')) {
                     $outboundUrl = asset('images/home/outbound.webp');
                 }
             @endphp
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] group-hover:scale-110 bg-zoom" 
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] group-hover:scale-105 bg-zoom" 
                  style="background-image: url('{{ $outboundUrl }}')"></div>
-            <div class="absolute inset-0 split-overlay transition-opacity duration-700 group-hover:opacity-90"></div>
+            <div class="absolute inset-0 split-overlay transition-opacity duration-700"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-16 lg:p-24 z-10">
+            <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-16 lg:p-20 z-10">
                 <div class="overflow-hidden mb-4 md:mb-6">
-                    <span class="inline-block px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4 md:mb-6">B2B & Corporate</span>
-                    <h2 class="text-4xl md:text-7xl lg:text-[6.5rem] font-black text-white leading-[0.85] tracking-tighter">
+                    <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.25em] rounded-md mb-3 md:mb-4">B2B & Corporate</span>
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] tracking-tight">
                         {!! nl2br(e($content['outbound_title'] ?? "Corporate\nOutbound.")) !!}
                     </h2>
                 </div>
-                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-80">
+                <p class="hidden sm:block text-slate-300 text-sm md:text-base font-normal max-w-sm mb-6 md:mb-8 leading-relaxed opacity-90">
                     {{ $content['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-700 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-500/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/outbound" class="px-6 py-3 md:px-8 md:py-4 bg-white/10 text-white border border-white/30 rounded-xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300">
                         Jelajahi Outbound
                     </a>
-                    <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
-                        <i class="fas fa-arrow-right -rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500"></i>
+                    <div class="group/arrow relative w-10 h-10 md:w-12 md:h-12 rounded-xl border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-slate-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-right -rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-300"></i>
                     </div>
                 </div>
             </div>
@@ -101,25 +101,25 @@
                     $tourUrl = asset('images/home/tour.webp');
                 }
             @endphp
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[8s] group-hover:scale-110 bg-zoom" 
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] group-hover:scale-105 bg-zoom" 
                  style="background-image: url('{{ $tourUrl }}')"></div>
-            <div class="absolute inset-0 split-overlay transition-opacity duration-700 group-hover:opacity-90"></div>
+            <div class="absolute inset-0 split-overlay transition-opacity duration-700"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-16 lg:p-24 text-right z-10">
+            <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-16 lg:p-20 text-right z-10">
                 <div class="overflow-hidden mb-4 md:mb-6">
-                    <span class="inline-block px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4 md:mb-6">Premium Leisure</span>
-                    <h2 class="text-4xl md:text-7xl lg:text-[6.5rem] font-black text-white leading-[0.85] tracking-tighter">
+                    <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.25em] rounded-md mb-3 md:mb-4">Premium Leisure</span>
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] tracking-tight">
                         {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
                     </h2>
                 </div>
-                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-80 text-right">
+                <p class="hidden sm:block text-slate-300 text-sm md:text-base font-normal max-w-sm mb-6 md:mb-8 leading-relaxed opacity-90 text-right">
                     {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
-                        <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500"></i>
+                    <div class="group/arrow relative w-10 h-10 md:w-12 md:h-12 rounded-xl border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-slate-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-300"></i>
                     </div>
-                    <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-800 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-400/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/tour" class="px-6 py-3 md:px-8 md:py-4 bg-white/10 text-white border border-white/30 rounded-xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300">
                         Jelajahi Wisata
                     </a>
                 </div>

@@ -14,9 +14,9 @@
   --color-toba-accent: #15803d;     /* Emerald 700 - Lebih solid */
   --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
   --color-toba-blue: #075985;       /* Sky 800 */
-  /* Premium Shadows */
-  --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
-  --shadow-glass: 0 8px 32px 0 rgba(15, 23, 42, 0.1);
+  /* Premium Shadows - Softened for Minimalist look */
+  --shadow-premium: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
+  --shadow-glass: 0 4px 20px 0 rgba(15, 23, 42, 0.03);
 }
 
 @layer base {
@@ -35,21 +35,21 @@
   .central-logo {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
   }
 
   .split-overlay {
-    background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 50%, rgba(15, 23, 42, 0) 100%);
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.2) 60%, rgba(15, 23, 42, 0.05) 100%);
   }
 
   .bg-zoom {
-    animation: zoom-slow 30s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+    animation: zoom-slow 40s infinite alternate cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   @keyframes zoom-slow {
     from { transform: scale(1); }
-    to { transform: scale(1.2); }
+    to { transform: scale(1.08); }
   }
 
   .btn-premium {
@@ -57,8 +57,8 @@
   }
 
   .btn-premium:hover {
-    @apply -translate-y-1.5 scale-[1.03];
-    box-shadow: 0 25px 40px -10px rgba(16, 185, 129, 0.4);
+    @apply -translate-y-0.5 scale-[1.01];
+    box-shadow: 0 8px 20px -8px rgba(16, 185, 129, 0.15);
   }
 
   .glass-card {
@@ -75,15 +75,15 @@
 
 /* Premium Utilities */
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-br from-toba-green via-emerald-500 to-teal-400;
+  @apply text-slate-900;
 }
 
 .text-gradient-gold {
-  @apply bg-clip-text text-transparent bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-600;
+  @apply text-amber-600;
 }
 
 .card-premium {
-  @apply bg-white rounded-[2.5rem] border border-slate-100/60 shadow-sm transition-all duration-500 hover:shadow-premium hover:-translate-y-3;
+  @apply bg-white rounded-3xl border border-slate-100/80 shadow-xs transition-all duration-500 hover:shadow-premium hover:-translate-y-1;
 }
 
 .admin-card {
