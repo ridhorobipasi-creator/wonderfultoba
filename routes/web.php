@@ -166,6 +166,7 @@ Route::prefix('outbound')->name('outbound.')->group(function() {
 Route::get('/about', [App\Http\Controllers\PublicController::class, 'about'])->name('about');
 Route::get('/terms', [App\Http\Controllers\PublicController::class, 'terms'])->name('terms');
 Route::get('/privacy', [App\Http\Controllers\PublicController::class, 'privacy'])->name('privacy');
+Route::get('/payment', [App\Http\Controllers\PublicController::class, 'payment'])->name('payment');
 Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index');
 
 

@@ -51,6 +51,9 @@
                 <ul class="space-y-4">
                     <li><a href="/" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Paket Wisata</a></li>
                     <li><a href="/tour/packages" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Semua Destinasi</a></li>
+                    <li><a href="/tour/gallery" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Galeri Foto</a></li>
+                    <li><a href="/tour/blog" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Blog Perjalanan</a></li>
+                    <li><a href="/sewa-mobil" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Sewa Mobil</a></li>
                 </ul>
             </div>
 
@@ -59,7 +62,8 @@
                 <h4 class="text-white font-black text-xs uppercase tracking-[0.3em] mb-8">Bantuan</h4>
                 <ul class="space-y-4">
                     <li><a href="/about" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Tentang Kami</a></li>
-                    <li><a href="/terms" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Syarat & Ketentuan</a></li>
+                    <li><a href="/payment" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Cara Pembayaran</a></li>
+                    <li><a href="/terms" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Syarat &amp; Ketentuan</a></li>
                     <li><a href="/privacy" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Kebijakan Privasi</a></li>
                     <li><a href="/tour/blog" class="text-slate-400 hover:text-toba-green text-sm font-bold transition-colors">Pusat Artikel</a></li>
                 </ul>
@@ -71,7 +75,7 @@
                 <div class="space-y-4">
                     <div class="flex items-start space-x-3 text-slate-400">
                         <i class="fas fa-map-marker-alt text-toba-green mt-1"></i>
-                        <p class="text-sm font-medium">{{ $siteSettings['general']['office_address'] ?? 'Jl. Jamin Ginting No. 123, Medan, Sumatera Utara' }}</p>
+                        <p class="text-sm font-medium">{{ $siteSettings['general']['office_address'] ?? 'Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara 21174' }}</p>
                     </div>
                     <div class="flex items-center space-x-3 text-slate-400">
                         <i class="fas fa-phone text-toba-green"></i>
@@ -79,7 +83,7 @@
                     </div>
                     <div class="flex items-center space-x-3 text-slate-400">
                         <i class="fas fa-envelope text-toba-green"></i>
-                        <p class="text-sm font-medium">{{ $siteSettings['general']['contact_email'] ?? 'info@wonderfultoba.com' }}</p>
+                        <p class="text-sm font-medium">{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}</p>
                     </div>
                 </div>
             </div>
@@ -89,11 +93,14 @@
             <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">
                 &copy; {{ date('Y') }} <span class="text-white">Wonderful Toba</span>. Dikelola Secara Profesional.
             </p>
-            <div class="flex items-center space-x-6">
+            <div class="flex items-center gap-4">
                 @php
                     $partnerLogoUrl = $siteSettings['cms_landing']['brand_partner_logo_url'] ?? 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Wonderful_Indonesia_logo.svg';
                 @endphp
-                <x-premium-image :src="$partnerLogoUrl" alt="Partner Logo" class="h-8 opacity-50 grayscale hover:grayscale-0 transition-all cursor-pointer" />
+                <div class="flex items-center gap-3">
+                    <x-premium-image :src="$partnerLogoUrl" alt="Wonderful Indonesia" class="h-8 opacity-60 grayscale hover:grayscale-0 transition-all" />
+                    <span class="text-slate-600 text-[9px] font-bold uppercase tracking-widest leading-tight">Agen Resmi<br>Wonderful Indonesia</span>
+                </div>
             </div>
         </div>
     </div>

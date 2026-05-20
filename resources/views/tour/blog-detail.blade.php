@@ -48,11 +48,11 @@
                         {{ $post->category }}
                     </span>
                     <span class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
-                        {{ \Carbon\Carbon::parse($post->createdAt)->locale(session('locale', 'my') === 'my' ? 'ms' : session('locale', 'my'))->translatedFormat('d F Y') }}
+                        {{ \Carbon\Carbon::parse($post->createdAt)->locale(session('locale', 'my') === 'en' ? 'en' : (session('locale', 'my') === 'my' ? 'ms' : 'id'))->translatedFormat('d F Y') }}
                     </span>
                 </div>
 
-                <h1 class="text-4xl md:text-7xl font-black text-white tracking-tighter leading-[1.05] drop-shadow-2xl" x-text="package.name">{{ $post->title }}</h1>
+                <h1 class="text-4xl md:text-7xl font-black text-white tracking-tighter leading-[1.05] drop-shadow-2xl">{{ $post->title }}</h1>
             </div>
         </div>
     </div>
@@ -73,9 +73,12 @@
                         </div>
                     </div>
 
-                    <!-- Article Body -->
                     <div class="prose prose-xl prose-slate max-w-none text-slate-600 font-medium leading-[1.8] tracking-normal">
-                        {!! nl2br(e($post->content)) !!}
+                        @if(!empty($post->content) && strlen($post->content) > 10)
+                            {!! nl2br($post->content) !!}
+                        @else
+                            <p class="text-slate-400 italic">{{ $post->excerpt }}</p>
+                        @endif
                     </div>
 
                     <!-- Tags -->

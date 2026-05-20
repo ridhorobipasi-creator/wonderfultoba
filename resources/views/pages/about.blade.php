@@ -70,10 +70,7 @@
                         </div>
                         <div>
                             @php
-                                $touristsCount = $siteSettings['cms_tour']['stat_customers'] ?? $content['stat_tourists'] ?? '5000+';
-                                if (strpos($touristsCount, '5000') !== false || strpos($touristsCount, '5K') !== false) {
-                                    $touristsCount = __('5.000+');
-                                }
+                                $touristsCount = $siteSettings['cms_tour']['stat_customers'] ?? $content['stat_tourists'] ?? '1.500+';
                             @endphp
                             <p class="text-5xl font-black text-toba-green mb-2 tracking-tighter">{{ $touristsCount }}</p>
                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ __('Wisatawan Puas') }}</p>
@@ -189,25 +186,43 @@
         </div>
     </section>
 
-    <!-- Trusted Clients (Slider Style) -->
-    @if(count($clients) > 0)
+    {{-- Partners/Trusted Clients Section — SVG logos always visible --}}
     <section class="py-24 bg-slate-900 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="text-center mb-16">
                 <span class="text-toba-accent font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Official Partners</span>
-                <h3 class="text-3xl font-black text-white tracking-tight leading-tight">Dipercaya Oleh Perusahaan Besar</h3>
+                <h3 class="text-3xl font-black text-white tracking-tight leading-tight">Dipercaya Oleh Institusi Terkemuka</h3>
             </div>
             
-            <div class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale hover:grayscale-0 transition-all duration-1000">
-                @foreach($clients as $client)
-                    <div class="w-32 md:w-40 h-16 relative group">
-                        <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="w-full h-full object-contain filter brightness-0 invert group-hover:invert-0 group-hover:brightness-100 transition-all">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 items-center">
+                @php
+                $svgPartners = [
+                    ['name' => 'Bank Mandiri Taspen', 'logo' => '/images/partners/mandiri.svg'],
+                    ['name' => 'Universitas Sumatera Utara', 'logo' => '/images/partners/usu.svg'],
+                    ['name' => 'Pelindo 1', 'logo' => '/images/partners/pelindo.svg'],
+                    ['name' => 'Hyundai', 'logo' => '/images/partners/hyundai.svg'],
+                ];
+                @endphp
+                @foreach($svgPartners as $partner)
+                <div class="flex flex-col items-center gap-4 group">
+                    <div class="w-full h-16 flex items-center justify-center opacity-50 group-hover:opacity-100 transition-all duration-500">
+                        <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}" class="max-h-12 w-auto object-contain filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-500">
                     </div>
+                    <p class="text-slate-500 text-[9px] font-black uppercase tracking-widest text-center group-hover:text-slate-300 transition-colors">{{ $partner['name'] }}</p>
+                </div>
                 @endforeach
+            </div>
+
+            {{-- Wonderful Indonesia Credential --}}
+            <div class="mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-center gap-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Wonderful_Indonesia_logo.svg" alt="Wonderful Indonesia" class="h-10 opacity-70">
+                <div class="text-center md:text-left">
+                    <p class="text-white font-black text-sm">Agen Wisata Resmi Program Wonderful Indonesia</p>
+                    <p class="text-slate-500 text-xs font-medium">Kementerian Pariwisata dan Ekonomi Kreatif Republik Indonesia</p>
+                </div>
             </div>
         </div>
     </section>
-    @endif
 
     <!-- Call to Action -->
     <section class="py-24 md:py-32 px-6 md:px-8">
