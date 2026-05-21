@@ -56,12 +56,49 @@
         isTransitioning: true,
         autoplayInterval: null,
         touchStartX: 0,
+        isDraggingCards: false,
+        dragStartX: 0,
+        dragOffsetX: 0,
+        dragPointerId: null,
+        previewStep: 204,
         slides: @js($infiniteSlides),
         
         init() {
+            this.$nextTick(() => {
+                this.computePreviewStep();
+                window.addEventListener('resize', () => this.computePreviewStep());
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) this.stopAutoplay();
+                    else if (this.totalOriginal > 1) this.startAutoplay();
+                });
+                window.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') return this.prev();
+                    if (e.key === 'ArrowRight') return this.next();
+                    if (e.key === ' ' || e.key === 'Spacebar') {
+                        e.preventDefault();
+                        if (this.autoplayInterval) this.stopAutoplay(); else if (this.totalOriginal > 1) this.startAutoplay();
+                    }
+                });
+            });
+
             if (this.totalOriginal > 1) {
                 this.startAutoplay();
             }
+        },
+
+        computePreviewStep() {
+            this.$nextTick(() => {
+                const preview = document.querySelector('#home-hero-slider .card-preview');
+                const container = document.querySelector('#home-hero-slider .card-container');
+                if (!preview) return;
+                const rect = preview.getBoundingClientRect();
+                let gap = 0;
+                if (container) {
+                    const style = getComputedStyle(container);
+                    gap = parseFloat(style.columnGap) || parseFloat(style.gap) || 0;
+                }
+                this.previewStep = Math.round(rect.width + gap);
+            });
         },
         
         startAutoplay() {
@@ -72,18 +109,19 @@
         },
         
         stopAutoplay() {
-            if (this.autoplayInterval) clearInterval(this.autoplayInterval);
+            if (this.autoplayInterval) {
+                clearInterval(this.autoplayInterval);
+                this.autoplayInterval = null;
+            }
         },
         
         next() {
-            if (this.activeIndex >= this.slides.length - 1) return;
             this.isTransitioning = true;
             this.activeIndex++;
             this.startAutoplay();
         },
         
         prev() {
-            if (this.activeIndex <= 0) return;
             this.isTransitioning = true;
             this.activeIndex--;
             this.startAutoplay();
@@ -92,6 +130,43 @@
         goTo(index) {
             this.isTransitioning = true;
             this.activeIndex = index + this.clonesCount;
+            this.startAutoplay();
+        },
+
+        beginCardDrag(e) {
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+            try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+            this.isDraggingCards = true;
+            this.dragPointerId = e.pointerId;
+            this.dragStartX = e.clientX;
+            this.dragOffsetX = 0;
+            this.isTransitioning = false;
+            this.stopAutoplay();
+        },
+
+        moveCardDrag(e) {
+            if (!this.isDraggingCards) return;
+            this.dragOffsetX = e.clientX - this.dragStartX;
+        },
+
+        endCardDrag(e) {
+            if (!this.isDraggingCards) return;
+            try { if (this.dragPointerId != null) e.target.releasePointerCapture(this.dragPointerId); } catch (err) {}
+
+            const threshold = 60;
+            const delta = this.dragOffsetX;
+
+            this.isDraggingCards = false;
+            this.dragOffsetX = 0;
+            this.dragPointerId = null;
+
+            if (Math.abs(delta) > threshold) {
+                if (delta < 0) this.next(); else this.prev();
+                return;
+            }
+
+            // restore transition and resume autoplay
+            this.isTransitioning = true;
             this.startAutoplay();
         },
 
@@ -111,11 +186,13 @@
                 let offset = this.activeIndex - this.clonesCount;
                 let realIndex = ((offset % this.totalOriginal) + this.totalOriginal) % this.totalOriginal + this.clonesCount;
                 this.activeIndex = realIndex;
-                setTimeout(() => {
+                this.$nextTick(() => {
+                    // Force reflow to apply the transform without transition
+                    void document.querySelector('#home-hero-slider .carousel-strip').offsetHeight;
                     this.isTransitioning = true;
-                }, 50);
+                });
             }
-        }
+        },
     }">
     
     <style>
@@ -208,13 +285,13 @@
                                             <span class="text-2xl font-black" x-text="AppCurrency.format(slide.price)"></span>
                                         </div>
                                     </div>
-                                    <a :href="slide.cta_link" class="inline-flex items-center gap-4 bg-toba-green text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 shadow-2xl hover:-translate-y-1">
+                                    <a :href="slide.cta_link" class="cta-primary px-8 py-4 md:px-10 md:py-5">
                                         <span>Explore Now</span>
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
                                 </div>
                                 <div class="flex items-center gap-8 mb-12 lg:justify-start justify-center" x-show="slide.type === 'blog' || !slide.price || slide.price == 0">
-                                    <a :href="slide.cta_link" class="inline-flex items-center gap-4 bg-toba-accent text-slate-900 px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white transition-all duration-500 shadow-2xl hover:-translate-y-1">
+                                    <a :href="slide.cta_link" class="cta-secondary px-8 py-4 md:px-10 md:py-5">
                                         <span x-text="slide.cta_text || 'Baca Selengkapnya'"></span>
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
@@ -235,8 +312,8 @@
             
             <div class="hidden lg:block pointer-events-auto">
                 {{-- Nav Controls --}}
-                <div class="flex items-center gap-6 bg-white/5 backdrop-blur-xl px-8 py-4 rounded-full border border-white/10">
-                    <button @click="prev()" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
+                <div class="flex items-center gap-6 bg-white/80 backdrop-blur-xl px-8 py-4 rounded-full border border-slate-200 shadow-sm">
+                    <button @click="prev()" aria-label="Previous slide" class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-900 hover:text-white transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
                     </button>
                     <div class="flex gap-2">
@@ -244,11 +321,11 @@
                             <div 
                                 class="w-2 h-2 rounded-full transition-all duration-500 cursor-pointer"
                                 @click="goTo(i-1)"
-                                :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) ? 'bg-toba-accent w-8' : 'bg-white/20'"
+                                :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) ? 'bg-slate-900 w-8' : 'bg-slate-300'"
                             ></div>
                         </template>
                     </div>
-                    <button @click="next()" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
+                    <button @click="next()" aria-label="Next slide" class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-900 hover:text-white transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
                     </button>
                 </div>
@@ -257,18 +334,23 @@
             {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
             <div class="hidden lg:block w-[588px] overflow-hidden pointer-events-auto py-4">
                 <div class="card-container flex items-center gap-6 carousel-strip"
-                     @transitionend.stop=""
+                     @pointerdown="beginCardDrag($event)"
+                     @pointermove="moveCardDrag($event)"
+                     @pointerup="endCardDrag()"
+                     @pointerleave="endCardDrag()"
+                     @pointercancel="endCardDrag()"
+                     style="touch-action: pan-y; user-select: none;"
                      :class="isTransitioning ? 'duration-[800ms]' : 'duration-0'"
-                     :style="'transform: translateX(-' + (activeIndex * 204) + 'px)'">
+                     :style="'transform: translateX(calc(-' + (activeIndex * previewStep) + 'px + ' + dragOffsetX + 'px))'">
                     <template x-for="(slide, i) in slides" :key="'card-' + i">
                         <div 
                             class="card-preview shrink-0 relative group overflow-hidden"
                             :class="activeIndex == i ? 'active-card' : 'opacity-40 scale-95 hover:opacity-70'"
                             @click="isTransitioning = true; activeIndex = i; startAutoplay()"
                         >
-                            <img :src="slide.image_url" 
-                                 :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
-                                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                               <img :src="slide.image_url" :alt="slide.title || 'Slide image'"
+                                   :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
+                                   class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                             <div class="absolute bottom-6 left-6 right-6 text-white translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all z-10">
                                 <p class="text-[10px] font-black uppercase tracking-widest mb-1" x-text="slide.location"></p>
@@ -279,5 +361,5 @@
                 </div>
             </div>
         </div>
-    </div>
+                                     :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
 </section>

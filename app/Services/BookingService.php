@@ -13,13 +13,13 @@ class BookingService
         private BookingRepository $repository
     ) {}
 
-    public function isAvailable(array $data)
+    /**
+     * Check if a package/date is available for booking.
+     * Currently always returns true — extend with real capacity/blackout logic.
+     */
+    public function isAvailable(array $data): bool
     {
-        $startDate = $data['startDate'];
-        $endDate = $data['endDate'];
-
-
-
+        // Future: check package capacity, blackout dates, fleet availability
         return true;
     }
 

@@ -10,25 +10,25 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Deferred -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
     <style>
         .split-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, rgba(15,23,42,0.38) 100%);
         }
         .bg-zoom {
-            animation: ken-burns 30s infinite alternate cubic-bezier(0.25, 1, 0.5, 1);
+            animation: ken-burns 45s infinite alternate cubic-bezier(0.25, 1, 0.5, 1);
         }
         @keyframes ken-burns {
             from { transform: scale(1); }
-            to { transform: scale(1.08); }
+            to { transform: scale(1.04); }
         }
     </style>
 </head>
-<body class="overflow-x-hidden bg-black text-slate-100 selection:bg-emerald-950 selection:text-emerald-300">
+<body class="overflow-x-hidden bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
     <!-- Preload Hero Images for LCP -->
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['outbound_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600' }}" fetchpriority="high">
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['tour_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600' }}" fetchpriority="high">
@@ -77,9 +77,9 @@
         </div>
     </div>
 
-    <main class="min-h-screen h-screen md:h-[100dvh] flex flex-col md:flex-row relative">
+    <main class="min-h-screen md:min-h-[80vh] flex flex-col md:flex-row relative">
         <!-- Tour & Travel (Full Width) -->
-        <div class="relative w-full h-full group overflow-hidden flex-grow">
+        <div class="relative w-full min-h-[80vh] md:min-h-[80vh] group overflow-hidden flex-grow">
             @php
                 $tourUrl = imageUrl($content['tour_image_url'] ?? null);
                 if (empty($tourUrl) || str_contains($tourUrl, 'unsplash')) {
@@ -90,19 +90,25 @@
                  style="background-image: url('{{ $tourUrl }}')"></div>
             <div class="absolute inset-0 split-overlay transition-opacity duration-700"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-end items-center p-8 md:p-16 lg:p-20 text-center z-10">
-                <div class="overflow-hidden mb-4 md:mb-6">
-                    <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.25em] rounded-md mb-3 md:mb-4">Premium Leisure</span>
-                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] tracking-tight">
+            <div class="absolute inset-0 flex flex-col justify-end items-center p-5 md:p-10 lg:p-14 text-center z-10">
+                <div class="max-w-3xl mx-auto bg-white/88 backdrop-blur-md border border-white/50 rounded-3xl p-7 md:p-10 mb-5 md:mb-7 shadow-lg">
+                    <span class="inline-block px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.25em] rounded-md mb-3 md:mb-4">{{ __('Tour Travel Mudah') }}</span>
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-semibold text-slate-900 leading-tight tracking-tight">
                         {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
                     </h2>
+                    <p class="hidden sm:block text-slate-600 text-sm md:text-base font-normal max-w-2xl mx-auto mt-4 leading-relaxed">
+                        {{ $content['tour_subtitle'] ?? 'Eksplorasi Danau Toba dan sekitarnya dengan proses pemesanan yang sederhana, jelas, dan nyaman.' }}
+                    </p>
                 </div>
-                <p class="hidden sm:block text-slate-300 text-sm md:text-lg font-normal max-w-lg mb-6 md:mb-10 leading-relaxed opacity-90 text-center">
-                    {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
+                <p class="hidden sm:block text-slate-600 text-sm md:text-lg font-normal max-w-2xl mb-5 md:mb-8 leading-relaxed text-center bg-white/80 backdrop-blur-sm px-5 py-3 rounded-full border border-slate-200">
+                    {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket yang jelas, nyaman, dan mudah dipilih.' }}
                 </p>
-                <div class="flex items-center">
-                    <a href="/tour" class="px-8 py-4 md:px-12 md:py-5 bg-white/10 text-white border border-white/30 rounded-xl font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300">
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <a href="/tour" class="px-8 py-4 md:px-10 md:py-4 bg-slate-900 text-white border border-slate-900 rounded-xl font-semibold text-xs md:text-sm uppercase tracking-widest hover:bg-slate-800 transition-all duration-300">
                         Jelajahi Wisata
+                    </a>
+                    <a href="/tour/packages" class="px-8 py-4 md:px-10 md:py-4 bg-white text-slate-900 border border-slate-200 rounded-xl font-semibold text-xs md:text-sm uppercase tracking-widest hover:bg-slate-50 transition-all duration-300 shadow-sm">
+                        Lihat Paket
                     </a>
                 </div>
             </div>
@@ -124,7 +130,7 @@
                     if (currentVersion === null) {
                         currentVersion = data.version;
                     } else if (data.version !== currentVersion) {
-                        console.log('CMS Update Detected! Syncing content...');
+                        // CMS content updated — auto-reload
                         window.location.reload();
                     }
                 } catch (e) {

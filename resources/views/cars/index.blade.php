@@ -37,7 +37,7 @@
     <!-- Hero Header -->
     <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-6 md:px-8">
         <div class="absolute inset-0 opacity-20">
-            <img src="/storage/2026/04/sumatra-panorama.webp" alt="" class="w-full h-full object-cover">
+            <img src="/storage/2026/04/sumatra-panorama.webp" alt="Sumatra panorama" class="w-full h-full object-cover">
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 to-slate-900/90"></div>
         <div class="relative z-10 max-w-7xl mx-auto text-center">

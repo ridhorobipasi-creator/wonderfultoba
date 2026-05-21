@@ -36,7 +36,11 @@ class AppServiceProvider extends ServiceProvider
             try {
                 // Point 4: Caching Site Settings for 24 hours
                 $decodedSettings = \Illuminate\Support\Facades\Cache::remember('site_settings_global', 86400, function () {
-                    $settings = \App\Models\Setting::all()->pluck('value', 'key')->toArray();
+                    $settings = \App\Models\Setting::query()
+                        ->select(['key', 'value'])
+                        ->get()
+                        ->mapWithKeys(fn ($setting) => [$setting->key => $setting->value])
+                        ->toArray();
                     
                     $decoded = [];
                     foreach ($settings as $key => $value) {

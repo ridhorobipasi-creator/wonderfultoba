@@ -76,20 +76,20 @@
 </head>
 <body class="font-sans text-slate-900 bg-white selection:bg-green-100 selection:text-green-900 overflow-x-hidden" x-data="{ isDark: false }">
     
-    <!-- Navbar Placeholder (Will be converted soon) -->
+    <!-- Navbar -->
     @include('layouts.partials.navbar')
 
     <main>
         @yield('content')
     </main>
 
-    <!-- Footer Placeholder (Will be converted soon) -->
+    <!-- Footer -->
     @include('layouts.partials.footer')
 
     <!-- Floating WhatsApp & Top -->
     <div class="fixed bottom-8 right-8 z-[90] flex flex-col gap-4" x-data="{ showTop: false }" @scroll.window="showTop = window.scrollY > 500">
         <!-- Scroll to Top -->
-        <button x-show="showTop" 
+        <button x-show="showTop" aria-label="Scroll to top"
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4"
                 x-transition:enter-end="opacity-100 translate-y-0"
@@ -127,7 +127,7 @@
                     if (currentVersion === null) {
                         currentVersion = data.version;
                     } else if (data.version !== currentVersion) {
-                        console.log('CMS Update Detected! Syncing content...');
+                        // CMS content updated — auto-reload
                         window.location.reload();
                     }
                 } catch (e) {}

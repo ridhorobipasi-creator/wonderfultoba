@@ -13,15 +13,25 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicController extends Controller
 {
-    protected $tourService;
-    protected $bookingService;
-
     public function __construct(
-        TourService $tourService,
-        BookingService $bookingService
-    ) {
-        $this->tourService = $tourService;
-        $this->bookingService = $bookingService;
+        protected TourService $tourService,
+        protected BookingService $bookingService
+    ) {}
+
+    /**
+     * Helper: Get structured site settings.
+     * Note: $siteSettings is ALSO shared globally via AppServiceProvider View Composer,
+     * but some methods need the structured array for logic (not just views).
+     */
+    private function getSiteSettings(array $keys = ['cms_tour', 'general']): array
+    {
+        return Cache::remember('site_settings_structured_' . implode('_', $keys), 3600, function () use ($keys) {
+            $settings = [];
+            foreach ($keys as $key) {
+                $settings[$key] = Setting::where('key', $key)->first()?->value ?? [];
+            }
+            return $settings;
+        });
     }
 
     /**
@@ -30,44 +40,58 @@ class PublicController extends Controller
     public function index()
     {
         try {
-            $siteSettings = Cache::remember('site_settings_all', 3600, function() {
-                return [
-                    'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-                    'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
-                    'general' => Setting::where('key', 'general')->first()?->value ?? [],
-                ];
-            });
-            
+            $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
             $content = $siteSettings['cms_landing'];
-            
+
             return view('index', compact('content', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error('Error loading index page: ' . $e->getMessage());
-            return view('errors.500'); 
+            return view('errors.500');
         }
     }
 
     /**
-     * Tour & Travel Main Page
+     * Tour & Travel Main Page — Cached for performance.
      */
     public function tour()
     {
         try {
-            $siteSettings = [
-                'cms_tour' => $this->tourService->getTourSettings(),
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
+            $siteSettings = $this->getSiteSettings(['cms_tour', 'general']);
             $settings = $siteSettings['cms_tour'];
-            $packages = $this->tourService->getFeaturedPackages();
-            $blogs = $this->tourService->getBlogs(3);
-            $blogs->each(function($b) {
+
+            // Cache homepage data for 10 minutes
+            $homeData = Cache::remember('tour_homepage_data', 600, function () {
+                $gallerySlides = \App\Models\GalleryImage::where('isActive', true)
+                    ->orderBy('orderPriority')
+                    ->take(12)
+                    ->get()
+                    ->map(fn($img) => [
+                        'url' => $img->imageUrl,
+                        'caption' => $img->caption ?? '',
+                        'category' => $img->category ?? '',
+                    ])
+                    ->values()
+                    ->toArray();
+
+                return [
+                    'packages' => $this->tourService->getFeaturedPackages(),
+                    'blogs' => $this->tourService->getBlogs(3),
+                    'gallerySlides' => $gallerySlides,
+                ];
+            });
+
+            $packages = $homeData['packages'];
+            $blogs = $homeData['blogs'];
+            $gallerySlides = $homeData['gallerySlides'];
+
+            // Translate only lightweight fields (title, excerpt, category) — NOT full content
+            $blogs->each(function ($b) {
                 $b->title = __($b->title);
                 $b->excerpt = __($b->excerpt);
-                $b->content = __($b->content);
                 $b->category = __($b->category);
             });
 
-            return view('tour.index', compact('settings', 'packages', 'blogs', 'siteSettings'));
+            return view('tour.index', compact('settings', 'packages', 'blogs', 'gallerySlides', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error('Error loading tour index: ' . $e->getMessage());
             return back()->with('error', 'Gagal memuat data tour. Silakan coba beberapa saat lagi.');
@@ -77,12 +101,10 @@ class PublicController extends Controller
     public function tourPackages(Request $request)
     {
         try {
-            $siteSettings = [
-                'cms_tour' => $this->tourService->getTourSettings(),
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
+            $siteSettings = $this->getSiteSettings();
             $packages = $this->tourService->getAllPackages();
             $cities = $this->tourService->getCities();
+
             return view('tour.packages', compact('packages', 'cities', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error('Error loading tour packages: ' . $e->getMessage());
@@ -92,46 +114,46 @@ class PublicController extends Controller
 
     public function tourGallery()
     {
-        $siteSettings = [
-            'cms_tour' => $this->tourService->getTourSettings(),
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings();
         $images = $this->tourService->getGallery();
+
         return view('tour.gallery', compact('images', 'siteSettings'));
     }
 
     public function tourBlog()
     {
-        $siteSettings = [
-            'cms_tour' => $this->tourService->getTourSettings(),
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings();
         $posts = $this->tourService->getBlogs();
-        $posts->each(function($post) {
+
+        // Translate lightweight fields only
+        $posts->each(function ($post) {
             $post->title = __($post->title);
             $post->excerpt = __($post->excerpt);
-            $post->content = __($post->content);
             $post->category = __($post->category);
         });
+
         return view('tour.blog', compact('posts', 'siteSettings'));
     }
 
     public function tourPackageDetail($slug)
     {
         try {
-            $siteSettings = [
-                'cms_tour' => $this->tourService->getTourSettings(),
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
+            $siteSettings = $this->getSiteSettings();
             $package = $this->tourService->getPackageBySlug($slug);
+
             if (!$package) {
                 return redirect()->route('tour.packages')->with('error', 'Paket tidak ditemukan.');
             }
 
-            // Increment Views
-            $package->increment('views_count');
+            // Session-based view counting — prevent F5 inflation
+            $viewKey = 'viewed_package_' . $package->id;
+            if (!session()->has($viewKey)) {
+                $package->increment('views_count');
+                session()->put($viewKey, true);
+            }
 
             $city = City::find($package->cityId);
+
             return view('tour.package-detail', compact('package', 'city', 'siteSettings'));
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): " . $e->getMessage());
@@ -142,30 +164,21 @@ class PublicController extends Controller
     public function tourBlogDetail($slug)
     {
         try {
-            $siteSettings = [
-                'cms_tour' => $this->tourService->getTourSettings(),
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
+            $siteSettings = $this->getSiteSettings();
             $post = $this->tourService->getBlogPost($slug);
+
             if (!$post) {
                 return redirect()->route('tour.blog');
             }
 
-            // Increment Views
-            $post->increment('views_count');
-
-            $post->title = __($post->title);
-            $post->excerpt = __($post->excerpt);
-            $post->content = __($post->content);
-            $post->category = __($post->category);
+            // Session-based view counting — prevent F5 inflation
+            $viewKey = 'viewed_blog_' . $post->id;
+            if (!session()->has($viewKey)) {
+                $post->increment('views_count');
+                session()->put($viewKey, true);
+            }
 
             $relatedPosts = $this->tourService->getRelatedBlogs($post->id);
-            $relatedPosts->each(function($rp) {
-                $rp->title = __($rp->title);
-                $rp->excerpt = __($rp->excerpt);
-                $rp->content = __($rp->content);
-                $rp->category = __($rp->category);
-            });
 
             return view('tour.blog-detail', compact('post', 'relatedPosts', 'siteSettings'));
         } catch (\Exception $e) {
@@ -178,8 +191,8 @@ class PublicController extends Controller
     {
         try {
             $validated = $request->validated();
-            $package = $this->tourService->getPackageBySlug($request->slug ?? ''); 
-            
+            $package = $this->tourService->getPackageBySlug($request->slug ?? '');
+
             if (!$package) {
                 $package = \App\Models\Package::find($validated['packageId']);
             }
@@ -218,7 +231,7 @@ class PublicController extends Controller
                          "- " . __("WhatsApp") . ": " . $validated['customerPhone'] . "\n" .
                          "- " . __("Tanggal") . ": " . $formattedDate . "\n" .
                          "- " . __("Peserta") . ": " . $validated['pax'] . " " . __("Orang") . "\n";
-            
+
             if (!empty($validated['notes'])) {
                 $waMessage .= "- " . __("Catatan") . ": " . $validated['notes'] . "\n";
             }
@@ -228,7 +241,7 @@ class PublicController extends Controller
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
             $waNumber = preg_replace('/[^0-9]/', '', $settings['contact_wa'] ?? $genSettings['whatsapp'] ?? '6281323888207');
-            
+
             $waUrl = "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
 
             return back()->with([
@@ -244,12 +257,8 @@ class PublicController extends Controller
 
     public function cars()
     {
-        $siteSettings = Cache::remember('site_settings_minimal', 3600, function() {
-            return [
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
-        });
-        $cars = Cache::remember('cars_active', 3600, function() {
+        $siteSettings = $this->getSiteSettings(['general']);
+        $cars = Cache::remember('cars_active', 3600, function () {
             return \App\Models\Car::where('status', 'available')->orderBy('sortOrder')->get();
         });
         return view('cars.index', compact('cars', 'siteSettings'));
@@ -257,43 +266,68 @@ class PublicController extends Controller
 
     public function about()
     {
-        $siteSettings = [
-            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-            'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
         $content = Setting::where('key', 'page_about')->first()?->value ?? [];
         $clients = \App\Models\Client::orderBy('orderPriority')->get();
+
         return view('pages.about', compact('content', 'siteSettings', 'clients'));
     }
 
     public function terms()
     {
-        $siteSettings = [
-            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'general']);
         $content = Setting::where('key', 'page_terms')->first()?->value ?? [];
+
         return view('pages.terms', compact('content', 'siteSettings'));
     }
 
     public function privacy()
     {
-        $siteSettings = [
-            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'general']);
         $content = Setting::where('key', 'page_privacy')->first()?->value ?? [];
+
         return view('pages.privacy', compact('content', 'siteSettings'));
     }
 
     public function payment()
     {
-        $siteSettings = [
-            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
-            'general' => Setting::where('key', 'general')->first()?->value ?? [],
-        ];
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'general']);
+
         return view('pages.payment', compact('siteSettings'));
     }
-}
 
+    public function submitOutboundQuote(Request $request)
+    {
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'participants' => 'required|integer|min:1',
+            'location' => 'required|string|max:255',
+            'activity_type' => 'nullable|string|max:255',
+            'estimated_date' => 'required|date',
+            'whatsapp' => 'required|string|max:255',
+        ]);
+
+        $generalSettings = Setting::where('key', 'general')->first()?->value ?? [];
+        $waSource = $generalSettings['whatsapp'] ?? config('services.whatsapp.number');
+        $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
+
+        if ($waNumber === '') {
+            return back()->with('error', __('Nomor WhatsApp belum dikonfigurasi.'));
+        }
+
+        $message = "Halo Sujai Laketoba, saya ingin meminta penawaran outbound.\n\n"
+            . "Company: {$validated['company_name']}\n"
+            . "Peserta: {$validated['participants']}\n"
+            . "Lokasi: {$validated['location']}\n"
+            . "Aktivitas: " . ($validated['activity_type'] ?? '-') . "\n"
+            . "Estimasi: {$validated['estimated_date']}\n"
+            . "WhatsApp: {$validated['whatsapp']}";
+
+        $waUrl = "https://wa.me/{$waNumber}?text=" . urlencode($message);
+
+        return back()->with([
+            'success' => __('Permintaan outbound berhasil dikirim.'),
+            'whatsappUrl' => $waUrl,
+        ]);
+    }
+}

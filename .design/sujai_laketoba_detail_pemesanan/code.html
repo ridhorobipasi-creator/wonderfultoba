@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sujai Laketoba | Detail Ekspedisi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Outfit:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#77a788",
+                      "inverse-surface": "#313030",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#745c00",
+                      "on-secondary": "#ffffff",
+                      "primary": "#002513",
+                      "primary-fixed": "#bceecb",
+                      "surface-container-high": "#ebe7e7",
+                      "on-secondary-fixed": "#241a00",
+                      "on-primary-fixed-variant": "#224f36",
+                      "primary-container": "#0b3c24",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-secondary-fixed-variant": "#574500",
+                      "background": "#fcf9f8",
+                      "surface-container-low": "#f6f3f2",
+                      "on-error": "#ffffff",
+                      "surface-container": "#f0edec",
+                      "on-primary-fixed": "#002110",
+                      "outline-variant": "#c1c9c0",
+                      "on-tertiary-container": "#ce8a90",
+                      "tertiary-container": "#55252b",
+                      "tertiary-fixed": "#ffdadb",
+                      "secondary-fixed-dim": "#e9c349",
+                      "on-surface-variant": "#414942",
+                      "inverse-on-surface": "#f3f0ef",
+                      "inverse-primary": "#a0d2b0",
+                      "secondary": "#735c00",
+                      "on-tertiary-fixed-variant": "#6b373d",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#1c1b1b",
+                      "tertiary": "#3b1017",
+                      "tertiary-fixed-dim": "#fdb3b9",
+                      "surface-tint": "#3a684c",
+                      "primary-fixed-dim": "#a0d2b0",
+                      "secondary-fixed": "#ffe088",
+                      "surface-variant": "#e5e2e1",
+                      "on-tertiary-fixed": "#360d14",
+                      "surface-bright": "#fcf9f8",
+                      "secondary-container": "#fed65b",
+                      "outline": "#717972",
+                      "on-background": "#1c1b1b",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#dcd9d9",
+                      "surface": "#fcf9f8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "section-gap": "120px",
+                      "container-max": "1440px",
+                      "margin-desktop": "80px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "headline-lg-mobile": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "body-md": ["Outfit"],
+                      "label-caps": ["Outfit"],
+                      "body-lg": ["Outfit"]
+              },
+              "fontSize": {
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "300"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(252, 249, 248, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .ken-burns {
+            animation: kenburns 20s infinite alternate;
+        }
+        @keyframes kenburns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/10 backdrop-blur-xl border-b border-white/10 shadow-sm h-20">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop h-full">
+<div class="font-display-lg text-headline-md font-bold tracking-tighter text-on-surface">Sujai Laketoba</div>
+<div class="hidden md:flex gap-unit*4 items-center">
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface transition-all duration-300 mx-4" href="#">Destinations</a>
+<a class="font-body-md text-body-md text-secondary border-b-2 border-secondary pb-1 mx-4" href="#">Expeditions</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface transition-all duration-300 mx-4" href="#">Private Jets</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface transition-all duration-300 mx-4" href="#">Journal</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface transition-all duration-300 mx-4" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-body-md font-body-md text-secondary cursor-pointer">USD/EN</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-body-md hover:scale-95 transition-transform duration-200">Inquire Now</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Gallery & Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-desktop py-10 grid grid-cols-12 gap-gutter">
+<div class="col-span-12 md:col-span-8 space-y-8">
+<!-- Main Gallery -->
+<div class="relative h-[500px] overflow-hidden rounded-xl shadow-2xl">
+<img class="w-full h-full object-cover ken-burns" data-alt="A cinematic, high-resolution wide shot of a luxury eco-resort overlooking the pristine turquoise waters of Lake Toba at sunset. The architecture features modern glass and dark sustainable wood, reflecting a deep jungle green palette. The lighting is warm and ethereal, casting long shadows and a golden glow across the landscape, embodying the ecological opulence and elite exclusivity of the Sujai Laketoba brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxwC9_t-HhkMR1atWymtsMAImVESxbHWEOtSfA3TPCRVFauZWtokkALFVXpSg1qfZ2KsmJXHvf-eQlwLaUdoMYAXYaQTvgYNf1C6DamtFOukCscAa8RiM2MjbuCBoNUpNktox6gaOHb-JMAxnkLUAVDoKY2_IAQaCuaf01kdh3U-VX8RV0szDHqXyjUTXn3OqlGav0MYp9Qr2eQhyhjaQMrAzwDkY1fb9KH8QIcReZKILXJLTtNJx8s6WJrP2pgeA0h68MieD7SYQh"/>
+<div class="absolute bottom-6 left-6 glass-card p-4 rounded-lg">
+<span class="font-label-caps text-label-caps text-secondary block mb-1">DESTINASI UNGGULAN</span>
+<h1 class="font-headline-lg text-headline-lg text-primary">Kemewahan Toba: Ekspedisi Pulau Samosir</h1>
+</div>
+</div>
+<!-- Thumbnails/Secondary Gallery -->
+<div class="flex gap-4 overflow-x-auto no-scrollbar">
+<div class="min-w-[200px] h-32 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="A detailed close-up of a private infinity pool at a luxury jungle resort, with water overflowing into a lush green forest background. The morning sunlight filters through tropical leaves, creating dapples of light. The aesthetic is crisp and high-end, using deep emerald tones and bright whites to emphasize a serene, private expedition atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbsxm8R0ZvXSkkb4Sr_kW-heMIdhOCu_4wqne5vd448oT_8iFMkeAhe9wsF1P9fA-scLl9xeyqFq9OHXeNf82Gx3E6A3vQ7Ecl11aKCNcIGf41Qn5c3uTmd-ugDO3xLPgUAMLR6qPjh3TjezNmHShTeiEyRvioWfKw6GglHCe9vWSRcZ_NYwQ-ySMFUaT0mREI1WZQBzTt0w63j_XnAo2HIVJaY6KPqnt44G6n29lqY7LmIrHwTd5-6e6R_-yPTf6-yU0x7MWfdGjy"/>
+</div>
+<div class="min-w-[200px] h-32 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="A sophisticated interior shot of a private jet cabin designed with beige leather, dark wood accents, and gold finishes. The lighting is soft and ambient, highlighting the premium craftsmanship. Through the window, fluffy white clouds are visible against a deep blue sky. The image exudes ultra-luxury travel and bespoke service for elite travelers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTNrp1qRmQIQ653HY29uqn1wnc_4H3mSGSvS6X-1Uea5pr4y_UrsRJMkKkw3uavQJh99PAEfqyb4AD7jKvYGqAzGSdSBZkIJrsUTPEwzB9V8QQ8SjQ_OBbDIpcXiowZGQZDPuSPjsw_4kI9MjL9eFwx-olvE7ycy2nstW8K1irM1ZR1IkGCljL9m4-r9t03OyDoyCUiliwJK64tZpXMI8sedweIIikb1ER1NaL76GPDde6o1nBHKMQi-Z0uoJXhESkvJO6bTQ9JexU"/>
+</div>
+<div class="min-w-[200px] h-32 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="An elegant evening dining setup on a private wooden deck overlooking a misty lake. Fine china, crystal glasses, and gold cutlery are arranged under the soft glow of hanging lanterns. The atmosphere is intimate and exclusive, blending natural beauty with refined luxury service in a deep jungle green and warm gold color scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByY5xwxm0LSkpLsmYZPq0u9CG0aa2T18NnuwolwsnflxNzevBcD7oj0wFcd7k6JhHKMiWndwCdcmlq7dNee6qg1rnSjj852-qdeHXqFbnrbKodZprRxGIm1p1ybjI_1GLATuTINOYs539bEl5_kaNO0nc6E7fnba_2gwmHbKrxSrThimeY2E3zY_QKHUa3EipITLXcMx9-DN7xj-F5CM287BPVlcE24rdx3nfO_6AJ3r1-EvRtiCnunH57Haly-CMiQ99rtI5oaPMl"/>
+</div>
+<div class="min-w-[200px] h-32 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="A high-angle shot of a traditional wooden boat redesigned with modern luxury amenities, gliding across a vast, calm lake. The water is a deep sapphire blue, reflecting the surrounding emerald mountains. The style is minimalist yet powerful, emphasizing the scale of nature and the solitude of a private high-end expedition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS-qtX3dcK57KV8NGJIZ0KTsv4uKFQ93iqhDkzfMgcvNRsysGxovrUI-wNDu4jISlB97U9dYBZhrzPjyBpc2tlLfCpSt_xpMBOiwvX3W3qMiP_fuc07fRKhdpBO3WaZbp356EQXqgqJAW11KI4PNlYg4Z4sjaxQXNiQlo1vL6FMRsds3N1LjzNmDVF_aQwLAm3K9oqRjINK3_M2IZKXVWlh2n1kXj11erDoOLNIJ_JolSqYS_rTljR5ZJ804JEA-Kf8J1-__Usgh8T"/>
+</div>
+</div>
+<!-- Itinerary Description -->
+<div class="space-y-6 py-8 border-t border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary">Rencana Perjalanan</h2>
+<div class="space-y-8">
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center text-secondary font-bold group-hover:bg-secondary group-hover:text-on-secondary transition-colors">01</div>
+<div class="w-px h-full bg-outline-variant my-2"></div>
+</div>
+<div class="pb-6">
+<h3 class="font-headline-md text-body-lg font-semibold text-on-surface">Kedatangan VIP &amp; Penerbangan Helikopter</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed">Penjemputan eksklusif di bandara dengan limousine menuju helipad pribadi. Nikmati pemandangan udara Danau Toba yang spektakuler sebelum mendarat langsung di resort tepi danau kami.</p>
+</div>
+</div>
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center text-secondary font-bold group-hover:bg-secondary group-hover:text-on-secondary transition-colors">02</div>
+<div class="w-px h-full bg-outline-variant my-2"></div>
+</div>
+<div class="pb-6">
+<h3 class="font-headline-md text-body-lg font-semibold text-on-surface">Eksplorasi Budaya Samosir</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed">Tur privat ke desa-desa tradisional dengan pemandu ahli. Temukan sejarah Batak yang kaya, saksikan pertunjukan tari Sigale-gale eksklusif untuk Anda, dan nikmati makan siang gourmet di tepi tebing.</p>
+</div>
+</div>
+<div class="flex gap-6 group">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center text-secondary font-bold group-hover:bg-secondary group-hover:text-on-secondary transition-colors">03</div>
+<div class="w-px h-full bg-outline-variant my-2"></div>
+</div>
+<div class="pb-6">
+<h3 class="font-headline-md text-body-lg font-semibold text-on-surface">Relaksasi Spiritual &amp; Perpisahan</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed">Pagi yang tenang dengan sesi meditasi di tepi danau, diikuti oleh perawatan spa tradisional. Ekspedisi ditutup dengan makan malam perpisahan di bawah taburan bintang sebelum kepulangan privat.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking Form Sidebar -->
+<div class="col-span-12 md:col-span-4">
+<div class="sticky top-28 bg-white p-8 rounded-xl shadow-xl border border-outline-variant">
+<div class="mb-6 flex justify-between items-end">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">MULAI DARI</span>
+<div class="font-headline-md text-headline-md text-primary">Rp 45.000.000</div>
+</div>
+<div class="text-right">
+<span class="text-secondary font-bold">★ 4.9</span>
+<span class="text-on-surface-variant text-sm block">124 Ulasan</span>
+</div>
+</div>
+<form class="space-y-6">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface mb-2 block">PILIH TANGGAL</label>
+<div class="relative">
+<input class="w-full border-outline-variant rounded-lg p-3 text-body-md focus:ring-secondary focus:border-secondary" type="date"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant">calendar_today</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface mb-2 block">TAMU DEWASA</label>
+<select class="w-full border-outline-variant rounded-lg p-3 text-body-md focus:ring-secondary focus:border-secondary bg-white">
+<option>1 Orang</option>
+<option selected="">2 Orang</option>
+<option>3 Orang</option>
+<option>4 Orang</option>
+</select>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface mb-2 block">ANAK-ANAK</label>
+<select class="w-full border-outline-variant rounded-lg p-3 text-body-md focus:ring-secondary focus:border-secondary bg-white">
+<option>0 Orang</option>
+<option>1 Orang</option>
+<option>2 Orang</option>
+</select>
+</div>
+</div>
+<div class="space-y-4">
+<label class="font-label-caps text-label-caps text-on-surface mb-2 block">LAYANAN TAMBAHAN</label>
+<label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">flight_takeoff</span>
+<div>
+<div class="font-body-md font-semibold text-on-surface">Private Jet</div>
+<div class="text-xs text-on-surface-variant">+ Rp 120.000.000</div>
+</div>
+</div>
+<input class="w-5 h-5 text-secondary border-outline-variant focus:ring-0 rounded" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">person_pin</span>
+<div>
+<div class="font-body-md font-semibold text-on-surface">Pemandu Ahli Antropologi</div>
+<div class="text-xs text-on-surface-variant">+ Rp 5.500.000</div>
+</div>
+</div>
+<input checked="" class="w-5 h-5 text-secondary border-outline-variant focus:ring-0 rounded" type="checkbox"/>
+</label>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg space-y-2">
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Ekspedisi (2 Tamu x 3 Hari)</span>
+<span>Rp 90.000.000</span>
+</div>
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Pemandu Ahli</span>
+<span>Rp 5.500.000</span>
+</div>
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Pajak &amp; Layanan (11%)</span>
+<span>Rp 10.505.000</span>
+</div>
+<div class="pt-2 border-t border-outline-variant flex justify-between font-bold text-primary text-lg">
+<span>Total Ringkasan</span>
+<span>Rp 106.005.000</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-headline-md text-body-lg hover:bg-primary-container transition-all duration-300 shadow-lg hover:shadow-primary/20" type="submit">
+                            Pesan Sekarang
+                        </button>
+<p class="text-center text-xs text-on-surface-variant italic">Konfirmasi instan tersedia untuk tanggal terpilih.</p>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Concierge Bar -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-auto glass-card border border-white/20 rounded-full px-8 py-3 z-50 flex items-center justify-between gap-12 shadow-2xl">
+<div class="hidden md:flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<span class="text-on-surface text-body-md font-semibold">Butuh Bantuan? Hubungi Pakar Perjalanan Kami</span>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto justify-between">
+<button class="bg-transparent text-secondary border border-secondary px-6 py-2 rounded-full font-body-md hover:bg-secondary/10 transition-colors">Chat Expert</button>
+<button class="bg-primary text-on-primary px-8 py-2 rounded-full font-body-md hover:scale-105 transition-transform">Book Now</button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-primary py-section-gap mt-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto px-margin-desktop">
+<div class="space-y-4">
+<div class="font-display-lg text-headline-md text-secondary-fixed">Sujai Laketoba</div>
+<p class="text-on-primary-container/60 font-body-md">Menghadirkan harmoni antara kemewahan tak tertandingi dan kelestarian ekologis di jantung Sumatera Utara.</p>
+</div>
+<div>
+<h4 class="text-secondary-fixed font-bold mb-6 font-headline-md text-body-lg">Navigasi</h4>
+<ul class="space-y-3 text-on-primary-container/60 font-body-md">
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Destinations</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Expeditions</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Private Jets</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Sustainability</li>
+</ul>
+</div>
+<div>
+<h4 class="text-secondary-fixed font-bold mb-6 font-headline-md text-body-lg">Informasi</h4>
+<ul class="space-y-3 text-on-primary-container/60 font-body-md">
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Privacy Policy</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Terms of Service</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">Travel Insurance</li>
+<li class="hover:text-on-primary-container transition-colors cursor-pointer">FAQ</li>
+</ul>
+</div>
+<div class="space-y-6">
+<h4 class="text-secondary-fixed font-bold mb-4 font-headline-md text-body-lg">Langganan Warta</h4>
+<div class="flex border-b border-on-primary-container/30 pb-2">
+<input class="bg-transparent border-none text-on-primary focus:ring-0 w-full placeholder:text-on-primary-container/30" placeholder="Alamat Email" type="email"/>
+<button class="text-secondary-fixed">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-desktop mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-on-primary-container/60 text-sm">
+<p>© 2024 Sujai Laketoba. Ecological Opulence. All rights reserved.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<span>Instagram</span>
+<span>LinkedIn</span>
+<span>YouTube</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for gallery hover
+        document.querySelectorAll('.flex-shrink-0.cursor-pointer').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const mainImg = document.querySelector('.ken-burns');
+                const tempSrc = mainImg.src;
+                const tempAlt = mainImg.getAttribute('data-alt');
+                
+                mainImg.src = this.querySelector('img').src;
+                mainImg.setAttribute('data-alt', this.querySelector('img').getAttribute('data-alt'));
+                
+                this.querySelector('img').src = tempSrc;
+                this.querySelector('img').setAttribute('data-alt', tempAlt);
+            });
+        });
+
+        // Simple sticky interaction
+        window.addEventListener('scroll', () => {
+            const concierge = document.querySelector('.glass-card.fixed');
+            if (window.scrollY > 500) {
+                concierge.classList.add('translate-y-0', 'opacity-100');
+                concierge.classList.remove('translate-y-20', 'opacity-0');
+            }
+        });
+    </script>
+</body></html>
