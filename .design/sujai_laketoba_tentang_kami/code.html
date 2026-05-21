@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About Us - Sujai Laketoba</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#a0d2b0",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#e5e2e1",
+                      "surface": "#fcf9f8",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-container": "#55252b",
+                      "on-tertiary-fixed": "#360d14",
+                      "tertiary": "#3b1017",
+                      "surface-container": "#f0edec",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#fcf9f8",
+                      "secondary-container": "#fed65b",
+                      "on-background": "#1c1b1b",
+                      "secondary-fixed": "#ffe088",
+                      "inverse-surface": "#313030",
+                      "background": "#fcf9f8",
+                      "tertiary-fixed-dim": "#fdb3b9",
+                      "surface-tint": "#3a684c",
+                      "surface-container-lowest": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-surface-variant": "#414942",
+                      "on-secondary-fixed-variant": "#574500",
+                      "on-primary-fixed-variant": "#224f36",
+                      "surface-container-low": "#f6f3f2",
+                      "primary-container": "#0b3c24",
+                      "on-primary-container": "#77a788",
+                      "surface-dim": "#dcd9d9",
+                      "on-secondary": "#ffffff",
+                      "primary": "#002513",
+                      "outline": "#717972",
+                      "on-tertiary-container": "#ce8a90",
+                      "on-secondary-fixed": "#241a00",
+                      "on-secondary-container": "#745c00",
+                      "secondary": "#735c00",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#6b373d",
+                      "inverse-on-surface": "#f3f0ef",
+                      "outline-variant": "#c1c9c0",
+                      "primary-fixed-dim": "#a0d2b0",
+                      "surface-container-high": "#ebe7e7",
+                      "tertiary-fixed": "#ffdadb",
+                      "on-primary-fixed": "#002110",
+                      "surface-variant": "#e5e2e1",
+                      "primary-fixed": "#bceecb",
+                      "on-surface": "#1c1b1b",
+                      "secondary-fixed-dim": "#e9c349"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "80px",
+                      "container-max": "1440px",
+                      "unit": "8px",
+                      "section-gap": "120px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Playfair Display"],
+                      "body-lg": ["Outfit"],
+                      "headline-md": ["Playfair Display"],
+                      "body-md": ["Outfit"],
+                      "headline-lg-mobile": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "label-caps": ["Outfit"]
+              },
+              "fontSize": {
+                      "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "300"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .ken-burns {
+            transition: transform 5s ease-in-out;
+        }
+        .ken-burns-container:hover .ken-burns {
+            transform: scale(1.05);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-panel-dark {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/10 backdrop-blur-xl border-b border-white/10 shadow-sm transition-all duration-300" id="navbar">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-20">
+<div class="font-display-lg text-headline-md font-bold tracking-tighter text-on-surface">
+                Sujai Laketoba
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded" href="#">Destinations</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded" href="#">Expeditions</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded" href="#">Private Jets</a>
+<a class="font-body-md text-body-md text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded" href="#">Journal</a>
+<a class="font-body-md text-body-md text-secondary border-b-2 border-secondary pb-1 px-3 py-2" href="#">About</a>
+</div>
+<div class="hidden md:flex items-center space-x-6">
+<span class="font-body-md text-body-md text-on-surface/80">USD/EN</span>
+<button class="bg-primary text-on-primary font-body-md text-body-md px-6 py-2 rounded hover:bg-primary-container transition-colors duration-300">
+                    Inquire Now
+                </button>
+</div>
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[819px] min-h-[600px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0 ken-burns-container">
+<img alt="Lake Toba Morning" class="w-full h-full object-cover ken-burns" data-alt="A breathtaking, wide-angle landscape shot of Lake Toba at misty dawn. The calm, dark waters reflect the soft, ethereal morning light breaking through rolling fog. Lush, deep green hills frame the vast expanse of the lake. The mood is tranquil, majestic, and evocative of untouched natural luxury, fitting an ecological opulence aesthetic. Soft natural lighting emphasizes the grandeur of the caldera." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ_BIsV4mJA-zn72L1F4EtDV7_zTuLr0QgmwQDa5qKMFhRSDOoly4kDM8vTCkadL7StVKtOMa-vlbxyc7yR2NOaiuZIJPZX1K9VcHLDMGVhPQm46N_nz-GtEbCpR69w2eaPWG_qm99HATGjJyPC3Z8RGGom3sdKle1gTyA5ngxEyvM0k2mrOGKgN25AQ1sUx-_lJhDomOOaXrmAXrACmUgGMRakHXffLHdp3CpONf2VV1fw6NTlBiVLPJpSomOmGtmkcE1F41PWlPM"/>
+<div class="absolute inset-0 bg-black/40"></div>
+</div>
+<div class="relative z-10 text-center px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto mt-20">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-[0.2em] uppercase mb-4 block">Our Heritage</span>
+<h1 class="font-display-lg text-display-lg text-on-primary mb-6">Ecological Opulence.</h1>
+<p class="font-body-lg text-body-lg text-surface-container-low max-w-2xl mx-auto">
+                    Redefining luxury travel in the heart of Sumatra. We blend the raw, untamed majesty of Lake Toba with unparalleled, bespoke service to create transformative journeys.
+                </p>
+</div>
+</section>
+<!-- Our Story -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div class="order-2 md:order-1">
+<span class="font-label-caps text-label-caps text-primary tracking-widest uppercase mb-4 block">The Beginning</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-8">A Vision Born from the Caldera.</h2>
+<div class="space-y-6 font-body-lg text-body-lg text-on-surface-variant">
+<p>
+                            Sujai Laketoba was founded not just as a travel company, but as a custodian of one of the world's most spectacular natural wonders. We recognized that the profound beauty of the Lake Toba caldera deserved to be experienced with reverence, exclusivity, and profound respect for its heritage.
+                        </p>
+<p>
+                            Our journey began with a simple belief: true luxury is found in the untouched, the authentic, and the deeply personal. We spent years mapping hidden coves, forging relationships with local Batak elders, and designing experiences that bridge the gap between absolute comfort and wild exploration.
+                        </p>
+<button class="mt-8 border border-secondary text-secondary px-8 py-3 rounded hover:bg-secondary hover:text-on-secondary transition-colors duration-300">
+                            Read Full History
+                        </button>
+</div>
+</div>
+<div class="order-1 md:order-2 relative aspect-[4/5] overflow-hidden rounded-xl">
+<img alt="Founder overlooking lake" class="w-full h-full object-cover" data-alt="A sophisticated portrait-style image showing a silhouette of a person looking out over a vast, mist-covered lake surrounded by steep, jungle-clad mountains. The lighting is cinematic, capturing the golden hour with deep shadows and warm highlights. The aesthetic is luxurious, contemplative, and adventurous, emphasizing the scale of nature against human presence. High-end editorial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwXhcnHafI7U2JzEtju17Q_QD1Nt0NUSaRffeKQsHcLrDuvVG3yxOGMaLRp1ncZelNOcpLITHGrZeZ5_QSaPtFBKt7uTIqeds0wAQ9OxhLDpbGaRT3lAhAHL65PeuPXz2fknLAj3PVO2dkgJQ9kkWLE_EIx0bIM2xAsLt6uxJyUxVk-0BjF9jtsLMr_-aIn5cRew_3SYfQodTTeU9ZSx5EDD8pv1dYrp2bUS4LtQ3zCdWZHq_NazGwTaYYaYh37i6tAN9qJ4IiVmEk"/>
+</div>
+</div>
+</section>
+<!-- Our Philosophy (Bento Grid) -->
+<section class="py-section-gap bg-surface-container-lowest px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Our Philosophy</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Guiding principles that elevate every expedition.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-unit auto-rows-[400px]">
+<!-- Bento Item 1 -->
+<div class="md:col-span-2 relative rounded-xl overflow-hidden group ken-burns-container">
+<img alt="Local Wisdom" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A close-up, highly textured photograph of traditional Batak wood carving or weaving, illuminated by soft, natural light filtering through foliage. The deep earthy reds, browns, and blacks contrast with subtle gold highlights. The mood is cultural, authentic, and grounded, representing local heritage and craftsmanship in a high-end, editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnXdlbXjaLYcMFCOifZk19PVOGaBJU5HozFb2-r8az9B2I2XYl5s6A9gjoIq7IAvIKxUjhSpqLe6VWIfMJ-mqn5WVzR2tOpN2Znt2zjw9SFcuZWeN_RCEbA8zjQvjIoptUCF5Ur2JSY59q44G_NFpKHOKcRg2NAXZrQDrCnQF58hBCaB_mp1BEncFdjvwkgJLs6dUsaUudE1IxVMnZREwcI_rYWsRROf0Mu_UuuK1bKe6dxnUBjuES-cAblcaTwYDRR7LpH6IUmE8W"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full glass-panel-dark border-x-0 border-b-0">
+<span class="material-symbols-outlined text-secondary-fixed mb-2" data-icon="energy_savings_leaf">energy_savings_leaf</span>
+<h3 class="font-headline-md text-headline-md text-on-primary mb-2">Sustainable Immersion</h3>
+<p class="font-body-md text-body-md text-surface-container-high">We operate with a zero-trace mandate, ensuring the caldera's pristine ecology remains untouched for generations.</p>
+</div>
+</div>
+<!-- Bento Item 2 -->
+<div class="relative rounded-xl overflow-hidden group ken-burns-container">
+<div class="absolute inset-0 bg-primary-container p-8 flex flex-col justify-center">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6" data-icon="diamond">diamond</span>
+<h3 class="font-headline-md text-headline-md text-on-primary-container mb-4">Uncompromised Luxury</h3>
+<p class="font-body-md text-body-md text-on-primary-container/80">From private seaplane transfers to secluded luxury camps, comfort is seamlessly integrated into the wilderness.</p>
+</div>
+</div>
+<!-- Bento Item 3 -->
+<div class="relative rounded-xl overflow-hidden group ken-burns-container">
+<img alt="Trekking" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A dramatic shot of a lone hiker standing on a lush, green ridge overlooking a deep valley in Sumatra. The lighting is moody, with dark storm clouds breaking to reveal shafts of sunlight. The aesthetic emphasizes raw adventure, isolation, and the sublime power of nature, capturing the essence of an exclusive expedition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6AyTV522KbTdSAXmoeBCmFwukCTvAgNn7u7on8wDCMSjtLWLRL_sL62D_0eJ2L5nEBfqvnBXwRct8crxmnMYBEtIUBN2GBbFIzQhrvppM1qZ-N9vND4tS2Vaf3aK74vIkChqaWx71SwV8YSdtMp2fhMoX1whC9fLZuaZ5jEweZx73nV7_EhLWfoKVGVrMTU52yw5mS77tPpVV8gOHL66UyIWkN-wFr1JxxXPnmd3mlvrSTqKdUA4PgbT9hp-uknlB049Rjfi1h5x8"/>
+<div class="absolute inset-0 bg-black/40"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<h3 class="font-headline-md text-headline-md text-on-primary mb-2">Wilderness Access</h3>
+<p class="font-body-md text-body-md text-surface-container-high">Exclusive entry to regions unseen by conventional tourism.</p>
+</div>
+</div>
+<!-- Bento Item 4 -->
+<div class="md:col-span-2 relative rounded-xl overflow-hidden group ken-burns-container">
+<div class="absolute inset-0 bg-surface flex items-center p-8 border border-outline-variant/30">
+<div class="max-w-xl">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="diversity_3">diversity_3</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Empowering Communities</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Our operations directly fund local conservation efforts and support the indigenous communities that call the shores of Lake Toba home. We believe true luxury gives back.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Meet the Experts -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<span class="font-label-caps text-label-caps text-primary tracking-widest uppercase mb-4 block">The Curators</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Meet Your Guides.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Seasoned explorers, cultural liaisons, and logistics masters dedicated to your journey.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Expert 1 -->
+<div class="group text-center">
+<div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden mb-6">
+<img alt="Expert 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A professional, close-up portrait of a rugged yet sophisticated male expedition guide in his 40s. He wears neutral, high-end outdoor apparel. The background is a soft, out-of-focus jungle setting. Lighting is soft and natural, conveying trustworthiness and expertise in luxury adventure travel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2_acl5Swpr_7Oc8wvLWVvXs-2m8zeLSF1LmEtytpTxPvJBtkFi1qKWmcoP__XG0U418mCQjS9H7dxdk5-r_quh5w1sC1mqGelJQtn0mn5abWFEf48UxfLK0UiGhVQu-cI9TN7D0y6cje1E13uLJXOXt8b_JPKVdlb34EVj7HnaumS4mlJVvSTB9JQS-1n1SWloVyHcxbEPeqFitYb95s3L_zIK0Ieec8G6AT3l7VXy2pWs38jX3Mn_VzjXDo-IL4EXqw8-CMQXwip"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Adrianus Tarigan</h3>
+<p class="font-label-caps text-label-caps text-secondary mb-3 mt-1">Lead Expedition Director</p>
+<p class="font-body-md text-body-md text-on-surface-variant">With 15 years navigating the Sumatran highlands, Adrianus orchestrates seamless, complex itineraries.</p>
+</div>
+<!-- Expert 2 -->
+<div class="group text-center mt-0 md:mt-12">
+<div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden mb-6">
+<img alt="Expert 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A professional portrait of a confident female travel concierge in her 30s. She is dressed in elegant, minimalist attire appropriate for a high-end luxury brand. The background is a subtle, blurred modern office or lounge setting with warm lighting. She exudes warmth, precision, and high-tier hospitality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnucjpmq0iPj_z97tqjltK2vP2IVIKEqpT7RMxdljQ5TqgA9sHMFuTVlfeLEN8t8QD_1z6aIRHbbgRP8T2ENOFHgHWzySIAZl45Xzkr7Eb3sO2c0Sco8MLP5QaJmITD2Fa-SUtL3YTCPCMdaccx-RyKulV8-i4x-QVg-sMnvo69U4H-6atV-SnqqQFbL46O3SDC_qTmx-iYdOrkh7BUHAu-MWUp5yuSyH1vuVLyH4iiFZ9dFVOWm437mjXzJnbX0AenRVQ17-aqnPj"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Sarah Huta</h3>
+<p class="font-label-caps text-label-caps text-secondary mb-3 mt-1">Chief Concierge</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Sarah ensures that absolute comfort and bespoke requests are met, even in the most remote camps.</p>
+</div>
+<!-- Expert 3 -->
+<div class="group text-center">
+<div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden mb-6">
+<img alt="Expert 3" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A portrait of an older, distinguished local male cultural guide with weathered, kind features. He wears a subtle hint of traditional Batak textile over modern outdoor wear. The background is slightly blurred greenery. The lighting emphasizes his wisdom and deep connection to the land, fitting a premium, authentic travel aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdwtMMlk31KJ0tQI5d6e3rAmwHOV9WZO4HIA3PyqBxkntxot2Qef4OpN0WoIuEgUMBdvw34dFUZlah-HZ8v5N3WI73EDF0Qhjs4wMNuelXJVmrUh-kXPCH6TGz9WqupCnpEgbkn5yAlLHxZS5r50WuStKxB-IZZ_aOBok6uOVq5DsNuMGKpemKGGTv2GAoqgivL9SfefqeU17AMHi4j7GZlW4UeGca3JQc5ugPjzj9xo5pof9rcN4NRmta1l3rF-1o3lskNIna1W8p"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Bapak Tobing</h3>
+<p class="font-label-caps text-label-caps text-secondary mb-3 mt-1">Cultural Liaison</p>
+<p class="font-body-md text-body-md text-on-surface-variant">A respected elder who bridges our guests with the profound spiritual history of the caldera.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary w-full py-section-gap border-t-0">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="md:col-span-1 mb-8 md:mb-0">
+<div class="font-display-lg text-headline-md text-secondary-fixed mb-4">
+                    Sujai Laketoba
+                </div>
+<p class="font-body-md text-body-md text-on-primary-container/80 max-w-xs">
+                    Curators of rare, untamed elegance in the heart of Sumatra.
+                </p>
+</div>
+<div class="md:col-span-3 flex flex-col md:flex-row justify-end items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
+<a class="font-body-md text-body-md text-on-primary-container/60 hover:text-on-primary-container hover:translate-x-1 transition-transform duration-300" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-primary-container/60 hover:text-on-primary-container hover:translate-x-1 transition-transform duration-300" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-primary-container/60 hover:text-on-primary-container hover:translate-x-1 transition-transform duration-300" href="#">Sustainability Charter</a>
+<a class="font-body-md text-body-md text-on-primary-container/60 hover:text-on-primary-container hover:translate-x-1 transition-transform duration-300" href="#">Travel Insurance</a>
+<a class="font-body-md text-body-md text-on-primary-container/60 hover:text-on-primary-container hover:translate-x-1 transition-transform duration-300" href="#">Contact Expert</a>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mt-16 pt-8 border-t border-on-primary-container/20">
+<p class="font-body-md text-body-md text-secondary-fixed-dim text-center opacity-80 hover:opacity-100 transition-opacity">
+                © 2024 Sujai Laketoba. Ecological Opulence. All rights reserved.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple navbar background transition on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-surface/80');
+                nav.classList.remove('bg-surface/10');
+            } else {
+                nav.classList.remove('bg-surface/80');
+                nav.classList.add('bg-surface/10');
+            }
+        });
+    </script>
+</body></html>

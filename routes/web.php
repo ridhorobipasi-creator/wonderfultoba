@@ -147,6 +147,7 @@ Route::get('/about', [App\Http\Controllers\PublicController::class, 'about'])->n
 Route::get('/terms', [App\Http\Controllers\PublicController::class, 'terms'])->name('terms');
 Route::get('/privacy', [App\Http\Controllers\PublicController::class, 'privacy'])->name('privacy');
 Route::get('/payment', [App\Http\Controllers\PublicController::class, 'payment'])->name('payment');
+Route::post('/outbound/quote/submit', [App\Http\Controllers\PublicController::class, 'submitOutboundQuote'])->name('outbound.quote.submit');
 Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index');
 
 

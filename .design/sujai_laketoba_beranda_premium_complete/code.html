@@ -1,0 +1,481 @@
+<html class="scroll-smooth" lang="id"><head></head><body class="bg-surface font-body-md text-on-surface overflow-x-hidden">```html
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sujai Laketoba | Kemewahan Ekologis Perjalanan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#0B3C24", // Deep Jungle Green
+                        "secondary": "#D4AF37", // Warm Gold
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#000000",
+                        "surface": "#fcf9f8",
+                        "surface-container": "#f0edec",
+                        "surface-container-low": "#f6f3f2",
+                        "outline-variant": "#c1c9c0",
+                        "on-surface": "#1c1b1b",
+                        "on-surface-variant": "#414942"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-caps": ["Outfit"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-lg": ["Outfit"],
+                        "body-md": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "300"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-shadow-elegant {
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        /* Slider Styles */
+        .hero-slide-bg {
+            position: absolute;
+            inset: 0;
+            transition: opacity 1s ease-in-out, transform 10s linear;
+            opacity: 0;
+        }
+        .active-slide {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .card-preview {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-preview.active {
+            border-color: #D4AF37;
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+    </style>
+<!-- Header Navigation -->
+<nav class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/10 backdrop-blur-xl border-b border-white/10 shadow-sm h-20 flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop" x-data="{ mobileMenuOpen: false }">
+<div class="font-display-lg text-headline-md font-bold tracking-tighter text-on-surface relative z-50">
+        Sujai Laketoba
+    </div>
+<div class="hidden lg:flex items-center gap-8 font-body-md text-body-md">
+<a class="text-secondary border-b-2 border-secondary pb-1 transition-all duration-300" href="#">Laman Utama</a>
+<a class="text-on-surface/80 hover:text-on-surface transition-all duration-300" href="#">Pakej Pelancongan</a>
+<a class="text-on-surface/80 hover:text-on-surface transition-all duration-300" href="#">Galeri</a>
+<a class="text-on-surface/80 hover:text-on-surface transition-all duration-300" href="#">Artikel &amp; Berita</a>
+<a class="text-on-surface/80 hover:text-on-surface transition-all duration-300" href="#">Tentang Kami</a>
+</div>
+<div class="flex items-center gap-4 relative z-50">
+<button aria-label="Search" class="text-on-surface/80 hover:text-on-surface p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-secondary/50">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</button>
+<button class="hidden md:flex font-body-md text-body-md text-on-surface/80 hover:text-on-surface items-center gap-1 focus:outline-none">
+            ID/IDR
+            <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="hidden sm:block bg-primary text-on-primary px-6 py-2.5 rounded-DEFAULT font-label-caps text-label-caps uppercase tracking-wider hover:bg-opacity-90 transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Hubungi Kami
+        </button>
+<button @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu" class="lg:hidden text-on-surface/80 hover:text-on-surface p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-secondary/50">
+<span class="material-symbols-outlined text-[28px]" x-text="mobileMenuOpen ? 'close' : 'menu'">menu</span>
+</button>
+</div>
+<!-- Mobile Menu Dropdown -->
+<div @click.away="mobileMenuOpen = false" class="absolute top-20 left-0 w-full bg-surface/95 backdrop-blur-xl border-b border-outline-variant shadow-lg py-6 px-margin-mobile flex flex-col gap-6 lg:hidden z-40" x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-end="opacity-100 translate-y-0" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:leave="transition ease-in duration-150" x-transition:leave-end="opacity-0 -translate-y-4" x-transition:leave-start="opacity-100 translate-y-0">
+<a class="text-secondary font-headline-md text-[24px] pb-4 border-b border-outline-variant/30 transition-colors" href="#">Laman Utama</a>
+<a class="text-on-surface font-headline-md text-[24px] pb-4 border-b border-outline-variant/30 hover:text-secondary transition-colors" href="#">Pakej Pelancongan</a>
+<a class="text-on-surface font-headline-md text-[24px] pb-4 border-b border-outline-variant/30 hover:text-secondary transition-colors" href="#">Galeri</a>
+<a class="text-on-surface font-headline-md text-[24px] pb-4 border-b border-outline-variant/30 hover:text-secondary transition-colors" href="#">Artikel &amp; Berita</a>
+<a class="text-on-surface font-headline-md text-[24px] pb-4 border-b border-outline-variant/30 hover:text-secondary transition-colors" href="#">Tentang Kami</a>
+<button class="bg-primary text-on-primary w-full py-4 mt-4 rounded-DEFAULT font-label-caps text-label-caps uppercase tracking-wider active:scale-95 transition-transform sm:hidden">
+            Hubungi Kami
+        </button>
+</div>
+</nav>
+<!-- Hero Slider Section -->
+<section class="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black" x-data="{ 
+        activeSlide: 0, 
+        slides: [
+            { image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDi8l4-UXstblfZpmvpvDpX8mWUvE6W8vPT5RHFTD6IQr8lkzasY3ZB_uQrghdjBI9emGrw9YSIqMqQab02ycxP6n673kGHwtbJdcjaAPhhcrQfTtbwkYas7-pfjTVimekk-TqWIVP81qvs7H84RblvdbklxLu9hEJSpEm2drt-A6xLYg9bvZSQKd7KV7ahCedC711wHsMo6igplizlODMrM9kgnPU1pUxgfsSiJY-tIp1xgzPjgyOhhhXJ9237713t3Swt0F5w7zYB', subtitle: 'Kemewahan Ekologis', title: 'Perjalanan &amp; Wisata.&lt;br&gt;Leisure Premium' },
+            { image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCCALN8rUcEAQdFVi0NaL6hAsoJk_Wo7z3oUjMUi-eRh5XK4BIFfDUjy7lZbyPpfnXrddFthqo--mJqqYt9NfY5OqYeUgreVELWb016pkuLqhLBBbtPN0CiPUxnAwK6tY7BUiuIwMwuHQ1fDUxCySEo58fYSuh8nPKc6U3_nk9cvr7wLfqP10_USFFFyw1QgYollKwdTv03OLZfAFhCPFZZjDxaE5lZf67PWmAHAUYY8HQqYS2ATUqoVM6zHzfUs6io4Z4rQKwc1Ahp', subtitle: 'Surga Tersembunyi', title: 'Eksplorasi Tak Terbatas.&lt;br&gt;Di Nusantara' },
+            { image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDEgaHyfcMcXOMqbn4XUncR6FUTJzm_tA1qPGywH3Hud6hbzWTshMRbUFxFaV6bCYbsP6V95D0gOU_r9Ag69s-1u2H-DOtCdZSsCf9KWR-o_FNDZ_HZJ7UY4tUU2fjMwf_rmONkz9dFkhEKGAQ4Qa0S8pqTm0IF46JK7_jdAfOcA0saXews2_d_ZoXjv4vDWWnXOsmZCEaGHKQ1hXZ1_0R6qWjKGGhvqqgV8GukbeWxsRcSTI99JxevpXartfwsIzOe8xaRR3YWYK5Z', subtitle: 'Layanan Eksklusif', title: 'Kenyamanan Mutlak.&lt;br&gt;Keamanan Terjamin' }
+        ],
+        timer: null,
+        startTimer() {
+            this.timer = setInterval(() =&gt; {
+                this.activeSlide = (this.activeSlide + 1) % this.slides.length;
+            }, 6000);
+        }
+    }" x-init="startTimer()">
+<template :key="index" x-for="(slide, index) in slides">
+<div :class="activeSlide === index ? 'active-slide' : ''" class="hero-slide-bg">
+<img :src="slide.image" alt="Hero Image" class="w-full h-full object-cover"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
+</div>
+</template>
+<div class="relative z-10 text-center max-w-4xl px-margin-mobile">
+<template :key="'text-' + index" x-for="(slide, index) in slides">
+<div x-show="activeSlide === index" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-end="opacity-100 translate-y-0" x-transition:enter-start="opacity-0 translate-y-8">
+<span class="font-label-caps text-label-caps text-secondary tracking-[0.3em] uppercase block mb-6" x-text="slide.subtitle"></span>
+<h1 class="font-display-lg text-display-lg text-white mb-8 text-shadow-elegant" x-html="slide.title"></h1>
+</div>
+</template>
+<button class="bg-secondary text-primary px-10 py-4 rounded-DEFAULT font-label-caps text-label-caps uppercase tracking-widest hover:bg-white transition-all duration-500 transform hover:scale-105">
+            Jelajahi Wisata
+        </button>
+</div>
+<!-- Slide Indicators -->
+<div class="absolute bottom-12 left-margin-mobile md:left-margin-desktop right-margin-mobile md:right-margin-desktop flex gap-4 z-20">
+<template :key="'indicator-' + index" x-for="(slide, index) in slides">
+<div @click="activeSlide = index" class="flex-1 h-1 bg-white/20 cursor-pointer relative overflow-hidden">
+<div :class="activeSlide === index ? '' : 'transition-none'" :style="activeSlide === index ? 'width: 100%; transition: width 6000ms linear;' : 'width: 0%'" class="h-full bg-secondary transition-all duration-100"></div>
+</div>
+</template>
+</div>
+</section>
+<!-- Featured Packages -->
+<section class="py-section-gap max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-6 md:gap-0">
+<div>
+<div class="w-16 h-0.5 bg-secondary mb-4"></div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Ekspedisi Terkurasi</h2>
+</div>
+<p class="max-w-md text-on-surface-variant font-body-lg text-body-lg">
+            Temukan sudut-sudut tak tersentuh di nusantara melalui kacamata kemewahan dan privasi mutlak.
+        </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-gutter md:gap-gutter">
+<!-- Card 1 -->
+<div class="group relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-xl cursor-pointer">
+<img alt="Bali Resort" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCALN8rUcEAQdFVi0NaL6hAsoJk_Wo7z3oUjMUi-eRh5XK4BIFfDUjy7lZbyPpfnXrddFthqo--mJqqYt9NfY5OqYeUgreVELWb016pkuLqhLBBbtPN0CiPUxnAwK6tY7BUiuIwMwuHQ1fDUxCySEo58fYSuh8nPKc6U3_nk9cvr7wLfqP10_USFFFyw1QgYollKwdTv03OLZfAFhCPFZZjDxaE5lZf67PWmAHAUYY8HQqYS2ATUqoVM6zHzfUs6io4Z4rQKwc1Ahp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute top-6 right-6 glass-card px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-white font-label-caps text-[12px]">4.9</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-6 md:p-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-caps text-label-caps">BALI &amp; NUSA TENGGARA</span>
+</div>
+<h3 class="font-headline-md text-[28px] md:text-headline-md mb-4">Hidden Gili Retreat</h3>
+<div class="flex justify-between items-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-500 transform md:translate-y-4 group-hover:translate-y-0">
+<div>
+<p class="font-label-caps text-[10px] opacity-70">Mulai dari</p>
+<p class="font-headline-md text-[24px] md:text-headline-md text-secondary">Rp 65jt</p>
+</div>
+<button class="bg-white/20 backdrop-blur-md border border-white/30 p-3 md:p-4 rounded-full">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-xl cursor-pointer">
+<img alt="Sumatra Jungle" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDznSv5DW5WWzjpvmlLbOMaenNznhBzrF1aAYctoXMZqnMScOfpQ0kn2OLxCEVvzt8TrBda6s_dWJw32zFh8B3ZrBqzJFBk-HG0oBIc5g4t58xMe0bGhpG8hBIruVkbYXrucznSxG4WNffK9_WHG-e2BSXD_XpcTk0dHA088MPJ1F3WYc7kI8y-2vrgXcUlUr6_-yea3fI5q-HRaP5B4Lp9wws-V5M-gf7DHOsKgqnvSh2dZo1Nig_Ak131VgpBHTIQGxGSoYpnYeTg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute top-6 right-6 glass-card px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-white font-label-caps text-[12px]">5.0</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-6 md:p-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-caps text-label-caps">HUTAN SUMATERA</span>
+</div>
+<h3 class="font-headline-md text-[28px] md:text-headline-md mb-4">Jungle Canopy Luxe</h3>
+<div class="flex justify-between items-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-500 transform md:translate-y-4 group-hover:translate-y-0">
+<div>
+<p class="font-label-caps text-[10px] opacity-70">Mulai dari</p>
+<p class="font-headline-md text-[24px] md:text-headline-md text-secondary">Rp 90jt</p>
+</div>
+<button class="bg-white/20 backdrop-blur-md border border-white/30 p-3 md:p-4 rounded-full">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-xl cursor-pointer">
+<img alt="Raja Ampat Yacht" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEgaHyfcMcXOMqbn4XUncR6FUTJzm_tA1qPGywH3Hud6hbzWTshMRbUFxFaV6bCYbsP6V95D0gOU_r9Ag69s-1u2H-DOtCdZSsCf9KWR-o_FNDZ_HZJ7UY4tUU2fjMwf_rmONkz9dFkhEKGAQ4Qa0S8pqTm0IF46JK7_jdAfOcA0saXews2_d_ZoXjv4vDWWnXOsmZCEaGHKQ1hXZ1_0R6qWjKGGhvqqgV8GukbeWxsRcSTI99JxevpXartfwsIzOe8xaRR3YWYK5Z"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute top-6 right-6 glass-card px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-white font-label-caps text-[12px]">4.8</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-6 md:p-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-caps text-label-caps">KEPULAUAN RAJA AMPAT</span>
+</div>
+<h3 class="font-headline-md text-[28px] md:text-headline-md mb-4">Pelayaran &amp; Atol Pribadi</h3>
+<div class="flex justify-between items-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-500 transform md:translate-y-4 group-hover:translate-y-0">
+<div>
+<p class="font-label-caps text-[10px] opacity-70">Mulai dari</p>
+<p class="font-headline-md text-[24px] md:text-headline-md text-secondary">Rp 145jt</p>
+</div>
+<button class="bg-white/20 backdrop-blur-md border border-white/30 p-3 md:p-4 rounded-full">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Why Choose Us -->
+<section class="bg-primary py-section-gap overflow-hidden" x-data="{ activeTab: 1 }">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
+<div class="relative order-2 lg:order-1">
+<div class="relative z-10 aspect-square overflow-hidden rounded-lg shadow-2xl">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDXHMMvcTNCGDHEHNbXIy_411v7OzfpoXBHl5o1zJyGjMVxg0M34vN1HfNj5otQKrK_bwkmrujGGxa3OrznLA4Tbt50il_sF19Gwji6wqvNuH0kN-zt4NbCiYFdTGAJ1bR71aIDa1FH5Em0Byx7CdZoKI5xzq41bPbQ-wJK3pzdYnmI-C_as5lQLevbDN6oR5YCaTIJOo-sDJzDcnF5BcrXtJG_JzEp9emI-Nr8R-0BufYv_1KMXvls0B4syWY73tsje34gqVWXtSQ" x-show="activeTab === 1" x-transition.opacity.duration.500ms=""/>
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGQFVlt1MwpbT2uxSjRos5ykb6AFtu64pBS36WsdUQYzFJJDjlcK02i4dbIXRMyf1u-EFXcH1uDJpeQBnKpFYERisU5jW33F6qa30sH6FdbweLyZdIbR_yDkuadOpwpDcZxeSQG8kYv-X2oVZ5nYgCv8BDRKQh_A95imaoFo_X4M9vCT2mEE7DYc-ZZXzI47nwR6ap_SDV94Jn4GrUM_DCHdWWd3_af2qTynLYwGj_PdhFnLKAlLKajOcaYaWrIw7dDBM99PVBpQ3a" x-show="activeTab === 2" x-transition.opacity.duration.500ms=""/>
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGvJ0_OZxpBrmXxRE4dkzDigmHX-P5q_9I5wXspieDANe3RpfMSx1g176FVMVb1UZYE0YlX5hXR6q9ZMFRBV5sMas7ocPLit8vyWirAhhrqIlFmzyecP0JvFXdJuA0NaOH99Qd9YMl1OyU0m9orPWrLsU19cHPBnNPA4sZ6ankzQXchPR_5EwLvY5WLNLyNwmzd6V_-4Dl5MrAycraYj_FEWEDAMwh707XYiWjbrvIDM_mwtGPTGolHHI40Uczo5MnukPh17O-wK5X" x-show="activeTab === 3" x-transition.opacity.duration.500ms=""/>
+</div>
+<div class="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-48 h-48 md:w-64 md:h-64 border border-secondary/20 rounded-lg -z-0"></div>
+<div class="absolute -top-6 -left-6 md:-top-10 md:-left-10 w-24 h-24 md:w-32 md:h-32 bg-secondary/10 blur-3xl -z-0"></div>
+</div>
+<div class="text-white order-1 lg:order-2">
+<span class="font-label-caps text-label-caps text-secondary tracking-widest uppercase block mb-4 md:mb-6">Keunggulan</span>
+<h2 class="font-headline-lg text-[36px] md:text-headline-lg mb-8 md:mb-12">Mengapa Sujai Laketoba?</h2>
+<div class="space-y-6 md:space-y-8">
+<!-- Tab 1 -->
+<div @click="activeTab = 1" class="cursor-pointer group">
+<div class="flex items-center justify-between mb-2 md:mb-4">
+<h3 :class="activeTab === 1 ? 'text-secondary' : 'text-white/60'" class="font-headline-md text-[20px] md:text-[24px]">Layanan Eksklusif</h3>
+<div :class="activeTab === 1 ? 'bg-secondary w-16 md:w-24' : 'bg-white/20'" class="w-8 md:w-12 h-px transition-all duration-500"></div>
+</div>
+<p class="font-body-md text-white/60 leading-relaxed" x-collapse="" x-show="activeTab === 1">
+                        Layanan concierge pribadi yang menangani setiap detail dari kedatangan hingga kepulangan, memastikan perjalanan Anda lancar dan spektakuler.
+                    </p>
+</div>
+<!-- Tab 2 -->
+<div @click="activeTab = 2" class="cursor-pointer group">
+<div class="flex items-center justify-between mb-2 md:mb-4">
+<h3 :class="activeTab === 2 ? 'text-secondary' : 'text-white/60'" class="font-headline-md text-[20px] md:text-[24px]">Keamanan Maksimal</h3>
+<div :class="activeTab === 2 ? 'bg-secondary w-16 md:w-24' : 'bg-white/20'" class="w-8 md:w-12 h-px transition-all duration-500"></div>
+</div>
+<p class="font-body-md text-white/60 leading-relaxed" x-collapse="" x-show="activeTab === 2">
+                        Protokol keamanan berlapis dan kemitraan asuransi global kami memberikan ketenangan pikiran total bahkan di destinasi yang paling terpencil.
+                    </p>
+</div>
+<!-- Tab 3 -->
+<div @click="activeTab = 3" class="cursor-pointer group">
+<div class="flex items-center justify-between mb-2 md:mb-4">
+<h3 :class="activeTab === 3 ? 'text-secondary' : 'text-white/60'" class="font-headline-md text-[20px] md:text-[24px]">Kearifan Lokal</h3>
+<div :class="activeTab === 3 ? 'bg-secondary w-16 md:w-24' : 'bg-white/20'" class="w-8 md:w-12 h-px transition-all duration-500"></div>
+</div>
+<p class="font-body-md text-white/60 leading-relaxed" x-collapse="" x-show="activeTab === 3">
+                        Kami bermitra dengan komunitas lokal untuk menawarkan pertukaran budaya otentik yang menghormati tradisi sambil mendukung pelestarian ekologi.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-section-gap bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-12 md:mb-20">
+<h2 class="font-headline-lg text-[36px] md:text-headline-lg text-primary mb-4">Suara dari Perjalanan</h2>
+<p class="font-body-lg text-on-surface-variant max-w-xl mx-auto">Kisah-kisah luar biasa yang dibagikan oleh komunitas pelancong global kami.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-gutter">
+<div class="bg-white p-8 md:p-12 rounded-xl border border-outline-variant hover:shadow-xl transition-all duration-500">
+<div class="flex gap-1 mb-6 md:mb-8">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="font-headline-md text-[18px] md:text-[20px] italic text-primary leading-relaxed mb-8 md:mb-10">
+                    "Perhatian terhadap detail ekologis sangat menakjubkan. Kami menjelajahi jantung Sumatera tanpa merasa mengganggu alam. Benar-benar kemewahan yang memiliki jiwa."
+                </blockquote>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2hFgaSrsa7A85bf12SiUK30lkhhCDaRhbOnbQUSBDrVAhUc-Gn-kMxthYsqdKkltnsLX5uDn04g_wUEJDw7KExIuUEuT2cOCkJzUuAvUoirw4J8-btZ7EU65QsdsiKicugbr5fKfKaiv1dI7zoNYP3tIBWv-WQaRo54c35tZdiY3pUz3Id2QsoJ1s8g4PhVBn9mEPONWbu5kdqHJ3Az707ev_vjB69P126_JW9q9SKGuhiqoqVWEFZ36G19k5tdDV9HRU5qbZr3v"/>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps">Julian Thorne</h4>
+<p class="text-[12px] text-on-surface-variant">London, UK</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white p-8 md:p-12 rounded-xl border border-outline-variant hover:shadow-xl transition-all duration-500">
+<div class="flex gap-1 mb-6 md:mb-8">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="font-headline-md text-[18px] md:text-[20px] italic text-primary leading-relaxed mb-8 md:mb-10">
+                    "Semuanya, mulai dari penerbangan pribadi hingga lokasi makan malam rahasia di Raja Ampat, dirancang dengan sempurna. Sujai Laketoba berada di kelasnya tersendiri."
+                </blockquote>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFaWOA9YaZv80gupI35EV08bFke39OBT9N8CQ45hUM6dKKz11RKUVgEOqjPB0spF_ja_gJ6-2wUxWYwZLSmBQV9h7pTqQ1AwkBLNqZm2Heokgv4sEbwFHjwf44zyhRu1psOnTm-x6WFxR7PtU9RLW5My0DCfk85AEvcuqn4mMERnRR084UCi-8jPaSPcohMu3PBqalduBH8ykcewFiLBro5njrtDwIEOFCZZBhts_Yjkf-BBORMZS97L63Xj6opHAW4qD4A01FGfXk"/>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps">Isabella Chen</h4>
+<p class="text-[12px] text-on-surface-variant">Singapura</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Specialist CTA -->
+<section class="py-section-gap px-margin-mobile md:px-0">
+<div class="max-w-container-max mx-auto md:px-margin-desktop">
+<div class="bg-primary rounded-2xl p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-10 lg:gap-12 overflow-hidden relative">
+<div class="absolute top-0 right-0 w-full lg:w-1/2 h-full bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-10"></div>
+<div class="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 shrink-0">
+<img alt="Specialist" class="w-full h-full object-cover rounded-full border-8 border-white/5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcft73vPYOEAlrgha3tNi21tDLiHViIpyAdQFDwk7J4c-4AGz7gVJiqWpsOluEIc9rHiWYreVc-RyAZvLvGFyQGI5Rqdg1QbmwUGy9HYdmrr7NMVTtvxKWDyctcflGNP-nuIx_YGXLXe8wVxtmyuDEt59W05sCKvqkFWLXKv2_ft4qAOAYmhaNnjIBkG403ijLiArktelr5B7aYCU6WhtFRf1jwmFsQviYZlkx_YHn30GQqrcY2vJMFNb9X21QwQRIC3Olt8ECoRET"/>
+</div>
+<div class="relative z-10 text-center lg:text-left text-white max-w-2xl">
+<h2 class="font-headline-lg text-[32px] md:text-headline-lg mb-4 md:mb-6 text-secondary">Bicara dengan Spesialis</h2>
+<p class="font-body-lg text-white/80 mb-8 md:mb-10">Ahli perjalanan kami siap merancang odyssey Indonesia pribadi Anda. Baik itu penguasaan pulau pribadi atau ekspedisi hutan tersembunyi, kami membuat yang mustahil menjadi mudah.</p>
+<div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start">
+<a class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-8 md:px-10 py-4 rounded-full font-label-caps text-label-caps uppercase tracking-widest flex items-center justify-center gap-3 transition-all animate-pulse" href="https://wa.me/#">
+<span class="material-symbols-outlined">chat</span>
+                        WhatsApp Ahli Kami
+                    </a>
+<span class="font-body-md text-white/40">Tersedia 24/7 untuk Klien VIP</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Journal/Blog -->
+<section class="py-section-gap max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 md:mb-16 gap-4 sm:gap-0">
+<h2 class="font-headline-lg text-[32px] md:text-headline-lg text-primary">Jurnal Perjalanan</h2>
+<a class="font-label-caps text-label-caps text-secondary underline underline-offset-8" href="#">Lihat Semua Cerita</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-gutter">
+<div class="group cursor-pointer">
+<div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6">
+<img alt="Ecology Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHDL64tzHaHFNt57SzGvjfDYH6ACnIPk4gzJIR5b14bYfsUTgab1AKYFNAFKm27uF2PcdanGORzTB-aT_Zpsbn059FuVNw5wTEgpi2ElejAY4BrX-xExLIxmBb3s4MWseDUlbTuNPp1HerXCd0wpfVDUB6HcCOl_6HImSZqvWC6FCOTpiEVrjXR9Aae666LS-ysiVej1yKePuh3doDdX7EaCKdR3hXGsSQe7q4Le_w82h5OiSDJwzXifs3vv8UTVWKuGbJ1EKRmQGO"/>
+</div>
+<span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">EKOLOGI</span>
+<h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300">Keberlanjutan di Alam Liar: Piagam Kami</h3>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6">
+<img alt="Java Summit Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGnq9XSujMxM4qOOFA1WzGHipK9irg8wqGvsFqBTHaT3rgDp9GspzxOJgiI0nWFDerWZ-iUhcekb93DKFbk0hh8-GST0LNcHonrn5FPbQGXK5qZSLjSRKHOnrEkYOGLgaHFAUk8PtQYPPUnhruLtGzy45Si9InIN7e5s0n7V2eR7h23qiS1Q98Ne0BAkIBp1ydJiUhVnuugBkm9iBaiSFG-kuqHqGryzgYdaw0YM8p6GfHdW1kB8tlYTvtSu9v4ZszQL1v33f4wm5n"/>
+</div>
+<span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">EKSPEDISI</span>
+<h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300">Mendaki Puncak-Puncak Megah di Jawa</h3>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6">
+<img alt="Culinary Post" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlX6Hp8Z4voh2XUdHEZPCkVPVAwhaePA4rm4xI6HcHjTvNM-L7rRjdRCp-PlmQYVGJHkMo7BIKGlwpDp4QT3_WIosSgY6xsQBEYPNUXAEVf_zm1HXrDQc3a2747U_bfQRUdKJ67sbBBtTtIZLQtKTAzeZzhO2chQ7fKGxldLE-cTqnODZZMLYAbW3MELoMcwqSqvu6KxLzEUMOPn0tyHAqANmNjMZ4F1gwBlrZcUqBPPzk8lnzacyymflRSm0bZnjg9a6NISI3VuaT"/>
+</div>
+<span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">KULINER</span>
+<h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300">Rute Rempah: Sebuah Odyssey Kuliner</h3>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="py-section-gap bg-surface">
+<div class="max-w-3xl mx-auto px-margin-mobile">
+<div class="text-center mb-12 md:mb-16">
+<h2 class="font-headline-lg text-[32px] md:text-headline-lg text-primary mb-4">Pertanyaan Umum</h2>
+<div class="w-12 h-0.5 bg-secondary mx-auto"></div>
+</div>
+<div class="space-y-2 md:space-y-4" x-data="{ selected: 1 }">
+<div class="border-b border-outline-variant">
+<button @click="selected !== 1 ? selected = 1 : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center text-left">
+<span class="font-headline-md text-[16px] md:text-[18px]">Transportasi Khusus &amp; Jet Pribadi?</span>
+<span :class="selected === 1 ? 'rotate-180' : ''" class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+</button>
+<div :style="selected === 1 ? 'max-height: 200px;' : ''" class="overflow-hidden transition-all duration-500 max-h-0">
+<p class="pb-5 md:pb-6 font-body-md text-[14px] md:text-[16px] text-on-surface-variant">Kami mengoperasikan armada pribadi jet Gulfstream dan Cessna untuk perjalanan regional, memastikan transit antar pulau Anda se-pribadi destinasi Anda.</p>
+</div>
+</div>
+<div class="border-b border-outline-variant">
+<button @click="selected !== 2 ? selected = 2 : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center text-left">
+<span class="font-headline-md text-[16px] md:text-[18px]">Kebutuhan Diet &amp; Halal?</span>
+<span :class="selected === 2 ? 'rotate-180' : ''" class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+</button>
+<div :style="selected === 2 ? 'max-height: 200px;' : ''" class="overflow-hidden transition-all duration-500 max-h-0">
+<p class="pb-5 md:pb-6 font-body-md text-[14px] md:text-[16px] text-on-surface-variant">Semua mitra kuliner kami telah diperiksa untuk standar tertinggi. Kami dengan mudah mengakomodasi permintaan Halal, Vegan, dan alergi khusus dengan presisi bintang Michelin.</p>
+</div>
+</div>
+<div class="border-b border-outline-variant">
+<button @click="selected !== 3 ? selected = 3 : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center text-left">
+<span class="font-headline-md text-[16px] md:text-[18px]">Pembayaran &amp; Privasi?</span>
+<span :class="selected === 3 ? 'rotate-180' : ''" class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+</button>
+<div :style="selected === 3 ? 'max-height: 200px;' : ''" class="overflow-hidden transition-all duration-500 max-h-0">
+<p class="pb-5 md:pb-6 font-body-md text-[14px] md:text-[16px] text-on-surface-variant">Kami menerima semua mata uang utama (USD, MYR, IDR, SGD) melalui transfer aman atau kartu premium. Semua identitas klien dan rencana perjalanan dijaga di bawah protokol kerahasiaan yang ketat.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-primary text-secondary py-section-gap border-t border-white/5">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-gutter">
+<div class="col-span-1 sm:col-span-2 md:col-span-1">
+<div class="font-display-lg text-headline-md text-secondary mb-6 md:mb-8">Sujai Laketoba</div>
+<p class="font-body-md text-[14px] md:text-[16px] text-white/60 mb-6 md:mb-8 max-w-xs">
+                Menciptakan mahakarya ekologis dalam dunia perjalanan kelas atas sejak 2012.
+            </p>
+<div class="flex gap-4">
+<a class="opacity-60 hover:opacity-100 transition-opacity p-2 -ml-2" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="opacity-60 hover:opacity-100 transition-opacity p-2" href="#"><span class="material-symbols-outlined">shield</span></a>
+<a class="opacity-60 hover:opacity-100 transition-opacity p-2" href="#"><span class="material-symbols-outlined">verified</span></a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-label-caps text-label-caps mb-4 md:mb-6">JELAJAHI</h4>
+<ul class="space-y-3 md:space-y-4">
+<li><a class="text-[14px] md:text-[16px] text-white/60 hover:text-secondary transition-transform hover:translate-x-1 inline-block py-1" href="#">Kepulauan</a></li>
+<li><a class="text-[14px] md:text-[16px] text-white/60 hover:text-secondary transition-transform hover:translate-x-1 inline-block py-1" href="#">Charter Pribadi</a></li>
+<li></li></ul></div></div></footer></body></html>

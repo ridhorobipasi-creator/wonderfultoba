@@ -6,13 +6,13 @@ Sujai Laketoba adalah platform digital pariwisata yang fokus pada penyediaan lay
 ---
 
 ## Tech Stack
-- **Framework**: Laravel 11 (PHP 8.2+)
-- **Styling**: Tailwind CSS 3
+- **Framework**: Laravel 13 (PHP 8.2+)
+- **Styling**: Tailwind CSS 4
 - **Frontend Logic**: Alpine.js
 - **Database**: 
   - Pengembangan: SQLite
   - Produksi (hostinger): MySQL
-- **Icons**: FontAwesome 6 (Pro/Free)
+- **Icons**: Material Symbols (Google)
 - **Image Processing**: GD Extension (Konversi otomatis ke WebP)
 
 ---
@@ -57,4 +57,4 @@ Proyek ini telah dikonfigurasi khusus agar bisa berjalan di hosting cPanel tanpa
 ---
 
 **Dikembangkan oleh**: Ridho Robbi Pasi (Mitralabs Studio) & Sujai Laketoba Team.
-**Terakhir Diperbarui**: 14 Mei 2026
+**Terakhir Diperbarui**: 21 Mei 2026

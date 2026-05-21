@@ -9,7 +9,24 @@ class Car extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'type',
+        'capacity',
+        'transmission',
+        'fuel',
+        'price',
+        'priceWithDriver',
+        'description',
+        'status',
+        'isFeatured',
+        'images',
+        'features',
+        'includes',
+        'pricingDetails',
+        'translations',
+        'sortOrder',
+    ];
 
     protected $appends = ['formatted_price'];
 
@@ -20,6 +37,10 @@ class Car extends Model
         'pricingDetails' => 'array',
         'translations' => 'array',
         'isFeatured' => 'boolean',
+        'price' => 'double',
+        'priceWithDriver' => 'double',
+        'capacity' => 'integer',
+        'sortOrder' => 'integer',
     ];
 
     const CREATED_AT = 'createdAt';

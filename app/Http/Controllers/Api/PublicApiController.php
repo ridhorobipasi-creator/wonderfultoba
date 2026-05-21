@@ -15,6 +15,7 @@ use App\Models\Setting;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class PublicApiController extends Controller
 {
@@ -54,7 +55,11 @@ class PublicApiController extends Controller
 
     public function getBlogs()
     {
-        $blogs = Blog::all()->map(function ($b) {
+            $blogs = Blog::query()
+                ->select(['id', 'slug', 'title', 'excerpt', 'author', 'category', 'status', 'createdAt'])
+                ->latest('createdAt')
+                ->get()
+                ->map(function ($b) {
             $b->is_published = $b->status === 'published';
             $b->author = ['name' => $b->author];
 
@@ -78,7 +83,11 @@ class PublicApiController extends Controller
 
     public function getBookings()
     {
-        $bookings = Booking::all()->map(function ($b) {
+            $bookings = Booking::query()
+                ->select(['id', 'customerName', 'type', 'status', 'totalPrice', 'startDate', 'createdAt'])
+                ->latest('createdAt')
+                ->get()
+                ->map(function ($b) {
             return [
                 'id' => 'BK-'.str_pad($b->id, 3, '0', STR_PAD_LEFT),
                 'customer_name' => $b->customerName,
@@ -137,6 +146,20 @@ class PublicApiController extends Controller
         return response()->json(GalleryImage::all());
     }
 
+    public function getOutboundServices()
+    {
+        if (!Schema::hasTable('outbound_services')) {
+            return response()->json([]);
+        }
+
+        return response()->json(
+            DB::table('outbound_services')
+                ->where('isActive', true)
+                ->orderBy('orderPriority')
+                ->get()
+        );
+    }
+
     public function getCities()
     {
         $cities = City::all()->map(function ($c) {
@@ -166,12 +189,12 @@ class PublicApiController extends Controller
         $key = $request->query('key');
 
         if ($key) {
-            $setting = Setting::where('key', $key)->first();
+            $setting = Setting::query()->select(['key', 'value'])->where('key', $key)->first();
 
             return response()->json($setting ? $setting->value : null);
         }
 
-        $settings = Setting::all();
+        $settings = Setting::query()->select(['key', 'value'])->get();
         $result = [];
         foreach ($settings as $s) {
             $result[$s->key] = $s->value;

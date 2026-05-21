@@ -184,7 +184,7 @@
         <div class="max-w-7xl mx-auto px-6 md:px-8 mt-24 mb-24">
             <div class="bg-gradient-to-r from-toba-green to-emerald-600 rounded-3xl p-10 text-center relative overflow-hidden shadow-sm">
                 <div class="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1200" alt="" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1200" alt="Paket wisata - destinasi" class="w-full h-full object-cover">
                 </div>
                 <div class="relative z-10">
                     <h3 class="text-2xl md:text-3xl font-light text-white mb-3">Tidak Menemukan Paket yang Cocok?</h3>

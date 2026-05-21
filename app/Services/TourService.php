@@ -112,6 +112,8 @@ class TourService
         \Illuminate\Support\Facades\Cache::forget('tour_packages_all');
         \Illuminate\Support\Facades\Cache::forget('featured_packages');
         \Illuminate\Support\Facades\Cache::forget('tour_blogs_all');
+        \Illuminate\Support\Facades\Cache::forget('tour_homepage_data');
+        \Illuminate\Support\Facades\Cache::forget('site_settings_structured_cms_tour_general');
         
         if ($slug) {
             \Illuminate\Support\Facades\Cache::forget("package_detail_{$slug}");
@@ -136,6 +138,7 @@ class TourService
     {
         return Package::where('status', 'active')
             ->where('isFeatured', true)
+            ->with(['packageImages', 'city'])
             ->orderBy('sortOrder')
             ->get();
     }
@@ -161,7 +164,7 @@ class TourService
     public function getAllPackages()
     {
         return Package::where('status', 'active')
-            ->with(['packageImages'])
+            ->with(['packageImages', 'city'])
             ->orderBy('sortOrder')
             ->get();
     }

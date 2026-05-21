@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Galeri - Sujai Laketoba</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#a0d2b0",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "surface": "#fcf9f8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#55252b",
+                        "on-tertiary-fixed": "#360d14",
+                        "tertiary": "#3b1017",
+                        "surface-container": "#f0edec",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#fcf9f8",
+                        "secondary-container": "#fed65b",
+                        "on-background": "#1c1b1b",
+                        "secondary-fixed": "#ffe088",
+                        "inverse-surface": "#313030",
+                        "background": "#fcf9f8",
+                        "tertiary-fixed-dim": "#fdb3b9",
+                        "surface-tint": "#3a684c",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#414942",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-primary-fixed-variant": "#224f36",
+                        "surface-container-low": "#f6f3f2",
+                        "primary-container": "#0b3c24",
+                        "on-primary-container": "#77a788",
+                        "surface-dim": "#dcd9d9",
+                        "on-secondary": "#ffffff",
+                        "primary": "#002513",
+                        "outline": "#717972",
+                        "on-tertiary-container": "#ce8a90",
+                        "on-secondary-fixed": "#241a00",
+                        "on-secondary-container": "#745c00",
+                        "secondary": "#735c00",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#6b373d",
+                        "inverse-on-surface": "#f3f0ef",
+                        "outline-variant": "#c1c9c0",
+                        "primary-fixed-dim": "#a0d2b0",
+                        "surface-container-high": "#ebe7e7",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-primary-fixed": "#002110",
+                        "surface-variant": "#e5e2e1",
+                        "primary-fixed": "#bceecb",
+                        "on-surface": "#1c1b1b",
+                        "secondary-fixed-dim": "#e9c349"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "section-gap": "120px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Outfit"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Outfit"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-caps": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["48px", { "lineHeight": "56px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "display-lg": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .ken-burns {
+            transition: transform 5s ease-out;
+        }
+        .group:hover .ken-burns {
+            transform: scale(1.1);
+        }
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/10 backdrop-blur-xl border-b border-white/10 shadow-sm transition-all duration-300" id="navbar">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-20">
+<!-- Brand Logo -->
+<a class="font-display-lg text-headline-md font-bold tracking-tighter text-on-surface hover:text-on-surface/80 transition-opacity" href="#">
+                Sujai Laketoba
+            </a>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 font-body-md text-body-md py-1 px-2 rounded" href="#">Destinations</a>
+<a class="text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 font-body-md text-body-md py-1 px-2 rounded" href="#">Expeditions</a>
+<a class="text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 font-body-md text-body-md py-1 px-2 rounded" href="#">Private Jets</a>
+<a class="text-secondary border-b-2 border-secondary pb-1 font-body-md text-body-md px-2" href="#">Journal</a>
+<a class="text-on-surface/80 hover:text-on-surface hover:bg-white/5 transition-all duration-300 font-body-md text-body-md py-1 px-2 rounded" href="#">About</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<button class="hidden md:block text-on-surface/80 hover:text-on-surface font-body-md text-body-md scale-95 duration-200 transition-transform">
+                    USD/EN
+                </button>
+<a class="bg-primary text-secondary hover:bg-primary/90 px-6 py-2 rounded scale-95 duration-200 transition-transform font-body-md text-body-md border border-transparent shadow-sm hidden md:inline-flex" href="#">
+                    Inquire Now
+                </a>
+<!-- Mobile Menu Button -->
+<button aria-label="Menu" class="md:hidden text-on-surface p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Page Header -->
+<header class="mb-16 text-center md:text-left">
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Galeri</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Jelajahi keindahan ekologis yang tak tertandingi dan kemewahan yang tersembunyi di sekitar Danau Toba. Setiap momen adalah mahakarya alam yang menunggu untuk ditemukan.
+            </p>
+</header>
+<!-- Filters -->
+<div class="flex flex-wrap gap-4 mb-12 justify-center md:justify-start">
+<button class="px-6 py-2 rounded-full border border-primary bg-primary text-on-primary font-label-caps text-label-caps transition-colors">Semua</button>
+<button class="px-6 py-2 rounded-full border border-outline hover:border-primary text-on-surface-variant hover:text-primary font-label-caps text-label-caps transition-colors">Pemandangan</button>
+<button class="px-6 py-2 rounded-full border border-outline hover:border-primary text-on-surface-variant hover:text-primary font-label-caps text-label-caps transition-colors">Budaya</button>
+<button class="px-6 py-2 rounded-full border border-outline hover:border-primary text-on-surface-variant hover:text-primary font-label-caps text-label-caps transition-colors">Fasilitas</button>
+</div>
+<!-- Masonry Gallery -->
+<div class="masonry-grid">
+<!-- Item 1 (Landscape) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[66%] overflow-hidden">
+<img alt="Danau Toba Pagi" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A breathtaking, cinematic sunrise over a vast, serene lake surrounded by deep green, misty mountains. The lighting is soft and golden, casting long reflections on the calm water. The mood is tranquil and luxurious, reflecting an 'Ecological Opulence' aesthetic with deep organic greens and warm sunlight cutting through the morning fog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIes2oU0Yf4ncsV7zkkVvoCOdZqj7AEd9bpkGOhEFywd5UpMwkvpJvErbG0-dUc5mPMu-g6BTz3DYvC4fCilc0lPt2E3YZw5goNDzz7amnL01IhCzYMpXLE6mQ7epiBEb-ruYynBz7R3qD0Dbz-DMpOaG-pDzwum3BPIgqbHDVgvL859WMQUnB6WKHKDnuB6OgkzdxUm5hUu9dnIt8YDTZ92e9CW3JFAVTsOt_inZfdet_WOD2ec9n8CrWT_IGsBjmOO_aGkZDpFZQ"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Pemandangan</span>
+<h3 class="font-headline-md text-headline-md">Fajar di Samosir</h3>
+</div>
+</div>
+</div>
+<!-- Item 2 (Portrait) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[133%] overflow-hidden">
+<img alt="Penari Tradisional" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A close-up, highly detailed portrait of a traditional dancer in vibrant, ornate cultural attire adorned with gold and deep red accents. The background is a soft, dark blur to emphasize the subject. The lighting is dramatic and directional, highlighting the rich textures of the fabric and jewelry. The overall mood is culturally rich, elegant, and perfectly aligned with a sophisticated, premium travel aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx_KqDs0Su3FRx5dzxhFVdk4KxWTsRFLRJGUPQseAyHTszBLPaYue-Qga0LfrMyCUPvN2bqPNuw-zLkMxORBhdWNTF2zbRL9EcD9encbWkdR-mYALlWEoWRFRbgrxAeIz9aSqy2hmAgofDms-xxxu0pdOppAF8l3PuS-U4dcGsvnIvQK3DGqqCadXHSSC5sEObvSZWoOE0UB6oJ6n4M8M0_aLa0fFb7V5gEwYYRgWqKK9p2DU-sG7jL7ZDjzIY49rimf4mVvyUUmb5"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Budaya</span>
+<h3 class="font-headline-md text-headline-md">Tarian Sambutan</h3>
+</div>
+</div>
+</div>
+<!-- Item 3 (Square) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[100%] overflow-hidden">
+<img alt="Resort Mewah" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="An ultra-luxury eco-resort villa featuring modern tropical architecture with dark wood accents and expansive glass windows. The villa is nestled amidst lush, deep green tropical foliage. Warm, inviting interior lights glow softly against the dusk sky. The aesthetic is 'Ecological Opulence', combining raw nature with highly refined, high-end design elements and pristine landscaping." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvyCo-ufi-Thk_rdhSYjH3cGY6jMY2P3_ZXDW2syFfkSBbZtHlKikSmEXkDvcTC7AALZyTIab2MA2XXlCnVvIudMO4EG7CUEqyc9gMoKx2fiEoD6lCJ5moUJjLXgpufTH6z9QLFu0a9PedBL_qcdAgVhd7Pog3By_c3SEBRITS2Xks3Pf0Sk4HQBvTGFispQhLWi2Zkg2Uk9kDVNz_1Tm2vm_ouCklPkiQ5l-PKQc2ZT0DWi-hGC2CEIincdo-j3z332L5msuUGjk4"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Fasilitas</span>
+<h3 class="font-headline-md text-headline-md">Sanctuary Villa</h3>
+</div>
+</div>
+</div>
+<!-- Item 4 (Landscape) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[66%] overflow-hidden">
+<img alt="Private Jet" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A sleek, modern private jet parked on a pristine runway during the golden hour. The sunlight glints off the polished fuselage, creating a sense of exclusivity and high-end travel. The background features rolling green hills under a clear sky. The image exudes ultimate luxury, speed, and refined service, perfectly matching an opulent expedition brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApvdKEjmDkzzlpzgjee96xTPTPF2Q-ku3AbHaNW3wVvM_Hf1iQAitsQlvFRVe1p7101PyjZaxoT5JGOmPxCEdEWxaffKyDUITTNInDMk1pnSJCRl8TLO0E9pNPsbNPnSjkCYJMWeTrq33lHV0mkgiaZzkbV3iHWo6vplhhGOtKEFidqVPnY_ErhWAq2l9r7K1bNbM1PZ6sX81iI9b46CYQ6acHHIwUP7fLcdwS5rQyniismn-xGwlR7ZzT-BdeZ2QQQZ7BwzzExZcv"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Fasilitas</span>
+<h3 class="font-headline-md text-headline-md">Kedatangan Eksklusif</h3>
+</div>
+</div>
+</div>
+<!-- Item 5 (Portrait) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[120%] overflow-hidden">
+<img alt="Kuliner Lokal" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A meticulously plated, high-end culinary dish featuring local Indonesian ingredients, presented on dark, textured ceramic dinnerware. The setting is dimly lit with moody, dramatic lighting that highlights the vibrant colors of the food and the golden accents of the cutlery. The style is gourmet and luxurious, fitting a fine-dining experience within an ecological opulence theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfNBCCiYSNP5UgPMCWEX-QfeCgnqmafIJMKkFQeJcGWdDGhbuS_JWNAYK9zh_xugpVjD0brAxJk21eBwcocdNf-nDNt445bXWDXD7ipijydAGC5fPtpQQofw5WQ1N6vZm_oDFovg60zr8rsvf7SUVk_TbWpdhr7plW3p1HYRot9vtqXqsDCKYI2_9ik3EpXQB4u2ci3HZyIPXj-K_hNX7Di9OM-s8SmqyEVxmSxtluvNo8T-V7H4UA3KlHmtc0-VC8NkmWLOGRjR-h"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Budaya</span>
+<h3 class="font-headline-md text-headline-md">Cita Rasa Toba</h3>
+</div>
+</div>
+</div>
+<!-- Item 6 (Square) -->
+<div class="masonry-item group relative overflow-hidden rounded-lg bg-surface-variant shadow-sm cursor-pointer">
+<div class="relative w-full pb-[100%] overflow-hidden">
+<img alt="Aktivitas Air" class="absolute inset-0 w-full h-full object-cover ken-burns" data-alt="A pristine, secluded white sand beach merging into crystal-clear turquoise waters. A small, elegant wooden boat rests gently near the shore. The scene is bright, airy, and deeply calming, representing a high-end, private coastal retreat. The aesthetic balances natural beauty with a sense of untouched luxury and exclusivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0URL_yDMEgds74P6fQeIq3XzXM_orvys6TKKPodbKwYoaFnjZMw23S0MUUm32ivRi6FX2Udg0qF_H5IIO67gopIF5s2iASHCVECAqRE8zoC9c2-cf1EN5ZnAab1zFwZXYGwi3ZpqoAT6gzD68ZaAJ_6sFmIURXRInCHgYk1RNSBtyNqYdKOGAr9tTN51ScoFmJ-fToWPcKjrvT11wiWaeZvvNStugq31YuiV36AoQFz7GMXQPsWHvfk3lQz-KtSz9D81fOhDW7TpP"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+<div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<span class="font-label-caps text-label-caps text-secondary-fixed tracking-widest mb-2 block">Pemandangan</span>
+<h3 class="font-headline-md text-headline-md">Eksplorasi Perairan</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More -->
+<div class="mt-16 text-center">
+<button class="px-8 py-3 rounded border border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300 font-label-caps text-label-caps tracking-widest">
+                Muat Lebih Banyak
+            </button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary w-full py-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="md:col-span-1 mb-8 md:mb-0">
+<h2 class="font-display-lg text-headline-md text-secondary-fixed mb-4">Sujai Laketoba</h2>
+<p class="text-secondary-fixed-dim font-body-md text-body-md opacity-80">
+                    © 2024 Sujai Laketoba. Ecological Opulence. All rights reserved.
+                </p>
+</div>
+<div class="md:col-span-3 flex flex-wrap gap-8 md:justify-end">
+<a class="text-on-primary-container/60 hover:text-on-primary-container font-body-md text-body-md hover:translate-x-1 transition-transform duration-300" href="#">Privacy Policy</a>
+<a class="text-on-primary-container/60 hover:text-on-primary-container font-body-md text-body-md hover:translate-x-1 transition-transform duration-300" href="#">Terms of Service</a>
+<a class="text-on-primary-container/60 hover:text-on-primary-container font-body-md text-body-md hover:translate-x-1 transition-transform duration-300" href="#">Sustainability Charter</a>
+<a class="text-on-primary-container/60 hover:text-on-primary-container font-body-md text-body-md hover:translate-x-1 transition-transform duration-300" href="#">Travel Insurance</a>
+<a class="text-on-primary-container/60 hover:text-on-primary-container font-body-md text-body-md hover:translate-x-1 transition-transform duration-300" href="#">Contact Expert</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-surface/80', 'backdrop-blur-md');
+                nav.classList.remove('bg-surface/10');
+            } else {
+                nav.classList.add('bg-surface/10');
+                nav.classList.remove('bg-surface/80', 'backdrop-blur-md');
+            }
+        });
+    </script>
+</body></html>
