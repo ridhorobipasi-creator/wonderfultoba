@@ -238,6 +238,7 @@ class PublicController extends Controller
                          '*'.__('Detail Pesanan:')."*\n".
                          '- '.__('Kode Booking').': '.$booking->bookingCode."\n".
                          '- '.__('Paket').': '.$package->name."\n".
+                         '- '.__('Link Paket').': '.route('tour.package.detail', $package->slug)."\n".
                          '- '.__('Nama').': '.$validated['customerName']."\n".
                          '- '.__('Email').': '.$validated['customerEmail']."\n".
                          '- '.__('WhatsApp').': '.$validated['customerPhone']."\n".

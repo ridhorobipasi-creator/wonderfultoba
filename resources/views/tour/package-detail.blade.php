@@ -482,7 +482,7 @@
                 @if(session('success'))
                     <div 
                         x-data="{ 
-                            countdown: 8, 
+                            countdown: 2, 
                             redirectCancelled: false,
                             timer: null,
                             init() {
