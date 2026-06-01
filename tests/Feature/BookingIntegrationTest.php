@@ -90,4 +90,41 @@ class BookingIntegrationTest extends TestCase
         $this->assertEquals('Custom Guide', $package->pricingDetails['additional_services'][1]['name']);
         $this->assertEquals(6000000, $package->pricingDetails['additional_services'][1]['price']);
     }
+
+    public function test_cleared_additional_services_are_saved_as_empty_array()
+    {
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+        $admin = \App\Models\User::factory()->create(['role' => 'superadmin']);
+
+        $package = Package::create([
+            'slug' => 'original-package',
+            'name' => 'Original Package',
+            'description' => 'Original description',
+            'duration' => '3 Hari',
+            'images' => json_encode([]),
+            'includes' => json_encode([]),
+            'excludes' => json_encode([]),
+            'price' => 1500000,
+            'status' => 'active',
+            'pricingDetails' => [
+                'additional_services' => [
+                    ['name' => 'Original Jet', 'icon' => 'flight', 'price' => 120000000],
+                ],
+            ],
+        ]);
+
+        $response = $this->actingAs($admin)->patch(route('admin.packages.update', $package), [
+            'name' => 'Updated Package',
+            'description' => 'Original description',
+            'duration' => '3 Hari',
+            'price' => 1500000,
+            'status' => 'active',
+            // No pricingDetails submitted, simulating deletion of all additional services in form
+        ]);
+
+        $response->assertRedirect();
+        $package->refresh();
+
+        $this->assertEquals([], $package->pricingDetails['additional_services']);
+    }
 }
