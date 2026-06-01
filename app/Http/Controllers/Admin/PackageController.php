@@ -104,8 +104,10 @@ class PackageController extends Controller
             'excludes' => 'nullable|array',
             'media_ids' => 'nullable|array',
             'pricingDetails' => 'nullable|array',
-            'pricingDetails.private_jet_price' => 'nullable|numeric|min:0',
-            'pricingDetails.guide_price' => 'nullable|numeric|min:0',
+            'pricingDetails.additional_services' => 'nullable|array',
+            'pricingDetails.additional_services.*.name' => 'required|string|max:255',
+            'pricingDetails.additional_services.*.icon' => 'required|string|max:255',
+            'pricingDetails.additional_services.*.price' => 'required|numeric|min:0',
         ]);
 
         try {
@@ -148,8 +150,10 @@ class PackageController extends Controller
             'excludes' => 'nullable|array',
             'media_ids' => 'nullable|array',
             'pricingDetails' => 'nullable|array',
-            'pricingDetails.private_jet_price' => 'nullable|numeric|min:0',
-            'pricingDetails.guide_price' => 'nullable|numeric|min:0',
+            'pricingDetails.additional_services' => 'nullable|array',
+            'pricingDetails.additional_services.*.name' => 'required|string|max:255',
+            'pricingDetails.additional_services.*.icon' => 'required|string|max:255',
+            'pricingDetails.additional_services.*.price' => 'required|numeric|min:0',
         ]);
 
         try {

@@ -132,8 +132,13 @@
         // Booking form variables
         pax: {{ old('pax', 2) }},
         paxChildren: {{ old('paxChildren', 0) }},
-        privateJet: false,
-        guide: true,
+        services: (@js($package->pricingDetails['additional_services'] ?? [
+            ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
+            ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
+        ])).map(s => ({
+            ...s,
+            selected: s.name === 'Pemandu Antropologi'
+        })),
         isSubmitting: false,
         notesUser: '{{ old('notesUser', '') }}',
         customerName: '{{ old('customerName', '') }}',
@@ -147,14 +152,13 @@
         get priceAnak() {
             return this.paxChildren * this.package.price * 0.5;
         },
-        get pricePrivateJet() {
-            return this.privateJet ? (this.package.pricingDetails?.private_jet_price !== undefined ? parseFloat(this.package.pricingDetails.private_jet_price) : 120000000) : 0;
-        },
-        get priceGuide() {
-            return this.guide ? (this.package.pricingDetails?.guide_price !== undefined ? parseFloat(this.package.pricingDetails.guide_price) : 5500000) : 0;
+        get additionalServicesPrice() {
+            return (this.services || [])
+                .filter(s => s.selected)
+                .reduce((total, s) => total + parseFloat(s.price || 0), 0);
         },
         get totalSebelumPajak() {
-            return this.priceDewasa + this.priceAnak + this.pricePrivateJet + this.priceGuide;
+            return this.priceDewasa + this.priceAnak + this.additionalServicesPrice;
         },
         get pajakLayanan() {
             return Math.round(this.totalSebelumPajak * 0.11);
@@ -167,11 +171,12 @@
             if (this.paxChildren > 0) {
                 lines.push('Anak-anak: ' + this.paxChildren + ' Orang');
             }
-            if (this.privateJet) {
-                lines.push('Private Jet: Ya');
-            }
-            if (this.guide) {
-                lines.push('Pemandu Ahli Antropologi: Ya');
+            if (this.services) {
+                this.services.forEach(s => {
+                    if (s.selected) {
+                        lines.push(s.name + ': Ya');
+                    }
+                });
             }
             if (this.notesUser && this.notesUser.trim()) {
                 lines.push('Catatan Tambahan: ' + this.notesUser.trim());
@@ -642,30 +647,21 @@
                         </div>
 
                         <!-- Layanan Tambahan -->
-                        <div class="space-y-3">
+                        <div class="space-y-3" x-show="services && services.length > 0">
                             <label class="font-label-caps text-label-caps text-slate-700 mb-1 block uppercase tracking-wider">{{ __('Layanan tambahan') }}</label>
                             
-                            <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="privateJet ? 'border-secondary bg-secondary/5' : ''">
-                                <div class="flex items-center gap-3">
-                                    <span class="material-symbols-outlined text-secondary text-[22px]">flight_takeoff</span>
-                                    <div>
-                                        <div class="font-body-md font-semibold text-slate-900 text-xs">Private Jet Charter</div>
-                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(package.pricingDetails?.private_jet_price !== undefined ? package.pricingDetails.private_jet_price : 120000000)">+ Rp 120.000.000</span></div>
+                            <template x-for="(service, idx) in services" :key="idx">
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="service.selected ? 'border-secondary bg-secondary/5' : ''">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-secondary text-[22px]" x-text="service.icon || 'help'"></span>
+                                        <div>
+                                            <div class="font-body-md font-semibold text-slate-900 text-xs" x-text="service.name"></div>
+                                            <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(service.price)"></span></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="checkbox" x-model="privateJet" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
-                            </label>
-
-                            <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="guide ? 'border-secondary bg-secondary/5' : ''">
-                                <div class="flex items-center gap-3">
-                                    <span class="material-symbols-outlined text-secondary text-[22px]">person_pin</span>
-                                    <div>
-                                        <div class="font-body-md font-semibold text-slate-900 text-xs">Pemandu Antropologi</div>
-                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(package.pricingDetails?.guide_price !== undefined ? package.pricingDetails.guide_price : 5500000)">+ Rp 5.500.000</span></div>
-                                    </div>
-                                </div>
-                                <input type="checkbox" x-model="guide" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
-                            </label>
+                                    <input type="checkbox" x-model="service.selected" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
+                                </label>
+                            </template>
                         </div>
 
                         <!-- Catatan User -->
@@ -685,14 +681,12 @@
                                 <span>{{ __('Ekspedisi Anak-Anak') }} (<span x-text="paxChildren"></span>x)</span>
                                 <span x-text="AppCurrency.format(priceAnak)"></span>
                             </div>
-                            <div x-show="privateJet" class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>Private Jet Charter</span>
-                                <span x-text="AppCurrency.format(pricePrivateJet)"></span>
-                            </div>
-                            <div x-show="guide" class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>{{ __('Pemandu Antropologi') }}</span>
-                                <span x-text="AppCurrency.format(priceGuide)"></span>
-                            </div>
+                            <template x-for="(service, idx) in services" :key="idx">
+                                <div x-show="service.selected" class="flex justify-between text-xs text-slate-600 font-body-md">
+                                    <span x-text="service.name"></span>
+                                    <span x-text="AppCurrency.format(service.price)"></span>
+                                </div>
+                            </template>
                             <div class="flex justify-between text-xs text-slate-600 font-body-md">
                                 <span>{{ __('Pajak & Layanan') }} (11%)</span>
                                 <span x-text="AppCurrency.format(pajakLayanan)"></span>

@@ -71,8 +71,10 @@ class BookingIntegrationTest extends TestCase
             'price' => 1500000,
             'status' => 'active',
             'pricingDetails' => [
-                'private_jet_price' => 130000000,
-                'guide_price' => 6000000,
+                'additional_services' => [
+                    ['name' => 'Custom Jet', 'icon' => 'flight', 'price' => 130000000],
+                    ['name' => 'Custom Guide', 'icon' => 'person', 'price' => 6000000],
+                ],
             ],
         ];
 
@@ -83,7 +85,9 @@ class BookingIntegrationTest extends TestCase
             'name' => 'Custom Pricing Package',
         ]);
 
-        $this->assertEquals(130000000, $package->pricingDetails['private_jet_price']);
-        $this->assertEquals(6000000, $package->pricingDetails['guide_price']);
+        $this->assertEquals('Custom Jet', $package->pricingDetails['additional_services'][0]['name']);
+        $this->assertEquals(130000000, $package->pricingDetails['additional_services'][0]['price']);
+        $this->assertEquals('Custom Guide', $package->pricingDetails['additional_services'][1]['name']);
+        $this->assertEquals(6000000, $package->pricingDetails['additional_services'][1]['price']);
     }
 }
