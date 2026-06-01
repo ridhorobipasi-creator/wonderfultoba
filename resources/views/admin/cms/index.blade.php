@@ -25,7 +25,7 @@ document.addEventListener('alpine:init', () => {
         metaDescription: @json($settings['meta_description'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.'),
         tourTitle: @json($settings['tour_title'] ?? "Tour &\nTravel."),
         tourSubtitle: @json($settings['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif.'),
-        tourImage: @json($resolve($settings['tour_image_url'] ?? '', 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600')),
+        tourImage: @json($resolve($settings['tour_image_url'] ?? '', 'tour')),
         
         updatePreview(e, type) {
             const file = e.target.files[0];

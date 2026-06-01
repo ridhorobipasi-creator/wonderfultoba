@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Helpers\CurrencyHelper;
+use App\Traits\HasImageFallback;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\HasImageFallback;
+
+/**
+ * @mixin \Eloquent
+ */
 
 class Package extends Model
 {
-    use HasImageFallback, SoftDeletes, \App\Traits\Syncable;
+    use \App\Traits\Syncable, HasImageFallback, SoftDeletes;
 
     const CREATED_AT = 'createdAt';
 
@@ -66,7 +71,10 @@ class Package extends Model
     public function getFirstImageAttribute()
     {
         $images = $this->images;
-        if (is_string($images)) $images = json_decode($images, true);
+        if (is_string($images)) {
+            $images = json_decode($images, true);
+        }
+
         return $this->resolveImageUrl($images[0] ?? null);
     }
 
@@ -77,6 +85,6 @@ class Package extends Model
 
     public function getFormattedPriceAttribute()
     {
-        return \App\Helpers\CurrencyHelper::formatPrice($this->price);
+        return CurrencyHelper::formatPrice($this->price);
     }
 }

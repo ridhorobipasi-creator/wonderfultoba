@@ -1,13 +1,30 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CMSController;
-use App\Http\Controllers\Admin\MediaController;
-use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CarController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\CMSController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FinanceController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\GeneralSettingsController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RegencyController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\SyncController;
+use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\WebAuthController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,31 +32,31 @@ use App\Http\Controllers\PublicController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [App\Http\Controllers\PublicController::class, 'tour'])->name('index');
+Route::get('/', [PublicController::class, 'tour'])->name('index');
 Route::get('/home', function () {
     return redirect()->route('index');
 })->name('home');
 
 // Auth routes
-Route::get('/login', [App\Http\Controllers\WebAuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [App\Http\Controllers\WebAuthController::class, 'login']);
-Route::post('/logout', [App\Http\Controllers\WebAuthController::class, 'logout'])->name('logout');
-Route::post('/register', [App\Http\Controllers\WebAuthController::class, 'register'])->name('register');
+Route::get('/login', [WebAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [WebAuthController::class, 'login']);
+Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
+Route::post('/register', [WebAuthController::class, 'register'])->name('register');
 
 // API Sync (Realtime without Supabase)
 Route::get('/api/sync/version', [SyncController::class, 'getVersion'])->name('api.sync.version');
 
 // Admin Group
-Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('admin')->name('admin.')->group(function() {
-    
+Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('admin')->name('admin.')->group(function () {
+
     // Dashboard
-    Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
-    Route::get('/dashboard/stats', [App\Http\Controllers\Admin\DashboardController::class, 'stats'])->name('dashboard.stats');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats'])->name('dashboard.stats');
 
     // Profile
-    Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Packages
     Route::get('packages/export', [PackageController::class, 'export'])->name('packages.export');
@@ -48,12 +65,12 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::resource('packages', PackageController::class);
 
     // Bookings
-    Route::get('bookings/export', [App\Http\Controllers\Admin\BookingController::class, 'export'])->name('bookings.export');
-    Route::post('bookings/bulk-destroy', [App\Http\Controllers\Admin\BookingController::class, 'bulkDestroy'])->name('bookings.bulk-destroy');
-    Route::get('bookings/{booking}/invoice', [App\Http\Controllers\PdfController::class, 'streamInvoice'])->name('bookings.invoice');
-    Route::get('bookings/{booking}/invoice/download', [App\Http\Controllers\PdfController::class, 'downloadInvoice'])->name('bookings.invoice.download');
-    Route::patch('bookings/{booking}/status', [App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.status');
-    Route::resource('bookings', App\Http\Controllers\Admin\BookingController::class);
+    Route::get('bookings/export', [BookingController::class, 'export'])->name('bookings.export');
+    Route::post('bookings/bulk-destroy', [BookingController::class, 'bulkDestroy'])->name('bookings.bulk-destroy');
+    Route::get('bookings/{booking}/invoice', [PdfController::class, 'streamInvoice'])->name('bookings.invoice');
+    Route::get('bookings/{booking}/invoice/download', [PdfController::class, 'downloadInvoice'])->name('bookings.invoice.download');
+    Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.status');
+    Route::resource('bookings', BookingController::class);
 
     // Blogs
     Route::get('blogs/export', [BlogController::class, 'export'])->name('blogs.export');
@@ -69,7 +86,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::resource('gallery', GalleryController::class);
 
     // Car Management
-    Route::resource('cars', App\Http\Controllers\Admin\CarController::class);
+    Route::resource('cars', CarController::class);
 
     // CMS Management
     Route::get('/cms-halaman-utama', [CMSController::class, 'index'])->name('cms.index');
@@ -78,12 +95,12 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::post('/cms-save/{key}', [CMSController::class, 'save'])->name('cms.save');
 
     // Financial Reports (Restricted)
-    Route::middleware('role:superadmin,admin_umum')->group(function() {
-        Route::get('/finance', [App\Http\Controllers\Admin\FinanceController::class, 'index'])->name('finance.index');
-        Route::get('/finance/export', [App\Http\Controllers\Admin\FinanceController::class, 'export'])->name('finance.export');
-        
-        Route::get('/reports/financial', [App\Http\Controllers\Admin\ReportController::class, 'financial'])->name('reports.financial');
-        Route::get('/reports/financial/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.financial.export');
+    Route::middleware('role:superadmin,admin_umum')->group(function () {
+        Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
+        Route::get('/finance/export', [FinanceController::class, 'export'])->name('finance.export');
+
+        Route::get('/reports/financial', [ReportController::class, 'financial'])->name('reports.financial');
+        Route::get('/reports/financial/export', [ReportController::class, 'export'])->name('reports.financial.export');
     });
 
     // Media Library (Global Storage)
@@ -93,68 +110,72 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::post('media/{media}/rename', [MediaController::class, 'rename'])->name('media.rename');
     Route::post('media/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('media.bulk-delete');
     Route::post('media/bulk-download', [MediaController::class, 'bulkDownload'])->name('media.bulk-download');
+    Route::post('media/convert-all', [MediaController::class, 'convertAll'])->name('media.convert-all');
+    Route::post('media/upload-from-url', [MediaController::class, 'storeFromUrl'])->name('media.upload-url');
+    Route::get('media/audit', [MediaController::class, 'audit'])->name('media.audit');
+    Route::post('media/audit/clean', [MediaController::class, 'cleanOrphanFiles'])->name('media.clean-orphans');
+    Route::post('media/{media}/crop', [MediaController::class, 'crop'])->name('media.crop');
     Route::resource('media', MediaController::class);
 
     // Region Data
-    Route::get('cities/regencies', [App\Http\Controllers\Admin\CityController::class, 'getRegencies'])->name('cities.regencies');
-    Route::resource('cities', App\Http\Controllers\Admin\CityController::class);
-    Route::resource('regencies', App\Http\Controllers\Admin\RegencyController::class)->only(['index', 'edit', 'update']);
+    Route::get('cities/regencies', [CityController::class, 'getRegencies'])->name('cities.regencies');
+    Route::resource('cities', CityController::class);
+    Route::resource('regencies', RegencyController::class)->only(['index', 'edit', 'update']);
 
     // Customers & Clients
-    Route::get('customers/export', [App\Http\Controllers\Admin\CustomerController::class, 'export'])->name('customers.export');
-    Route::post('customers/bulk-destroy', [App\Http\Controllers\Admin\CustomerController::class, 'bulkDestroy'])->name('customers.bulk-destroy');
-    Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
-    Route::resource('clients', App\Http\Controllers\Admin\ClientController::class);
-
-
+    Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
+    Route::post('customers/bulk-destroy', [CustomerController::class, 'bulkDestroy'])->name('customers.bulk-destroy');
+    Route::resource('customers', CustomerController::class);
+    Route::resource('clients', ClientController::class);
 
     // System Settings (Superadmin Only)
-    Route::middleware('role:superadmin,admin_umum')->group(function() {
-        Route::get('/settings/general', [App\Http\Controllers\Admin\GeneralSettingsController::class, 'index'])->name('settings.general.index');
-        Route::post('/settings/general', [App\Http\Controllers\Admin\GeneralSettingsController::class, 'update'])->name('settings.general.update');
-        Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
-        Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
-        Route::post('/settings/sitemap', [App\Http\Controllers\Admin\SettingController::class, 'generateSitemap'])->name('settings.sitemap');
-        Route::get('logs', [App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('logs.index');
-        Route::get('users/export', [App\Http\Controllers\Admin\UserController::class, 'export'])->name('users.export');
-        Route::post('users/bulk-destroy', [App\Http\Controllers\Admin\UserController::class, 'bulkDestroy'])->name('users.bulk-destroy');
-        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    Route::middleware('role:superadmin,admin_umum')->group(function () {
+        Route::get('/settings/general', [GeneralSettingsController::class, 'index'])->name('settings.general.index');
+        Route::post('/settings/general', [GeneralSettingsController::class, 'update'])->name('settings.general.update');
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/sitemap', [SettingController::class, 'generateSitemap'])->name('settings.sitemap');
+        Route::get('logs', [ActivityLogController::class, 'index'])->name('logs.index');
+        Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+        Route::post('users/bulk-destroy', [UserController::class, 'bulkDestroy'])->name('users.bulk-destroy');
+        Route::resource('users', UserController::class);
     });
 });
 
 // Locale Route
-Route::get('/change-locale/{locale}', [App\Http\Controllers\LocaleController::class, 'changeLocale'])->name('change-locale');
+Route::get('/change-locale/{locale}', [LocaleController::class, 'changeLocale'])->name('change-locale');
 
 // Public Tour Routes
-Route::prefix('tour')->name('tour.')->group(function() {
-    Route::get('/', function() {
+Route::prefix('tour')->name('tour.')->group(function () {
+    Route::get('/', function () {
         return redirect()->route('index');
     })->name('index');
-    Route::get('/packages', [App\Http\Controllers\PublicController::class, 'tourPackages'])->name('packages');
-    Route::get('/gallery', [App\Http\Controllers\PublicController::class, 'tourGallery'])->name('gallery');
-    Route::get('/blog', [App\Http\Controllers\PublicController::class, 'tourBlog'])->name('blog');
-    Route::get('/package/{slug}', [App\Http\Controllers\PublicController::class, 'tourPackageDetail'])->name('package.detail');
-    Route::get('/blog/{slug}', [App\Http\Controllers\PublicController::class, 'tourBlogDetail'])->name('blog.detail');
-    
+    Route::get('/packages', [PublicController::class, 'tourPackages'])->name('packages');
+    Route::get('/gallery', [PublicController::class, 'tourGallery'])->name('gallery');
+    Route::get('/blog', [PublicController::class, 'tourBlog'])->name('blog');
+    Route::get('/package/{slug}', [PublicController::class, 'tourPackageDetail'])->name('package.detail');
+    Route::get('/blog/{slug}', [PublicController::class, 'tourBlogDetail'])->name('blog.detail');
+
     // Booking with Rate Limiting
-    Route::post('/booking/submit', [App\Http\Controllers\PublicController::class, 'submitBooking'])
+    Route::post('/booking/submit', [PublicController::class, 'submitBooking'])
         ->middleware('throttle:5,1')
         ->name('booking.submit');
 });
 
 // Other Public Pages
-Route::get('/about', [App\Http\Controllers\PublicController::class, 'about'])->name('about');
-Route::get('/terms', [App\Http\Controllers\PublicController::class, 'terms'])->name('terms');
-Route::get('/privacy', [App\Http\Controllers\PublicController::class, 'privacy'])->name('privacy');
-Route::get('/payment', [App\Http\Controllers\PublicController::class, 'payment'])->name('payment');
-Route::post('/outbound/quote/submit', [App\Http\Controllers\PublicController::class, 'submitOutboundQuote'])->name('outbound.quote.submit');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
+Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
+Route::get('/payment', [PublicController::class, 'payment'])->name('payment');
+Route::post('/outbound/quote/submit', [PublicController::class, 'submitOutboundQuote'])->name('outbound.quote.submit');
 Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index');
 
-
 // Invoice & Itinerary
-Route::get('/invoice/{code}', [App\Http\Controllers\PdfController::class, 'streamInvoice'])->name('invoice.download');
-Route::get('/itinerary/{slug}', [App\Http\Controllers\PdfController::class, 'downloadItinerary'])->name('itinerary.download');
+Route::get('/invoice/{code}', [PdfController::class, 'streamInvoice'])->name('invoice.download');
+Route::get('/itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
+
+// Dynamic OpenGraph Banners
+Route::get('/og-banner/{type}/{id}.webp', [PublicController::class, 'generateOgBanner'])->name('og-banner');
 
 // Sitemap
-Route::get('/sitemap.xml', [App\Http\Controllers\Admin\SettingController::class, 'generateSitemap']);
-
+Route::get('/sitemap.xml', [SettingController::class, 'generateSitemap']);

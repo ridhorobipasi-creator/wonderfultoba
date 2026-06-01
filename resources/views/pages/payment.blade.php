@@ -6,12 +6,12 @@
 
 @section('content')
 <div class="bg-slate-50 min-h-screen pt-32 pb-24">
-    <div class="max-w-5xl mx-auto px-6 md:px-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+    <div class="max-w-5xl mx-auto px-5 md:px-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
 
         {{-- Header --}}
-        <div class="text-center mb-16">
+        <div class="text-center mb-12 md:mb-16">
             <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full">{{ __('Informasi') }}</span>
-            <h1 class="text-3xl md:text-5xl font-semibold text-slate-900 tracking-tight mt-6">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mt-6">
                 {{ __('Cara') }} <span class="text-toba-green">{{ __('Pembayaran') }}</span>
             </h1>
             <p class="mt-4 text-slate-600 font-normal max-w-xl mx-auto text-sm leading-relaxed">

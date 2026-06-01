@@ -1,0 +1,2761 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Actions/CalculateBookingPrice.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaCommand.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaCommand.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaCommand.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaCommand.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaLibrary.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaLibrary.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:truncate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaLibrary.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Console/Commands/SyncMediaLibrary.php
+
+		-
+			message: '#^Offset 1 on non\-empty\-list\<string\> in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Console/Commands/SyncMediaLibrary.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Exports/FinancialExport.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:url\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: app/Helpers/ImageHelper.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Helpers/ImageHelper.php
+
+		-
+			message: '#^Right side of \|\| is always false\.$#'
+			identifier: booleanOr.rightAlwaysFalse
+			count: 5
+			path: app/Helpers/ImageHelper.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$bookingCode\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Helpers/WhatsAppHelper.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$customerName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Helpers/WhatsAppHelper.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$package\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Helpers/WhatsAppHelper.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$startDate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Helpers/WhatsAppHelper.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$action\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:select\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ActivityLogController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$image_url\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:user\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to static method download\(\) on an unknown class Excel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\BlogController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\BlogController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/BlogController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$bookingCode\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$createdAt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$customerEmail\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$customerName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$customerPhone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$endDate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$startDate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$totalPrice\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$month\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$year\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/BookingController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 6
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CMSController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CMSController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 5
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/CMSController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Car\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Car\:\:latest\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CarController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CarController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/CarController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\City\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Regency\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Regency\>\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Regency\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Regency\>\:\:\$province\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$cat_province_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$media_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$province_id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$regency_id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$regency_name_manual\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\City\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Province\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Regency\:\:firstOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Regency\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CityController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\CityController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/CityController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Client\:\:\$logo\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$logo_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$website\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Client\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Client\:\:max\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Client\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\ClientController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\ClientController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/ClientController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Customer\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$min_bookings\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$min_spent\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Customer\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Customer\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Call to static method download\(\) on an unknown class Excel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/CustomerController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/FinanceController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/FinanceController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GalleryImage\:\:\$caption\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GalleryImage\:\:\$imageUrl\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GalleryImage\:\:\$isActive\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$end_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$image_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$media_ids\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$start_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\GalleryController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\GalleryController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/GalleryController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$icon_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$logo_dark_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$logo_light_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:firstOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\GeneralSettingsController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\GeneralSettingsController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/GeneralSettingsController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$alt_text\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$filename\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$ids\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$new_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$old_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$usage\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:url\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:get\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:pluck\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:select\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Offset 1 on non\-empty\-list\<string\> in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\MediaController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\MediaController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 6
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/MediaController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Package\>\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$featured\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\City\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to static method download\(\) on an unknown class Excel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\PackageController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\PackageController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/PackageController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:user\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ProfileController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$province_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/RegencyController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Province\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/RegencyController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$bookingCode\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$createdAt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$totalPrice\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:whereBetween\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:whereYear\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/ReportController.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:firstOrNew\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Instanceof between Illuminate\\Http\\UploadedFile and Illuminate\\Http\\UploadedFile will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\SettingController\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Http\\Controllers\\Admin\\SettingController\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Admin/SettingController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Http\\Request\:\:\$search\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:id\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\ActivityLog\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to static method download\(\) on an unknown class Excel\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\City\:\:\$province\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\City\:\:\$region\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$is_published\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$packageImages\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PackageTier\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PackageTier\:\:\$tagline\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PackageTier\:\:\$tierName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:attempt\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:user\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:sum\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\PackageTier\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Api/PublicApiController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/SyncController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/Api/SyncController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Api/SyncController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$packageImages\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>image_url" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/PdfController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Car\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\City\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Client\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 7
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to static method warning\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 7
+			path: app/Http/Controllers/PublicController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Auth\\Factory\:\:user\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/WebAuthController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/WebAuthController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Middleware/CheckMaintenanceMode.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Call to function method_exists\(\) with class\-string\<static\(App\\Models\\Blog\)\> and ''restored'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Models/Blog.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$customerEmail\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Booking.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Car\:\:\$price\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Car.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Client.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/GalleryImage.php
+
+		-
+			message: '#^Call to function method_exists\(\) with class\-string\<static\(App\\Models\\GalleryImage\)\> and ''restored'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Models/GalleryImage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Media\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Media\:\:\$usage_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:url\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Models/Media.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:pluck\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:pluck\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:pluck\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$first_image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$images\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$price\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Call to function method_exists\(\) with class\-string\<static\(App\\Models\\Package\)\> and ''restored'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Models/Package.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PackageImage\:\:\$image_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/PackageImage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Setting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Blog\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/BlogObserver.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Observers/PackageObserver.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/SettingObserver.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Providers/AdminServiceProvider.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Repositories/BookingRepository.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/BookingService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/BookingService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Customer\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/BookingService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:find\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/BookingService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/BookingService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:orderByDesc\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:select\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 10
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Booking\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Customer\:\:latest\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:get\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:sum\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:orderByDesc\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:select\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:count\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:whereMonth\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/DashboardService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Booking\:\:\$bookingCode\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/InvoiceService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Services/InvoiceService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 3
+			path: app/Services/InvoiceService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$images\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Package\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Binary operation "/" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Blog\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\City\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\GalleryImage\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:updateOrCreate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Media\:\:whereIn\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Package\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Setting\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class Log\.$#'
+			identifier: class.notFound
+			count: 7
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Method App\\Services\\TourService\:\:indexToMedia\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocate expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagecolorallocatealpha expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagefilledrectangle expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagestring expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesx expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of function imagesy expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Services\\TourService\:\:applyWatermark\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#1 \$image of method App\\Services\\TourService\:\:extractDominantColor\(\) expects resource, GdImage given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#2 \$height of function imagecreatetruecolor expects int\<1, max\>, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#2 \$src_image of function imagecopyresampled expects GdImage, resource given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Parameter \#8 \$dst_height of function imagecopyresampled expects int, float given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Undefined variable\: \$image$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/TourService.php
+
+		-
+			message: '#^Variable \$baseFilename in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Services/TourService.php

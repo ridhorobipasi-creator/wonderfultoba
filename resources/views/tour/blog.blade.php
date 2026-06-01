@@ -40,40 +40,20 @@
     <!-- Cinematic Premium Hero Section -->
     <div class="relative h-[60dvh] flex items-center overflow-hidden bg-primary">
         @php
-            $heroImage = $siteSettings['cms_tour']['hero_image_url'] ?? $siteSettings['cms_landing']['tour_image_url'] ?? 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000';
-            if (Str::startsWith($heroImage, ['http', '//', 'data:', 'blob:'])) {
-                foreach (['assets/', 'images/', 'branding/', 'gallery/'] as $prefix) {
-                    if (str_contains($heroImage, '/' . $prefix) && !str_contains($heroImage, '/storage/' . $prefix)) {
-                        $heroImage = str_replace('/' . $prefix, '/storage/' . $prefix, $heroImage);
-                    }
-                }
-            } else {
-                $cleanPath = ltrim($heroImage, '/');
-                $matched = false;
-                foreach (['assets/', 'images/', 'branding/', 'gallery/'] as $prefix) {
-                    if (Str::startsWith($cleanPath, $prefix)) {
-                        $heroImage = asset('storage/' . $cleanPath);
-                        $matched = true;
-                        break;
-                    }
-                }
-                if (!$matched) {
-                    $heroImage = asset('storage/' . ltrim(str_replace('storage/', '', $cleanPath), '/'));
-                }
-            }
+            $heroImage = imageUrl($siteSettings['cms_tour']['hero_image_url'] ?? $siteSettings['cms_landing']['tour_image_url'] ?? null, asset('images/sumut/sumatra_panorama.webp'));
         @endphp
         <img src="{{ $heroImage }}" alt="Blog Hero" class="absolute inset-0 w-full h-full object-cover opacity-45 animate-subtle-zoom">
         <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/50 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pt-20">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pt-20">
             <div class="max-w-4xl">
                 <div class="flex items-center space-x-2 mb-4 animate-fade-in-down">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/20 backdrop-blur-md border border-secondary/30 text-secondary-container text-[10px] font-black uppercase tracking-[0.25em] rounded-full">
                         {{ __('JOURNAL & STORIES') }}
                     </span>
                 </div>
-                <h1 class="text-4xl md:text-7xl font-headline-lg font-normal text-white tracking-tight leading-tight mb-6 animate-fade-in-up">
+                <h1 class="text-4xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-6 animate-fade-in-up">
                     Inspirasi & <br />
                     <span class="text-secondary-fixed">{{ __('Eksplorasi Toba') }}</span>
                 </h1>
@@ -85,7 +65,7 @@
     </div>
 
     <!-- Filter & Search Bar -->
-    <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-16 relative z-30">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 -mt-16 relative z-30">
         <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl p-6 border border-outline-variant/20 animate-in fade-in zoom-in duration-1000 delay-300">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <!-- Category Filters -->
@@ -116,12 +96,12 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-20">
-        
+    <div class="max-w-7xl mx-auto px-5 md:px-8 mt-14 md:mt-20">
+
         <!-- Featured Post -->
         <template x-if="featured">
-            <article class="group relative bg-primary rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700 mb-20 min-h-[450px] md:min-h-[550px] flex flex-col justify-end border border-outline-variant/20">
-                <img :src="featured.image ? (featured.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.includes('/' + p) && !featured.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), featured.image) : featured.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.startsWith(p)) ? '/storage/' + featured.image.replace(/^\//, '') : '/storage/' + featured.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200'" :alt="featured.translated_title"
+            <article class="group relative bg-primary rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700 mb-12 md:mb-20 min-h-[420px] md:min-h-[550px] flex flex-col justify-end border border-outline-variant/20">
+                <img :src="featured.image ? (featured.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.includes('/' + p) && !featured.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), featured.image) : featured.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.startsWith(p)) ? '/storage/' + featured.image.replace(/^\//, '') : '/storage/' + featured.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="featured.translated_title"
                     class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-[2s] ease-out">
                 
                 <!-- Overlays -->
@@ -136,7 +116,7 @@
                             <span x-text="new Date(featured.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })"></span>
                         </span>
                     </div>
-                    <h2 class="text-3xl md:text-5xl font-headline-lg font-normal text-white mb-6 group-hover:text-secondary-fixed transition-colors leading-tight tracking-tight" x-text="featured.translated_title"></h2>
+                    <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-5 md:mb-6 group-hover:text-secondary-fixed transition-colors leading-[1.1] tracking-tight" x-text="featured.translated_title"></h2>
                     <p class="text-surface-container-highest text-sm md:text-base font-light mb-8 line-clamp-2 leading-relaxed opacity-90" x-text="featured.excerpt || featured.content"></p>
                     
                     <a :href="'/tour/blog/' + (featured.slug || featured.id)" class="inline-flex items-center gap-3 bg-white text-primary px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all duration-300 shadow-md hover:-translate-y-0.5 group/btn">
@@ -148,11 +128,11 @@
         </template>
 
         <!-- Blog Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             <template x-for="(post, i) in rest" :key="post.id">
                 <article class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden shadow-lg border border-outline-variant/20 hover:border-secondary/30 transition-all duration-500 hover:-translate-y-1.5 animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                     <a :href="'/tour/blog/' + (post.slug || post.id)" class="block relative overflow-hidden h-64">
-                        <img :src="post.image ? (post.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.includes('/' + p) && !post.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), post.image) : post.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.startsWith(p)) ? '/storage/' + post.image.replace(/^\//, '') : '/storage/' + post.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=800'" :alt="post.title"
+                        <img :src="post.image ? (post.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.includes('/' + p) && !post.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), post.image) : post.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.startsWith(p)) ? '/storage/' + post.image.replace(/^\//, '') : '/storage/' + post.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.title"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out">
                         <div class="absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors"></div>
                         <div class="absolute top-4 left-4">

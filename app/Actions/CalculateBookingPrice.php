@@ -14,7 +14,7 @@ class CalculateBookingPrice
 
         if (isset($data['packageId'])) {
             $package = Package::find($data['packageId']);
-            
+
             if ($package) {
                 $pricePerPerson = $package->price ?? 0;
                 $costPerPerson = $package->cost_price ?? 0;
@@ -23,7 +23,7 @@ class CalculateBookingPrice
                 if ($package->pricingDetails && is_array($package->pricingDetails)) {
                     // Find matching pax tier
                     $match = collect($package->pricingDetails)->firstWhere('pax', $pax);
-                    
+
                     if ($match) {
                         $pricePerPerson = $match['price_per_person'] ?? $match['price'] ?? $match['pricePerPerson'] ?? $pricePerPerson;
                     }

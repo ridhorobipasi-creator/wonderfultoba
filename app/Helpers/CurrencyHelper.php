@@ -2,8 +2,8 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class CurrencyHelper
@@ -12,7 +12,7 @@ class CurrencyHelper
      * Get exchange rate from IDR to target currency.
      * Uses ExchangeRate-API with 24 hours caching.
      *
-     * @param string $targetCurrency
+     * @param  string  $targetCurrency
      * @return float
      */
     public static function getRate($targetCurrency)
@@ -23,7 +23,7 @@ class CurrencyHelper
         }
 
         // Cache rates for 24 hours
-        return Cache::remember('exchange_rate_idr_to_' . $targetCurrency, 86400, function () use ($targetCurrency) {
+        return Cache::remember('exchange_rate_idr_to_'.$targetCurrency, 86400, function () use ($targetCurrency) {
             try {
                 $apiKey = 'b753386c73cbdf1122c8f917';
                 $response = Http::timeout(5)->get("https://v6.exchangerate-api.com/v6/{$apiKey}/latest/IDR");
@@ -35,10 +35,10 @@ class CurrencyHelper
                         return (float) $rates[$targetCurrency];
                     }
                 }
-                
+
                 Log::warning("Failed to fetch exchange rate for {$targetCurrency} from API. Using fallback rate.");
             } catch (\Exception $e) {
-                Log::error("Error fetching exchange rate: " . $e->getMessage());
+                Log::error('Error fetching exchange rate: '.$e->getMessage());
             }
 
             // Fallback rates if API fails
@@ -58,8 +58,8 @@ class CurrencyHelper
      * - 'my' => MYR (RM) [Default]
      * - 'en' => SGD (S$)
      *
-     * @param float $priceInIdr
-     * @param string|null $locale
+     * @param  float  $priceInIdr
+     * @param  string|null  $locale
      * @return string
      */
     public static function formatPrice($priceInIdr, $locale = null)
@@ -99,6 +99,6 @@ class CurrencyHelper
         $convertedPrice = $priceInIdr * $rate;
 
         // If it's a whole number in MYR/SGD, we can choose to round it or keep decimals. Let's keep decimals for MYR/SGD.
-        return $symbol . number_format($convertedPrice, $decimals, $decPoint, $thousandsSep);
+        return $symbol.number_format($convertedPrice, $decimals, $decPoint, $thousandsSep);
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         $tables = ['packages', 'blogs', 'customers', 'users', 'bookings', 'gallery_images'];
         foreach ($tables as $table) {
-            if (!Schema::hasColumn($table, 'deleted_at')) {
+            if (! Schema::hasColumn($table, 'deleted_at')) {
                 Schema::table($table, function (Blueprint $table) {
                     $table->softDeletes();
                 });

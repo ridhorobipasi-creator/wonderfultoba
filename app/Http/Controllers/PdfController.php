@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
 use App\Models\Setting;
-use Illuminate\Http\Request;
+use App\Services\InvoiceService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class PdfController extends Controller
 {
@@ -20,7 +21,7 @@ class PdfController extends Controller
             ->where('slug', $slug)
             ->first();
 
-        if (!$package) {
+        if (! $package) {
             abort(404, 'Paket tidak ditemukan.');
         }
 
@@ -37,8 +38,8 @@ class PdfController extends Controller
             ?? imageFallback();
 
         $data = [
-            'package'      => $package,
-            'city'         => $city,
+            'package' => $package,
+            'city' => $city,
             'siteSettings' => $siteSettings,
             'heroImageUrl' => $heroImageUrl,
         ];
@@ -54,10 +55,12 @@ class PdfController extends Controller
             $booking = Booking::where('bookingCode', $identifier)
                 ->orWhere('id', $identifier)
                 ->firstOrFail();
-            return app(\App\Services\InvoiceService::class)->streamInvoice($booking);
+
+            return app(InvoiceService::class)->streamInvoice($booking);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('PDF Stream Error: ' . $e->getMessage());
-            return 'Gagal membuka PDF: ' . $e->getMessage();
+            Log::error('PDF Stream Error: '.$e->getMessage());
+
+            return 'Gagal membuka PDF: '.$e->getMessage();
         }
     }
 
@@ -67,11 +70,12 @@ class PdfController extends Controller
             $booking = Booking::where('bookingCode', $identifier)
                 ->orWhere('id', $identifier)
                 ->firstOrFail();
-            return app(\App\Services\InvoiceService::class)->downloadInvoice($booking);
+
+            return app(InvoiceService::class)->downloadInvoice($booking);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('PDF Download Error: ' . $e->getMessage());
-            return 'Gagal mengunduh PDF: ' . $e->getMessage();
+            Log::error('PDF Download Error: '.$e->getMessage());
+
+            return 'Gagal mengunduh PDF: '.$e->getMessage();
         }
     }
 }
-

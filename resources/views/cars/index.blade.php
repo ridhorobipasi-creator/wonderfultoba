@@ -35,7 +35,7 @@
     class="bg-slate-50 min-h-screen pb-24"
 >
     <!-- Hero Header -->
-    <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-6 md:px-8">
+    <div class="relative overflow-hidden bg-slate-900 pt-32 pb-20 px-5 md:px-8">
         <div class="absolute inset-0 opacity-20">
             <img src="/storage/2026/04/sumatra-panorama.webp" alt="Sumatra panorama" class="w-full h-full object-cover">
         </div>
@@ -44,8 +44,8 @@
             <span class="inline-flex items-center gap-2 px-3 py-1 bg-toba-green/10 text-toba-accent text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full mb-5">
                 Premium Car Rental
             </span>
-            <h1 class="text-4xl md:text-5xl font-light text-white mb-5 tracking-tight leading-tight">
-                Sewa <span class="text-toba-green">Mobil</span>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-5 tracking-tight leading-[1.1]">
+                Sewa <span class="text-toba-accent">Mobil</span>
             </h1>
             <p class="text-slate-300 text-sm md:text-base max-w-2xl mx-auto font-normal leading-relaxed mb-10 md:mb-12">
                 Pilihan armada terbaik untuk perjalanan bisnis atau wisata Anda di Sumatera Utara.
@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-12">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 mt-12">
         <!-- Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <template x-for="car in filteredCars" :key="car.id">
@@ -130,7 +130,7 @@
                                 </p>
                             </div>
                             <button @click="openBookingModal(car)" 
-                               class="bg-slate-955 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-toba-green transition-all duration-300 whitespace-nowrap">
+                               class="bg-slate-950 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-toba-green transition-all duration-300 whitespace-nowrap">
                                 Sewa Sekarang
                             </button>
                         </div>
@@ -142,7 +142,7 @@
         <!-- Empty State -->
         <div x-show="filteredCars.length === 0" class="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
             <svg class="w-12 h-12 mx-auto text-slate-200 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <h3 class="text-xl font-light text-slate-900 mb-2">Armada tidak ditemukan</h3>
+            <h3 class="text-xl font-bold text-slate-900 mb-2 tracking-tight">Armada tidak ditemukan</h3>
             <p class="text-slate-500 text-sm font-normal">Coba gunakan kata kunci atau kategori yang berbeda.</p>
         </div>
     </div>

@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\Syncable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * @mixin \Eloquent
+ */
 
 class Client extends Model
 {
-    use \App\Traits\Syncable;
-    
+    use Syncable;
+
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';

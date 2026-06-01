@@ -2,27 +2,38 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\GalleryImage;
+use App\Models\Package;
+use App\Models\Setting;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CMSController extends Controller
 {
     use HandlesImageUploads;
+
     public function index()
     {
-        $settings = \App\Models\Setting::where('key', 'cms_landing')->first()?->value ?? [];
+        $settings = Setting::where('key', 'cms_landing')->first()?->value ?? [];
+
         return view('admin.cms.index', compact('settings'));
     }
 
     public function tour()
     {
-        $settings = \App\Models\Setting::where('key', 'cms_tour')->first()?->value ?? [];
-        
+        $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
+
         // Fetch data for selection lists
-        $packages = \App\Models\Package::where('status', 'active')->get();
-        $blogs = \App\Models\Blog::where('status', 'published')->orderBy('createdAt', 'desc')->get();
-        $gallery = \App\Models\GalleryImage::orderBy('orderPriority', 'asc')->get();
+        $packages = Package::where('status', 'active')->get();
+        $blogs = Blog::where('status', 'published')->orderBy('createdAt', 'desc')->get();
+        $gallery = GalleryImage::orderBy('orderPriority', 'asc')->get();
 
         // Logic for auto-populating slides removed to allow clean reset.
 
@@ -31,43 +42,45 @@ class CMSController extends Controller
 
     public function pages()
     {
-        $about = \App\Models\Setting::where('key', 'page_about')->first()?->value ?? [];
-        $terms = \App\Models\Setting::where('key', 'page_terms')->first()?->value ?? [];
-        $privacy = \App\Models\Setting::where('key', 'page_privacy')->first()?->value ?? [];
-        
+        $about = Setting::where('key', 'page_about')->first()?->value ?? [];
+        $terms = Setting::where('key', 'page_terms')->first()?->value ?? [];
+        $privacy = Setting::where('key', 'page_privacy')->first()?->value ?? [];
+
         return view('admin.cms.pages', compact('about', 'terms', 'privacy'));
     }
 
     public function save(Request $request, $key)
     {
         try {
-            \Illuminate\Support\Facades\DB::beginTransaction();
+            DB::beginTransaction();
 
             // 1. Ambil data lama
-            $setting = \App\Models\Setting::where('key', $key)->first();
+            $setting = Setting::where('key', $key)->first();
             $existing = $setting ? ($setting->value ?? []) : [];
-            
+
             // 2. Ambil data input baru (kecuali token)
             $data = $request->except(['_token']);
-            
+
             // 3. Handle recursive file uploads (including nested arrays like slides)
-            $processFiles = function($files, &$targetData) use (&$processFiles) {
+            $processFiles = function ($files, &$targetData) use (&$processFiles) {
                 foreach ($files as $key => $file) {
                     if (is_array($file)) {
-                        if (!isset($targetData[$key])) $targetData[$key] = [];
+                        if (! isset($targetData[$key])) {
+                            $targetData[$key] = [];
+                        }
                         $processFiles($file, $targetData[$key]);
-                    } else if ($file instanceof \Illuminate\Http\UploadedFile) {
+                    } elseif ($file instanceof UploadedFile) {
                         $path = $this->uploadAndIndex($file, 'cms', 'cms_upload');
 
                         // Handle path convention for settings JSON
                         $savedPath = $path; // We'll keep path relative to storage
-                        
+
                         // If the field name ends with '_file', replace it with '_url'
                         $urlField = str_replace(['_file', '_upload'], '', $key);
-                        if (!str_ends_with($urlField, '_url')) {
+                        if (! str_ends_with($urlField, '_url')) {
                             $urlField .= '_url';
                         }
-                        
+
                         $targetData[$urlField] = $savedPath;
                         unset($targetData[$key]);
                     }
@@ -77,42 +90,57 @@ class CMSController extends Controller
             $allFiles = $request->allFiles();
             $processFiles($allFiles, $data);
 
-            \Illuminate\Support\Facades\Log::info('CMS Saving Data for ' . $key, ['data' => $data]);
+            Log::info('CMS Saving Data for '.$key, ['data' => $data]);
 
-            // 4. Merge data: Data baru menimpa data lama
-            $finalData = array_merge($existing, $data);
-            
-            \Illuminate\Support\Facades\Log::info('CMS Final Merged Data', ['final' => $finalData]);
+            // 4. Merge data: data baru menimpa data lama.
+            // Untuk array nested seperti homepage_slides, array_merge dangkal bisa merusak strukturnya.
+            // Karena itu, kita deep-merge secara aman (minimal untuk nested arrays).
+            $finalData = $existing;
+
+            $deepMerge = function (&$target, $source) use (&$deepMerge) {
+                foreach ((array) $source as $key => $value) {
+                    if (is_array($value) && isset($target[$key]) && is_array($target[$key])) {
+                        $deepMerge($target[$key], $value);
+                    } else {
+                        $target[$key] = $value;
+                    }
+                }
+            };
+
+            $deepMerge($finalData, $data);
+
+            Log::info('CMS Final Merged Data', ['final' => $finalData]);
 
             // 5. Simpan ke database
             if ($setting) {
                 $setting->value = $finalData;
                 $setting->save();
             } else {
-                \App\Models\Setting::create([
+                Setting::create([
                     'key' => $key,
-                    'value' => $finalData
+                    'value' => $finalData,
                 ]);
             }
 
-            \Illuminate\Support\Facades\DB::commit();
-            
-            // Clear related caches so frontend updates immediately
-            \Illuminate\Support\Facades\Cache::forget('cms_tour_settings');
-            \Illuminate\Support\Facades\Cache::forget('site_settings_all');
-            
-            \Illuminate\Support\Facades\Log::alert("CMS SUCCESS: Saved '{$key}' with fields: " . implode(', ', array_keys($data)));
+            DB::commit();
 
-            \App\Http\Controllers\Api\SyncController::triggerSync();
+            // Clear related caches so frontend updates immediately
+            Cache::forget('cms_tour_settings');
+            Cache::forget('site_settings_all');
+
+            Log::alert("CMS SUCCESS: Saved '{$key}' with fields: ".implode(', ', array_keys($data)));
+
+            SyncController::triggerSync();
 
             return back()->with('success', 'Perubahan berhasil diterbitkan ke halaman publik!');
 
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\DB::rollBack();
-            \Illuminate\Support\Facades\Log::error("CMS FATAL ERROR: " . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+            DB::rollBack();
+            Log::error('CMS FATAL ERROR: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
             ]);
-            return back()->with('error', 'Gagal menyimpan: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal menyimpan: '.$e->getMessage());
         }
     }
 }

@@ -21,8 +21,8 @@ class BookingRepository
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('bookingCode', 'like', "%{$filters['search']}%")
-                  ->orWhere('customerName', 'like', "%{$filters['search']}%")
-                  ->orWhere('customerEmail', 'like', "%{$filters['search']}%");
+                    ->orWhere('customerName', 'like', "%{$filters['search']}%")
+                    ->orWhere('customerEmail', 'like', "%{$filters['search']}%");
             });
         }
 
@@ -62,6 +62,7 @@ class BookingRepository
     public function update(Booking $booking, array $data)
     {
         $booking->update($data);
+
         return $booking->fresh();
     }
 

@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class BlogController extends Controller
 {
-    use HandlesImageUploads, \App\Traits\LogsActivity;
-    
+    use \App\Traits\LogsActivity, HandlesImageUploads;
+
     public function show(Blog $blog)
     {
         return view('admin.blogs.show', compact('blog'));
     }
+
     public function index(Request $request)
     {
         $query = Blog::query();
@@ -24,7 +29,7 @@ class BlogController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                ->orWhere('content', 'like', "%{$search}%");
         }
 
         if ($request->filled('category')) {
@@ -36,6 +41,7 @@ class BlogController extends Controller
         }
 
         $blogs = $query->latest()->paginate(15);
+
         return view('admin.blogs.index', compact('blogs'));
     }
 
@@ -70,10 +76,10 @@ class BlogController extends Controller
         $validated['author'] = $validated['author'] ?? auth()->user()->name;
         $validated['excerpt'] = $validated['excerpt'] ?? Str::limit(strip_tags($validated['content']), 160);
         $validated['published_at'] = $validated['published_at'] ?? now();
-        
+
         $blog = Blog::create($validated);
         $this->logActivity('created', "Created new blog post: {$blog->title}", $blog);
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return redirect()->route('admin.blogs.index')->with('success', 'Artikel berhasil diterbitkan!');
     }
@@ -113,7 +119,7 @@ class BlogController extends Controller
 
         $blog->update($validated);
         $this->logActivity('updated', "Updated blog post: {$blog->title}", $blog);
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return redirect()->route('admin.blogs.index')->with('success', 'Artikel berhasil diperbarui!');
     }
@@ -134,10 +140,12 @@ class BlogController extends Controller
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (empty($ids)) return response()->json(['message' => 'No IDs provided'], 400);
+        if (empty($ids)) {
+            return response()->json(['message' => 'No IDs provided'], 400);
+        }
 
         Blog::whereIn('id', $ids)->delete();
-        $this->logActivity('bulk_deleted', "Bulk deleted " . count($ids) . " blogs");
+        $this->logActivity('bulk_deleted', 'Bulk deleted '.count($ids).' blogs');
 
         return response()->json(['message' => 'Blogs deleted successfully']);
     }
@@ -145,25 +153,38 @@ class BlogController extends Controller
     public function export(Request $request)
     {
         $format = $request->get('format', 'xlsx');
-        $filename = 'blogs-export-' . date('Y-m-d') . '.' . $format;
-        
+        $filename = 'blogs-export-'.date('Y-m-d').'.'.$format;
+
         $blogs = Blog::all();
 
-        return \Excel::download(new class($blogs) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings, \Maatwebsite\Excel\Concerns\WithMapping {
+        return \Excel::download(new class($blogs) implements FromCollection, WithHeadings, WithMapping
+        {
             protected $data;
-            public function __construct($data) { $this->data = $data; }
-            public function collection() { return $this->data; }
-            public function headings(): array {
+
+            public function __construct($data)
+            {
+                $this->data = $data;
+            }
+
+            public function collection()
+            {
+                return $this->data;
+            }
+
+            public function headings(): array
+            {
                 return ['ID', 'Judul', 'Kategori', 'Penulis', 'Status', 'Tanggal Rilis'];
             }
-            public function map($row): array {
+
+            public function map($row): array
+            {
                 return [
                     $row->id,
                     $row->title,
                     $row->category,
                     $row->author,
                     strtoupper($row->status),
-                    $row->published_at ? $row->published_at->format('Y-m-d') : '-'
+                    $row->published_at ? $row->published_at->format('Y-m-d') : '-',
                 ];
             }
         }, $filename);

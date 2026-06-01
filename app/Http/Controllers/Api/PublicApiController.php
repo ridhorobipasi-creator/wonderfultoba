@@ -15,6 +15,7 @@ use App\Models\Setting;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class PublicApiController extends Controller
@@ -55,16 +56,16 @@ class PublicApiController extends Controller
 
     public function getBlogs()
     {
-            $blogs = Blog::query()
-                ->select(['id', 'slug', 'title', 'excerpt', 'author', 'category', 'status', 'createdAt'])
-                ->latest('createdAt')
-                ->get()
-                ->map(function ($b) {
-            $b->is_published = $b->status === 'published';
-            $b->author = ['name' => $b->author];
+        $blogs = Blog::query()
+            ->select(['id', 'slug', 'title', 'excerpt', 'author', 'category', 'status', 'createdAt'])
+            ->latest('createdAt')
+            ->get()
+            ->map(function ($b) {
+                $b->is_published = $b->status === 'published';
+                $b->author = ['name' => $b->author];
 
-            return $b;
-        });
+                return $b;
+            });
 
         return response()->json($blogs);
     }
@@ -83,20 +84,20 @@ class PublicApiController extends Controller
 
     public function getBookings()
     {
-            $bookings = Booking::query()
-                ->select(['id', 'customerName', 'type', 'status', 'totalPrice', 'startDate', 'createdAt'])
-                ->latest('createdAt')
-                ->get()
-                ->map(function ($b) {
-            return [
-                'id' => 'BK-'.str_pad($b->id, 3, '0', STR_PAD_LEFT),
-                'customer_name' => $b->customerName,
-                'tour_name' => $b->type === 'package' ? 'Tour Package' : 'Custom Service',
-                'status' => ucfirst($b->status),
-                'total_price' => $b->totalPrice,
-                'booking_date' => $b->startDate,
-            ];
-        });
+        $bookings = Booking::query()
+            ->select(['id', 'customerName', 'type', 'status', 'totalPrice', 'startDate', 'createdAt'])
+            ->latest('createdAt')
+            ->get()
+            ->map(function ($b) {
+                return [
+                    'id' => 'BK-'.str_pad($b->id, 3, '0', STR_PAD_LEFT),
+                    'customer_name' => $b->customerName,
+                    'tour_name' => $b->type === 'package' ? 'Tour Package' : 'Custom Service',
+                    'status' => ucfirst($b->status),
+                    'total_price' => $b->totalPrice,
+                    'booking_date' => $b->startDate,
+                ];
+            });
 
         return response()->json($bookings);
     }
@@ -104,10 +105,10 @@ class PublicApiController extends Controller
     public function submitBooking(StoreBookingRequest $request)
     {
         $validated = $request->validated();
-        
+
         try {
             $bookingService = app(BookingService::class);
-            
+
             $bookingData = [
                 'type' => 'package',
                 'packageId' => $validated['packageId'],
@@ -128,10 +129,11 @@ class PublicApiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Booking berhasil dikirim!',
-                'data' => $booking
+                'data' => $booking,
             ], 201);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('API Booking Error: ' . $e->getMessage(), ['request' => $request->all()]);
+            Log::error('API Booking Error: '.$e->getMessage(), ['request' => $request->all()]);
+
             return response()->json(['error' => 'Maaf, terjadi kesalahan sistem saat memproses booking Anda.'], 500);
         }
     }
@@ -148,7 +150,7 @@ class PublicApiController extends Controller
 
     public function getOutboundServices()
     {
-        if (!Schema::hasTable('outbound_services')) {
+        if (! Schema::hasTable('outbound_services')) {
             return response()->json([]);
         }
 
