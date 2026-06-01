@@ -47,22 +47,22 @@
             @php
                 $heroImg = (count($packages) > 0 && count($packages[0]->packageImages) > 0) 
                     ? imageUrl($packages[0]->packageImages[0]->image_path) 
-                    : 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=2000';
+                    : imageUrl('sumatra-panorama');
             @endphp
             <img src="{{ $heroImg }}" alt="Packages Hero" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high" decoding="async">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-slate-50"></div>
-            <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pb-28">
+            <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-28">
                 <div class="animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <span class="inline-flex items-center gap-2 px-3 py-1 bg-toba-green/20 backdrop-blur-md border border-white/10 text-white text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full mb-4">Eksplorasi Indonesia & Dunia</span>
-                    <h1 class="text-4xl md:text-5xl font-light text-white tracking-tight leading-tight">
-                        Paket Wisata <span class="text-toba-accent font-normal">Pilihan Terbaik</span>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1]">
+                        Paket Wisata <span class="text-toba-accent">Pilihan Terbaik</span>
                     </h1>
                 </div>
             </div>
         </div>
 
         <!-- Filter Section -->
-        <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-16 relative z-20">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 -mt-16 relative z-20">
             <div class="bg-white/95 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search Box -->
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Results Grid -->
-        <div class="max-w-7xl mx-auto px-6 md:px-8 mt-14">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 mt-14">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 mb-0.5">Menampilkan Hasil</h2>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <template x-for="(pkg, i) in filteredPackages" :key="pkg.id">
                     <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-slate-200 transition-colors duration-300 group h-full flex flex-col shadow-sm">
@@ -133,7 +133,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star text-amber-400 fill-amber-400"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
                                         <span class="font-bold text-slate-800 text-[10px] tracking-wider">4.8</span>
                                     </div>
-                                    <div class="bg-slate-955 text-white px-2.5 py-1 rounded-lg text-[9px] font-semibold uppercase tracking-wider" x-text="pkg.duration"></div>
+                                    <div class="bg-slate-950 text-white px-2.5 py-1 rounded-lg text-[9px] font-semibold uppercase tracking-wider" x-text="pkg.duration"></div>
                                 </div>
 
                                 <button class="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition-all shadow-sm" aria-label="Simpan ke wishlist">
@@ -171,23 +171,23 @@
                 <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-x"><path d="m16 16 5 5"></path><circle cx="10" cy="10" r="7"></circle><path d="m7 7 6 6"></path><path d="m13 7-6 6"></path></svg>
                 </div>
-                <h3 class="text-2xl font-light text-slate-900 mb-3 tracking-tight">Destinasi Belum Ditemukan</h3>
-                <p class="text-slate-550 text-xs font-normal max-w-xs mx-auto mb-8 leading-relaxed">Kami tidak menemukan paket yang sesuai dengan kriteria Anda. Cobalah untuk mereset filter atau mencari dengan kata kunci lain.</p>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3 tracking-tight">Destinasi Belum Ditemukan</h3>
+                <p class="text-slate-500 text-xs font-normal max-w-xs mx-auto mb-8 leading-relaxed">Kami tidak menemukan paket yang sesuai dengan kriteria Anda. Cobalah untuk mereset filter atau mencari dengan kata kunci lain.</p>
                 <button @click="searchQuery = ''; filterCity = 'all'; filterDuration = 'Semua'; sortBy = 'default'"
-                    class="bg-slate-955 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-toba-green transition-colors duration-300">
+                    class="bg-slate-950 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-toba-green transition-colors duration-300">
                     Reset Semua Filter
                 </button>
             </div>
         </div>
 
         <!-- Custom CTA Section -->
-        <div class="max-w-7xl mx-auto px-6 md:px-8 mt-24 mb-24">
-            <div class="bg-gradient-to-r from-toba-green to-emerald-600 rounded-3xl p-10 text-center relative overflow-hidden shadow-sm">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 mb-16 md:mb-24">
+            <div class="bg-gradient-to-r from-toba-green to-emerald-600 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-sm">
                 <div class="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1200" alt="Paket wisata - destinasi" class="w-full h-full object-cover">
+                    <img src="{{ imageUrl('sumatra-panorama') }}" alt="Paket wisata - destinasi" class="w-full h-full object-cover">
                 </div>
                 <div class="relative z-10">
-                    <h3 class="text-2xl md:text-3xl font-light text-white mb-3">Tidak Menemukan Paket yang Cocok?</h3>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">Tidak Menemukan Paket yang Cocok?</h3>
                     <p class="text-white/80 text-sm font-normal mb-8 max-w-lg mx-auto">Kami siap merancang itinerary khusus sesuai kebutuhan dan budget Anda.</p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
                         <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-sm">

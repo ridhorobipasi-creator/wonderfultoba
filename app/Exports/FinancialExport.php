@@ -30,7 +30,7 @@ class FinancialExport implements FromCollection, WithHeadings, WithMapping
             'Item',
             'Pelanggan',
             'Total',
-            'Status'
+            'Status',
         ];
     }
 
@@ -46,8 +46,8 @@ class FinancialExport implements FromCollection, WithHeadings, WithMapping
             $booking->package?->isOutbound ? 'Outbound' : 'Tour',
             $booking->package?->name ?? 'Custom',
             $booking->customer?->name ?? 'Demo User',
-            'Rp ' . number_format($booking->totalPrice, 0, ',', '.'),
-            ucfirst($booking->status)
+            'Rp '.number_format($booking->totalPrice, 0, ',', '.'),
+            ucfirst($booking->status),
         ];
     }
 }

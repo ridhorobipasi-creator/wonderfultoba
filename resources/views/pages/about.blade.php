@@ -11,14 +11,14 @@
         <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/50 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pt-20">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pt-20">
             <div class="max-w-4xl">
                 <div class="flex items-center space-x-2 mb-4 animate-fade-in-down">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 text-white text-[10px] font-semibold uppercase tracking-[0.25em] rounded-full">
                         {{ __('OUR LEGACY') }}
                     </span>
                 </div>
-                <h1 class="text-4xl md:text-7xl font-headline-lg font-semibold text-white tracking-tight leading-tight mb-6 animate-fade-in-up">
+                <h1 class="text-4xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-6 animate-fade-in-up">
                     Dedikasi Untuk <br />
                     <span class="text-emerald-300">{{ __('Pariwisata Sumut') }}</span>
                 </h1>
@@ -30,8 +30,8 @@
     </div>
 
     <!-- Luxury Story Section -->
-    <section class="py-24 md:py-36 relative overflow-hidden bg-surface">
-        <div class="max-w-7xl mx-auto px-6 md:px-8">
+    <section class="py-16 md:py-36 relative overflow-hidden bg-surface">
+        <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                 
                 <!-- Image Side -->
@@ -104,12 +104,12 @@
     </section>
 
     <!-- Luxury Vision & Mission Section -->
-    <section class="py-24 md:py-36 bg-surface-container-low relative overflow-hidden">
+    <section class="py-16 md:py-36 bg-surface-container-low relative overflow-hidden">
         <div class="absolute inset-0 bg-[radial-gradient(#ffe088_0.5px,transparent_0.5px)] [background-size:16px_16px] opacity-15"></div>
         <div class="absolute top-0 right-0 w-1/3 h-full bg-surface-container skew-x-12 translate-x-20"></div>
         
-        <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-20 md:mb-28">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-20">
                 <span class="text-secondary font-semibold text-xs uppercase tracking-[0.2em] mb-4 block">
                     {{ __('OUR MISSION & VISION') }}
                 </span>
@@ -129,7 +129,7 @@
                             {{ __('Visi Kami') }}
                         </h3>
                         <p class="text-slate-600 text-sm md:text-base font-normal leading-relaxed">
-                            {{ $content['vision'] ?? 'Menjadi lokomotif pariwisata Sumatera Utara yang mengedepankan kualitas layanan premium, keberlanjutan alam, serta kebahagiaan dan kepuasan maksimal setiap tamu yang kami layani.' }}
+                            {{ $content['vision'] ?? 'Membawa Anda menikmati keaslian alam dan budaya Sumatera Utara melalui perjalanan yang tenang, aman, dan berkesan.' }}
                         </p>
                     </div>
                     <div class="pt-10 flex justify-end">
@@ -148,7 +148,7 @@
                         </h3>
                         <ul class="space-y-5">
                             @php
-                                $missions = explode("\n", $content['mission'] ?? "Menyediakan paket wisata yang edukatif, inspiratif, dan autentik.\nMenjamin standar kenyamanan dan keamanan transportasi serta akomodasi.\nMempromosikan kearifan lokal melalui interaksi budaya yang positif dan berkelanjutan.");
+                                $missions = explode("\n", $content['mission'] ?? "Merancang itinerary yang sesuai dengan ritme liburan Anda.\nMenyediakan transportasi dan akomodasi lokal terbaik.\nMemastikan setiap pelanggan pulang dengan cerita yang indah.");
                             @endphp
                             @foreach($missions as $mission)
                                 @if(trim($mission))
@@ -170,8 +170,8 @@
     </section>
 
     <!-- Why Choose Us Section -->
-    <section class="py-24 md:py-36 bg-surface">
-        <div class="max-w-7xl mx-auto px-6 md:px-8">
+    <section class="py-16 md:py-36 bg-surface">
+        <div class="max-w-7xl mx-auto px-5 md:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
                 
                 <div class="lg:col-span-5 space-y-6">
@@ -234,12 +234,12 @@
     </section>
 
     <!-- Trusted Partners Section (Sophisticated Dark Mode Showcase) -->
-    <section class="py-24 bg-primary relative overflow-hidden">
+    <section class="py-16 md:py-24 bg-primary relative overflow-hidden">
         <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:24px_24px]"></div>
-        <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
             <div class="text-center mb-16">
                 <span class="text-secondary-fixed font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">OFFICIAL PARTNERS</span>
-                <h3 class="text-2xl md:text-4xl font-headline-md font-normal text-white tracking-tight">Dipercaya Oleh Institusi Terkemuka</h3>
+                <h3 class="text-2xl md:text-4xl font-bold text-white tracking-tight">Dipercaya Oleh Institusi Terkemuka</h3>
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center">
@@ -275,13 +275,13 @@
     </section>
 
     <!-- Luxury Call to Action Section -->
-    <section class="py-24 md:py-36 px-6 md:px-8 bg-surface">
-        <div class="max-w-7xl mx-auto bg-surface-container rounded-[2.5rem] p-12 md:p-24 relative overflow-hidden text-center border border-outline-variant/20 shadow-2xl">
+    <section class="py-16 md:py-36 px-5 md:px-8 bg-surface">
+        <div class="max-w-7xl mx-auto bg-surface-container rounded-3xl md:rounded-[2.5rem] p-8 md:p-24 relative overflow-hidden text-center border border-outline-variant/20 shadow-2xl">
             <div class="absolute -top-32 -right-32 w-[30rem] h-[30rem] bg-secondary/5 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] bg-primary/10 rounded-full blur-3xl"></div>
             
             <div class="relative z-10 max-w-3xl mx-auto space-y-8">
-                <h2 class="text-3xl md:text-6xl font-headline-lg font-normal text-primary tracking-tight leading-tight">
+                <h2 class="text-3xl md:text-6xl font-bold text-primary tracking-tight leading-[1.05]">
                     Mulai Cerita Indah <br /> <span class="text-secondary">{{ __('Anda Bersama Kami') }}</span>
                 </h2>
                 <p class="text-on-surface-variant text-sm md:text-base font-light leading-relaxed max-w-xl mx-auto">

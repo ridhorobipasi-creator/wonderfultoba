@@ -13,9 +13,10 @@
 
     <!-- Featured Packages -->
     @if($settings['show_featured'] ?? true)
-    <section class="py-24 bg-surface overflow-hidden"
+    <section class="py-16 md:py-24 bg-surface overflow-hidden"
              x-data="{
                  isDragging: false, startX: 0, scrollLeft: 0,
+                 scrollPercent: 0,
                  get el() { return this.$refs.pkgStrip },
                  onDown(e) { this.isDragging = true; this.startX = e.pageX - this.el.offsetLeft; this.scrollLeft = this.el.scrollLeft; },
                  onMove(e) { if (!this.isDragging) return; e.preventDefault(); this.el.scrollLeft = this.scrollLeft - ((e.pageX - this.el.offsetLeft) - this.startX); },
@@ -23,13 +24,16 @@
                  scrollPrev() { this.el.scrollBy({ left: -380, behavior: 'smooth' }); },
                  scrollNext() { this.el.scrollBy({ left: 380, behavior: 'smooth' }); },
              }">
-        <div class="max-w-7xl mx-auto px-6 md:px-8">
-            <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-14 gap-6">
-                <div>
-                    <div class="w-16 h-0.5 bg-secondary mb-4"></div>
-                    <h2 class="font-headline-lg text-headline-lg text-primary">{{ __('Ekspedisi Terkurasi') }}</h2>
+        <div class="max-w-7xl mx-auto px-5 md:px-8">
+            <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 md:mb-14 gap-6">
+                <div class="max-w-xl">
+                    <span class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-secondary mb-3">
+                        <span class="w-6 h-px bg-secondary"></span>{{ __('Paket Pilihan') }}
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-bold text-primary tracking-tight leading-[1.1]">{{ __('Pilihan Liburan Terbaik') }}</h2>
+                    <p class="text-on-surface-variant text-sm md:text-base mt-3 leading-relaxed">{{ __('Geser untuk menjelajahi destinasi terkurasi di seluruh Sumatera Utara.') }}</p>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 shrink-0">
                     <button @click="scrollPrev()"
                             class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition-all">
                         <span class="material-symbols-outlined text-[18px]">chevron_left</span>
@@ -44,6 +48,7 @@
 
         <div x-ref="pkgStrip"
              @mousedown="onDown($event)" @mousemove="onMove($event)" @mouseup="onUp()" @mouseleave="onUp()"
+             @scroll="const max = el.scrollWidth - el.clientWidth; scrollPercent = max > 0 ? (el.scrollLeft / max) * 100 : 0"
              class="flex gap-6 overflow-x-auto scroll-smooth px-6 md:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] pb-4 no-scrollbar select-none"
              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
@@ -85,11 +90,19 @@
             @endforeach
 
         </div>
+
+        <!-- Modern Scroll Progress Bar for Packages -->
+        <div class="max-w-7xl mx-auto px-6 md:px-8 mt-6">
+            <div class="h-[3px] w-full bg-slate-100 rounded-full overflow-hidden relative">
+                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition-all duration-150"
+                     :style="'width: ' + scrollPercent + '%'"></div>
+            </div>
+        </div>
     </section>
     @endif
 
     @php
-        $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000');
+        $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'sumatra-panorama');
     @endphp
 
     <!-- Gallery Showcase -->
@@ -109,7 +122,7 @@
         }
     @endphp
 
-    <section class="bg-primary py-20 md:py-28 overflow-hidden"
+    <section class="bg-primary py-16 md:py-24 overflow-hidden"
              x-data="{
                  slides: @js($slides),
                  scrollContainer: null,
@@ -117,6 +130,7 @@
                  startX: 0,
                  scrollLeft: 0,
                  autoTimer: null,
+                 scrollPercent: 0,
 
                  init() {
                      this.scrollContainer = this.$refs.strip;
@@ -171,11 +185,13 @@
              }">
 
         {{-- Header --}}
-        <div class="max-w-7xl mx-auto px-6 md:px-8 mb-10 md:mb-14 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
-            <div>
-                <span class="font-label-caps text-[10px] text-white tracking-widest uppercase block mb-3">{{ __('Galeri Destinasi') }}</span>
-                <h2 class="font-headline-lg text-[32px] md:text-headline-lg text-white leading-tight">
-                    {{ __('Momen') }} <span class="text-white">{{ __('Tak Terlupakan') }}</span>
+        <div class="max-w-7xl mx-auto px-5 md:px-8 mb-8 md:mb-12 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+            <div class="max-w-xl">
+                <span class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-secondary-fixed mb-3">
+                    <span class="w-6 h-px bg-secondary-fixed"></span>{{ __('Galeri Destinasi') }}
+                </span>
+                <h2 class="text-3xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+                    {{ __('Kenangan Nyata dari Toba') }}
                 </h2>
             </div>
             <a href="{{ route('tour.gallery') }}"
@@ -191,11 +207,11 @@
 
             {{-- Prev / Next arrows --}}
             <button @click="scrollPrev()"
-                    class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-0 group-hover/strip:opacity-100">
+                    class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-60 hover:opacity-100">
                 <span class="material-symbols-outlined text-[20px]">chevron_left</span>
             </button>
             <button @click="scrollNext()"
-                    class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-0 group-hover/strip:opacity-100">
+                    class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-60 hover:opacity-100">
                 <span class="material-symbols-outlined text-[20px]">chevron_right</span>
             </button>
 
@@ -205,6 +221,7 @@
                  @mousemove="onMouseMove($event)"
                  @mouseup="onMouseUp()"
                  @mouseleave="onMouseUp()"
+                 @scroll="const max = scrollContainer.scrollWidth - scrollContainer.clientWidth; scrollPercent = max > 0 ? (scrollContainer.scrollLeft / max) * 100 : 0"
                  class="flex gap-5 overflow-x-auto scroll-smooth px-6 md:px-8 pb-4 no-scrollbar select-none"
                  :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
@@ -238,6 +255,14 @@
             </div>
         </div>
 
+        <!-- Modern Scroll Progress Bar for Gallery -->
+        <div class="max-w-7xl mx-auto px-6 md:px-8 mt-6">
+            <div class="h-[3px] w-full bg-white/10 rounded-full overflow-hidden relative">
+                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition-all duration-150"
+                     :style="'width: ' + scrollPercent + '%'"></div>
+            </div>
+        </div>
+
     </section>
     @endif
 
@@ -249,22 +274,22 @@
             [
                 'name' => 'Julian Thorne',
                 'location' => 'London, UK',
-                'text' => 'Perhatian terhadap detail ekologis sangat menakjubkan. Kami menjelajahi jantung Sumatera tanpa merasa mengganggu alam. Benar-benar kemewahan yang memiliki jiwa.',
-                'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC2hFgaSrsa7A85bf12SiUK30lkhhCDaRhbOnbQUSBDrVAhUc-Gn-kMxthYsqdKkltnsLX5uDn04g_wUEJDw7KExIuUEuT2cOCkJzUuAvUoirw4J8-btZ7EU65QsdsiKicugbr5fKfKaiv1dI7zoNYP3tIBWv-WQaRo54c35tZdiY3pUz3Id2QsoJ1s8g4PhVBn9mEPONWbu5kdqHJ3Az707ev_vjB69P126_JW9q9SKGuhiqoqVWEFZ36G19k5tdDV9HRU5qbZr3v'
+                'text' => 'Perhatian terhadap detail sangat menakjubkan. Kami menjelajahi jantung Sumatera tanpa repot mengatur jadwal. Mulai dari penjemputan di Kualanamu hingga makan malam di tepi Samosir, semuanya dirancang sempurna.',
+                'image' => 'user1'
             ],
             [
                 'name' => 'Isabella Chen',
                 'location' => 'Singapura',
-                'text' => 'Semuanya, mulai dari penerbangan pribadi hingga lokasi makan malam rahasia di Raja Ampat, dirancang dengan sempurna. Sujai Laketoba berada di kelasnya tersendiri.',
-                'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFaWOA9YaZv80gupI35EV08bFke39OBT9N8CQ45hUM6dKKz11RKUVgEOqjPB0spF_ja_gJ6-2wUxWYwZLSmBQV9h7pTqQ1AwkBLNqZm2Heokgv4sEbwFHjwf44zyhRu1psOnTm-x6WFxR7PtU9RLW5My0DCfk85AEvcuqn4mMERnRR084UCi-8jPaSPcohMu3PBqalduBH8ykcewFiLBro5njrtDwIEOFCZZBhts_Yjkf-BBORMZS97L63Xj6opHAW4qD4A01FGfXk'
+                'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Sujai Laketoba mengkurasi tempat-tempat otentik yang jarang diketahui turis biasa. Sangat direkomendasikan untuk liburan keluarga.',
+                'image' => 'user2'
             ]
         ];
     @endphp
-    <section class="py-20 bg-surface">
-        <div class="max-w-5xl mx-auto px-6 md:px-8">
-            <div class="flex items-center gap-4 mb-12">
-                <div class="w-10 h-0.5 bg-secondary"></div>
-                <span class="font-label-caps text-[10px] text-secondary uppercase tracking-widest">{{ __('Testimoni') }}</span>
+    <section class="py-16 md:py-24 bg-surface">
+        <div class="max-w-5xl mx-auto px-5 md:px-8">
+            <div class="flex items-center gap-3 mb-10 md:mb-12">
+                <span class="w-6 h-px bg-secondary"></span>
+                <span class="text-[10px] font-bold text-secondary uppercase tracking-[0.25em]">{{ __('Testimoni') }}</span>
             </div>
 
             <div class="space-y-8">
@@ -280,7 +305,7 @@
                     <div class="flex items-center gap-3 md:w-48 shrink-0">
                         <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-low shrink-0">
                             <img alt="{{ $t['name'] }}"
-                                 src="{{ !empty($t['image']) ? (Str::startsWith($t['image'], 'http') ? $t['image'] : asset('storage/'.$t['image'])) : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&h=150&q=80' }}"
+                                 src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
                                  class="w-full h-full object-cover">
                         </div>
                         <div>
@@ -300,12 +325,12 @@
 
     <!-- Specialist — minimal inline -->
     @if($settings['show_specialist'] ?? true)
-    <section class="bg-surface pb-20 px-6 md:px-8">
+    <section class="bg-surface pb-16 md:pb-20 px-5 md:px-8">
         <div class="max-w-5xl mx-auto">
-            <div class="bg-primary rounded-2xl px-8 py-6 md:px-10 md:py-7 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+            <div class="bg-primary rounded-3xl px-6 py-7 md:px-10 md:py-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-8 text-center sm:text-left">
                 <img alt="{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}"
                      class="w-14 h-14 rounded-full object-cover border-2 border-white/10 shrink-0"
-                     src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80') }}"/>
+                     src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'staff1') }}"/>
                 <div class="flex-1 text-center sm:text-left">
                     <p class="text-white font-bold font-body-md text-sm">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
                     <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
@@ -322,12 +347,17 @@
 
     <!-- Journal/Blog -->
     @if($settings['show_blogs'] ?? true)
-    <section class="py-24 max-w-7xl mx-auto px-6 md:px-8 bg-surface">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 md:mb-16 gap-4">
-            <h2 class="font-headline-lg text-[32px] md:text-headline-lg text-primary">{{ __('Jurnal Perjalanan') }}</h2>
-            <a class="font-label-caps text-label-caps text-secondary underline underline-offset-8" href="/tour/blog">{{ __('Lihat Semua Cerita') }}</a>
+    <section class="py-16 md:py-24 max-w-7xl mx-auto px-5 md:px-8 bg-surface">
+        <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-10 md:mb-14 gap-4">
+            <div class="max-w-xl">
+                <span class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-secondary mb-3">
+                    <span class="w-6 h-px bg-secondary"></span>{{ __('Cerita') }}
+                </span>
+                <h2 class="text-3xl md:text-5xl font-bold text-primary tracking-tight leading-[1.1]">{{ __('Jurnal Perjalanan') }}</h2>
+            </div>
+            <a class="text-[11px] font-bold uppercase tracking-widest text-secondary underline underline-offset-8 shrink-0" href="/tour/blog">{{ __('Lihat Semua Cerita') }}</a>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             @foreach($blogs as $blog)
             <div class="group cursor-pointer" onclick="window.location.href='{{ route('tour.blog.detail', $blog->slug) }}'">
                 <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
@@ -342,10 +372,10 @@
     @endif
 
     <!-- FAQ -->
-    <section class="py-24 bg-surface-container-low">
-        <div class="max-w-3xl mx-auto px-6">
-            <div class="text-center mb-12 md:mb-16">
-                <h2 class="font-headline-lg text-[32px] md:text-headline-lg text-primary mb-4">{{ __('Pertanyaan Umum') }}</h2>
+    <section class="py-16 md:py-24 bg-surface-container-low">
+        <div class="max-w-3xl mx-auto px-5">
+            <div class="text-center mb-10 md:mb-14">
+                <h2 class="text-3xl md:text-5xl font-bold text-primary tracking-tight mb-4">{{ __('Pertanyaan Umum') }}</h2>
                 <div class="w-12 h-0.5 bg-secondary mx-auto"></div>
             </div>
             @php
@@ -374,9 +404,9 @@
             @endphp
             <div class="space-y-2 md:space-y-4" x-data="{ selected: 1 }">
                 @foreach($faqs as $index => $faq)
-                <div class="border-b border-outline-variant bg-white px-6 rounded-2xl shadow-xs border border-slate-100">
-                    <button @click="selected !== {{ $index + 1 }} ? selected = {{ $index + 1 }} : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center text-left focus:outline-none">
-                        <span class="font-headline-md text-[16px] md:text-[18px] text-primary font-bold">{{ __($faq['q']) }}</span>
+                <div class="bg-white px-5 md:px-6 rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-sm">
+                    <button @click="selected !== {{ $index + 1 }} ? selected = {{ $index + 1 }} : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center gap-4 text-left focus:outline-none">
+                        <span class="text-[15px] md:text-[18px] text-primary font-bold leading-snug">{{ __($faq['q']) }}</span>
                         <span :class="selected === {{ $index + 1 }} ? 'rotate-180 text-secondary' : ''" class="material-symbols-outlined transition-transform duration-300">expand_more</span>
                     </button>
                     <div x-show="selected === {{ $index + 1 }}" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="overflow-hidden">
@@ -391,8 +421,8 @@
     </section>
 
     <!-- Cinema CTA -->
-    <section class="py-24 md:py-32 px-6 md:px-8 bg-surface">
-        <div class="max-w-7xl mx-auto bg-primary rounded-[4rem] p-12 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,37,19,0.3)]">
+    <section class="py-16 md:py-32 px-5 md:px-8 bg-surface">
+        <div class="max-w-7xl mx-auto bg-primary rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,37,19,0.3)]">
             <div class="absolute inset-0 opacity-40">
                 <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? 'Call to action image' }}" class="w-full h-full object-cover">
             </div>
@@ -403,27 +433,27 @@
             <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-[120px]"></div>
 
             <div class="relative z-10 text-center lg:text-left max-w-4xl">
-                <h2 class="text-4xl md:text-7xl font-headline-lg text-white mb-8 tracking-tight leading-[0.95]">
+                <h2 class="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-6 md:mb-8 tracking-tight leading-[1.05] md:leading-[0.95]">
                     {{ __('Siap Untuk') }} <br/> <span class="text-white">{{ __('Petualangan Nyata?') }}</span>
                 </h2>
-                <p class="text-xl text-slate-300 mb-12 font-body-lg leading-relaxed max-w-2xl">
+                <p class="text-base md:text-xl text-slate-300 mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                     @php
                         $touristsCount = $settings['stat_customers'] ?? '1.500+';
                     @endphp
                     {{ __('Bergabunglah dengan') }} <span class="text-white font-bold">{{ $touristsCount }}</span> {{ __('wisatawan lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
-                    <a href="/tour/packages" class="bg-white text-primary px-12 py-6 rounded-[2rem] font-bold text-sm uppercase tracking-[0.2em] hover:bg-secondary hover:text-white transition-all duration-500 shadow-2xl flex items-center gap-3 group">
+                    <a href="/tour/packages" class="bg-white text-primary px-8 py-4 md:px-12 md:py-6 rounded-2xl md:rounded-[2rem] font-bold text-sm uppercase tracking-[0.2em] hover:bg-secondary hover:text-white transition-all duration-500 shadow-2xl flex items-center gap-3 group">
                         <span>{{ __('Pesan Paket Sekarang') }}</span>
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                     <div class="flex -space-x-4">
                         @php
                         $avatarPhotos = [
-                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80',
-                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80',
-                            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80',
-                            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
+                            imageUrl('avatar_user_1'),
+                            imageUrl('avatar_user_2'),
+                            imageUrl('avatar_user_3'),
+                            imageUrl('avatar_user_4'),
                         ];
                         @endphp
                         @foreach($avatarPhotos as $avatarUrl)

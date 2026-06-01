@@ -25,8 +25,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <!-- FontAwesome deferred (non-render-blocking) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <style>
         [x-cloak] { display: none !important; }
@@ -437,7 +439,7 @@
             <main class="flex-1 p-5 lg:p-10 w-full max-w-full">
 
                 {{-- Floating Toast Notifications --}}
-                <div class="fixed top-24 right-8 z-[9999] flex flex-col gap-4 w-80 pointer-events-none">
+                <div class="fixed top-24 left-4 right-4 sm:left-auto sm:right-8 z-[9999] flex flex-col gap-4 w-auto sm:w-80 pointer-events-none">
                     @if(session('success'))
                         <div x-data="{ show: true }"
                              x-init="setTimeout(() => show = false, 5000)"

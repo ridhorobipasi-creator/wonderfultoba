@@ -6,9 +6,9 @@
 
 @section('content')
 <div class="bg-slate-50 min-h-screen pt-32 pb-24">
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <h1 class="text-3xl md:text-5xl font-light text-slate-900 mb-6 tracking-tight">Syarat &amp; <span class="text-toba-green">Ketentuan</span></h1>
+    <div class="max-w-4xl mx-auto px-5">
+        <div class="bg-white rounded-3xl p-6 md:p-12 shadow-sm border border-slate-100 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Syarat &amp; <span class="text-toba-green">Ketentuan</span></h1>
             
             {{-- Identitas Perusahaan --}}
             <div class="mb-8 p-6 bg-slate-50 border border-slate-100 rounded-2xl text-xs text-slate-500 font-normal leading-relaxed">

@@ -59,14 +59,14 @@
         <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/50 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 pt-20">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pt-20">
             <div class="max-w-4xl animate-fade-in-up">
                 <div class="flex items-center space-x-2 mb-4 animate-fade-in-down">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/20 backdrop-blur-md border border-secondary/30 text-secondary-container text-[10px] font-black uppercase tracking-[0.25em] rounded-full">
                         {{ __('Visual Storytelling') }}
                     </span>
                 </div>
-                <h1 class="text-4xl md:text-7xl font-headline-lg font-normal text-white tracking-tight leading-tight mb-6">
+                <h1 class="text-4xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-6">
                     Galeri <br />
                     <span class="text-secondary-fixed">{{ __('Momen Indah') }}</span>
                 </h1>
@@ -78,7 +78,7 @@
     </div>
 
     <!-- Category Filter & Search Bar -->
-    <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-16 relative z-30">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 -mt-16 relative z-30">
         <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl p-6 border border-outline-variant/20 animate-in fade-in zoom-in duration-1000 delay-300">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <!-- Filters -->
@@ -110,17 +110,17 @@
     </div>
 
     <!-- Masonry Gallery Grid -->
-    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-20">
-        <div class="flex items-center justify-between mb-10">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 mt-14 md:mt-20">
+        <div class="flex items-center justify-between mb-8 md:mb-10">
             <div>
-                <h2 class="text-2xl font-headline-md font-normal text-primary tracking-tight">{{ __('Koleksi') }} <span class="text-secondary">{{ __('Visual') }}</span></h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-primary tracking-tight">{{ __('Koleksi') }} <span class="text-secondary">{{ __('Visual') }}</span></h2>
                 <p class="text-on-surface-variant font-light text-xs mt-1">
                     {{ __('Menampilkan') }} <span class="text-secondary font-bold" x-text="filteredImages.length"></span> {{ __('mahakarya alam Sumatera Utara') }}
                 </p>
             </div>
         </div>
 
-        <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
+        <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-8 space-y-5 md:space-y-8">
             <template x-for="(img, index) in filteredImages" :key="index">
                 <div
                     class="break-inside-avoid relative rounded-3xl overflow-hidden group cursor-pointer shadow-lg transition-all duration-[0.6s] border border-outline-variant/20 hover:border-secondary/40 hover:-translate-y-1 bg-white"

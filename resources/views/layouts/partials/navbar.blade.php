@@ -52,7 +52,7 @@
                                 <span class="text-sm">🇸🇬</span> SGD (English)
                             @endif
                         </span>
-                        <svg class="w-3.5 h-3.5 text-white transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-3.5 h-3.5 text-slate-500 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg py-2 border border-slate-200 text-[11px] z-[200]">
                         <a href="{{ route('change-locale', 'my') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors {{ session('locale', 'my') === 'my' ? 'bg-slate-50 text-primary font-semibold' : '' }}">
@@ -72,8 +72,8 @@
 
     <!-- Main Nav -->
     <nav 
-        :class="isScrolled ? 'bg-white/95 backdrop-blur-md py-3 shadow-sm border-slate-200/70' : 'bg-transparent py-5 border-transparent'"
-        class="transition-all duration-300 border-b"
+        :class="isScrolled ? 'bg-white/80 backdrop-blur-xl py-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50' : 'bg-transparent py-5 border-transparent'"
+        class="transition-all duration-500"
     >
         <div class="max-w-7xl mx-auto px-4 lg:px-6 xl:px-8">
             <div class="flex justify-between items-center">
@@ -104,7 +104,7 @@
                                 S
                             </div>
                             <div class="flex flex-col whitespace-nowrap">
-                                <span class="text-base md:text-lg font-bold leading-none tracking-tight transition-colors uppercase text-slate-900">
+                                <span :class="isScrolled ? 'text-slate-900' : 'text-white'" class="text-base md:text-lg font-bold leading-none tracking-tight transition-colors uppercase">
                                     {{ $brandName }}
                                 </span>
                                 <span 
@@ -121,30 +121,30 @@
                 <!-- Desktop Nav -->
                 <div class="hidden lg:flex items-center space-x-8 shrink-0 w-max">
                     <a href="/" 
-                        :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-slate-700 hover:text-primary')" 
+                        :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Beranda') }}</a>
 
                     <a href="/tour/packages" 
-                        :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-slate-700 hover:text-primary')" 
+                        :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Paket Wisata') }}</a>
                     
                     <a href="/tour/gallery" 
-                        :class="isScrolled ? ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-slate-700 hover:text-primary')" 
+                        :class="isScrolled ? ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Galeri') }}</a>
                     
                     <a href="/tour/blog" 
-                        :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-slate-700 hover:text-primary')" 
+                        :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Blog') }}</a>
                     
                     <a href="/about" 
-                        :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-slate-700 hover:text-primary')" 
+                        :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Tentang Kami') }}</a>
                 </div>
 
                 <!-- Desktop Actions -->
                 <div class="hidden lg:flex items-center space-x-6 shrink-0 ml-8">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer" 
-                        :class="isScrolled ? 'border-primary text-primary hover:bg-primary hover:text-white' : 'border-slate-300 text-slate-700 hover:bg-slate-900 hover:text-white'"
+                        :class="isScrolled ? 'border-primary text-primary hover:bg-primary hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-900'"
                         class="px-5 py-2 rounded-lg border font-semibold text-xs tracking-wider transition-all flex items-center space-x-2 whitespace-nowrap uppercase"
                     >
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>

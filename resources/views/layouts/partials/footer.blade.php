@@ -1,4 +1,4 @@
-<footer class="bg-slate-950 pt-16 md:pt-20 pb-10 px-6 md:px-8 relative overflow-hidden">
+<footer class="bg-slate-950 pt-16 md:pt-20 pb-10 px-5 md:px-8 relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-[1px] bg-white/10"></div>
     
     <div class="max-w-7xl mx-auto relative z-10">

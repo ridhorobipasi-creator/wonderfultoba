@@ -9,7 +9,7 @@
     
     $isInternational = $locationData && $locationData->type === 'international';
     $rawImage = $package->packageImages->first()?->image_path 
-        ?? ((isset($package->images) && count($package->images) > 0) ? $package->images[0] : (isset($package->image) ? $package->image : 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=800'));
+        ?? ((isset($package->images) && count($package->images) > 0) ? $package->images[0] : (isset($package->image) ? $package->image : 'tour'));
     $image = imageUrl($rawImage);
 @endphp
 

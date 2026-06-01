@@ -39,8 +39,8 @@
                 </div>
 
                 <!-- The "Paper" Editor -->
-                <div class="bg-slate-50 p-8 md:p-16 rounded-[3.5rem] border border-slate-100 min-h-[900px] flex justify-center relative">
-                    <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-16 md:p-24 min-h-[1000px] relative">
+                <div class="bg-slate-50 p-3 sm:p-8 md:p-16 rounded-2xl md:rounded-[3.5rem] border border-slate-100 min-h-[900px] flex justify-center relative">
+                    <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-5 sm:p-10 md:p-24 min-h-[1000px] relative">
                         <!-- CKEditor Container -->
                         <div id="editor-container" class="prose prose-slate max-w-none">
                             <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition-all">{{ old('content') }}</textarea>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ActivityLogController extends Controller
@@ -22,9 +23,9 @@ class ActivityLogController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%");
+                    ->orWhere('model', 'like', "%{$search}%");
             });
         }
 
@@ -33,7 +34,7 @@ class ActivityLogController extends Controller
         }
 
         $logs = $query->latest()->paginate(50);
-        $users = \App\Models\User::orderBy('name')->get();
+        $users = User::orderBy('name')->get();
         $actions = ActivityLog::select('action')->distinct()->pluck('action');
 
         return view('admin.logs.index', compact('logs', 'users', 'actions'));

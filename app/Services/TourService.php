@@ -2,10 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Package;
+use App\Models\Blog;
+use App\Models\City;
+use App\Models\GalleryImage;
 use App\Models\Media;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Package;
+use App\Models\Setting;
 use App\Traits\HandlesImageUploads;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TourService
@@ -15,20 +21,20 @@ class TourService
     /**
      * Create or update a tour package with comprehensive image handling.
      */
-    public function savePackage(array $data, Package $package = null)
+    public function savePackage(array $data, ?Package $package = null)
     {
-        $package = $package ?? new Package();
-        
+        $package = $package ?? new Package;
+
         // 1. Prepare Data
-        if (!$package->exists) {
+        if (! $package->exists) {
             $data['slug'] = Str::slug($data['name']);
         } elseif (isset($data['name']) && $data['name'] !== $package->name) {
             $data['slug'] = Str::slug($data['name']);
         }
 
         // 2. Sanitize Includes/Excludes
-        $data['includes'] = array_values(array_filter($data['includes'] ?? [], fn($v) => !empty(trim((string)$v))));
-        $data['excludes'] = array_values(array_filter($data['excludes'] ?? [], fn($v) => !empty(trim((string)$v))));
+        $data['includes'] = array_values(array_filter($data['includes'] ?? [], fn ($v) => ! empty(trim((string) $v))));
+        $data['excludes'] = array_values(array_filter($data['excludes'] ?? [], fn ($v) => ! empty(trim((string) $v))));
 
         // 3. Handle Image Removals (for update)
         $currentImages = $package->images ?? [];
@@ -58,7 +64,7 @@ class TourService
         }
 
         $data['images'] = array_values(array_unique($currentImages));
-        
+
         // 6. Save Package
         $package->fill($data);
         $package->save();
@@ -68,7 +74,7 @@ class TourService
         foreach ($data['images'] as $index => $imgPath) {
             $package->packageImages()->create([
                 'image_path' => $imgPath,
-                'sort_order' => $index
+                'sort_order' => $index,
             ]);
         }
 
@@ -85,6 +91,7 @@ class TourService
                 Storage::disk('public')->delete($image);
             }
         }
+
         return $package->delete();
     }
 
@@ -100,7 +107,7 @@ class TourService
             'category' => 'packages',
             'mime_type' => 'image/webp',
             'size' => Storage::disk('public')->size($path),
-            'alt_text' => $packageName
+            'alt_text' => $packageName,
         ]);
     }
 
@@ -109,17 +116,18 @@ class TourService
      */
     public function clearCache($slug = null)
     {
-        \Illuminate\Support\Facades\Cache::forget('tour_packages_all');
-        \Illuminate\Support\Facades\Cache::forget('featured_packages');
-        \Illuminate\Support\Facades\Cache::forget('tour_blogs_all');
-        \Illuminate\Support\Facades\Cache::forget('tour_homepage_data');
-        \Illuminate\Support\Facades\Cache::forget('site_settings_structured_cms_tour_general');
-        
+        Cache::forget('tour_packages_all');
+        Cache::forget('featured_packages');
+        Cache::forget('tour_blogs_all');
+        Cache::forget('tour_homepage_data');
+        Cache::forget('site_settings_structured_cms_tour_general');
+
         if ($slug) {
-            \Illuminate\Support\Facades\Cache::forget("package_detail_{$slug}");
+            Cache::forget("package_detail_{$slug}");
         }
 
-        \Illuminate\Support\Facades\Log::info("Cache cleared for " . ($slug ?? 'all packages'));
+        Log::info('Cache cleared for '.($slug ?? 'all packages'));
+
         return true;
     }
 
@@ -128,7 +136,7 @@ class TourService
      */
     public function getTourSettings()
     {
-        return \App\Models\Setting::where('key', 'cms_tour')->first()?->value ?? [];
+        return Setting::where('key', 'cms_tour')->first()?->value ?? [];
     }
 
     /**
@@ -136,11 +144,21 @@ class TourService
      */
     public function getFeaturedPackages()
     {
-        return Package::where('status', 'active')
+        $featured = Package::where('status', 'active')
             ->where('isFeatured', true)
             ->with(['packageImages', 'city'])
             ->orderBy('sortOrder')
             ->get();
+
+        // Fallback: if no featured packages, show all active ones
+        if ($featured->isEmpty()) {
+            return Package::where('status', 'active')
+                ->with(['packageImages', 'city'])
+                ->orderBy('sortOrder')
+                ->get();
+        }
+
+        return $featured;
     }
 
     /**
@@ -148,7 +166,7 @@ class TourService
      */
     public function getBlogs($limit = null)
     {
-        $query = \App\Models\Blog::where('status', 'published')
+        $query = Blog::where('status', 'published')
             ->latest('createdAt');
 
         if ($limit) {
@@ -174,7 +192,7 @@ class TourService
      */
     public function getCities()
     {
-        return \App\Models\City::orderBy('name')->get();
+        return City::orderBy('name')->get();
     }
 
     /**
@@ -182,12 +200,12 @@ class TourService
      */
     public function getGallery()
     {
-        return \App\Models\GalleryImage::where('isActive', true)
-            ->where(function($query) {
+        return GalleryImage::where('isActive', true)
+            ->where(function ($query) {
                 $query->where('category', 'tour')
-                      ->orWhere('category', 'Tour')
-                      ->orWhereNull('category')
-                      ->orWhere('category', '');
+                    ->orWhere('category', 'Tour')
+                    ->orWhereNull('category')
+                    ->orWhere('category', '');
             })
             ->orderBy('orderPriority')
             ->get();
@@ -208,7 +226,7 @@ class TourService
      */
     public function getBlogPost($slug)
     {
-        return \App\Models\Blog::where('slug', $slug)
+        return Blog::where('slug', $slug)
             ->where('status', 'published')
             ->first();
     }
@@ -218,11 +236,10 @@ class TourService
      */
     public function getRelatedBlogs($currentId, $limit = 3)
     {
-        return \App\Models\Blog::where('status', 'published')
+        return Blog::where('status', 'published')
             ->where('id', '!=', $currentId)
             ->latest('createdAt')
             ->limit($limit)
             ->get();
     }
 }
-

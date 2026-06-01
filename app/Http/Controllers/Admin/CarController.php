@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 use App\Traits\HandlesImageUploads;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CarController extends Controller
 {
@@ -16,6 +15,7 @@ class CarController extends Controller
     public function index()
     {
         $cars = Car::latest('createdAt')->paginate(10);
+
         return view('admin.cars.index', compact('cars'));
     }
 
@@ -41,7 +41,7 @@ class CarController extends Controller
 
         $data = $validated;
         $data['isFeatured'] = $request->has('isFeatured');
-        $data['images'] = $request->input('images', []); 
+        $data['images'] = $request->input('images', []);
 
         Car::create($data);
         Cache::forget('cars_active');
@@ -83,6 +83,7 @@ class CarController extends Controller
     {
         $car->delete();
         Cache::forget('cars_active');
+
         return redirect()->route('admin.cars.index')->with('success', 'Mobil berhasil dihapus.');
     }
 

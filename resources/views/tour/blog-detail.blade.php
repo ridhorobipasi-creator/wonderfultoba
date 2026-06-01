@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
+@php
+    $coverExif = null;
+    if (!empty($post->image)) {
+        $clean = ltrim($post->image, '/');
+        if (str_starts_with($clean, 'storage/')) {
+            $clean = substr($clean, 8);
+        }
+        $media = \App\Models\Media::where('path', $clean)->orWhere('path', $post->image)->first();
+        if ($media && $media->exif_data) {
+            $coverExif = $media->exif_data;
+        }
+    }
+@endphp
+
 @section('title', ($post->translated_title ?? 'Blog') . ' – Sujai Laketoba')
 @section('description', \Illuminate\Support\Str::limit($post->content ?? '', 160))
 
-@section('og_image', $post->image ?: asset('images/og-default.webp'))
+@section('og_image', ogBannerUrl($post))
 
 @push('schema')
 <script type="application/ld+json">
@@ -28,16 +42,14 @@
 
     {{-- ====== IMMERSIVE CINEMATIC HERO ====== --}}
     <div class="relative h-[55dvh] w-full overflow-hidden bg-primary">
-        <img src="{{ $post->image }}" alt="{{ $post->translated_title }}" 
-             class="absolute inset-0 w-full h-full object-cover opacity-50 animate-subtle-zoom"
-             fetchpriority="high" decoding="async">
+        {!! responsiveImage($post->image, 'absolute inset-0 w-full h-full object-cover opacity-50 animate-subtle-zoom', $post->translated_title, 'fetchpriority="high" decoding="async"') !!}
         
         {{-- Gradient overlays --}}
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-primary/40"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/20 to-transparent"></div>
 
         {{-- Hero content --}}
-        <div class="relative z-10 h-full max-w-5xl mx-auto px-6 md:px-8 flex flex-col justify-center pt-16">
+        <div class="relative z-10 h-full max-w-5xl mx-auto px-5 md:px-8 flex flex-col justify-center pt-16">
             <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000">
                 {{-- Back button --}}
                 <a href="/tour/blog" 
@@ -60,7 +72,7 @@
                     </span>
                 </div>
 
-                <h1 class="text-3xl md:text-5xl font-headline-lg font-normal text-white tracking-tight leading-tight drop-shadow-sm">
+                <h1 class="text-3xl md:text-5xl font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm">
                     {{ $post->translated_title }}
                 </h1>
             </div>
@@ -68,12 +80,12 @@
     </div>
 
     {{-- ====== READING AREA ====== --}}
-    <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-16 relative z-20">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            
+    <div class="max-w-7xl mx-auto px-5 md:px-8 -mt-16 relative z-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+
             {{-- ── Main article body ── --}}
             <div class="lg:col-span-8">
-                <article class="bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-outline-variant/30">
+                <article class="bg-white rounded-3xl p-6 md:p-14 shadow-sm border border-outline-variant/30">
                     
                     {{-- Author meta --}}
                     <div class="flex items-center gap-4 mb-10 pb-8 border-b border-outline-variant/30">
@@ -86,15 +98,42 @@
                         </div>
                     </div>
 
+                    @if($coverExif)
+                    <div class="mb-10 p-5 bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-wrap gap-4 items-center justify-between text-xs text-slate-500 animate-in fade-in slide-in-from-top-4 duration-500 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg">📸</span>
+                            <div>
+                                <p class="font-semibold text-slate-700">Metadata Foto Jurnal</p>
+                                <p class="text-slate-500">
+                                    @if(!empty($coverExif['camera_brand']) || !empty($coverExif['camera_model']))
+                                        {{ $coverExif['camera_brand'] ?? '' }} {{ $coverExif['camera_model'] ?? '' }}
+                                    @endif
+                                    @if(!empty($coverExif['aperture'])) • {{ $coverExif['aperture'] }} @endif
+                                    @if(!empty($coverExif['iso'])) • ISO {{ $coverExif['iso'] }} @endif
+                                    @if(!empty($coverExif['shutter_speed'])) • {{ $coverExif['shutter_speed'] }} @endif
+                                </p>
+                            </div>
+                        </div>
+                        @if(!empty($coverExif['gps']['lat']) && !empty($coverExif['gps']['lng']))
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg font-semibold tracking-wide transition-colors">
+                            <span class="material-symbols-outlined text-[14px]">location_on</span>
+                            {{ __('Titik Lokasi') }}
+                        </a>
+                        @endif
+                    </div>
+                    @endif
+
                     {{-- Article body --}}
-                    <div class="prose prose-lg max-w-none text-on-surface-variant font-body-md leading-relaxed
-                                prose-headings:font-headline-md prose-headings:text-primary
-                                prose-a:text-secondary prose-a:no-underline hover:prose-a:underline
-                                prose-strong:text-on-surface prose-blockquote:border-secondary prose-blockquote:text-on-surface-variant">
+                    <div class="prose prose-lg md:prose-xl max-w-none text-slate-700 font-body-md leading-[1.8] tracking-[0.01em]
+                                prose-headings:font-headline-md prose-headings:text-primary prose-headings:font-semibold
+                                prose-a:text-emerald-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                                prose-strong:text-slate-900 prose-strong:font-bold
+                                prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:bg-emerald-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:text-slate-700 prose-blockquote:not-italic prose-blockquote:rounded-r-xl
+                                prose-img:rounded-2xl prose-img:shadow-sm">
                         @if(!empty($post->content) && strlen($post->content) > 10)
                             {!! nl2br($post->content) !!}
                         @else
-                            <p class="text-outline italic">{{ $post->translated_excerpt }}</p>
+                            <p class="text-slate-400 italic text-center py-10">{{ $post->translated_excerpt }}</p>
                         @endif
                     </div>
 
@@ -204,12 +243,12 @@
 
         {{-- ====== RELATED POSTS ====== --}}
         @if(count($relatedPosts) > 0)
-            <div class="mt-24 pt-16 border-t border-outline-variant/30">
-                <div class="flex items-center gap-4 mb-12">
-                    <div class="w-12 h-0.5 bg-secondary"></div>
-                    <span class="font-label-caps text-[10px] text-secondary uppercase tracking-wider">{{ __('Inspirasi Lainnya') }}</span>
+            <div class="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-outline-variant/30">
+                <div class="flex items-center gap-3 mb-10 md:mb-12">
+                    <span class="w-10 h-px bg-secondary"></span>
+                    <span class="text-[10px] font-bold text-secondary uppercase tracking-[0.25em]">{{ __('Inspirasi Lainnya') }}</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     @foreach($relatedPosts as $rp)
                         <article class="group cursor-pointer" onclick="window.location.href='/tour/blog/{{ $rp->slug ?? $rp->id }}'">
                             <div class="relative aspect-[16/10] rounded-3xl overflow-hidden mb-5 border border-outline-variant/20 shadow-sm">

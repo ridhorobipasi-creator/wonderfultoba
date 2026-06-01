@@ -26,9 +26,9 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('cmsTourHandler', () => ({
         activeTab: 'hero',
-        heroTitle: @json($settings['hero_title'] ?? 'Jelajahi Keajaiban Alam Sumatera Utara.'),
-        heroSubtitle: @json($settings['hero_subtitle'] ?? 'Dari birunya Danau Toba hingga sejuknya Berastagi, kami siap menemani perjalanan tak terlupakan Anda dengan layanan premium.'),
-        heroImage: @json($resolve($settings['hero_image_url'] ?? '', 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200')),
+        heroTitle: @json($settings['hero_title'] ?? 'Liburan Sempurna di Sumatera Utara.'),
+        heroSubtitle: @json($settings['hero_subtitle'] ?? 'Kami mengatur seluruh perjalanan Anda. Nikmati udara pagi Berastagi dan keindahan Samosir tanpa perlu pusing menyusun itinerary.'),
+        heroImage: @json($resolve($settings['hero_image_url'] ?? '', 'sumatra-panorama')),
         ctaText: @json($settings['hero_cta_text'] ?? 'Lihat Paket Wisata'),
         
         slides: @json($slides),
@@ -112,7 +112,7 @@ document.addEventListener('alpine:init', () => {
         },
         
         stat0: @json($settings['stat_value_0'] ?? '1.5K+'),
-        label0: @json($settings['stat_label_0'] ?? 'Trip Selesai'),
+        label0: @json($settings['stat_label_0'] ?? 'Liburan Sukses'),
         stat1: @json($settings['stat_value_1'] ?? '10K+'),
         label1: @json($settings['stat_label_1'] ?? 'Wisatawan'),
         stat2: @json($settings['stat_value_2'] ?? '50+'),
@@ -122,11 +122,49 @@ document.addEventListener('alpine:init', () => {
         
         fixPath(path) {
             if (!path) return '';
+            let lower = path.toLowerCase();
+            
+            // Map keywords to local paths
+            if (lower.includes('staff1')) return '/images/sumut/specialist_avatar.webp';
+            if (lower.includes('user1')) return '/images/sumut/avatar_user_1.webp';
+            if (lower.includes('user2')) return '/images/sumut/avatar_user_2.webp';
+            if (lower.includes('user3')) return '/images/sumut/avatar_user_3.webp';
+            if (lower.includes('user4')) return '/images/sumut/avatar_user_4.webp';
+            if (lower.includes('outbound')) return '/images/home/outbound.webp';
+            if (lower.includes('tour')) return '/images/home/tour.webp';
+            
+            // Legacy DB paths
+            if (lower.includes('2023/10/')) {
+                if (lower.includes('001-1.jpg')) return '/images/sumut/toba_hero.webp';
+                if (lower.includes('002-1.jpg')) return '/images/sumut/toba_landscape.webp';
+                if (lower.includes('003-1.jpg')) return '/images/sumut/batak_house.webp';
+                if (lower.includes('004.jpg')) return '/images/sumut/sipiso_piso.webp';
+                if (lower.includes('005.jpg')) return '/images/sumut/berastagi.webp';
+                if (lower.includes('006.jpg')) return '/images/sumut/lumbini.webp';
+                if (lower.includes('008.jpg')) return '/images/sumut/hotel_room.webp';
+                if (lower.includes('009-1.jpg')) return '/images/sumut/maimun_palace.webp';
+                if (lower.includes('0010.jpg') || lower.includes('010.jpg')) return '/images/sumut/masjid_raya.webp';
+                if (lower.includes('team-building') || lower.includes('fun-games') || lower.includes('gathering') || lower.includes('outbound-kids')) {
+                    return '/images/home/outbound.webp';
+                }
+            }
+
+            // Remote URLs
+            if (lower.includes('unsplash.com') || lower.includes('placeholder') || lower.includes('pravatar.cc') || lower.includes('googleusercontent.com')) {
+                if (lower.includes('photo-1580489944761') || lower.includes('staff1')) return '/images/sumut/specialist_avatar.webp';
+                if (lower.includes('photo-1507003211169') || lower.includes('user1') || lower.includes('ab6axubc2hfgasrsa7a85bf12siuk3')) return '/images/sumut/avatar_user_1.webp';
+                if (lower.includes('photo-1534528741775') || lower.includes('user2') || lower.includes('ab6axuafawoa9yazv80gupi35ev08b')) return '/images/sumut/avatar_user_2.webp';
+                if (lower.includes('photo-1500648767791') || lower.includes('user3')) return '/images/sumut/avatar_user_3.webp';
+                if (lower.includes('photo-1494790108377') || lower.includes('user4')) return '/images/sumut/avatar_user_4.webp';
+                if (lower.includes('photo-1472099645785')) return '/images/sumut/avatar_user_1.webp';
+                if (lower.includes('photo-1596402184320') || lower.includes('photo-1544735049') || lower.includes('photo-1511632765')) return '/images/sumut/sumatra_panorama.webp';
+                if (lower.includes('googleusercontent.com')) return '/images/sumut/avatar_user_3.webp';
+                return '/images/home/tour.webp';
+            }
+
             if (path.startsWith('http') || path.startsWith('blob:') || path.startsWith('data:')) return path;
             
             let clean = path.replace(/^\/?storage\//, '').replace(/^\//, '');
-            
-            // In this project, even 'assets/' is inside 'storage/'
             return '/storage/' + clean;
         },
 
@@ -150,12 +188,12 @@ document.addEventListener('alpine:init', () => {
         specialist_name: @json($settings['specialist_name'] ?? 'Sarah Anggraini'),
         specialist_title: @json($settings['specialist_title'] ?? 'Travel Specialist'),
         specialist_desc: @json($settings['specialist_desc'] ?? 'Punya pertanyaan khusus? Saya siap membantu merencanakan liburan impian Anda.'),
-        specialist_image: @json($resolve($settings['specialist_image_url'] ?? '', 'https://i.pravatar.cc/100?u=staff1')),
+        specialist_image: @json($resolve($settings['specialist_image_url'] ?? '', 'staff1')),
         
         @php
             $defaultTestimonials = [
-                ['name' => 'Andini Wijaya', 'location' => 'Jakarta, Indonesia', 'text' => 'Pelayanan sangat profesional. Tour guide ramah dan sangat menguasai medan. Itinerary juga tidak terlalu padat sehingga kami bisa benar-benar menikmati waktu.', 'image' => 'https://i.pravatar.cc/100?u=user1'],
-                ['name' => 'Budi Santoso', 'location' => 'Surabaya, Indonesia', 'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Sujai Laketoba benar-benar kurasi yang terbaik untuk tamunya. Highly recommended!', 'image' => 'https://i.pravatar.cc/100?u=user2']
+                ['name' => 'Andini Wijaya', 'location' => 'Jakarta, Indonesia', 'text' => 'Pelayanan sangat profesional. Tour guide ramah dan sangat menguasai medan. Itinerary juga tidak terlalu padat sehingga kami bisa benar-benar menikmati waktu.', 'image' => 'user1'],
+                ['name' => 'Budi Santoso', 'location' => 'Surabaya, Indonesia', 'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Sujai Laketoba benar-benar kurasi yang terbaik untuk tamunya. Highly recommended!', 'image' => 'user2']
             ];
         @endphp
         testimonials: (() => {
@@ -169,7 +207,7 @@ document.addEventListener('alpine:init', () => {
                 name: 'Nama Pengunjung',
                 location: 'Kota, Negara',
                 text: 'Tulis ulasan pengunjung di sini...',
-                image: 'https://i.pravatar.cc/100?u=' + Math.random()
+                image: 'user1'
             });
         },
 
@@ -716,7 +754,7 @@ document.addEventListener('alpine:init', () => {
             <!-- Backgrounds -->
             <template x-for="(slide, index) in slides" :key="index">
                 <div x-show="activeSlideIdx === index" x-transition.opacity.duration.1000ms class="absolute inset-0">
-                    <img :src="fixPath(slide.image_url) || 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1200'" class="w-full h-full object-cover">
+                    <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent"></div>
                 </div>
             </template>
@@ -748,7 +786,7 @@ document.addEventListener('alpine:init', () => {
                             <button type="button" @click="activeSlideIdx = index" 
                                     :class="activeSlideIdx === index ? 'ring-2 ring-toba-accent ring-offset-2 ring-offset-slate-900 scale-105 opacity-100' : 'opacity-40 hover:opacity-100'"
                                     class="relative shrink-0 w-24 h-32 rounded-2xl overflow-hidden transition-all duration-500">
-                                <img :src="fixPath(slide.image_url) || 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=400'" class="w-full h-full object-cover">
+                                <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-black/40"></div>
                                 <div class="absolute bottom-2 left-2 right-2 text-left">
                                     <p class="text-[6px] font-black text-white truncate uppercase" x-text="slide.title"></p>
@@ -966,8 +1004,50 @@ document.addEventListener('alpine:init', () => {
 
             fixPath(path) {
                 if (!path) return '';
-                if (path.startsWith('http')) return path;
-                return '/storage/' + path.replace('/storage/', '').replace(/^\//, '');
+                let lower = path.toLowerCase();
+                
+                // Map keywords to local paths
+                if (lower.includes('staff1')) return '/images/sumut/specialist_avatar.webp';
+                if (lower.includes('user1')) return '/images/sumut/avatar_user_1.webp';
+                if (lower.includes('user2')) return '/images/sumut/avatar_user_2.webp';
+                if (lower.includes('user3')) return '/images/sumut/avatar_user_3.webp';
+                if (lower.includes('user4')) return '/images/sumut/avatar_user_4.webp';
+                if (lower.includes('outbound')) return '/images/home/outbound.webp';
+                if (lower.includes('tour')) return '/images/home/tour.webp';
+                
+                // Legacy DB paths
+                if (lower.includes('2023/10/')) {
+                    if (lower.includes('001-1.jpg')) return '/images/sumut/toba_hero.webp';
+                    if (lower.includes('002-1.jpg')) return '/images/sumut/toba_landscape.webp';
+                    if (lower.includes('003-1.jpg')) return '/images/sumut/batak_house.webp';
+                    if (lower.includes('004.jpg')) return '/images/sumut/sipiso_piso.webp';
+                    if (lower.includes('005.jpg')) return '/images/sumut/berastagi.webp';
+                    if (lower.includes('006.jpg')) return '/images/sumut/lumbini.webp';
+                    if (lower.includes('008.jpg')) return '/images/sumut/hotel_room.webp';
+                    if (lower.includes('009-1.jpg')) return '/images/sumut/maimun_palace.webp';
+                    if (lower.includes('0010.jpg') || lower.includes('010.jpg')) return '/images/sumut/masjid_raya.webp';
+                    if (lower.includes('team-building') || lower.includes('fun-games') || lower.includes('gathering') || lower.includes('outbound-kids')) {
+                        return '/images/home/outbound.webp';
+                    }
+                }
+
+                // Remote URLs
+                if (lower.includes('unsplash.com') || lower.includes('placeholder') || lower.includes('pravatar.cc') || lower.includes('googleusercontent.com')) {
+                    if (lower.includes('photo-1580489944761') || lower.includes('staff1')) return '/images/sumut/specialist_avatar.webp';
+                    if (lower.includes('photo-1507003211169') || lower.includes('user1') || lower.includes('ab6axubc2hfgasrsa7a85bf12siuk3')) return '/images/sumut/avatar_user_1.webp';
+                    if (lower.includes('photo-1534528741775') || lower.includes('user2') || lower.includes('ab6axuafawoa9yazv80gupi35ev08b')) return '/images/sumut/avatar_user_2.webp';
+                    if (lower.includes('photo-1500648767791') || lower.includes('user3')) return '/images/sumut/avatar_user_3.webp';
+                    if (lower.includes('photo-1494790108377') || lower.includes('user4')) return '/images/sumut/avatar_user_4.webp';
+                    if (lower.includes('photo-1472099645785')) return '/images/sumut/avatar_user_1.webp';
+                    if (lower.includes('photo-1596402184320') || lower.includes('photo-1544735049') || lower.includes('photo-1511632765')) return '/images/sumut/sumatra_panorama.webp';
+                    if (lower.includes('googleusercontent.com')) return '/images/sumut/avatar_user_3.webp';
+                    return '/images/home/tour.webp';
+                }
+
+                if (path.startsWith('http') || path.startsWith('blob:') || path.startsWith('data:')) return path;
+                
+                let clean = path.replace(/^\/?storage\//, '').replace(/^\//, '');
+                return '/storage/' + clean;
             },
 
             handleSlideImage(e, index) {

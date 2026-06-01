@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Http\Controllers\Api\SyncController;
+use App\Models\Setting;
 
 trait Syncable
 {
@@ -13,7 +14,7 @@ trait Syncable
     {
         $trigger = function ($model) {
             // Prevent infinite loop: if we're updating the sync version itself, don't trigger again
-            if ($model instanceof \App\Models\Setting && $model->key === 'cms_sync_version') {
+            if ($model instanceof Setting && $model->key === 'cms_sync_version') {
                 return;
             }
             SyncController::triggerSync();
@@ -21,7 +22,7 @@ trait Syncable
 
         static::saved($trigger);
         static::deleted($trigger);
-        
+
         if (method_exists(static::class, 'restored')) {
             static::restored($trigger);
         }

@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @mixin \Eloquent
+ */
+
 class Customer extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'name', 'email', 'phone', 'address', 'notes',
-        'total_bookings', 'total_spent', 'last_booking_at'
+        'total_bookings', 'total_spent', 'last_booking_at',
     ];
 
     protected $casts = [

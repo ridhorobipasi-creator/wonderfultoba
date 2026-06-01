@@ -154,6 +154,7 @@
 
         <!-- Regency Table -->
         <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead>
                     <tr class="bg-slate-50">
@@ -192,6 +193,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 </div>

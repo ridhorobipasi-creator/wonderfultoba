@@ -15,11 +15,65 @@
     // Normalize for AlpineJS thumbnails and ensure json_encode includes it BEFORE x-data evaluates
     $packageImagesArray = $heroImages->map(function($img) {
         $path = is_array($img) ? ($img['image_path'] ?? null) : ($img->image_path ?? null);
+        $srcset = '';
+        $blurHash = '';
+        
+        if (!empty($path)) {
+            $clean = ltrim($path, '/');
+            if (str_starts_with($clean, 'storage/')) {
+                $clean = substr($clean, 8);
+            }
+            $media = \App\Models\Media::where('path', $clean)->orWhere('path', $path)->first();
+            if ($media) {
+                $dir = dirname($media->path);
+                $base = basename($media->path);
+                $mobilePath = ($dir === '.' || $dir === '/') ? 'mobile/' . $base : $dir . '/mobile/' . $base;
+                $mediumPath = ($dir === '.' || $dir === '/') ? 'medium/' . $base : $dir . '/medium/' . $base;
+                $largePath = ($dir === '.' || $dir === '/') ? 'large/' . $base : $dir . '/large/' . $base;
+
+                $srcsetParts = [];
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($mobilePath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($mobilePath) . ' 480w';
+                }
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($mediumPath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($mediumPath) . ' 800w';
+                }
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($largePath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($largePath) . ' 1200w';
+                }
+                if (!empty($srcsetParts)) {
+                    $srcset = implode(', ', $srcsetParts);
+                }
+                $blurHash = $media->blur_hash;
+            }
+        }
+        
         return [
-            'url' => imageUrl($path)
+            'url' => imageUrl($path),
+            'srcset' => $srcset,
+            'blur_hash' => $blurHash
         ];
     })->toArray();
     $package->setAttribute('package_images', $packageImagesArray);
+
+    $coverExif = null;
+    $mainImgPath = null;
+    if (is_array($package->images) && count($package->images) > 0) {
+        $mainImgPath = $package->images[0];
+    } elseif ($package->packageImages && $package->packageImages->count() > 0) {
+        $mainImgPath = $package->packageImages->first()->image_path;
+    }
+    
+    if ($mainImgPath) {
+        $clean = ltrim($mainImgPath, '/');
+        if (str_starts_with($clean, 'storage/')) {
+            $clean = substr($clean, 8);
+        }
+        $media = \App\Models\Media::where('path', $clean)->orWhere('path', $mainImgPath)->first();
+        if ($media && $media->exif_data) {
+            $coverExif = $media->exif_data;
+        }
+    }
 @endphp
 
 @section('title', ($package->name ?? 'Paket Wisata') . ' – Sujai Laketoba')
@@ -73,6 +127,7 @@
             return this.city ? (this.city.type === 'international' ? (this.city.place || this.city.region || '') + ', ' + this.city.country : this.city.name) : (this.package.locationTag || 'Danau Toba');
         },
         showConcierge: false,
+        totalChanged: false,
 
         // Booking form variables
         pax: {{ old('pax', 2) }},
@@ -124,6 +179,7 @@
             return lines.join(' | ');
         }
     }"
+    x-init="$watch('totalAkhir', value => { totalChanged = true; setTimeout(() => totalChanged = false, 500); })"
     @scroll.window="showConcierge = window.scrollY > 300"
     class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-20"
 >
@@ -131,11 +187,21 @@
     <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-12 gap-gutter">
         <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
             <!-- Main Gallery -->
-            <div class="relative h-[420px] md:h-[500px] overflow-hidden rounded-2xl shadow-lg">
-                <img class="w-full h-full object-cover ken-burns" :src="package_images[activeImg] ? package_images[activeImg].url : '{{ asset('images/home/tour.webp') }}'" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
-                <div class="absolute bottom-5 left-5 glass-card p-5 rounded-2xl max-w-[92%] md:max-w-[70%]">
-                    <span class="font-label-caps text-[10px] text-secondary block mb-1 uppercase tracking-wider" x-text="locationDisplay"></span>
-                    <h1 class="font-headline-lg text-[22px] md:text-headline-lg text-primary leading-tight" x-text="package.name"></h1>
+            <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
+                <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
+                     :src="package_images[activeImg] ? package_images[activeImg].url : '{{ imageUrl($package->images[0] ?? null) }}'"
+                     :srcset="package_images[activeImg] ? package_images[activeImg].srcset : ''"
+                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                     :style="package_images[activeImg] && package_images[activeImg].blur_hash ? 'background-image: url(' + package_images[activeImg].blur_hash + '); background-size: cover; background-position: center; filter: blur(8px); transition: filter 0.5s ease-in-out, background-image 0.5s ease-in-out;' : ''"
+                     onload="this.style.filter='none'; this.style.backgroundImage='none';"
+                     onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 md:bottom-10 md:left-10 bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-[1.5rem] max-w-[92%] md:max-w-[75%] shadow-glass">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="font-label-caps text-[10px] md:text-xs text-emerald-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
+                    </div>
+                    <h1 class="font-headline-lg text-2xl md:text-4xl text-white font-bold leading-tight drop-shadow-sm" x-text="package.name"></h1>
                 </div>
             </div>
             
@@ -143,9 +209,9 @@
             <div x-show="package_images && package_images.length > 1" class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
                 <template x-for="(imgObj, i) in package_images" :key="i">
                     <div @click="activeImg = i" 
-                         :class="activeImg === i ? 'border-2 border-secondary' : 'border border-outline-variant'"
-                         class="min-w-[200px] h-32 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-80 transition-all duration-300">
-                        <img class="w-full h-full object-cover" :src="imgObj.url" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
+                         :class="activeImg === i ? 'ring-2 ring-emerald-500 ring-offset-2' : 'border border-slate-200/50'"
+                         class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-90 transition-all duration-300 shadow-sm">
+                        <img class="w-full h-full object-cover" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                     </div>
                 </template>
             </div>
@@ -180,6 +246,31 @@
                 <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200">
                     <h2 class="font-headline-md text-headline-md text-primary mb-4 md:mb-6">{{ __('Ringkasan Pengalaman') }}</h2>
                     <div class="prose prose-slate max-w-none text-slate-600 font-body-md text-body-md leading-relaxed" x-html="package.description"></div>
+
+                    @if($coverExif)
+                    <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-4 items-center justify-between text-xs text-slate-500 bg-slate-50 p-4 rounded-xl">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg">📸</span>
+                            <div>
+                                <p class="font-semibold text-slate-700">Metadata Foto Wisata</p>
+                                <p class="text-slate-500">
+                                    @if(!empty($coverExif['camera_brand']) || !empty($coverExif['camera_model']))
+                                        {{ $coverExif['camera_brand'] ?? '' }} {{ $coverExif['camera_model'] ?? '' }}
+                                    @endif
+                                    @if(!empty($coverExif['aperture'])) • {{ $coverExif['aperture'] }} @endif
+                                    @if(!empty($coverExif['iso'])) • ISO {{ $coverExif['iso'] }} @endif
+                                    @if(!empty($coverExif['shutter_speed'])) • {{ $coverExif['shutter_speed'] }} @endif
+                                </p>
+                            </div>
+                        </div>
+                        @if(!empty($coverExif['gps']['lat']) && !empty($coverExif['gps']['lng']))
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg font-semibold tracking-wide transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">location_on</span>
+                            {{ __('Lihat Lokasi Persis') }}
+                        </a>
+                        @endif
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Timeline Rencana Perjalanan -->
@@ -367,7 +458,7 @@
                     <div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mt-10 group-hover:scale-125 transition-transform duration-500"></div>
                     <div class="flex items-center gap-4 mb-4 relative z-10">
                         <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-primary overflow-hidden border-2 border-white shadow-md">
-                            <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
+                            <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null, 'staff1') }}" class="w-full h-full object-cover" onerror="this.src='{{ imageUrl('staff1') }}'">
                         </div>
                         <div>
                             <p class="font-label-caps text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">{{ __($siteSettings['cms_tour']['specialist_title'] ?? 'Travel Specialist') }}</p>
@@ -389,7 +480,30 @@
         <div id="booking-form-sidebar" class="col-span-12 md:col-span-4 relative">
             <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6">
                 @if(session('success'))
-                    <div class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500" x-init="setTimeout(() => { if ('{{ session('whatsappUrl') }}') { window.location.href = '{{ session('whatsappUrl') }}' } }, 3000)">
+                    <div 
+                        x-data="{ 
+                            countdown: 8, 
+                            redirectCancelled: false,
+                            timer: null,
+                            init() {
+                                this.timer = setInterval(() => {
+                                    if (this.countdown > 0 && !this.redirectCancelled) {
+                                        this.countdown--;
+                                    } else {
+                                        clearInterval(this.timer);
+                                        if (!this.redirectCancelled && '{{ session('whatsappUrl') }}') {
+                                            window.location.href = '{{ session('whatsappUrl') }}';
+                                        }
+                                    }
+                                }, 1000);
+                            },
+                            cancelRedirect() {
+                                this.redirectCancelled = true;
+                                if (this.timer) clearInterval(this.timer);
+                            }
+                        }"
+                        class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500"
+                    >
                         <div class="w-14 h-14 bg-white text-secondary rounded-full flex items-center justify-center text-2xl shadow-sm border border-secondary/20 mx-auto mb-4">
                             <span class="material-symbols-outlined text-[32px]">check_circle</span>
                         </div>
@@ -401,14 +515,42 @@
                             <p class="text-2xl font-semibold font-body-md text-primary tracking-wider">{{ session('bookingCode') }}</p>
                         </div>
                         
-                        <a 
-                            href="{{ session('whatsappUrl') }}"
-                            target="_blank"
-                            class="w-full py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-xs uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition-all flex items-center justify-center gap-2 group"
-                        >
-                            <span class="material-symbols-outlined text-[18px]">chat</span>
-                            {{ __('KONFIRMASI SEKARANG') }}
-                        </a>
+                        <!-- Redirection Countdown Status -->
+                        <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
+                            <template x-if="!redirectCancelled && countdown > 0">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
+                                </div>
+                            </template>
+                            <template x-if="!redirectCancelled && countdown === 0">
+                                <span>Menghubungkan ke WhatsApp...</span>
+                            </template>
+                            <template x-if="redirectCancelled">
+                                <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
+                            </template>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <template x-if="!redirectCancelled && countdown > 0">
+                                <button 
+                                    @click="cancelRedirect()"
+                                    type="button"
+                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition-all focus:outline-none"
+                                >
+                                    {{ __('Batal Alihkan') }}
+                                </button>
+                            </template>
+                            <a 
+                                href="{{ session('whatsappUrl') }}"
+                                target="_blank"
+                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition-all flex items-center justify-center gap-2 group"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">chat</span>
+                                {{ __('KONFIRMASI SEKARANG') }}
+                            </a>
+                        </div>
                     </div>
                 @else
                         <div class="flex justify-between items-end border-b border-slate-200 pb-4">
@@ -555,7 +697,8 @@
                                 <span>{{ __('Pajak & Layanan') }} (11%)</span>
                                 <span x-text="AppCurrency.format(pajakLayanan)"></span>
                             </div>
-                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md">
+                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition-all duration-300 origin-right"
+                                 :class="totalChanged ? 'scale-[1.03] text-secondary font-bold' : ''">
                                 <span>Total Ringkasan</span>
                                 <span x-text="AppCurrency.format(totalAkhir)"></span>
                             </div>
@@ -577,6 +720,9 @@
                             </span>
                         </button>
                         <p class="text-center text-[11px] text-slate-500 font-body-md">{{ __('Konfirmasi cepat tersedia untuk tanggal terpilih.') }}</p>
+                        <p class="text-center text-[9px] text-slate-400 font-body-md mt-1 leading-normal">
+                            * {{ __('Data Anda akan disimpan di sistem kami. Anda akan diarahkan ke WhatsApp untuk melakukan konfirmasi cepat.') }}
+                        </p>
                     </form>
                 @endif
             </div>

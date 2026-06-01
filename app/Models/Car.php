@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
+use App\Helpers\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * @mixin \Eloquent
+ */
 
 class Car extends Model
 {
@@ -44,6 +49,7 @@ class Car extends Model
     ];
 
     const CREATED_AT = 'createdAt';
+
     const UPDATED_AT = 'updatedAt';
 
     public function bookings()
@@ -56,17 +62,17 @@ class Car extends Model
         if (empty($path)) {
             return asset('images/placeholder-car.webp');
         }
-        
+
         if (str_starts_with($path, 'http')) {
             return $path;
         }
 
         // Standard storage path
-        return asset('storage/' . $path);
+        return asset('storage/'.$path);
     }
 
     public function getFormattedPriceAttribute()
     {
-        return \App\Helpers\CurrencyHelper::formatPrice($this->price);
+        return CurrencyHelper::formatPrice($this->price);
     }
 }

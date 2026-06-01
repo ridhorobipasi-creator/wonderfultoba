@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin \Eloquent
+ */
+
 class ActivityLog extends Model
 {
     protected $fillable = [
-        'user_id', 'action', 'model', 'model_id', 'description', 
-        'changes', 'ip_address', 'user_agent'
+        'user_id', 'action', 'model', 'model_id', 'description',
+        'changes', 'ip_address', 'user_agent',
     ];
 
     protected $casts = [
-        'changes' => 'array'
+        'changes' => 'array',
     ];
 
     public function user()

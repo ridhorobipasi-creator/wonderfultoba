@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Setting;
-use App\Models\Blog;
-use App\Models\Package;
-use App\Models\GalleryImage;
-
 use Illuminate\Support\Facades\Storage;
+
+/**
+ * @mixin \Eloquent
+ */
 
 class Media extends Model
 {
@@ -23,26 +22,34 @@ class Media extends Model
         'mime_type',
         'size',
         'alt_text',
-        'order_priority'
+        'order_priority',
+        'thumb',
+        'dominant_color',
+        'blur_hash',
+        'exif_data',
+    ];
+
+    protected $casts = [
+        'exif_data' => 'array',
     ];
 
     protected $appends = ['url', 'thumbnail_url', 'usage_count'];
 
     public function getUrlAttribute()
     {
-        return asset('storage/' . $this->path);
+        return Storage::disk('public')->url($this->path);
     }
 
     public function getThumbnailUrlAttribute()
     {
         $dir = dirname($this->path);
         $file = basename($this->path);
-        $thumbPath = $dir . '/thumbnails/' . $file;
-        
+        $thumbPath = $dir.'/thumbnails/'.$file;
+
         if (Storage::disk('public')->exists($thumbPath)) {
-            return asset('storage/' . $thumbPath);
+            return Storage::disk('public')->url($thumbPath);
         }
-        
+
         return $this->url; // Fallback to full size
     }
 
@@ -64,11 +71,12 @@ class Media extends Model
                 $val = $setting->value;
                 if (is_array($val)) {
                     $substrings[] = json_encode($val);
-                } else if (is_string($val)) {
+                } elseif (is_string($val)) {
                     $substrings[] = $val;
                 }
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         // 2. Blogs
         try {
@@ -76,7 +84,8 @@ class Media extends Model
             foreach ($blogImages as $img) {
                 $direct[$img] = ($direct[$img] ?? 0) + 1;
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         // 3. Packages
         try {
@@ -86,7 +95,7 @@ class Media extends Model
                     foreach ($imgs as $img) {
                         $direct[$img] = ($direct[$img] ?? 0) + 1;
                     }
-                } else if (is_string($imgs)) {
+                } elseif (is_string($imgs)) {
                     $decoded = json_decode($imgs, true);
                     if (is_array($decoded)) {
                         foreach ($decoded as $img) {
@@ -97,7 +106,8 @@ class Media extends Model
                     }
                 }
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         // 4. Gallery
         try {
@@ -105,11 +115,12 @@ class Media extends Model
             foreach ($galleryImages as $img) {
                 $direct[$img] = ($direct[$img] ?? 0) + 1;
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         self::$usedPathsCache = [
             'direct' => $direct,
-            'substrings' => $substrings
+            'substrings' => $substrings,
         ];
 
         return self::$usedPathsCache;
@@ -118,7 +129,7 @@ class Media extends Model
     public function getUsageCountAttribute()
     {
         $rawPath = $this->path;
-        $storagePath = '/storage/' . $this->path;
+        $storagePath = '/storage/'.$this->path;
         $count = 0;
 
         $cache = self::getUsedPaths();

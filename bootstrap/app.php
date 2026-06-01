@@ -1,26 +1,30 @@
 <?php
 
 // Auto-restore .env file from tracked .env.sujai if it gets deleted by Hostinger/GitHub deployments
-if (!file_exists(__DIR__ . '/../.env')) {
-    if (file_exists(__DIR__ . '/../.env.sujai')) {
-        @copy(__DIR__ . '/../.env.sujai', __DIR__ . '/../.env');
+if (! file_exists(__DIR__.'/../.env')) {
+    if (file_exists(__DIR__.'/../.env.sujai')) {
+        @copy(__DIR__.'/../.env.sujai', __DIR__.'/../.env');
     }
 }
 
 // Auto-create essential storage subdirectories if they are missing (prevents 'valid cache path' errors on cPanel/Hostinger)
 $storagePaths = [
-    __DIR__ . '/../storage/framework/views',
-    __DIR__ . '/../storage/framework/cache/data',
-    __DIR__ . '/../storage/framework/sessions',
-    __DIR__ . '/../storage/logs',
-    __DIR__ . '/../storage/app/public',
+    __DIR__.'/../storage/framework/views',
+    __DIR__.'/../storage/framework/cache/data',
+    __DIR__.'/../storage/framework/sessions',
+    __DIR__.'/../storage/logs',
+    __DIR__.'/../storage/app/public',
 ];
 foreach ($storagePaths as $path) {
-    if (!file_exists($path)) {
+    if (! file_exists($path)) {
         @mkdir($path, 0755, true);
     }
 }
 
+use App\Http\Middleware\CheckMaintenanceMode;
+use App\Http\Middleware\LocaleCurrencyMiddleware;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -34,11 +38,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
-        $middleware->append(\App\Http\Middleware\LocaleCurrencyMiddleware::class);
-        $middleware->append(\App\Http\Middleware\CheckMaintenanceMode::class);
-        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+        $middleware->append(LocaleCurrencyMiddleware::class);
+        $middleware->append(CheckMaintenanceMode::class);
+        $middleware->append(SecurityHeaders::class);
         $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'role' => RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

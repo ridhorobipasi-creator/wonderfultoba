@@ -1,5 +1,11 @@
 <?php
 
+use App\Helpers\CurrencyHelper;
+use App\Models\Blog;
+use App\Models\Media;
+use App\Models\Package;
+use Illuminate\Support\Facades\Storage;
+
 /**
  * Global Image Path Resolution Helper
  *
@@ -13,17 +19,122 @@
  * Usage in PHP (Controller/Service):
  *   imageUrl($path)
  */
-
 if (! function_exists('imageUrl')) {
     function imageUrl(?string $path, ?string $fallback = null): string
     {
-        $localFallback = $fallback ?? asset('images/home/tour.webp');
-
+        // If path is null or empty, use fallback if specified, otherwise default local asset
         if (empty($path) || $path === 'null') {
-            return $localFallback;
+            if ($fallback) {
+                $path = $fallback;
+            } else {
+                return asset('images/home/tour.webp');
+            }
         }
 
-        // Already a full external URL — return as-is
+        $lower = strtolower($path);
+
+        // Special local fallback keys or avatar keywords
+        if (str_contains($lower, 'staff1')) {
+            return asset('images/sumut/specialist_avatar.webp');
+        }
+        if (str_contains($lower, 'user1')) {
+            return asset('images/sumut/avatar_user_1.webp');
+        }
+        if (str_contains($lower, 'user2')) {
+            return asset('images/sumut/avatar_user_2.webp');
+        }
+        if (str_contains($lower, 'user3')) {
+            return asset('images/sumut/avatar_user_3.webp');
+        }
+        if (str_contains($lower, 'user4')) {
+            return asset('images/sumut/avatar_user_4.webp');
+        }
+        if (str_contains($lower, 'outbound')) {
+            return asset('images/home/outbound.webp');
+        }
+        if (str_contains($lower, 'tour')) {
+            return asset('images/home/tour.webp');
+        }
+
+        // Intercept legacy DB paths (2023/10/...) first to assign varied premium local images
+        if (str_contains($lower, '2023/10/') || preg_match('/assets\/images\/\d{4}\/\d{2}\//', $lower)) {
+            if (str_contains($lower, '001-1')) {
+                return asset('images/sumut/toba_hero.webp');
+            }
+            if (str_contains($lower, '002-1')) {
+                return asset('images/sumut/toba_landscape.webp');
+            }
+            if (str_contains($lower, '003-1')) {
+                return asset('images/sumut/batak_house.webp');
+            }
+            if (str_contains($lower, '004')) {
+                return asset('images/sumut/sipiso_piso.webp');
+            }
+            if (str_contains($lower, '005')) {
+                return asset('images/sumut/berastagi.webp');
+            }
+            if (str_contains($lower, '006')) {
+                return asset('images/sumut/lumbini.webp');
+            }
+            if (str_contains($lower, '008')) {
+                return asset('images/sumut/hotel_room.webp');
+            }
+            if (str_contains($lower, '009-1')) {
+                return asset('images/sumut/maimun_palace.webp');
+            }
+            if (str_contains($lower, '0010') || str_contains($lower, '010')) {
+                return asset('images/sumut/masjid_raya.webp');
+            }
+            if (str_contains($lower, 'team-building')) {
+                return asset('images/home/outbound.webp');
+            }
+            if (str_contains($lower, 'fun-games')) {
+                return asset('images/home/outbound.webp');
+            }
+            if (str_contains($lower, 'gathering')) {
+                return asset('images/home/outbound.webp');
+            }
+            if (str_contains($lower, 'outbound-kids')) {
+                return asset('images/home/outbound.webp');
+            }
+        }
+
+        // Intercept Unsplash, Pravatar, Google Content, or remote placeholders to serve local premium assets instead
+        if (
+            str_contains($lower, 'unsplash.com') ||
+            str_contains($lower, 'placeholder') ||
+            str_contains($lower, 'pravatar.cc') ||
+            str_contains($lower, 'googleusercontent.com')
+        ) {
+            if (str_contains($lower, 'photo-1580489944761') || str_contains($lower, 'staff1')) {
+                return asset('images/sumut/specialist_avatar.webp');
+            }
+            if (str_contains($lower, 'photo-1507003211169') || str_contains($lower, 'user1') || str_contains($lower, 'ab6axubc2hfgasrsa7a85bf12siuk3')) {
+                return asset('images/sumut/avatar_user_1.webp');
+            }
+            if (str_contains($lower, 'photo-1534528741775') || str_contains($lower, 'user2') || str_contains($lower, 'ab6axuafawoa9yazv80gupi35ev08b')) {
+                return asset('images/sumut/avatar_user_2.webp');
+            }
+            if (str_contains($lower, 'photo-1500648767791') || str_contains($lower, 'user3')) {
+                return asset('images/sumut/avatar_user_3.webp');
+            }
+            if (str_contains($lower, 'photo-1494790108377') || str_contains($lower, 'user4')) {
+                return asset('images/sumut/avatar_user_4.webp');
+            }
+            if (str_contains($lower, 'photo-1472099645785')) {
+                return asset('images/sumut/avatar_user_1.webp');
+            }
+            if (str_contains($lower, 'photo-1596402184320') || str_contains($lower, 'photo-1544735049') || str_contains($lower, 'photo-1511632765')) {
+                return asset('images/sumut/sumatra_panorama.webp');
+            }
+            if (str_contains($lower, 'googleusercontent.com')) {
+                return asset('images/sumut/avatar_user_3.webp');
+            }
+
+            return asset('images/home/tour.webp');
+        }
+
+        // Already a full external URL — return as-is (except if it is one of the intercepted domains above)
         if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '//')) {
             return $path;
         }
@@ -32,8 +143,6 @@ if (! function_exists('imageUrl')) {
         if (str_starts_with($path, 'data:') || str_starts_with($path, 'blob:')) {
             return $path;
         }
-
-        $lower = strtolower($path);
 
         // Intercept Partner Logos first to prevent 'toba' substring matching
         if (str_contains($lower, 'mandiri')) {
@@ -49,48 +158,126 @@ if (! function_exists('imageUrl')) {
             return asset('images/partners/hyundai.svg');
         }
 
-        // Premium Unsplash Override for Travel Images
+        // Premium Localized Overrides for North Sumatra Tourism Images
         if (str_contains($lower, 'lake-toba-premium')) {
-            return 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=1200&q=80'; // Samosir hills aerial landscape
+            return asset('images/sumut/toba_hero.webp');
         }
         if (str_contains($lower, 'sumatra-panorama')) {
-            return 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'; // Wide mountain panorama
+            return asset('images/sumut/sumatra_panorama.webp');
         }
-        if (str_contains($lower, '001-1') || str_contains($lower, 'toba') || str_contains($lower, 'samosir')) {
-            return 'https://images.unsplash.com/photo-1544735049-717bc392183e?auto=format&fit=crop&w=1200&q=80'; // Lake Toba
+
+        // Multi-image Package overrides to ensure variety on details page
+        if (str_contains($lower, 'toba-1')) {
+            return asset('images/sumut/toba_hero.webp');
         }
-        if (str_contains($lower, '002-1')) {
-            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'; // Samosir beach
+        if (str_contains($lower, 'toba-2') || str_contains($lower, 'toba-landscape')) {
+            return asset('images/sumut/toba_landscape.webp');
         }
-        if (str_contains($lower, '003-1')) {
-            return 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?auto=format&fit=crop&w=1200&q=80'; // Sipiso-piso Waterfall
+        if (str_contains($lower, 'toba-3')) {
+            return asset('images/sumut/batak_house.webp');
         }
-        if (str_contains($lower, '004') || str_contains($lower, 'berastagi') || str_contains($lower, 'karo')) {
-            return 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=1200&q=80'; // Berastagi Mount Sinabung
+        if (str_contains($lower, 'toba-4') || str_contains($lower, 'sipiso_piso') || str_contains($lower, 'sipiso-piso')) {
+            return asset('images/sumut/sipiso_piso.webp');
         }
-        if (str_contains($lower, '005') || str_contains($lower, 'lumbini')) {
-            return 'https://images.unsplash.com/photo-1544735049-717bc392183e?auto=format&fit=crop&w=1200&q=80'; // Lumbini golden temple
+        if (str_contains($lower, 'toba') || str_contains($lower, 'samosir') || str_contains($lower, 'parapat')) {
+            if (str_contains($lower, 'sunset')) {
+                return asset('images/sumut/toba_landscape.webp');
+            }
+            if (str_contains($lower, 'boat') || str_contains($lower, 'danau-toba-panorama')) {
+                return asset('images/sumut/toba_hero.webp');
+            }
+            if (str_contains($lower, 'huta-bolon') || str_contains($lower, 'batak')) {
+                return asset('images/sumut/batak_house.webp');
+            }
+
+            return asset('images/sumut/toba_landscape.webp');
         }
-        if (str_contains($lower, '006') || str_contains($lower, 'simalem')) {
-            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'; // Karo Simalem Resort view
+        if (str_contains($lower, 'sipiso')) {
+            return asset('images/sumut/sipiso_piso.webp');
         }
-        if (str_contains($lower, '008') || str_contains($lower, 'medan')) {
-            return 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80'; // Maimun Palace / Medan
+        if (str_contains($lower, 'berastagi-1')) {
+            return asset('images/sumut/berastagi.webp');
         }
-        if (str_contains($lower, '009-1') || str_contains($lower, 'masjid')) {
-            return 'https://images.unsplash.com/photo-1564507592937-25994a9015ba?auto=format&fit=crop&w=1200&q=80'; // Masjid Raya Medan
+        if (str_contains($lower, 'berastagi-2') || str_contains($lower, 'lumbini')) {
+            return asset('images/sumut/lumbini.webp');
         }
-        if (str_contains($lower, '010') || str_contains($lower, '0010')) {
-            return 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80'; // Premium hotel room / travel stay
+        if (str_contains($lower, 'berastagi-3') || str_contains($lower, 'simalem')) {
+            return asset('images/sumut/hotel_room.webp');
         }
-        if (str_contains($lower, 'car') || str_contains($lower, 'avanza') || str_contains($lower, 'innova') || str_contains($lower, 'hiace')) {
-            if (str_contains($lower, 'avanza')) {
-                return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80';
+        if (str_contains($lower, 'berastagi') || str_contains($lower, 'karo')) {
+            return asset('images/sumut/berastagi.webp');
+        }
+        if (str_contains($lower, 'medan-1') || str_contains($lower, 'maimun')) {
+            return asset('images/sumut/maimun_palace.webp');
+        }
+        if (str_contains($lower, 'medan-2') || str_contains($lower, 'masjid')) {
+            return asset('images/sumut/masjid_raya.webp');
+        }
+        if (str_contains($lower, 'medan')) {
+            return asset('images/sumut/maimun_palace.webp');
+        }
+        if (str_contains($lower, 'bukitlawang-1') || str_contains($lower, 'orangutan')) {
+            return asset('images/sumut/orangutan.webp');
+        }
+        if (str_contains($lower, 'bukitlawang-2') || str_contains($lower, 'bukit-lawang')) {
+            return asset('images/sumut/sumatra_panorama.webp');
+        }
+        if (str_contains($lower, 'honeymoon-1')) {
+            return asset('images/sumut/hotel_room.webp');
+        }
+        if (str_contains($lower, 'honeymoon-2')) {
+            return asset('images/sumut/toba_landscape.webp');
+        }
+        if (str_contains($lower, 'honeymoon-3')) {
+            return asset('images/sumut/toba_hero.webp');
+        }
+        if (str_contains($lower, 'sumut-complete-1')) {
+            return asset('images/sumut/toba_hero.webp');
+        }
+        if (str_contains($lower, 'sumut-complete-2')) {
+            return asset('images/sumut/berastagi.webp');
+        }
+        if (str_contains($lower, 'sumut-complete-3')) {
+            return asset('images/sumut/orangutan.webp');
+        }
+        if (str_contains($lower, '010') || str_contains($lower, '0010') || str_contains($lower, 'hotel') || str_contains($lower, 'room')) {
+            return asset('images/sumut/hotel_room.webp');
+        }
+        if (str_contains($lower, 'car') || str_contains($lower, 'avanza') || str_contains($lower, 'innova') || str_contains($lower, 'hiace') || str_contains($lower, 'alphard') || str_contains($lower, 'apv') || str_contains($lower, 'sigra')) {
+            if (str_contains($lower, 'avanza') || str_contains($lower, 'apv') || str_contains($lower, 'sigra')) {
+                return asset('images/sumut/car_avanza.webp');
             }
             if (str_contains($lower, 'innova')) {
-                return 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80';
+                return asset('images/sumut/car_innova.webp');
             }
-            return 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80';
+            if (str_contains($lower, 'hiace')) {
+                return asset('images/sumut/car_hiace.webp');
+            }
+            if (str_contains($lower, 'alphard')) {
+                return asset('images/sumut/car_alphard.webp');
+            }
+
+            return asset('images/sumut/car_avanza.webp');
+        }
+
+        if (str_contains($lower, 'avatar') || str_contains($lower, 'specialist') || str_contains($lower, 'sarah')) {
+            if (str_contains($lower, 'specialist') || str_contains($lower, 'sarah')) {
+                return asset('images/sumut/specialist_avatar.webp');
+            }
+            if (str_contains($lower, 'avatar_user_1') || str_contains($lower, 'user_1') || str_contains($lower, '-1') || str_contains($lower, '_1')) {
+                return asset('images/sumut/avatar_user_1.webp');
+            }
+            if (str_contains($lower, 'avatar_user_2') || str_contains($lower, 'user_2') || str_contains($lower, '-2') || str_contains($lower, '_2')) {
+                return asset('images/sumut/avatar_user_2.webp');
+            }
+            if (str_contains($lower, 'avatar_user_3') || str_contains($lower, 'user_3') || str_contains($lower, '-3') || str_contains($lower, '_3')) {
+                return asset('images/sumut/avatar_user_3.webp');
+            }
+            if (str_contains($lower, 'avatar_user_4') || str_contains($lower, 'user_4') || str_contains($lower, '-4') || str_contains($lower, '_4')) {
+                return asset('images/sumut/avatar_user_4.webp');
+            }
+
+            return asset('images/sumut/avatar_user_1.webp');
         }
 
         $clean = ltrim($path, '/');
@@ -98,10 +285,10 @@ if (! function_exists('imageUrl')) {
         // Dynamic fallback for non-existent local/storage files with premium Unsplash travel images
         $fileInPublic = public_path($clean);
         $cleanStoragePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
-        $fileInStorage = storage_path('app/public/' . $cleanStoragePath);
+        $fileInStorage = storage_path('app/public/'.$cleanStoragePath);
 
-        if (!file_exists($fileInPublic) && !file_exists($fileInStorage)) {
-            return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80';
+        if (! file_exists($fileInPublic) && ! file_exists($fileInStorage)) {
+            return asset('images/home/tour.webp');
         }
 
         // Check if it's a static asset in the public folder (no storage/ prefix needed)
@@ -122,8 +309,8 @@ if (! function_exists('imageUrl')) {
         $extension = strtolower(pathinfo($clean, PATHINFO_EXTENSION));
         if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
             $webpPath = preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $clean);
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($webpPath)) {
-                return asset('storage/' . $webpPath);
+            if (Storage::disk('public')->exists($webpPath)) {
+                return Storage::disk('public')->url($webpPath);
             }
         }
         // --------------------------------------
@@ -131,16 +318,58 @@ if (! function_exists('imageUrl')) {
         // Paths that start with known media prefixes (from Media Library)
         foreach (['branding/', 'gallery/', 'cms/', 'packages/', 'blogs/', 'cities/'] as $prefix) {
             if (str_starts_with($clean, $prefix)) {
-                return asset('storage/' . $clean);
+                return Storage::disk('public')->url($clean);
             }
         }
 
         // Final Fallback: Check if file exists in public/ directly, else assume storage
-        if (file_exists(public_path($clean)) && !is_dir(public_path($clean))) {
+        if (file_exists(public_path($clean)) && ! is_dir(public_path($clean))) {
             return asset($clean);
         }
 
-        return asset('storage/' . $clean);
+        return Storage::disk('public')->url($clean);
+    }
+}
+
+if (! function_exists('dominantColor')) {
+    /**
+     * Get the dominant color hex code for an image path.
+     * Uses static request-level cache for maximum performance.
+     */
+    function dominantColor(?string $path, string $default = '#e2e8f0'): string
+    {
+        if (empty($path) || $path === 'null') {
+            return $default;
+        }
+
+        // Clean path to match database storage path
+        $clean = ltrim($path, '/');
+        if (str_starts_with($clean, 'storage/')) {
+            $clean = substr($clean, strlen('storage/'));
+        }
+
+        static $colorCache = [];
+
+        if (isset($colorCache[$clean])) {
+            return $colorCache[$clean];
+        }
+
+        try {
+            $media = Media::where('path', $clean)
+                ->orWhere('path', $path)
+                ->first();
+            if ($media && $media->dominant_color) {
+                $colorCache[$clean] = $media->dominant_color;
+
+                return $media->dominant_color;
+            }
+        } catch (Exception $e) {
+            // Database not ready or column missing
+        }
+
+        $colorCache[$clean] = $default;
+
+        return $default;
     }
 }
 
@@ -161,7 +390,100 @@ if (! function_exists('formatPrice')) {
      */
     function formatPrice($priceInIdr, $locale = null): string
     {
-        return \App\Helpers\CurrencyHelper::formatPrice($priceInIdr, $locale);
+        return CurrencyHelper::formatPrice($priceInIdr, $locale);
     }
 }
 
+if (! function_exists('responsiveImage')) {
+    /**
+     * Render a responsive, lazy-loaded, SEO-optimized image tag with blur placeholder.
+     */
+    function responsiveImage(?string $path, string $class = '', string $alt = '', string $attributes = ''): string
+    {
+        $src = imageUrl($path);
+        $srcsetAttr = '';
+        $placeholderStyle = '';
+
+        if (! empty($path) && $path !== 'null') {
+            $clean = ltrim($path, '/');
+            if (str_starts_with($clean, 'storage/')) {
+                $clean = substr($clean, strlen('storage/'));
+            }
+
+            try {
+                $media = Media::where('path', $clean)
+                    ->orWhere('path', $path)
+                    ->first();
+
+                if ($media) {
+                    // Srcset resolution
+                    $dir = dirname($media->path);
+                    $base = basename($media->path);
+                    $mobilePath = ($dir === '.' || $dir === '/') ? 'mobile/'.$base : $dir.'/mobile/'.$base;
+                    $mediumPath = ($dir === '.' || $dir === '/') ? 'medium/'.$base : $dir.'/medium/'.$base;
+                    $largePath = ($dir === '.' || $dir === '/') ? 'large/'.$base : $dir.'/large/'.$base;
+
+                    $srcsetParts = [];
+                    if (Storage::disk('public')->exists($mobilePath)) {
+                        $srcsetParts[] = Storage::disk('public')->url($mobilePath).' 480w';
+                    }
+                    if (Storage::disk('public')->exists($mediumPath)) {
+                        $srcsetParts[] = Storage::disk('public')->url($mediumPath).' 800w';
+                    }
+                    if (Storage::disk('public')->exists($largePath)) {
+                        $srcsetParts[] = Storage::disk('public')->url($largePath).' 1200w';
+                    }
+
+                    if (! empty($srcsetParts)) {
+                        $srcsetAttr = 'srcset="'.implode(', ', $srcsetParts).'"';
+                    }
+
+                    // Blur hash placeholder inline style
+                    if ($media->blur_hash) {
+                        $placeholderStyle = "background-image: url('{$media->blur_hash}'); background-size: cover; background-position: center; filter: blur(8px); transition: filter 0.5s ease-in-out, background-image 0.5s ease-in-out;";
+                    }
+                }
+            } catch (Exception $e) {
+            }
+        }
+
+        if (empty($alt)) {
+            $alt = 'Wonderful Lake Toba Wisata';
+        }
+
+        return sprintf(
+            '<img class="lazy-responsive-image %s" src="%s" %s sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" alt="%s" style="%s" onload="this.style.filter=\'none\'; this.style.backgroundImage=\'none\';" %s>',
+            e($class),
+            e($src),
+            $srcsetAttr,
+            e($alt),
+            $placeholderStyle,
+            $attributes
+        );
+    }
+}
+
+if (! function_exists('ogBannerUrl')) {
+    /**
+     * Get the dynamic OpenGraph social share banner URL for a blog or package.
+     */
+    function ogBannerUrl($model = null): string
+    {
+        if (! $model) {
+            return imageUrl(null);
+        }
+
+        $type = null;
+        if ($model instanceof Package) {
+            $type = 'package';
+        } elseif ($model instanceof Blog) {
+            $type = 'blog';
+        }
+
+        if ($type && isset($model->id)) {
+            return route('og-banner', ['type' => $type, 'id' => $model->id]);
+        }
+
+        return imageUrl(null);
+    }
+}

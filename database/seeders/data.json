@@ -2,132 +2,163 @@
   "users": [
     {
       "id": 1,
-      "name": "Admin Umum",
-      "email": "admin@medantobatravel.com",
-      "role": "admin_umum"
+      "name": "Admin Utama",
+      "email": "admin@sujailaketoba.com",
+      "role": "admin",
+      "created_at": "2026-01-01 08:00:00"
     },
     {
       "id": 2,
       "name": "Admin Tour",
-      "email": "tour@medantobatravel.com",
-      "role": "admin_tour"
-    }
-  ],
-  "cities": [
-    { "id": 1, "name": "Medan", "slug": "medan" },
-    { "id": 2, "name": "Danau Toba", "slug": "danau-toba" },
-    { "id": 3, "name": "Berastagi", "slug": "berastagi" }
-  ],
-  "packages": [
-    {
-      "id": 1,
-      "name": "Paket Danau Toba 3D2N",
-      "slug": "paket-danau-toba-3d2n",
-      "shortDescription": "Jelajahi keindahan Danau Toba selama 3 hari 2 malam dengan fasilitas lengkap",
-      "description": "Nikmati pengalaman tak terlupakan menjelajahi Danau Toba, danau vulkanik terbesar di Asia Tenggara. Paket ini mencakup kunjungan ke Pulau Samosir, desa tradisional Batak, dan berbagai spot foto instagramable.",
-      "locationTag": "Danau Toba, Samosir",
-      "price": 1500000,
-      "priceDisplay": "per orang (min. 4 pax)",
-      "duration": "3 Hari 2 Malam",
-      "images": [
-        "assets/images/2023/10/001-1.jpg",
-        "assets/images/2023/10/002-1.jpg",
-        "assets/images/2023/10/003-1.jpg"
-      ],
-      "includes": [
-        "Hotel bintang 3 (2 malam)",
-        "Transportasi AC selama tour",
-        "Makan 6x (2 breakfast, 2 lunch, 2 dinner)",
-        "Tiket masuk objek wisata",
-        "Tour guide berpengalaman",
-        "Air mineral selama perjalanan"
-      ],
-      "excludes": [
-        "Tiket pesawat/kereta",
-        "Pengeluaran pribadi",
-        "Tips guide & driver",
-        "Asuransi perjalanan"
-      ],
-      "itinerary": [
-        { "day": 1, "title": "Penjemputan - Sipiso-piso", "activities": ["Penjemputan di Kualanamu", "Sipiso-piso Waterfall", "Tongging Village", "Check-in Hotel"] },
-        { "day": 2, "title": "Pulau Samosir", "activities": ["Pulau Samosir", "Desa Tomok", "Huta Bolon", "Tuktuk Siadong"] },
-        { "day": 3, "title": "Oleh-oleh & Drop off", "activities": ["Pasar Tomok", "Belanja Oleh-oleh", "Perjalanan ke Medan", "Drop off Bandara"] }
-      ],
-      "status": "active",
-      "isFeatured": true,
-      "cityId": 2,
-      "createdAt": "2026-04-01"
-    },
-    {
-      "id": 2,
-      "name": "Paket Berastagi 2D1N",
-      "slug": "paket-berastagi-2d1n",
-      "shortDescription": "Wisata sejuk ke Berastagi dengan kunjungan ke Gundaling dan Sipiso-piso",
-      "description": "Rasakan kesejukan udara pegunungan Berastagi. Kunjungi berbagai objek wisata menarik seperti Gundaling Hill, Air Terjun Sipiso-piso, dan pasar buah Berastagi yang terkenal.",
-      "locationTag": "Berastagi, Karo",
-      "price": 850000,
-      "priceDisplay": "per orang (min. 4 pax)",
-      "duration": "2 Hari 1 Malam",
-      "images": [
-        "assets/images/2023/10/004.jpg",
-        "assets/images/2023/10/005.jpg",
-        "assets/images/2023/10/006.jpg"
-      ],
-      "includes": [
-        "Hotel bintang 3 (1 malam)",
-        "Transportasi AC",
-        "Makan 3x",
-        "Tiket masuk wisata",
-        "Tour guide"
-      ],
-      "excludes": [
-        "Tiket transportasi ke Medan",
-        "Pengeluaran pribadi",
-        "Tips"
-      ],
-      "itinerary": [
-        { "day": 1, "title": "Medan - Berastagi", "activities": ["Gundaling Hill", "Sipiso-piso Waterfall", "Check-in Hotel"] },
-        { "day": 2, "title": "Wisata Karo", "activities": ["Pasar Buah", "Taman Alam Lumbini", "Kembali ke Medan"] }
-      ],
-      "status": "active",
-      "isFeatured": true,
-      "cityId": 3,
-      "createdAt": "2026-04-05"
+      "email": "tour@sujailaketoba.com",
+      "role": "admin_tour",
+      "created_at": "2026-01-15 09:00:00"
     },
     {
       "id": 3,
-      "name": "Paket Medan City Tour",
-      "slug": "paket-medan-city-tour",
-      "shortDescription": "Jelajahi kota Medan dalam sehari dengan mengunjungi landmark bersejarah",
-      "description": "Tour keliling kota Medan mengunjungi Istana Maimun, Masjid Raya, Tjong A Fie Mansion, dan kuliner khas Medan. Cocok untuk wisatawan yang ingin mengenal Medan lebih dekat.",
-      "locationTag": "Kota Medan",
-      "price": 350000,
-      "priceDisplay": "per orang (min. 2 pax)",
-      "duration": "1 Hari (8 jam)",
-      "images": [
-        "assets/images/2023/10/008.jpg",
-        "assets/images/2023/10/009-1.jpg",
-        "assets/images/2023/10/0010.jpg"
-      ],
-      "includes": [
-        "Mobil + driver",
-        "BBM",
-        "Parkir",
-        "Tour guide",
-        "Air mineral"
-      ],
-      "excludes": [
-        "Makan",
-        "Tiket masuk museum",
-        "Belanja oleh-oleh"
-      ],
-      "itinerary": [
-        { "day": 1, "title": "City Tour", "activities": ["Istana Maimun", "Masjid Raya", "Tjong A Fie Mansion", "Pasar Ikan Lama", "Kuliner Merdeka Walk"] }
-      ],
-      "status": "active",
-      "isFeatured": false,
-      "cityId": 1,
-      "createdAt": "2026-04-10"
+      "name": "Admin Finance",
+      "email": "finance@sujailaketoba.com",
+      "role": "admin_finance",
+      "created_at": "2026-02-01 10:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Super Admin",
+      "email": "superadmin@sujailaketoba.com",
+      "role": "super_admin",
+      "created_at": "2026-01-01 07:00:00"
+    }
+  ],
+  "cities": [
+    {
+      "id": 1,
+      "name": "Medan",
+      "slug": "medan",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/medan.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Parapat",
+      "slug": "parapat",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/parapat.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 3,
+      "name": "Berastagi",
+      "slug": "berastagi",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/berastagi.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Samosir",
+      "slug": "samosir",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/samosir.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 5,
+      "name": "Bukit Lawang",
+      "slug": "bukit-lawang",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/bukit-lawang.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 6,
+      "name": "Brastagi",
+      "slug": "brastagi",
+      "region": "Sumatera Utara",
+      "image": "assets/images/cities/brastagi.jpg",
+      "created_at": "2026-01-01 00:00:00"
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "name": "Ahmad Wijaya",
+      "email": "ahmad.wijaya@gmail.com",
+      "phone": "081234567890",
+      "address": "Jl. Sudirman No. 123, Jakarta Selatan",
+      "total_bookings": 3,
+      "total_spent": 4500000,
+      "last_booking_at": "2026-05-15 10:30:00"
+    },
+    {
+      "id": 2,
+      "name": "Siti Nurhaliza",
+      "email": "siti.nurhaliza@yahoo.com",
+      "phone": "081234567891",
+      "address": "Jl. Gatot Subroto No. 45, Bandung",
+      "total_bookings": 2,
+      "total_spent": 3000000,
+      "last_booking_at": "2026-05-10 14:20:00"
+    },
+    {
+      "id": 3,
+      "name": "Budi Santoso",
+      "email": "budi.santoso@outlook.com",
+      "phone": "081234567892",
+      "address": "Jl. Ahmad Yani No. 78, Surabaya",
+      "total_bookings": 5,
+      "total_spent": 7500000,
+      "last_booking_at": "2026-05-18 09:15:00"
+    },
+    {
+      "id": 4,
+      "name": "Dewi Lestari",
+      "email": "dewi.lestari@gmail.com",
+      "phone": "081234567893",
+      "address": "Jl. Merdeka No. 56, Yogyakarta",
+      "total_bookings": 1,
+      "total_spent": 1500000,
+      "last_booking_at": "2026-05-05 16:45:00"
+    },
+    {
+      "id": 5,
+      "name": "Rizky Ramadhan",
+      "email": "rizky.ramadhan@gmail.com",
+      "phone": "081234567894",
+      "address": "Jl. Pangeran Diponegoro No. 90, Semarang",
+      "total_bookings": 4,
+      "total_spent": 6000000,
+      "last_booking_at": "2026-05-20 11:00:00"
+    },
+    {
+      "id": 6,
+      "name": "Putri Ayu Wulandari",
+      "email": "putri.wulandari@gmail.com",
+      "phone": "081234567895",
+      "address": "Jl. HR Rasuna Said No. 12, Jakarta",
+      "total_bookings": 2,
+      "total_spent": 2800000,
+      "last_booking_at": "2026-04-28 13:30:00"
+    },
+    {
+      "id": 7,
+      "name": "Hendra Wijaya",
+      "email": "hendra.wijaya@ymail.com",
+      "phone": "081234567896",
+      "address": "Jl. Asia Afrika No. 34, Bandung",
+      "total_bookings": 1,
+      "total_spent": 850000,
+      "last_booking_at": "2026-04-15 08:45:00"
+    },
+    {
+      "id": 8,
+      "name": "Maya Safitri",
+      "email": "maya.safitri@gmail.com",
+      "phone": "081234567897",
+      "address": "Jl. Basuki Rahmat No. 67, Malang",
+      "total_bookings": 3,
+      "total_spent": 4200000,
+      "last_booking_at": "2026-05-12 15:20:00"
     }
   ],
   "cars": [
@@ -135,85 +166,817 @@
       "id": 1,
       "name": "Toyota Avanza",
       "type": "MPV",
+      "capacity": 7,
+      "transmission": "Automatic",
+      "fuel": "Petrol",
       "price": 350000,
-      "is_available": true,
-      "image": "assets/images/2023/10/004.jpg"
+      "priceWithDriver": 450000,
+      "description": "Mobil MPV terpopuler di Indonesia, cocok untuk keluarga kecil. Dilengkapi AC dingin dan audio system.",
+      "status": "active",
+      "isFeatured": true,
+      "images": ["assets/images/cars/avanza-1.jpg", "assets/images/cars/avanza-2.jpg"],
+      "features": ["AC", "Audio System", "USB Charger", "Bagasi Luas"],
+      "created_at": "2026-01-01 00:00:00"
     },
     {
       "id": 2,
       "name": "Toyota Innova Reborn",
       "type": "Premium MPV",
+      "capacity": 7,
+      "transmission": "Automatic",
+      "fuel": "Petrol",
       "price": 600000,
-      "is_available": true,
-      "image": "assets/images/2023/10/005.jpg"
+      "priceWithDriver": 750000,
+      "description": "MPV premium dengan interior mewah dan nyaman. Cocok untuk perjalanan jauh dengan kenyamanan maksimal.",
+      "status": "active",
+      "isFeatured": true,
+      "images": ["assets/images/cars/innova-1.jpg", "assets/images/cars/innova-2.jpg"],
+      "features": ["AC Premium", "Audio System", "USB Charger", "Leg Room Luas", "Coffee Maker"],
+      "created_at": "2026-01-01 00:00:00"
     },
     {
       "id": 3,
-      "name": "Toyota Hiace Standard",
+      "name": "Toyota Hiace",
       "type": "Minibus",
+      "capacity": 14,
+      "transmission": "Manual",
+      "fuel": "Diesel",
       "price": 1000000,
-      "is_available": true,
-      "image": "assets/images/2023/10/006.jpg"
+      "priceWithDriver": 1200000,
+      "description": "Minibus besar untuk grup pariwisata. Kapasitas 14 penumpang dengan багажник luas.",
+      "status": "active",
+      "isFeatured": true,
+      "images": ["assets/images/cars/hiace-1.jpg"],
+      "features": ["AC", "Audio System", "Bagasi Besar", "Reclining Seat"],
+      "created_at": "2026-01-01 00:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Daihatsu Sigra",
+      "type": "City Car",
+      "capacity": 5,
+      "transmission": "Manual",
+      "fuel": "Petrol",
+      "price": 250000,
+      "priceWithDriver": 350000,
+      "description": "Mobil ekonomis untuk perjalanan dalam kota atau grup kecil.",
+      "status": "active",
+      "isFeatured": false,
+      "images": ["assets/images/cars/sigra-1.jpg"],
+      "features": ["AC", "Audio System"],
+      "created_at": "2026-02-01 00:00:00"
+    },
+    {
+      "id": 5,
+      "name": "Suzuki APV",
+      "type": "MPV",
+      "capacity": 7,
+      "transmission": "Automatic",
+      "fuel": "Petrol",
+      "price": 300000,
+      "priceWithDriver": 400000,
+      "description": "MPV keluarga yang nyaman dan irit bahan bakar.",
+      "status": "active",
+      "isFeatured": false,
+      "images": ["assets/images/cars/apv-1.jpg"],
+      "features": ["AC", "Audio System", "Bagasi Cukup"],
+      "created_at": "2026-02-15 00:00:00"
+    },
+    {
+      "id": 6,
+      "name": "Toyota Alphard",
+      "type": "Luxury MPV",
+      "capacity": 6,
+      "transmission": "Automatic",
+      "fuel": "Petrol",
+      "price": 1500000,
+      "priceWithDriver": 1800000,
+      "description": "MPV mewah dengan fitur premium. Cocok untuk perjalanan bisnis atau honeymoon.",
+      "status": "active",
+      "isFeatured": true,
+      "images": ["assets/images/cars/alphard-1.jpg", "assets/images/cars/alphard-2.jpg"],
+      "features": ["AC Premium", "Leather Seat", "TV Screen", "Mini Bar", "USB Charger", "Leg Room Extra Luas"],
+      "created_at": "2026-03-01 00:00:00"
+    }
+  ],
+  "packages": [
+    {
+      "id": 1,
+      "name": "Paket Danau Toba 3D2N Premium",
+      "slug": "paket-danau-toba-3d2n-premium",
+      "shortDescription": "Jelajahi keindahan Danau Toba selama 3 hari 2 malam dengan fasilitas lengkap dan guide berpengalaman",
+      "description": "Nikmati pengalaman tak terlupakan menjelajahi Danau Toba, danau vulkanik terbesar di Asia Tenggara. Paket ini mencakup kunjungan ke Pulau Samosir, desa tradisional Batak, Air Terjun Sipiso-piso, dan berbagai spot foto instagramable. Dengan akomodasi hotel bintang 3 dan transportasi AC, perjalanan Anda akan menjadi lebih nyaman.",
+      "locationTag": "Danau Toba, Samosir, Parapat",
+      "price": 1500000,
+      "priceDisplay": "per orang (min. 4 pax)",
+      "duration": "3 Hari 2 Malam",
+      "images": [
+        "assets/images/packages/toba-1.jpg",
+        "assets/images/packages/toba-2.jpg",
+        "assets/images/packages/toba-3.jpg",
+        "assets/images/packages/toba-4.jpg"
+      ],
+      "includes": [
+        "Hotel bintang 3 (2 malam)",
+        "Transportasi AC selama tour",
+        "Makan 6x (2 breakfast, 2 lunch, 2 dinner)",
+        "Tiket masuk objek wisata",
+        "Tour guide berpengalaman",
+        "Air mineral selama perjalanan",
+        "Asuransi perjalanan"
+      ],
+      "excludes": [
+        "Tiket pesawat/kereta",
+        "Pengeluaran pribadi",
+        "Tips guide & driver",
+        "Tours tambahan"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Penjemputan - Sipiso-piso - Parapat", "activities": ["Penjemputan di Bandara Kualanamu", "Perjalanan ke Sipiso-piso Waterfall", "Makan siang di Tongging Village", "Check-in Hotel Parapat", "Makan malam"]},
+        { "day": 2, "title": "Pulau Samosir Full Day", "activities": ["Naik boat ke Pulau Samosir", "Kunjungan ke Desa Tomok", "Huta Bolon Siallagan", "Tuktuk Siadong", "Makan siang seafood", "Pura Parhaladan", "Kembali ke Parapat"]},
+        { "day": 3, "title": "Oleh-oleh & Drop Off", "activities": ["Sarapan pagi", "Pasar Tomok (belanja oleh-oleh)", "Perjalanan kembali ke Medan", "Makan siang di kota", "Drop off Bandara/KAI Station"]}
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "cityId": 2,
+      "cost_price": 900000,
+      "childPrice": 1200000,
+      "dronePrice": 500000,
+      "created_at": "2026-04-01 10:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Paket Berastagi 2D1N",
+      "slug": "paket-berastagi-2d1n",
+      "shortDescription": "Wisata sejuk ke Berastagi dengan kunjungan ke Gundaling, Sipiso-piso, dan pasar buah terkenal",
+      "description": "Rasakan kesejukan udara pegunungan Berastagi yang berada di ketinggian 1.300 mdpl. Kunjungi berbagai objek wisata menarik seperti Gundaling Hill dengan pemandangan spektakuler, Air Terjun Sipiso-piso yang menjulang tinggi, dan pasar buah Berastagi yang terkenal dengan buah-buahan segar.",
+      "locationTag": "Berastagi, Karo",
+      "price": 850000,
+      "priceDisplay": "per orang (min. 4 pax)",
+      "duration": "2 Hari 1 Malam",
+      "images": [
+        "assets/images/packages/berastagi-1.jpg",
+        "assets/images/packages/berastagi-2.jpg",
+        "assets/images/packages/berastagi-3.jpg"
+      ],
+      "includes": [
+        "Hotel bintang 3 (1 malam)",
+        "Transportasi AC",
+        "Makan 3x",
+        "Tiket masuk wisata",
+        "Tour guide bersertifikasi",
+        "Air mineral"
+      ],
+      "excludes": [
+        "Tiket transportasi ke Medan",
+        "Pengeluaran pribadi",
+        "Tips",
+        "Buah-buahan"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Medan - Berastagi", "activities": ["Penjemputan di Medan", "Gundaling Hill viewpoint", "Sipiso-piso Waterfall", "Makan siang", "Check-in Hotel", "Pasar buah Berastagi"]},
+        { "day": 2, "title": "Wisata Karo", "activities": ["Sarapan pagi", "Taman Alam Lumbini", "Desa Linguistik", "Makan siang", "Kembali ke Medan"]}
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "cityId": 3,
+      "cost_price": 500000,
+      "childPrice": 650000,
+      "created_at": "2026-04-05 11:00:00"
+    },
+    {
+      "id": 3,
+      "name": "Paket Medan City Tour 1 Hari",
+      "slug": "paket-medan-city-tour-1-hari",
+      "shortDescription": "Jelajahi kota Medan dalam sehari dengan mengunjungi landmark bersejarah dan kuliner khas",
+      "description": "Tour keliling kota Medan mengunjungi Istana Maimun yang megah, Masjid Raya Al-Mashun yang indah, Tjong A Fie Mansion dengan arsitektur Tionghoa, dan berbagai kuliner khas Medan yang legendaris seperti mie Aceh, Soto Medan, dan durian. Cocok untuk wisatawan yang ingin mengenal Medan lebih dekat dalam waktu singkat.",
+      "locationTag": "Kota Medan",
+      "price": 350000,
+      "priceDisplay": "per orang (min. 2 pax)",
+      "duration": "1 Hari (8 jam)",
+      "images": [
+        "assets/images/packages/medan-1.jpg",
+        "assets/images/packages/medan-2.jpg"
+      ],
+      "includes": [
+        "Mobil + driver",
+        "BBM",
+        "Parkir",
+        "Tour guide",
+        "Air mineral",
+        "Makan siang 1x"
+      ],
+      "excludes": [
+        "Tiket masuk museum (opsional)",
+        "Belanja oleh-oleh",
+        "Pengeluaran pribadi"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "City Tour Medan", "activities": ["Istana Maimun", "Masjid Raya Al-Mashun", "Tjong A Fie Mansion", "Pusat oleh-oleh (Merdeka Walk)", "Kuliner khas Medan", "Makam Raja-Raja"]}
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "cityId": 1,
+      "cost_price": 200000,
+      "childPrice": 250000,
+      "created_at": "2026-04-10 09:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Paket Samosir Adventure 4D3N",
+      "slug": "paket-samosir-adventure-4d3n",
+      "shortDescription": "Petualangan lengkap di Pulau Samosir dengan aktivitas snorkeling, biking, dan budaya Batak",
+      "description": "Rasakan pengalaman adventure lengkap di Pulau Samosir! Nikmati aktivitas snorkeling di biru jernih Danau Toba, bersepeda keliling pulau, trekking ke bukit dengan pemandangan spektakuler, dan immerse dalam budaya Batak yang kaya dengan kunjungan ke makam raja-raja kuno dan upacara adat.",
+      "locationTag": "Samosir, Tuktuk, Tomok",
+      "price": 2500000,
+      "priceDisplay": "per orang (min. 3 pax)",
+      "duration": "4 Hari 3 Malam",
+      "images": [
+        "assets/images/packages/samosir-1.jpg",
+        "assets/images/packages/samosir-2.jpg",
+        "assets/images/packages/samosir-3.jpg"
+      ],
+      "includes": [
+        "Homestay/lodge di Samosir (3 malam)",
+        "Transportasi AC",
+        "Makan 9x",
+        "Boat untuk snorkeling",
+        "Sepeda untuk touring",
+        "Guide lokal berpengalaman",
+        "Perlengkapan snorkeling",
+        "Tiket masuk wisata"
+      ],
+      "excludes": [
+        "Tiket pesawat",
+        "Pengeluaran pribadi",
+        "Tips",
+        "Asuransi tambahan"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Kedatangan - Parapat ke Samosir", "activities": ["Penjemputan di Bandara", "Perjalanan ke Parapat", "Naik boat ke Samosir", "Check-in homestay", "Sunset di Tuktuk"]},
+        { "day": 2, "title": "Adventure Day", "activities": ["Snorkeling di Gigi Hiu", "Biking keliling pulau", "Trekking bukit", "Makan siang seafood"]},
+        { "day": 3, "title": "Budaya & Tradisi", "activities": ["Kunjungan ke Huta Bolon", "Upacara adat (jika ada)", "Workshop tenun Ulos", "Kuliner Batak"]},
+        { "day": 4, "title": "Check Out - Pulang", "activities": ["Sarapan pagi", "Belanja oleh-oleh", "Boat ke Parapat", "Drop off"]}
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "cityId": 4,
+      "cost_price": 1600000,
+      "childPrice": 2000000,
+      "dronePrice": 800000,
+      "created_at": "2026-04-15 10:00:00"
+    },
+    {
+      "id": 5,
+      "name": "Paket Bukit Lawang Trekking 2D1N",
+      "slug": "paket-bukit-lawang-trekking-2d1n",
+      "shortDescription": "Trekking seru di habitats orangutan dan hutan hujan tropis Sumatera",
+      "description": "Rasakan pengalaman trekking di habitat alami orangutan liar di Taman Nasional Gunung Leuser, Bukit Lawang. Nikmati keindahan hutan hujan tropis, sungai jernih, dan temukan berbagai spesies flora dan fauna langka. Cocok untuk любителей nature dan wildlife.",
+      "locationTag": "Bukit Lawang, Gunung Leuser",
+      "price": 950000,
+      "priceDisplay": "per orang (min. 2 pax)",
+      "duration": "2 Hari 1 Malam",
+      "images": [
+        "assets/images/packages/bukitlawang-1.jpg",
+        "assets/images/packages/bukitlawang-2.jpg"
+      ],
+      "includes": [
+        "Lodge/inn di Bukit Lawang",
+        "Transportasi dari Medan",
+        "Makan 3x",
+        "Guide bersertifikasi",
+        "Tiket masuk TNGL",
+        "Perlengkapan trekking dasar"
+      ],
+      "excludes": [
+        "Transportasi ke Medan",
+        "Pengeluaran pribadi",
+        "Tips guide"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Medan - Bukit Lawang", "activities": ["Penjemputan di Medan (06:00)", "Perjalanan ~3 jam", "Briefing keselamatan", "Start trekking", "T仔细观察 orangutan", "Sungai tubing", "Makan siang", "Check-in lodge"]},
+        { "day": 2, "title": "Jungle Trek - Kembali", "activities": ["Sarapan pagi", "Jungle trek pagi", "Visit rehabilitation center", "Makan siang", "Kembali ke Medan"]}
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "cityId": 5,
+      "cost_price": 600000,
+      "childPrice": 750000,
+      "created_at": "2026-04-20 08:00:00"
+    },
+    {
+      "id": 6,
+      "name": "Paket Honeymoon Danau Toba 4D3N",
+      "slug": "paket-honeymoon-danau-toba-4d3n",
+      "shortDescription": "Paket romantis untuk pasangan pengantin baru dengan suasana eksotis Danau Toba",
+      "description": "Rayakan bulan madu Anda di surga tropis Danau Toba! Paket eksklusif ini menawarkan akomodasi resort bintang 4 dengan pemandangan danau langsung, makan malam romantis di tepi danau, private boat tour, spa treatment, dan berbagai aktivitas spesial untuk pasangan. Dilengkapi dengan photographer profesional untuk mengabadikan momen berharga Anda.",
+      "locationTag": "Tuktuk Samosir, Parapat",
+      "price": 5500000,
+      "priceDisplay": "per pasangan",
+      "duration": "4 Hari 3 Malam",
+      "images": [
+        "assets/images/packages/honeymoon-1.jpg",
+        "assets/images/packages/honeymoon-2.jpg",
+        "assets/images/packages/honeymoon-3.jpg"
+      ],
+      "includes": [
+        "Resort bintang 4 dengan lake view (3 malam)",
+        "Breakfast harian",
+        "Makan malam romantis 2x",
+        "Private boat tour",
+        "Spa treatment untuk 2 orang",
+        "Flower arrangement",
+        "Professional photographer (2 jam)",
+        "Welcome fruit basket",
+        "Transportasi private",
+        "Guide personal"
+      ],
+      "excludes": [
+        "Tiket pesawat",
+        "Pengeluaran pribadi",
+        "Asuransi tambahan"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Kedatangan - Selamat Datang", "activities": ["Penjemputan VIP di bandara", "Perjalanan private ke Samosir", "Check-in resort", "Afternoon tea", "Sunset cruise", "Dinner romantis"]},
+        { "day": 2, "title": "Petualangan Bersama", "activities": ["Breakfast di villa", "Snorkeling adventure", "Makan siang seafood", "Spa treatment", "Leisure time"]},
+        { "day": 3, "title": "Cultural Experience", "activities": ["Breakfast", "Kunjungan museum Batak", "Workshop Ulos", "Photo session", "Farewell dinner"]},
+        { "day": 4, "title": "Check Out", "activities": ["Breakfast", "Belanja oleh-oleh", "Transfer ke bandara"]}
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "cityId": 4,
+      "cost_price": 3500000,
+      "created_at": "2026-04-25 10:00:00"
+    },
+    {
+      "id": 7,
+      "name": "Paket Tour Sumatera Utara 7D6N",
+      "slug": "paket-tour-sumut-7d6n",
+      "shortDescription": "Tour komprehensif mengunjungi semua destinasi utama Sumatera Utara",
+      "description": "Paket lengkap untuk menjelajahi seluruh keindahan Sumatera Utara! Mulai dari kota Medan, Danau Toba, Samosir, Berastagi, hingga Bukit Lawang. Dengan durasi 7 hari 6 malam, Anda akan mendapatkan pengalaman lengkap wisata alam, budaya, dan adventure di Sumatera Utara.",
+      "locationTag": "Medan, Parapat, Samosir, Berastagi, Bukit Lawang",
+      "price": 4500000,
+      "priceDisplay": "per orang (min. 4 pax)",
+      "duration": "7 Hari 6 Malam",
+      "images": [
+        "assets/images/packages/sumut-complete-1.jpg",
+        "assets/images/packages/sumut-complete-2.jpg",
+        "assets/images/packages/sumut-complete-3.jpg"
+      ],
+      "includes": [
+        "Hotel bintang 3 (6 malam, rotasi)",
+        "Transportasi AC selama tour",
+        "Makan 18x (6 breakfast, 6 lunch, 6 dinner)",
+        "Tiket masuk semua objek wisata",
+        "Boat ke Samosir",
+        "Guide berpengalaman",
+        "Air mineral harian",
+        "Asuransi perjalanan"
+      ],
+      "excludes": [
+        "Tiket pesawat",
+        "Pengeluaran pribadi",
+        "Tips guide & driver",
+        "Makan di luar jadwal"
+      ],
+      "itinerary": [
+        { "day": 1, "title": "Medan City Tour", "activities": ["Penjemputan di bandara", "City tour Medan", "Check-in hotel", "Dinner di Merdeka Walk"]},
+        { "day": 2, "title": "Medan - Berastagi", "activities": ["Perjalanan ke Berastagi", "Sipiso-piso Waterfall", "Gundaling Hill", "Pasar buah", "Check-in hotel"]},
+        { "day": 3, "title": "Berastagi - Parapat", "activities": ["Taman Alam Lumbini", "Perjalanan ke Parapat", "Check-in resort", "Leisure time"]},
+        { "day": 4, "title": "Pulau Samosir", "activities": ["Boat ke Samosir", "Huta Bolon", "Tuktuk", "Pura Parhaladan", "Kembali ke Parapat"]},
+        { "day": 5, "title": "Parapat - Bukit Lawang", "activities": ["Perjalanan ke Bukit Lawang", "Jungle trek", "Sungai tubing", "Check-in lodge"]},
+        { "day": 6, "title": "Bukit Lawang - Medan", "activities": ["Morning trek", "Rehabilitation center", "Perjalanan pulang", "Check-in hotel"]},
+        { "day": 7, "title": "Departure", "activities": ["Sarapan pagi", "Belanja oleh-oleh", "Transfer ke bandara"]}
+      ],
+      "status": "active",
+      "isFeatured": true,
+      "cityId": 1,
+      "cost_price": 2800000,
+      "childPrice": 3500000,
+      "dronePrice": 1500000,
+      "created_at": "2026-05-01 09:00:00"
+    },
+    {
+      "id": 8,
+      "name": "Paket Half Day Tour Parapat",
+      "slug": "paket-half-day-parapat",
+      "shortDescription": "Tour singkat setengah hari di sekitar Parapat dan pemandangan Danau Toba",
+      "description": "Paket singkat namun berkesan untuk wisatawan dengan waktu terbatas. Nikmati pemandangan spektakuler Danau Toba dari berbagai spot terbaik di Parapat.",
+      "locationTag": "Parapat, Sibolangit",
+      "price": 150000,
+      "priceDisplay": "per orang (min. 3 pax)",
+      "duration": "Half Day (4 jam)",
+      "images": ["assets/images/packages/halfday-1.jpg"],
+      "includes": ["Transportasi AC", "Makan siang 1x", "Tiket masuk spot foto", "Air mineral"],
+      "excludes": ["Pengeluaran pribadi"],
+      "itinerary": [
+        { "day": 1, "title": "Half Day Tour", "activities": ["Penjemputan di meeting point", "Pemandangan Danau Toba", "Spot foto", "Pasar tradisional", "Kembali"]}
+      ],
+      "status": "active",
+      "isFeatured": false,
+      "cityId": 2,
+      "cost_price": 100000,
+      "created_at": "2026-05-10 10:00:00"
+    }
+  ],
+  "package_images": [
+    { "id": 1, "package_id": 1, "image_path": "assets/images/packages/toba-1.jpg", "sort_order": 1 },
+    { "id": 2, "package_id": 1, "image_path": "assets/images/packages/toba-2.jpg", "sort_order": 2 },
+    { "id": 3, "package_id": 1, "image_path": "assets/images/packages/toba-3.jpg", "sort_order": 3 },
+    { "id": 4, "package_id": 1, "image_path": "assets/images/packages/toba-4.jpg", "sort_order": 4 },
+    { "id": 5, "package_id": 2, "image_path": "assets/images/packages/berastagi-1.jpg", "sort_order": 1 },
+    { "id": 6, "package_id": 2, "image_path": "assets/images/packages/berastagi-2.jpg", "sort_order": 2 },
+    { "id": 7, "package_id": 2, "image_path": "assets/images/packages/berastagi-3.jpg", "sort_order": 3 },
+    { "id": 8, "package_id": 3, "image_path": "assets/images/packages/medan-1.jpg", "sort_order": 1 },
+    { "id": 9, "package_id": 3, "image_path": "assets/images/packages/medan-2.jpg", "sort_order": 2 }
+  ],
+  "package_amenities": [
+    { "id": 1, "package_id": 1, "name": "Hotel bintang 3 (2 malam)", "type": "include" },
+    { "id": 2, "package_id": 1, "name": "Transportasi AC selama tour", "type": "include" },
+    { "id": 3, "package_id": 1, "name": "Makan 6x", "type": "include" },
+    { "id": 4, "package_id": 1, "name": "Tiket masuk objek wisata", "type": "include" },
+    { "id": 5, "package_id": 1, "name": "Tiket pesawat/kereta", "type": "exclude" },
+    { "id": 6, "package_id": 1, "name": "Pengeluaran pribadi", "type": "exclude" },
+    { "id": 7, "package_id": 2, "name": "Hotel bintang 3 (1 malam)", "type": "include" },
+    { "id": 8, "package_id": 2, "name": "Transportasi AC", "type": "include" },
+    { "id": 9, "package_id": 2, "name": "Makan 3x", "type": "include" },
+    { "id": 10, "package_id": 2, "name": "Tiket transportasi ke Medan", "type": "exclude" }
+  ],
+  "package_tiers": [
+    { "id": 1, "tierName": "Basic", "category": "general", "tagline": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas." },
+    { "id": 2, "tierName": "Standard", "category": "general", "tagline": "Paket paling populer. Keseimbangan antara harga dan fasilitas terbaik." },
+    { "id": 3, "tierName": "Premium", "category": "general", "tagline": "Pengalaman mewah tanpa kompromi. Resort bintang 4-5, fasilitator senior, gala dinner." },
+    { "id": 4, "tierName": "VIP", "category": "corporate", "tagline": "Paket eksklusif untuk corporate event dan incentive travel." }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "userId": 2,
+      "customerId": 1,
+      "packageId": 1,
+      "carId": 2,
+      "type": "package",
+      "bookingCode": "SLT-2026-0001",
+      "startDate": "2026-05-20 08:00:00",
+      "endDate": "2026-05-22 18:00:00",
+      "totalPrice": 6000000,
+      "total_cost": 3600000,
+      "customerName": "Ahmad Wijaya",
+      "customerEmail": "ahmad.wijaya@gmail.com",
+      "customerPhone": "081234567890",
+      "notes": "Tour untuk keluarga 4 orang. Butuh kendaraan yang nyaman.",
+      "status": "confirmed",
+      "created_at": "2026-05-15 10:30:00"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "customerId": 2,
+      "packageId": 2,
+      "carId": 1,
+      "type": "package",
+      "bookingCode": "SLT-2026-0002",
+      "startDate": "2026-05-25 07:00:00",
+      "endDate": "2026-05-26 18:00:00",
+      "totalPrice": 3400000,
+      "total_cost": 2000000,
+      "customerName": "Siti Nurhaliza",
+      "customerEmail": "siti.nurhaliza@yahoo.com",
+      "customerPhone": "081234567891",
+      "notes": "Honeymoon trip untuk 2 orang.",
+      "status": "confirmed",
+      "created_at": "2026-05-10 14:20:00"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "customerId": 3,
+      "packageId": 7,
+      "carId": 3,
+      "type": "package",
+      "bookingCode": "SLT-2026-0003",
+      "startDate": "2026-06-01 06:00:00",
+      "endDate": "2026-06-07 20:00:00",
+      "totalPrice": 18000000,
+      "total_cost": 11200000,
+      "customerName": "Budi Santoso",
+      "customerEmail": "budi.santoso@outlook.com",
+      "customerPhone": "081234567892",
+      "notes": "Corporate trip untuk 4 staff perusahaan. Perlu koordinasi khusus.",
+      "status": "pending",
+      "created_at": "2026-05-18 09:15:00"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "customerId": 4,
+      "packageId": 1,
+      "carId": null,
+      "type": "package",
+      "bookingCode": "SLT-2026-0004",
+      "startDate": "2026-05-10 08:00:00",
+      "endDate": "2026-05-12 18:00:00",
+      "totalPrice": 1500000,
+      "total_cost": 900000,
+      "customerName": "Dewi Lestari",
+      "customerEmail": "dewi.lestari@gmail.com",
+      "customerPhone": "081234567893",
+      "notes": "Solo traveler, nyaman dengan group tour.",
+      "status": "completed",
+      "created_at": "2026-05-05 16:45:00"
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "customerId": 5,
+      "packageId": 6,
+      "carId": 6,
+      "type": "package",
+      "bookingCode": "SLT-2026-0005",
+      "startDate": "2026-06-10 08:00:00",
+      "endDate": "2026-06-13 18:00:00",
+      "totalPrice": 5500000,
+      "total_cost": 3500000,
+      "customerName": "Rizky Ramadhan",
+      "customerEmail": "rizky.ramadhan@gmail.com",
+      "customerPhone": "081234567894",
+      "notes": "Honeymoon package. Wife's birthday surprise.",
+      "status": "confirmed",
+      "created_at": "2026-05-20 11:00:00"
+    },
+    {
+      "id": 6,
+      "userId": 1,
+      "customerId": 6,
+      "packageId": 3,
+      "carId": 4,
+      "type": "package",
+      "bookingCode": "SLT-2026-0006",
+      "startDate": "2026-05-03 08:00:00",
+      "endDate": "2026-05-03 16:00:00",
+      "totalPrice": 700000,
+      "total_cost": 400000,
+      "customerName": "Putri Ayu Wulandari",
+      "customerEmail": "putri.wulandari@gmail.com",
+      "customerPhone": "081234567895",
+      "notes": "City tour untuk 2 orang.",
+      "status": "completed",
+      "created_at": "2026-04-28 13:30:00"
+    },
+    {
+      "id": 7,
+      "userId": 2,
+      "customerId": 7,
+      "packageId": 2,
+      "carId": 1,
+      "type": "package",
+      "bookingCode": "SLT-2026-0007",
+      "startDate": "2026-04-20 07:00:00",
+      "endDate": "2026-04-21 18:00:00",
+      "totalPrice": 850000,
+      "total_cost": 500000,
+      "customerName": "Hendra Wijaya",
+      "customerEmail": "hendra.wijaya@ymail.com",
+      "customerPhone": "081234567896",
+      "notes": "Single traveler.",
+      "status": "completed",
+      "created_at": "2026-04-15 08:45:00"
+    },
+    {
+      "id": 8,
+      "userId": 1,
+      "customerId": 8,
+      "packageId": 5,
+      "carId": 5,
+      "type": "package",
+      "bookingCode": "SLT-2026-0008",
+      "startDate": "2026-05-17 06:00:00",
+      "endDate": "2026-05-18 18:00:00",
+      "totalPrice": 1900000,
+      "total_cost": 1200000,
+      "customerName": "Maya Safitri",
+      "customerEmail": "maya.safitri@gmail.com",
+      "customerPhone": "081234567897",
+      "notes": "Adventure trip untuk 2 orang. First time trekking.",
+      "status": "pending",
+      "created_at": "2026-05-12 15:20:00"
+    },
+    {
+      "id": 9,
+      "userId": 3,
+      "customerId": 1,
+      "packageId": 4,
+      "carId": 2,
+      "type": "package",
+      "bookingCode": "SLT-2026-0009",
+      "startDate": "2026-04-10 08:00:00",
+      "endDate": "2026-04-13 18:00:00",
+      "totalPrice": 10000000,
+      "total_cost": 6400000,
+      "customerName": "Ahmad Wijaya",
+      "customerEmail": "ahmad.wijaya@gmail.com",
+      "customerPhone": "081234567890",
+      "notes": "Return customer - family reunion.",
+      "status": "cancelled",
+      "created_at": "2026-04-05 11:00:00"
+    },
+    {
+      "id": 10,
+      "userId": 2,
+      "customerId": 3,
+      "packageId": 1,
+      "carId": 2,
+      "type": "package",
+      "bookingCode": "SLT-2026-0010",
+      "startDate": "2026-05-28 08:00:00",
+      "endDate": "2026-05-30 18:00:00",
+      "totalPrice": 6000000,
+      "total_cost": 3600000,
+      "customerName": "Budi Santoso",
+      "customerEmail": "budi.santoso@outlook.com",
+      "customerPhone": "081234567892",
+      "notes": "Repeat customer from cancelled booking.",
+      "status": "confirmed",
+      "created_at": "2026-05-19 14:00:00"
     }
   ],
   "blogs": [
     {
       "id": 1,
-      "title": "5 Destinasi Wisata Wajib di Danau Toba",
-      "excerpt": "Danau Toba memiliki banyak tempat wisata menarik. Berikut adalah 5 tempat yang wajib Anda kunjungi saat berkunjung.",
-      "image": "assets/images/2023/10/001-1.jpg",
-      "author": { "name": "Admin Tour" },
+      "title": "5 Destinasi Wisata Wajib di Danau Toba yang Memukau",
+      "slug": "5-destinasi-wisata-wajib-di-danau-toba",
+      "excerpt": "Danau Toba memiliki banyak tempat wisata menarik. Berikut adalah 5 tempat yang wajib Anda kunjungi saat berkunjung ke destinasi wisata paling indah di Sumatera Utara.",
+      "content": "<p>Danau Toba merupakan danau vulkanik terbesar di Asia Tenggara dan menjadi salah satu destinasi wisata paling menakjubkan di Indonesia...</p>",
+      "image": "assets/images/blogs/toba-destinations.jpg",
+      "author": "Admin Tour",
       "category": "Tour",
-      "is_published": true,
-      "createdAt": "2026-04-01"
+      "tags": ["Danau Toba", "Wisata", "Sumatera Utara", "Samosir"],
+      "status": "published",
+      "published_at": "2026-04-01 10:00:00",
+      "metaTitle": "5 Destinasi Wisata Wajib di Danau Toba | Sujai Laketoba",
+      "metaDescription": "Jelajahi 5 destinasi wisata terbaik di Danau Toba yang harus dikunjungi. Dari Pulau Samosir hingga Air Terjun Sipiso-piso."
+    },
+    {
+      "id": 2,
+      "title": "Panduan Lengkap Transportasi dari Bandara Kualanamu ke Danau Toba",
+      "slug": "panduan-transportasi-kualanamu-ke-danau-toba",
+      "excerpt": "Everything you need to know about getting from Kualanamu International Airport (KNO) to the breathtaking shores of Lake Toba.",
+      "content": "<p>Getting to Lake Toba from Kualanamu Airport is easier than you think. Here's a comprehensive guide...</p>",
+      "image": "assets/images/blogs/transfer-guide.jpg",
+      "author": "Admin Tour",
+      "category": "Guide",
+      "tags": ["Kualanamu", "Transfer", "Airport", "Transportation"],
+      "status": "published",
+      "published_at": "2026-04-10 09:00:00",
+      "metaTitle": "Panduan Transfer dari Kualanamu ke Danau Toba | Sujai Laketoba",
+      "metaDescription": "Guide lengkap transportasi dari Bandara Kualanamu ke Danau Toba. Pilihan mobil, bus, dan shuttle."
     },
     {
       "id": 3,
-      "title": "Kuliner Khas Medan yang Wajib Dicoba",
-      "excerpt": "Selain wisatanya, Sumatera Utara juga terkenal dengan kulinernya yang kaya rempah dan menggugah selera.",
-      "image": "assets/images/2023/10/003-1.jpg",
-      "author": { "name": "Admin Tour" },
-      "category": "Tour",
-      "is_published": true,
-      "createdAt": "2026-04-10"
+      "title": "Kuliner Khas Medan yang Wajib Dicoba Saat Berkunjung",
+      "slug": "kuliner-khas-medan-wajib-coba",
+      "excerpt": "Selain wisatanya, Sumatera Utara juga terkenal dengan kulinernya yang kaya rempah dan menggugah selera. Berikut rekomendasi kuliner khas Medan.",
+      "content": "<p>Medan adalah surga kuliner dengan berbagai makanan khas yang menggugah selera...</p>",
+      "image": "assets/images/blogs/medan-food.jpg",
+      "author": "Admin Tour",
+      "category": "Food",
+      "tags": ["Kuliner", "Medan", "Makanan Khas", "Mie Aceh", "Soto Medan"],
+      "status": "published",
+      "published_at": "2026-04-15 14:00:00",
+      "metaTitle": "Kuliner Khas Medan yang Wajib Dicoba | Sujai Laketoba",
+      "metaDescription": "Rekomendasi makanan khas Medan yang harus dicoba. Dari Mie Aceh hingga Soto Medan."
     },
     {
       "id": 4,
-      "title": "Kualanamu Airport to Lake Toba: Complete Transfer Guide",
-      "excerpt": "Everything you need to know about getting from Kualanamu International Airport (KNO) to the breathtaking shores of Lake Toba.",
-      "image": "assets/images/2023/10/008.jpg",
-      "author": { "name": "Admin Tour" },
-      "category": "Tour",
-      "is_published": true,
-      "createdAt": "2026-04-12"
+      "title": "Halal Food Guide di Danau Toba untuk Muslim Travelers",
+      "slug": "halal-food-guide-danau-toba",
+      "excerpt": "Discover the best halal restaurants, traditional Muslim-friendly Batak dishes, and dining tips around Samosir Island and Parapat.",
+      "content": "<p>Traveling as a Muslim tourist? Here's your complete guide to finding halal food around Lake Toba...</p>",
+      "image": "assets/images/blogs/halal-food.jpg",
+      "author": "Admin Tour",
+      "category": "Food",
+      "tags": ["Halal", "Muslim Travel", "Food Guide", "Danau Toba"],
+      "status": "published",
+      "published_at": "2026-04-20 11:00:00",
+      "metaTitle": "Halal Food Guide Danau Toba | Sujai Laketoba",
+      "metaDescription": "Panduan makanan halal di Danau Toba untuk wisatawan Muslim. Restoran dan tips kuliner."
     },
     {
       "id": 5,
-      "title": "Halal Food Guide in Lake Toba for Muslim Travelers",
-      "excerpt": "Discover the best halal restaurants, traditional Muslim-friendly Batak dishes, and dining tips around Samosir Island and Parapat.",
-      "image": "assets/images/2023/10/003-1.jpg",
-      "author": { "name": "Admin Tour" },
-      "category": "Tour",
-      "is_published": true,
-      "createdAt": "2026-04-15"
+      "title": "Tips Trekking di Bukit Lawang untuk Pemula",
+      "slug": "tips-trekking-bukit-lawang-pemula",
+      "excerpt": "Bukit Lawang offers incredible jungle trekking experiences. Here are tips for beginners to make the most of their adventure.",
+      "content": "<p>Bukit Lawang is the gateway to Gunung Leuser National Park...</p>",
+      "image": "assets/images/blogs/trekking-tips.jpg",
+      "author": "Admin Tour",
+      "category": "Adventure",
+      "tags": ["Bukit Lawang", "Trekking", "Orangutan", "Gunung Leuser"],
+      "status": "published",
+      "published_at": "2026-04-25 08:00:00",
+      "metaTitle": "Tips Trekking Bukit Lawang untuk Pemula | Sujai Laketoba",
+      "metaDescription": "Tips trekking di Bukit Lawang untuk pemula. Persiapan, perlengkapan, dan keselamatan."
+    },
+    {
+      "id": 6,
+      "title": "Mengenal Budaya dan Tradisi Suku Batak di Samosir",
+      "slug": "budaya-tradisi-suku-batak-samosir",
+      "excerpt": "Explore the rich culture and traditions of the Batak people in Samosir Island, from traditional houses to ceremonial practices.",
+      "content": "<p>The Batak people have a rich cultural heritage that is well preserved in Samosir Island...</p>",
+      "image": "assets/images/blogs/batak-culture.jpg",
+      "author": "Admin Tour",
+      "category": "Culture",
+      "tags": ["Batak", "Samosir", "Budaya", "Tradisi", "Ulos"],
+      "status": "published",
+      "published_at": "2026-05-01 10:00:00",
+      "metaTitle": "Budaya Suku Batak di Samosir | Sujai Laketoba",
+      "metaDescription": "Mengenal budaya dan tradisi suku Batak di Pulau Samosir. Rumah adat, upacara, dan kerajinan."
+    },
+    {
+      "id": 7,
+      "title": "Best Time to Visit Lake Toba: Seasonal Guide 2026",
+      "slug": "best-time-visit-lake-toba-2026",
+      "excerpt": "Planning your trip to Lake Toba? Here's the complete seasonal guide to help you choose the best time to visit.",
+      "content": "<p>Lake Toba is a year-round destination, but certain seasons offer different experiences...</p>",
+      "image": "assets/images/blogs/best-time.jpg",
+      "author": "Admin Tour",
+      "category": "Guide",
+      "tags": ["Best Time", "Season", "Weather", "Lake Toba"],
+      "status": "published",
+      "published_at": "2026-05-05 09:00:00"
+    },
+    {
+      "id": 8,
+      "title": "10 Spot Foto Instagramable di Danau Toba",
+      "slug": "spot-foto-instagramable-danau-toba",
+      "excerpt": "Dari viewpoint Gundaling hingga pantai-pantai kecil di Samosir, berikut 10 spot foto terbaik di Danau Toba.",
+      "content": "<p>Danau Toba memiliki banyak spot foto yang instagramable...</p>",
+      "image": "assets/images/blogs/photo-spots.jpg",
+      "author": "Admin Tour",
+      "category": "Photography",
+      "tags": ["Instagram", "Photo Spot", "Wisata", "Danau Toba"],
+      "status": "published",
+      "published_at": "2026-05-10 15:00:00"
+    },
+    {
+      "id": 9,
+      "title": "Budget Travel ke Danau Toba: Tips Hemat 2026",
+      "slug": "budget-travel-danau-toba-2026",
+      "excerpt": "Traveling to Lake Toba on a budget? Here are practical tips to explore this beautiful destination without breaking the bank.",
+      "content": "<p>Lake Toba can be explored on any budget...</p>",
+      "image": "assets/images/blogs/budget-travel.jpg",
+      "author": "Admin Tour",
+      "category": "Tips",
+      "tags": ["Budget", "Hemat", "Travel Tips", "Backpacking"],
+      "status": "draft",
+      "published_at": "2026-05-15 10:00:00"
+    },
+    {
+      "id": 10,
+      "title": "Aktivitas Air di Danau Toba: Snorkeling, Diving, dan Watersports",
+      "slug": "aktivitas-air-danau-toba",
+      "excerpt": "Dari snorkeling di Gigi Hiu hingga jetski di sekitar Pulau Samosir, berikut aktivitas air seru di Danau Toba.",
+      "content": "<p>Danau Toba bukan hanya tentang pemandangan...</p>",
+      "image": "assets/images/blogs/water-sports.jpg",
+      "author": "Admin Tour",
+      "category": "Adventure",
+      "tags": ["Snorkeling", "Diving", "Watersports", "Danau Toba"],
+      "status": "draft",
+      "published_at": "2026-05-18 12:00:00"
     }
   ],
-  "clients": [
-    { "logo": "assets/images/2023/10/Mandiri-taspen-wondefultoba-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/USU-medantobatravel-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/Pelindo-1-medantobatravel-outbound-medan.png" },
-    { "logo": "assets/images/2023/10/Hyundai-medantobatravel-outbound-medan.png" }
-  ],
   "gallery_images": [
-    { "imageUrl": "assets/images/2023/10/medantobatravel_0922.jpg", "category": "Tour", "caption": "Menikmati indahnya Danau Toba dari ketinggian" },
-    { "imageUrl": "assets/images/2023/10/medantobatravel_0925.jpg", "category": "Tour", "caption": "Eksplorasi budaya suku Batak di Samosir" }
+    { "id": 1, "imageUrl": "assets/images/gallery/danau-toba-panorama.jpg", "category": "Tour", "caption": "Pemandangan spektakuler Danau Toba dari ketinggian", "tags": ["Danau Toba", "Panorama", "Pemandangan"], "orderPriority": 1, "isActive": true },
+    { "id": 2, "imageUrl": "assets/images/gallery/samosir-sunset.jpg", "category": "Tour", "caption": "Sunset romantis di tepi Danau Toba", "tags": ["Samosir", "Sunset", "Romantis"], "orderPriority": 2, "isActive": true },
+    { "id": 3, "imageUrl": "assets/images/gallery/sipiso-piso.jpg", "category": "Waterfall", "caption": "Air Terjun Sipiso-piso yang megah", "tags": ["Sipiso-piso", "Air Terjun", "Alam"], "orderPriority": 3, "isActive": true },
+    { "id": 4, "imageUrl": "assets/images/gallery/batak-tradition.jpg", "category": "Culture", "caption": "Tarian tradisional suku Batak", "tags": ["Batak", "Tradisi", "Tarian"], "orderPriority": 4, "isActive": true },
+    { "id": 5, "imageUrl": "assets/images/gallery/huta-bolon.jpg", "category": "Culture", "caption": "Rumah tradisional Huta Bolon di Samosir", "tags": ["Huta Bolon", "Rumah Adat", "Samosir"], "orderPriority": 5, "isActive": true },
+    { "id": 6, "imageUrl": "assets/images/gallery/gundaling-hill.jpg", "category": "Tour", "caption": "Pemandangan Gundaling Hill di Berastagi", "tags": ["Gundaling", "Berastagi", "Viewpoint"], "orderPriority": 6, "isActive": true },
+    { "id": 7, "imageUrl": "assets/images/gallery/orangutan.jpg", "category": "Wildlife", "caption": "Orangutan liar di Taman Nasional Gunung Leuser", "tags": ["Orangutan", "Wildlife", "Bukit Lawang"], "orderPriority": 7, "isActive": true },
+    { "id": 8, "imageUrl": "assets/images/gallery/medan-city.jpg", "category": "Tour", "caption": "Ikon kota Medan - Masjid Raya Al-Mashun", "tags": ["Medan", "Masjid", "Heritage"], "orderPriority": 8, "isActive": true },
+    { "id": 9, "imageUrl": "assets/images/gallery/snorkeling.jpg", "category": "Adventure", "caption": "Aktivitas snorkeling di Gigi Hiu", "tags": ["Snorkeling", "Gigi Hiu", "Adventure"], "orderPriority": 9, "isActive": true },
+    { "id": 10, "imageUrl": "assets/images/gallery/lake-toba-boat.jpg", "category": "Tour", "caption": "Perjalanan boat menyeberangi Danau Toba", "tags": ["Boat", "Danau Toba", "Transport"], "orderPriority": 10, "isActive": true }
   ],
-  "package_tiers": [
-    { "id": 1, "name": "Basic", "description": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas." },
-    { "id": 2, "name": "Standard", "description": "Paket paling populer. Keseimbangan antara harga dan fasilitas terbaik." },
-    { "id": 3, "name": "Premium", "description": "Pengalaman mewah tanpa kompromi. Resort bintang 4-5, fasilitator senior, gala dinner." }
+  "clients": [
+    { "id": 1, "name": "Bank Mandiri", "logo": "assets/images/clients/mandiri.png", "websiteUrl": "https://www.bankmandiri.co.id", "orderPriority": 1, "isActive": true },
+    { "id": 2, "name": "Universitas Sumatera Utara", "logo": "assets/images/clients/usu.png", "websiteUrl": "https://www.usu.ac.id", "orderPriority": 2, "isActive": true },
+    { "id": 3, "name": "PT Pelindo", "logo": "assets/images/clients/pelindo.png", "websiteUrl": "https://www.pelindo.co.id", "orderPriority": 3, "isActive": true },
+    { "id": 4, "name": "Hyundai Motors Indonesia", "logo": "assets/images/clients/hyundai.png", "websiteUrl": "https://www.hyundai.com/id", "orderPriority": 4, "isActive": true },
+    { "id": 5, "name": "PT Astra International", "logo": "assets/images/clients/astra.png", "websiteUrl": "https://www.astra.co.id", "orderPriority": 5, "isActive": true },
+    { "id": 6, "name": "Telkom Indonesia", "logo": "assets/images/clients/telkom.png", "websiteUrl": "https://www.telkom.co.id", "orderPriority": 6, "isActive": true }
   ],
-  "bookings": [],
+  "media": [
+    { "id": 1, "filename": "toba-hero.jpg", "original_name": "toba-hero.jpg", "path": "media/toba-hero.jpg", "category": "Hero", "mime_type": "image/jpeg", "size": 2048000, "alt_text": "Pemandangan Danau Toba dari ketinggian", "order_priority": 1 },
+    { "id": 2, "filename": "medan-city.jpg", "original_name": "medan-city.jpg", "path": "media/medan-city.jpg", "category": "City", "mime_type": "image/jpeg", "size": 1536000, "alt_text": "Ikon kota Medan", "order_priority": 2 },
+    { "id": 3, "filename": "berastagi-view.jpg", "original_name": "berastagi-view.jpg", "path": "media/berastagi-view.jpg", "category": "Tour", "mime_type": "image/jpeg", "size": 1843200, "alt_text": "Pemandangan Berastagi", "order_priority": 3 },
+    { "id": 4, "filename": "car-1.jpg", "original_name": "car-1.jpg", "path": "media/car-1.jpg", "category": "Vehicle", "mime_type": "image/jpeg", "size": 1024000, "alt_text": "Toyota Innova untuk transportasi tour", "order_priority": 4 },
+    { "id": 5, "filename": "blog-header.jpg", "original_name": "blog-header.jpg", "path": "media/blog-header.jpg", "category": "Blog", "mime_type": "image/jpeg", "size": 2560000, "alt_text": "Header blog post", "order_priority": 5 }
+  ],
+  "activity_logs": [
+    { "id": 1, "userId": 1, "action": "login", "description": "User logged in", "ip_address": "192.168.1.1", "created_at": "2026-05-21 08:00:00" },
+    { "id": 2, "userId": 2, "action": "create", "description": "Created new package: Paket Honeymoon Danau Toba 4D3N", "model_type": "App\\Models\\Package", "model_id": 6, "created_at": "2026-04-25 10:30:00" },
+    { "id": 3, "userId": 1, "action": "update", "description": "Updated booking SLT-2026-0001 status to confirmed", "model_type": "App\\Models\\Booking", "model_id": 1, "created_at": "2026-05-15 11:00:00" },
+    { "id": 4, "userId": 3, "action": "create", "description": "Created new customer: Maya Safitri", "model_type": "App\\Models\\Customer", "model_id": 8, "created_at": "2026-05-12 14:00:00" }
+  ],
   "settings": [
     {
       "key": "general",
@@ -222,9 +985,11 @@
         "site_tagline": "Sumatera Utara Travel Experience",
         "wa_number": "+62 813-2388-8207",
         "contact_email": "info@sujailaketoba.com",
+        "contact_phone": "+62 813-2388-8207",
+        "address": "Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara",
         "seo_meta_title": "Sujai Laketoba | Premium Tour Travel",
         "seo_meta_desc": "Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.",
-        "seo_meta_keywords": "tour danau toba, travel sumatera utara"
+        "seo_meta_keywords": "tour danau toba, travel sumatera utara, paket wisata toba"
       }
     },
     {
@@ -235,7 +1000,9 @@
         "brand_icon": "icons/icon-192x192.png",
         "tour_title": "Tour &\nTravel.",
         "tour_subtitle": "Eksplorasi keindahan Danau Toba, Berastagi, dan alam liar Bukit Lawang dengan paket liburan eksklusif kami.",
-        "tour_image_url": "2026/04/sumatra-panorama.png"
+        "tour_image_url": "2026/04/sumatra-panorama.png",
+        "hero_title": "Jelajahi Keajaiban Sumatera Utara",
+        "hero_subtitle": "Nikmati petualangan tak terlupakan di Danau Toba, Samosir, Berastagi, dan sekitarnya"
       }
     },
     {
@@ -245,14 +1012,15 @@
         "hero_subtitle": "Nikmati pengalaman tak terlupakan menjelajahi keindahan Sumatera Utara bersama kami",
         "hero_image": "2026/04/lake-toba-premium.png",
         "contact_wa_1": "+6281323888207",
-        "contact_email": "hello@medantobatravel.com",
+        "contact_wa_2": "+6281323888208",
+        "contact_email": "hello@sujailaketoba.com",
         "contact_address": "Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara",
         "cta_text": "Mulai Petualangan Anda",
         "cta_link": "/tour/packages",
-        "stat_trips": "1000+",
-        "stat_customers": "5000+",
+        "stat_trips": "1500+",
+        "stat_customers": "7500+",
         "stat_destinations": "50+",
-        "stat_awards": "10+",
+        "stat_awards": "15+",
         "why_us_title": "Mengapa Memilih Sujai Laketoba?",
         "why_us_items": [
           { "title": "Pemandu Berpengalaman", "icon": "Shield", "desc": "Tim guide profesional dengan sertifikasi resmi dan pengalaman lebih dari 10 tahun" },
@@ -260,6 +1028,39 @@
           { "title": "Layanan 24/7", "icon": "Clock", "desc": "Customer service siap membantu Anda kapan saja selama perjalanan" },
           { "title": "Asuransi Perjalanan", "icon": "Heart", "desc": "Setiap paket dilengkapi dengan asuransi perjalanan untuk keamanan Anda" }
         ]
+      }
+    },
+    {
+      "key": "social_media",
+      "value": {
+        "facebook": "https://facebook.com/sujailaketoba",
+        "instagram": "https://instagram.com/sujailaketoba",
+        "twitter": "https://twitter.com/sujailaketoba",
+        "youtube": "https://youtube.com/sujailaketoba",
+        "tiktok": "https://tiktok.com/@sujailaketoba"
+      }
+    },
+    {
+      "key": "payment",
+      "value": {
+        "bank_name": "Bank Central Asia (BCA)",
+        "bank_account": "1234567890",
+        "bank_holder": "PT Sujai Laketoba Travel",
+        "ewallet": {
+          "dana": "+6281323888207",
+          "gopay": "+6281323888207",
+          "ovo": "+6281323888207"
+        }
+      }
+    },
+    {
+      "key": "booking_settings",
+      "value": {
+        "min_advance_days": 3,
+        "max_advance_days": 90,
+        "confirmation_timeout_hours": 24,
+        "auto_cancel_unpaid": true,
+        "refund_policy": "Pengembalian 100% jika pembatalan 7 hari sebelum keberangkatan, 50% jika 3-7 hari, tidak ada pengembalian jika kurang dari 3 hari."
       }
     }
   ]

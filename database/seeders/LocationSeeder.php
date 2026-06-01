@@ -13,7 +13,7 @@ class LocationSeeder extends Seeder
     public function up(): void
     {
         // Clear tables if needed or use updateOrInsert
-        
+
         // 38 Provinces
         $provinces = [
             'Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Kepulauan Riau',
@@ -22,7 +22,7 @@ class LocationSeeder extends Seeder
             'Bali', 'Nusa Tenggara Barat', 'Nusa Tenggara Timur',
             'Kalimantan Barat', 'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara',
             'Sulawesi Utara', 'Gorontalo', 'Sulawesi Tengah', 'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tenggara',
-            'Maluku', 'Maluku Utara', 'Papua', 'Papua Barat', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya'
+            'Maluku', 'Maluku Utara', 'Papua', 'Papua Barat', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya',
         ];
 
         foreach ($provinces as $province) {

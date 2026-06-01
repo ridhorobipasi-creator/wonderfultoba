@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin \Eloquent
+ */
+
 class PackageAmenity extends Model
 {
     protected $fillable = ['package_id', 'name', 'type'];

@@ -120,11 +120,11 @@ document.addEventListener('alpine:init', () => {
                 <div class="space-y-6">
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Visi</label>
-                        <textarea name="vision" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['vision'] ?? 'Menjadi lokomotif pariwisata Sumatera Utara yang mengedepankan kualitas layanan, keberlanjutan alam, dan kebahagiaan setiap tamu.' }}</textarea>
+                        <textarea name="vision" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['vision'] ?? 'Membawa Anda menikmati keaslian alam dan budaya Sumatera Utara melalui perjalanan yang tenang, aman, dan berkesan.' }}</textarea>
                     </div>
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Misi (Pisahkan dengan baris baru)</label>
-                        <textarea name="mission" rows="4" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['mission'] ?? "Menyediakan paket wisata yang edukatif dan inspiratif.\nMenjamin kenyamanan dan keamanan transportasi tamu.\nMempromosikan kearifan lokal melalui interaksi budaya yang positif." }}</textarea>
+                        <textarea name="mission" rows="4" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm">{{ $about['mission'] ?? "Merancang itinerary yang sesuai dengan ritme liburan Anda.\nMenyediakan transportasi dan akomodasi lokal terbaik.\nMemastikan setiap pelanggan pulang dengan cerita yang indah." }}</textarea>
                     </div>
                 </div>
             </div>

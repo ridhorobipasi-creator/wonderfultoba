@@ -4,12 +4,29 @@
 @section('page-title', 'Pusat Galeri Media')
 
 @section('content')
+<!-- Load CropperJS CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
 <div x-data="mediaManager()" 
      @dragover.prevent="isDragging = true" 
      @dragleave.prevent="isDragging = false" 
      @drop.prevent="handleDrop($event)"
      class="flex flex-col lg:flex-row gap-8 min-h-[80vh] relative">
     
+    <!-- Drag & Drop Blur Overlay -->
+    <div x-show="isDragging" 
+         class="absolute inset-0 bg-indigo-600/80 backdrop-blur-md z-[300] rounded-[3.5rem] flex flex-col items-center justify-center text-white p-8 transition-all duration-300"
+         @dragover.prevent=""
+         @drop.prevent="handleDrop($event); isDragging = false"
+         @dragleave.prevent="isDragging = false"
+         x-cloak>
+        <div class="w-32 h-32 bg-white/10 rounded-[3rem] flex items-center justify-center border-4 border-dashed border-white/40 mb-8 animate-bounce">
+            <i class="fas fa-cloud-arrow-up text-5xl"></i>
+        </div>
+        <h3 class="text-3xl font-black tracking-tight">Lepaskan File Anda Di Sini</h3>
+        <p class="text-xs font-bold uppercase tracking-widest text-indigo-200 mt-2">Unggah otomatis ke folder <span class="text-white" x-text="filters.category || 'uploads'"></span></p>
+    </div>
     <!-- Left Sidebar: Folder Navigation -->
     <aside class="w-full lg:w-80 shrink-0 space-y-6">
         <!-- Quick Stats -->
@@ -32,7 +49,7 @@
             </div>
             
             <button @click="setCategory('')" 
-                    :class="filters.category === '' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
+                    :class="filters.category === '' && activeTab === 'library' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
                     class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all group">
                 <div class="flex items-center gap-4">
                     <i class="fas fa-layer-group text-sm group-hover:scale-110 transition-transform"></i>
@@ -44,7 +61,7 @@
             <template x-for="cat in categories" :key="cat.name">
                 <div class="group/folder relative">
                     <button @click="setCategory(cat.name)" 
-                            :class="filters.category === cat.name ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
+                            :class="filters.category === cat.name && activeTab === 'library' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
                             class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all group">
                         <div class="flex items-center gap-4">
                             <i class="fas text-sm group-hover:scale-110 transition-transform" :class="cat.icon"></i>
@@ -65,7 +82,7 @@
         <div class="bg-slate-900 rounded-[2.5rem] p-6 text-white space-y-2">
             <p class="px-4 text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-4">Quick Filters</p>
             <button @click="setUsage('all')" 
-                    :class="filters.usage === 'all' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'"
+                    :class="filters.usage === 'all' && activeTab === 'library' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'"
                     class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group">
                 <div class="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="fas fa-circle-nodes text-[10px]"></i>
@@ -73,146 +90,309 @@
                 <span class="text-[11px] font-black uppercase tracking-widest">All Status</span>
             </button>
             <button @click="setUsage('orphan')" 
-                    :class="filters.usage === 'orphan' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'text-white/40 hover:text-white'"
+                    :class="filters.usage === 'orphan' && activeTab === 'library' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'text-white/40 hover:text-white'"
                     class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group">
                 <div class="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="fas fa-broom text-[10px]"></i>
                 </div>
                 <span class="text-[11px] font-black uppercase tracking-widest">Orphan Items</span>
             </button>
+
+            <!-- Storage Health Audit Tab Trigger -->
+            <button @click="openAuditPanel()" 
+                    :class="activeTab === 'audit' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-950/20' : 'text-white/40 hover:text-white'"
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group border border-white/5 mt-4">
+                <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i class="fas fa-chart-pie text-[10px]"></i>
+                </div>
+                <span class="text-[11px] font-black uppercase tracking-widest">Storage Health</span>
+            </button>
         </div>
     </aside>
 
-    <!-- Main Content: The Grid -->
+    <!-- Main Content: The Grid / Audit Panel -->
     <main class="flex-1 space-y-8">
+        
         <!-- Header & Breadcrumbs -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-2">
                 <div class="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">
-                    <a href="/admin/media" class="hover:text-indigo-600">Library</a>
+                    <a href="#" @click.prevent="activeTab = 'library'" class="hover:text-indigo-600">Library</a>
                     <i class="fas fa-chevron-right text-[8px] opacity-30"></i>
-                    <span class="text-indigo-600" x-text="filters.category || 'Home'"></span>
+                    <span class="text-indigo-600" x-text="activeTab === 'audit' ? 'Storage Health' : (filters.category || 'Home')"></span>
                 </div>
                 <h2 class="text-5xl font-black text-slate-900 tracking-tighter leading-none">
-                    <span x-text="filters.category ? filters.category.toUpperCase() : 'GALLERY HUB'"></span>
+                    <span x-text="activeTab === 'audit' ? 'STORAGE HEALTH' : (filters.category ? filters.category.toUpperCase() : 'GALLERY HUB')"></span>
                 </h2>
             </div>
 
-            <div class="flex items-center gap-3">
+            <!-- Library View Actions -->
+            <div class="flex items-center gap-3" x-show="activeTab === 'library'">
+                <!-- Watermark Checkbox Toggle -->
+                <div class="flex items-center gap-3 bg-white px-5 py-4 rounded-[1.5rem] border border-slate-200 shadow-sm mr-2 select-none">
+                    <input type="checkbox" id="uploadWatermark" x-model="useWatermark" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                    <label for="uploadWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer">Watermark</label>
+                </div>
+
                 <button @click="syncMedia()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-3">
                     <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> Sync Disk
+                </button>
+                <button @click="convertAllToWebp()" class="px-8 py-5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-indigo-100 transition-all flex items-center gap-3 shadow-sm" :disabled="converting">
+                    <i class="fas fa-magic" :class="converting ? 'animate-pulse' : ''"></i> Convert WebP
+                </button>
+                <button @click="openUrlModal()" class="px-8 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-3 shadow-sm">
+                    <i class="fas fa-globe"></i> Upload URL
                 </button>
                 <input type="file" id="mediaUpload" multiple class="hidden" @change="uploadFiles($event)">
                 <label for="mediaUpload" class="px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all cursor-pointer flex items-center gap-3 group">
                     <i class="fas fa-upload group-hover:-translate-y-1 transition-transform"></i> Upload New
                 </label>
             </div>
-        </div>
 
-        <!-- Search Bar -->
-        <div class="relative group">
-            <i class="fas fa-search absolute left-7 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors"></i>
-            <input type="text" x-model="filters.search" @input.debounce.500ms="fetchMedia()" placeholder="Cari aset dalam folder ini..." 
-                   class="w-full pl-16 pr-8 py-6 bg-white border border-slate-100 rounded-[2rem] font-bold text-sm text-slate-900 shadow-sm focus:ring-[1rem] focus:ring-indigo-600/5 transition-all outline-none">
-        </div>
-
-        <!-- Bulk Actions Floating Bar -->
-        <template x-if="selectedIds.length > 0">
-            <div class="fixed bottom-12 left-1/2 lg:left-[calc(50%+160px)] -translate-x-1/2 z-[100] bg-slate-900 text-white px-10 py-6 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] flex items-center gap-10 animate-in slide-in-from-bottom duration-500 backdrop-blur-xl bg-opacity-95 border border-white/5">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-lg font-black shadow-lg" x-text="selectedIds.length"></div>
-                    <div>
-                        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 leading-none">Items Selected</p>
-                        <p class="text-[12px] font-bold mt-1.5 uppercase tracking-widest">Ready to Manage</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 border-l border-white/10 pl-10">
-                    <button @click="openMoveModal()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
-                        <i class="fas fa-up-down-left-right text-indigo-400"></i> Move To
-                    </button>
-                    <button @click="bulkDownload()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
-                        <i class="fas fa-download text-emerald-400"></i> Download
-                    </button>
-                    <button @click="bulkDelete()" class="px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center gap-3 shadow-xl shadow-rose-950/40">
-                        <i class="fas fa-trash"></i> Delete Permanent
-                    </button>
-                    <button @click="selectedIds = []" class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-all ml-4">Cancel</button>
-                </div>
+            <!-- Audit View Actions -->
+            <div class="flex items-center gap-3" x-show="activeTab === 'audit'" x-cloak>
+                <button @click="fetchAuditData()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-3">
+                    <i class="fas fa-rotate" :class="auditLoading ? 'animate-spin' : ''"></i> Rescan Storage
+                </button>
+                <button @click="activeTab = 'library'" class="px-8 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-3 shadow-sm">
+                    <i class="fas fa-folder-open"></i> Back to Library
+                </button>
             </div>
-        </template>
+        </div>
 
-        <!-- The Grid -->
-        <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-            <template x-for="item in media" :key="item.id">
-                <div class="group relative aspect-square rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-700 transform hover:-translate-y-2"
-                     :class="selectedIds.includes(item.id) ? 'ring-[0.5rem] ring-indigo-600 ring-offset-4' : ''">
-                    
-                    <img :src="item.thumbnail_url" class="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-110">
-                    
-                    <!-- Selection Indicator -->
-                    <div class="absolute top-6 right-6 z-20">
-                        <input type="checkbox" :value="item.id" x-model="selectedIds" class="w-7 h-7 rounded-xl border-2 border-white/20 bg-black/40 text-indigo-600 focus:ring-0 cursor-pointer shadow-2xl transition-all">
-                    </div>
+        <!-- 1. LIBRARY TAB VIEW -->
+        <div x-show="activeTab === 'library'" class="space-y-8">
+            <!-- Search Bar -->
+            <div class="relative group">
+                <i class="fas fa-search absolute left-7 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors"></i>
+                <input type="text" x-model="filters.search" @input.debounce.500ms="fetchMedia()" placeholder="Cari aset dalam folder ini..." 
+                       class="w-full pl-16 pr-8 py-6 bg-white border border-slate-100 rounded-[2rem] font-bold text-sm text-slate-900 shadow-sm focus:ring-[1rem] focus:ring-indigo-600/5 transition-all outline-none">
+            </div>
 
-                    <!-- Smart Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-8 flex flex-col justify-end">
-                        <div class="space-y-5">
-                            <div class="flex flex-wrap gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                <div class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-xl text-[7px] font-black uppercase tracking-widest text-white border border-white/20" x-text="item.category"></div>
-                                <div class="px-3 py-1.5 bg-indigo-600 rounded-xl text-[7px] font-black uppercase tracking-widest text-white" x-show="item.usage_count > 0" x-text="item.usage_count + ' Links'"></div>
-                            </div>
-                            
-                            <div class="flex gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-75">
-                                <button @click="openEditModal(item)" class="flex-1 py-3.5 bg-white text-slate-900 rounded-[1.25rem] font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
-                                    Manage
-                                </button>
-                                <button @click="copyUrl(item.path)" class="w-11 h-11 bg-white/10 backdrop-blur-md text-white rounded-[1.25rem] flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all border border-white/20">
-                                    <i class="fas fa-link text-[11px]"></i>
-                                </button>
-                                <button @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition-all shadow-xl">
-                                    <i class="fas fa-trash text-[11px]"></i>
-                                </button>
-                            </div>
+            <!-- Bulk Actions Floating Bar -->
+            <template x-if="selectedIds.length > 0">
+                <div class="fixed bottom-12 left-1/2 lg:left-[calc(50%+160px)] -translate-x-1/2 z-[100] bg-slate-900 text-white px-10 py-6 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] flex items-center gap-10 animate-in slide-in-from-bottom duration-500 backdrop-blur-xl bg-opacity-95 border border-white/5">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-lg font-black shadow-lg" x-text="selectedIds.length"></div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 leading-none">Items Selected</p>
+                            <p class="text-[12px] font-bold mt-1.5 uppercase tracking-widest">Ready to Manage</p>
                         </div>
+                    </div>
+                    <div class="flex items-center gap-3 border-l border-white/10 pl-10">
+                        <button @click="openMoveModal()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
+                            <i class="fas fa-up-down-left-right text-indigo-400"></i> Move To
+                        </button>
+                        <button @click="bulkDownload()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
+                            <i class="fas fa-download text-emerald-400"></i> Download
+                        </button>
+                        <button @click="bulkDelete()" class="px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center gap-3 shadow-xl shadow-rose-950/40">
+                            <i class="fas fa-trash"></i> Delete Permanent
+                        </button>
+                        <button @click="selectedIds = []" class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-all ml-4">Cancel</button>
                     </div>
                 </div>
             </template>
-        </div>
 
-        <!-- Empty State -->
-        <div x-show="!loading && media.length === 0" class="py-40 text-center bg-white rounded-[4rem] border border-dashed border-slate-200">
-            <div class="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-slate-200">
-                <i class="fas fa-folder-open text-4xl"></i>
+            <!-- The Grid -->
+            <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+                <template x-for="item in media" :key="item.id">
+                    <div class="group relative aspect-square rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-700 transform hover:-translate-y-2"
+                         :class="selectedIds.includes(item.id) ? 'ring-[0.5rem] ring-indigo-600 ring-offset-4' : ''"
+                         :style="item.dominant_color ? 'background-color: ' + item.dominant_color : 'background-color: #f8fafc'">
+                        
+                        <img :src="item.thumbnail_url" class="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-110">
+                        
+                        <!-- Selection Indicator -->
+                        <div class="absolute top-6 right-6 z-20">
+                            <input type="checkbox" :value="item.id" x-model="selectedIds" class="w-7 h-7 rounded-xl border-2 border-white/20 bg-black/40 text-indigo-600 focus:ring-0 cursor-pointer shadow-2xl transition-all">
+                        </div>
+
+                        <!-- Smart Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-8 flex flex-col justify-end">
+                            <div class="space-y-5">
+                                <div class="flex flex-wrap gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                    <div class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-xl text-[7px] font-black uppercase tracking-widest text-white border border-white/20" x-text="item.category"></div>
+                                    <div class="px-3 py-1.5 bg-indigo-600 rounded-xl text-[7px] font-black uppercase tracking-widest text-white" x-show="item.usage_count > 0" x-text="item.usage_count + ' Links'"></div>
+                                </div>
+                                
+                                <div class="flex gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-75">
+                                    <button @click="openEditModal(item)" class="flex-1 py-3.5 bg-white text-slate-900 rounded-[1.25rem] font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
+                                        Manage
+                                    </button>
+                                    <button @click="copyUrl(item.url)" class="w-11 h-11 bg-white/10 backdrop-blur-md text-white rounded-[1.25rem] flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all border border-white/20">
+                                        <i class="fas fa-link text-[11px]"></i>
+                                    </button>
+                                    <button @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition-all shadow-xl">
+                                        <i class="fas fa-trash text-[11px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
-            <h4 class="text-2xl font-black text-slate-900">Folder is Empty</h4>
-            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-3">Start by dragging files here</p>
-        </div>
 
-        <!-- Skeleton -->
-        <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-            @for($i=0; $i<10; $i++)
-                <div class="aspect-square bg-slate-50 rounded-[3.5rem] animate-pulse"></div>
-            @endfor
-        </div>
-
-        <!-- Pagination -->
-        <div x-show="last_page > 1" class="flex flex-col sm:flex-row items-center justify-between gap-8 pt-12 border-t border-slate-100">
-            <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">
-                Showing <span class="text-slate-900" x-text="media.length"></span> of <span class="text-slate-900" x-text="stats.total"></span> Assets
-            </p>
-            <div class="flex items-center gap-3">
-                <button @click="changePage(current_page - 1)" :disabled="current_page === 1" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <div class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl">
-                    Page <span x-text="current_page"></span> / <span x-text="last_page"></span>
+            <!-- Empty State -->
+            <div x-show="!loading && media.length === 0" class="py-40 text-center bg-white rounded-[4rem] border border-dashed border-slate-200">
+                <div class="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-slate-200">
+                    <i class="fas fa-folder-open text-4xl"></i>
                 </div>
-                <button @click="changePage(current_page + 1)" :disabled="current_page === last_page" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
+                <h4 class="text-2xl font-black text-slate-900">Folder is Empty</h4>
+                <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-3">Start by dragging files here</p>
+            </div>
+
+            <!-- Skeleton -->
+            <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+                @for($i=0; $i<10; $i++)
+                    <div class="aspect-square bg-slate-50 rounded-[3.5rem] animate-pulse"></div>
+                @endfor
+            </div>
+
+            <!-- Pagination -->
+            <div x-show="last_page > 1" class="flex flex-col sm:flex-row items-center justify-between gap-8 pt-12 border-t border-slate-100">
+                <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                    Showing <span class="text-slate-900" x-text="media.length"></span> of <span class="text-slate-900" x-text="stats.total"></span> Assets
+                </p>
+                <div class="flex items-center gap-3">
+                    <button @click="changePage(current_page - 1)" :disabled="current_page === 1" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl">
+                        Page <span x-text="current_page"></span> / <span x-text="last_page"></span>
+                    </div>
+                    <button @click="changePage(current_page + 1)" :disabled="current_page === last_page" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STORAGE HEALTH AUDIT VIEW -->
+        <div x-show="activeTab === 'audit'" class="space-y-8" x-cloak>
+            <!-- Audit Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Total size of orphans -->
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Orphan Storage Space</p>
+                    <h4 class="text-3xl font-black mt-2 text-rose-500" x-text="auditData.total_size_formatted || '0.00 MB'"></h4>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Can be safely reclaimed</p>
+                </div>
+                <!-- Orphan Files count -->
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Orphan Files on Disk</p>
+                    <h4 class="text-3xl font-black mt-2 text-slate-800" x-text="auditData.orphans ? auditData.orphans.length : 0"></h4>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Files with no database records</p>
+                </div>
+                <!-- DB Orphans count -->
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Unused DB Records</p>
+                    <h4 class="text-3xl font-black mt-2 text-indigo-600" x-text="stats.orphans"></h4>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Filter in library to delete</p>
+                </div>
+            </div>
+
+            <!-- Orphan files list panel -->
+            <div class="bg-white border border-slate-100 rounded-[3rem] p-8 shadow-sm space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-black text-slate-900">Physical Orphan Files</h3>
+                        <p class="text-xs font-bold text-slate-400 mt-1">File-file di bawah ini tersimpan secara fisik di server tetapi tidak terdaftar di database.</p>
+                    </div>
+                    
+                    <template x-if="selectedAuditPaths.length > 0">
+                        <button @click="deleteSelectedAudits()" class="px-6 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-2">
+                            <i class="fas fa-trash"></i> Delete Selected (<span x-text="selectedAuditPaths.length"></span>)
+                        </button>
+                    </template>
+                </div>
+
+                <!-- Table of orphan files -->
+                <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="p-6 text-[9px] font-black uppercase tracking-widest text-slate-400 w-16">
+                                    <input type="checkbox" @change="selectedAuditPaths = $event.target.checked ? auditData.orphans.map(o => o.path) : []" :checked="selectedAuditPaths.length === auditData.orphans.length && auditData.orphans.length > 0" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300">
+                                </th>
+                                <th class="p-6 text-[9px] font-black uppercase tracking-widest text-slate-400 w-32">Preview</th>
+                                <th class="p-6 text-[9px] font-black uppercase tracking-widest text-slate-400">File Path</th>
+                                <th class="p-6 text-[9px] font-black uppercase tracking-widest text-slate-400 w-28">Size</th>
+                                <th class="p-6 text-[9px] font-black uppercase tracking-widest text-slate-400 w-44">Modified Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="file in auditData.orphans" :key="file.path">
+                                <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td class="p-6">
+                                        <input type="checkbox" :value="file.path" x-model="selectedAuditPaths" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300">
+                                    </td>
+                                    <td class="p-6">
+                                        <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                                            <img :src="file.url" class="w-full h-full object-cover">
+                                        </div>
+                                    </td>
+                                    <td class="p-6">
+                                        <p class="font-bold text-sm text-slate-800" x-text="file.filename"></p>
+                                        <p class="font-mono text-[10px] text-slate-400 mt-1" x-text="file.path"></p>
+                                    </td>
+                                    <td class="p-6 font-bold text-xs text-slate-600" x-text="file.size_formatted"></td>
+                                    <td class="p-6 text-xs text-slate-400" x-text="file.created_at"></td>
+                                </tr>
+                            </template>
+                            <template x-if="!auditLoading && (!auditData.orphans || auditData.orphans.length === 0)">
+                                <tr>
+                                    <td colspan="5" class="py-20 text-center text-slate-400 font-bold text-sm">
+                                        <i class="fas fa-circle-check text-emerald-400 text-3xl mb-4"></i>
+                                        <p>Hebat! Tidak ditemukan file yatim (orphan) fisik di disk. Penyimpanan Anda 100% sehat.</p>
+                                    </td>
+                                </tr>
+                            </template>
+                            <template x-if="auditLoading">
+                                <tr>
+                                    <td colspan="5" class="py-20 text-center text-slate-400 font-bold text-sm">
+                                        <i class="fas fa-spinner animate-spin text-indigo-600 text-3xl mb-4"></i>
+                                        <p>Memindai seluruh penyimpanan disk server...</p>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
+
+    <!-- Modal: Upload from URL -->
+    <div x-show="uploadingUrlModal" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="uploadingUrlModal = false"></div>
+        <div class="relative bg-white w-full max-w-lg rounded-[3.5rem] p-12 shadow-2xl" x-transition>
+            <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-4">Upload from URL</h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-10">Unduh & konversi otomatis ke WebP</p>
+            
+            <div class="space-y-8">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-4">Image Source URL</label>
+                    <input type="url" x-model="urlUploadData.url" placeholder="https://example.com/image.jpg" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-4">SEO Alternative Text (Optional)</label>
+                    <input type="text" x-model="urlUploadData.alt_text" placeholder="Deskripsi gambar..." class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                </div>
+                
+                <!-- Watermark URL checkbox -->
+                <div class="flex items-center gap-3 bg-slate-50 px-6 py-4 rounded-2xl">
+                    <input type="checkbox" id="urlWatermark" x-model="urlUploadData.watermark" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                    <label for="urlWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer select-none">Watermark Brand</label>
+                </div>
+
+                <button @click="submitUrlUpload()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all disabled:opacity-50" :disabled="!urlUploadData.url || urlUploading">
+                    <span x-show="!urlUploading">Download & Convert</span>
+                    <span x-show="urlUploading">Downloading...</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal: Rename Folder -->
     <div x-show="renamingFolder" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
@@ -266,31 +446,42 @@
         </div>
     </div>
 
-    <!-- Modal: Edit File / Rename -->
+    <!-- Modal: Edit File / Rename & Crop -->
     <div x-show="editingItem" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="editingItem = null"></div>
-        <div class="relative bg-white w-full max-w-xl rounded-[4rem] p-12 shadow-2xl overflow-hidden" x-transition>
-            <div class="flex justify-between items-start mb-10">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="if (!isCropping) editingItem = null"></div>
+        <div class="relative bg-white w-full max-w-xl rounded-[4rem] p-12 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" x-transition>
+            <div class="flex justify-between items-start mb-6 shrink-0">
                 <div>
                     <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none">File Properties</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4" x-text="editingItem?.mime_type + ' • ' + (editingItem?.size / 1024).toFixed(1) + ' KB'"></p>
                 </div>
-                <button @click="editingItem = null" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all">
+                <button @click="if (!isCropping) editingItem = null" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all" :disabled="isCropping">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <div class="space-y-8">
-                <div class="aspect-video w-full rounded-[2.5rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-inner group/preview relative">
-                    <img :src="editingItem?.url" class="w-full h-full object-cover">
-                    <div class="absolute top-4 right-4">
-                         <a :href="editingItem?.url" target="_blank" class="w-10 h-10 bg-white/20 backdrop-blur-md text-white rounded-xl flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all border border-white/20">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto pr-2 space-y-8 scrollbar-thin scrollbar-thumb-slate-200">
+                <!-- Preview Canvas / Image with Cropper -->
+                <div class="aspect-video w-full rounded-[2.5rem] overflow-hidden bg-slate-50 border border-slate-100 shadow-inner group/preview relative flex items-center justify-center shrink-0">
+                    <img :src="editingItem?.url" id="cropperSourceImage" x-ref="cropperImage" class="max-h-full max-w-full object-contain">
+                    
+                    <!-- Crop Trigger Overlay Button -->
+                    <button @click="initCropper()" x-show="!isCropping" class="absolute bottom-4 left-4 px-5 py-2.5 bg-slate-900/80 backdrop-blur text-white hover:bg-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                        <i class="fas fa-crop-alt mr-2"></i> Crop Image
+                    </button>
+                    
+                    <!-- Aspect Ratio Overlays -->
+                    <div x-show="isCropping" class="flex gap-2 justify-center py-3 bg-slate-900/90 backdrop-blur rounded-b-2xl absolute top-0 left-0 right-0 z-30">
+                        <button @click="setAspectRatio(NaN)" class="px-3 py-1.5 bg-white/20 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-white/40">Free</button>
+                        <button @click="setAspectRatio(1.7777777777777777)" class="px-3 py-1.5 bg-white/20 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-white/40">16:9</button>
+                        <button @click="setAspectRatio(1.3333333333333333)" class="px-3 py-1.5 bg-white/20 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-white/40">4:3</button>
+                        <button @click="setAspectRatio(1)" class="px-3 py-1.5 bg-white/20 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest hover:bg-white/40">1:1</button>
+                        <button @click="cancelCropping()" class="px-3 py-1.5 bg-rose-500 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest ml-4">Cancel</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-6">
+                <div class="grid grid-cols-1 gap-6" x-show="!isCropping">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Original Filename</label>
                         <input type="text" x-model="editingItemData.filename" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
@@ -301,8 +492,111 @@
                     </div>
                 </div>
 
-                <button @click="saveEdit()" class="w-full py-6 bg-slate-900 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all">
+                <!-- Premium Metadata & Optimization Details -->
+                <div class="border-t border-slate-100 pt-8 space-y-6" x-show="!isCropping && editingItem">
+                    <h4 class="text-sm font-black text-slate-900 uppercase tracking-wider mb-4">Premium Media Optimization</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Dominant Color Card -->
+                        <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Warna Dominan</p>
+                                <p class="font-mono text-xs font-bold text-slate-800 mt-2" x-text="editingItem?.dominant_color || 'Tidak tersedia'"></p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full border-2 border-white shadow-md transition-transform hover:scale-110" 
+                                 :style="'background-color: ' + (editingItem?.dominant_color || '#e2e8f0')"></div>
+                        </div>
+
+                        <!-- Blur Placeholder Card -->
+                        <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100 flex items-center justify-between">
+                            <div class="flex-1 pr-3">
+                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Loading Placeholder</p>
+                                <p class="text-[10px] font-bold text-emerald-600 mt-2 flex items-center gap-1.5">
+                                    <i class="fas fa-circle-check"></i> Active WebP Base64
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 border border-slate-100 shadow-inner relative flex items-center justify-center group/blur-preview">
+                                <img :src="editingItem?.blur_hash || editingItem?.thumbnail_url" 
+                                     class="w-full h-full object-cover filter blur-[2px] scale-125 transition-all group-hover/blur-preview:blur-none group-hover/blur-preview:scale-100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Responsive Variants Status -->
+                    <div class="bg-indigo-50/50 rounded-3xl p-6 border border-indigo-100/50 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[9px] font-black text-indigo-700 uppercase tracking-widest leading-none">Status Ukuran Responsif (WebP Srcset)</p>
+                            <span class="px-2.5 py-1 bg-indigo-600 text-white text-[7px] font-black uppercase tracking-widest rounded-lg">PageSpeed Hijau</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 pt-1">
+                            <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
+                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Large</p>
+                                <p class="text-[9px] font-bold text-slate-700 mt-0.5">1200px</p>
+                            </div>
+                            <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
+                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Medium</p>
+                                <p class="text-[9px] font-bold text-slate-700 mt-0.5">800px</p>
+                            </div>
+                            <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
+                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Mobile</p>
+                                <p class="text-[9px] font-bold text-slate-700 mt-0.5">480px</p>
+                            </div>
+                        </div>
+                        <p class="text-[8px] font-semibold text-indigo-600/70 italic text-center mt-1">
+                            * Varian mobile, medium, dan large otomatis diunggah untuk mengoptimalkan bandwidth pengunjung sesuai resolusi perangkat.
+                        </p>
+                    </div>
+
+                    <!-- EXIF Travel Camera & GPS Panel -->
+                    <div class="bg-slate-900 text-white rounded-3xl p-6 border border-slate-800 space-y-4" x-show="editingItem?.exif_data">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-camera text-indigo-400 text-xs"></i>
+                                <span class="text-[9px] font-black uppercase tracking-widest text-indigo-300">Camera Specs (EXIF)</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-indigo-600/30 border border-indigo-500/20 text-indigo-300 text-[6px] font-black uppercase tracking-widest rounded-md">Auto Extracted</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-xs font-bold">
+                            <div>
+                                <p class="text-[8px] font-black text-white/40 uppercase tracking-widest leading-none">Kamera</p>
+                                <p class="text-white mt-1.5 font-black uppercase tracking-wider text-[10px]" x-text="(editingItem?.exif_data?.camera_brand || '') + ' ' + (editingItem?.exif_data?.camera_model || 'Unknown')"></p>
+                            </div>
+                            <div>
+                                <p class="text-[8px] font-black text-white/40 uppercase tracking-widest leading-none">Exposure Settings</p>
+                                <p class="text-slate-200 mt-1.5 font-mono text-[10px]" x-text="(editingItem?.exif_data?.aperture || '-') + ' • ' + (editingItem?.exif_data?.shutter_speed || '-') + ' • ISO ' + (editingItem?.exif_data?.iso || '-')"></p>
+                            </div>
+                        </div>
+
+                        <!-- GPS location if available -->
+                        <div class="pt-2 border-t border-white/5 flex items-center justify-between gap-4" x-show="editingItem?.exif_data?.gps">
+                            <div>
+                                <p class="text-[8px] font-black text-white/40 uppercase tracking-widest leading-none">Koordinat GPS</p>
+                                <p class="text-slate-300 font-mono text-[9px] mt-1.5" x-text="editingItem?.exif_data?.gps?.lat.toFixed(5) + ', ' + editingItem?.exif_data?.gps?.lng.toFixed(5)"></p>
+                            </div>
+                            <a :href="'https://www.google.com/maps/search/?api=1&query=' + editingItem?.exif_data?.gps?.lat + ',' + editingItem?.exif_data?.gps?.lng" 
+                               target="_blank" 
+                               class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-950/50 flex items-center gap-1.5 transition-all">
+                                <i class="fas fa-map-location-dot"></i> Buka Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="pt-6 border-t border-slate-100 mt-6 shrink-0">
+                <!-- Update Properties (Normal View) -->
+                <button @click="saveEdit()" x-show="!isCropping" class="w-full py-6 bg-slate-900 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all">
                     Update All Properties
+                </button>
+
+                <!-- Crop Actions (Cropping View) -->
+                <button @click="saveCroppedImage()" x-show="isCropping" class="w-full py-6 bg-indigo-600 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-3">
+                    <i class="fas fa-check"></i> <span x-text="cropSaving ? 'Saving Crop...' : 'Save Cropped Image'"></span>
                 </button>
             </div>
         </div>
@@ -327,18 +621,34 @@ function mediaManager() {
         renamingFolder: null,
         renamingFolderData: { old_name: '', new_name: '' },
         syncing: false,
+        converting: false,
+        uploadingUrlModal: false,
+        urlUploading: false,
+        urlUploadData: { url: '', alt_text: '', watermark: false },
         stats: { total: 0, orphans: 0 },
         filters: { search: '', category: '', usage: 'all' },
         
+        // Premium features state
+        activeTab: 'library', // 'library' or 'audit'
+        useWatermark: false,
+        isCropping: false,
+        cropSaving: false,
+        cropper: null,
+        auditData: { orphans: [], total_size_formatted: '0.00 MB' },
+        auditLoading: false,
+        selectedAuditPaths: [],
+
         init() { this.fetchMedia(); },
 
         setCategory(cat) {
+            this.activeTab = 'library';
             this.filters.category = cat;
             this.current_page = 1;
             this.fetchMedia();
         },
 
         setUsage(usage) {
+            this.activeTab = 'library';
             this.filters.usage = usage;
             this.current_page = 1;
             this.fetchMedia();
@@ -395,6 +705,61 @@ function mediaManager() {
             } catch (e) { console.error(e); }
         },
 
+        openUrlModal() {
+            this.uploadingUrlModal = true;
+            this.urlUploadData = { url: '', alt_text: '', watermark: false };
+        },
+
+        async submitUrlUpload() {
+            if (!this.urlUploadData.url) return;
+            this.urlUploading = true;
+            try {
+                const response = await fetch('{{ route('admin.media.upload-url') }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({
+                        url: this.urlUploadData.url,
+                        category: this.filters.category || 'uploads',
+                        alt_text: this.urlUploadData.alt_text,
+                        watermark: this.urlUploadData.watermark ? '1' : '0'
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.uploadingUrlModal = false;
+                    this.fetchMedia();
+                    this.showToast('✓ ' + data.message);
+                } else {
+                    alert(data.message || 'Gagal mengunduh gambar');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Terjadi kesalahan saat mengunduh gambar');
+            } finally {
+                this.urlUploading = false;
+            }
+        },
+
+        async convertAllToWebp() {
+            if (!confirm('Konversi semua gambar yang bukan format WebP ke format WebP? Proses ini mungkin membutuhkan waktu beberapa detik.')) return;
+            this.converting = true;
+            try {
+                const response = await fetch('{{ route('admin.media.convert-all') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.fetchMedia();
+                    this.showToast('✓ ' + data.message);
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                this.converting = false;
+            }
+        },
+
         async syncMedia() {
             this.syncing = true;
             try {
@@ -438,6 +803,7 @@ function mediaManager() {
             const formData = new FormData();
             for (let i = 0; i < files.length; i++) { formData.append('files[]', files[i]); }
             formData.append('category', this.filters.category || 'uploads');
+            formData.append('watermark', this.useWatermark ? '1' : '0');
             formData.append('_token', '{{ csrf_token() }}');
             this.loading = true;
             fetch('/admin/media', { method: 'POST', body: formData })
@@ -461,6 +827,7 @@ function mediaManager() {
 
         openEditModal(item) {
             this.editingItem = item;
+            this.isCropping = false;
             this.editingItemData = { 
                 filename: item.original_name || item.filename,
                 alt_text: item.alt_text || '', 
@@ -525,8 +892,7 @@ function mediaManager() {
             });
         },
 
-        copyUrl(path) {
-            const url = window.location.origin + '/storage/' + path;
+        copyUrl(url) {
             navigator.clipboard.writeText(url); this.showToast('✓ URL Copied');
         },
 
@@ -536,6 +902,115 @@ function mediaManager() {
             toast.innerText = message;
             document.body.appendChild(toast);
             setTimeout(() => { toast.classList.add('animate-out', 'fade-out', 'duration-500'); setTimeout(() => toast.remove(), 500); }, 3000);
+        },
+
+        // Storage Audit methods
+        async openAuditPanel() {
+            this.activeTab = 'audit';
+            this.fetchAuditData();
+        },
+
+        async fetchAuditData() {
+            this.auditLoading = true;
+            try {
+                const res = await fetch('{{ route('admin.media.audit') }}');
+                const data = await res.json();
+                if (data.success) {
+                    this.auditData = data;
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                this.auditLoading = false;
+            }
+        },
+
+        async deleteSelectedAudits() {
+            if (this.selectedAuditPaths.length === 0) return;
+            if (!confirm(`Hapus permanen ${this.selectedAuditPaths.length} file yatim dari server?`)) return;
+            try {
+                const res = await fetch('{{ route('admin.media.clean-orphans') }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({ paths: this.selectedAuditPaths })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    this.selectedAuditPaths = [];
+                    this.fetchAuditData();
+                    this.fetchMedia(); // Refresh stats
+                    this.showToast('✓ ' + data.message);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        },
+
+        // CropperJS functions
+        initCropper() {
+            this.isCropping = true;
+            this.$nextTick(() => {
+                const imageEl = document.getElementById('cropperSourceImage');
+                this.cropper = new Cropper(imageEl, {
+                    viewMode: 1,
+                    dragMode: 'move',
+                    background: false,
+                    responsive: true,
+                    restore: false
+                });
+            });
+        },
+
+        setAspectRatio(ratio) {
+            if (this.cropper) {
+                this.cropper.setAspectRatio(ratio);
+            }
+        },
+
+        cancelCropping() {
+            if (this.cropper) {
+                this.cropper.destroy();
+                this.cropper = null;
+            }
+            this.isCropping = false;
+        },
+
+        async saveCroppedImage() {
+            if (!this.cropper) return;
+            this.cropSaving = true;
+            try {
+                // Get cropped canvas as base64 webp (high compression quality)
+                const canvas = this.cropper.getCroppedCanvas({
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'high'
+                });
+                const dataUrl = canvas.toDataURL('image/webp', 0.85);
+                
+                const response = await fetch(`/admin/media/${this.editingItem.id}/crop`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify({ image: dataUrl })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.cancelCropping();
+                    this.editingItem = null;
+                    this.fetchMedia();
+                    this.showToast('✓ ' + data.message);
+                } else {
+                    alert(data.message || 'Gagal memotong gambar');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Terjadi kesalahan saat memotong gambar.');
+            } finally {
+                this.cropSaving = false;
+            }
         }
     }
 }

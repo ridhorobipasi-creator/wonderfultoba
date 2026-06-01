@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class SyncMediaLibrary extends Command
 {
     protected $signature = 'media:sync {--fresh : Delete all records and re-index from scratch}';
+
     protected $description = 'Sync all files in public storage into the Media Library table';
 
     public function handle()
@@ -23,7 +24,7 @@ class SyncMediaLibrary extends Command
         $indexed = 0;
         $skipped = 0;
 
-        $this->info('Found ' . count($files) . ' total files in storage. Indexing...');
+        $this->info('Found '.count($files).' total files in storage. Indexing...');
         $bar = $this->output->createProgressBar(count($files));
         $bar->start();
 
@@ -33,14 +34,16 @@ class SyncMediaLibrary extends Command
             $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
             // Skip non-images and thumbnails
-            if (!in_array($ext, $extensions) || str_contains($file, '/thumbnails/') || str_contains($file, 'temp/')) {
+            if (! in_array($ext, $extensions) || str_contains($file, '/thumbnails/') || str_contains($file, 'temp/')) {
                 $skipped++;
+
                 continue;
             }
 
             // Skip already indexed
             if (Media::where('path', $file)->exists()) {
                 $skipped++;
+
                 continue;
             }
 
@@ -61,12 +64,12 @@ class SyncMediaLibrary extends Command
             try {
                 $size = Storage::disk('public')->size($file);
                 Media::create([
-                    'filename'      => basename($file),
+                    'filename' => basename($file),
                     'original_name' => basename($file),
-                    'path'          => $file,
-                    'category'      => $category,
-                    'mime_type'     => 'image/' . ($ext === 'jpg' ? 'jpeg' : $ext),
-                    'size'          => $size,
+                    'path' => $file,
+                    'category' => $category,
+                    'mime_type' => 'image/'.($ext === 'jpg' ? 'jpeg' : $ext),
+                    'size' => $size,
                 ]);
                 $indexed++;
             } catch (\Exception $e) {
@@ -77,7 +80,7 @@ class SyncMediaLibrary extends Command
         $bar->finish();
         $this->newLine();
         $this->info("✅ Done! Indexed: {$indexed} | Skipped/Already exists: {$skipped}");
-        $this->info('Total in Media Library: ' . Media::count());
+        $this->info('Total in Media Library: '.Media::count());
 
         return 0;
     }

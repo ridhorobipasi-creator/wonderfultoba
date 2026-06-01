@@ -16,14 +16,14 @@ class GeneralSettingsController extends Controller
     {
         $settings = Setting::where('key', 'general')->first();
         $general = $settings ? $settings->value : [];
-        
+
         return view('admin.settings.index', compact('general'));
     }
 
     public function update(Request $request)
     {
         $data = $request->except(['_token', 'logo_light_file', 'logo_dark_file', 'icon_file']);
-        
+
         $setting = Setting::firstOrCreate(['key' => 'general']);
         $existing = $setting->value ?? [];
 
@@ -39,9 +39,15 @@ class GeneralSettingsController extends Controller
         }
 
         // Handle Media Library Selections
-        if ($request->filled('logo_light_url')) $data['logo_light_url'] = $request->logo_light_url;
-        if ($request->filled('logo_dark_url')) $data['logo_dark_url'] = $request->logo_dark_url;
-        if ($request->filled('icon_url')) $data['icon_url'] = $request->icon_url;
+        if ($request->filled('logo_light_url')) {
+            $data['logo_light_url'] = $request->logo_light_url;
+        }
+        if ($request->filled('logo_dark_url')) {
+            $data['logo_dark_url'] = $request->logo_dark_url;
+        }
+        if ($request->filled('icon_url')) {
+            $data['icon_url'] = $request->icon_url;
+        }
 
         $finalData = array_merge($existing, $data);
         $setting->value = $finalData;

@@ -16,9 +16,17 @@
         ];
     }
 
-    // Fallback removed to allow clean reset as requested.
+    // Fallback added back to prevent slider from disappearing when settings are empty
     if (empty($slides)) {
-        return; // Don't render anything if there are no slides
+        $slides[] = [
+            'title' => 'Eksplorasi Keindahan',
+            'subtitle' => 'Danau Toba',
+            'image_url' => null,
+            'location' => 'Sujai Laketoba',
+            'price' => 0,
+            'cta_link' => '/tour/packages',
+            'cta_text' => 'Lihat Paket'
+        ];
     }
 
     // We now use the global imageUrl() helper defined in ImageHelper.php
@@ -37,12 +45,27 @@
 
     $totalOriginal = count($preparedSlides);
     
-    // For seamless looping, we clone the first few and last few slides
-    // [Last 3] + [Original] + [First 3]
-    $clonesCount = $totalOriginal >= 3 ? 3 : $totalOriginal;
-    $startClones = array_slice($preparedSlides, -$clonesCount);
-    $endClones = array_slice($preparedSlides, 0, $clonesCount);
+    // We need enough clones to fill the 3-card preview container + buffer for fast clicking
+    $clonesNeeded = 6;
+    
+    // Helper to generate repeated array elements to reach needed count
+    $generateClones = function($array, $count, $fromEnd = false) {
+        if (empty($array)) return [];
+        $result = [];
+        while(count($result) < $count) {
+            $result = array_merge($result, $array);
+        }
+        if ($fromEnd) {
+            return array_slice($result, - $count);
+        }
+        return array_slice($result, 0, $count);
+    };
+
+    $startClones = $generateClones($preparedSlides, $clonesNeeded, true);
+    $endClones = $generateClones($preparedSlides, $clonesNeeded, false);
+    
     $infiniteSlides = array_merge($startClones, $preparedSlides, $endClones);
+    $clonesCount = $clonesNeeded;
     $startIndex = $clonesCount;
 @endphp
 
@@ -214,13 +237,13 @@
         }
 
         .card-preview {
-            width: 180px;
-            height: 280px;
-            border-radius: 24px;
+            width: 140px;
+            height: 220px;
+            border-radius: 16px;
             transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
             background: #0f172a;
         }
 
@@ -308,31 +331,51 @@
 
     {{-- Overlay Controls & Indicators --}}
     <div class="absolute inset-0 z-30 pointer-events-none flex flex-col justify-end">
-        <div class="w-full max-w-7xl mx-auto px-6 md:px-16 lg:px-24 pb-20 flex flex-col lg:flex-row items-end justify-between gap-12">
-            
-            <div class="hidden lg:block pointer-events-auto">
-                {{-- Nav Controls --}}
-                <div class="flex items-center gap-6 bg-white/80 backdrop-blur-xl px-8 py-4 rounded-full border border-slate-200 shadow-sm">
-                    <button @click="prev()" aria-label="Previous slide" class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-900 hover:text-white transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+        <div class="w-full max-w-7xl mx-auto px-6 md:px-16 lg:px-24 pb-10 flex flex-col lg:flex-row items-end justify-between gap-8">
+
+            {{-- Left: Minimal Dot Indicators + Counter --}}
+            <div class="hidden lg:flex flex-col gap-4 pointer-events-auto">
+
+                {{-- Slide Counter --}}
+                <div class="flex items-baseline gap-1">
+                    <span class="text-white text-2xl font-black leading-none tabular-nums" 
+                          x-text="String(((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal + 1).padStart(2,'0')"></span>
+                    <span class="text-white/30 text-sm font-medium">/</span>
+                    <span class="text-white/40 text-sm font-medium" x-text="String(totalOriginal).padStart(2,'0')"></span>
+                </div>
+
+                {{-- Thin progress line dots --}}
+                <div class="flex items-center gap-2">
+                    <template x-for="i in totalOriginal" :key="'dot-' + i">
+                        <div 
+                            class="h-[3px] rounded-full transition-all duration-500 cursor-pointer"
+                            @click="goTo(i-1)"
+                            :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) 
+                                ? 'w-8 bg-white' 
+                                : 'w-4 bg-white/30 hover:bg-white/60'"
+                        ></div>
+                    </template>
+                </div>
+
+                {{-- Prev / Next ghost buttons --}}
+                <div class="flex items-center gap-3">
+                    <button @click="prev()" aria-label="Previous slide"
+                        class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300 backdrop-blur-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                        </svg>
                     </button>
-                    <div class="flex gap-2">
-                        <template x-for="i in totalOriginal" :key="'dot-' + i">
-                            <div 
-                                class="w-2 h-2 rounded-full transition-all duration-500 cursor-pointer"
-                                @click="goTo(i-1)"
-                                :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) ? 'bg-slate-900 w-8' : 'bg-slate-300'"
-                            ></div>
-                        </template>
-                    </div>
-                    <button @click="next()" aria-label="Next slide" class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-900 hover:text-white transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                    <button @click="next()" aria-label="Next slide"
+                        class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition-all duration-300 backdrop-blur-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                        </svg>
                     </button>
                 </div>
             </div>
 
             {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
-            <div class="hidden lg:block w-[588px] overflow-hidden pointer-events-auto py-4">
+            <div class="hidden lg:block w-[468px] overflow-hidden pointer-events-auto py-4">
                 <div class="card-container flex items-center gap-6 carousel-strip"
                      @pointerdown="beginCardDrag($event)"
                      @pointermove="moveCardDrag($event)"
@@ -352,14 +395,14 @@
                                    :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
                                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                            <div class="absolute bottom-6 left-6 right-6 text-white translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all z-10">
-                                <p class="text-[10px] font-black uppercase tracking-widest mb-1" x-text="slide.location"></p>
-                                <h3 class="text-xs font-black uppercase leading-tight line-clamp-2" x-text="slide.title"></h3>
+                            <div class="absolute bottom-4 left-4 right-4 text-white translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all z-10">
+                                <p class="text-[9px] font-black uppercase tracking-widest mb-0.5 text-white/60" x-text="slide.location"></p>
+                                <h3 class="text-[11px] font-black uppercase leading-tight line-clamp-2" x-text="slide.title"></h3>
                             </div>
                         </div>
                     </template>
                 </div>
             </div>
         </div>
-                                     :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
+    </div>
 </section>
