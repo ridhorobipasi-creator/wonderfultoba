@@ -101,9 +101,9 @@ class BookingIntegrationTest extends TestCase
             'name' => 'Original Package',
             'description' => 'Original description',
             'duration' => '3 Hari',
-            'images' => json_encode([]),
-            'includes' => json_encode([]),
-            'excludes' => json_encode([]),
+            'images' => [],
+            'includes' => [],
+            'excludes' => [],
             'price' => 1500000,
             'status' => 'active',
             'pricingDetails' => [
