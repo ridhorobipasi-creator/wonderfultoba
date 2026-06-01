@@ -100,30 +100,28 @@
                 </a>
 
                 <!-- Desktop Nav -->
-                <div class="hidden lg:flex items-center space-x-8 shrink-0 w-max">
-                    <a href="/" 
-                        :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Beranda</a>
-                    
-                    <a href="/tour" 
-                        :class="isScrolled ? ({{ request()->is('tour') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Tour & Wisata</a>
-
-                    <a href="/tour/packages" 
-                        :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Paket</a>
-                    
-                    <a href="/tour/gallery" 
-                        :class="isScrolled ? ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Galeri</a>
-                    
-                    <a href="/tour/blog" 
-                        :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Blog</a>
-                    
-                    <a href="/about" 
-                        :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-toba-green' : 'text-slate-600 hover:text-toba-green') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-toba-accent' : 'text-white/80 hover:text-white')" 
-                        class="font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm">Tentang Kami</a>
+                @php
+                    $navItems = [
+                        ['label' => 'Beranda',    'href' => '/',              'active' => request()->is('/')],
+                        ['label' => 'Tour',        'href' => '/tour',          'active' => request()->is('tour')],
+                        ['label' => 'Outbound',    'href' => '/outbound',      'active' => request()->is('outbound*')],
+                        ['label' => 'Paket',       'href' => '/tour/packages', 'active' => request()->is('tour/packages*')],
+                        ['label' => 'Galeri',      'href' => '/tour/gallery',  'active' => request()->is('tour/gallery')],
+                        ['label' => 'Blog',        'href' => '/tour/blog',     'active' => request()->is('tour/blog*')],
+                        ['label' => 'Tentang',     'href' => '/about',         'active' => request()->is('about')],
+                    ];
+                @endphp
+                <div class="hidden lg:flex items-center lg:space-x-4 xl:space-x-6 shrink-0 w-max">
+                    @foreach($navItems as $item)
+                    <a href="{{ $item['href'] }}"
+                        @if($item['active'])
+                            :class="isScrolled ? 'text-toba-green' : 'text-toba-accent'"
+                            aria-current="page"
+                        @else
+                            :class="isScrolled ? 'text-slate-600 hover:text-toba-green' : 'text-white/80 hover:text-white'"
+                        @endif
+                        class="relative font-bold tracking-wide transition-all duration-200 whitespace-nowrap text-sm py-1 {{ $item['active'] ? 'after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-toba-green' : '' }}">{{ $item['label'] }}</a>
+                    @endforeach
                 </div>
 
 
@@ -143,7 +141,7 @@
 
                 <!-- Mobile Menu Toggle -->
                 <div class="lg:hidden flex items-center">
-                    <button @click="isMenuOpen = !isMenuOpen" :class="isScrolled ? 'text-slate-600 hover:text-toba-green' : 'text-white bg-black/5 hover:bg-black/10 rounded-xl'" class="p-2 transition-all">
+                    <button @click="isMenuOpen = !isMenuOpen" :aria-expanded="isMenuOpen" aria-label="Buka menu navigasi" :class="isScrolled ? 'text-slate-600 hover:text-toba-green' : 'text-white bg-black/5 hover:bg-black/10 rounded-xl'" class="p-2 transition-all">
                         <svg x-show="!isMenuOpen" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                         <svg x-show="isMenuOpen" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>

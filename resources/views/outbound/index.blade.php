@@ -701,12 +701,40 @@
                 <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Klien Portofolio Kami</h2>
             </div>
             
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-                @foreach($clients as $client)
-                <div class="w-32 md:w-40 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110">
-                    <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain">
+            {{-- Logo strip: swipe sentuh di mobile, drag mouse + tombol panah di desktop --}}
+            <div class="relative"
+                 x-data="{
+                     isDown: false, startX: 0, scrollStart: 0, canLeft: false, canRight: false,
+                     refresh() { const e = $refs.track; this.canLeft = e.scrollLeft > 5; this.canRight = e.scrollLeft < e.scrollWidth - e.clientWidth - 5; },
+                     nudge(d) { $refs.track.scrollBy({ left: d * $refs.track.clientWidth * 0.7, behavior: 'smooth' }); },
+                     start(e) { this.isDown = true; this.startX = e.pageX; this.scrollStart = $refs.track.scrollLeft; },
+                     drag(e) { if (!this.isDown) return; e.preventDefault(); $refs.track.scrollLeft = this.scrollStart - (e.pageX - this.startX); },
+                     stop() { this.isDown = false; }
+                 }"
+                 x-init="refresh(); $nextTick(() => refresh())"
+                 @mousemove.window="drag($event)" @mouseup.window="stop()" @resize.window="refresh()">
+
+                {{-- Tombol panah (desktop saja) --}}
+                <button type="button" @click="nudge(-1)" x-show="canLeft" x-cloak aria-label="Sebelumnya"
+                        class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white text-toba-green shadow-lg ring-1 ring-slate-100 hover:bg-toba-green hover:text-white transition-colors">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+                <button type="button" @click="nudge(1)" x-show="canRight" x-cloak aria-label="Berikutnya"
+                        class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white text-toba-green shadow-lg ring-1 ring-slate-100 hover:bg-toba-green hover:text-white transition-colors">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+
+                <div x-ref="track" @scroll="refresh()" @mousedown="start($event)"
+                     :class="isDown ? 'md:cursor-grabbing snap-none' : 'md:cursor-grab snap-x snap-mandatory'"
+                     class="-mx-6 md:mx-0 px-6 md:px-0 pb-2 overflow-x-auto select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <div class="flex w-max mx-auto items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+                        @foreach($clients as $client)
+                        <div class="snap-center shrink-0 w-32 md:w-40 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110">
+                            <img src="{{ imageUrl($client->logo) }}" alt="{{ $client->name }}" class="max-w-full max-h-full object-contain pointer-events-none" loading="lazy" draggable="false">
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
-                @endforeach
             </div>
         </div>
     </section>

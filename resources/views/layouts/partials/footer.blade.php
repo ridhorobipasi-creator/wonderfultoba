@@ -31,16 +31,16 @@
                 </p>
                 <div class="flex items-center space-x-4">
                     @if($siteSettings['general']['social_instagram'] ?? false)
-                        <a href="https://instagram.com/{{ str_replace('@', '', $siteSettings['general']['social_instagram']) }}" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://instagram.com/{{ str_replace('@', '', $siteSettings['general']['social_instagram']) }}" target="_blank" rel="noopener" aria-label="Instagram Wonderful Toba" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-instagram" aria-hidden="true"></i></a>
                     @endif
                     @if($siteSettings['general']['social_facebook'] ?? false)
-                        <a href="{{ $siteSettings['general']['social_facebook'] }}" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $siteSettings['general']['social_facebook'] }}" target="_blank" rel="noopener" aria-label="Facebook Wonderful Toba" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
                     @endif
                     @if($siteSettings['general']['social_youtube'] ?? false)
-                        <a href="{{ $siteSettings['general']['social_youtube'] }}" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
+                        <a href="{{ $siteSettings['general']['social_youtube'] }}" target="_blank" rel="noopener" aria-label="YouTube Wonderful Toba" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-youtube" aria-hidden="true"></i></a>
                     @endif
                     @if($siteSettings['general']['social_tiktok'] ?? false)
-                        <a href="{{ $siteSettings['general']['social_tiktok'] }}" target="_blank" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
+                        <a href="{{ $siteSettings['general']['social_tiktok'] }}" target="_blank" rel="noopener" aria-label="TikTok Wonderful Toba" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300 hover:bg-toba-green hover:text-white transition-all"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
                     @endif
                 </div>
             </div>

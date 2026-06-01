@@ -252,32 +252,6 @@
       "createdAt": "2026-04-25"
     }
   ],
-  "cars": [
-    {
-      "id": 1,
-      "name": "Toyota Avanza",
-      "type": "MPV",
-      "price": 350000,
-      "is_available": true,
-      "image": "assets/images/2023/10/004.jpg"
-    },
-    {
-      "id": 2,
-      "name": "Toyota Innova Reborn",
-      "type": "Premium MPV",
-      "price": 600000,
-      "is_available": true,
-      "image": "assets/images/2023/10/005.jpg"
-    },
-    {
-      "id": 3,
-      "name": "Toyota Hiace Standard",
-      "type": "Minibus",
-      "price": 1000000,
-      "is_available": true,
-      "image": "assets/images/2023/10/006.jpg"
-    }
-  ],
   "blogs": [
     {
       "id": 1,

@@ -20,12 +20,6 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>{{ url('/cars') }}</loc>
-        <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
         <loc>{{ url('/tour/packages') }}</loc>
         <lastmod>{{ now()->tz('UTC')->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>

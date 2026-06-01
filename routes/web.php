@@ -66,9 +66,6 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
     Route::get('galleries', [GalleryController::class, 'index'])->name('galleries.index');
     Route::resource('gallery', GalleryController::class);
 
-    // Car Management
-    Route::resource('cars', App\Http\Controllers\Admin\CarController::class);
-
     // CMS Management
     Route::get('/cms-halaman-utama', [CMSController::class, 'index'])->name('cms.index');
     Route::get('/cms-beranda-tour', [CMSController::class, 'tour'])->name('cms.tour');
@@ -156,7 +153,6 @@ Route::prefix('outbound')->name('outbound.')->group(function() {
 Route::get('/about', [App\Http\Controllers\PublicController::class, 'about'])->name('about');
 Route::get('/terms', [App\Http\Controllers\PublicController::class, 'terms'])->name('terms');
 Route::get('/privacy', [App\Http\Controllers\PublicController::class, 'privacy'])->name('privacy');
-Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index');
 
 
 // Invoice & Itinerary

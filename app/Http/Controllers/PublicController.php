@@ -273,19 +273,6 @@ class PublicController extends Controller
         return view('outbound.blog', compact('posts', 'siteSettings'));
     }
 
-    public function cars()
-    {
-        $siteSettings = Cache::remember('site_settings_minimal', 3600, function() {
-            return [
-                'general' => Setting::where('key', 'general')->first()?->value ?? [],
-            ];
-        });
-        $cars = Cache::remember('cars_active', 3600, function() {
-            return \App\Models\Car::where('status', 'active')->orderBy('sortOrder')->get();
-        });
-        return view('cars.index', compact('cars', 'siteSettings'));
-    }
-
     public function about()
     {
         $siteSettings = [

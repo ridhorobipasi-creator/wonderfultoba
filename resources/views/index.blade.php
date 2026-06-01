@@ -9,8 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+
     <!-- FontAwesome Deferred -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
@@ -27,7 +26,7 @@
         }
     </style>
 </head>
-<body class="overflow-x-hidden bg-black">
+<body class="font-sans overflow-x-hidden bg-black">
     <!-- Preload Hero Images for LCP -->
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['outbound_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600' }}" fetchpriority="high">
     <link rel="preload" as="image" href="{{ imageUrl($siteSettings['cms_landing']['tour_image_url'] ?? null) ?: 'https://images.unsplash.com/photo-1544735049-717bc392183e?w=1600' }}" fetchpriority="high">
@@ -84,9 +83,9 @@
                     <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-700 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-500/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
                         Jelajahi Outbound
                     </a>
-                    <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
-                        <i class="fas fa-arrow-right -rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500"></i>
-                    </div>
+                    <a href="/outbound" aria-label="Jelajahi Outbound" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-right -rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -116,9 +115,9 @@
                     {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <div class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
-                        <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500"></i>
-                    </div>
+                    <a href="/tour" aria-label="Jelajahi Wisata" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                        <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500" aria-hidden="true"></i>
+                    </a>
                     <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-800 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-400/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
                         Jelajahi Wisata
                     </a>
@@ -130,25 +129,34 @@
     </main>
 
 
+    <!-- Notifikasi konten diperbarui (tanpa reload paksa) -->
+    <button id="cms-update-toast" type="button" onclick="window.location.reload()"
+            class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[120] translate-y-24 opacity-0 transition-all duration-500 flex items-center gap-3 bg-white text-slate-900 pl-5 pr-3 py-3 rounded-2xl shadow-2xl">
+        <i class="fas fa-arrows-rotate text-emerald-600" aria-hidden="true"></i>
+        <span class="text-sm font-bold">Konten diperbarui</span>
+        <span class="text-[11px] font-black uppercase tracking-widest bg-emerald-600 text-white px-3 py-1.5 rounded-xl">Muat ulang</span>
+    </button>
+
     <!-- CMS Realtime Sync (No-Supabase Version) -->
     <script>
         (function() {
             let currentVersion = null;
-            const checkInterval = 5000; // 5 seconds
-            
+            const checkInterval = 30000; // 30 detik
+            let notified = false;
+
             async function checkCmsVersion() {
+                if (document.visibilityState !== 'visible' || notified) return;
                 try {
                     const response = await fetch('{{ route('api.sync.version') }}');
                     const data = await response.json();
-                    
                     if (currentVersion === null) {
                         currentVersion = data.version;
                     } else if (data.version !== currentVersion) {
-                        console.log('CMS Update Detected! Syncing content...');
-                        window.location.reload();
+                        notified = true;
+                        const t = document.getElementById('cms-update-toast');
+                        if (t) t.classList.remove('translate-y-24', 'opacity-0');
                     }
-                } catch (e) {
-                }
+                } catch (e) {}
             }
 
             setInterval(checkCmsVersion, checkInterval);

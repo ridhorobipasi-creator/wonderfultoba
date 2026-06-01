@@ -82,7 +82,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">{{ $booking->bookingCode }}</p>
-                                                <h4 class="text-xs font-bold text-slate-900">{{ $booking->package->name ?? $booking->car->name ?? 'N/A' }}</h4>
+                                                <h4 class="text-xs font-bold text-slate-900">{{ $booking->package->name ?? 'N/A' }}</h4>
                                             </div>
                                         </div>
                                     </td>

@@ -65,8 +65,9 @@
                 x-transition:enter-end="opacity-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+                aria-label="Kembali ke atas"
                 class="w-12 h-12 bg-white text-slate-900 rounded-2xl shadow-2xl flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all group border border-slate-100">
-            <i class="fas fa-chevron-up text-sm group-hover:-translate-y-1 transition-transform"></i>
+            <i class="fas fa-chevron-up text-sm group-hover:-translate-y-1 transition-transform" aria-hidden="true"></i>
         </button>
         <!-- WhatsApp Button -->
         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6281323888207') }}?text={{ urlencode($siteSettings['general']['wa_message'] ?? 'Halo Wonderful Toba, saya ingin bertanya tentang paket wisata...') }}" 
@@ -80,41 +81,54 @@
 
     </div>
 
+    <!-- Notifikasi konten diperbarui (pengganti reload paksa) -->
+    <div id="cms-update-toast"
+         class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[120] translate-y-24 opacity-0 transition-all duration-500 pointer-events-none">
+        <button type="button" onclick="window.location.reload()"
+                class="pointer-events-auto flex items-center gap-3 bg-slate-900 text-white pl-5 pr-3 py-3 rounded-2xl shadow-2xl border border-white/10 hover:bg-slate-800 transition-colors">
+            <i class="fas fa-arrows-rotate text-toba-accent" aria-hidden="true"></i>
+            <span class="text-sm font-bold">Konten diperbarui</span>
+            <span class="text-[11px] font-black uppercase tracking-widest bg-toba-green px-3 py-1.5 rounded-xl">Muat ulang</span>
+        </button>
+    </div>
+
     <!-- CMS Realtime Sync (No-Supabase Version) -->
     <script>
         (function() {
+            // Jangan ganggu pengunjung dengan reload paksa: cukup tampilkan notifikasi.
             let currentVersion = null;
-            const checkInterval = 5000; // 5 seconds
+            const checkInterval = 30000; // 30 detik — hemat kuota/baterai
             let timer = null;
-            
-            async function checkCmsVersion() {
-                if (document.visibilityState !== 'visible') return;
+            let notified = false;
 
+            function showToast() {
+                const t = document.getElementById('cms-update-toast');
+                if (!t) return;
+                t.classList.remove('translate-y-24', 'opacity-0');
+            }
+
+            async function checkCmsVersion() {
+                if (document.visibilityState !== 'visible' || notified) return;
                 try {
                     const response = await fetch('{{ route('api.sync.version') }}');
                     const data = await response.json();
-                    
                     if (currentVersion === null) {
                         currentVersion = data.version;
                     } else if (data.version !== currentVersion) {
-                        console.log('CMS Update Detected! Syncing content...');
-                        window.location.reload();
+                        notified = true;
+                        showToast();
+                        stopPolling();
                     }
                 } catch (e) {}
             }
 
             function startPolling() {
-                if (!timer) timer = setInterval(checkCmsVersion, checkInterval);
+                if (!timer && !notified) timer = setInterval(checkCmsVersion, checkInterval);
             }
-
             function stopPolling() {
-                if (timer) {
-                    clearInterval(timer);
-                    timer = null;
-                }
+                if (timer) { clearInterval(timer); timer = null; }
             }
 
-            // Start polling only on non-admin pages
             if (!window.location.pathname.startsWith('/admin')) {
                 startPolling();
                 document.addEventListener('visibilitychange', () => {

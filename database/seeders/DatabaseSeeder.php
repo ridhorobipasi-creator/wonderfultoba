@@ -63,23 +63,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // 4. CARS
-        if (isset($data['cars'])) {
-            foreach ($data['cars'] as $car) {
-                DB::table('cars')->insert([
-                    'id' => $car['id'],
-                    'name' => $car['name'],
-                    'type' => $car['type'] ?? 'Standard',
-                    'capacity' => 4,
-                    'transmission' => 'Automatic',
-                    'fuel' => 'Petrol',
-                    'price' => $car['price'] ?? 0,
-                    'images' => json_encode(isset($car['image']) ? [$car['image']] : []),
-                    'status' => ($car['is_available'] ?? true) ? 'available' : 'unavailable',
-                ]);
-            }
-        }
-
         // 5. BOOKINGS
         if (isset($data['bookings'])) {
             foreach ($data['bookings'] as $key => $bk) {

@@ -36,3 +36,22 @@ Thumbs.db
 *.7z
 *.tt
 *.tmp
+
+# Database files (jangan commit database ke repo!)
+*.sqlite
+*.sqlite3
+/wony7598_toba
+/database/*.sqlite
+
+# Server logs (tanpa ekstensi .log, lolos dari pola *.log)
+error_log
+**/error_log
+
+# Debug & helper scripts (jangan publikasikan)
+/debug.php
+/test_exec.php
+/check_tokens.php
+/public/fix_storage_link.php
+
+# Sisa stack lama
+/legacy_backup
