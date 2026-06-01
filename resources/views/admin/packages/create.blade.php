@@ -196,6 +196,32 @@
                     </div>
                 </div>
 
+                <!-- Layanan Tambahan (Additional Services) -->
+                <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100">
+                    <h3 class="text-sm font-black text-indigo-950 mb-4 flex items-center gap-2">
+                        <i class="fas fa-hand-holding-usd text-indigo-600"></i> Layanan Tambahan (Additional Services)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Private Jet Charter Price</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                                <input type="number" name="pricingDetails[private_jet_price]" value="{{ old('pricingDetails.private_jet_price', 120000000) }}" min="0" step="1000"
+                                    class="w-full pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Pemandu Antropologi Price</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                                <input type="number" name="pricingDetails[guide_price]" value="{{ old('pricingDetails.guide_price', 5500000) }}" min="0" step="1000"
+                                    class="w-full pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Dynamic Includes & Excludes Editor -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Includes -->

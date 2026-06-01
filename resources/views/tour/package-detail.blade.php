@@ -148,10 +148,10 @@
             return this.paxChildren * this.package.price * 0.5;
         },
         get pricePrivateJet() {
-            return this.privateJet ? 120000000 : 0;
+            return this.privateJet ? (this.package.pricingDetails?.private_jet_price !== undefined ? parseFloat(this.package.pricingDetails.private_jet_price) : 120000000) : 0;
         },
         get priceGuide() {
-            return this.guide ? 5500000 : 0;
+            return this.guide ? (this.package.pricingDetails?.guide_price !== undefined ? parseFloat(this.package.pricingDetails.guide_price) : 5500000) : 0;
         },
         get totalSebelumPajak() {
             return this.priceDewasa + this.priceAnak + this.pricePrivateJet + this.priceGuide;
@@ -650,7 +650,7 @@
                                     <span class="material-symbols-outlined text-secondary text-[22px]">flight_takeoff</span>
                                     <div>
                                         <div class="font-body-md font-semibold text-slate-900 text-xs">Private Jet Charter</div>
-                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ Rp 120.000.000</div>
+                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(package.pricingDetails?.private_jet_price !== undefined ? package.pricingDetails.private_jet_price : 120000000)">+ Rp 120.000.000</span></div>
                                     </div>
                                 </div>
                                 <input type="checkbox" x-model="privateJet" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
@@ -661,7 +661,7 @@
                                     <span class="material-symbols-outlined text-secondary text-[22px]">person_pin</span>
                                     <div>
                                         <div class="font-body-md font-semibold text-slate-900 text-xs">Pemandu Antropologi</div>
-                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ Rp 5.500.000</div>
+                                        <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(package.pricingDetails?.guide_price !== undefined ? package.pricingDetails.guide_price : 5500000)">+ Rp 5.500.000</span></div>
                                     </div>
                                 </div>
                                 <input type="checkbox" x-model="guide" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>

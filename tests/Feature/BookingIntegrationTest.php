@@ -59,4 +59,31 @@ class BookingIntegrationTest extends TestCase
             'status' => 'pending',
         ]);
     }
+
+    public function test_package_pricing_details_can_be_saved_via_tour_service()
+    {
+        $tourService = app(\App\Services\TourService::class);
+
+        $data = [
+            'name' => 'Custom Pricing Package',
+            'description' => 'Test description',
+            'duration' => '3 Hari',
+            'price' => 1500000,
+            'status' => 'active',
+            'pricingDetails' => [
+                'private_jet_price' => 130000000,
+                'guide_price' => 6000000,
+            ],
+        ];
+
+        $package = $tourService->savePackage($data);
+
+        $this->assertDatabaseHas('packages', [
+            'id' => $package->id,
+            'name' => 'Custom Pricing Package',
+        ]);
+
+        $this->assertEquals(130000000, $package->pricingDetails['private_jet_price']);
+        $this->assertEquals(6000000, $package->pricingDetails['guide_price']);
+    }
 }

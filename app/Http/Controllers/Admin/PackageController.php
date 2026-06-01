@@ -103,6 +103,9 @@ class PackageController extends Controller
             'includes' => 'nullable|array',
             'excludes' => 'nullable|array',
             'media_ids' => 'nullable|array',
+            'pricingDetails' => 'nullable|array',
+            'pricingDetails.private_jet_price' => 'nullable|numeric|min:0',
+            'pricingDetails.guide_price' => 'nullable|numeric|min:0',
         ]);
 
         try {
@@ -144,6 +147,9 @@ class PackageController extends Controller
             'includes' => 'nullable|array',
             'excludes' => 'nullable|array',
             'media_ids' => 'nullable|array',
+            'pricingDetails' => 'nullable|array',
+            'pricingDetails.private_jet_price' => 'nullable|numeric|min:0',
+            'pricingDetails.guide_price' => 'nullable|numeric|min:0',
         ]);
 
         try {
