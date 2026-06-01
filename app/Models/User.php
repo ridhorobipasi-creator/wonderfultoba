@@ -36,18 +36,21 @@ class User extends Authenticatable
     // Check if user is superadmin (Full Access)
     public function isSuperAdmin(): bool
     {
-        return in_array($this->role, ['superadmin', 'admin_umum']);
+        $role = str_replace('_', '', strtolower($this->role ?? ''));
+        return in_array($role, ['superadmin', 'adminumum']);
     }
 
     // Check if user is tour admin
     public function isTourAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'admin_tour', 'superadmin', 'admin_umum']);
+        $role = str_replace('_', '', strtolower($this->role ?? ''));
+        return in_array($role, ['admin', 'admintour', 'superadmin', 'adminumum']);
     }
 
     // Legacy check
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'superadmin', 'admin_umum', 'admin_tour']);
+        $role = str_replace('_', '', strtolower($this->role ?? ''));
+        return in_array($role, ['admin', 'superadmin', 'adminumum', 'admintour']);
     }
 }

@@ -19,10 +19,11 @@ class RoleMiddleware
             return redirect('login');
         }
 
-        if (! in_array($request->user()->role, $roles)) {
-            return response()->view('errors.403', [
-                'message' => 'Anda tidak memiliki hak akses untuk halaman ini.',
-            ], 403);
+        $userRole = str_replace('_', '', strtolower($request->user()->role ?? ''));
+        $normalizedRoles = array_map(fn($r) => str_replace('_', '', strtolower($r)), $roles);
+
+        if (! in_array($userRole, $normalizedRoles)) {
+            abort(403, 'Anda tidak memiliki hak akses untuk halaman ini.');
         }
 
         return $next($request);
