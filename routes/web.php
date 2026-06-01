@@ -172,7 +172,7 @@ Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index')
 
 // Invoice & Itinerary
 Route::get('/invoice/{code}', [PdfController::class, 'streamInvoice'])->name('invoice.download');
-Route::get('/itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
+Route::get('/download-itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
 
 // Dynamic OpenGraph Banners
 Route::get('/og-banner/{type}/{id}.webp', [PublicController::class, 'generateOgBanner'])->name('og-banner');
