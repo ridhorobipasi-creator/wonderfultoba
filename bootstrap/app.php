@@ -38,7 +38,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
-        $middleware->append(LocaleCurrencyMiddleware::class);
+        $middleware->web(append: [
+            LocaleCurrencyMiddleware::class,
+        ]);
         $middleware->append(CheckMaintenanceMode::class);
         $middleware->append(SecurityHeaders::class);
         $middleware->alias([
