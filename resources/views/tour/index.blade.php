@@ -64,9 +64,9 @@
                          src="{{ $pkgImage }}" loading="lazy"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                     
-                    <div class="absolute top-5 right-5 glass-card px-3 py-1 rounded-full flex items-center gap-1">
-                        <span class="material-symbols-outlined text-secondary text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="text-white font-label-caps text-[11px]">{{ $pkg->rating ?? '4.9' }}</span>
+                    <div class="absolute top-5 right-5 bg-black/60 backdrop-blur-md px-3 py-1 border border-white/10 rounded-full flex items-center gap-1.5 shadow-lg">
+                        <span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="text-white font-label-caps text-[11px] font-bold">{{ $pkg->rating ?? '4.9' }}</span>
                     </div>
 
                     <div class="absolute bottom-0 left-0 w-full p-6 text-white">
@@ -76,11 +76,13 @@
                         </div>
                         <h3 class="font-headline-md text-[22px] md:text-[26px] mb-3 line-clamp-2 leading-tight">{{ $pkg->name }}</h3>
                         <div class="flex justify-between items-center">
-                            <div class="bg-black/50 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 shadow-lg">
-                                <p class="font-label-caps text-[9px] text-slate-300 uppercase tracking-widest leading-none mb-1.5">{{ __('Mulai dari') }}</p>
-                                <p class="font-headline-md text-[18px] md:text-[20px] text-secondary font-black leading-none">{{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}</p>
+                            <div class="bg-secondary-fixed px-4 py-2.5 rounded-2xl border border-white/25 shadow-lg flex flex-col justify-center">
+                                <p class="font-label-caps text-[9px] text-on-secondary-fixed-variant font-bold uppercase tracking-widest leading-none mb-1.5">{{ __('Mulai dari') }}</p>
+                                <p class="font-headline-md text-[18px] md:text-[20px] text-on-secondary-fixed font-black leading-none tracking-tight">
+                                    {{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}
+                                </p>
                             </div>
-                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary group-hover:border-secondary transition-all">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary-fixed group-hover:border-secondary-fixed group-hover:text-on-secondary-fixed transition-all duration-300">
                                 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                             </div>
                         </div>
