@@ -9,7 +9,7 @@
     $itemListElements = [];
     foreach ($packages as $idx => $pkg) {
         $pkgImg  = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
-        $pkgUrl  = route('tour.package-detail', ['package' => $pkg->slug ?? $pkg->id]);
+        $pkgUrl  = route('tour.package.detail', ['slug' => $pkg->slug ?? $pkg->id]);
         $pkgPrice = $pkg->price ?? 0;
         $itemListElements[] = [
             '@type'    => 'ListItem',
