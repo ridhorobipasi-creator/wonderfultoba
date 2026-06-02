@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
-@section('title', $settings['meta_title'] ?? $settings['hero_title'] ?? 'Sujai Laketoba – Wisata Sumatera Utara')
-@section('description', $settings['meta_description'] ?? $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Sujai Laketoba.')
-@section('keywords', __('paket wisata danau toba, layanan premium danau toba, private tour samosir, travel vip medan, wisata sumatera utara, sujai laketoba'))
+@section('title', 'Paket Wisata Danau Toba dari ' . $originName . ' – Harga Terbaik 2026')
+@section('description', 'Pilihan paket liburan premium ke Danau Toba, Samosir, dan sekitarnya keberangkatan dari ' . $originName . ' bersama Sujai Laketoba.')
+@section('keywords', __('paket wisata danau toba dari ' . strtolower($originName) . ', travel danau toba dari ' . strtolower($originName) . ', tour samosir ' . strtolower($originName)))
+
 
 @push('schema')
 @php
@@ -77,10 +78,32 @@
 @section('content')
 <div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}' }">
     
-    <!-- Premium Hero Slider -->
-    @if($settings['show_slider'] ?? true)
-    <x-home-slider :settings="$settings" :packages="$packages" />
-    @endif
+    <!-- Programmatic SEO Hero Banner -->
+    <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-primary px-5 md:px-8">
+        <div class="absolute inset-0 opacity-40">
+            <img src="{{ imageUrl($settings['hero_image_1_url'] ?? null, 'sumatra-panorama') }}" alt="Danau Toba" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+        <div class="max-w-5xl mx-auto relative z-10 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary text-secondary font-bold text-xs uppercase tracking-widest mb-6 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                Keberangkatan dari {{ $originName }}
+            </span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
+                Paket Wisata Danau Toba dari <span class="text-secondary">{{ $originName }}</span>
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                Rencanakan liburan impian Anda ke Danau Toba dengan layanan premium kami. Penjemputan eksklusif, rute terkurasi, dan pengalaman tak terlupakan menanti Anda.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo Sujai Laketoba, saya tertarik paket wisata Danau Toba dari ' . $originName) }}" 
+                   class="w-full sm:w-auto bg-green-600 hover:bg-green-500 text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">chat</span>
+                    Konsultasi Gratis
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Featured Packages -->
     @if($settings['show_featured'] ?? true)
@@ -543,25 +566,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SEO Internal Links (Cities) -->
-    <section class="py-12 bg-surface border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-5 md:px-8">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Populer: Paket Wisata dari Berbagai Kota</h3>
-            <div class="flex flex-wrap gap-x-4 gap-y-2">
-                @php
-                    $seoSetting = \App\Models\Setting::where('key', 'general')->first();
-                    $originsString = $seoSetting->value['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
-                    $pSEOCities = array_filter(array_map('trim', explode(',', $originsString)));
-                @endphp
-                @foreach($pSEOCities as $city)
-                    <a href="{{ route('landing.origin', Str::slug($city)) }}" class="text-[11px] text-slate-500 hover:text-secondary transition-colors">
-                        Paket Wisata Danau Toba dari {{ ucwords($city) }}
-                    </a>
-                @endforeach
             </div>
         </div>
     </section>

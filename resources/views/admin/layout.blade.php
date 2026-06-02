@@ -21,7 +21,18 @@
         }
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $iconUrl }}">
-    
+
+    {{-- PWA: hanya Superadmin yang melihat & bisa meng-install panel admin --}}
+    @if(auth()->check() && auth()->user()->isSuperAdmin())
+        <link rel="manifest" href="{{ route('admin.pwa.manifest') }}" crossorigin="use-credentials">
+        <meta name="theme-color" content="#1e40af">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Sujai Admin">
+        <link rel="apple-touch-icon" href="/icon-192.png">
+    @endif
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -541,5 +552,17 @@
 
     <x-media-modal />
     @stack('scripts')
+
+    {{-- PWA Service Worker: didaftarkan hanya untuk Superadmin, scope dibatasi ke /admin/ --}}
+    @if(auth()->check() && auth()->user()->isSuperAdmin())
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/admin-sw.js', { scope: '/admin/' })
+                    .catch(function (err) { console.warn('Admin SW registration failed:', err); });
+            });
+        }
+    </script>
+    @endif
 </body>
 </html>

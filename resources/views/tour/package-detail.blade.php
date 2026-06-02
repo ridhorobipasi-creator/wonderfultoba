@@ -76,8 +76,11 @@
     }
 @endphp
 
-@section('title', ($package->translated_name ?? 'Paket Wisata') . ' – Sujai Laketoba')
-@section('description', $package->translated_description ?? '')
+@php
+    $originSuffix = isset($originCity) && $originCity ? ' dari ' . $originCity : '';
+@endphp
+@section('title', ($package->translated_name ?? 'Paket Wisata') . $originSuffix . ' – Sujai Laketoba')
+@section('description', (isset($originCity) && $originCity ? 'Paket ' . ($package->translated_name ?? 'Wisata') . ' keberangkatan dari ' . $originCity . '. ' : '') . ($package->translated_description ?? ''))
 
 @section('og_image')
     @php
@@ -90,20 +93,52 @@
 <script type="application/ld+json">
 {
   "@@context": "https://schema.org/",
-  "@@type": "Product",
-  "name": "{{ $package->translated_name }}",
-  "image": [
-    "{{ count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : asset('images/og-default.webp') }}"
-  ],
-  "description": "{{ Str::limit(strip_tags($package->translated_description), 160) }}",
-  "sku": "PKG-{{ $package->id }}",
-  "offers": {
-    "@@type": "Offer",
-    "url": "{{ url()->current() }}",
-    "priceCurrency": "IDR",
-    "price": "{{ $package->price }}",
-    "availability": "https://schema.org/InStock"
-  }
+  "@@graph": [
+    {
+      "@@type": "Product",
+      "name": "{{ $package->translated_name }}",
+      "image": [
+        "{{ count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : asset('images/og-default.webp') }}"
+      ],
+      "description": "{{ Str::limit(strip_tags($package->translated_description), 160) }}",
+      "sku": "PKG-{{ $package->id }}",
+      "offers": {
+        "@@type": "Offer",
+        "url": "{{ url()->current() }}",
+        "priceCurrency": "IDR",
+        "price": "{{ $package->price }}",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@@type": "TouristTrip",
+      "name": "{{ $package->translated_name }}",
+      "description": "{{ Str::limit(strip_tags($package->translated_description), 160) }}",
+      "provider": {
+        "@@type": "TravelAgency",
+        "name": "Sujai Laketoba",
+        "url": "{{ url('/') }}"
+      },
+      "itinerary": {
+        "@@type": "ItemList",
+        "itemListElement": [
+          @if(isset($package->itinerary) && is_array($package->itinerary))
+            @foreach($package->itinerary as $index => $item)
+            {
+              "@@type": "ListItem",
+              "position": {{ $index + 1 }},
+              "item": {
+                "@@type": "TouristAttraction",
+                "name": "{{ $item['title'] ?? 'Day ' . ($index + 1) }}",
+                "description": "{{ Str::limit(strip_tags($item['description'] ?? ''), 100) }}"
+              }
+            }{{ !$loop->last ? ',' : '' }}
+            @endforeach
+          @endif
+        ]
+      }
+    }
+  ]
 }
 </script>
 @endpush
@@ -188,6 +223,29 @@
     @scroll.window="showConcierge = window.scrollY > 300"
     class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-20"
 >
+    <!-- AI Context & Screen Reader Only Data -->
+    <section class="sr-only" id="ai-context" aria-hidden="true">
+        <h2>AI Context: {{ $package->translated_name }}</h2>
+        <p>{{ $package->translated_description }}</p>
+        <p>Price: IDR {{ number_format($package->price, 0, ',', '.') }}</p>
+        @if(!empty($package->pricingDetails['includes']))
+        <h3>Includes</h3>
+        <ul>
+            @foreach($package->pricingDetails['includes'] as $inc)
+                <li>{{ is_array($inc) ? ($inc['text'] ?? '') : $inc }}</li>
+            @endforeach
+        </ul>
+        @endif
+        @if(!empty($package->pricingDetails['excludes']))
+        <h3>Excludes</h3>
+        <ul>
+            @foreach($package->pricingDetails['excludes'] as $exc)
+                <li>{{ is_array($exc) ? ($exc['text'] ?? '') : $exc }}</li>
+            @endforeach
+        </ul>
+        @endif
+    </section>
+
     <!-- Gallery & Hero Section -->
     <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-12 gap-gutter">
         <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
@@ -205,8 +263,13 @@
                     <div class="flex items-center gap-2 mb-3">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span class="font-label-caps text-[10px] md:text-xs text-emerald-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
+                        @if(isset($originCity) && $originCity)
+                            <span class="ml-2 bg-emerald-500/80 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
+                                Dari {{ $originCity }}
+                            </span>
+                        @endif
                     </div>
-                    <h1 class="font-headline-lg text-2xl md:text-4xl text-white font-bold leading-tight drop-shadow-sm" x-text="package.translated_name"></h1>
+                    <h1 class="font-headline-lg text-2xl md:text-4xl text-white font-bold leading-tight drop-shadow-sm" x-text="package.translated_name + '{{ isset($originCity) && $originCity ? ' dari ' . $originCity : '' }}'"></h1>
                 </div>
             </div>
             
@@ -278,7 +341,36 @@
                     @endif
                 </div>
 
-                <!-- Timeline Rencana Perjalanan -->
+                {{-- pSEO: Internal Linking Block — "Paket ini tersedia dari kota berikut" --}}
+                @php
+                    $seoSetting    = \App\Models\Setting::where('key', 'general')->first();
+                    $originsString = $seoSetting->value['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
+                    $pSEOCities    = array_filter(array_map('trim', explode(',', $originsString)));
+                @endphp
+                @if(count($pSEOCities) > 0)
+                <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-6 md:p-8">
+                    <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">
+                        <span class="material-symbols-outlined text-[14px] align-middle mr-1">flight_takeoff</span>
+                        Paket ini tersedia keberangkatan dari:
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($pSEOCities as $cityLink)
+                            @php
+                                $citySlug = \Illuminate\Support\Str::slug($cityLink);
+                                $isActive = (isset($originCity) && strtolower($originCity) === strtolower(trim($cityLink)));
+                            @endphp
+                            <a href="{{ url('/tour/package/' . $package->slug . '-dari-' . $citySlug) }}"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all
+                                      {{ $isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600' }}">
+                                @if($isActive)<span class="material-symbols-outlined text-[13px]">check_circle</span>@endif
+                                {{ ucwords(trim($cityLink)) }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+
                 <div x-show="package.itinerary || package.translated_itinerary_text" class="space-y-6 py-8 border-t border-outline-variant">
                     <h2 class="font-headline-md text-headline-md text-primary">{{ __('Rencana Perjalanan') }}</h2>
                     

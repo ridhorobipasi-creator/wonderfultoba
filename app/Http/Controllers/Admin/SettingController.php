@@ -95,7 +95,7 @@ class SettingController extends Controller
             $xml .= '</url>';
         }
 
-        // Packages
+        // Packages (canonical)
         $packages = Package::where('status', 'active')->get();
         foreach ($packages as $package) {
             $xml .= '<url>';
@@ -106,6 +106,27 @@ class SettingController extends Controller
             $xml .= '</url>';
         }
 
+        // Programmatic SEO: Packages × Cities
+        // e.g. /tour/paket-danau-toba-3h2m/dari-jakarta
+        $seoSetting    = Setting::where('key', 'general')->first();
+        $originsString = $seoSetting->value['seo_pseo_origins'] ?? 'jakarta, surabaya, bandung, bali, batam, palembang, makassar, semarang, yogyakarta, kuala-lumpur, singapore, penang, pekanbaru, padang, malaysia';
+        $allowedOrigins = array_values(array_filter(array_map(
+            fn($o) => str_replace(' ', '-', trim(strtolower($o))),
+            explode(',', $originsString)
+        )));
+
+        foreach ($packages as $package) {
+            $lastmod = ($package->updatedAt ?? $package->createdAt)->format('Y-m-d');
+            foreach ($allowedOrigins as $kota) {
+                $xml .= '<url>';
+                $xml .= '<loc>'.url('/tour/package/'.$package->slug.'-dari-'.$kota).'</loc>';
+                $xml .= '<lastmod>'.$lastmod.'</lastmod>';
+                $xml .= '<changefreq>weekly</changefreq>';
+                $xml .= '<priority>0.85</priority>';
+                $xml .= '</url>';
+            }
+        }
+
         // Blogs
         $blogs = Blog::where('status', 'published')->get();
         foreach ($blogs as $blog) {
@@ -114,6 +135,15 @@ class SettingController extends Controller
             $xml .= '<lastmod>'.($blog->updatedAt ?? $blog->createdAt)->format('Y-m-d').'</lastmod>';
             $xml .= '<changefreq>weekly</changefreq>';
             $xml .= '<priority>0.7</priority>';
+            $xml .= '</url>';
+        }
+
+        // Programmatic SEO: City Landing Pages (/dari-{kota})
+        foreach ($allowedOrigins as $kota) {
+            $xml .= '<url>';
+            $xml .= '<loc>'.route('landing.origin', $kota).'</loc>';
+            $xml .= '<changefreq>weekly</changefreq>';
+            $xml .= '<priority>0.8</priority>';
             $xml .= '</url>';
         }
 

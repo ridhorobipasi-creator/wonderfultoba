@@ -125,6 +125,47 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::resource('customers', CustomerController::class);
     Route::resource('clients', ClientController::class);
 
+    // PWA - Admin Panel Progressive Web App
+    Route::get('/manifest.json', function () {
+        // Only Superadmin can access the manifest — returns 403 otherwise
+        if (!auth()->check() || !auth()->user()->isSuperAdmin()) {
+            abort(403, 'Access denied.');
+        }
+        $manifest = [
+            'name'             => 'Sujai Admin Panel',
+            'short_name'       => 'Sujai Admin',
+            'description'      => 'Panel manajemen wisata Sujai Laketoba — khusus Superadmin',
+            'start_url'        => '/admin/',
+            'scope'            => '/admin/',
+            'display'          => 'standalone',
+            'orientation'      => 'portrait',
+            'background_color' => '#f8fafc',
+            'theme_color'      => '#1e40af',
+            'categories'       => ['business', 'productivity'],
+            'icons'            => [
+                [
+                    'src'     => '/icon-192.png',
+                    'sizes'   => '192x192',
+                    'type'    => 'image/png',
+                    'purpose' => 'any maskable',
+                ],
+                [
+                    'src'     => '/icon-512.png',
+                    'sizes'   => '512x512',
+                    'type'    => 'image/png',
+                    'purpose' => 'any maskable',
+                ],
+            ],
+        ];
+        return response()->json($manifest)
+            ->header('Content-Type', 'application/manifest+json');
+    })->name('pwa.manifest');
+
+    // PWA Offline page
+    Route::get('/offline', function () {
+        return view('admin.offline');
+    })->name('pwa.offline');
+
     // System Settings (Superadmin Only)
     Route::middleware('role:superadmin,admin_umum')->group(function () {
         Route::get('/settings/general', [GeneralSettingsController::class, 'index'])->name('settings.general.index');
@@ -158,6 +199,9 @@ Route::prefix('tour')->name('tour.')->group(function () {
         ->middleware('throttle:5,1')
         ->name('booking.submit');
 });
+
+// Programmatic SEO Landing Pages
+Route::get('/paket-wisata-danau-toba-dari-{kota}', [PublicController::class, 'landingOrigin'])->name('landing.origin');
 
 // Other Public Pages
 Route::get('/about', [PublicController::class, 'about'])->name('about');

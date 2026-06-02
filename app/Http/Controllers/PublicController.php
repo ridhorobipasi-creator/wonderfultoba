@@ -149,7 +149,27 @@ class PublicController extends Controller
     {
         try {
             $siteSettings = $this->getSiteSettings();
+            $originCity = null;
+
             $package = $this->tourService->getPackageBySlug($slug);
+
+            // pSEO: If exact slug not found, try to detect "-dari-{kota}" pattern
+            if (! $package && str_contains($slug, '-dari-')) {
+                // Find the last occurrence of '-dari-' to extract origin city
+                $lastDariPos = strrpos($slug, '-dari-');
+                $baseSlug    = substr($slug, 0, $lastDariPos);
+                $kotaSlug    = substr($slug, $lastDariPos + 6); // skip '-dari-'
+
+                // Validate kota against allowed origins in settings
+                $originsString  = $siteSettings['general']['seo_pseo_origins'] ?? 'jakarta, surabaya, bandung, bali, batam, palembang, makassar, semarang, yogyakarta, kuala-lumpur, singapore, penang, pekanbaru, padang, malaysia';
+                $allowedOrigins = array_filter(array_map('trim', explode(',', strtolower($originsString))));
+                $allowedOrigins = array_map(fn($o) => str_replace(' ', '-', $o), $allowedOrigins);
+
+                if (in_array($kotaSlug, $allowedOrigins)) {
+                    $package    = $this->tourService->getPackageBySlug($baseSlug);
+                    $originCity = Str::title(str_replace('-', ' ', $kotaSlug));
+                }
+            }
 
             if (! $package) {
                 abort(404);
@@ -164,7 +184,7 @@ class PublicController extends Controller
 
             $city = City::find($package->cityId);
 
-            return view('tour.package-detail', compact('package', 'city', 'siteSettings'));
+            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity'));
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): ".$e->getMessage());
 
@@ -196,6 +216,39 @@ class PublicController extends Controller
             Log::error("Error loading blog detail ($slug): ".$e->getMessage());
 
             abort(404);
+        }
+    }
+
+    /**
+     * Programmatic SEO Landing Pages (by Origin City)
+     */
+    public function landingOrigin($kota)
+    {
+        try {
+            $siteSettings = $this->getSiteSettings(['cms_tour', 'general']);
+            
+            $originsString = $siteSettings['general']['seo_pseo_origins'] ?? 'jakarta, surabaya, bandung, bali, batam, palembang, makassar, semarang, yogyakarta, kuala-lumpur, singapore, penang, pekanbaru, padang, malaysia';
+            $allowedOrigins = array_filter(array_map('trim', explode(',', strtolower($originsString))));
+            
+            // Allow hyphens instead of spaces for URL matching
+            $allowedOrigins = array_map(function($o) { return str_replace(' ', '-', $o); }, $allowedOrigins);
+
+            $kotaSlug = strtolower(trim($kota));
+
+            if (!in_array($kotaSlug, $allowedOrigins)) {
+                return redirect()->route('tour.packages');
+            }
+
+            $originName = Str::title(str_replace('-', ' ', $kotaSlug));
+            
+            // Re-use logic from tour() method
+            $packages = $this->tourService->getFeaturedPackages();
+            $blogs = $this->tourService->getBlogs(3);
+
+            return view('tour.landing-origin', compact('packages', 'blogs', 'siteSettings', 'originName', 'kotaSlug'));
+        } catch (\Exception $e) {
+            Log::error('Error loading pSEO landing page: '.$e->getMessage());
+            return redirect()->route('tour.packages');
         }
     }
 

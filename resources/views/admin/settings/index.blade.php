@@ -188,6 +188,14 @@
                             <textarea name="seo_meta_keywords" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-500 text-xs">{{ $general['seo_meta_keywords'] ?? 'danau toba, tour samosir, travel medan, paket wisata sumatera utara' }}</textarea>
                         </div>
                         <div class="space-y-3">
+                            <label class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Daftar Kota Target SEO (pSEO Origins)</label>
+                            <textarea name="seo_pseo_origins" rows="3" placeholder="Jakarta, Surabaya, Malaysia, Singapore" class="w-full px-6 py-4 bg-indigo-50/50 border-none rounded-2xl font-bold text-indigo-900 text-xs">{{ $general['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia' }}</textarea>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Pisahkan dengan koma. Akan otomatis membuat halaman target SEO & masuk ke Sitemap.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                        <div class="space-y-3">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Google Analytics / GTM ID</label>
                             <input type="text" name="seo_ga_id" value="{{ $general['seo_ga_id'] ?? '' }}" placeholder="G-XXXXXXXXXX" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-black text-slate-400 text-xs tracking-widest">
                             <p class="text-[8px] font-bold text-slate-400 uppercase">Input ID saja, skrip akan ditambahkan otomatis.</p>
