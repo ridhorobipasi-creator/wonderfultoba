@@ -45,6 +45,46 @@ Route::post('/register', [WebAuthController::class, 'register'])->name('register
 // API Sync (Realtime without Supabase)
 Route::get('/api/sync/version', [SyncController::class, 'getVersion'])->name('api.sync.version');
 
+// PWA Android (.apk) packaging — public endpoints used by PWABuilder & the TWA wrapper.
+// The app itself still requires login; these only expose the manifest/asset links needed to build the APK.
+Route::get('/admin-app', fn () => view('admin.install'))->name('pwa.install');
+
+Route::get('/admin-app/manifest.webmanifest', function () {
+    return response()->json([
+        'name'             => 'Sujai Admin',
+        'short_name'       => 'Sujai Admin',
+        'description'      => 'Panel manajemen wisata Sujai Laketoba',
+        'start_url'        => '/admin/',
+        'scope'            => '/',
+        'display'          => 'standalone',
+        'orientation'      => 'portrait',
+        'background_color' => '#f8fafc',
+        'theme_color'      => '#1e40af',
+        'icons'            => [
+            ['src' => '/icon-192.png', 'sizes' => '192x192', 'type' => 'image/png', 'purpose' => 'any'],
+            ['src' => '/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'any'],
+            ['src' => '/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'maskable'],
+        ],
+    ], 200, ['Content-Type' => 'application/manifest+json']);
+})->name('pwa.manifest.public');
+
+// Digital Asset Links — verifies the APK owns this domain so the TWA opens without a URL bar.
+Route::get('/.well-known/assetlinks.json', function () {
+    $fingerprints = array_values(array_filter(array_map(
+        'trim',
+        explode(',', (string) config('services.pwa_android.fingerprint'))
+    )));
+
+    return response()->json([[
+        'relation' => ['delegate_permission/common.handle_all_urls'],
+        'target'   => [
+            'namespace'                => 'android_app',
+            'package_name'             => config('services.pwa_android.package'),
+            'sha256_cert_fingerprints' => $fingerprints,
+        ],
+    ]]);
+})->name('pwa.assetlinks');
+
 // Admin Group
 Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('admin')->name('admin.')->group(function () {
 

@@ -39,4 +39,12 @@ return [
         'number' => env('WHATSAPP_NUMBER', ''),
     ],
 
+    // Android TWA (.apk) packaging — Digital Asset Links for the admin PWA.
+    // Fill ANDROID_APP_FINGERPRINT with the SHA256 signing fingerprint(s) that
+    // PWABuilder/Play Store gives you (comma-separated for multiple).
+    'pwa_android' => [
+        'package'     => env('ANDROID_APP_PACKAGE', 'com.sujailaketoba.admin'),
+        'fingerprint' => env('ANDROID_APP_FINGERPRINT', ''),
+    ],
+
 ];
