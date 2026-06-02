@@ -23,7 +23,7 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:200',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:15360',
             'logo_media_id' => 'nullable|exists:media,id',
             'websiteUrl' => 'nullable|url|max:500',
         ]);

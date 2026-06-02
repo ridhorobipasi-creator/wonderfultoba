@@ -62,7 +62,7 @@ class GalleryController extends Controller
         $validated = $request->validate([
             'caption' => 'nullable|string',
             'category' => 'required|in:tour,outbound',
-            'gallery_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'gallery_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
             'gallery_image_media_id' => 'nullable|exists:media,id',
             'tags' => 'nullable|array',
         ]);

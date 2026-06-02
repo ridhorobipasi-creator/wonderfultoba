@@ -66,7 +66,7 @@ class CityController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'description' => 'nullable|string',
-            'city_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'city_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
             'city_image_media_id' => 'nullable|exists:media,id',
             'province_id' => 'required_if:regency_id,manual|nullable|exists:provinces,id',
         ]);
@@ -121,7 +121,7 @@ class CityController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
             'media_id' => 'nullable|exists:media,id',
             'province_id' => 'required_if:regency_id,manual|nullable|exists:provinces,id',
         ]);
