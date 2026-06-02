@@ -21,6 +21,7 @@ class SettingObserver
             'site_settings_structured_cms_landing_cms_tour_general',
             'site_settings_structured_cms_landing_general',
             'site_settings_structured_general',
+            'site_settings_structured_cms_landing_cms_tour_general',
         ];
         foreach ($patterns as $key) {
             Cache::forget($key);

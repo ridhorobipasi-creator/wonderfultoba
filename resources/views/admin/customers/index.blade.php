@@ -115,9 +115,9 @@
                                 class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
                         </th>
                         <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Pelanggan</th>
-                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Bookings</th>
-                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Total Spent</th>
-                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Terakhir Pesan</th>
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest text-center hidden md:table-cell">Bookings</th>
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest text-center hidden md:table-cell">Total Spent</th>
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Terakhir Pesan</th>
                         <th class="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksi</th>
                     </tr>
                 </thead>
@@ -138,16 +138,21 @@
                                     <div class="min-w-0">
                                         <h4 class="text-sm font-black text-slate-900 tracking-tight truncate">{{ $customer->name }}</h4>
                                         <p class="text-[10px] font-bold text-slate-400 truncate">{{ $customer->email }}</p>
+                                        {{-- Condensed stats for mobile (columns hidden) --}}
+                                        <div class="md:hidden flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
+                                            <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[9px] font-black">{{ $customer->total_bookings }} Trip</span>
+                                            <span class="text-[10px] font-black text-slate-900">Rp {{ number_format($customer->total_spent / 1000, 0) }}K</span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-8 py-5 text-center">
+                            <td class="px-8 py-5 text-center hidden md:table-cell">
                                 <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black">{{ $customer->total_bookings }} Trip</span>
                             </td>
-                            <td class="px-8 py-5 text-center">
+                            <td class="px-8 py-5 text-center hidden md:table-cell">
                                 <span class="text-xs font-black text-slate-900">Rp {{ number_format($customer->total_spent / 1000, 0) }}K</span>
                             </td>
-                            <td class="px-8 py-5">
+                            <td class="px-8 py-5 hidden lg:table-cell">
                                 @if($customer->last_booking_at)
                                     <p class="text-xs font-bold text-slate-600">{{ $customer->last_booking_at->format('d M Y') }}</p>
                                     <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">{{ $customer->last_booking_at->diffForHumans() }}</p>

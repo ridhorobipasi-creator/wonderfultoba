@@ -252,7 +252,7 @@
                     @foreach($relatedPosts as $rp)
                         <article class="group cursor-pointer" onclick="window.location.href='/tour/blog/{{ $rp->slug ?? $rp->id }}'">
                             <div class="relative aspect-[16/10] rounded-3xl overflow-hidden mb-5 border border-outline-variant/20 shadow-sm">
-                                <img src="{{ $rp->image }}" alt="{{ $rp->translated_title }}" 
+                                <img src="{{ $rp->image_url }}" alt="{{ $rp->translated_title }}" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]">
                                 <div class="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-5">
                                     <span class="font-label-caps text-[9px] text-secondary-fixed uppercase tracking-widest flex items-center gap-1">

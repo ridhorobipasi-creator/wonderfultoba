@@ -57,7 +57,6 @@
             <div class="hidden lg:flex items-center gap-8">
                 <a href="/" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Beranda</a>
                 <a href="/tour/packages" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Paket Wisata</a>
-                <a href="/sewa-mobil" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Sewa Mobil</a>
                 <a href="/tour/gallery" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Galeri</a>
                 <a href="/tour/blog" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Blog</a>
                 <a href="/about" class="text-xs font-semibold text-slate-800 hover:text-emerald-700 tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 rounded px-2.5 py-1 outline-none">Tentang Kami</a>
@@ -126,7 +125,6 @@
              style="display: none;">
             <a href="/" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Beranda</a>
             <a href="/tour/packages" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Paket Wisata</a>
-            <a href="/sewa-mobil" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Sewa Mobil</a>
             <a href="/tour/gallery" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Galeri</a>
             <a href="/tour/blog" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Blog</a>
             <a href="/about" class="text-sm font-semibold text-slate-800 hover:text-emerald-700 py-1 transition-colors">Tentang Kami</a>

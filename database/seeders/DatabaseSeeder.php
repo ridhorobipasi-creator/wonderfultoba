@@ -67,30 +67,7 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // CARS (camelCase)
-        if (isset($data['cars'])) {
-            foreach ($data['cars'] as $car) {
-                DB::table('cars')->updateOrInsert(
-                    ['id' => $car['id']],
-                    [
-                        'name' => $car['name'],
-                        'type' => $car['type'] ?? 'Standard',
-                        'capacity' => $car['capacity'] ?? 4,
-                        'transmission' => $car['transmission'] ?? 'Automatic',
-                        'fuel' => $car['fuel'] ?? 'Petrol',
-                        'price' => $car['price'] ?? 0,
-                        'priceWithDriver' => $car['priceWithDriver'] ?? null,
-                        'description' => $car['description'] ?? null,
-                        'status' => $car['status'] ?? 'active',
-                        'isFeatured' => $car['isFeatured'] ?? false,
-                        'images' => json_encode($car['images'] ?? []),
-                        'features' => json_encode($car['features'] ?? []),
-                        'createdAt' => $car['created_at'] ?? now(),
-                        'updatedAt' => now(),
-                    ]
-                );
-            }
-        }
+
 
         // PACKAGES (camelCase)
         if (isset($data['packages'])) {

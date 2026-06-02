@@ -240,12 +240,6 @@
                                  <i class="fas fa-map w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'text-white' : 'text-emerald-500' }}"></i>
                                  Paket Tour Wisata
                             </a>
-                            <a href="{{ route('admin.cars.index') }}"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
-                                      {{ request()->routeIs('admin.cars.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                 <i class="fas fa-car w-5 text-sm {{ request()->routeIs('admin.cars.*') ? 'text-white' : 'text-blue-500' }}"></i>
-                                 Manajemen Armada Mobil
-                            </a>
                         </div>
                     </div>
 

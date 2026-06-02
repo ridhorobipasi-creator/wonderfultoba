@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CMSController;
@@ -85,9 +84,6 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::get('galleries', [GalleryController::class, 'index'])->name('galleries.index');
     Route::resource('gallery', GalleryController::class);
 
-    // Car Management
-    Route::resource('cars', CarController::class);
-
     // CMS Management
     Route::get('/cms-halaman-utama', [CMSController::class, 'index'])->name('cms.index');
     Route::get('/cms-beranda-tour', [CMSController::class, 'tour'])->name('cms.tour');
@@ -168,7 +164,6 @@ Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/payment', [PublicController::class, 'payment'])->name('payment');
 Route::post('/outbound/quote/submit', [PublicController::class, 'submitOutboundQuote'])->name('outbound.quote.submit');
-Route::get('/sewa-mobil', [PublicController::class, 'cars'])->name('cars.index');
 
 // Invoice & Itinerary
 Route::get('/invoice/{code}', [PdfController::class, 'streamInvoice'])->name('invoice.download');

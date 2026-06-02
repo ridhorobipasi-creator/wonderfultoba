@@ -57,7 +57,7 @@
                 <thead>
                     <tr class="border-b border-slate-100 bg-slate-50/80">
                         <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Kabupaten/Kota</th>
-                        <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Provinsi</th>
+                        <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Provinsi</th>
                         <th class="px-8 py-5 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Kategori</th>
                         <th class="px-8 py-5 text-right text-[9px] font-black text-slate-400 uppercase tracking-widest">Aksi</th>
                     </tr>
@@ -67,8 +67,10 @@
                     <tr class="hover:bg-slate-50/50 transition-colors group">
                         <td class="px-8 py-5">
                             <p class="font-black text-slate-900 text-sm">{{ $regency->name }}</p>
+                            {{-- Province inline on mobile (column hidden) --}}
+                            <span class="md:hidden block mt-1 text-[9px] font-black text-slate-400 uppercase tracking-wider">{{ $regency->province->name ?? '-' }}</span>
                         </td>
-                        <td class="px-8 py-5">
+                        <td class="px-8 py-5 hidden md:table-cell">
                             <span class="inline-block px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                 {{ $regency->province->name ?? '-' }}
                             </span>
@@ -84,7 +86,7 @@
                         </td>
                         <td class="px-8 py-5 text-right">
                             <a href="{{ route('admin.regencies.edit', $regency) }}"
-                               class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all opacity-0 group-hover:opacity-100">
+                               class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all md:opacity-0 group-hover:opacity-100">
                                 <i class="fas fa-pen text-[9px]"></i> Edit
                             </a>
                         </td>

@@ -23,7 +23,13 @@
         
         <!-- Badges -->
         <div class="absolute top-5 left-5 flex flex-col space-y-2">
-            <div class="bg-white/95 px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-sm border border-slate-200">
+            @if($package->isFeatured ?? false)
+            <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
+                <span class="text-xs">🔥</span> 
+                <span class="font-bold text-[10px] uppercase tracking-widest">{{ __('Terpopuler') }}</span>
+            </div>
+            @endif
+            <div class="bg-white/95 px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-sm border border-slate-200 w-fit">
                 <svg class="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 <span class="font-semibold text-slate-800 text-[10px] uppercase tracking-wider">4.8</span>
             </div>

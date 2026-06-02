@@ -159,7 +159,7 @@
                 <thead>
                     <tr class="bg-slate-50">
                         <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Kabupaten / Kota</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Provinsi</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Provinsi</th>
                         <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Kategori</th>
                         <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Aksi</th>
                     </tr>
@@ -169,8 +169,10 @@
                     <tr class="hover:bg-slate-50/50 transition">
                         <td class="px-8 py-6">
                             <span class="text-sm font-black text-slate-900 tracking-tight">{{ $reg->name }}</span>
+                            {{-- Province inline on mobile (column hidden) --}}
+                            <span class="md:hidden block mt-1 text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $reg->province->name }}</span>
                         </td>
-                        <td class="px-8 py-6">
+                        <td class="px-8 py-6 hidden md:table-cell">
                             <span class="px-3 py-1 rounded-full bg-slate-100 text-[9px] font-black text-slate-500 uppercase tracking-widest">
                                 {{ $reg->province->name }}
                             </span>

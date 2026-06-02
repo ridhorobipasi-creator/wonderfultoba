@@ -11,7 +11,7 @@ class WhatsAppHelper
      */
     public static function getBookingLink(Booking $booking): string
     {
-        $phone = config('services.whatsapp.phone', '6281323888207');
+        $phone = config('services.whatsapp.phone', '6282277848855');
         $packageName = $booking->package ? $booking->package->name : 'Paket Wisata';
 
         $message = "Halo Sujai Laketoba,\n\n";

@@ -78,7 +78,7 @@ class CustomerController extends Controller
     {
         $customer->load(['bookings' => function ($q) {
             $q->latest('createdAt');
-        }, 'bookings.package', 'bookings.car']);
+        }, 'bookings.package']);
 
         return view('admin.customers.show', compact('customer'));
     }

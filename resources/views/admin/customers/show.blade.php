@@ -66,45 +66,50 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-white">
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest">Trip / Layanan</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tanggal</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Total</th>
+                                <th class="px-5 md:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest">Trip / Layanan</th>
+                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center hidden md:table-cell">Tanggal</th>
+                                <th class="px-5 md:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center hidden sm:table-cell">Status</th>
+                                <th class="px-5 md:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
                             @foreach($customer->bookings as $booking)
                                 <tr class="hover:bg-slate-50/30 transition-colors">
-                                    <td class="px-10 py-6">
+                                    @php
+                                        $colors = [
+                                            'pending' => 'bg-amber-50 text-amber-600',
+                                            'confirmed' => 'bg-emerald-50 text-emerald-600',
+                                            'completed' => 'bg-blue-50 text-blue-600',
+                                            'cancelled' => 'bg-rose-50 text-rose-600',
+                                        ];
+                                        $color = $colors[$booking->status] ?? 'bg-slate-50 text-slate-500';
+                                    @endphp
+                                    <td class="px-5 md:px-10 py-6">
                                         <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400">
-                                                <i class="fas {{ $booking->type === 'package' ? 'fa-box-archive' : 'fa-car-side' }} text-xs"></i>
+                                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
+                                                <i class="fas fa-box-archive text-xs"></i>
                                             </div>
-                                            <div>
+                                            <div class="min-w-0">
                                                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">{{ $booking->bookingCode }}</p>
-                                                <h4 class="text-xs font-bold text-slate-900">{{ $booking->package->name ?? $booking->car->name ?? 'N/A' }}</h4>
+                                                <h4 class="text-xs font-bold text-slate-900 truncate">{{ $booking->package->name ?? 'N/A' }}</h4>
+                                                {{-- Date & status inline on mobile (columns hidden) --}}
+                                                <div class="sm:hidden flex flex-wrap items-center gap-2 mt-1.5">
+                                                    <span class="px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest {{ $color }}">{{ $booking->status }}</span>
+                                                    <span class="text-[9px] font-bold text-slate-400">{{ $booking->startDate ? $booking->startDate->format('d M Y') : '-' }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-10 py-6 text-center">
+                                    <td class="px-10 py-6 text-center hidden md:table-cell">
                                         <p class="text-xs font-bold text-slate-600">{{ $booking->startDate ? $booking->startDate->format('d M Y') : '-' }}</p>
                                     </td>
-                                    <td class="px-10 py-6 text-center">
-                                        @php
-                                            $colors = [
-                                                'pending' => 'bg-amber-50 text-amber-600',
-                                                'confirmed' => 'bg-emerald-50 text-emerald-600',
-                                                'completed' => 'bg-blue-50 text-blue-600',
-                                                'cancelled' => 'bg-rose-50 text-rose-600',
-                                            ];
-                                            $color = $colors[$booking->status] ?? 'bg-slate-50 text-slate-500';
-                                        @endphp
+                                    <td class="px-5 md:px-10 py-6 text-center hidden sm:table-cell">
                                         <span class="px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest {{ $color }}">
                                             {{ $booking->status }}
                                         </span>
                                     </td>
-                                    <td class="px-10 py-6 text-right">
-                                        <span class="text-xs font-black text-slate-900">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</span>
+                                    <td class="px-5 md:px-10 py-6 text-right">
+                                        <span class="text-xs font-black text-slate-900 whitespace-nowrap">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</span>
                                     </td>
                                 </tr>
                             @endforeach

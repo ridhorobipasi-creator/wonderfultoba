@@ -154,7 +154,7 @@
         <div class="card-flat-soft p-8 md:p-12 text-center">
             <h3 class="text-2xl md:text-3xl font-semibold text-slate-900 mb-3">Siap Memesan? / Ready to Book?</h3>
             <p class="text-slate-600 font-normal text-sm mb-8">Hubungi kami via WhatsApp dan kami akan pandu proses pembayaran step-by-step.</p>
-            <a href="https://wa.me/6281323888207" target="_blank" class="cta-primary">
+            <a href="https://wa.me/6282277848855" target="_blank" class="cta-primary">
                 <i class="fab fa-whatsapp text-sm"></i>
                 Chat via WhatsApp
             </a>

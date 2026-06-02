@@ -98,7 +98,7 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-phone text-secondary shrink-0"></i>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['general']['wa_number'] ?? '+6281323888207') }}" 
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['general']['wa_number'] ?? '+6282277848855') }}" 
                            class="hover:text-secondary transition-colors">
                             {{ $siteSettings['general']['wa_number'] ?? '+62 813-2388-8207' }}
                         </a>

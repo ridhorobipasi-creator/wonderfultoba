@@ -43,28 +43,32 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50/50">
-                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">ID Pesanan</th>
-                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Customer</th>
-                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu Transaksi</th>
-                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Nominal</th>
-                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
+                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">ID Pesanan</th>
+                        <th class="px-5 md:px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Customer</th>
+                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Waktu Transaksi</th>
+                        <th class="px-5 md:px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Nominal</th>
+                        <th class="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center hidden sm:table-cell">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($transactions as $booking)
                     <tr class="hover:bg-slate-50/50 transition cursor-default">
-                        <td class="px-10 py-8 text-xs font-black text-slate-900">#{{ $booking->id }}</td>
-                        <td class="px-10 py-8">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 font-black text-[10px] uppercase">
+                        <td class="px-10 py-8 text-xs font-black text-slate-900 hidden md:table-cell">#{{ $booking->id }}</td>
+                        <td class="px-5 md:px-10 py-6 md:py-8">
+                            <div class="flex items-center space-x-3 md:space-x-4">
+                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 font-black text-[10px] uppercase shrink-0">
                                     {{ substr($booking->customerName, 0, 1) }}
                                 </div>
-                                <span class="text-xs font-bold text-slate-700">{{ $booking->customerName }}</span>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-bold text-slate-700 block truncate">{{ $booking->customerName }}</span>
+                                    {{-- ID, time & status inline on mobile (columns hidden) --}}
+                                    <span class="lg:hidden block text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">#{{ $booking->id }} · {{ $booking->createdAt ? $booking->createdAt->format('d M Y') : '-' }}</span>
+                                </div>
                             </div>
                         </td>
-                        <td class="px-10 py-8 text-xs font-bold text-slate-400">{{ $booking->createdAt ? $booking->createdAt->format('d M Y, H:i') : '-' }}</td>
-                        <td class="px-10 py-8 text-xs font-black text-slate-900 text-right">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
-                        <td class="px-10 py-8 text-center">
+                        <td class="px-10 py-8 text-xs font-bold text-slate-400 hidden lg:table-cell">{{ $booking->createdAt ? $booking->createdAt->format('d M Y, H:i') : '-' }}</td>
+                        <td class="px-5 md:px-10 py-6 md:py-8 text-xs font-black text-slate-900 text-right whitespace-nowrap">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
+                        <td class="px-10 py-8 text-center hidden sm:table-cell">
                             <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">
                                 Berhasil
                             </span>

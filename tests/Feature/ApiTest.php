@@ -23,16 +23,6 @@ class ApiTest extends TestCase
             ->assertJsonStructure([]);
     }
 
-    public function test_cars_endpoint_returns_json()
-    {
-        $this->markTestSkipped('Cars module is not used in this project');
-
-        $response = $this->getJson('/api/cars');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([]);
-    }
-
     public function test_blogs_endpoint_returns_json()
     {
         $response = $this->getJson('/api/blogs');

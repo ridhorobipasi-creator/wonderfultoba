@@ -45,8 +45,8 @@ class AppServiceProvider extends ServiceProvider
         // Share settings globally
         if (! $this->app->runningInConsole()) {
             try {
-                // Point 4: Caching Site Settings for 24 hours
-                $decodedSettings = Cache::remember('site_settings_global', 86400, function () {
+                // Point 4: Caching Site Settings - Automatically cleared on saved() via Observer
+                $decodedSettings = Cache::rememberForever('site_settings_global', function () {
                     $settings = Setting::query()
                         ->select(['key', 'value'])
                         ->get()

@@ -83,12 +83,12 @@
                 <p class="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-2">📊 Ringkasan Tahunan {{ $year }}</p>
                 <h3 class="text-3xl font-black tracking-tight">Performa Bisnis</h3>
             </div>
-            <div class="grid grid-cols-2 gap-8 w-full md:w-auto">
-                <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-[150px]">
-                    <p class="text-[28px] font-black leading-none text-white">{{ number_format($yearlySummary['orders']) }}</p>
+            <div class="grid grid-cols-2 gap-4 md:gap-8 w-full md:w-auto">
+                <div class="bg-white/10 p-5 md:p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-0 md:min-w-[150px]">
+                    <p class="text-2xl md:text-[28px] font-black leading-none text-white">{{ number_format($yearlySummary['orders']) }}</p>
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Total Pesanan</p>
                 </div>
-                <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-[150px]">
+                <div class="bg-white/10 p-5 md:p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-0 md:min-w-[150px]">
                     <p class="text-[20px] font-black leading-none text-white">Rp {{ number_format($yearlySummary['revenue'] / 1000000, 1) }}jt</p>
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Pendapatan</p>
                 </div>
@@ -140,8 +140,8 @@
                         <tr class="bg-slate-50/50">
                             <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">ID</th>
                             <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Pelanggan</th>
-                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Paket</th>
-                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Paket</th>
+                            <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Status</th>
                             <th class="px-6 py-4 text-right text-[9px] font-black text-slate-400 uppercase tracking-widest">Total</th>
                         </tr>
                     </thead>
@@ -152,25 +152,31 @@
                                     <p class="text-xs font-black text-slate-900">{{ $booking->bookingCode }}</p>
                                     <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $booking->createdAt->format('d M Y') }}</p>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-xs font-bold text-slate-700">{{ $booking->customer?->name }}</p>
-                                    <p class="text-[9px] text-slate-400">{{ $booking->customer?->email }}</p>
-                                </td>
+                                @php
+                                    $statusStyles = [
+                                        'pending' => 'bg-amber-100 text-amber-700',
+                                        'confirmed' => 'bg-indigo-100 text-indigo-700',
+                                        'finished' => 'bg-emerald-100 text-emerald-700',
+                                        'cancelled' => 'bg-rose-100 text-rose-700'
+                                    ];
+                                    $statusStyle = $statusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600';
+                                @endphp
                                 <td class="px-6 py-4">
+                                    <p class="text-xs font-bold text-slate-700 truncate">{{ $booking->customer?->name }}</p>
+                                    <p class="text-[9px] text-slate-400 truncate">{{ $booking->customer?->email }}</p>
+                                    {{-- Status & package inline on mobile (columns hidden) --}}
+                                    <div class="sm:hidden flex flex-wrap items-center gap-1.5 mt-1">
+                                        <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest {{ $statusStyle }}">{{ $booking->status }}</span>
+                                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest truncate">{{ $booking->package?->name ?? 'Custom' }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 hidden lg:table-cell">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-indigo-100 text-indigo-700">
                                         {{ $booking->package?->name ?? 'Custom' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @php
-                                        $statusStyles = [
-                                            'pending' => 'bg-amber-100 text-amber-700',
-                                            'confirmed' => 'bg-indigo-100 text-indigo-700',
-                                            'finished' => 'bg-emerald-100 text-emerald-700',
-                                            'cancelled' => 'bg-rose-100 text-rose-700'
-                                        ];
-                                    @endphp
-                                    <span class="px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest {{ $statusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                    <span class="px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest {{ $statusStyle }}">
                                         {{ $booking->status }}
                                     </span>
                                 </td>

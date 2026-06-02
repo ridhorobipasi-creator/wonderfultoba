@@ -28,7 +28,7 @@ class Package extends Model
         'translations', 'cityId',
     ];
 
-    protected $appends = ['first_image', 'image_url', 'formatted_price'];
+    protected $appends = ['first_image', 'image_url', 'formatted_price', 'translated_name', 'translated_description', 'translated_short_description', 'translated_itinerary_text'];
 
     protected $casts = [
         'images' => 'array',
@@ -86,5 +86,30 @@ class Package extends Model
     public function getFormattedPriceAttribute()
     {
         return CurrencyHelper::formatPrice($this->price);
+    }
+
+    // Dynamic Localization Accessors
+    public function getTranslatedNameAttribute()
+    {
+        $locale = app()->getLocale();
+        return $this->translations[$locale]['name'] ?? $this->name;
+    }
+
+    public function getTranslatedDescriptionAttribute()
+    {
+        $locale = app()->getLocale();
+        return $this->translations[$locale]['description'] ?? $this->description;
+    }
+
+    public function getTranslatedShortDescriptionAttribute()
+    {
+        $locale = app()->getLocale();
+        return $this->translations[$locale]['shortDescription'] ?? $this->shortDescription;
+    }
+
+    public function getTranslatedItineraryTextAttribute()
+    {
+        $locale = app()->getLocale();
+        return $this->translations[$locale]['itineraryText'] ?? $this->itineraryText;
     }
 }

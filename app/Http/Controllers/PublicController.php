@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Blog;
-use App\Models\Car;
 use App\Models\City;
 use App\Models\Client;
 use App\Models\GalleryImage;
@@ -16,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PublicController extends Controller
 {
@@ -152,7 +152,7 @@ class PublicController extends Controller
             $package = $this->tourService->getPackageBySlug($slug);
 
             if (! $package) {
-                return redirect()->route('tour.packages')->with('error', 'Paket tidak ditemukan.');
+                abort(404);
             }
 
             // Session-based view counting — prevent F5 inflation
@@ -168,7 +168,7 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): ".$e->getMessage());
 
-            return redirect()->route('tour.packages')->with('error', 'Gagal memuat detail paket.');
+            abort(404);
         }
     }
 
@@ -179,7 +179,7 @@ class PublicController extends Controller
             $post = $this->tourService->getBlogPost($slug);
 
             if (! $post) {
-                return redirect()->route('tour.blog');
+                abort(404);
             }
 
             // Session-based view counting — prevent F5 inflation
@@ -195,13 +195,24 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error("Error loading blog detail ($slug): ".$e->getMessage());
 
-            return redirect()->route('tour.blog');
+            abort(404);
         }
     }
 
     public function submitBooking(StoreBookingRequest $request)
     {
         try {
+            // Honeypot Security Check (Pencegahan Spam)
+            if ($request->filled('website_url')) {
+                // Bot terdeteksi karena mengisi hidden input. Berikan respon seolah berhasil.
+                Log::warning('Honeypot triggered during booking submission.', ['ip' => $request->ip()]);
+                return back()->with([
+                    'success' => __('Booking berhasil dikirim! Kami akan menghubungi Anda segera.'),
+                    'bookingCode' => 'BOT-' . strtoupper(Str::random(6)),
+                    'whatsappUrl' => null,
+                ]);
+            }
+
             $validated = $request->validated();
             $package = $this->tourService->getPackageBySlug($request->slug ?? '');
 
@@ -254,8 +265,14 @@ class PublicController extends Controller
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
 
-            // Prefer per-module contact, then general settings, then config/env
-            $waSource = $settings['contact_wa'] ?? $genSettings['whatsapp'] ?? config('services.whatsapp.number') ?? '';
+            // Try all possible key variants for WhatsApp number (wa_number, whatsapp, contact_wa, contact_wa_1)
+            $waSource = $settings['contact_wa']
+                ?? $genSettings['wa_number']
+                ?? $genSettings['whatsapp']
+                ?? $genSettings['contact_wa_1']
+                ?? $genSettings['contact_wa']
+                ?? config('services.whatsapp.number')
+                ?? '';
             $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
 
             // If there's no WhatsApp number configured, log and return success without WA URL
@@ -284,15 +301,7 @@ class PublicController extends Controller
         }
     }
 
-    public function cars()
-    {
-        $siteSettings = $this->getSiteSettings(['general']);
-        $cars = Cache::remember('cars_active', 3600, function () {
-            return Car::where('status', 'available')->orderBy('sortOrder')->get();
-        });
 
-        return view('cars.index', compact('cars', 'siteSettings'));
-    }
 
     public function about()
     {

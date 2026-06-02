@@ -8,7 +8,7 @@
         contact: { 
             phone: '{{ $siteSettings['general']['wa_number'] ?? '+62 813-2388-8207' }}', 
             email: '{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}', 
-            whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6281323888207') }}' 
+            whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855') }}' 
         }
     }"
     x-init="
@@ -152,12 +152,29 @@
                     </a>
                 </div>
 
-                <!-- Mobile Menu Toggle -->
-                <div class="lg:hidden flex items-center">
-                    <button @click="isMenuOpen = !isMenuOpen" aria-label="Toggle navigation menu" :class="isScrolled ? 'text-slate-600 hover:text-secondary' : 'text-white bg-black/5 hover:bg-black/10 rounded-xl'" class="p-2 transition-all">
-                        <svg x-show="!isMenuOpen" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                        <svg x-show="isMenuOpen" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
+                <!-- Mobile: Language Selector (icon only) + WA Button -->
+                <div class="lg:hidden flex items-center gap-2">
+                    <!-- Language Picker compact -->
+                    <div x-data="{ open: false }" class="relative z-[110]">
+                        <button @click="open = !open" aria-label="Pilih Bahasa" :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'" class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all">
+                            @if(session('locale', 'my') === 'my') 🇲🇾
+                            @elseif(session('locale', 'my') === 'id') 🇮🇩
+                            @else 🇸🇬
+                            @endif
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg py-2 border border-slate-200 text-[11px] z-[200]">
+                            <a href="{{ route('change-locale', 'my') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors {{ session('locale', 'my') === 'my' ? 'bg-slate-50 text-primary font-semibold' : '' }}">🇲🇾 MYR (Melayu)</a>
+                            <a href="{{ route('change-locale', 'id') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors {{ session('locale', 'my') === 'id' ? 'bg-slate-50 text-primary font-semibold' : '' }}">🇮🇩 IDR (Indonesia)</a>
+                            <a href="{{ route('change-locale', 'en') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors {{ session('locale', 'my') === 'en' ? 'bg-slate-50 text-primary font-semibold' : '' }}">🇸🇬 SGD (English)</a>
+                        </div>
+                    </div>
+                    <!-- WhatsApp CTA compact -->
+                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer"
+                        :class="isScrolled ? 'bg-primary text-white' : 'bg-white/15 text-white border border-white/30'"
+                        class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                        aria-label="Hubungi via WhatsApp">
+                        <i class="fab fa-whatsapp text-base"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -250,6 +267,49 @@
         </div>
     </nav>
 
+    <!-- Mobile Horizontal Scrollable Sub-Navbar -->
+    <div class="lg:hidden border-t border-slate-200/60"
+        :class="isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-white/90 backdrop-blur-md'">
+        <div class="overflow-x-auto no-scrollbar">
+            <ul class="flex items-center whitespace-nowrap px-4 py-0 gap-0">
+                <li>
+                    <a href="/"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Beranda') }}</a>
+                </li>
+                <li>
+                    <a href="/tour/packages"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Paket Wisata') }}</a>
+                </li>
+                <li>
+                    <a href="/tour/gallery"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Galeri') }}</a>
+                </li>
+                <li>
+                    <a href="/tour/blog"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Blog') }}</a>
+                </li>
+                <li>
+                    <a href="/about"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Tentang Kami') }}</a>
+                </li>
+                <li>
+                    <a href="/tour/destinations"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/destinations*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Destinasi') }}</a>
+                </li>
+                <li>
+                    <a href="/testimonials"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('testimonials*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Testimoni') }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 </header>
 

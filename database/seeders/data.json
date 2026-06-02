@@ -161,104 +161,6 @@
       "last_booking_at": "2026-05-12 15:20:00"
     }
   ],
-  "cars": [
-    {
-      "id": 1,
-      "name": "Toyota Avanza",
-      "type": "MPV",
-      "capacity": 7,
-      "transmission": "Automatic",
-      "fuel": "Petrol",
-      "price": 350000,
-      "priceWithDriver": 450000,
-      "description": "Mobil MPV terpopuler di Indonesia, cocok untuk keluarga kecil. Dilengkapi AC dingin dan audio system.",
-      "status": "active",
-      "isFeatured": true,
-      "images": ["assets/images/cars/avanza-1.jpg", "assets/images/cars/avanza-2.jpg"],
-      "features": ["AC", "Audio System", "USB Charger", "Bagasi Luas"],
-      "created_at": "2026-01-01 00:00:00"
-    },
-    {
-      "id": 2,
-      "name": "Toyota Innova Reborn",
-      "type": "Premium MPV",
-      "capacity": 7,
-      "transmission": "Automatic",
-      "fuel": "Petrol",
-      "price": 600000,
-      "priceWithDriver": 750000,
-      "description": "MPV premium dengan interior mewah dan nyaman. Cocok untuk perjalanan jauh dengan kenyamanan maksimal.",
-      "status": "active",
-      "isFeatured": true,
-      "images": ["assets/images/cars/innova-1.jpg", "assets/images/cars/innova-2.jpg"],
-      "features": ["AC Premium", "Audio System", "USB Charger", "Leg Room Luas", "Coffee Maker"],
-      "created_at": "2026-01-01 00:00:00"
-    },
-    {
-      "id": 3,
-      "name": "Toyota Hiace",
-      "type": "Minibus",
-      "capacity": 14,
-      "transmission": "Manual",
-      "fuel": "Diesel",
-      "price": 1000000,
-      "priceWithDriver": 1200000,
-      "description": "Minibus besar untuk grup pariwisata. Kapasitas 14 penumpang dengan багажник luas.",
-      "status": "active",
-      "isFeatured": true,
-      "images": ["assets/images/cars/hiace-1.jpg"],
-      "features": ["AC", "Audio System", "Bagasi Besar", "Reclining Seat"],
-      "created_at": "2026-01-01 00:00:00"
-    },
-    {
-      "id": 4,
-      "name": "Daihatsu Sigra",
-      "type": "City Car",
-      "capacity": 5,
-      "transmission": "Manual",
-      "fuel": "Petrol",
-      "price": 250000,
-      "priceWithDriver": 350000,
-      "description": "Mobil ekonomis untuk perjalanan dalam kota atau grup kecil.",
-      "status": "active",
-      "isFeatured": false,
-      "images": ["assets/images/cars/sigra-1.jpg"],
-      "features": ["AC", "Audio System"],
-      "created_at": "2026-02-01 00:00:00"
-    },
-    {
-      "id": 5,
-      "name": "Suzuki APV",
-      "type": "MPV",
-      "capacity": 7,
-      "transmission": "Automatic",
-      "fuel": "Petrol",
-      "price": 300000,
-      "priceWithDriver": 400000,
-      "description": "MPV keluarga yang nyaman dan irit bahan bakar.",
-      "status": "active",
-      "isFeatured": false,
-      "images": ["assets/images/cars/apv-1.jpg"],
-      "features": ["AC", "Audio System", "Bagasi Cukup"],
-      "created_at": "2026-02-15 00:00:00"
-    },
-    {
-      "id": 6,
-      "name": "Toyota Alphard",
-      "type": "Luxury MPV",
-      "capacity": 6,
-      "transmission": "Automatic",
-      "fuel": "Petrol",
-      "price": 1500000,
-      "priceWithDriver": 1800000,
-      "description": "MPV mewah dengan fitur premium. Cocok untuk perjalanan bisnis atau honeymoon.",
-      "status": "active",
-      "isFeatured": true,
-      "images": ["assets/images/cars/alphard-1.jpg", "assets/images/cars/alphard-2.jpg"],
-      "features": ["AC Premium", "Leather Seat", "TV Screen", "Mini Bar", "USB Charger", "Leg Room Extra Luas"],
-      "created_at": "2026-03-01 00:00:00"
-    }
-  ],
   "packages": [
     {
       "id": 1,
@@ -292,9 +194,41 @@
         "Tours tambahan"
       ],
       "itinerary": [
-        { "day": 1, "title": "Penjemputan - Sipiso-piso - Parapat", "activities": ["Penjemputan di Bandara Kualanamu", "Perjalanan ke Sipiso-piso Waterfall", "Makan siang di Tongging Village", "Check-in Hotel Parapat", "Makan malam"]},
-        { "day": 2, "title": "Pulau Samosir Full Day", "activities": ["Naik boat ke Pulau Samosir", "Kunjungan ke Desa Tomok", "Huta Bolon Siallagan", "Tuktuk Siadong", "Makan siang seafood", "Pura Parhaladan", "Kembali ke Parapat"]},
-        { "day": 3, "title": "Oleh-oleh & Drop Off", "activities": ["Sarapan pagi", "Pasar Tomok (belanja oleh-oleh)", "Perjalanan kembali ke Medan", "Makan siang di kota", "Drop off Bandara/KAI Station"]}
+        {
+          "day": 1,
+          "title": "Penjemputan - Sipiso-piso - Parapat",
+          "activities": [
+            "Penjemputan di Bandara Kualanamu",
+            "Perjalanan ke Sipiso-piso Waterfall",
+            "Makan siang di Tongging Village",
+            "Check-in Hotel Parapat",
+            "Makan malam"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Pulau Samosir Full Day",
+          "activities": [
+            "Naik boat ke Pulau Samosir",
+            "Kunjungan ke Desa Tomok",
+            "Huta Bolon Siallagan",
+            "Tuktuk Siadong",
+            "Makan siang seafood",
+            "Pura Parhaladan",
+            "Kembali ke Parapat"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Oleh-oleh & Drop Off",
+          "activities": [
+            "Sarapan pagi",
+            "Pasar Tomok (belanja oleh-oleh)",
+            "Perjalanan kembali ke Medan",
+            "Makan siang di kota",
+            "Drop off Bandara/KAI Station"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": true,
@@ -334,8 +268,29 @@
         "Buah-buahan"
       ],
       "itinerary": [
-        { "day": 1, "title": "Medan - Berastagi", "activities": ["Penjemputan di Medan", "Gundaling Hill viewpoint", "Sipiso-piso Waterfall", "Makan siang", "Check-in Hotel", "Pasar buah Berastagi"]},
-        { "day": 2, "title": "Wisata Karo", "activities": ["Sarapan pagi", "Taman Alam Lumbini", "Desa Linguistik", "Makan siang", "Kembali ke Medan"]}
+        {
+          "day": 1,
+          "title": "Medan - Berastagi",
+          "activities": [
+            "Penjemputan di Medan",
+            "Gundaling Hill viewpoint",
+            "Sipiso-piso Waterfall",
+            "Makan siang",
+            "Check-in Hotel",
+            "Pasar buah Berastagi"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Wisata Karo",
+          "activities": [
+            "Sarapan pagi",
+            "Taman Alam Lumbini",
+            "Desa Linguistik",
+            "Makan siang",
+            "Kembali ke Medan"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": true,
@@ -372,7 +327,18 @@
         "Pengeluaran pribadi"
       ],
       "itinerary": [
-        { "day": 1, "title": "City Tour Medan", "activities": ["Istana Maimun", "Masjid Raya Al-Mashun", "Tjong A Fie Mansion", "Pusat oleh-oleh (Merdeka Walk)", "Kuliner khas Medan", "Makam Raja-Raja"]}
+        {
+          "day": 1,
+          "title": "City Tour Medan",
+          "activities": [
+            "Istana Maimun",
+            "Masjid Raya Al-Mashun",
+            "Tjong A Fie Mansion",
+            "Pusat oleh-oleh (Merdeka Walk)",
+            "Kuliner khas Medan",
+            "Makam Raja-Raja"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": false,
@@ -413,10 +379,47 @@
         "Asuransi tambahan"
       ],
       "itinerary": [
-        { "day": 1, "title": "Kedatangan - Parapat ke Samosir", "activities": ["Penjemputan di Bandara", "Perjalanan ke Parapat", "Naik boat ke Samosir", "Check-in homestay", "Sunset di Tuktuk"]},
-        { "day": 2, "title": "Adventure Day", "activities": ["Snorkeling di Gigi Hiu", "Biking keliling pulau", "Trekking bukit", "Makan siang seafood"]},
-        { "day": 3, "title": "Budaya & Tradisi", "activities": ["Kunjungan ke Huta Bolon", "Upacara adat (jika ada)", "Workshop tenun Ulos", "Kuliner Batak"]},
-        { "day": 4, "title": "Check Out - Pulang", "activities": ["Sarapan pagi", "Belanja oleh-oleh", "Boat ke Parapat", "Drop off"]}
+        {
+          "day": 1,
+          "title": "Kedatangan - Parapat ke Samosir",
+          "activities": [
+            "Penjemputan di Bandara",
+            "Perjalanan ke Parapat",
+            "Naik boat ke Samosir",
+            "Check-in homestay",
+            "Sunset di Tuktuk"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Adventure Day",
+          "activities": [
+            "Snorkeling di Gigi Hiu",
+            "Biking keliling pulau",
+            "Trekking bukit",
+            "Makan siang seafood"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Budaya & Tradisi",
+          "activities": [
+            "Kunjungan ke Huta Bolon",
+            "Upacara adat (jika ada)",
+            "Workshop tenun Ulos",
+            "Kuliner Batak"
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Check Out - Pulang",
+          "activities": [
+            "Sarapan pagi",
+            "Belanja oleh-oleh",
+            "Boat ke Parapat",
+            "Drop off"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": true,
@@ -454,8 +457,31 @@
         "Tips guide"
       ],
       "itinerary": [
-        { "day": 1, "title": "Medan - Bukit Lawang", "activities": ["Penjemputan di Medan (06:00)", "Perjalanan ~3 jam", "Briefing keselamatan", "Start trekking", "T仔细观察 orangutan", "Sungai tubing", "Makan siang", "Check-in lodge"]},
-        { "day": 2, "title": "Jungle Trek - Kembali", "activities": ["Sarapan pagi", "Jungle trek pagi", "Visit rehabilitation center", "Makan siang", "Kembali ke Medan"]}
+        {
+          "day": 1,
+          "title": "Medan - Bukit Lawang",
+          "activities": [
+            "Penjemputan di Medan (06:00)",
+            "Perjalanan ~3 jam",
+            "Briefing keselamatan",
+            "Start trekking",
+            "T仔细观察 orangutan",
+            "Sungai tubing",
+            "Makan siang",
+            "Check-in lodge"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Jungle Trek - Kembali",
+          "activities": [
+            "Sarapan pagi",
+            "Jungle trek pagi",
+            "Visit rehabilitation center",
+            "Makan siang",
+            "Kembali ke Medan"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": false,
@@ -497,10 +523,49 @@
         "Asuransi tambahan"
       ],
       "itinerary": [
-        { "day": 1, "title": "Kedatangan - Selamat Datang", "activities": ["Penjemputan VIP di bandara", "Perjalanan private ke Samosir", "Check-in resort", "Afternoon tea", "Sunset cruise", "Dinner romantis"]},
-        { "day": 2, "title": "Petualangan Bersama", "activities": ["Breakfast di villa", "Snorkeling adventure", "Makan siang seafood", "Spa treatment", "Leisure time"]},
-        { "day": 3, "title": "Cultural Experience", "activities": ["Breakfast", "Kunjungan museum Batak", "Workshop Ulos", "Photo session", "Farewell dinner"]},
-        { "day": 4, "title": "Check Out", "activities": ["Breakfast", "Belanja oleh-oleh", "Transfer ke bandara"]}
+        {
+          "day": 1,
+          "title": "Kedatangan - Selamat Datang",
+          "activities": [
+            "Penjemputan VIP di bandara",
+            "Perjalanan private ke Samosir",
+            "Check-in resort",
+            "Afternoon tea",
+            "Sunset cruise",
+            "Dinner romantis"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Petualangan Bersama",
+          "activities": [
+            "Breakfast di villa",
+            "Snorkeling adventure",
+            "Makan siang seafood",
+            "Spa treatment",
+            "Leisure time"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Cultural Experience",
+          "activities": [
+            "Breakfast",
+            "Kunjungan museum Batak",
+            "Workshop Ulos",
+            "Photo session",
+            "Farewell dinner"
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Check Out",
+          "activities": [
+            "Breakfast",
+            "Belanja oleh-oleh",
+            "Transfer ke bandara"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": true,
@@ -540,13 +605,77 @@
         "Makan di luar jadwal"
       ],
       "itinerary": [
-        { "day": 1, "title": "Medan City Tour", "activities": ["Penjemputan di bandara", "City tour Medan", "Check-in hotel", "Dinner di Merdeka Walk"]},
-        { "day": 2, "title": "Medan - Berastagi", "activities": ["Perjalanan ke Berastagi", "Sipiso-piso Waterfall", "Gundaling Hill", "Pasar buah", "Check-in hotel"]},
-        { "day": 3, "title": "Berastagi - Parapat", "activities": ["Taman Alam Lumbini", "Perjalanan ke Parapat", "Check-in resort", "Leisure time"]},
-        { "day": 4, "title": "Pulau Samosir", "activities": ["Boat ke Samosir", "Huta Bolon", "Tuktuk", "Pura Parhaladan", "Kembali ke Parapat"]},
-        { "day": 5, "title": "Parapat - Bukit Lawang", "activities": ["Perjalanan ke Bukit Lawang", "Jungle trek", "Sungai tubing", "Check-in lodge"]},
-        { "day": 6, "title": "Bukit Lawang - Medan", "activities": ["Morning trek", "Rehabilitation center", "Perjalanan pulang", "Check-in hotel"]},
-        { "day": 7, "title": "Departure", "activities": ["Sarapan pagi", "Belanja oleh-oleh", "Transfer ke bandara"]}
+        {
+          "day": 1,
+          "title": "Medan City Tour",
+          "activities": [
+            "Penjemputan di bandara",
+            "City tour Medan",
+            "Check-in hotel",
+            "Dinner di Merdeka Walk"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Medan - Berastagi",
+          "activities": [
+            "Perjalanan ke Berastagi",
+            "Sipiso-piso Waterfall",
+            "Gundaling Hill",
+            "Pasar buah",
+            "Check-in hotel"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Berastagi - Parapat",
+          "activities": [
+            "Taman Alam Lumbini",
+            "Perjalanan ke Parapat",
+            "Check-in resort",
+            "Leisure time"
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Pulau Samosir",
+          "activities": [
+            "Boat ke Samosir",
+            "Huta Bolon",
+            "Tuktuk",
+            "Pura Parhaladan",
+            "Kembali ke Parapat"
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Parapat - Bukit Lawang",
+          "activities": [
+            "Perjalanan ke Bukit Lawang",
+            "Jungle trek",
+            "Sungai tubing",
+            "Check-in lodge"
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Bukit Lawang - Medan",
+          "activities": [
+            "Morning trek",
+            "Rehabilitation center",
+            "Perjalanan pulang",
+            "Check-in hotel"
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Departure",
+          "activities": [
+            "Sarapan pagi",
+            "Belanja oleh-oleh",
+            "Transfer ke bandara"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": true,
@@ -566,11 +695,30 @@
       "price": 150000,
       "priceDisplay": "per orang (min. 3 pax)",
       "duration": "Half Day (4 jam)",
-      "images": ["assets/images/packages/halfday-1.jpg"],
-      "includes": ["Transportasi AC", "Makan siang 1x", "Tiket masuk spot foto", "Air mineral"],
-      "excludes": ["Pengeluaran pribadi"],
+      "images": [
+        "assets/images/packages/halfday-1.jpg"
+      ],
+      "includes": [
+        "Transportasi AC",
+        "Makan siang 1x",
+        "Tiket masuk spot foto",
+        "Air mineral"
+      ],
+      "excludes": [
+        "Pengeluaran pribadi"
+      ],
       "itinerary": [
-        { "day": 1, "title": "Half Day Tour", "activities": ["Penjemputan di meeting point", "Pemandangan Danau Toba", "Spot foto", "Pasar tradisional", "Kembali"]}
+        {
+          "day": 1,
+          "title": "Half Day Tour",
+          "activities": [
+            "Penjemputan di meeting point",
+            "Pemandangan Danau Toba",
+            "Spot foto",
+            "Pasar tradisional",
+            "Kembali"
+          ]
+        }
       ],
       "status": "active",
       "isFeatured": false,
@@ -580,33 +728,148 @@
     }
   ],
   "package_images": [
-    { "id": 1, "package_id": 1, "image_path": "assets/images/packages/toba-1.jpg", "sort_order": 1 },
-    { "id": 2, "package_id": 1, "image_path": "assets/images/packages/toba-2.jpg", "sort_order": 2 },
-    { "id": 3, "package_id": 1, "image_path": "assets/images/packages/toba-3.jpg", "sort_order": 3 },
-    { "id": 4, "package_id": 1, "image_path": "assets/images/packages/toba-4.jpg", "sort_order": 4 },
-    { "id": 5, "package_id": 2, "image_path": "assets/images/packages/berastagi-1.jpg", "sort_order": 1 },
-    { "id": 6, "package_id": 2, "image_path": "assets/images/packages/berastagi-2.jpg", "sort_order": 2 },
-    { "id": 7, "package_id": 2, "image_path": "assets/images/packages/berastagi-3.jpg", "sort_order": 3 },
-    { "id": 8, "package_id": 3, "image_path": "assets/images/packages/medan-1.jpg", "sort_order": 1 },
-    { "id": 9, "package_id": 3, "image_path": "assets/images/packages/medan-2.jpg", "sort_order": 2 }
+    {
+      "id": 1,
+      "package_id": 1,
+      "image_path": "assets/images/packages/toba-1.jpg",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "package_id": 1,
+      "image_path": "assets/images/packages/toba-2.jpg",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "package_id": 1,
+      "image_path": "assets/images/packages/toba-3.jpg",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "package_id": 1,
+      "image_path": "assets/images/packages/toba-4.jpg",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "package_id": 2,
+      "image_path": "assets/images/packages/berastagi-1.jpg",
+      "sort_order": 1
+    },
+    {
+      "id": 6,
+      "package_id": 2,
+      "image_path": "assets/images/packages/berastagi-2.jpg",
+      "sort_order": 2
+    },
+    {
+      "id": 7,
+      "package_id": 2,
+      "image_path": "assets/images/packages/berastagi-3.jpg",
+      "sort_order": 3
+    },
+    {
+      "id": 8,
+      "package_id": 3,
+      "image_path": "assets/images/packages/medan-1.jpg",
+      "sort_order": 1
+    },
+    {
+      "id": 9,
+      "package_id": 3,
+      "image_path": "assets/images/packages/medan-2.jpg",
+      "sort_order": 2
+    }
   ],
   "package_amenities": [
-    { "id": 1, "package_id": 1, "name": "Hotel bintang 3 (2 malam)", "type": "include" },
-    { "id": 2, "package_id": 1, "name": "Transportasi AC selama tour", "type": "include" },
-    { "id": 3, "package_id": 1, "name": "Makan 6x", "type": "include" },
-    { "id": 4, "package_id": 1, "name": "Tiket masuk objek wisata", "type": "include" },
-    { "id": 5, "package_id": 1, "name": "Tiket pesawat/kereta", "type": "exclude" },
-    { "id": 6, "package_id": 1, "name": "Pengeluaran pribadi", "type": "exclude" },
-    { "id": 7, "package_id": 2, "name": "Hotel bintang 3 (1 malam)", "type": "include" },
-    { "id": 8, "package_id": 2, "name": "Transportasi AC", "type": "include" },
-    { "id": 9, "package_id": 2, "name": "Makan 3x", "type": "include" },
-    { "id": 10, "package_id": 2, "name": "Tiket transportasi ke Medan", "type": "exclude" }
+    {
+      "id": 1,
+      "package_id": 1,
+      "name": "Hotel bintang 3 (2 malam)",
+      "type": "include"
+    },
+    {
+      "id": 2,
+      "package_id": 1,
+      "name": "Transportasi AC selama tour",
+      "type": "include"
+    },
+    {
+      "id": 3,
+      "package_id": 1,
+      "name": "Makan 6x",
+      "type": "include"
+    },
+    {
+      "id": 4,
+      "package_id": 1,
+      "name": "Tiket masuk objek wisata",
+      "type": "include"
+    },
+    {
+      "id": 5,
+      "package_id": 1,
+      "name": "Tiket pesawat/kereta",
+      "type": "exclude"
+    },
+    {
+      "id": 6,
+      "package_id": 1,
+      "name": "Pengeluaran pribadi",
+      "type": "exclude"
+    },
+    {
+      "id": 7,
+      "package_id": 2,
+      "name": "Hotel bintang 3 (1 malam)",
+      "type": "include"
+    },
+    {
+      "id": 8,
+      "package_id": 2,
+      "name": "Transportasi AC",
+      "type": "include"
+    },
+    {
+      "id": 9,
+      "package_id": 2,
+      "name": "Makan 3x",
+      "type": "include"
+    },
+    {
+      "id": 10,
+      "package_id": 2,
+      "name": "Tiket transportasi ke Medan",
+      "type": "exclude"
+    }
   ],
   "package_tiers": [
-    { "id": 1, "tierName": "Basic", "category": "general", "tagline": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas." },
-    { "id": 2, "tierName": "Standard", "category": "general", "tagline": "Paket paling populer. Keseimbangan antara harga dan fasilitas terbaik." },
-    { "id": 3, "tierName": "Premium", "category": "general", "tagline": "Pengalaman mewah tanpa kompromi. Resort bintang 4-5, fasilitator senior, gala dinner." },
-    { "id": 4, "tierName": "VIP", "category": "corporate", "tagline": "Paket eksklusif untuk corporate event dan incentive travel." }
+    {
+      "id": 1,
+      "tierName": "Basic",
+      "category": "general",
+      "tagline": "Paket hemat untuk grup kecil. Aktivitas standar, cocok untuk budget terbatas."
+    },
+    {
+      "id": 2,
+      "tierName": "Standard",
+      "category": "general",
+      "tagline": "Paket paling populer. Keseimbangan antara harga dan fasilitas terbaik."
+    },
+    {
+      "id": 3,
+      "tierName": "Premium",
+      "category": "general",
+      "tagline": "Pengalaman mewah tanpa kompromi. Resort bintang 4-5, fasilitator senior, gala dinner."
+    },
+    {
+      "id": 4,
+      "tierName": "VIP",
+      "category": "corporate",
+      "tagline": "Paket eksklusif untuk corporate event dan incentive travel."
+    }
   ],
   "bookings": [
     {
@@ -614,7 +877,6 @@
       "userId": 2,
       "customerId": 1,
       "packageId": 1,
-      "carId": 2,
       "type": "package",
       "bookingCode": "SLT-2026-0001",
       "startDate": "2026-05-20 08:00:00",
@@ -633,7 +895,6 @@
       "userId": 2,
       "customerId": 2,
       "packageId": 2,
-      "carId": 1,
       "type": "package",
       "bookingCode": "SLT-2026-0002",
       "startDate": "2026-05-25 07:00:00",
@@ -652,7 +913,6 @@
       "userId": 2,
       "customerId": 3,
       "packageId": 7,
-      "carId": 3,
       "type": "package",
       "bookingCode": "SLT-2026-0003",
       "startDate": "2026-06-01 06:00:00",
@@ -671,7 +931,6 @@
       "userId": 1,
       "customerId": 4,
       "packageId": 1,
-      "carId": null,
       "type": "package",
       "bookingCode": "SLT-2026-0004",
       "startDate": "2026-05-10 08:00:00",
@@ -690,7 +949,6 @@
       "userId": 2,
       "customerId": 5,
       "packageId": 6,
-      "carId": 6,
       "type": "package",
       "bookingCode": "SLT-2026-0005",
       "startDate": "2026-06-10 08:00:00",
@@ -709,7 +967,6 @@
       "userId": 1,
       "customerId": 6,
       "packageId": 3,
-      "carId": 4,
       "type": "package",
       "bookingCode": "SLT-2026-0006",
       "startDate": "2026-05-03 08:00:00",
@@ -728,7 +985,6 @@
       "userId": 2,
       "customerId": 7,
       "packageId": 2,
-      "carId": 1,
       "type": "package",
       "bookingCode": "SLT-2026-0007",
       "startDate": "2026-04-20 07:00:00",
@@ -747,7 +1003,6 @@
       "userId": 1,
       "customerId": 8,
       "packageId": 5,
-      "carId": 5,
       "type": "package",
       "bookingCode": "SLT-2026-0008",
       "startDate": "2026-05-17 06:00:00",
@@ -766,7 +1021,6 @@
       "userId": 3,
       "customerId": 1,
       "packageId": 4,
-      "carId": 2,
       "type": "package",
       "bookingCode": "SLT-2026-0009",
       "startDate": "2026-04-10 08:00:00",
@@ -785,7 +1039,6 @@
       "userId": 2,
       "customerId": 3,
       "packageId": 1,
-      "carId": 2,
       "type": "package",
       "bookingCode": "SLT-2026-0010",
       "startDate": "2026-05-28 08:00:00",
@@ -810,7 +1063,12 @@
       "image": "assets/images/blogs/toba-destinations.jpg",
       "author": "Admin Tour",
       "category": "Tour",
-      "tags": ["Danau Toba", "Wisata", "Sumatera Utara", "Samosir"],
+      "tags": [
+        "Danau Toba",
+        "Wisata",
+        "Sumatera Utara",
+        "Samosir"
+      ],
       "status": "published",
       "published_at": "2026-04-01 10:00:00",
       "metaTitle": "5 Destinasi Wisata Wajib di Danau Toba | Sujai Laketoba",
@@ -825,7 +1083,12 @@
       "image": "assets/images/blogs/transfer-guide.jpg",
       "author": "Admin Tour",
       "category": "Guide",
-      "tags": ["Kualanamu", "Transfer", "Airport", "Transportation"],
+      "tags": [
+        "Kualanamu",
+        "Transfer",
+        "Airport",
+        "Transportation"
+      ],
       "status": "published",
       "published_at": "2026-04-10 09:00:00",
       "metaTitle": "Panduan Transfer dari Kualanamu ke Danau Toba | Sujai Laketoba",
@@ -840,7 +1103,13 @@
       "image": "assets/images/blogs/medan-food.jpg",
       "author": "Admin Tour",
       "category": "Food",
-      "tags": ["Kuliner", "Medan", "Makanan Khas", "Mie Aceh", "Soto Medan"],
+      "tags": [
+        "Kuliner",
+        "Medan",
+        "Makanan Khas",
+        "Mie Aceh",
+        "Soto Medan"
+      ],
       "status": "published",
       "published_at": "2026-04-15 14:00:00",
       "metaTitle": "Kuliner Khas Medan yang Wajib Dicoba | Sujai Laketoba",
@@ -855,7 +1124,12 @@
       "image": "assets/images/blogs/halal-food.jpg",
       "author": "Admin Tour",
       "category": "Food",
-      "tags": ["Halal", "Muslim Travel", "Food Guide", "Danau Toba"],
+      "tags": [
+        "Halal",
+        "Muslim Travel",
+        "Food Guide",
+        "Danau Toba"
+      ],
       "status": "published",
       "published_at": "2026-04-20 11:00:00",
       "metaTitle": "Halal Food Guide Danau Toba | Sujai Laketoba",
@@ -870,7 +1144,12 @@
       "image": "assets/images/blogs/trekking-tips.jpg",
       "author": "Admin Tour",
       "category": "Adventure",
-      "tags": ["Bukit Lawang", "Trekking", "Orangutan", "Gunung Leuser"],
+      "tags": [
+        "Bukit Lawang",
+        "Trekking",
+        "Orangutan",
+        "Gunung Leuser"
+      ],
       "status": "published",
       "published_at": "2026-04-25 08:00:00",
       "metaTitle": "Tips Trekking Bukit Lawang untuk Pemula | Sujai Laketoba",
@@ -885,7 +1164,13 @@
       "image": "assets/images/blogs/batak-culture.jpg",
       "author": "Admin Tour",
       "category": "Culture",
-      "tags": ["Batak", "Samosir", "Budaya", "Tradisi", "Ulos"],
+      "tags": [
+        "Batak",
+        "Samosir",
+        "Budaya",
+        "Tradisi",
+        "Ulos"
+      ],
       "status": "published",
       "published_at": "2026-05-01 10:00:00",
       "metaTitle": "Budaya Suku Batak di Samosir | Sujai Laketoba",
@@ -900,7 +1185,12 @@
       "image": "assets/images/blogs/best-time.jpg",
       "author": "Admin Tour",
       "category": "Guide",
-      "tags": ["Best Time", "Season", "Weather", "Lake Toba"],
+      "tags": [
+        "Best Time",
+        "Season",
+        "Weather",
+        "Lake Toba"
+      ],
       "status": "published",
       "published_at": "2026-05-05 09:00:00"
     },
@@ -913,7 +1203,12 @@
       "image": "assets/images/blogs/photo-spots.jpg",
       "author": "Admin Tour",
       "category": "Photography",
-      "tags": ["Instagram", "Photo Spot", "Wisata", "Danau Toba"],
+      "tags": [
+        "Instagram",
+        "Photo Spot",
+        "Wisata",
+        "Danau Toba"
+      ],
       "status": "published",
       "published_at": "2026-05-10 15:00:00"
     },
@@ -926,7 +1221,12 @@
       "image": "assets/images/blogs/budget-travel.jpg",
       "author": "Admin Tour",
       "category": "Tips",
-      "tags": ["Budget", "Hemat", "Travel Tips", "Backpacking"],
+      "tags": [
+        "Budget",
+        "Hemat",
+        "Travel Tips",
+        "Backpacking"
+      ],
       "status": "draft",
       "published_at": "2026-05-15 10:00:00"
     },
@@ -939,43 +1239,291 @@
       "image": "assets/images/blogs/water-sports.jpg",
       "author": "Admin Tour",
       "category": "Adventure",
-      "tags": ["Snorkeling", "Diving", "Watersports", "Danau Toba"],
+      "tags": [
+        "Snorkeling",
+        "Diving",
+        "Watersports",
+        "Danau Toba"
+      ],
       "status": "draft",
       "published_at": "2026-05-18 12:00:00"
     }
   ],
   "gallery_images": [
-    { "id": 1, "imageUrl": "assets/images/gallery/danau-toba-panorama.jpg", "category": "Tour", "caption": "Pemandangan spektakuler Danau Toba dari ketinggian", "tags": ["Danau Toba", "Panorama", "Pemandangan"], "orderPriority": 1, "isActive": true },
-    { "id": 2, "imageUrl": "assets/images/gallery/samosir-sunset.jpg", "category": "Tour", "caption": "Sunset romantis di tepi Danau Toba", "tags": ["Samosir", "Sunset", "Romantis"], "orderPriority": 2, "isActive": true },
-    { "id": 3, "imageUrl": "assets/images/gallery/sipiso-piso.jpg", "category": "Waterfall", "caption": "Air Terjun Sipiso-piso yang megah", "tags": ["Sipiso-piso", "Air Terjun", "Alam"], "orderPriority": 3, "isActive": true },
-    { "id": 4, "imageUrl": "assets/images/gallery/batak-tradition.jpg", "category": "Culture", "caption": "Tarian tradisional suku Batak", "tags": ["Batak", "Tradisi", "Tarian"], "orderPriority": 4, "isActive": true },
-    { "id": 5, "imageUrl": "assets/images/gallery/huta-bolon.jpg", "category": "Culture", "caption": "Rumah tradisional Huta Bolon di Samosir", "tags": ["Huta Bolon", "Rumah Adat", "Samosir"], "orderPriority": 5, "isActive": true },
-    { "id": 6, "imageUrl": "assets/images/gallery/gundaling-hill.jpg", "category": "Tour", "caption": "Pemandangan Gundaling Hill di Berastagi", "tags": ["Gundaling", "Berastagi", "Viewpoint"], "orderPriority": 6, "isActive": true },
-    { "id": 7, "imageUrl": "assets/images/gallery/orangutan.jpg", "category": "Wildlife", "caption": "Orangutan liar di Taman Nasional Gunung Leuser", "tags": ["Orangutan", "Wildlife", "Bukit Lawang"], "orderPriority": 7, "isActive": true },
-    { "id": 8, "imageUrl": "assets/images/gallery/medan-city.jpg", "category": "Tour", "caption": "Ikon kota Medan - Masjid Raya Al-Mashun", "tags": ["Medan", "Masjid", "Heritage"], "orderPriority": 8, "isActive": true },
-    { "id": 9, "imageUrl": "assets/images/gallery/snorkeling.jpg", "category": "Adventure", "caption": "Aktivitas snorkeling di Gigi Hiu", "tags": ["Snorkeling", "Gigi Hiu", "Adventure"], "orderPriority": 9, "isActive": true },
-    { "id": 10, "imageUrl": "assets/images/gallery/lake-toba-boat.jpg", "category": "Tour", "caption": "Perjalanan boat menyeberangi Danau Toba", "tags": ["Boat", "Danau Toba", "Transport"], "orderPriority": 10, "isActive": true }
+    {
+      "id": 1,
+      "imageUrl": "assets/images/gallery/danau-toba-panorama.jpg",
+      "category": "Tour",
+      "caption": "Pemandangan spektakuler Danau Toba dari ketinggian",
+      "tags": [
+        "Danau Toba",
+        "Panorama",
+        "Pemandangan"
+      ],
+      "orderPriority": 1,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "imageUrl": "assets/images/gallery/samosir-sunset.jpg",
+      "category": "Tour",
+      "caption": "Sunset romantis di tepi Danau Toba",
+      "tags": [
+        "Samosir",
+        "Sunset",
+        "Romantis"
+      ],
+      "orderPriority": 2,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "imageUrl": "assets/images/gallery/sipiso-piso.jpg",
+      "category": "Waterfall",
+      "caption": "Air Terjun Sipiso-piso yang megah",
+      "tags": [
+        "Sipiso-piso",
+        "Air Terjun",
+        "Alam"
+      ],
+      "orderPriority": 3,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "imageUrl": "assets/images/gallery/batak-tradition.jpg",
+      "category": "Culture",
+      "caption": "Tarian tradisional suku Batak",
+      "tags": [
+        "Batak",
+        "Tradisi",
+        "Tarian"
+      ],
+      "orderPriority": 4,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "imageUrl": "assets/images/gallery/huta-bolon.jpg",
+      "category": "Culture",
+      "caption": "Rumah tradisional Huta Bolon di Samosir",
+      "tags": [
+        "Huta Bolon",
+        "Rumah Adat",
+        "Samosir"
+      ],
+      "orderPriority": 5,
+      "isActive": true
+    },
+    {
+      "id": 6,
+      "imageUrl": "assets/images/gallery/gundaling-hill.jpg",
+      "category": "Tour",
+      "caption": "Pemandangan Gundaling Hill di Berastagi",
+      "tags": [
+        "Gundaling",
+        "Berastagi",
+        "Viewpoint"
+      ],
+      "orderPriority": 6,
+      "isActive": true
+    },
+    {
+      "id": 7,
+      "imageUrl": "assets/images/gallery/orangutan.jpg",
+      "category": "Wildlife",
+      "caption": "Orangutan liar di Taman Nasional Gunung Leuser",
+      "tags": [
+        "Orangutan",
+        "Wildlife",
+        "Bukit Lawang"
+      ],
+      "orderPriority": 7,
+      "isActive": true
+    },
+    {
+      "id": 8,
+      "imageUrl": "assets/images/gallery/medan-city.jpg",
+      "category": "Tour",
+      "caption": "Ikon kota Medan - Masjid Raya Al-Mashun",
+      "tags": [
+        "Medan",
+        "Masjid",
+        "Heritage"
+      ],
+      "orderPriority": 8,
+      "isActive": true
+    },
+    {
+      "id": 9,
+      "imageUrl": "assets/images/gallery/snorkeling.jpg",
+      "category": "Adventure",
+      "caption": "Aktivitas snorkeling di Gigi Hiu",
+      "tags": [
+        "Snorkeling",
+        "Gigi Hiu",
+        "Adventure"
+      ],
+      "orderPriority": 9,
+      "isActive": true
+    },
+    {
+      "id": 10,
+      "imageUrl": "assets/images/gallery/lake-toba-boat.jpg",
+      "category": "Tour",
+      "caption": "Perjalanan boat menyeberangi Danau Toba",
+      "tags": [
+        "Boat",
+        "Danau Toba",
+        "Transport"
+      ],
+      "orderPriority": 10,
+      "isActive": true
+    }
   ],
   "clients": [
-    { "id": 1, "name": "Bank Mandiri", "logo": "assets/images/clients/mandiri.png", "websiteUrl": "https://www.bankmandiri.co.id", "orderPriority": 1, "isActive": true },
-    { "id": 2, "name": "Universitas Sumatera Utara", "logo": "assets/images/clients/usu.png", "websiteUrl": "https://www.usu.ac.id", "orderPriority": 2, "isActive": true },
-    { "id": 3, "name": "PT Pelindo", "logo": "assets/images/clients/pelindo.png", "websiteUrl": "https://www.pelindo.co.id", "orderPriority": 3, "isActive": true },
-    { "id": 4, "name": "Hyundai Motors Indonesia", "logo": "assets/images/clients/hyundai.png", "websiteUrl": "https://www.hyundai.com/id", "orderPriority": 4, "isActive": true },
-    { "id": 5, "name": "PT Astra International", "logo": "assets/images/clients/astra.png", "websiteUrl": "https://www.astra.co.id", "orderPriority": 5, "isActive": true },
-    { "id": 6, "name": "Telkom Indonesia", "logo": "assets/images/clients/telkom.png", "websiteUrl": "https://www.telkom.co.id", "orderPriority": 6, "isActive": true }
+    {
+      "id": 1,
+      "name": "Bank Mandiri",
+      "logo": "assets/images/clients/mandiri.png",
+      "websiteUrl": "https://www.bankmandiri.co.id",
+      "orderPriority": 1,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Universitas Sumatera Utara",
+      "logo": "assets/images/clients/usu.png",
+      "websiteUrl": "https://www.usu.ac.id",
+      "orderPriority": 2,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "PT Pelindo",
+      "logo": "assets/images/clients/pelindo.png",
+      "websiteUrl": "https://www.pelindo.co.id",
+      "orderPriority": 3,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Hyundai Motors Indonesia",
+      "logo": "assets/images/clients/hyundai.png",
+      "websiteUrl": "https://www.hyundai.com/id",
+      "orderPriority": 4,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "PT Astra International",
+      "logo": "assets/images/clients/astra.png",
+      "websiteUrl": "https://www.astra.co.id",
+      "orderPriority": 5,
+      "isActive": true
+    },
+    {
+      "id": 6,
+      "name": "Telkom Indonesia",
+      "logo": "assets/images/clients/telkom.png",
+      "websiteUrl": "https://www.telkom.co.id",
+      "orderPriority": 6,
+      "isActive": true
+    }
   ],
   "media": [
-    { "id": 1, "filename": "toba-hero.jpg", "original_name": "toba-hero.jpg", "path": "media/toba-hero.jpg", "category": "Hero", "mime_type": "image/jpeg", "size": 2048000, "alt_text": "Pemandangan Danau Toba dari ketinggian", "order_priority": 1 },
-    { "id": 2, "filename": "medan-city.jpg", "original_name": "medan-city.jpg", "path": "media/medan-city.jpg", "category": "City", "mime_type": "image/jpeg", "size": 1536000, "alt_text": "Ikon kota Medan", "order_priority": 2 },
-    { "id": 3, "filename": "berastagi-view.jpg", "original_name": "berastagi-view.jpg", "path": "media/berastagi-view.jpg", "category": "Tour", "mime_type": "image/jpeg", "size": 1843200, "alt_text": "Pemandangan Berastagi", "order_priority": 3 },
-    { "id": 4, "filename": "car-1.jpg", "original_name": "car-1.jpg", "path": "media/car-1.jpg", "category": "Vehicle", "mime_type": "image/jpeg", "size": 1024000, "alt_text": "Toyota Innova untuk transportasi tour", "order_priority": 4 },
-    { "id": 5, "filename": "blog-header.jpg", "original_name": "blog-header.jpg", "path": "media/blog-header.jpg", "category": "Blog", "mime_type": "image/jpeg", "size": 2560000, "alt_text": "Header blog post", "order_priority": 5 }
+    {
+      "id": 1,
+      "filename": "toba-hero.jpg",
+      "original_name": "toba-hero.jpg",
+      "path": "media/toba-hero.jpg",
+      "category": "Hero",
+      "mime_type": "image/jpeg",
+      "size": 2048000,
+      "alt_text": "Pemandangan Danau Toba dari ketinggian",
+      "order_priority": 1
+    },
+    {
+      "id": 2,
+      "filename": "medan-city.jpg",
+      "original_name": "medan-city.jpg",
+      "path": "media/medan-city.jpg",
+      "category": "City",
+      "mime_type": "image/jpeg",
+      "size": 1536000,
+      "alt_text": "Ikon kota Medan",
+      "order_priority": 2
+    },
+    {
+      "id": 3,
+      "filename": "berastagi-view.jpg",
+      "original_name": "berastagi-view.jpg",
+      "path": "media/berastagi-view.jpg",
+      "category": "Tour",
+      "mime_type": "image/jpeg",
+      "size": 1843200,
+      "alt_text": "Pemandangan Berastagi",
+      "order_priority": 3
+    },
+    {
+      "id": 4,
+      "filename": "car-1.jpg",
+      "original_name": "car-1.jpg",
+      "path": "media/car-1.jpg",
+      "category": "Vehicle",
+      "mime_type": "image/jpeg",
+      "size": 1024000,
+      "alt_text": "Toyota Innova untuk transportasi tour",
+      "order_priority": 4
+    },
+    {
+      "id": 5,
+      "filename": "blog-header.jpg",
+      "original_name": "blog-header.jpg",
+      "path": "media/blog-header.jpg",
+      "category": "Blog",
+      "mime_type": "image/jpeg",
+      "size": 2560000,
+      "alt_text": "Header blog post",
+      "order_priority": 5
+    }
   ],
   "activity_logs": [
-    { "id": 1, "userId": 1, "action": "login", "description": "User logged in", "ip_address": "192.168.1.1", "created_at": "2026-05-21 08:00:00" },
-    { "id": 2, "userId": 2, "action": "create", "description": "Created new package: Paket Honeymoon Danau Toba 4D3N", "model_type": "App\\Models\\Package", "model_id": 6, "created_at": "2026-04-25 10:30:00" },
-    { "id": 3, "userId": 1, "action": "update", "description": "Updated booking SLT-2026-0001 status to confirmed", "model_type": "App\\Models\\Booking", "model_id": 1, "created_at": "2026-05-15 11:00:00" },
-    { "id": 4, "userId": 3, "action": "create", "description": "Created new customer: Maya Safitri", "model_type": "App\\Models\\Customer", "model_id": 8, "created_at": "2026-05-12 14:00:00" }
+    {
+      "id": 1,
+      "userId": 1,
+      "action": "login",
+      "description": "User logged in",
+      "ip_address": "192.168.1.1",
+      "created_at": "2026-05-21 08:00:00"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "action": "create",
+      "description": "Created new package: Paket Honeymoon Danau Toba 4D3N",
+      "model_type": "App\\Models\\Package",
+      "model_id": 6,
+      "created_at": "2026-04-25 10:30:00"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "action": "update",
+      "description": "Updated booking SLT-2026-0001 status to confirmed",
+      "model_type": "App\\Models\\Booking",
+      "model_id": 1,
+      "created_at": "2026-05-15 11:00:00"
+    },
+    {
+      "id": 4,
+      "userId": 3,
+      "action": "create",
+      "description": "Created new customer: Maya Safitri",
+      "model_type": "App\\Models\\Customer",
+      "model_id": 8,
+      "created_at": "2026-05-12 14:00:00"
+    }
   ],
   "settings": [
     {
@@ -1023,10 +1571,26 @@
         "stat_awards": "15+",
         "why_us_title": "Mengapa Memilih Sujai Laketoba?",
         "why_us_items": [
-          { "title": "Pemandu Berpengalaman", "icon": "Shield", "desc": "Tim guide profesional dengan sertifikasi resmi dan pengalaman lebih dari 10 tahun" },
-          { "title": "Harga Terjangkau", "icon": "DollarSign", "desc": "Paket wisata dengan harga kompetitif tanpa mengurangi kualitas pelayanan" },
-          { "title": "Layanan 24/7", "icon": "Clock", "desc": "Customer service siap membantu Anda kapan saja selama perjalanan" },
-          { "title": "Asuransi Perjalanan", "icon": "Heart", "desc": "Setiap paket dilengkapi dengan asuransi perjalanan untuk keamanan Anda" }
+          {
+            "title": "Pemandu Berpengalaman",
+            "icon": "Shield",
+            "desc": "Tim guide profesional dengan sertifikasi resmi dan pengalaman lebih dari 10 tahun"
+          },
+          {
+            "title": "Harga Terjangkau",
+            "icon": "DollarSign",
+            "desc": "Paket wisata dengan harga kompetitif tanpa mengurangi kualitas pelayanan"
+          },
+          {
+            "title": "Layanan 24/7",
+            "icon": "Clock",
+            "desc": "Customer service siap membantu Anda kapan saja selama perjalanan"
+          },
+          {
+            "title": "Asuransi Perjalanan",
+            "icon": "Heart",
+            "desc": "Setiap paket dilengkapi dengan asuransi perjalanan untuk keamanan Anda"
+          }
         ]
       }
     },

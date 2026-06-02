@@ -4,6 +4,47 @@
 @section('description', 'Pilihan paket wisata Danau Toba terbaik mulai dari private tour, group gathering, hingga corporate outing dengan layanan premium.')
 @section('keywords', 'paket wisata murah danau toba, private tour danau toba, paket gathering medan, harga paket wisata toba')
 
+@push('schema')
+@php
+    $itemListElements = [];
+    foreach ($packages as $idx => $pkg) {
+        $pkgImg  = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
+        $pkgUrl  = route('tour.package-detail', ['package' => $pkg->slug ?? $pkg->id]);
+        $pkgPrice = $pkg->price ?? 0;
+        $itemListElements[] = [
+            '@type'    => 'ListItem',
+            'position' => $idx + 1,
+            'item'     => [
+                '@type'       => 'TouristTrip',
+                '@id'         => $pkgUrl,
+                'name'        => $pkg->translated_name,
+                'description' => Str::limit(strip_tags($pkg->translated_description ?? ''), 160),
+                'url'         => $pkgUrl,
+                'image'       => $pkgImg,
+                'touristType' => ['Family', 'Couple', 'Group'],
+                'offers'      => [
+                    '@type'        => 'Offer',
+                    'price'        => (string) $pkgPrice,
+                    'priceCurrency'=> 'IDR',
+                    'availability' => 'https://schema.org/InStock',
+                    'seller'       => ['@type' => 'TravelAgency', 'name' => 'Sujai Laketoba'],
+                ],
+            ],
+        ];
+    }
+    $schemaData = [
+        '@context'     => 'https://schema.org',
+        '@type'        => 'ItemList',
+        'name'         => 'Paket Wisata Sumatera Utara – Sujai Laketoba',
+        'description'  => 'Pilihan lengkap paket wisata premium Danau Toba, Samosir, Berastagi, Tangkahan, dan seluruh Sumatera Utara.',
+        'url'          => url()->current(),
+        'numberOfItems'=> count($packages),
+        'itemListElement' => $itemListElements,
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
+@endpush
+
 @section('content')
 <div 
     x-data="{ 
@@ -17,8 +58,8 @@
         get filteredPackages() {
             let filtered = this.packages.filter(p => {
                 const matchCity = this.filterCity === 'all' || String(p.cityId) === this.filterCity;
-                const matchSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                                   (p.description && p.description.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                const matchSearch = p.translated_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                   (p.translated_description && p.translated_description.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 
                 // Duration matching
                 let matchDur = true;
@@ -123,10 +164,17 @@
                 <template x-for="(pkg, i) in filteredPackages" :key="pkg.id">
                     <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-slate-200 transition-colors duration-300 group h-full flex flex-col shadow-sm">
-                            <div class="relative h-64 overflow-hidden shrink-0">
+                            <div class="relative h-64 overflow-hidden shrink-0" x-data="{ loaded: false }">
+                                <!-- Blur placeholder -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-toba-green/20 via-slate-200/50 to-toba-accent/20 animate-pulse"
+                                     x-show="!loaded"></div>
                                 <img :src="pkg.first_image" :alt="pkg.name" 
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]"
-                                     loading="lazy" decoding="async">
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-all duration-[1.5s]"
+                                     :class="loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'"
+                                     style="transition: opacity 0.6s ease, transform 1.5s ease"
+                                     loading="lazy" decoding="async"
+                                     x-on:load="loaded = true"
+                                     x-on:error="loaded = true">
                                 
                                 <div class="absolute top-4 left-4 flex flex-col space-y-1.5">
                                     <div class="bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg flex items-center space-x-1 border border-slate-100 shadow-sm">
@@ -146,8 +194,8 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                     <span x-text="cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara'"></span>
                                 </div>
-                                <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.name"></h3>
-                                <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-2 font-normal flex-grow" x-text="pkg.description"></p>
+                                <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
+                                <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>
                                 
                                 <div class="flex items-center justify-between pt-5 border-t border-slate-100">
                                     <div>
@@ -190,11 +238,11 @@
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">Tidak Menemukan Paket yang Cocok?</h3>
                     <p class="text-white/80 text-sm font-normal mb-8 max-w-lg mx-auto">Kami siap merancang itinerary khusus sesuai kebutuhan dan budget Anda.</p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-sm">
+                        <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             Konsultasi Gratis
                         </a>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-white/20 transition-all">
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-white/20 transition-all">
                             WhatsApp Kami
                         </a>
                     </div>

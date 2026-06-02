@@ -3,8 +3,79 @@
 @section('title', $settings['meta_title'] ?? $settings['hero_title'] ?? 'Sujai Laketoba – Wisata Sumatera Utara')
 @section('description', $settings['meta_description'] ?? $settings['hero_subtitle'] ?? 'Temukan keindahan Danau Toba, Samosir, Berastagi, Tangkahan, dan Bukit Lawang bersama Sujai Laketoba.')
 @section('keywords', __('paket wisata danau toba, layanan premium danau toba, private tour samosir, travel vip medan, wisata sumatera utara, sujai laketoba'))
+
+@push('schema')
+@php
+    $sameAsLinks = [];
+    if (!empty($siteSettings['general']['social_instagram'])) {
+        $sameAsLinks[] = 'https://www.instagram.com/' . ltrim($siteSettings['general']['social_instagram'], '@');
+    }
+    if (!empty($siteSettings['general']['social_facebook'])) {
+        $sameAsLinks[] = 'https://www.facebook.com/' . $siteSettings['general']['social_facebook'];
+    }
+    if (!empty($siteSettings['general']['social_tiktok'])) {
+        $sameAsLinks[] = 'https://www.tiktok.com/@' . ltrim($siteSettings['general']['social_tiktok'], '@');
+    }
+    if (!empty($siteSettings['general']['social_youtube'])) {
+        $sameAsLinks[] = 'https://www.youtube.com/' . $siteSettings['general']['social_youtube'];
+    }
+    $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('assets/img/logo.png'));
+    $schemaPhone   = '+' . preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855');
+    $schemaEmail   = $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com';
+    $schemaDesc    = $settings['meta_description'] ?? 'Agen perjalanan wisata Danau Toba terpercaya';
+
+    $homepageSchema = [
+        '@context' => 'https://schema.org',
+        '@graph'   => [
+            [
+                '@type'       => 'TravelAgency',
+                '@id'         => url('/') . '/#organization',
+                'name'        => 'Sujai Laketoba',
+                'url'         => url('/'),
+                'logo'        => [
+                    '@type' => 'ImageObject',
+                    'url'   => $schemaLogoUrl,
+                ],
+                'image'       => $schemaLogoUrl,
+                'description' => 'Agen perjalanan wisata premium untuk Danau Toba, Samosir, Berastagi, Tangkahan, dan seluruh destinasi Sumatera Utara.',
+                'telephone'   => $schemaPhone,
+                'email'       => $schemaEmail,
+                'address'     => [
+                    '@type'           => 'PostalAddress',
+                    'addressLocality' => 'Balige',
+                    'addressRegion'   => 'Sumatera Utara',
+                    'addressCountry'  => 'ID',
+                ],
+                'areaServed'    => ['@type' => 'State', 'name' => 'Sumatera Utara'],
+                'sameAs'        => $sameAsLinks,
+                'priceRange'    => '$$',
+                'openingHours'  => 'Mo-Su 08:00-20:00',
+            ],
+            [
+                '@type'       => 'WebSite',
+                '@id'         => url('/') . '/#website',
+                'url'         => url('/'),
+                'name'        => 'Sujai Laketoba',
+                'description' => $schemaDesc,
+                'publisher'   => ['@id' => url('/') . '/#organization'],
+                'potentialAction' => [
+                    '@type'       => 'SearchAction',
+                    'target'      => [
+                        '@type'       => 'EntryPoint',
+                        'urlTemplate' => url('/tour/packages') . '?search={search_term_string}',
+                    ],
+                    'query-input' => 'required name=search_term_string',
+                ],
+                'inLanguage' => ['id', 'en', 'ms'],
+            ],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($homepageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
+@endpush
+
 @section('content')
-<div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6281323888207') }}' }">
+<div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}' }">
     
     <!-- Premium Hero Slider -->
     @if($settings['show_slider'] ?? true)
@@ -59,11 +130,17 @@
             <div class="flex-shrink-0 w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl cursor-pointer"
                      onclick="window.location.href='/tour/package/{{ $pkg->slug ?: $pkg->id }}'">
-                    <img alt="{{ $pkg->name }}"
+                    <img alt="{{ $pkg->translated_name }}"
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                          src="{{ $pkgImage }}" loading="lazy"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                     
+                    @if($loop->first || ($pkg->isFeatured ?? false))
+                    <div class="absolute top-5 left-5 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-lg flex items-center gap-1.5 z-10">
+                        <span class="text-xs">🔥</span> {{ __('Terpopuler') }}
+                    </div>
+                    @endif
+
                     <div class="absolute top-5 right-5 bg-black/60 backdrop-blur-md px-3 py-1 border border-white/10 rounded-full flex items-center gap-1.5 shadow-lg">
                         <span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
                         <span class="text-white font-label-caps text-[11px] font-bold">{{ $pkg->rating ?? '4.9' }}</span>
@@ -74,7 +151,7 @@
                             <span class="material-symbols-outlined text-[16px]">location_on</span>
                             <span class="font-label-caps text-[10px] tracking-wider">{{ strtoupper(__($pkg->locationTag ?? 'Sumatera Utara')) }}</span>
                         </div>
-                        <h3 class="font-headline-md text-[22px] md:text-[26px] mb-3 line-clamp-2 leading-tight">{{ $pkg->name }}</h3>
+                        <h3 class="font-headline-md text-[22px] md:text-[26px] mb-3 line-clamp-2 leading-tight">{{ $pkg->translated_name }}</h3>
                         <div class="flex justify-between items-center">
                             <div class="bg-secondary-fixed px-4 py-2.5 rounded-2xl border border-white/25 shadow-lg flex flex-col justify-center">
                                 <p class="font-label-caps text-[9px] text-on-secondary-fixed-variant font-bold uppercase tracking-widest leading-none mb-1.5">{{ __('Mulai dari') }}</p>
@@ -338,7 +415,7 @@
                     <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
                 </div>
                 <a class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition-all shrink-0"
-                   href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6281323888207') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}">
+                   href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}">
                     <span class="material-symbols-outlined text-[16px]">chat</span>
                     {{ __('WhatsApp') }}
                 </a>
@@ -363,7 +440,7 @@
             @foreach($blogs as $blog)
             <div class="group cursor-pointer" onclick="window.location.href='{{ route('tour.blog.detail', $blog->slug) }}'">
                 <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
-                    <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image }}"/>
+                    <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
                 </div>
                 <span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
                 <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight">{{ $blog->translated_title }}</h3>

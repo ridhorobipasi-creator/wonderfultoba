@@ -49,7 +49,7 @@
 
                 @if($blog->image)
                     <div class="aspect-video rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-xl">
-                        <img src="{{ $blog->image }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
+                        <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
                     </div>
                 @endif
 

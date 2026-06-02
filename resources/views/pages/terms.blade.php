@@ -59,7 +59,7 @@
                     <p class="mb-6">Untuk pertanyaan, keluhan, atau penyelesaian sengketa, tamu dapat menghubungi kami melalui:</p>
                     <ul class="list-none pl-0 mb-6 space-y-2">
                         <li>📧 Email: <a href="mailto:info@sujailaketoba.com" class="text-toba-green font-semibold hover:underline">info@sujailaketoba.com</a></li>
-                        <li>📱 WhatsApp: <a href="https://wa.me/6281323888207" class="text-toba-green font-semibold hover:underline">+62 813-2388-8207</a></li>
+                        <li>📱 WhatsApp: <a href="https://wa.me/6282277848855" class="text-toba-green font-semibold hover:underline">+62 822-7784-8855</a></li>
                     </ul>
                 @endif
             </div>

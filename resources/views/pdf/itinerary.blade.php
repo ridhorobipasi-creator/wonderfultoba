@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Itinerary - {{ $package->name }}</title>
+    <title>Itinerary - {{ $package->translated_name }}</title>
     <style>
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
@@ -83,7 +83,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>{{ $package->name }}</h1>
+        <h1>{{ $package->translated_name }}</h1>
         <p>{{ $siteSettings['general']['site_name'] ?? 'Sujai Laketoba' }} – Sumatera Utara</p>
     </div>
 
@@ -107,14 +107,14 @@
 
     <div class="section">
         <div class="section-title">Deskripsi</div>
-        <div style="font-size: 14px;">{{ $package->description }}</div>
+        <div style="font-size: 14px;">{!! $package->translated_description !!}</div>
     </div>
 
-    @if($package->itineraryText || ($package->itinerary && count($package->itinerary) > 0))
+    @if($package->translated_itinerary_text || ($package->itinerary && count($package->itinerary) > 0))
     <div class="section">
         <div class="section-title">Jadwal Perjalanan</div>
-        @if($package->itineraryText)
-            <div style="font-size: 14px; white-space: pre-line;">{{ $package->itineraryText }}</div>
+        @if($package->translated_itinerary_text)
+            <div style="font-size: 14px; white-space: pre-line;">{!! $package->translated_itinerary_text !!}</div>
         @else
             @foreach($package->itinerary as $day)
                 <div class="itinerary-day">

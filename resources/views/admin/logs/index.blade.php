@@ -81,17 +81,27 @@
             <table class="w-full">
                 <thead>
                     <tr class="bg-slate-50/50">
-                        <th class="pl-10 pr-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Admin / Operator</th>
-                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksi & Modul</th>
-                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Detail Aktivitas</th>
-                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">IP Address</th>
-                        <th class="pr-10 pl-6 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu</th>
+                        <th class="pl-5 md:pl-10 pr-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Admin / Operator</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Aksi & Modul</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Detail Aktivitas</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">IP Address</th>
+                        <th class="pr-5 md:pr-10 pl-6 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($logs as $log)
                         <tr class="group hover:bg-slate-50/30 transition-all duration-300">
-                            <td class="pl-10 pr-6 py-5">
+                            @php
+                                $colors = [
+                                    'created' => 'bg-emerald-50 text-emerald-600',
+                                    'updated' => 'bg-blue-50 text-blue-600',
+                                    'deleted' => 'bg-rose-50 text-rose-600',
+                                    'bulk_deleted' => 'bg-rose-100 text-rose-700',
+                                    'status_updated' => 'bg-amber-50 text-amber-600',
+                                ];
+                                $color = $colors[$log->action] ?? 'bg-slate-100 text-slate-500';
+                            @endphp
+                            <td class="pl-5 md:pl-10 pr-6 py-5">
                                 <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all shrink-0">
                                         <span class="text-xs font-black">{{ substr($log->user->name ?? 'S', 0, 1) }}</span>
@@ -99,28 +109,24 @@
                                     <div class="min-w-0">
                                         <h4 class="text-sm font-black text-slate-900 tracking-tight truncate">{{ $log->user->name ?? 'System Bot' }}</h4>
                                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest truncate">{{ $log->user->role ?? 'automated' }}</p>
+                                        {{-- Condensed action + detail for mobile (columns hidden) --}}
+                                        <div class="md:hidden flex flex-wrap items-center gap-2 mt-1.5">
+                                            <span class="px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest {{ $color }}">{{ str_replace('_', ' ', $log->action) }}</span>
+                                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $log->model ?? '-' }}</span>
+                                        </div>
+                                        <p class="sm:hidden text-[10px] font-bold text-slate-500 leading-snug mt-1 line-clamp-2">{{ $log->description }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-5">
+                            <td class="px-6 py-5 hidden md:table-cell">
                                 <div class="space-y-1.5">
-                                    @php
-                                        $colors = [
-                                            'created' => 'bg-emerald-50 text-emerald-600',
-                                            'updated' => 'bg-blue-50 text-blue-600',
-                                            'deleted' => 'bg-rose-50 text-rose-600',
-                                            'bulk_deleted' => 'bg-rose-100 text-rose-700',
-                                            'status_updated' => 'bg-amber-50 text-amber-600',
-                                        ];
-                                        $color = $colors[$log->action] ?? 'bg-slate-100 text-slate-500';
-                                    @endphp
                                     <span class="px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest {{ $color }}">
                                         {{ str_replace('_', ' ', $log->action) }}
                                     </span>
                                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $log->model ?? '-' }}</p>
                                 </div>
                             </td>
-                            <td class="px-6 py-5">
+                            <td class="px-6 py-5 hidden sm:table-cell">
                                 <div class="max-w-xs">
                                     <p class="text-xs font-bold text-slate-700 leading-relaxed">{{ $log->description }}</p>
                                     @if($log->model_id)
@@ -128,10 +134,10 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="px-6 py-5">
+                            <td class="px-6 py-5 hidden lg:table-cell">
                                 <code class="px-2 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-500">{{ $log->ip_address }}</code>
                             </td>
-                            <td class="pr-10 pl-6 py-5 text-right">
+                            <td class="pr-5 md:pr-10 pl-6 py-5 text-right">
                                 <p class="text-xs font-black text-slate-900">{{ $log->created_at->format('H:i:s') }}</p>
                                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $log->created_at->format('d M Y') }}</p>
                                 <p class="text-[8px] font-bold text-toba-green mt-0.5">{{ $log->created_at->diffForHumans() }}</p>

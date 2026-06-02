@@ -193,6 +193,20 @@
                             <p class="text-[8px] font-bold text-slate-400 uppercase">Input ID saja, skrip akan ditambahkan otomatis.</p>
                         </div>
                     </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fab fa-facebook-square text-blue-500"></i> Meta (Facebook) Pixel ID
+                            </label>
+                            <input type="text" name="seo_pixel_id" value="{{ $general['seo_pixel_id'] ?? '' }}" placeholder="123456789012345" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-black text-slate-400 text-xs tracking-widest">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Masukkan Pixel ID untuk retargeting Facebook/Instagram Ads.</p>
+                        </div>
+                        <div class="space-y-3 flex flex-col justify-center p-6 bg-blue-50 rounded-2xl">
+                            <p class="text-[9px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-lightbulb"></i> Tips Retargeting</p>
+                            <p class="text-[10px] text-blue-400 leading-relaxed">Dengan Pixel aktif, Anda bisa menargetkan ulang pengunjung yang sudah melihat halaman paket wisata Anda di Facebook & Instagram Ads.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -121,15 +121,15 @@
                                 class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
                         </th>
                         <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">User</th>
-                        <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Contact</th>
+                        <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Contact</th>
                         <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Role</th>
-                        <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">Joined</th>
+                        <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Joined</th>
                         <th class="px-6 py-4 text-right text-[9px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($users as $user)
-                        <tr class="hover:bg-gray-50/50 transition" :class="selected.includes({{ $user->id }}) ? 'bg-indigo-50/50' : ''">
+                        <tr class="group hover:bg-gray-50/50 transition" :class="selected.includes({{ $user->id }}) ? 'bg-indigo-50/50' : ''">
                             <td class="pl-8 py-4">
                                 <input type="checkbox" 
                                     value="{{ $user->id }}" 
@@ -141,17 +141,19 @@
                                     <div class="w-10 h-10 bg-gradient-to-br from-{{ $user->role === 'superadmin' ? 'indigo-600 to-violet-700' : ($user->role === 'admin' ? 'orange-500 to-red-600' : 'blue-500 to-purple-600') }} rounded-2xl flex items-center justify-center text-white font-black text-xs mr-3 shadow-sm">
                                         {{ strtoupper(substr($user->name, 0, 1)) }}
                                     </div>
-                                    <div>
-                                        <p class="font-black text-gray-900 text-sm tracking-tight">{{ $user->name }}</p>
+                                    <div class="min-w-0">
+                                        <p class="font-black text-gray-900 text-sm tracking-tight truncate">{{ $user->name }}</p>
                                         @if($user->id === auth()->id())
                                             <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[8px] font-black bg-blue-100 text-blue-700 uppercase tracking-widest">
                                                 <i class="fas fa-user-circle mr-1"></i>You
                                             </span>
                                         @endif
+                                        {{-- Email shown inline on mobile (Contact column hidden) --}}
+                                        <p class="md:hidden text-gray-400 text-[11px] font-medium truncate mt-0.5">{{ $user->email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 hidden md:table-cell">
                                 <div class="text-xs space-y-1 font-medium">
                                     <p class="text-gray-900">{{ $user->email }}</p>
                                     @if($user->phone)
@@ -166,7 +168,7 @@
                                     {{ str_replace('_', ' ', $user->role) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-xs font-bold text-gray-400 uppercase tracking-widest text-[9px]">
+                            <td class="px-6 py-4 whitespace-nowrap text-xs font-bold text-gray-400 uppercase tracking-widest text-[9px] hidden lg:table-cell">
                                 {{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right">

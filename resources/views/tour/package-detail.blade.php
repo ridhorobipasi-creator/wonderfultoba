@@ -76,8 +76,8 @@
     }
 @endphp
 
-@section('title', ($package->name ?? 'Paket Wisata') . ' – Sujai Laketoba')
-@section('description', $package->description ?? '')
+@section('title', ($package->translated_name ?? 'Paket Wisata') . ' – Sujai Laketoba')
+@section('description', $package->translated_description ?? '')
 
 @section('og_image')
     @php
@@ -91,14 +91,14 @@
 {
   "@@context": "https://schema.org/",
   "@@type": "Product",
-  "name": "{{ $package->name }}",
+  "name": "{{ $package->translated_name }}",
   "image": [
     "{{ count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : asset('images/og-default.webp') }}"
   ],
-  "description": "{{ Str::limit(strip_tags($package->description), 160) }}",
+  "description": "{{ Str::limit(strip_tags($package->translated_description), 160) }}",
   "sku": "PKG-{{ $package->id }}",
   "offers": {
-    "@type": "Offer",
+    "@@type": "Offer",
     "url": "{{ url()->current() }}",
     "priceCurrency": "IDR",
     "price": "{{ $package->price }}",
@@ -117,11 +117,11 @@
         package_images: @js($packageImagesArray),
         city: @js($city),
         contact: {
-            whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['whatsapp'] ?? '6281323888207' }}',
+            whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['wa_number'] ?? '6282277848855' }}',
             email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com' }}'
         },
         get waNumber() {
-            return (this.contact.whatsapp || '6281323888207').replace(/[^0-9]/g, '');
+            return (this.contact.whatsapp || '6282277848855').replace(/[^0-9]/g, '');
         },
         get locationDisplay() {
             return this.city ? (this.city.type === 'international' ? (this.city.place || this.city.region || '') + ', ' + this.city.country : this.city.name) : (this.package.locationTag || 'Danau Toba');
@@ -206,7 +206,7 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span class="font-label-caps text-[10px] md:text-xs text-emerald-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
                     </div>
-                    <h1 class="font-headline-lg text-2xl md:text-4xl text-white font-bold leading-tight drop-shadow-sm" x-text="package.name"></h1>
+                    <h1 class="font-headline-lg text-2xl md:text-4xl text-white font-bold leading-tight drop-shadow-sm" x-text="package.translated_name"></h1>
                 </div>
             </div>
             
@@ -250,7 +250,7 @@
                 <!-- Ringkasan Pengalaman -->
                 <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200">
                     <h2 class="font-headline-md text-headline-md text-primary mb-4 md:mb-6">{{ __('Ringkasan Pengalaman') }}</h2>
-                    <div class="prose prose-slate max-w-none text-slate-600 font-body-md text-body-md leading-relaxed" x-html="package.description"></div>
+                    <div class="prose prose-slate max-w-none text-slate-600 font-body-md text-body-md leading-relaxed" x-html="package.translated_description"></div>
 
                     @if($coverExif)
                     <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-4 items-center justify-between text-xs text-slate-500 bg-slate-50 p-4 rounded-xl">
@@ -279,12 +279,12 @@
                 </div>
 
                 <!-- Timeline Rencana Perjalanan -->
-                <div x-show="package.itinerary || package.itineraryText" class="space-y-6 py-8 border-t border-outline-variant">
+                <div x-show="package.itinerary || package.translated_itinerary_text" class="space-y-6 py-8 border-t border-outline-variant">
                     <h2 class="font-headline-md text-headline-md text-primary">{{ __('Rencana Perjalanan') }}</h2>
                     
-                    <div x-show="package.itineraryText" class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm whitespace-pre-line text-slate-600 font-body-md text-body-md leading-relaxed" x-text="package.itineraryText"></div>
+                    <div x-show="package.translated_itinerary_text" class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm whitespace-pre-line text-slate-600 font-body-md text-body-md leading-relaxed" x-text="package.translated_itinerary_text"></div>
                     
-                    <div x-show="!package.itineraryText && package.itinerary" class="space-y-8 relative">
+                    <div x-show="!package.translated_itinerary_text && package.itinerary" class="space-y-8 relative">
                         <template x-for="(day, i) in package.itinerary" :key="i">
                             <div class="flex gap-5 group">
                                 <div class="flex flex-col items-center">
@@ -471,7 +471,7 @@
                         </div>
                     </div>
                     <p class="text-[11px] text-slate-600 font-body-md font-normal leading-relaxed mb-4 relative z-10">{{ __($siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Kami siap bantu pilih paket yang paling pas.') }}</p>
-                    <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.name)" 
+                    <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
                        target="_blank"
                        class="flex items-center justify-center gap-1.5 py-2.5 bg-primary/5 text-primary rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-on-primary transition-all relative z-10 border border-primary/20">
                         <span class="material-symbols-outlined text-[16px]">chat</span>
@@ -698,6 +698,12 @@
                             </div>
                         </div>
 
+                        <!-- Honeypot Field -->
+                        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                            <label for="website_url">Tinggalkan kolom ini kosong jika Anda manusia</label>
+                            <input type="text" name="website_url" id="website_url" value="" autocomplete="off" tabindex="-1">
+                        </div>
+
                         <!-- Submit Button -->
                         <button 
                             type="submit" 
@@ -725,8 +731,15 @@
 
     <!-- Floating Concierge Bar -->
     <div 
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-auto glass-card border border-slate-200 rounded-2xl px-5 md:px-8 py-3 z-50 flex items-center justify-between gap-4 md:gap-12 shadow-lg transition-all duration-500 transform"
-        :class="showConcierge ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-20 opacity-0 pointer-events-none'"
+        x-show="showConcierge" 
+        x-transition:enter="transition ease-out duration-500"
+        x-transition:enter-start="opacity-0 translate-y-12 scale-95"
+        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+        x-transition:leave-end="opacity-0 translate-y-12 scale-95"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-auto glass-card border border-slate-200 rounded-2xl px-5 md:px-8 py-3 z-50 hidden md:flex items-center justify-between gap-4 md:gap-12 shadow-lg transition-all duration-500 transform"
+        style="display: none;"
     >
         <div class="hidden md:flex items-center gap-2">
             <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">support_agent</span>

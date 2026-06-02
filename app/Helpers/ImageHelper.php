@@ -280,6 +280,32 @@ if (! function_exists('imageUrl')) {
             return asset('images/sumut/avatar_user_1.webp');
         }
 
+        // Blog-specific fallback image overrides
+        if (str_contains($lower, 'batak')) {
+            return asset('images/sumut/batak_house.webp');
+        }
+        if (str_contains($lower, 'trekking') || str_contains($lower, 'orangutan')) {
+            return asset('images/sumut/orangutan.webp');
+        }
+        if (str_contains($lower, 'spots') || str_contains($lower, 'photo')) {
+            return asset('images/sumut/toba_landscape.webp');
+        }
+        if (str_contains($lower, 'best-time')) {
+            return asset('images/sumut/toba_hero.webp');
+        }
+        if (str_contains($lower, 'transfer') || str_contains($lower, 'guide')) {
+            return asset('images/sumut/sumatra_panorama.webp');
+        }
+        if (str_contains($lower, 'food') || str_contains($lower, 'kuliner')) {
+            return asset('images/sumut/hotel_room.webp');
+        }
+        if (str_contains($lower, 'water') || str_contains($lower, 'sport')) {
+            return asset('images/sumut/toba_hero.webp');
+        }
+        if (str_contains($lower, 'budget')) {
+            return asset('images/sumut/toba_landscape.webp');
+        }
+
         $clean = ltrim($path, '/');
 
         // Dynamic fallback for non-existent local/storage files with premium Unsplash travel images

@@ -43,7 +43,7 @@ class FinanceController extends Controller
                     $booking->customerName,
                     $booking->customerEmail,
                     ucfirst($booking->type),
-                    $booking->package->name ?? $booking->car->name ?? 'N/A',
+                    $booking->package->name ?? 'N/A',
                     $booking->totalPrice,
                     $booking->createdAt->format('Y-m-d H:i'),
                 ]);
