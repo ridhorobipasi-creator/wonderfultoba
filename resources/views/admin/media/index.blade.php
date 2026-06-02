@@ -137,6 +137,9 @@
                 <button @click="syncMedia()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-3">
                     <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> Sync Disk
                 </button>
+                <button @click="syncPublicAssets()" class="px-8 py-5 bg-amber-50 border border-amber-200 text-amber-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition-all shadow-sm flex items-center gap-3" :disabled="syncingStatic" title="Daftarkan gambar dari public/images/ ke Media Library">
+                    <i class="fas fa-folder-tree" :class="syncingStatic ? 'animate-pulse' : ''"></i> Sync Statis
+                </button>
                 <button @click="convertAllToWebp()" class="px-8 py-5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-indigo-100 transition-all flex items-center gap-3 shadow-sm" :disabled="converting">
                     <i class="fas fa-magic" :class="converting ? 'animate-pulse' : ''"></i> Convert WebP
                 </button>
@@ -203,6 +206,11 @@
                         
                         <img :src="item.thumbnail_url" class="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-110">
                         
+                        <!-- Static Asset Badge -->
+                        <div x-show="item.is_static_asset" class="absolute top-4 left-4 z-20 px-2.5 py-1 bg-amber-400 rounded-lg text-[7px] font-black uppercase tracking-widest text-white shadow-lg" title="Aset statis dari public/images/ — file fisik terlindungi">
+                            <i class="fas fa-lock text-[7px] mr-1"></i>Static
+                        </div>
+
                         <!-- Selection Indicator -->
                         <div class="absolute top-6 right-6 z-20">
                             <input type="checkbox" :value="item.id" x-model="selectedIds" class="w-7 h-7 rounded-xl border-2 border-white/20 bg-black/40 text-indigo-600 focus:ring-0 cursor-pointer shadow-2xl transition-all">
@@ -223,9 +231,13 @@
                                     <button @click="copyUrl(item.url)" class="w-11 h-11 bg-white/10 backdrop-blur-md text-white rounded-[1.25rem] flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all border border-white/20">
                                         <i class="fas fa-link text-[11px]"></i>
                                     </button>
-                                    <button @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition-all shadow-xl">
+                                    <!-- Tombol hapus: disabled + tooltip untuk static assets -->
+                                    <button x-show="!item.is_static_asset" @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition-all shadow-xl">
                                         <i class="fas fa-trash text-[11px]"></i>
                                     </button>
+                                    <div x-show="item.is_static_asset" class="w-11 h-11 bg-amber-500/80 text-white rounded-[1.25rem] flex items-center justify-center" title="Aset statis terlindungi dari penghapusan">
+                                        <i class="fas fa-shield-halved text-[11px]"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -658,6 +670,7 @@ function mediaManager() {
         renamingFolder: null,
         renamingFolderData: { old_name: '', new_name: '' },
         syncing: false,
+        syncingStatic: false,
         converting: false,
         uploadingUrlModal: false,
         urlUploading: false,
@@ -807,6 +820,29 @@ function mediaManager() {
                 const data = await response.json();
                 if (data.success) { this.fetchMedia(); this.showToast('✓ ' + data.message); }
             } catch (e) { console.error(e); } finally { this.syncing = false; }
+        },
+
+        async syncPublicAssets() {
+            if (!confirm('Daftarkan semua gambar dari folder public/images/ ke Media Library?\n\nFile fisik TIDAK akan dipindahkan. Hanya dicatat di database.')) return;
+            this.syncingStatic = true;
+            try {
+                const response = await fetch('{{ route('admin.media.sync-public-assets') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.fetchMedia();
+                    this.showToast('✓ ' + data.message);
+                } else {
+                    alert(data.message || 'Sync gagal.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Terjadi kesalahan saat sync aset statis.');
+            } finally {
+                this.syncingStatic = false;
+            }
         },
 
         fetchMedia() {

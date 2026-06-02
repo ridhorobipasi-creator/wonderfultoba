@@ -35,13 +35,41 @@ class Media extends Model
 
     protected $appends = ['url', 'thumbnail_url', 'usage_count', 'usage_details'];
 
+    /**
+     * Apakah aset ini adalah file statis (dari public/images/)?
+     */
+    public function getIsStaticAssetAttribute(): bool
+    {
+        return str_starts_with($this->path, '_static/');
+    }
+
+    /**
+     * Kembalikan path relatif asli (tanpa prefix _static/).
+     */
+    public function getRealPublicPathAttribute(): string
+    {
+        if ($this->is_static_asset) {
+            return ltrim(substr($this->path, strlen('_static')), '/');
+        }
+        return $this->path;
+    }
+
     public function getUrlAttribute()
     {
+        if ($this->is_static_asset) {
+            // _static/images/sumut/berastagi.webp → /images/sumut/berastagi.webp
+            return '/' . ltrim(substr($this->path, strlen('_static')), '/');
+        }
         return '/storage/' . ltrim($this->path, '/');
     }
 
     public function getThumbnailUrlAttribute()
     {
+        if ($this->is_static_asset) {
+            // Static assets tidak punya thumbnail terpisah — gunakan URL asli
+            return $this->url;
+        }
+
         $dir = dirname($this->path);
         $file = basename($this->path);
         $thumbPath = $dir.'/thumbnails/'.$file;
@@ -129,23 +157,34 @@ class Media extends Model
     public function getUsageCountAttribute()
     {
         $rawPath = $this->path;
-        $storagePath = '/storage/'.$this->path;
         $count = 0;
 
         $cache = self::getUsedPaths();
 
-        // Count direct matches
-        if (isset($cache['direct'][$rawPath])) {
-            $count += $cache['direct'][$rawPath];
+        // Daftar semua variasi path yang mungkin digunakan
+        $variants = [$rawPath];
+        if ($this->is_static_asset) {
+            // _static/images/sumut/berastagi.webp → /images/sumut/berastagi.webp
+            $variants[] = '/' . ltrim(substr($rawPath, strlen('_static')), '/');
+            $variants[] = ltrim(substr($rawPath, strlen('_static')), '/');
+        } else {
+            $variants[] = '/storage/' . $rawPath;
         }
-        if (isset($cache['direct'][$storagePath])) {
-            $count += $cache['direct'][$storagePath];
+
+        // Count direct matches
+        foreach ($variants as $v) {
+            if (isset($cache['direct'][$v])) {
+                $count += $cache['direct'][$v];
+            }
         }
 
         // Count substring matches in settings
         foreach ($cache['substrings'] as $str) {
-            if (str_contains($str, $rawPath) || str_contains($str, $storagePath)) {
-                $count++;
+            foreach ($variants as $v) {
+                if (str_contains($str, $v)) {
+                    $count++;
+                    break; // cukup hitung sekali per setting string
+                }
             }
         }
 
@@ -155,7 +194,15 @@ class Media extends Model
     public function getUsageDetailsAttribute()
     {
         $rawPath = $this->path;
-        $storagePath = '/storage/' . ltrim($this->path, '/');
+        // Buat semua variant path yang mungkin dipakai di DB lain
+        $pathVariants = [$rawPath];
+        if ($this->is_static_asset) {
+            $pathVariants[] = '/' . ltrim(substr($rawPath, strlen('_static')), '/');
+            $pathVariants[] = ltrim(substr($rawPath, strlen('_static')), '/');
+        } else {
+            $pathVariants[] = '/storage/' . ltrim($rawPath, '/');
+        }
+        $storagePath = $pathVariants[1] ?? $pathVariants[0];
         $details = [];
 
         // 1. Check Packages (Tour Packages)
@@ -166,7 +213,7 @@ class Media extends Model
                 // Check packageImages relation
                 if ($pkg->packageImages) {
                     foreach ($pkg->packageImages as $img) {
-                        if ($img->image_path === $rawPath || $img->image_path === $storagePath) {
+                        if (in_array($img->image_path, $pathVariants)) {
                             $used = true;
                             break;
                         }
@@ -176,19 +223,17 @@ class Media extends Model
                 if (!$used) {
                     $imgs = $pkg->images;
                     if (is_array($imgs)) {
-                        if (in_array($rawPath, $imgs) || in_array($storagePath, $imgs)) {
-                            $used = true;
+                        foreach ($pathVariants as $v) {
+                            if (in_array($v, $imgs)) { $used = true; break; }
                         }
                     } elseif (is_string($imgs)) {
                         $decoded = json_decode($imgs, true);
                         if (is_array($decoded)) {
-                            if (in_array($rawPath, $decoded) || in_array($storagePath, $decoded)) {
-                                $used = true;
+                            foreach ($pathVariants as $v) {
+                                if (in_array($v, $decoded)) { $used = true; break; }
                             }
                         } else {
-                            if ($imgs === $rawPath || $imgs === $storagePath) {
-                                $used = true;
-                            }
+                            if (in_array($imgs, $pathVariants)) { $used = true; }
                         }
                     }
                 }
@@ -208,7 +253,7 @@ class Media extends Model
         try {
             $blogs = \App\Models\Blog::all();
             foreach ($blogs as $blog) {
-                if ($blog->image === $rawPath || $blog->image === $storagePath) {
+                if (in_array($blog->image, $pathVariants)) {
                     $details[] = [
                         'type' => 'Artikel Blog',
                         'name' => $blog->translated_title ?? $blog->title,
@@ -223,7 +268,7 @@ class Media extends Model
         try {
             $galleries = \App\Models\GalleryImage::all();
             foreach ($galleries as $gal) {
-                if ($gal->imageUrl === $rawPath || $gal->imageUrl === $storagePath) {
+                if (in_array($gal->imageUrl, $pathVariants)) {
                     $details[] = [
                         'type' => 'Foto Galeri',
                         'name' => $gal->title ?? ('Galeri #' . $gal->id),
@@ -240,14 +285,11 @@ class Media extends Model
             foreach ($settings as $setting) {
                 $val = $setting->value;
                 $used = false;
-                if (is_string($val)) {
-                    if (str_contains($val, $rawPath) || str_contains($val, $storagePath)) {
+                $encoded = is_array($val) ? json_encode($val) : (string) $val;
+                foreach ($pathVariants as $v) {
+                    if (str_contains($encoded, $v)) {
                         $used = true;
-                    }
-                } elseif (is_array($val)) {
-                    $encoded = json_encode($val);
-                    if (str_contains($encoded, $rawPath) || str_contains($encoded, $storagePath)) {
-                        $used = true;
+                        break;
                     }
                 }
 

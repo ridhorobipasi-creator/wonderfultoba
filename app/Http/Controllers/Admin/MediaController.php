@@ -189,6 +189,96 @@ class MediaController extends Controller
         return back()->with('success', 'Media diperbarui.');
     }
 
+    /**
+     * Sinkronisasi aset statis dari public/images/ ke Media Library DB.
+     * Aset ini disimpan dengan prefix _static/ pada path-nya.
+     */
+    public function syncPublicAssets(): JsonResponse
+    {
+        $publicImagesPath = public_path('images');
+        $extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+        $indexedCount = 0;
+        $skippedCount = 0;
+
+        if (!is_dir($publicImagesPath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder public/images tidak ditemukan.',
+            ], 404);
+        }
+
+        // Rekursif scan semua file di public/images/
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($publicImagesPath, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isDir()) continue;
+
+            $extension = strtolower($fileInfo->getExtension());
+            if (!in_array($extension, $extensions)) continue;
+
+            // Buat path relatif dari public/: images/sumut/berastagi.webp
+            $relativePath = str_replace('\\', '/', substr($fileInfo->getRealPath(), strlen(public_path()) + 1));
+
+            // Simpan ke DB dengan prefix _static/
+            $dbPath = '_static/' . $relativePath;
+
+            if (Media::where('path', $dbPath)->withTrashed()->exists()) {
+                $skippedCount++;
+                continue;
+            }
+
+            // Deteksi kategori dari subfolder (images/sumut/... → sumut)
+            $parts = explode('/', $relativePath);
+            $category = count($parts) > 1 ? $parts[1] : 'static-assets';
+
+            // Map kategori folder ke nama yang lebih deskriptif
+            $category = match($category) {
+                'sumut'    => 'static-sumut',
+                'home'     => 'static-home',
+                'partners' => 'static-partners',
+                default    => 'static-' . $category,
+            };
+
+            // Extract dominant color jika GD tersedia
+            $dominantColor = null;
+            if (extension_loaded('gd') && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                try {
+                    $imgData = @file_get_contents($fileInfo->getRealPath());
+                    if ($imgData) {
+                        $image = @imagecreatefromstring($imgData);
+                        if ($image) {
+                            $dominantColor = $this->extractDominantColor($image);
+                            imagedestroy($image);
+                        }
+                    }
+                } catch (\Exception $e) {}
+            }
+
+            Media::create([
+                'filename'      => $fileInfo->getFilename(),
+                'original_name' => $fileInfo->getFilename(),
+                'path'          => $dbPath,
+                'category'      => $category,
+                'mime_type'     => 'image/' . ($extension === 'jpg' ? 'jpeg' : ($extension === 'svg' ? 'svg+xml' : $extension)),
+                'size'          => $fileInfo->getSize(),
+                'thumb'         => null, // Static assets tidak punya thumbnail terpisah
+                'dominant_color'=> $dominantColor,
+                'alt_text'      => pathinfo($fileInfo->getFilename(), PATHINFO_FILENAME),
+            ]);
+
+            $indexedCount++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Berhasil mengindeks $indexedCount aset statis baru dari public/images/. ($skippedCount sudah ada, dilewati)",
+            'indexed' => $indexedCount,
+            'skipped' => $skippedCount,
+        ]);
+    }
+
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
@@ -198,8 +288,17 @@ class MediaController extends Controller
 
         $mediaItems = Media::whereIn('id', $ids)->get();
         $count = 0;
+        $skipped = 0;
 
         foreach ($mediaItems as $media) {
+            // Proteksi: aset statis tidak boleh dihapus dari sini
+            if ($media->is_static_asset) {
+                // Hanya hapus record DB, JANGAN hapus file fisik
+                $media->delete();
+                $count++;
+                continue;
+            }
+
             $path = $media->path;
             $media->delete();
             if (Storage::disk('public')->exists($path)) {
@@ -216,7 +315,7 @@ class MediaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "$count aset berhasil dihapus secara permanen.",
+            'message' => "$count aset berhasil dihapus." . ($skipped > 0 ? " ($skipped aset statis hanya dihapus dari indeks.)" : ''),
         ]);
     }
 
@@ -285,9 +384,11 @@ class MediaController extends Controller
     public function destroy(Media $media)
     {
         $path = $media->path;
+        $isStatic = $media->is_static_asset;
         $media->delete();
 
-        if (Storage::disk('public')->exists($path)) {
+        // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
+        if (!$isStatic && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
 
             // Also delete thumbnail
@@ -298,7 +399,10 @@ class MediaController extends Controller
         }
 
         if (request()->ajax() || request()->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Media berhasil dihapus.']);
+            $msg = $isStatic
+                ? 'Aset statis dihapus dari indeks (file fisik tetap aman).'
+                : 'Media berhasil dihapus.';
+            return response()->json(['success' => true, 'message' => $msg]);
         }
 
         return back()->with('success', 'Media dihapus.');

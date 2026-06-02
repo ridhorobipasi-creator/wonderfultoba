@@ -101,6 +101,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
 
     // Media Library (Global Storage)
     Route::post('media/sync', [MediaController::class, 'sync'])->name('media.sync');
+    Route::post('media/sync-public-assets', [MediaController::class, 'syncPublicAssets'])->name('media.sync-public-assets');
     Route::post('media/move', [MediaController::class, 'move'])->name('media.move');
     Route::post('media/rename-folder', [MediaController::class, 'renameFolder'])->name('media.rename-folder');
     Route::post('media/{media}/rename', [MediaController::class, 'rename'])->name('media.rename');
