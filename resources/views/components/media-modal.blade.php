@@ -233,25 +233,45 @@ window.mediaPicker = function() {
             formData.append('_token', '{{ csrf_token() }}');
 
             this.loading = true;
-            fetch('/admin/media', { method: 'POST', body: formData })
-                .then(res => res.json())
+            fetch('/admin/media', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+                .then(async res => {
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok || !data.success) {
+                        // Surface the real reason (validation, size, server error)
+                        let msg = data.message || 'Upload gagal.';
+                        if (data.errors) msg = Object.values(data.errors).flat().join('\n');
+                        if (res.status === 413) msg = 'File terlalu besar untuk server (PHP upload_max_filesize / post_max_size).';
+                        throw new Error(msg);
+                    }
+                    return data;
+                })
                 .then(data => {
-                    if (data.success) {
-                        this.fetchMedia();
-                        // Auto-select uploaded items if multiple mode
-                        if (this.isMultiple && data.media) {
-                            const newMedia = Array.isArray(data.media) ? data.media : [data.media];
-                            newMedia.forEach(item => {
-                                if (!this.isSelected(item)) {
-                                    this.selectedItems.push(item);
-                                }
-                            });
-                        }
+                    this.fetchMedia();
+                    // Auto-select uploaded items if multiple mode
+                    if (this.isMultiple && data.data) {
+                        const newMedia = Array.isArray(data.data) ? data.data : [data.data];
+                        newMedia.forEach(item => {
+                            if (item && !this.isSelected(item)) {
+                                this.selectedItems.push(item);
+                            }
+                        });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
-                    alert('Upload failed');
+                    alert('Upload gagal: ' + (err.message || 'Kesalahan jaringan/server.'));
+                })
+                .finally(() => {
+                    // Reset input so re-selecting the same file fires @change again
+                    e.target.value = '';
                 });
         }
     }
