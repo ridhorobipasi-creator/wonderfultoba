@@ -33,7 +33,7 @@ class Media extends Model
         'exif_data' => 'array',
     ];
 
-    protected $appends = ['url', 'thumbnail_url', 'usage_count'];
+    protected $appends = ['url', 'thumbnail_url', 'usage_count', 'usage_details'];
 
     public function getUrlAttribute()
     {
@@ -150,6 +150,119 @@ class Media extends Model
         }
 
         return $count;
+    }
+
+    public function getUsageDetailsAttribute()
+    {
+        $rawPath = $this->path;
+        $storagePath = '/storage/' . ltrim($this->path, '/');
+        $details = [];
+
+        // 1. Check Packages (Tour Packages)
+        try {
+            $packages = \App\Models\Package::with('packageImages')->get();
+            foreach ($packages as $pkg) {
+                $used = false;
+                // Check packageImages relation
+                if ($pkg->packageImages) {
+                    foreach ($pkg->packageImages as $img) {
+                        if ($img->image_path === $rawPath || $img->image_path === $storagePath) {
+                            $used = true;
+                            break;
+                        }
+                    }
+                }
+                // Check images field
+                if (!$used) {
+                    $imgs = $pkg->images;
+                    if (is_array($imgs)) {
+                        if (in_array($rawPath, $imgs) || in_array($storagePath, $imgs)) {
+                            $used = true;
+                        }
+                    } elseif (is_string($imgs)) {
+                        $decoded = json_decode($imgs, true);
+                        if (is_array($decoded)) {
+                            if (in_array($rawPath, $decoded) || in_array($storagePath, $decoded)) {
+                                $used = true;
+                            }
+                        } else {
+                            if ($imgs === $rawPath || $imgs === $storagePath) {
+                                $used = true;
+                            }
+                        }
+                    }
+                }
+
+                if ($used) {
+                    $details[] = [
+                        'type' => 'Paket Wisata',
+                        'name' => $pkg->translated_name ?? $pkg->name,
+                        'edit_url' => route('admin.packages.edit', $pkg->id),
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
+        // 2. Check Blogs (Blog Posts)
+        try {
+            $blogs = \App\Models\Blog::all();
+            foreach ($blogs as $blog) {
+                if ($blog->image === $rawPath || $blog->image === $storagePath) {
+                    $details[] = [
+                        'type' => 'Artikel Blog',
+                        'name' => $blog->translated_title ?? $blog->title,
+                        'edit_url' => route('admin.blogs.edit', $blog->id),
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
+        // 3. Check Gallery
+        try {
+            $galleries = \App\Models\GalleryImage::all();
+            foreach ($galleries as $gal) {
+                if ($gal->imageUrl === $rawPath || $gal->imageUrl === $storagePath) {
+                    $details[] = [
+                        'type' => 'Foto Galeri',
+                        'name' => $gal->title ?? ('Galeri #' . $gal->id),
+                        'edit_url' => route('admin.gallery.index'),
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
+        // 4. Check Settings (Global Settings)
+        try {
+            $settings = \App\Models\Setting::all();
+            foreach ($settings as $setting) {
+                $val = $setting->value;
+                $used = false;
+                if (is_string($val)) {
+                    if (str_contains($val, $rawPath) || str_contains($val, $storagePath)) {
+                        $used = true;
+                    }
+                } elseif (is_array($val)) {
+                    $encoded = json_encode($val);
+                    if (str_contains($encoded, $rawPath) || str_contains($encoded, $storagePath)) {
+                        $used = true;
+                    }
+                }
+
+                if ($used) {
+                    $details[] = [
+                        'type' => 'Pengaturan Global',
+                        'name' => 'Setting: ' . $setting->key,
+                        'edit_url' => route('admin.settings.index'),
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $details;
     }
 
     public function getIsOrphanAttribute()

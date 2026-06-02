@@ -584,6 +584,43 @@
                             </a>
                         </div>
                     </div>
+
+                    <!-- Bi-directional Integration Panel: Usage Details -->
+                    <div class="bg-indigo-50/30 rounded-3xl p-6 border border-indigo-100/50 space-y-4" x-show="editingItem?.usage_details && editingItem?.usage_details.length > 0">
+                        <div class="flex items-center justify-between border-b border-indigo-100 pb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-circle-nodes text-indigo-600 text-xs"></i>
+                                <span class="text-[9px] font-black uppercase tracking-widest text-indigo-800">Bi-directional Links & Integration</span>
+                            </div>
+                            <span class="px-2.5 py-1 bg-indigo-600 text-white text-[7px] font-black uppercase tracking-widest rounded-lg">Connected</span>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <template x-for="link in editingItem?.usage_details" :key="link.name">
+                                <div class="bg-white border border-indigo-100/50 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="space-y-1">
+                                        <span class="px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 text-[6px] font-black uppercase tracking-widest rounded-md" x-text="link.type"></span>
+                                        <p class="text-xs font-black text-slate-800 tracking-tight" x-text="link.name"></p>
+                                    </div>
+                                    <a :href="link.edit_url" 
+                                       class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-100 flex items-center gap-1.5 transition-all">
+                                        <i class="fas fa-pen-to-square"></i> Edit
+                                    </a>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Orphan Warning (If no usage details) -->
+                    <div class="bg-amber-50/50 rounded-3xl p-6 border border-amber-200/50 flex items-center gap-4" x-show="!editingItem?.usage_details || editingItem?.usage_details.length === 0">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[9px] font-black text-amber-800 uppercase tracking-widest">Orphan Media Asset</p>
+                            <p class="text-[10px] font-bold text-amber-600 mt-1 leading-normal font-sans">Aset media ini tidak terhubung/digunakan di konten mana pun (Paket Wisata, Artikel Blog, Galeri, atau Pengaturan). Anda dapat menghapusnya untuk menghemat penyimpanan disk.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
