@@ -243,6 +243,11 @@ window.mediaPicker = function() {
                 }
             })
                 .then(async res => {
+                    if (res.status === 401 || res.status === 419) {
+                        alert('Sesi login berakhir. Anda akan diarahkan ke halaman login.');
+                        window.location.href = '/login';
+                        throw new Error('Sesi berakhir.');
+                    }
                     const data = await res.json().catch(() => ({}));
                     if (!res.ok || !data.success) {
                         // Surface the real reason (validation, size, server error)
