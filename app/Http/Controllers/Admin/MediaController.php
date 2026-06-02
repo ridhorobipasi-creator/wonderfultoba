@@ -177,9 +177,14 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:8192',
+            'files.*' => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:15360',
             'category' => 'nullable|string',
             'watermark' => 'nullable',
+        ], [
+            'files.*.required' => 'Tidak ada file yang dipilih.',
+            'files.*.image' => 'File harus berupa gambar yang valid.',
+            'files.*.mimes' => 'Format gambar harus JPG, PNG, WEBP, atau GIF.',
+            'files.*.max' => 'Ukuran setiap gambar maksimal 15 MB.',
         ]);
 
         $uploadedMedia = [];
