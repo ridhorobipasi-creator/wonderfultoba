@@ -2,6 +2,12 @@
 !*
 !.gitignore
 
+# Ignore local media and uploads folders to keep repo clean
+media/
+gallery/uploads/*
+!gallery/uploads/logo-wonderful-toba-outbound-white-1-1778121570.webp
+!gallery/uploads/thumbnails/logo-wonderful-toba-outbound-white-1-1778121570.webp
+
 # Exclude large zip files to keep git light
 *.zip
 *.tar.gz

@@ -353,7 +353,7 @@ if (! function_exists('imageUrl')) {
             return asset($clean);
         }
 
-        return Storage::disk('public')->url($clean);
+        return '/storage/' . ltrim($clean, '/');
     }
 }
 

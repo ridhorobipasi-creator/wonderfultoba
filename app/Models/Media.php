@@ -37,7 +37,7 @@ class Media extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::disk('public')->url($this->path);
+        return '/storage/' . ltrim($this->path, '/');
     }
 
     public function getThumbnailUrlAttribute()
@@ -47,7 +47,7 @@ class Media extends Model
         $thumbPath = $dir.'/thumbnails/'.$file;
 
         if (Storage::disk('public')->exists($thumbPath)) {
-            return Storage::disk('public')->url($thumbPath);
+            return '/storage/' . ltrim($thumbPath, '/');
         }
 
         return $this->url; // Fallback to full size
