@@ -308,6 +308,7 @@ if (! function_exists('imageUrl')) {
 
         $clean = ltrim($path, '/');
 
+        if (str_starts_with($clean, '_static/')) { $clean = substr($clean, 8); }
         // Dynamic fallback for non-existent local/storage files with premium Unsplash travel images
         $fileInPublic = public_path($clean);
         $cleanStoragePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
@@ -370,6 +371,10 @@ if (! function_exists('dominantColor')) {
 
         // Clean path to match database storage path
         $clean = ltrim($path, '/');
+       if (str_starts_with($clean, '_static/')) { $clean = substr($clean, 8); }
+         if (str_starts_with($clean, '_static/')) {
+            $clean = substr($clean, 8);
+        }
         if (str_starts_with($clean, 'storage/')) {
             $clean = substr($clean, strlen('storage/'));
         }
@@ -432,7 +437,8 @@ if (! function_exists('responsiveImage')) {
 
         if (! empty($path) && $path !== 'null') {
             $clean = ltrim($path, '/');
-            if (str_starts_with($clean, 'storage/')) {
+            if (str_starts_with($clean, '_static/')) { $clean = substr($clean, 8); }
+        if (str_starts_with($clean, 'storage/')) {
                 $clean = substr($clean, strlen('storage/'));
             }
 
@@ -513,3 +519,5 @@ if (! function_exists('ogBannerUrl')) {
         return imageUrl(null);
     }
 }
+
+

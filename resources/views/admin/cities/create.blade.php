@@ -80,30 +80,17 @@
                 </div>
 
                 <!-- Step 3: Image Selection -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Foto Wilayah / Destinasi</label>
-                    
-                    <div class="grid grid-cols-1 gap-6">
-                        <!-- Media Picker -->
-                        <div @click="openMediaPicker()" class="cursor-pointer h-40 border-2 border-slate-200 rounded-[2rem] flex flex-col items-center justify-center bg-white hover:border-indigo-500 hover:bg-indigo-50/20 transition-all group">
-                            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-images text-xl"></i>
-                            </div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest group-hover:text-indigo-600">Pilih dari Galeri</p>
-                        </div>
-                    </div>
+                <x-image-input 
+                    name="city_image"
+                    label="Foto Wilayah / Destinasi"
+                    :value="old('image_id')"
+                    :required="false"
+                    category="destinations"
+                    help="Pilih atau upload foto yang mewakili destinasi ini"
+                />
 
-                    <!-- Preview Container -->
-                    <div x-show="previewUrl || selectedMedia" class="mt-6 flex justify-center">
-                        <div class="relative w-full max-w-md h-64 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl group">
-                            <img :src="previewUrl || (selectedMedia ? '/storage/' + (selectedMedia.path.replace(/^\/?storage\//, '')) : '')" class="w-full h-full object-cover">
-                            <button type="button" @click="clearImage()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <input type="hidden" name="media_id" :value="selectedMedia ? selectedMedia.id : ''">
-                        </div>
-                    </div>
-                </div>
+                @error('city_image') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
+                @error('image_id') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
 
                 <!-- Step 4: Deskripsi -->
                 <div>
@@ -132,9 +119,6 @@
         if (typeof Alpine === 'undefined') return;
         
         Alpine.data('cityForm', () => ({
-            previewUrl: null,
-            selectedMedia: null,
-            
             // Dropdown Logic
             provinceId: '',
             regencyId: '',
@@ -158,32 +142,6 @@
                 } finally {
                     this.loadingRegencies = false;
                 }
-            },
-
-            previewImage(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    this.previewUrl = URL.createObjectURL(file);
-                    this.selectedMedia = null;
-                }
-            },
-
-            openMediaPicker() {
-                window.dispatchEvent(new CustomEvent('open-media-picker', { 
-                    detail: { 
-                        callback: (item) => {
-                            this.selectedMedia = item;
-                            this.previewUrl = null;
-                        } 
-                    } 
-                }));
-            },
-
-            clearImage() {
-                this.previewUrl = null;
-                this.selectedMedia = null;
-                const fileInput = document.querySelector('input[type="file"]');
-                if (fileInput) fileInput.value = '';
             }
         }));
     }
@@ -195,3 +153,5 @@
     }
 </script>
 @endpush
+
+

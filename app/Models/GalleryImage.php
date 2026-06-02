@@ -19,7 +19,7 @@ class GalleryImage extends Model
     const UPDATED_AT = 'updatedAt';
 
     protected $fillable = [
-        'imageUrl', 'caption', 'category', 'tags', 'eventDate', 'orderPriority', 'isActive',
+        'imageUrl', 'image_id', 'caption', 'category', 'tags', 'eventDate', 'orderPriority', 'isActive',
     ];
 
     protected $casts = [
@@ -30,8 +30,18 @@ class GalleryImage extends Model
 
     protected $appends = ['image_url'];
 
+    public function imageMedia()
+    {
+        return $this->belongsTo(Media::class, 'image_id');
+    }
+
     public function getImageUrlAttribute()
     {
+        // Priority: media relation > legacy imageUrl field > fallback
+        if ($this->imageMedia) {
+            return $this->imageMedia->url;
+        }
+        
         return $this->resolveImageUrl($this->attributes['imageUrl'] ?? null);
     }
 }

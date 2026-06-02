@@ -58,18 +58,25 @@ class BlogController extends Controller
             'excerpt' => 'nullable|string',
             'author' => 'nullable|string|max:100',
             'category' => 'required|string|max:50',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'image_url' => 'nullable|string',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'cover_image_media_id' => 'nullable|exists:media,id',
             'status' => 'required|in:published,draft',
             'published_at' => 'nullable|date',
             'metaTitle' => 'nullable|string|max:255',
             'metaDescription' => 'nullable|string',
         ]);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'blogs', 'blog', $validated['title']);
-        } elseif ($request->filled('image_url')) {
-            $validated['image'] = $request->image_url;
+        // Handle cover image input (dual mode: file upload or media library)
+        if ($request->hasFile('cover_image')) {
+            $media = $this->uploadAndIndex($request->file('cover_image'), 'blogs', $validated['title']);
+            $validated['cover_image_id'] = $media->id;
+            // Keep legacy image field for backwards compatibility
+            $validated['image'] = $media->path;
+        } elseif ($request->filled('cover_image_media_id')) {
+            $validated['cover_image_id'] = $request->cover_image_media_id;
+            // Keep legacy image field for backwards compatibility
+            $media = Media::find($request->cover_image_media_id);
+            $validated['image'] = $media ? $media->path : null;
         }
 
         $validated['slug'] = Str::slug($validated['title']);

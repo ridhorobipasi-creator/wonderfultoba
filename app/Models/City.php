@@ -22,7 +22,7 @@ class City extends Model
     protected $appends = ['image_url'];
 
     protected $fillable = [
-        'regency_id', 'name', 'slug', 'type', 'country', 'region', 'district', 'place', 'description', 'image',
+        'regency_id', 'name', 'slug', 'type', 'country', 'region', 'district', 'place', 'description', 'image', 'image_id',
     ];
 
     public function regency()
@@ -35,8 +35,18 @@ class City extends Model
         return $this->hasMany(Package::class, 'cityId');
     }
 
+    public function imageMedia()
+    {
+        return $this->belongsTo(Media::class, 'image_id');
+    }
+
     public function getImageUrlAttribute(): string
     {
+        // Priority: media relation > legacy image field > fallback
+        if ($this->imageMedia) {
+            return $this->imageMedia->url;
+        }
+        
         return $this->resolveImageUrl($this->image ?? null);
     }
 }

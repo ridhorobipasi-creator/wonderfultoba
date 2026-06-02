@@ -18,7 +18,7 @@ class Blog extends Model
  */
 
     protected $fillable = [
-        'slug', 'title', 'content', 'excerpt', 'image', 'author', 'category', 'status', 'tags',
+        'slug', 'title', 'content', 'excerpt', 'image', 'cover_image_id', 'author', 'category', 'status', 'tags',
     ];
 
     protected $appends = ['image_url', 'translated_title', 'translated_excerpt', 'translated_category'];
@@ -28,8 +28,18 @@ class Blog extends Model
         'published_at' => 'datetime',
     ];
 
+    public function coverImage()
+    {
+        return $this->belongsTo(Media::class, 'cover_image_id');
+    }
+
     public function getImageUrlAttribute()
     {
+        // Priority: media relation > legacy image field > fallback
+        if ($this->coverImage) {
+            return $this->coverImage->url;
+        }
+        
         return $this->resolveImageUrl($this->image);
     }
 

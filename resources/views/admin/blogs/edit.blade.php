@@ -73,7 +73,7 @@
                 </div>
 
                 <!-- Cover Image -->
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100" x-data="blogCoverHandler('{{ $blog->image ? (Str::startsWith($blog->image, 'http') ? $blog->image : asset('storage/' . $blog->image)) : '' }}')">
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100" x-data="blogCoverHandler('{{ imageUrl($blog->image) }}')">
                     <h3 class="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
                         <span class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
                             <i class="fas fa-camera text-[12px]"></i>
@@ -81,7 +81,12 @@
                         Foto Sampul
                     </h3>
 
-                    <div class="grid grid-cols-1 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="relative h-20 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
+                            <input type="file" name="image" @change="previewLocalImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <i class="fas fa-upload text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
+                            <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Upload Lokal</span>
+                        </div>
                         <div @click="openMediaPicker()" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
                             <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
                             <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>
@@ -95,6 +100,7 @@
                             <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">Belum ada foto terpilih</p>
                         </div>
                         <input type="hidden" name="image_url" :value="imagePath">
+                        <input type="hidden" name="media_id" :value="selectedMedia ? selectedMedia.id : '">
                     </div>
                 </div>
 
@@ -186,7 +192,7 @@
                             if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
                             if (path.startsWith('storage/')) path = path.replace('storage/', '');
 
-                            this.previewUrl = '/storage/' + path;
+                            this.previewUrl = item.url || ('/storage/' + path);
                             this.imagePath = path;
                         } 
                     } 
@@ -196,3 +202,8 @@
     }
 </script>
 @endpush
+
+
+
+
+

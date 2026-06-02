@@ -66,8 +66,8 @@ class CityController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'media_id' => 'nullable|exists:media,id',
+            'city_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'city_image_media_id' => 'nullable|exists:media,id',
             'province_id' => 'required_if:regency_id,manual|nullable|exists:provinces,id',
         ]);
 
@@ -81,11 +81,17 @@ class CityController extends Controller
 
         $validated['slug'] = Str::slug($validated['name']);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $this->uploadAndIndex($request->file('image'), 'cities', 'destinations', $validated['name']);
-        } elseif ($request->filled('media_id')) {
-            $media = Media::find($request->media_id);
+        // Handle image input (dual mode: file upload or media library)
+        if ($request->hasFile('city_image')) {
+            $media = $this->uploadAndIndex($request->file('city_image'), 'destinations', $validated['name']);
+            $validated['image_id'] = $media->id;
+            // Keep legacy image field for backwards compatibility
             $validated['image'] = $media->path;
+        } elseif ($request->filled('city_image_media_id')) {
+            $validated['image_id'] = $request->city_image_media_id;
+            // Keep legacy image field for backwards compatibility
+            $media = Media::find($request->city_image_media_id);
+            $validated['image'] = $media ? $media->path : null;
         }
 
         $regency = Regency::with('province')->find($validated['regency_id']);

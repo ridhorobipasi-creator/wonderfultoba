@@ -13,6 +13,37 @@ class MediaController extends Controller
 {
     use HandlesImageUploads;
 
+    /**
+     * Get multiple media items by IDs for component initialization
+     */
+    public function batch(Request $request): JsonResponse
+    {
+        $ids = $request->input('ids', []);
+        
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([]);
+        }
+
+        $media = Media::whereIn('id', $ids)
+            ->select(['id', 'filename', 'original_name', 'path', 'category', 'alt_text', 'dominant_color'])
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'filename' => $item->filename,
+                    'original_name' => $item->original_name,
+                    'path' => $item->path,
+                    'category' => $item->category,
+                    'alt_text' => $item->alt_text,
+                    'dominant_color' => $item->dominant_color,
+                    'url' => $item->url,
+                    'thumbnail_url' => $item->thumbnail_url,
+                ];
+            });
+
+        return response()->json($media);
+    }
+
     public function sync()
     {
         $files = Storage::disk('public')->allFiles();

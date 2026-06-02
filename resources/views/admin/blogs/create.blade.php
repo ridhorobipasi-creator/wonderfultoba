@@ -69,8 +69,9 @@
                         </select>
                         <input type="text" name="author" value="{{ auth()->user()->name }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500/20 text-xs font-bold text-slate-600">
                     </div>
-                </di                <!-- Cover Image -->
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100" x-data="blogCoverHandler()">
+                </div>
+                <!-- Cover Image -->
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
                     <h3 class="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
                         <span class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
                             <i class="fas fa-camera text-[12px]"></i>
@@ -78,22 +79,19 @@
                         Foto Sampul
                     </h3>
                     
-                    <div class="grid grid-cols-1 gap-4 mb-6">
-                        <div @click="openMediaPicker()" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
-                            <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
-                            <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>
-                        </div>
-                    </div>
+                    <x-image-input 
+                        name="cover_image"
+                        label=""
+                        :value="old('cover_image_id')"
+                        :required="false"
+                        category="blogs"
+                        help="Pilih atau upload foto sampul untuk artikel blog ini"
+                        class="mb-4"
+                    />
 
-                    <div class="relative group rounded-3xl overflow-hidden bg-slate-50 border-2 border-slate-100 min-h-[160px] flex items-center justify-center">
-                        <img :src="previewUrl" x-show="previewUrl" class="w-full h-full object-cover">
-                        <div x-show="!previewUrl" class="text-center p-6">
-                            <i class="fas fa-image text-slate-200 text-3xl mb-3"></i>
-                            <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">Belum ada foto terpilih</p>
-                        </div>
-                        <input type="hidden" name="image_url" :value="imagePath">
-                    </div>
-                </div>div>
+                    @error('cover_image') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
+                    @error('cover_image_id') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
+                </div>
 
                 <!-- Teaser -->
                 <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
@@ -210,7 +208,7 @@
                             if (path.startsWith('/storage/')) path = path.replace('/storage/', '');
                             if (path.startsWith('storage/')) path = path.replace('storage/', '');
                             
-                            this.previewUrl = '/storage/' + path;
+                            this.previewUrl = item.url || ('/storage/' + path);
                             this.imagePath = path;
                         } 
                     } 
@@ -220,3 +218,7 @@
     }
 </script>
 @endpush
+
+
+
+

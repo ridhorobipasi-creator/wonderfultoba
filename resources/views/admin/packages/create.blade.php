@@ -50,53 +50,18 @@
                 </div>
 
                 <!-- Images Upload -->
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Package Images</label>
-                    <div class="flex flex-col gap-4 mb-4">
-                        <button type="button" @click="openPackageMediaPicker()" class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
-                            <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                                <i class="fas fa-images text-3xl"></i>
-                            </div>
-                            <p class="text-lg font-black text-slate-800 tracking-tight mt-2">Pilih dari Galeri Pusat</p>
-                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Pilih satu atau lebih aset untuk paket ini</p>
-                        </button>
-                    </div>
+                <x-image-input 
+                    name="package_images"
+                    label="Package Images"
+                    :value="old('media_ids', [])"
+                    :multiple="true"
+                    :required="false"
+                    category="tours"
+                    help="Pilih satu atau lebih gambar untuk paket ini. Anda bisa memilih dari media library atau upload gambar baru."
+                />
 
-                    <div id="selected-media-container" class="grid grid-cols-4 sm:grid-cols-6 gap-4 mb-4" x-show="selectedMedia.length > 0">
-                        <template x-for="(item, idx) in selectedMedia" :key="'media'+item.id">
-                            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-indigo-500 shadow-lg group">
-                                <img :src="'/storage/' + (item.path.replace(/^\/?storage\//, ''))" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                    <button type="button" @click="selectedMedia.splice(idx, 1)" class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </button>
-                                </div>
-                                <input type="hidden" name="media_ids[]" :value="item.id">
-                                <div class="absolute top-1 right-1 bg-indigo-600 text-[7px] text-white px-1.5 py-0.5 rounded-full font-black tracking-widest">GALLERY</div>
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="mt-4 flex flex-col gap-2">
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Atau Upload Gambar Baru dari Perangkat (Lokal)</label>
-                        <input type="file" name="images[]" multiple @change="handleLocalFiles($event)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-slate-900 file:text-white hover:file:bg-slate-800 transition cursor-pointer">
-                    </div>
-
-                    <!-- Local Images Preview -->
-                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-4" x-show="localPreviews.length > 0">
-                        <template x-for="(preview, idx) in localPreviews" :key="'local'+idx">
-                            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-emerald-500 shadow-lg group">
-                                <img :src="preview.url" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                    <button type="button" @click="removeLocalFile(idx)" class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-times text-xs"></i>
-                                    </button>
-                                </div>
-                                <div class="absolute top-1 right-1 bg-emerald-600 text-[7px] text-white px-1.5 py-0.5 rounded-full font-black tracking-widest">LOCAL</div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
+                @error('package_images') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
+                @error('media_ids') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
 
                 <!-- Short Description -->
                 <div>

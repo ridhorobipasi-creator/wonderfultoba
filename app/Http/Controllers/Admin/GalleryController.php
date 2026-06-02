@@ -59,48 +59,52 @@ class GalleryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'files.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'image_url' => 'nullable|string',
+        $validated = $request->validate([
             'caption' => 'nullable|string',
             'category' => 'required|in:tour,outbound',
+            'gallery_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'gallery_image_media_id' => 'nullable|exists:media,id',
+            'tags' => 'nullable|array',
         ]);
 
         $uploaded = 0;
 
-        if ($request->filled('image_url')) {
+        // Handle image input (dual mode: file upload or media library)
+        if ($request->hasFile('gallery_image')) {
+            $media = $this->uploadAndIndex($request->file('gallery_image'), 'gallery', $validated['caption'] ?? 'Gallery Image');
+            
             $img = GalleryImage::create([
-                'caption' => $request->caption ?? 'Gallery Image',
-                'category' => $request->category,
-                'imageUrl' => $request->image_url,
+                'caption' => $validated['caption'] ?? $media->original_name,
+                'category' => $validated['category'],
+                'image_id' => $media->id,
+                'imageUrl' => $media->path, // Keep legacy field
+                'tags' => $validated['tags'] ?? [],
                 'isActive' => true,
             ]);
-            $this->logActivity('created', "Added gallery image: {$img->caption}", $img);
+            
+            $this->logActivity('created', "Uploaded gallery image: {$img->caption}", $img);
             $uploaded++;
-        }
-
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                // Convert to WebP, resize, and Index into Media Library
-                $path = $this->uploadAndIndex($file, 'gallery', $request->category, $file->getClientOriginalName());
-
-                if ($path) {
-                    $img = GalleryImage::create([
-                        'caption' => $file->getClientOriginalName(),
-                        'category' => $request->category,
-                        'imageUrl' => $path,
-                        'isActive' => true,
-                    ]);
-                    $this->logActivity('created', "Uploaded gallery image: {$img->caption}", $img);
-                    $uploaded++;
-                }
+        } elseif ($request->filled('gallery_image_media_id')) {
+            $media = Media::find($request->gallery_image_media_id);
+            
+            if ($media) {
+                $img = GalleryImage::create([
+                    'caption' => $validated['caption'] ?? $media->original_name,
+                    'category' => $validated['category'],
+                    'image_id' => $media->id,
+                    'imageUrl' => $media->path, // Keep legacy field
+                    'tags' => $validated['tags'] ?? [],
+                    'isActive' => true,
+                ]);
+                
+                $this->logActivity('created', "Added gallery image: {$img->caption}", $img);
+                $uploaded++;
             }
         }
 
         SyncController::triggerSync();
 
-        return redirect()->route('admin.gallery.index')
-            ->with('success', "$uploaded foto berhasil ditambahkan ke Galeri (".strtoupper($request->category).').');
+        return redirect()->route('admin.gallery.index')->with('success', "$uploaded gambar berhasil ditambahkan ke galeri!");
     }
 
     public function destroy(GalleryImage $gallery)

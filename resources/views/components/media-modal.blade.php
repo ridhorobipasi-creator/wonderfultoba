@@ -75,11 +75,22 @@
 
                     <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         <template x-for="item in media" :key="item.id">
-                            <button type="button" @click="selectMedia(item)" class="group relative aspect-square rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-600 overflow-hidden transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-indigo-100">
+                            <button type="button" @click="toggleSelection(item)" 
+                                    :class="isSelected(item) ? 'border-indigo-600 ring-2 ring-indigo-500 ring-offset-2' : 'border-slate-100 hover:border-indigo-600'"
+                                    class="group relative aspect-square rounded-[2.5rem] bg-white border overflow-hidden transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-indigo-100">
                                 <img :src="item.thumbnail_url" class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110">
+                                
+                                <!-- Selection indicator for multiple mode -->
+                                <div x-show="isMultiple && isSelected(item)" class="absolute top-3 right-3">
+                                    <div class="w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Hover overlay -->
                                 <div class="absolute inset-0 bg-indigo-600/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-4">
                                     <div class="w-10 h-10 rounded-2xl bg-white text-indigo-600 flex items-center justify-center shadow-2xl scale-50 group-hover:scale-100 transition-transform duration-500">
-                                        <i class="fas fa-check"></i>
+                                        <i :class="isSelected(item) ? 'fas fa-minus' : 'fas fa-check'"></i>
                                     </div>
                                     <p class="text-[8px] font-black text-white uppercase tracking-widest text-center truncate w-full" x-text="item.filename"></p>
                                 </div>
@@ -95,7 +106,8 @@
                 </div>
 
                 <!-- Footer Pagination -->
-                <div class="px-8 py-6 border-t border-slate-50 bg-white flex justify-center">
+                <div class="px-8 py-6 border-t border-slate-50 bg-white flex justify-between items-center">
+                    <!-- Pagination -->
                     <div x-show="lastPage > 1" class="flex gap-2">
                         <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all shadow-sm">
                             <i class="fas fa-chevron-left text-xs"></i>
@@ -103,6 +115,20 @@
                         <div class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center shadow-lg" x-text="currentPage + ' / ' + lastPage"></div>
                         <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all shadow-sm">
                             <i class="fas fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Confirm Selection for Multiple Mode -->
+                    <div x-show="isMultiple" class="flex items-center gap-4">
+                        <div x-show="selectedItems.length > 0" class="text-xs text-slate-500 font-bold">
+                            <span x-text="selectedItems.length"></span> item(s) selected
+                        </div>
+                        <button @click="confirmSelection()" 
+                                :disabled="selectedItems.length === 0"
+                                :class="selectedItems.length > 0 ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
+                                class="px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg">
+                            <i class="fas fa-check mr-2"></i>
+                            Use Selected
                         </button>
                     </div>
                 </div>
@@ -123,10 +149,15 @@ window.mediaPicker = function() {
         currentPage: 1,
         lastPage: 1,
         callback: null,
+        selectedItems: [],
+        isMultiple: false,
 
         open(detail) {
             this.isOpen = true;
             this.callback = detail.callback;
+            this.isMultiple = detail.multiple || false;
+            this.selectedItems = [];
+            this.category = detail.category || '';
             this.fetchMedia();
         },
 
@@ -149,21 +180,48 @@ window.mediaPicker = function() {
             this.fetchMedia();
         },
 
-        selectMedia(item) {
+        toggleSelection(item) {
+            if (this.isMultiple) {
+                const existingIndex = this.selectedItems.findIndex(selected => selected.id === item.id);
+                if (existingIndex >= 0) {
+                    this.selectedItems.splice(existingIndex, 1);
+                } else {
+                    this.selectedItems.push(item);
+                }
+            } else {
+                this.selectedItems = [item];
+                this.selectMedia();
+            }
+        },
+
+        isSelected(item) {
+            return this.selectedItems.some(selected => selected.id === item.id);
+        },
+
+        confirmSelection() {
+            if (this.selectedItems.length > 0) {
+                this.selectMedia();
+            }
+        },
+
+        selectMedia() {
+            const result = this.isMultiple ? this.selectedItems : this.selectedItems[0];
+            
             // Priority 1: Direct function passed in detail
             if (typeof this.callback === 'function') {
-                this.callback(item);
+                this.callback(result);
             } 
             // Priority 2: Global window function name
             else if (typeof this.callback === 'string' && typeof window[this.callback] === 'function') {
-                window[this.callback](item);
+                window[this.callback](result);
             }
             // Priority 3: Custom Event
             else {
-                window.dispatchEvent(new CustomEvent('media-selected', { detail: item }));
+                window.dispatchEvent(new CustomEvent('media-selected', { detail: result }));
             }
             
             this.isOpen = false;
+            this.selectedItems = [];
         },
 
         uploadFiles(e) {
@@ -178,7 +236,18 @@ window.mediaPicker = function() {
             fetch('/admin/media', { method: 'POST', body: formData })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) this.fetchMedia();
+                    if (data.success) {
+                        this.fetchMedia();
+                        // Auto-select uploaded items if multiple mode
+                        if (this.isMultiple && data.media) {
+                            const newMedia = Array.isArray(data.media) ? data.media : [data.media];
+                            newMedia.forEach(item => {
+                                if (!this.isSelected(item)) {
+                                    this.selectedItems.push(item);
+                                }
+                            });
+                        }
+                    }
                 })
                 .catch(err => {
                     this.loading = false;

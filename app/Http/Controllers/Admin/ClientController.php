@@ -21,22 +21,31 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'logo_url' => 'required|string',
-            'website' => 'nullable|url',
+        $validated = $request->validate([
+            'name' => 'required|string|max:200',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'logo_media_id' => 'nullable|exists:media,id',
+            'websiteUrl' => 'nullable|url|max:500',
         ]);
 
-        $path = $request->logo_url;
+        // Handle logo input (dual mode: file upload or media library)
+        if ($request->hasFile('logo')) {
+            $media = $this->uploadAndIndex($request->file('logo'), 'general', $validated['name'] . ' Logo');
+            $validated['logo_id'] = $media->id;
+            // Keep legacy logo field for backwards compatibility
+            $validated['logo'] = $media->path;
+        } elseif ($request->filled('logo_media_id')) {
+            $validated['logo_id'] = $request->logo_media_id;
+            // Keep legacy logo field for backwards compatibility
+            $media = Media::find($request->logo_media_id);
+            $validated['logo'] = $media ? $media->path : null;
+        }
 
-        Client::create([
-            'name' => $request->name,
-            'logo' => $path,
-            'website' => $request->website,
-            'sortOrder' => Client::max('sortOrder') + 1,
-        ]);
+        $validated['orderPriority'] = Client::max('orderPriority') + 1;
 
-        return redirect()->back()->with('success', 'Client added!');
+        Client::create($validated);
+
+        return redirect()->back()->with('success', 'Client berhasil ditambahkan!');
     }
 
     public function destroy(Client $client)
