@@ -127,27 +127,27 @@
             </div>
 
             <!-- Library View Actions -->
-            <div class="flex items-center gap-3" x-show="activeTab === 'library'">
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto" x-show="activeTab === 'library'">
                 <!-- Watermark Checkbox Toggle -->
-                <div class="flex items-center gap-3 bg-white px-5 py-4 rounded-[1.5rem] border border-slate-200 shadow-sm mr-2 select-none">
+                <div class="flex items-center gap-3 bg-white px-5 py-4 rounded-[1.5rem] border border-slate-200 shadow-sm mr-2 select-none w-full sm:w-auto justify-center">
                     <input type="checkbox" id="uploadWatermark" x-model="useWatermark" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
                     <label for="uploadWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer">Watermark</label>
                 </div>
 
-                <button @click="syncMedia()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-3">
-                    <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> Sync Disk
+                <button @click="syncMedia()" class="flex-1 sm:flex-none px-6 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2">
+                    <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> <span class="hidden sm:inline">Sync Disk</span><span class="sm:hidden">Sync</span>
                 </button>
-                <button @click="syncPublicAssets()" class="px-8 py-5 bg-amber-50 border border-amber-200 text-amber-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition-all shadow-sm flex items-center gap-3" :disabled="syncingStatic" title="Daftarkan gambar dari public/images/ ke Media Library">
-                    <i class="fas fa-folder-tree" :class="syncingStatic ? 'animate-pulse' : ''"></i> Sync Statis
+                <button @click="syncPublicAssets()" class="flex-1 sm:flex-none px-6 py-5 bg-amber-50 border border-amber-200 text-amber-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition-all shadow-sm flex items-center justify-center gap-2" :disabled="syncingStatic" title="Daftarkan gambar dari public/images/ ke Media Library">
+                    <i class="fas fa-folder-tree" :class="syncingStatic ? 'animate-pulse' : ''"></i> <span class="hidden sm:inline">Sync Statis</span><span class="sm:hidden">Statis</span>
                 </button>
-                <button @click="convertAllToWebp()" class="px-8 py-5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-indigo-100 transition-all flex items-center gap-3 shadow-sm" :disabled="converting">
-                    <i class="fas fa-magic" :class="converting ? 'animate-pulse' : ''"></i> Convert WebP
+                <button @click="convertAllToWebp()" class="flex-1 sm:flex-none px-6 py-5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-indigo-100 transition-all flex items-center justify-center gap-2 shadow-sm" :disabled="converting">
+                    <i class="fas fa-magic" :class="converting ? 'animate-pulse' : ''"></i> <span class="hidden sm:inline">Convert WebP</span><span class="sm:hidden">WebP</span>
                 </button>
-                <button @click="openUrlModal()" class="px-8 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-3 shadow-sm">
-                    <i class="fas fa-globe"></i> Upload URL
+                <button @click="openUrlModal()" class="flex-1 sm:flex-none px-6 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fas fa-globe"></i> <span class="hidden sm:inline">Upload URL</span><span class="sm:hidden">URL</span>
                 </button>
                 <input type="file" id="mediaUpload" multiple class="hidden" @change="uploadFiles($event)">
-                <label for="mediaUpload" class="px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all cursor-pointer flex items-center gap-3 group">
+                <label for="mediaUpload" class="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all cursor-pointer flex items-center justify-center gap-3 group">
                     <i class="fas fa-upload group-hover:-translate-y-1 transition-transform"></i> Upload New
                 </label>
             </div>
@@ -174,25 +174,28 @@
 
             <!-- Bulk Actions Floating Bar -->
             <template x-if="selectedIds.length > 0">
-                <div class="fixed bottom-12 left-1/2 lg:left-[calc(50%+160px)] -translate-x-1/2 z-[100] bg-slate-900 text-white px-10 py-6 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] flex items-center gap-10 animate-in slide-in-from-bottom duration-500 backdrop-blur-xl bg-opacity-95 border border-white/5">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-lg font-black shadow-lg" x-text="selectedIds.length"></div>
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 leading-none">Items Selected</p>
-                            <p class="text-[12px] font-bold mt-1.5 uppercase tracking-widest">Ready to Manage</p>
+                <div class="fixed bottom-6 lg:bottom-12 left-4 right-4 lg:left-[calc(50%+160px)] lg:right-auto lg:-translate-x-1/2 z-[100] bg-slate-900 text-white p-5 lg:px-10 lg:py-6 rounded-3xl lg:rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] flex flex-col lg:flex-row items-center gap-4 lg:gap-10 animate-in slide-in-from-bottom duration-500 backdrop-blur-xl bg-opacity-95 border border-white/5">
+                    <div class="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-lg font-black shadow-lg" x-text="selectedIds.length"></div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 leading-none">Items Selected</p>
+                                <p class="text-[12px] font-bold mt-1.5 uppercase tracking-widest">Ready to Manage</p>
+                            </div>
                         </div>
+                        <button @click="selectedIds = []" class="lg:hidden w-10 h-10 bg-white/10 hover:bg-white/20 transition-all rounded-xl flex items-center justify-center text-white"><i class="fas fa-times"></i></button>
                     </div>
-                    <div class="flex items-center gap-3 border-l border-white/10 pl-10">
-                        <button @click="openMoveModal()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
-                            <i class="fas fa-up-down-left-right text-indigo-400"></i> Move To
+                    <div class="flex flex-wrap items-center gap-3 border-t lg:border-t-0 lg:border-l border-white/10 pt-4 lg:pt-0 lg:pl-10 w-full lg:w-auto justify-center">
+                        <button @click="openMoveModal()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-up-down-left-right text-indigo-400"></i> Move
                         </button>
-                        <button @click="bulkDownload()" class="px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3">
-                            <i class="fas fa-download text-emerald-400"></i> Download
+                        <button @click="bulkDownload()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-download text-emerald-400"></i> <span class="hidden sm:inline">Download</span><span class="sm:hidden">DL</span>
                         </button>
-                        <button @click="bulkDelete()" class="px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center gap-3 shadow-xl shadow-rose-950/40">
-                            <i class="fas fa-trash"></i> Delete Permanent
+                        <button @click="bulkDelete()" class="w-full lg:w-auto px-4 lg:px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-rose-950/40">
+                            <i class="fas fa-trash"></i> <span class="hidden sm:inline">Delete Permanent</span><span class="sm:hidden">Delete</span>
                         </button>
-                        <button @click="selectedIds = []" class="text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-all ml-4">Cancel</button>
+                        <button @click="selectedIds = []" class="hidden lg:block text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-all ml-4">Cancel</button>
                     </div>
                 </div>
             </template>
