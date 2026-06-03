@@ -85,7 +85,7 @@
         $logoData = null;
         if (!empty($logoUrl)) {
             $logoPath = ltrim(str_replace('storage/', '', $logoUrl), '/');
-            $fullPath = storage_path('app/public/' . $logoPath);
+            $fullPath = public_path('storage/' . $logoPath);
             if (file_exists($fullPath)) {
                 $mime = mime_content_type($fullPath) ?: 'image/png';
                 $logoData = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($fullPath));

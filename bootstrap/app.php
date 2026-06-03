@@ -14,6 +14,8 @@ $storagePaths = [
     __DIR__.'/../storage/framework/sessions',
     __DIR__.'/../storage/logs',
     __DIR__.'/../storage/app/public',
+    // Public 'public' disk root — uploads are written here and served directly at /storage
+    __DIR__.'/../public/storage',
 ];
 foreach ($storagePaths as $path) {
     if (! file_exists($path)) {

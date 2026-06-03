@@ -312,7 +312,7 @@ if (! function_exists('imageUrl')) {
         // Dynamic fallback for non-existent local/storage files with premium Unsplash travel images
         $fileInPublic = public_path($clean);
         $cleanStoragePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
-        $fileInStorage = storage_path('app/public/'.$cleanStoragePath);
+        $fileInStorage = Storage::disk('public')->path($cleanStoragePath);
 
         if (! file_exists($fileInPublic) && ! file_exists($fileInStorage)) {
             return asset('images/home/tour.webp');

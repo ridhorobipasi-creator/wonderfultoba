@@ -40,7 +40,11 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // Write directly into the publicly-served folder (public/storage) instead of
+            // storage/app/public. On Hostinger the public/storage symlink cannot be created
+            // because public/storage already exists as a real committed directory, so files
+            // saved to storage/app/public were never reachable via the /storage URL.
+            'root' => public_path('storage'),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
@@ -67,14 +71,12 @@ return [
     | Symbolic Links
     |--------------------------------------------------------------------------
     |
-    | Here you may configure the symbolic links that will be created when the
-    | `storage:link` Artisan command is executed. The array keys should be
-    | the locations of the links and the values should be their targets.
+    | The 'public' disk writes directly into public/storage, so no symbolic link
+    | is required. Leaving this empty prevents `php artisan storage:link --force`
+    | from replacing the real public/storage directory with a broken symlink.
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+    'links' => [],
 
 ];

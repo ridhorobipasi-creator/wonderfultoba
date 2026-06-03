@@ -371,7 +371,7 @@ class MediaController extends Controller
 
         $mediaItems = Media::whereIn('id', $ids)->get();
         $zipName = 'wonderful_toba_assets_'.date('YmdHis').'.zip';
-        $zipPath = storage_path('app/public/temp/'.$zipName);
+        $zipPath = public_path('storage/temp/'.$zipName);
 
         if (! file_exists(dirname($zipPath))) {
             mkdir(dirname($zipPath), 0755, true);
@@ -380,7 +380,7 @@ class MediaController extends Controller
         $zip = new \ZipArchive;
         if ($zip->open($zipPath, \ZipArchive::CREATE) === true) {
             foreach ($mediaItems as $media) {
-                $filePath = storage_path('app/public/'.$media->path);
+                $filePath = public_path('storage/'.$media->path);
                 if (file_exists($filePath)) {
                     $zip->addFile($filePath, $media->filename);
                 }

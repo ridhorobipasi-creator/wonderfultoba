@@ -367,12 +367,11 @@ class PublicController extends Controller
 
     public function debugStorage() 
     {
-        $dir = storage_path('app/public/gallery/uploads');
+        $dir = public_path('storage/gallery/uploads');
         $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
         return response()->json([
             'storage_path' => $dir,
             'files' => $files,
-            'logo_check' => file_exists(storage_path('app/public/gallery/uploads/logo-1780499659.webp')),
         ]);
     }
 
@@ -474,7 +473,7 @@ class PublicController extends Controller
             if (str_starts_with($clean, 'storage/')) {
                 $clean = substr($clean, 8);
             }
-            $absPath = storage_path('app/public/'.$clean);
+            $absPath = public_path('storage/'.$clean);
             if (file_exists($absPath)) {
                 $bgImage = @imagecreatefromstring(file_get_contents($absPath));
             }

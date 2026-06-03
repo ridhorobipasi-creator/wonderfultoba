@@ -263,7 +263,7 @@ Route::get('/sitemap.xml', [SettingController::class, 'generateSitemap']);
 
 // Proxy Route untuk melayani file storage jika Symlink tidak berfungsi (misal di Shared Hosting / CPanel / Hostinger)
 Route::get('/storage/{path}', function ($path) {
-    $filePath = storage_path('app/public/' . $path);
+    $filePath = public_path('storage/' . $path);
     
     // DEBUG: Jika file tidak ada, tampilkan path yang dicari untuk membantu proses debug
     if (!file_exists($filePath)) {
@@ -278,12 +278,12 @@ Route::get('/storage/{path}', function ($path) {
 
 // TEMPORARY DEBUG ROUTE
 Route::get('/debug-storage', function () {
-    $dir = storage_path('app/public/gallery/uploads');
+    $dir = public_path('storage/gallery/uploads');
     $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
     return response()->json([
         'storage_path' => $dir,
         'files' => $files,
-        'branding_files' => file_exists(storage_path('app/public/branding')) ? scandir(storage_path('app/public/branding')) : 'No branding dir'
+        'branding_files' => file_exists(public_path('storage/branding')) ? scandir(public_path('storage/branding')) : 'No branding dir'
     ]);
 });
 
