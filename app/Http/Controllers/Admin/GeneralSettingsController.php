@@ -27,7 +27,7 @@ class GeneralSettingsController extends Controller
     {
         $data = $request->except(['_token', 'logo_light_file', 'logo_dark_file', 'icon_file', 'company']);
 
-        $setting = Setting::firstOrCreate(['key' => 'general']);
+        $setting = Setting::firstOrNew(['key' => 'general']);
         $existing = $setting->value ?? [];
 
         // Handle File Uploads
@@ -59,7 +59,7 @@ class GeneralSettingsController extends Controller
         // Company / invoice identity is stored as its own settings group,
         // because PdfController & InvoiceService load it under the 'company' key.
         if ($request->has('company')) {
-            $companySetting = Setting::firstOrCreate(['key' => 'company']);
+            $companySetting = Setting::firstOrNew(['key' => 'company']);
             $companySetting->value = array_merge($companySetting->value ?? [], $request->input('company'));
             $companySetting->save();
         }
