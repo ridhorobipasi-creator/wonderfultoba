@@ -972,7 +972,7 @@ function mediaManager() {
             })
             .then(res => res.json())
             .then(data => {
-                if (data.success !== false) {
+                if (data.success === true) {
                     // Langsung hapus dari array lokal (instant feedback)
                     this.media = this.media.filter(m => m.id !== id);
                     this.showToast('✓ Media berhasil dihapus');

@@ -428,29 +428,36 @@ class MediaController extends Controller
 
     public function destroy(Media $media)
     {
-        $path = $media->path;
-        $isStatic = $media->is_static_asset;
-        $media->forceDelete();
+        try {
+            $path = $media->path;
+            $isStatic = $media->is_static_asset;
+            $media->forceDelete();
 
-        // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
-        if (!$isStatic && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+            // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
+            if (!$isStatic && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
 
-            // Also delete thumbnail
-            $thumbPath = dirname($path).'/thumbnails/'.basename($path);
-            if (Storage::disk('public')->exists($thumbPath)) {
-                Storage::disk('public')->delete($thumbPath);
+                // Also delete thumbnail
+                $thumbPath = dirname($path).'/thumbnails/'.basename($path);
+                if (Storage::disk('public')->exists($thumbPath)) {
+                    Storage::disk('public')->delete($thumbPath);
+                }
             }
-        }
 
-        if (request()->ajax() || request()->wantsJson()) {
-            $msg = $isStatic
-                ? 'Aset statis dihapus dari indeks (file fisik tetap aman).'
-                : 'Media berhasil dihapus.';
-            return response()->json(['success' => true, 'message' => $msg]);
-        }
+            if (request()->ajax() || request()->wantsJson()) {
+                $msg = $isStatic
+                    ? 'Aset statis dihapus dari indeks (file fisik tetap aman).'
+                    : 'Media berhasil dihapus.';
+                return response()->json(['success' => true, 'message' => $msg]);
+            }
 
-        return back()->with('success', 'Media dihapus.');
+            return back()->with('success', 'Media dihapus.');
+        } catch (\Exception $e) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Gagal menghapus: ' . $e->getMessage()], 500);
+            }
+            return back()->with('error', 'Gagal menghapus media.');
+        }
     }
 
     /**
