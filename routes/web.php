@@ -311,37 +311,5 @@ Route::get('/debug-log', function () {
     
     return response()->json($info);
 });
-Route::get('/debug-media', function (Illuminate\Http\Request $request) {
-    $action = $request->get('action', 'info');
-    if ($action === 'info') {
-        return response()->json([
-            'count' => \App\Models\Media::count(),
-            'latest' => \App\Models\Media::orderBy('id', 'desc')->take(20)->get(),
-        ], 200, [], JSON_PRETTY_PRINT);
-    } elseif ($action === 'delete') {
-        $id = $request->get('id', 0);
-        $media = \App\Models\Media::find($id);
-        if (!$media) return response()->json(['error' => 'Not found', 'id' => $id]);
-        
-        try {
-            $path = $media->path;
-            $res = $media->forceDelete();
-            $file_deleted = false;
-            if (!empty($path) && Storage::disk('public')->exists($path)) {
-                $file_deleted = Storage::disk('public')->delete($path);
-            }
-            return response()->json([
-                'success' => true,
-                'db_deleted' => $res,
-                'file_deleted' => $file_deleted,
-                'media' => $media,
-                'still_exists_in_db' => \App\Models\Media::where('id', $id)->exists()
-            ], 200, [], JSON_PRETTY_PRINT);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-});
-Route::get('/debug-media-all', function () {
-    return \App\Models\Media::where('filename', 'like', '%logo%')->get();
-});
+
+
