@@ -214,7 +214,7 @@
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.media.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                 <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-fuchsia-500' }}"></i>
-                                Galeri Foto
+                                Media Pusat
                             </a>
                              @if(auth()->user()->isSuperAdmin())
                              <a href="{{ route('admin.cities.index') }}"
