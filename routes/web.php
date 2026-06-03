@@ -260,3 +260,15 @@ Route::get('/og-banner/{type}/{id}.webp', [PublicController::class, 'generateOgB
 
 // Sitemap
 Route::get('/sitemap.xml', [SettingController::class, 'generateSitemap']);
+
+// Proxy Route untuk melayani file storage jika Symlink tidak berfungsi (misal di Shared Hosting / CPanel / Hostinger)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath, [
+        'Content-Type' => mime_content_type($filePath),
+        'Cache-Control' => 'public, max-age=31536000'
+    ]);
+})->where('path', '.*');

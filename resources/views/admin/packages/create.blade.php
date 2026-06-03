@@ -153,17 +153,33 @@
                                 class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
                         </div>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Harga Modal (Internal)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
-                            <input type="number" name="cost_price" value="{{ old('cost_price') }}" min="0" step="1000"
-                                class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition" placeholder="Opsional">
-                        </div>
-                        <p class="mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Digunakan untuk menghitung laba bersih</p>
-                    </div>
                 </div>
+
+                <!-- PENGATURAN LANJUTAN (ACCORDION) -->
+                <div x-data="{ advancedOpen: false }" class="bg-gray-50 rounded-2xl border border-gray-200 mt-8">
+                    <button type="button" @click="advancedOpen = !advancedOpen" class="w-full px-6 py-4 flex items-center justify-between focus:outline-none">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-gray-200 text-gray-600 flex items-center justify-center font-black">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            <div class="text-left">
+                                <h3 class="text-sm font-black text-gray-900">Pengaturan Lanjutan (Opsional)</h3>
+                                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Harga Modal, Layanan Tambahan, Lokasi Spesifik</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" :class="advancedOpen ? 'rotate-180' : ''"></i>
+                    </button>
+                    
+                    <div x-show="advancedOpen" x-collapse x-cloak class="px-6 pb-6 space-y-6 border-t border-gray-200 pt-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Harga Modal (Internal)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                                <input type="number" name="cost_price" value="{{ old('cost_price') }}" min="0" step="1000"
+                                    class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition" placeholder="Opsional">
+                            </div>
+                            <p class="mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Digunakan untuk menghitung laba bersih</p>
+                        </div>
 
                 <!-- Layanan Tambahan (Additional Services) - DYNAMIC CRUD -->
                 <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 space-y-4">
@@ -279,7 +295,7 @@
 
                 <!-- City -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">City</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Kota Tujuan / City</label>
                     <select name="cityId"
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
                         <option value="">Select City (Optional)</option>
@@ -294,9 +310,10 @@
                     <input type="checkbox" name="isFeatured" value="1" id="isFeatured" {{ old('isFeatured') ? 'checked' : '' }}
                         class="w-5 h-5 text-toba-green border-gray-300 rounded focus:ring-toba-green">
                     <label for="isFeatured" class="ml-3 text-sm font-bold text-gray-700 cursor-pointer">
-                        <i class="fas fa-star text-yellow-500 mr-1"></i>Mark as Featured Package
+                        <i class="fas fa-star text-yellow-500 mr-1"></i>Tandai sebagai Paket Unggulan (Featured)
                     </label>
                 </div>
+            </div> <!-- End of Advanced Settings -->
 
                 <!-- Submit Buttons -->
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">

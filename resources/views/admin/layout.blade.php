@@ -161,7 +161,7 @@
                            class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                   {{ request()->routeIs('admin.dashboard') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                             <i class="fas fa-chart-line w-5 text-sm {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-toba-green' }}"></i>
-                            Dashboard
+                            Beranda
                         </a>
                     </div>
 
@@ -196,13 +196,13 @@
 
                     {{-- MANAJEMEN KONTEN (CMS) --}}
                     <div class="mb-5">
-                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Manajemen Konten (CMS)</p>
+                        <p class="px-4 mb-1.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.25em]">Artikel & Berita</p>
                         <div class="space-y-0.5">
                             <a href="{{ route('admin.cms.tour') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.cms.tour') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                 <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-sky-400' }}"></i>
-                                CMS Halaman Utama
+                                Halaman Beranda Web
                             </a>
                             <a href="{{ route('admin.blogs.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
@@ -214,14 +214,14 @@
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.media.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                 <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-fuchsia-500' }}"></i>
-                                Media Library (Global)
+                                Galeri Foto
                             </a>
                              @if(auth()->user()->isSuperAdmin())
                              <a href="{{ route('admin.cities.index') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                        {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                  <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'text-white' : 'text-teal-500' }}"></i>
-                                 Wilayah & Destinasi
+                                 Kota Tujuan
                              </a>
                              @endif
                              <a href="{{ route('admin.gallery.index', ['category' => 'tour']) }}"
@@ -254,17 +254,31 @@
                         </div>
                     </div>
 
+                    {{-- TONG SAMPAH --}}
+                    @if(auth()->user()->isSuperAdmin())
+                    <div class="mb-5">
+                        <div class="space-y-0.5">
+                            <a href="{{ route('admin.trash.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.trash.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-trash-can w-5 text-sm {{ request()->routeIs('admin.trash.*') ? 'text-white' : 'text-orange-500' }}"></i>
+                                 Tong Sampah
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
 
                     {{-- SYSTEM MANAGEMENT - Restricted to Superadmin --}}
                     @if(auth()->user()->isSuperAdmin())
                     <div class="mb-5 pt-4 border-t border-slate-50">
-                        <p class="px-4 mb-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]">System Engine</p>
+                        <p class="px-4 mb-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]">Pengaturan Sistem</p>
                         <div class="space-y-0.5">
                             <a href="{{ route('admin.settings.general.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
                                       {{ request()->routeIs('admin.settings.general.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
                                 <i class="fas fa-sliders w-5 text-sm {{ request()->routeIs('admin.settings.general.*') ? 'text-white' : 'text-slate-400' }}"></i>
-                                Pengaturan Umum
+                                Pengaturan Dasar
                             </a>
                             <a href="{{ route('admin.users.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]

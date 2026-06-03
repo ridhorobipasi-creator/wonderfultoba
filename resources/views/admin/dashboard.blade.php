@@ -93,72 +93,7 @@
         </div>
     </div>
 
-    <!-- 2.5 MEDIA & SYSTEM HEALTH -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-3 bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center gap-10">
-            <div class="flex-shrink-0 relative">
-                <svg class="w-32 h-32 transform -rotate-90">
-                    <circle cx="64" cy="64" r="58" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-100" />
-                    <circle cx="64" cy="64" r="58" stroke="currentColor" stroke-width="8" fill="transparent" 
-                            :stroke-dasharray="364.4"
-                            :stroke-dashoffset="364.4 * (1 - Math.min(1, data.media.total_size / (500 * 1024 * 1024)))"
-                            class="text-toba-green transition-all duration-1000" />
-                </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-xl font-black text-slate-900" x-text="((data.media.total_size / (500 * 1024 * 1024)) * 100).toFixed(0) + '%'"></span>
-                    <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Storage</span>
-                </div>
-            </div>
-            <div class="flex-1 space-y-6">
-                <div>
-                    <h3 class="text-lg font-black text-slate-900 tracking-tight">Kesehatan Media & Penyimpanan</h3>
-                    <p class="text-xs font-medium text-slate-500 mt-1">Status penggunaan aset digital dan optimasi ruang server.</p>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                    <div class="space-y-1">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total File</p>
-                        <p class="text-lg font-black text-slate-900" x-text="data.media.total_count + ' Assets'"></p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Used Space</p>
-                        <p class="text-lg font-black text-slate-900" x-text="(data.media.total_size / (1024 * 1024)).toFixed(1) + ' MB'"></p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-[9px] font-black text-rose-500 uppercase tracking-widest">Orphan Assets</p>
-                        <p class="text-lg font-black text-rose-500" x-text="data.media.orphan_count + ' Unused'"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-shrink-0 flex flex-col gap-3">
-                <a href="{{ route('admin.media.index') }}" class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition shadow-xl">Buka Galeri</a>
-                <a href="{{ route('admin.media.index', ['usage' => 'orphan']) }}" class="px-8 py-4 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition">Cleanup Now</a>
-            </div>
-        </div>
-
-        <div class="bg-slate-900 p-10 rounded-[3.5rem] shadow-2xl shadow-slate-200 text-white relative overflow-hidden group">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
-            <div class="relative z-10 flex flex-col h-full justify-between">
-                <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Live Traffic</span>
-                    </div>
-                    <h3 class="text-2xl font-black leading-tight mb-2">Platform<br>Healthy.</h3>
-                    <p class="text-[10px] font-bold text-white/40 leading-relaxed uppercase tracking-widest">Sistem berjalan dengan performa maksimal 99.9% uptime.</p>
-                </div>
-                <div class="pt-8 flex items-center justify-between">
-                    <div class="text-left">
-                        <p class="text-[8px] font-black text-white/30 uppercase tracking-widest mb-1">Server Response</p>
-                        <p class="text-xs font-black">124ms</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[8px] font-black text-white/30 uppercase tracking-widest mb-1">Active Sessions</p>
-                        <p class="text-xs font-black" x-text="Math.floor(Math.random() * 20) + 5">0</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- (Bagian Media & System Health disembunyikan agar dashboard lebih ramah bisnis) -->
 
     <!-- 3. MAIN TRANSACTIONS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
