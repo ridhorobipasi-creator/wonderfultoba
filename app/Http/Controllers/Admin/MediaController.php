@@ -337,13 +337,13 @@ class MediaController extends Controller
             // Proteksi: aset statis tidak boleh dihapus dari sini
             if ($media->is_static_asset) {
                 // Hanya hapus record DB, JANGAN hapus file fisik
-                $media->delete();
+                $media->forceDelete();
                 $count++;
                 continue;
             }
 
             $path = $media->path;
-            $media->delete();
+            $media->forceDelete();
             if (Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
 
@@ -428,7 +428,7 @@ class MediaController extends Controller
     {
         $path = $media->path;
         $isStatic = $media->is_static_asset;
-        $media->delete();
+        $media->forceDelete();
 
         // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
         if (!$isStatic && Storage::disk('public')->exists($path)) {

@@ -859,7 +859,7 @@ function mediaManager() {
 
         fetchMedia() {
             this.loading = true;
-            let url = `/admin/media?page=${this.current_page}&search=${this.filters.search}&category=${this.filters.category}&usage=${this.filters.usage}`;
+            let url = `/admin/media?page=${this.current_page}&search=${this.filters.search}&category=${this.filters.category}&usage=${this.filters.usage}&_t=${Date.now()}`;
             fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.json())
                 .then(data => {
