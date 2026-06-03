@@ -83,18 +83,18 @@
                                 {{ $content['stat_years'] ?? '12+' }}
                             </p>
                             <p class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">
-                                {{ __('Tahun Pengalaman') }}
+                                {{ $content['stat_years_label'] ?? __('Tahun Pengalaman') }}
                             </p>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all duration-300 shadow-sm">
                             @php
-                                $touristsCount = $siteSettings['cms_tour']['stat_customers'] ?? $content['stat_tourists'] ?? '1.500+';
+                                $touristsCount = $content['stat_tourists'] ?? '5k+';
                             @endphp
                             <p class="text-4xl font-headline-md font-semibold text-primary mb-1 tracking-tight">
                                 {{ $touristsCount }}
                             </p>
                             <p class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">
-                                {{ __('Wisatawan Puas') }}
+                                {{ $content['stat_tourists_label'] ?? __('Wisatawan Puas') }}
                             </p>
                         </div>
                     </div>

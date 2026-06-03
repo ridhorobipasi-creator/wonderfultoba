@@ -16,6 +16,9 @@
         <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
             <i class="fas fa-search mr-2"></i> SEO Global
         </button>
+        <button @click="activeTab = 'company'" :class="activeTab === 'company' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-building mr-2"></i> Perusahaan & Invoice
+        </button>
     </div>
 
     <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
@@ -213,6 +216,55 @@
                         <div class="space-y-3 flex flex-col justify-center p-6 bg-blue-50 rounded-2xl">
                             <p class="text-[9px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-lightbulb"></i> Tips Retargeting</p>
                             <p class="text-[10px] text-blue-400 leading-relaxed">Dengan Pixel aktif, Anda bisa menargetkan ulang pengunjung yang sudah melihat halaman paket wisata Anda di Facebook & Instagram Ads.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company & Invoice Tab -->
+        @php $company = $company ?? []; @endphp
+        <div x-show="activeTab === 'company'" x-transition class="space-y-8">
+            <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-amber-500 rounded-full"></span> Identitas Perusahaan & Invoice
+                    </h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-3 ml-5">Data ini muncul di header & instruksi pembayaran pada PDF invoice.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-id-card-clip text-slate-300"></i> Nama Legal Perusahaan
+                            </label>
+                            <input type="text" name="company[legal_name]" value="{{ $company['legal_name'] ?? '' }}" placeholder="PT Sujai Laketoba Experience" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-receipt text-slate-300"></i> NPWP
+                            </label>
+                            <input type="text" name="company[tax_id]" value="{{ $company['tax_id'] ?? '' }}" placeholder="00.000.000.0-000.000" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-700">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Kosongkan bila tidak ingin ditampilkan di invoice.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="p-8 bg-amber-50 rounded-[2.5rem] space-y-4">
+                            <div class="flex items-center gap-4 text-amber-600">
+                                <i class="fas fa-building-columns text-2xl"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">Rekening Pembayaran</span>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Bank & Nomor Rekening</label>
+                                <input type="text" name="company[bank_account]" value="{{ $company['bank_account'] ?? '' }}" placeholder="BCA 1234567890" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 shadow-sm">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Atas Nama</label>
+                                <input type="text" name="company[bank_account_name]" value="{{ $company['bank_account_name'] ?? '' }}" placeholder="PT Sujai Laketoba Experience" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-bold text-slate-700 shadow-sm">
+                            </div>
+                            <p class="text-[8px] font-bold text-amber-400 uppercase tracking-widest italic">Instruksi transfer hanya muncul bila nomor rekening diisi.</p>
                         </div>
                     </div>
                 </div>

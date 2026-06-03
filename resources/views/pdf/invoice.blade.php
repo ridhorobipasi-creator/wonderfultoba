@@ -31,7 +31,7 @@
         $bankAccount     = $siteSettings['company']['bank_account'] ?? null;
         $bankAccountName = $siteSettings['company']['bank_account_name'] ?? $legalName;
         $taxId           = $siteSettings['company']['tax_id'] ?? null;
-        $address         = $siteSettings['general']['address'] ?? 'Sumatera Utara';
+        $address         = $siteSettings['general']['office_address'] ?? 'Sumatera Utara';
         $email           = $siteSettings['general']['contact_email'] ?? '';
     @endphp
 
@@ -39,7 +39,7 @@
         <div class="header">
             <div class="invoice-title">INVOICE</div>
             @php
-                $logoUrl = $siteSettings['general']['logo_url'] ?? ($siteSettings['cms_landing']['brand_logo_url'] ?? null);
+                $logoUrl = $siteSettings['general']['logo_light_url'] ?? ($siteSettings['cms_landing']['brand_logo_url'] ?? null);
             @endphp
             @if(!empty($logoUrl))
                 @php

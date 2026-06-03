@@ -37,7 +37,6 @@ class SettingController extends Controller
                 }
             } elseif ($files instanceof UploadedFile) {
                 $path = $this->uploadAndIndex($files, 'branding', 'branding');
-                // If the key is 'general', we might want to store it as 'logo_url' inside general
                 $data[$key.'_url'] = $path;
             }
         }

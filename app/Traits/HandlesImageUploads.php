@@ -147,6 +147,18 @@ trait HandlesImageUploads
         $path = $this->uploadAndConvert($file, $directory, 80, $watermark);
 
         if ($path) {
+            $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            $isWebp = $extension === 'webp';
+
+            $mimeType = match ($extension) {
+                'webp' => 'image/webp',
+                'png' => 'image/png',
+                'jpg', 'jpeg' => 'image/jpeg',
+                'gif' => 'image/gif',
+                'svg' => 'image/svg+xml',
+                default => 'application/octet-stream',
+            };
+
             // Automatically index to Media Library
             Media::updateOrCreate(
                 ['path' => $path],
@@ -154,9 +166,9 @@ trait HandlesImageUploads
                     'filename' => basename($path),
                     'original_name' => $file->getClientOriginalName(),
                     'category' => $category ?? $directory,
-                    'mime_type' => 'image/webp',
+                    'mime_type' => $mimeType,
                     'size' => Storage::disk('public')->size($path),
-                    'thumb' => $directory.'/thumbnails/'.basename($path),
+                    'thumb' => $isWebp ? ($directory.'/thumbnails/'.basename($path)) : null,
                     'alt_text' => $altText,
                     'dominant_color' => $this->lastDominantColor,
                     'blur_hash' => $this->lastBlurHash,
@@ -167,6 +179,7 @@ trait HandlesImageUploads
 
         return $path;
     }
+
 
     /**
      * Core upload and conversion engine.

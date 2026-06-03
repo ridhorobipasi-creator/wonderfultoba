@@ -17,12 +17,15 @@ class GeneralSettingsController extends Controller
         $settings = Setting::where('key', 'general')->first();
         $general = $settings ? $settings->value : [];
 
-        return view('admin.settings.index', compact('general'));
+        $companySetting = Setting::where('key', 'company')->first();
+        $company = $companySetting ? $companySetting->value : [];
+
+        return view('admin.settings.index', compact('general', 'company'));
     }
 
     public function update(Request $request)
     {
-        $data = $request->except(['_token', 'logo_light_file', 'logo_dark_file', 'icon_file']);
+        $data = $request->except(['_token', 'logo_light_file', 'logo_dark_file', 'icon_file', 'company']);
 
         $setting = Setting::firstOrCreate(['key' => 'general']);
         $existing = $setting->value ?? [];
@@ -52,6 +55,14 @@ class GeneralSettingsController extends Controller
         $finalData = array_merge($existing, $data);
         $setting->value = $finalData;
         $setting->save();
+
+        // Company / invoice identity is stored as its own settings group,
+        // because PdfController & InvoiceService load it under the 'company' key.
+        if ($request->has('company')) {
+            $companySetting = Setting::firstOrCreate(['key' => 'company']);
+            $companySetting->value = array_merge($companySetting->value ?? [], $request->input('company'));
+            $companySetting->save();
+        }
 
         Cache::flush();
 
