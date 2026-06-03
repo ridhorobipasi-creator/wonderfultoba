@@ -288,8 +288,22 @@ Route::get('/debug-storage', function () {
 });
 
 Route::get('/debug-log', function () {
-    $logFile = storage_path('logs/laravel.log');
-    if (!file_exists($logFile)) return "No log file";
-    $lines = file($logFile);
-    return "<pre>" . implode("", array_slice($lines, -100)) . "</pre>";
+    $info = [
+        'public_disk_root' => config('filesystems.disks.public.root'),
+        'storage_path_app_public' => storage_path('app/public'),
+        'public_path' => public_path(),
+        'base_path' => base_path(),
+    ];
+    
+    // Find newly created files in the last 1 hour
+    $recentFiles = [];
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(storage_path()));
+    foreach ($iterator as $file) {
+        if ($file->isFile() && $file->getMTime() > (time() - 3600)) {
+            $recentFiles[] = $file->getPathname();
+        }
+    }
+    $info['recent_storage_files'] = $recentFiles;
+    
+    return response()->json($info);
 });
