@@ -154,7 +154,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::post('media/audit/clean', [MediaController::class, 'cleanOrphanFiles'])->name('media.clean-orphans');
     Route::post('media/{media}/crop', [MediaController::class, 'crop'])->name('media.crop');
     Route::post('media/search', [MediaController::class, 'index'])->name('media.search');
-    Route::resource('media', MediaController::class);
+    Route::resource('media', MediaController::class)->parameters(['media' => 'media']);
 
     // Region Data
     Route::get('cities/regencies', [CityController::class, 'getRegencies'])->name('cities.regencies');
