@@ -275,3 +275,14 @@ Route::get('/storage/{path}', function ($path) {
         'Cache-Control' => 'public, max-age=31536000'
     ]);
 })->where('path', '.*');
+
+// TEMPORARY DEBUG ROUTE
+Route::get('/debug-storage', function () {
+    $dir = storage_path('app/public/gallery/uploads');
+    $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
+    return response()->json([
+        'storage_path' => $dir,
+        'files' => $files,
+        'branding_files' => file_exists(storage_path('app/public/branding')) ? scandir(storage_path('app/public/branding')) : 'No branding dir'
+    ]);
+});
