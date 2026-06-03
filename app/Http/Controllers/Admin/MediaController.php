@@ -191,14 +191,21 @@ class MediaController extends Controller
         $category = $request->category ?? 'uncategorized';
         $watermark = $request->boolean('watermark');
 
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $path = $this->uploadAndIndex($file, 'gallery/'.$category, $category, null, $watermark);
+        try {
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $path = $this->uploadAndIndex($file, 'gallery/'.$category, $category, null, $watermark);
 
-                if ($path) {
-                    $uploadedMedia[] = Media::where('path', $path)->first();
+                    if ($path) {
+                        $uploadedMedia[] = Media::where('path', $path)->first();
+                    }
                 }
             }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'System Error: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine(),
+            ], 500);
         }
 
         return response()->json([

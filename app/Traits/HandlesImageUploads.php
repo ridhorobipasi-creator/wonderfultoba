@@ -300,9 +300,14 @@ trait HandlesImageUploads
                 return $path;
             }
         } catch (\Throwable $e) {
-            \Log::error('Upload Error: '.$e->getMessage());
+            try {
+                \Log::error('Upload Error: '.$e->getMessage());
+            } catch (\Throwable $logException) {
+                // Ignore log errors if storage/logs is not writable
+                throw new \Exception('Upload Error: ' . $e->getMessage() . ' | Log Error: ' . $logException->getMessage());
+            }
 
-            return $file->store($directory, 'public');
+            throw $e;
         }
 
         return $file->store($directory, 'public');
