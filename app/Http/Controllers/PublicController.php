@@ -358,17 +358,11 @@ class PublicController extends Controller
 
     public function about()
     {
-        // CLEAR CACHES ON HOSTINGER
-        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
+        $content = Setting::where('key', 'page_about')->first()?->value ?? [];
+        $clients = Client::orderBy('orderPriority')->get();
 
-        $dir = storage_path('app/public/gallery/uploads');
-        $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
-        return response()->json([
-            'status' => 'Cache Cleared!',
-            'storage_path' => $dir,
-            'files' => $files,
-        ]);
+        return view('pages.about', compact('content', 'siteSettings', 'clients'));
     }
 
     public function debugStorage() 
