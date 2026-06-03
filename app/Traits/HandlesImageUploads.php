@@ -182,6 +182,36 @@ trait HandlesImageUploads
 
 
     /**
+     * Downscale a GD image so its largest side fits within $maxDimension.
+     * Returns the (possibly new) image resource; the original is freed when resized.
+     *
+     * @param  resource  $image
+     * @return resource
+     */
+    protected function downscaleToMax($image, int $maxDimension = 6000)
+    {
+        $width = imagesx($image);
+        $height = imagesy($image);
+
+        if ($width <= $maxDimension && $height <= $maxDimension) {
+            return $image;
+        }
+
+        $ratio = min($maxDimension / $width, $maxDimension / $height);
+        $newWidth = max(1, (int) floor($width * $ratio));
+        $newHeight = max(1, (int) floor($height * $ratio));
+
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+        imagealphablending($resized, false);
+        imagesavealpha($resized, true);
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        imagedestroy($image);
+
+        return $resized;
+    }
+
+    /**
      * Core upload and conversion engine.
      */
     protected function uploadAndConvert($file, $directory = 'uploads', $quality = 80, $watermark = false)
@@ -218,18 +248,14 @@ trait HandlesImageUploads
             }
 
             if ($image) {
-                // Ensure dimensions are not crazy large
-                $width = imagesx($image);
-                $height = imagesy($image);
-                if ($width > 6000 || $height > 6000) {
-                    imagedestroy($image);
-
-                    return $file->store($directory, 'public');
-                }
-
                 \imagepalettetotruecolor($image);
                 \imagealphablending($image, true);
                 \imagesavealpha($image, true);
+
+                // Downscale oversized images instead of storing the heavy original
+                $image = $this->downscaleToMax($image, 6000);
+                $width = imagesx($image);
+                $height = imagesy($image);
 
                 // Apply watermark if requested
                 if ($watermark) {
@@ -273,7 +299,7 @@ trait HandlesImageUploads
 
                 return $path;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             \Log::error('Upload Error: '.$e->getMessage());
 
             return $file->store($directory, 'public');
@@ -335,18 +361,14 @@ trait HandlesImageUploads
             }
 
             if ($image) {
-                // Ensure dimensions are not crazy large
-                $width = imagesx($image);
-                $height = imagesy($image);
-                if ($width > 6000 || $height > 6000) {
-                    imagedestroy($image);
-
-                    return false;
-                }
-
                 \imagepalettetotruecolor($image);
                 \imagealphablending($image, true);
                 \imagesavealpha($image, true);
+
+                // Downscale oversized images instead of skipping the conversion
+                $image = $this->downscaleToMax($image, 6000);
+                $width = imagesx($image);
+                $height = imagesy($image);
 
                 // Extract dominant color
                 $this->lastDominantColor = $this->extractDominantColor($image);
@@ -401,7 +423,7 @@ trait HandlesImageUploads
 
                 return $newStoragePath;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             \Log::error('WebP Conversion Error for '.$storagePath.': '.$e->getMessage());
         }
 
@@ -490,18 +512,14 @@ trait HandlesImageUploads
             $image = @imagecreatefromstring($imgData);
 
             if ($image) {
-                // Ensure dimensions are not crazy large
-                $width = imagesx($image);
-                $height = imagesy($image);
-                if ($width > 6000 || $height > 6000) {
-                    imagedestroy($image);
-
-                    return false;
-                }
-
                 \imagepalettetotruecolor($image);
                 \imagealphablending($image, true);
                 \imagesavealpha($image, true);
+
+                // Downscale oversized images instead of skipping the conversion
+                $image = $this->downscaleToMax($image, 6000);
+                $width = imagesx($image);
+                $height = imagesy($image);
 
                 // Apply watermark if requested
                 if ($watermark) {
