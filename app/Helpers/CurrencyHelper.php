@@ -54,8 +54,8 @@ class CurrencyHelper
     /**
      * Convert and format price based on active locale.
      * Locales mapping:
-     * - 'id' => IDR (Rp)
-     * - 'my' => MYR (RM) [Default]
+     * - 'id' => IDR (Rp) [Default]
+     * - 'my' => MYR (RM)
      * - 'en' => SGD (S$)
      *
      * @param  float  $priceInIdr
@@ -65,7 +65,7 @@ class CurrencyHelper
     public static function formatPrice($priceInIdr, $locale = null)
     {
         if (is_null($locale)) {
-            $locale = session('locale', 'my'); // Default Malaysia (my)
+            $locale = session('locale', 'id'); // Default Indonesia (id)
         }
 
         switch ($locale) {

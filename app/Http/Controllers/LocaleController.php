@@ -8,7 +8,7 @@ class LocaleController extends Controller
 {
     /**
      * Change active language session.
-     * Allowed locales: 'my' (Malaysia), 'id' (Indonesia), 'en' (English).
+     * Allowed locales: 'id' (Indonesia), 'en' (English), 'my' (Malaysia/MYR).
      *
      * @param  string  $locale
      * @return RedirectResponse
