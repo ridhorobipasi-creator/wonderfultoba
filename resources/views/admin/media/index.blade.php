@@ -128,28 +128,37 @@
 
             <!-- Library View Actions -->
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto" x-show="activeTab === 'library'">
-                <!-- Watermark Checkbox Toggle -->
-                <div class="flex items-center gap-3 bg-white px-5 py-4 rounded-[1.5rem] border border-slate-200 shadow-sm mr-2 select-none w-full sm:w-auto justify-center">
-                    <input type="checkbox" id="uploadWatermark" x-model="useWatermark" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
-                    <label for="uploadWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer">Watermark</label>
-                </div>
-
-                <button @click="syncMedia()" class="flex-1 sm:flex-none px-6 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2">
-                    <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> <span class="hidden sm:inline">Sync Disk</span><span class="sm:hidden">Sync</span>
-                </button>
-                <button @click="syncPublicAssets()" class="flex-1 sm:flex-none px-6 py-5 bg-amber-50 border border-amber-200 text-amber-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition-all shadow-sm flex items-center justify-center gap-2" :disabled="syncingStatic" title="Daftarkan gambar dari public/images/ ke Media Library">
-                    <i class="fas fa-folder-tree" :class="syncingStatic ? 'animate-pulse' : ''"></i> <span class="hidden sm:inline">Sync Statis</span><span class="sm:hidden">Statis</span>
-                </button>
-                <button @click="convertAllToWebp()" class="flex-1 sm:flex-none px-6 py-5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-indigo-100 transition-all flex items-center justify-center gap-2 shadow-sm" :disabled="converting">
-                    <i class="fas fa-magic" :class="converting ? 'animate-pulse' : ''"></i> <span class="hidden sm:inline">Convert WebP</span><span class="sm:hidden">WebP</span>
-                </button>
-                <button @click="openUrlModal()" class="flex-1 sm:flex-none px-6 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fas fa-globe"></i> <span class="hidden sm:inline">Upload URL</span><span class="sm:hidden">URL</span>
-                </button>
                 <input type="file" id="mediaUpload" multiple class="hidden" @change="uploadFiles($event)">
                 <label for="mediaUpload" class="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all cursor-pointer flex items-center justify-center gap-3 group">
-                    <i class="fas fa-upload group-hover:-translate-y-1 transition-transform"></i> Upload New
+                    <i class="fas fa-upload group-hover:-translate-y-1 transition-transform"></i> Upload Foto
                 </label>
+
+                <!-- Dropdown Fitur Lanjutan -->
+                <div class="relative" x-data="{ advOpen: false }">
+                    <button @click="advOpen = !advOpen" @click.away="advOpen = false" class="w-full sm:w-auto px-6 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-cogs"></i> Fitur Lanjutan <i class="fas fa-chevron-down ml-1"></i>
+                    </button>
+                    <div x-show="advOpen" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 flex flex-col origin-top-right">
+                        <!-- Watermark Checkbox Toggle -->
+                        <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-50">
+                            <input type="checkbox" id="uploadWatermark" x-model="useWatermark" class="w-5 h-5 rounded-md text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                            <label for="uploadWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer flex-1">Beri Watermark Otomatis</label>
+                        </div>
+                        
+                        <button @click="syncMedia(); advOpen=false" class="text-left px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50 border-b border-slate-50 flex items-center gap-3">
+                            <i class="fas fa-rotate" :class="syncing ? 'animate-spin' : ''"></i> Sinkronisasi Disk (Sync)
+                        </button>
+                        <button @click="syncPublicAssets(); advOpen=false" class="text-left px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50 border-b border-slate-50 flex items-center gap-3" :disabled="syncingStatic">
+                            <i class="fas fa-folder-tree"></i> Sync Aset Statis
+                        </button>
+                        <button @click="convertAllToWebp(); advOpen=false" class="text-left px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50 border-b border-slate-50 flex items-center gap-3" :disabled="converting">
+                            <i class="fas fa-magic"></i> Konversi WebP Massal
+                        </button>
+                        <button @click="openUrlModal(); advOpen=false" class="text-left px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50 flex items-center gap-3">
+                            <i class="fas fa-globe"></i> Upload Gambar dari URL
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Audit View Actions -->
