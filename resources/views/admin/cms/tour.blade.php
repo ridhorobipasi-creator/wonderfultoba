@@ -451,6 +451,7 @@ document.addEventListener('alpine:init', () => {
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
+                                <input type="hidden" name="show_specialist" value="0">
                                 <input type="checkbox" name="show_specialist" value="1" {{ ($settings['show_specialist'] ?? true) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
                             </div>
@@ -492,6 +493,7 @@ document.addEventListener('alpine:init', () => {
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
+                                <input type="hidden" name="show_testimonials" value="0">
                                 <input type="checkbox" name="show_testimonials" value="1" {{ ($settings['show_testimonials'] ?? true) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-amber-400 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
                             </div>
@@ -570,6 +572,7 @@ document.addEventListener('alpine:init', () => {
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
+                                <input type="hidden" name="show_slider" value="0">
                                 <input type="checkbox" name="show_slider" value="1" {{ ($settings['show_slider'] ?? true) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
                             </div>
