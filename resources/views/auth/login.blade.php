@@ -13,7 +13,12 @@
             @php
                 $logoUrl = $siteSettings['general']['logo_light_url'] ?? ($siteSettings['cms_landing']['brand_logo_url'] ?? null);
                 if ($logoUrl && !Str::startsWith($logoUrl, ['http', '//', 'data:', 'blob:'])) {
-                    $logoUrl = asset('storage/' . ltrim(str_replace('storage/', '', $logoUrl), '/'));
+                    $cleanLogo = ltrim($logoUrl, '/');
+                    if (Str::startsWith($cleanLogo, 'assets/')) {
+                        $logoUrl = asset($cleanLogo);
+                    } else {
+                        $logoUrl = asset('storage/' . ltrim(str_replace('storage/', '', $cleanLogo), '/'));
+                    }
                 }
             @endphp
 
