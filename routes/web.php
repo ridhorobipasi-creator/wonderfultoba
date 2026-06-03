@@ -255,6 +255,7 @@ Route::post('/outbound/quote/submit', [PublicController::class, 'submitOutboundQ
 // Invoice & Itinerary
 Route::get('/invoice/{code}', [PdfController::class, 'streamInvoice'])->name('invoice.download');
 Route::get('/download-itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
+Route::get('/track-booking/{code}', [PublicController::class, 'trackBooking'])->name('booking.track');
 
 // Dynamic OpenGraph Banners
 Route::get('/og-banner/{type}/{id}.webp', [PublicController::class, 'generateOgBanner'])->name('og-banner');
@@ -307,4 +308,35 @@ Route::get('/debug-log', function () {
     $info['recent_storage_files'] = $recentFiles;
     
     return response()->json($info);
+});
+Route::get('/debug-media', function (Illuminate\Http\Request $request) {
+    $action = $request->get('action', 'info');
+    if ($action === 'info') {
+        return response()->json([
+            'count' => \App\Models\Media::count(),
+            'latest' => \App\Models\Media::orderBy('id', 'desc')->take(20)->get(),
+        ], 200, [], JSON_PRETTY_PRINT);
+    } elseif ($action === 'delete') {
+        $id = $request->get('id', 0);
+        $media = \App\Models\Media::find($id);
+        if (!$media) return response()->json(['error' => 'Not found', 'id' => $id]);
+        
+        try {
+            $path = $media->path;
+            $res = $media->forceDelete();
+            $file_deleted = false;
+            if (!empty($path) && Storage::disk('public')->exists($path)) {
+                $file_deleted = Storage::disk('public')->delete($path);
+            }
+            return response()->json([
+                'success' => true,
+                'db_deleted' => $res,
+                'file_deleted' => $file_deleted,
+                'media' => $media,
+                'still_exists_in_db' => \App\Models\Media::where('id', $id)->exists()
+            ], 200, [], JSON_PRETTY_PRINT);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 });

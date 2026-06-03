@@ -298,16 +298,28 @@ class PublicController extends Controller
                 ->translatedFormat('d F Y');
 
             // Construct WhatsApp Message
+            $invoiceUrl = route('invoice.download', $booking->bookingCode);
+            $trackingUrl = route('booking.track', $booking->bookingCode);
+            $bookingDate = now()
+                ->locale($carbonLocale)
+                ->translatedFormat('d F Y, H:i');
+
             $waMessage = __('Halo Sujai Laketoba, saya ingin memesan paket wisata.')."\n\n".
                          '*'.__('Detail Pesanan:')."*\n".
                          '- '.__('Kode Booking').': '.$booking->bookingCode."\n".
+                         '- '.__('Status').': '.__('Menunggu konfirmasi admin')."\n".
                          '- '.__('Paket').': '.$package->name."\n".
                          '- '.__('Link Paket').': '.route('tour.package.detail', $package->slug)."\n".
                          '- '.__('Nama').': '.$validated['customerName']."\n".
                          '- '.__('Email').': '.$validated['customerEmail']."\n".
                          '- '.__('WhatsApp').': '.$validated['customerPhone']."\n".
                          '- '.__('Tanggal').': '.$formattedDate."\n".
-                         '- '.__('Peserta').': '.$validated['pax'].' '.__('Orang')."\n";
+                         '- '.__('Peserta').': '.$validated['pax'].' '.__('Orang')."\n".
+                         '- '.__('Estimasi Total').': Rp '.number_format((float) $booking->totalPrice, 0, ',', '.')."\n".
+                         '- '.__('Tanggal Booking').': '.$bookingDate."\n\n".
+                         '*'.__('Link Penting:')."*\n".
+                         '- '.__('Invoice').': '.$invoiceUrl."\n".
+                         '- '.__('Tekan ini untuk lihat track').': '.$trackingUrl."\n";
 
             if (! empty($validated['notes'])) {
                 $waMessage .= '- '.__('Catatan').': '.$validated['notes']."\n";
@@ -352,6 +364,16 @@ class PublicController extends Controller
 
             return back()->with('error', __('Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.'));
         }
+    }
+
+    public function trackBooking(string $code)
+    {
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
+        $booking = \App\Models\Booking::with(['package', 'package.city'])
+            ->where('bookingCode', $code)
+            ->firstOrFail();
+
+        return view('booking.track', compact('booking', 'siteSettings'));
     }
 
 
