@@ -358,23 +358,24 @@ class PublicController extends Controller
 
     public function about()
     {
-        // TEMPORARY DIAGNOSTICS FOR STORAGE ISSUE
-        if (request()->has('debug_storage')) {
-            $dir = storage_path('app/public/gallery/uploads');
-            $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
-            return response()->json([
-                'storage_path' => $dir,
-                'files' => $files,
-                'branding_files' => file_exists(storage_path('app/public/branding')) ? scandir(storage_path('app/public/branding')) : 'No branding dir',
-                'logo_check' => file_exists(storage_path('app/public/gallery/uploads/logo-1780499659.webp')),
-            ]);
-        }
+        $dir = storage_path('app/public/gallery/uploads');
+        $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
+        return response()->json([
+            'storage_path' => $dir,
+            'files' => $files,
+            'logo_check' => file_exists(storage_path('app/public/gallery/uploads/logo-1780499659.webp')),
+        ]);
+    }
 
-        $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
-        $content = Setting::where('key', 'page_about')->first()?->value ?? [];
-        $clients = Client::orderBy('orderPriority')->get();
-
-        return view('pages.about', compact('content', 'siteSettings', 'clients'));
+    public function debugStorage() 
+    {
+        $dir = storage_path('app/public/gallery/uploads');
+        $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
+        return response()->json([
+            'storage_path' => $dir,
+            'files' => $files,
+            'logo_check' => file_exists(storage_path('app/public/gallery/uploads/logo-1780499659.webp')),
+        ]);
     }
 
     public function terms()
