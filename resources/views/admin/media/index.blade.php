@@ -859,7 +859,7 @@ function mediaManager() {
 
         fetchMedia() {
             this.loading = true;
-            let url = `/admin/media/search`;
+            let url = `{{ route('admin.media.search') }}?_t=${new Date().getTime()}`;
             
             const formData = new FormData();
             formData.append('page', this.current_page);
@@ -961,7 +961,7 @@ function mediaManager() {
         async bulkDelete() {
             if (!confirm(`Hapus permanen ${this.selectedIds.length} aset?`)) return;
             try {
-                const response = await fetch('{{ route('admin.media.bulk-delete') }}', {
+                const response = await fetch('{{ route('admin.media.bulk-delete') }}?_t=' + new Date().getTime(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
                     body: JSON.stringify({ ids: this.selectedIds })
@@ -977,7 +977,7 @@ function mediaManager() {
 
         deleteItem(id) {
             if (!confirm('Hapus permanen?')) return;
-            fetch(`/admin/media/${id}`, { 
+            fetch(`/admin/media/${id}?_t=${new Date().getTime()}`, { 
                 method: 'DELETE', 
                 headers: { 
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
