@@ -358,12 +358,16 @@ class PublicController extends Controller
 
     public function about()
     {
+        // CLEAR CACHES ON HOSTINGER
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
         $dir = storage_path('app/public/gallery/uploads');
         $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
         return response()->json([
+            'status' => 'Cache Cleared!',
             'storage_path' => $dir,
             'files' => $files,
-            'logo_check' => file_exists(storage_path('app/public/gallery/uploads/logo-1780499659.webp')),
         ]);
     }
 
