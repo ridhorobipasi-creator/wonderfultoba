@@ -36,6 +36,9 @@ Thumbs.db
 # Database backups
 *.sql
 
+# Stale deploy duplicate (not used at runtime; .cpanel.yml deploys repo root)
+/.deploy/
+
 # File deployment & temp
 *.zip
 *.tar.gz
