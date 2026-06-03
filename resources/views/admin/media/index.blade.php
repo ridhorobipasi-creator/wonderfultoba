@@ -859,8 +859,22 @@ function mediaManager() {
 
         fetchMedia() {
             this.loading = true;
-            let url = `/admin/media?page=${this.current_page}&search=${this.filters.search}&category=${this.filters.category}&usage=${this.filters.usage}&_t=${Date.now()}`;
-            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            let url = `/admin/media/search`;
+            
+            const formData = new FormData();
+            formData.append('page', this.current_page);
+            formData.append('search', this.filters.search);
+            formData.append('category', this.filters.category);
+            formData.append('usage', this.filters.usage);
+            
+            fetch(url, { 
+                method: 'POST',
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
                 .then(res => res.json())
                 .then(data => {
                     this.media = data.media.data;
