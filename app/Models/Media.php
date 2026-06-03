@@ -33,7 +33,7 @@ class Media extends Model
         'exif_data' => 'array',
     ];
 
-    protected $appends = ['url', 'thumbnail_url', 'usage_count', 'usage_details'];
+    protected $appends = ['url', 'thumbnail_url', 'usage_count'];
 
     /**
      * Apakah aset ini adalah file statis (dari public/images/)?

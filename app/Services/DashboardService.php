@@ -43,11 +43,6 @@ class DashboardService
                     'total' => Package::count(),
                     'active' => Package::where('status', 'active')->count(),
                 ],
-                'media' => [
-                    'total_count' => Media::count(),
-                    'total_size' => Media::sum('size'), // in bytes
-                    'orphan_count' => $this->calculateOrphanMedia(),
-                ],
                 'top_views' => [
                     'packages' => Package::orderByDesc('views_count')->limit(5)->get()->toArray(),
                     'blogs' => Blog::orderByDesc('views_count')->limit(5)->get()->toArray(),
@@ -161,10 +156,5 @@ class DashboardService
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-    }
-
-    private function calculateOrphanMedia()
-    {
-        return Media::get()->filter(fn ($m) => $m->usage_count === 0)->count();
     }
 }
