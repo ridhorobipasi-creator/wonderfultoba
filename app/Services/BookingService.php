@@ -33,7 +33,7 @@ class BookingService
     public function create(array $data)
     {
         try {
-            return DB::transaction(function () use ($data) {
+            $booking = DB::transaction(function () use ($data) {
                 if (! $this->isAvailable($data)) {
                     throw new \Exception('Armada atau Paket tidak tersedia pada tanggal yang dipilih.');
                 }
@@ -59,7 +59,7 @@ class BookingService
                 );
                 $data['customerId'] = $customer->id;
 
-                $booking = $this->repository->create($data);
+                $createdBooking = $this->repository->create($data);
 
                 // Update customer stats
                 $customer->update([
@@ -68,25 +68,27 @@ class BookingService
                     'last_booking_at' => now(),
                 ]);
 
-                // Notify Admins
-                try {
-                    $admins = User::whereIn('role', ['admin', 'superadmin'])->get();
-                    Notification::send($admins, new NewBookingNotification($booking));
-                } catch (\Exception $ne) {
-                    Log::warning('Failed to send admin booking notification: '.$ne->getMessage());
-                }
-
-                // Notify Customer with Invoice
-                try {
-                    $booking->notify(new CustomerBookingNotification($booking));
-                } catch (\Exception $ce) {
-                    Log::warning('Failed to send customer booking notification: '.$ce->getMessage());
-                }
-
-                Log::info('New booking created: '.$booking->bookingCode, ['booking_id' => $booking->id]);
-
-                return $booking;
+                return $createdBooking;
             });
+
+            // Notify Admins
+            try {
+                $admins = User::whereIn('role', ['admin', 'superadmin'])->get();
+                Notification::send($admins, new NewBookingNotification($booking));
+            } catch (\Exception $ne) {
+                Log::warning('Failed to send admin booking notification: '.$ne->getMessage());
+            }
+
+            // Notify Customer with Invoice
+            try {
+                $booking->notify(new CustomerBookingNotification($booking));
+            } catch (\Exception $ce) {
+                Log::warning('Failed to send customer booking notification: '.$ce->getMessage());
+            }
+
+            Log::info('New booking created: '.$booking->bookingCode, ['booking_id' => $booking->id]);
+
+            return $booking;
         } catch (\Exception $e) {
             Log::error('Booking Creation Failed: '.$e->getMessage());
             throw $e;
