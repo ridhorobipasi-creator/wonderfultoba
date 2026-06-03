@@ -286,3 +286,10 @@ Route::get('/debug-storage', function () {
         'branding_files' => file_exists(storage_path('app/public/branding')) ? scandir(storage_path('app/public/branding')) : 'No branding dir'
     ]);
 });
+
+Route::get('/debug-log', function () {
+    $logFile = storage_path('logs/laravel.log');
+    if (!file_exists($logFile)) return "No log file";
+    $lines = file($logFile);
+    return "<pre>" . implode("", array_slice($lines, -100)) . "</pre>";
+});
