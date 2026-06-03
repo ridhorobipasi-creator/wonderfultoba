@@ -346,8 +346,11 @@ class MediaController extends Controller
 
             $path = $media->path;
             $media->forceDelete();
-            if (Storage::disk('public')->exists($path)) {
-                Storage::disk('public')->delete($path);
+            
+            if (!empty($path)) {
+                if (Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
+                }
 
                 // Also delete thumbnail
                 $thumbPath = dirname($path).'/thumbnails/'.basename($path);
