@@ -452,7 +452,7 @@ class MediaController extends Controller
             }
 
             return back()->with('success', 'Media dihapus.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Gagal menghapus: ' . $e->getMessage()], 500);
             }
