@@ -434,7 +434,7 @@ class MediaController extends Controller
             $media->forceDelete();
 
             // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
-            if (!$isStatic && Storage::disk('public')->exists($path)) {
+            if (!$isStatic && !empty($path) && Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
 
                 // Also delete thumbnail
@@ -601,7 +601,7 @@ class MediaController extends Controller
                 continue;
             }
 
-            if (Storage::disk('public')->exists($path)) {
+            if (!empty($path) && Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
 
                 // Delete thumb if exists
