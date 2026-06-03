@@ -168,9 +168,11 @@ class MediaController extends Controller
                     'total' => Media::count(),
                     'orphans' => Media::get()->filter(fn ($m) => $m->usage_count === 0)->count(),
                 ],
-            ])->header('Cache-Control', 'no-store, no-cache, must-revalidate')
-              ->header('Pragma', 'no-cache')
-              ->header('Expires', '0');
+            ])->withHeaders([
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+                'Pragma' => 'no-cache',
+                'Expires' => 'Sun, 02 Jan 1990 00:00:00 GMT'
+            ]);
         }
 
         return view('admin.media.index', compact('media', 'categories'));
