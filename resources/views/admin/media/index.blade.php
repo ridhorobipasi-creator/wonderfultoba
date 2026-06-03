@@ -971,9 +971,21 @@ function mediaManager() {
                 } 
             })
             .then(res => res.json())
-            .then(data => { 
-                this.fetchMedia(); 
-                this.showToast('✓ Media berhasil dihapus');
+            .then(data => {
+                if (data.success !== false) {
+                    // Langsung hapus dari array lokal (instant feedback)
+                    this.media = this.media.filter(m => m.id !== id);
+                    this.showToast('✓ Media berhasil dihapus');
+                    // Refresh dari server untuk pastikan data DB sinkron
+                    setTimeout(() => this.fetchMedia(), 500);
+                } else {
+                    alert('Gagal menghapus: ' + (data.message || 'Server error'));
+                    this.fetchMedia();
+                }
+            })
+            .catch(err => {
+                alert('Network error: ' + err.message);
+                this.fetchMedia();
             });
         },
 
