@@ -366,9 +366,28 @@ class PublicController extends Controller
         }
     }
 
+    public function showTrackBookingForm()
+    {
+        $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
+
+        return view('booking.lookup', compact('siteSettings'));
+    }
+
+    public function redirectTrackBooking(Request $request)
+    {
+        $validated = $request->validate([
+            'booking_code' => ['required', 'string', 'max:30'],
+        ]);
+
+        $code = strtoupper(trim($validated['booking_code']));
+
+        return redirect()->route('booking.track', $code);
+    }
+
     public function trackBooking(string $code)
     {
         $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
+        $code = strtoupper(trim($code));
         $booking = \App\Models\Booking::with(['package', 'package.city'])
             ->where('bookingCode', $code)
             ->firstOrFail();

@@ -255,6 +255,8 @@ Route::post('/outbound/quote/submit', [PublicController::class, 'submitOutboundQ
 // Invoice & Itinerary
 Route::get('/invoice/{code}', [PdfController::class, 'streamInvoice'])->name('invoice.download');
 Route::get('/download-itinerary/{slug}', [PdfController::class, 'downloadItinerary'])->name('itinerary.download');
+Route::get('/track-booking', [PublicController::class, 'showTrackBookingForm'])->name('booking.track.form');
+Route::post('/track-booking', [PublicController::class, 'redirectTrackBooking'])->name('booking.track.lookup');
 Route::get('/track-booking/{code}', [PublicController::class, 'trackBooking'])->name('booking.track');
 
 // Dynamic OpenGraph Banners
@@ -339,4 +341,7 @@ Route::get('/debug-media', function (Illuminate\Http\Request $request) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+});
+Route::get('/debug-media-all', function () {
+    return \App\Models\Media::where('filename', 'like', '%logo%')->get();
 });
