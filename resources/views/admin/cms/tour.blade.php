@@ -330,7 +330,7 @@ document.addEventListener('alpine:init', () => {
                     @php
                         $allTourPackages = \App\Models\Package::with('packageImages')
                             ->where('status', 'active')
-                            ->where('isOutbound', false)
+                            ->when(\Illuminate\Support\Facades\Schema::hasColumn('packages', 'isOutbound'), fn ($q) => $q->where('isOutbound', false))
                             ->orderBy('isFeatured', 'desc')
                             ->orderBy('createdAt', 'desc')
                             ->get();
