@@ -252,6 +252,7 @@
             <!-- Main Gallery -->
             <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
+                     fetchpriority="high" decoding="async"
                      :src="package_images[activeImg] ? package_images[activeImg].url : '{{ imageUrl($package->images[0] ?? null) }}'"
                      :srcset="package_images[activeImg] ? package_images[activeImg].srcset : ''"
                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -279,7 +280,7 @@
                     <div @click="activeImg = i" 
                          :class="activeImg === i ? 'ring-2 ring-emerald-500 ring-offset-2' : 'border border-slate-200/50'"
                          class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-90 transition-all duration-300 shadow-sm">
-                        <img class="w-full h-full object-cover" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
+                        <img class="w-full h-full object-cover" loading="lazy" decoding="async" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                     </div>
                 </template>
             </div>
@@ -506,7 +507,7 @@
                             <div class="p-6 bg-slate-50 rounded-xl border border-slate-200 transition-all">
                                 <div class="flex items-center gap-3 mb-4">
                                     @if(!empty($t['image']))
-                                        <img src="{{ imageUrl($t['image']) }}" class="w-10 h-10 rounded-lg object-cover bg-slate-200" alt="{{ $t['name'] }}" onerror="this.style.display='none'">
+                                        <img src="{{ imageUrl($t['image']) }}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover bg-slate-200" alt="{{ $t['name'] }}" onerror="this.style.display='none'">
                                     @else
                                         <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-base">
                                             {{ strtoupper(substr($t['name'] ?? '?', 0, 1)) }}
@@ -555,7 +556,7 @@
                     <div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mt-10 group-hover:scale-125 transition-transform duration-500"></div>
                     <div class="flex items-center gap-4 mb-4 relative z-10">
                         <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-primary overflow-hidden border-2 border-white shadow-md">
-                            <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null, 'staff1') }}" class="w-full h-full object-cover" onerror="this.src='{{ imageUrl('staff1') }}'">
+                            <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null, 'staff1') }}" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="this.src='{{ imageUrl('staff1') }}'">
                         </div>
                         <div>
                             <p class="font-label-caps text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">{{ __($siteSettings['cms_tour']['specialist_title'] ?? 'Travel Specialist') }}</p>
@@ -702,6 +703,7 @@
                             <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Pilih tanggal') }} <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <input type="date" name="startDate" x-model="startDate" required
+                                    min="{{ now()->format('Y-m-d') }}"
                                     class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all uppercase">
                             </div>
                             @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror

@@ -385,6 +385,7 @@
                         <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-low shrink-0">
                             <img alt="{{ $t['name'] }}"
                                  src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
+                                 loading="lazy" decoding="async"
                                  class="w-full h-full object-cover">
                         </div>
                         <div>
@@ -409,6 +410,7 @@
             <div class="bg-primary rounded-3xl px-6 py-7 md:px-10 md:py-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-8 text-center sm:text-left">
                 <img alt="{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}"
                      class="w-14 h-14 rounded-full object-cover border-2 border-white/10 shrink-0"
+                     loading="lazy" decoding="async"
                      src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'staff1') }}"/>
                 <div class="flex-1 text-center sm:text-left">
                     <p class="text-white font-bold font-body-md text-sm">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
@@ -440,7 +442,7 @@
             @foreach($blogs as $blog)
             <div class="group cursor-pointer" onclick="window.location.href='{{ route('tour.blog.detail', $blog->slug) }}'">
                 <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
-                    <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
+                    <img alt="{{ $blog->translated_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
                 </div>
                 <span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
                 <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight">{{ $blog->translated_title }}</h3>
@@ -503,7 +505,7 @@
     <section class="py-16 md:py-32 px-5 md:px-8 bg-surface">
         <div class="max-w-7xl mx-auto bg-primary rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,37,19,0.3)]">
             <div class="absolute inset-0 opacity-40">
-                <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? 'Call to action image' }}" class="w-full h-full object-cover">
+                <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? 'Call to action image' }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
             </div>
             <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary/60 to-transparent"></div>
             
@@ -536,7 +538,7 @@
                         ];
                         @endphp
                         @foreach($avatarPhotos as $avatarUrl)
-                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-primary shadow-xl object-cover" alt="Pelanggan Sujai Laketoba">
+                            <img src="{{ $avatarUrl }}" loading="lazy" decoding="async" class="w-14 h-14 rounded-full border-4 border-primary shadow-xl object-cover" alt="Pelanggan Sujai Laketoba">
                         @endforeach
                         <div class="w-14 h-14 rounded-full border-4 border-primary bg-secondary flex items-center justify-center text-white text-[10px] font-bold">
                             {{ $touristsCount }}
