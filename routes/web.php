@@ -291,21 +291,6 @@ Route::get('/debug-storage', function () {
     ]);
 });
 
-Route::get('/debug-log', function () {
-    $info = [
-        'public_disk_root' => config('filesystems.disks.public.root'),
-        'storage_path_app_public' => storage_path('app/public'),
-        'public_path' => public_path(),
-        'base_path' => base_path(),
-    ];
-    
-    // Find newly created files in the last 1 hour
-    $recentFiles = [];
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(storage_path()));
-    foreach ($iterator as $file) {
-        if ($file->isFile() && $file->getMTime() > (time() - 3600)) {
-            $recentFiles[] = $file->getPathname();
-        }
     }
     $info['recent_storage_files'] = $recentFiles;
     
