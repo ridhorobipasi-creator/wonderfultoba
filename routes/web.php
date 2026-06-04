@@ -310,35 +310,4 @@ Route::get('/debug-file', function () {
         $output['mime_error'] = $e->getMessage();
     }
     
-    try {
-        $response = response()->file($filePath);
-        $output['response_created'] = true;
-    } catch (\Throwable $e) {
-        $output['response_error'] = $e->getMessage();
-    }
-    
-    return response()->json($output);
-});
-
-Route::get('/create-symlink', function () {
-    $target = dirname(base_path()) . '/persistent_uploads';
-    $link = public_path('storage');
-    
-    $output = [];
-    $output['target'] = $target;
-    $output['link'] = $link;
-    $output['target_exists'] = file_exists($target);
-    $output['link_exists'] = file_exists($link) || is_link($link);
-    
-    if ($output['link_exists']) {
-        $output['deleted'] = @unlink($link);
-        if (!$output['deleted']) {
-            $output['deleted'] = @rmdir($link);
-        }
-    }
-    
-    $output['symlink_result'] = @symlink($target, $link);
-    $output['symlink_error'] = error_get_last();
-    
-    return response()->json($output);
-});
+})->where('path', '.*');
