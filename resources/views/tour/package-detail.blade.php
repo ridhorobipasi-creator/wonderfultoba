@@ -671,7 +671,7 @@
                             @if($__rating['count'])
                             <span class="text-slate-500 text-[11px] font-body-md block">
                                 @if($__rating['url'])
-                                    <a href="{{ $__rating['url'] }}" target="_blank" rel="noopener" class="hover:text-secondary transition-colors">{{ number_format($__rating['count']) }} {{ $__rating['source'] === 'google' ? __('ulasan Google') : __('ulasan') }}</a>
+                                    <a href="{{ $__rating['url'] }}" target="_blank" rel="noopener" class="hover:text-secondary transition-colors">{{ number_format($__rating['count']) }} {{ __('ulasan Google') }}</a>
                                 @else
                                     {{ number_format($__rating['count']) }} {{ __('ulasan') }}
                                 @endif

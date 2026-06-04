@@ -157,37 +157,31 @@
                     </div>
                 </div>
 
-                <!-- Rating & Ulasan (Google Maps + Override) -->
+                <!-- Rating & Ulasan (angka dari Google Maps, diisi manual) -->
                 <div class="pt-8 border-t border-slate-100 space-y-6">
                     <div class="flex items-center gap-3">
                         <span class="text-amber-400 text-lg">★</span>
                         <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Rating & Ulasan</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Google Place ID</label>
-                            <input type="text" name="google_place_id" value="{{ $general['google_place_id'] ?? '' }}" placeholder="ChIJ..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Rating <span class="text-slate-300 normal-case">(0–5)</span></label>
+                            <input type="number" step="0.1" min="0" max="5" name="rating_override" value="{{ $general['rating_override'] ?? '' }}" placeholder="mis. 4.9" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Google Maps API Key</label>
-                            <input type="text" name="google_maps_api_key" value="{{ $general['google_maps_api_key'] ?? '' }}" placeholder="AIza..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Jumlah Ulasan</label>
+                            <input type="number" min="0" name="review_count_override" value="{{ $general['review_count_override'] ?? '' }}" placeholder="mis. 87" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Override Rating <span class="text-slate-300 normal-case">(kosongkan = pakai Google)</span></label>
-                            <input type="number" step="0.1" min="0" max="5" name="rating_override" value="{{ $general['rating_override'] ?? '' }}" placeholder="mis. 4.8" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Override Jumlah Ulasan</label>
-                            <input type="number" min="0" name="review_count_override" value="{{ $general['review_count_override'] ?? '' }}" placeholder="mis. 213" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
-                        </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Link Google Maps <span class="text-slate-300 normal-case">(opsional — jumlah ulasan jadi link ke listing)</span></label>
+                        <input type="text" name="google_maps_url" value="{{ $general['google_maps_url'] ?? '' }}" placeholder="https://maps.app.goo.gl/..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
                     </div>
 
                     <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic leading-relaxed">
-                        Isi Place ID + API Key → rating asli ditarik otomatis dari Google (cache 12 jam). Override hanya untuk koreksi manual; kalau kedua kolom rating kosong & Google belum diisi, badge rating disembunyikan (bukan angka palsu).
+                        Isi sesuai angka yang tampil di Google Maps Anda. Kosongkan rating → badge disembunyikan (bukan angka palsu).
                     </p>
                 </div>
             </div>
