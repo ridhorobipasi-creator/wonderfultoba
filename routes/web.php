@@ -286,15 +286,6 @@ Route::get('/debug-storage', function () {
     $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
     return response()->json([
         'storage_path' => $dir,
-        'files' => $files,
-        'branding_files' => file_exists(public_path('storage/branding')) ? scandir(public_path('storage/branding')) : 'No branding dir'
+        'files' => $files
     ]);
 });
-
-    }
-    $info['recent_storage_files'] = $recentFiles;
-    
-    return response()->json($info);
-});
-
-
