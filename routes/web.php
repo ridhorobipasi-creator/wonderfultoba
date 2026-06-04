@@ -287,27 +287,3 @@ Route::get('/storage/{path}', function ($path) {
     ]);
 })->where('path', '.*');
 
-// TEMPORARY DEBUG ROUTE
-Route::get('/debug-storage', function () {
-    $dir = public_path('storage/gallery/uploads');
-    $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
-    return response()->json([
-        'storage_path' => $dir,
-        'files' => $files
-    ]);
-});
-
-Route::get('/debug-file', function () {
-    $filePath = dirname(base_path()) . '/persistent_uploads/gallery/uploads/logo-1-1780548538.webp';
-    $output = [];
-    $output['file_exists'] = file_exists($filePath);
-    $output['is_readable'] = is_readable($filePath);
-    $output['file_size'] = @filesize($filePath);
-    
-    try {
-        $output['mime'] = mime_content_type($filePath);
-    } catch (\Throwable $e) {
-        $output['mime_error'] = $e->getMessage();
-    }
-    
-})->where('path', '.*');
