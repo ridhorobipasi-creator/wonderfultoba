@@ -327,14 +327,6 @@ document.addEventListener('alpine:init', () => {
                         </h4>
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Pilih maks. 3 paket yang tampil di beranda Tour. Jika kosong, sistem pakai paket bertanda ⭐ Featured.</p>
                     </div>
-                    @php
-                        $allTourPackages = \App\Models\Package::with('packageImages')
-                            ->where('status', 'active')
-                            ->orderBy('isFeatured', 'desc')
-                            ->orderBy('createdAt', 'desc')
-                            ->get();
-                        $pinnedIds = $settings['featured_package_ids'] ?? [];
-                    @endphp
                     <div class="space-y-3 max-h-[450px] overflow-y-auto pr-1 no-scrollbar">
                         @forelse($allTourPackages as $ap)
                         @php

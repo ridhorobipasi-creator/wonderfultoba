@@ -41,7 +41,7 @@
                     <select name="packageId" x-model="packageId" :required="type === 'package'"
                         class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition-all font-bold text-sm appearance-none cursor-pointer">
                         <option value="">-- Pilih Paket --</option>
-                        @foreach(\App\Models\Package::where('status', 'active')->orderBy('name')->get() as $pkg)
+                        @foreach($packages as $pkg)
                             <option value="{{ $pkg->id }}">{{ $pkg->name }} (Rp {{ number_format($pkg->price / 1000) }}K)</option>
                         @endforeach
                     </select>

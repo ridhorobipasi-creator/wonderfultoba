@@ -344,8 +344,7 @@
 
                 {{-- pSEO: Internal Linking Block — "Paket ini tersedia dari kota berikut" --}}
                 @php
-                    $seoSetting    = \App\Models\Setting::where('key', 'general')->first();
-                    $originsString = $seoSetting->value['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
+                    $originsString = $siteSettings['general']['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
                     $pSEOCities    = array_filter(array_map('trim', explode(',', $originsString)));
                 @endphp
                 @if(count($pSEOCities) > 0)

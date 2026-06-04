@@ -114,7 +114,9 @@ class BookingController extends Controller
 
     public function create()
     {
-        return view('admin.bookings.create');
+        $packages = \App\Models\Package::where('status', 'active')->orderBy('name')->get();
+
+        return view('admin.bookings.create', compact('packages'));
     }
 
     public function store(Request $request)

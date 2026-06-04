@@ -35,9 +35,15 @@ class CMSController extends Controller
         $blogs = Blog::where('status', 'published')->orderBy('createdAt', 'desc')->get();
         $gallery = GalleryImage::orderBy('orderPriority', 'asc')->get();
 
-        // Logic for auto-populating slides removed to allow clean reset.
+        // Featured-package picker data (moved out of the Blade view).
+        $allTourPackages = Package::with('packageImages')
+            ->where('status', 'active')
+            ->orderBy('isFeatured', 'desc')
+            ->orderBy('createdAt', 'desc')
+            ->get();
+        $pinnedIds = $settings['featured_package_ids'] ?? [];
 
-        return view('admin.cms.tour', compact('settings', 'packages', 'blogs', 'gallery'));
+        return view('admin.cms.tour', compact('settings', 'packages', 'blogs', 'gallery', 'allTourPackages', 'pinnedIds'));
     }
 
     public function pages()

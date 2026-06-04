@@ -558,8 +558,7 @@
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Populer: Paket Wisata dari Berbagai Kota</h3>
             <div class="flex flex-wrap gap-x-4 gap-y-2">
                 @php
-                    $seoSetting = \App\Models\Setting::where('key', 'general')->first();
-                    $originsString = $seoSetting->value['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
+                    $originsString = $siteSettings['general']['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia';
                     $pSEOCities = array_filter(array_map('trim', explode(',', $originsString)));
                 @endphp
                 @foreach($pSEOCities as $city)
