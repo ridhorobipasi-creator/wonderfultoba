@@ -32,14 +32,14 @@
                 $largePath = ($dir === '.' || $dir === '/') ? 'large/' . $base : $dir . '/large/' . $base;
 
                 $srcsetParts = [];
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($mobilePath)) {
-                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($mobilePath) . ' 480w';
+                if (\Illuminate\Support\Facades\Storage::disk('uploads')->exists($mobilePath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('uploads')->url($mobilePath) . ' 480w';
                 }
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($mediumPath)) {
-                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($mediumPath) . ' 800w';
+                if (\Illuminate\Support\Facades\Storage::disk('uploads')->exists($mediumPath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('uploads')->url($mediumPath) . ' 800w';
                 }
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($largePath)) {
-                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('public')->url($largePath) . ' 1200w';
+                if (\Illuminate\Support\Facades\Storage::disk('uploads')->exists($largePath)) {
+                    $srcsetParts[] = \Illuminate\Support\Facades\Storage::disk('uploads')->url($largePath) . ' 1200w';
                 }
                 if (!empty($srcsetParts)) {
                     $srcset = implode(', ', $srcsetParts);
