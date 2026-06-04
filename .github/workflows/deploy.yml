@@ -87,6 +87,7 @@ jobs:
           **/storage/framework/cache/**
           **/storage/framework/sessions/**
           **/storage/app/public/**
+          **/public/storage/**
           **/public/storage
           **/.vscode/**
           optimize.bat

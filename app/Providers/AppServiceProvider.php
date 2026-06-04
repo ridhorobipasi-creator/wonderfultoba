@@ -37,15 +37,6 @@ class AppServiceProvider extends ServiceProvider
         // public/storage (see config/filesystems.php), which is the folder the web server
         // serves at /storage. This avoids the unreliable symlink on shared hosting.
 
-        // -----------------------------------------------------------------------
-        // PERSISTENT UPLOAD SYMLINKS
-        // User-uploaded files live in storage/app/uploads/ which is NEVER touched
-        // by git or Hostinger auto-deploy. We expose them at the expected public
-        // URLs by creating symlinks inside public/storage/. If a deploy wipes a
-        // symlink, it is transparently re-created on the very next request.
-        // -----------------------------------------------------------------------
-        $this->ensureUploadSymlinks();
-
         // Register Observers
         Package::observe(PackageObserver::class);
         Blog::observe(BlogObserver::class);
@@ -102,89 +93,6 @@ class AppServiceProvider extends ServiceProvider
                 }
             } catch (\Exception $e) {
                 // Silently fail if DB not ready
-            }
-        }
-    }
-
-    /**
-     * Ensure symlinks from public/storage/ point to the persistent upload directories
-     * inside storage/app/uploads/. This is called on every boot so that even if
-     * Hostinger's git auto-deploy removes the symlinks, they are re-created
-     * automatically on the first request after deploy — without any manual SSH work.
-     *
-     * Directory map (link → target):
-     *   public/storage/gallery  →  storage/app/uploads/gallery
-     *   public/storage/media    →  storage/app/uploads/media
-     */
-    private function ensureUploadSymlinks(): void
-    {
-        try {
-            $uploadDirs = ['gallery', 'media'];
-
-            foreach ($uploadDirs as $dir) {
-                $target = storage_path("app/uploads/{$dir}");
-                $link   = public_path("storage/{$dir}");
-
-                // 1. Ensure the real persistent target directory exists
-                if (! is_dir($target)) {
-                    @mkdir($target, 0755, true);
-                }
-
-                // 2. If the link path is a real directory (not a symlink), migrate its
-                //    contents to the persistent target then remove the directory so we
-                //    can replace it with a symlink.
-                if (is_dir($link) && ! is_link($link)) {
-                    $this->migrateDirectory($link, $target);
-                    // Remove the now-empty (or migrated) real directory
-                    @rmdir($link);
-                }
-
-                // 3. Create symlink if it does not exist (or was wiped by deploy)
-                if (! file_exists($link) && ! is_link($link)) {
-                    if (function_exists('symlink')) {
-                        @symlink($target, $link);
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            // Silently fail during boot to prevent application/deploy crashes
-        }
-    }
-
-    /**
-     * Recursively move files from $source directory to $destination.
-     * Skips files that already exist at destination (keeps newer uploads safe).
-     */
-    private function migrateDirectory(string $source, string $destination): void
-    {
-        if (! is_dir($source)) {
-            return;
-        }
-
-        $items = @scandir($source);
-        if (! $items) {
-            return;
-        }
-
-        foreach ($items as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
-
-            $srcPath  = $source  . DIRECTORY_SEPARATOR . $item;
-            $destPath = $destination . DIRECTORY_SEPARATOR . $item;
-
-            if (is_dir($srcPath)) {
-                if (! is_dir($destPath)) {
-                    @mkdir($destPath, 0755, true);
-                }
-                $this->migrateDirectory($srcPath, $destPath);
-                @rmdir($srcPath); // Remove after emptying
-            } else {
-                // Only move if not already at destination
-                if (! file_exists($destPath)) {
-                    @rename($srcPath, $destPath);
-                }
             }
         }
     }

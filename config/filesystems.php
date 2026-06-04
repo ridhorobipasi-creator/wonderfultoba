@@ -51,19 +51,6 @@ return [
             'report' => false,
         ],
 
-        // Persistent uploads disk — files stored here survive git deploys.
-        // This folder (storage/app/uploads/) is NEVER tracked by git and NEVER
-        // wiped by Hostinger auto-deploy. Symlinks from public/storage/gallery
-        // and public/storage/media point here (auto-created in AppServiceProvider).
-        'uploads' => [
-            'driver' => 'local',
-            'root' => storage_path('app/uploads'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-            'report' => false,
-        ],
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
