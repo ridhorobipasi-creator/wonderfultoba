@@ -299,8 +299,23 @@ Route::get('/debug-storage', function () {
 
 Route::get('/debug-file', function () {
     $filePath = dirname(base_path()) . '/persistent_uploads/gallery/uploads/logo-1-1780548538.webp';
-    if (!file_exists($filePath)) {
-        return "File doesn't exist at " . $filePath;
+    $output = [];
+    $output['file_exists'] = file_exists($filePath);
+    $output['is_readable'] = is_readable($filePath);
+    $output['file_size'] = @filesize($filePath);
+    
+    try {
+        $output['mime'] = mime_content_type($filePath);
+    } catch (\Throwable $e) {
+        $output['mime_error'] = $e->getMessage();
     }
-    return response(file_get_contents($filePath))->header('Content-Type', 'image/webp');
+    
+    try {
+        $response = response()->file($filePath);
+        $output['response_created'] = true;
+    } catch (\Throwable $e) {
+        $output['response_error'] = $e->getMessage();
+    }
+    
+    return response()->json($output);
 });
