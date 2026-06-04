@@ -49,14 +49,18 @@ class BookingService
                 // Set default status
                 $data['status'] = $data['status'] ?? 'pending';
 
-                // Sync Customer
-                $customer = Customer::updateOrCreate(
-                    ['email' => $data['customerEmail']],
-                    [
-                        'name' => $data['customerName'],
-                        'phone' => $data['customerPhone'] ?? null,
-                    ]
-                );
+                // Sync Customer — include soft-deleted records so a repeat booking
+                // from a previously removed email restores that customer instead of
+                // hitting the customers_email_unique index with a fresh insert.
+                $customer = Customer::withTrashed()->firstOrNew(['email' => $data['customerEmail']]);
+                $customer->fill([
+                    'name' => $data['customerName'],
+                    'phone' => $data['customerPhone'] ?? null,
+                ]);
+                if ($customer->trashed()) {
+                    $customer->deleted_at = null;
+                }
+                $customer->save();
                 $data['customerId'] = $customer->id;
 
                 $createdBooking = $this->repository->create($data);
