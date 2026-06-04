@@ -296,3 +296,11 @@ Route::get('/debug-storage', function () {
         'files' => $files
     ]);
 });
+
+Route::get('/debug-file', function () {
+    $filePath = dirname(base_path()) . '/persistent_uploads/gallery/uploads/logo-1-1780548538.webp';
+    if (!file_exists($filePath)) {
+        return "File doesn't exist at " . $filePath;
+    }
+    return response(file_get_contents($filePath))->header('Content-Type', 'image/webp');
+});
