@@ -164,10 +164,13 @@
                     </div>
                     @endif
 
+                    @php $__r = siteRating(); @endphp
+                    @if($__r)
                     <div class="absolute top-5 right-5 bg-black/60 backdrop-blur-md px-3 py-1 border border-white/10 rounded-full flex items-center gap-1.5 shadow-lg">
                         <span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="text-white font-label-caps text-[11px] font-bold">{{ $pkg->rating ?? '4.9' }}</span>
+                        <span class="text-white font-label-caps text-[11px] font-bold">{{ number_format($__r['value'], 1) }}</span>
                     </div>
+                    @endif
 
                     <div class="absolute bottom-0 left-0 w-full p-6 text-white">
                         <div class="flex items-center gap-2 mb-2">

@@ -664,10 +664,21 @@
                             <span class="font-label-caps text-[10px] text-slate-500 uppercase tracking-wider">{{ __('Mulai dari') }}</span>
                             <div class="font-headline-md text-headline-md text-primary" x-text="AppCurrency.format(package.price)"></div>
                         </div>
+                        @php $__rating = siteRating(); @endphp
+                        @if($__rating)
                         <div class="text-right">
-                            <span class="text-secondary font-semibold font-body-md">★ 4.9</span>
-                            <span class="text-slate-500 text-[11px] font-body-md block">124 ulasan</span>
+                            <span class="text-secondary font-semibold font-body-md">★ {{ number_format($__rating['value'], 1) }}</span>
+                            @if($__rating['count'])
+                            <span class="text-slate-500 text-[11px] font-body-md block">
+                                @if($__rating['url'])
+                                    <a href="{{ $__rating['url'] }}" target="_blank" rel="noopener" class="hover:text-secondary transition-colors">{{ number_format($__rating['count']) }} {{ $__rating['source'] === 'google' ? __('ulasan Google') : __('ulasan') }}</a>
+                                @else
+                                    {{ number_format($__rating['count']) }} {{ __('ulasan') }}
+                                @endif
+                            </span>
+                            @endif
                         </div>
+                        @endif
                     </div>
 
                     @if(session('error'))

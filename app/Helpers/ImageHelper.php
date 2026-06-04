@@ -6,6 +6,11 @@ use App\Models\Media;
 use App\Models\Package;
 use Illuminate\Support\Facades\Storage;
 
+// Loaded here (not via composer "files") because the FTP deploy excludes
+// composer.json/vendor and never runs dump-autoload on the server — this
+// file is already registered, so requiring siblings keeps helpers reachable.
+require_once __DIR__.'/RatingHelper.php';
+
 /**
  * Global Image Path Resolution Helper
  *

@@ -39,6 +39,13 @@ return [
         'number' => env('WHATSAPP_NUMBER', ''),
     ],
 
+    // Google Places — used to pull the real business rating into trust badges.
+    // The API key can also be set in Admin → Settings (general.google_maps_api_key),
+    // which takes precedence over this env value.
+    'google_places' => [
+        'key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
     // Android TWA (.apk) packaging — Digital Asset Links for the admin PWA.
     // Fill ANDROID_APP_FINGERPRINT with the SHA256 signing fingerprint(s) that
     // PWABuilder/Play Store gives you (comma-separated for multiple).
