@@ -89,6 +89,12 @@ jobs:
           **/storage/app/public/**
           **/public/storage/**
           **/public/storage
+          storage/logs/**
+          storage/framework/views/**
+          storage/framework/cache/**
+          storage/framework/sessions/**
+          storage/app/public/**
+          public/storage/**
           **/.vscode/**
           optimize.bat
           PRODUKSI.md
