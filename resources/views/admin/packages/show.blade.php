@@ -141,10 +141,6 @@
             <!-- Details Card -->
             <div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-50 space-y-6">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-400">Tipe Paket</span>
-                    <span class="text-xs font-black text-slate-900 uppercase tracking-widest">{{ $package->isOutbound ? 'Outbound' : 'Tour' }}</span>
-                </div>
-                <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">Durasi</span>
                     <span class="text-xs font-black text-slate-900 uppercase tracking-widest">{{ $package->duration ?? '-' }}</span>
                 </div>

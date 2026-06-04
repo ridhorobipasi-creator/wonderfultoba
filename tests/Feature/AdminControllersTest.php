@@ -257,7 +257,6 @@ class AdminControllersTest extends TestCase
             'duration' => '3D2N',
             'status' => 'active',
             'isFeatured' => true,
-            'isOutbound' => false,
         ]);
 
         $response->assertRedirect('/admin/packages');
