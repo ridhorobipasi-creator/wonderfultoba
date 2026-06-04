@@ -363,9 +363,7 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error('Booking Submission Error: '.$e->getMessage(), ['request' => $request->all()]);
 
-            // TEMP DEBUG: surface the real exception on screen because server logs are not writable.
-            // Revert to the generic message once the root cause is identified.
-            return back()->with('error', 'DEBUG: '.$e->getMessage());
+            return back()->with('error', __('Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.'));
         }
     }
 
