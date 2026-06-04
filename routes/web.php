@@ -280,44 +280,34 @@ Route::get('/storage/{path}', function ($path) {
     ]);
 })->where('path', '.*');
 
-// Route Khusus untuk memigrasikan foto lama ke folder baru yang aman dari Git Deploy
-Route::get('/migrate-uploads', function () {
-    $result = [];
-    $legacyDirs = ['gallery', 'media'];
-    
-    if (!is_dir(public_path('uploads'))) {
-        @mkdir(public_path('uploads'), 0755, true);
-    }
-
-    foreach ($legacyDirs as $dir) {
-        $oldPath = public_path("storage/{$dir}");
-        $newPath = public_path("uploads/{$dir}");
-
-        if (is_dir($oldPath) && !is_link($oldPath)) {
-            if (!file_exists($newPath)) {
-                $success = @rename($oldPath, $newPath);
-                $result[] = "Moved {$oldPath} to {$newPath}: " . ($success ? "SUCCESS" : "FAILED");
-            } else {
-                $result[] = "Destination {$newPath} already exists. Please merge manually.";
-            }
-        } else {
-            $result[] = "Directory {$oldPath} does not exist or is a symlink. Skipped.";
-        }
-    }
-    
+// TEMPORARY DEBUG ROUTE
+Route::get('/debug-storage', function () {
+    $dir = public_path('storage/gallery/uploads');
+    $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
     return response()->json([
-        'message' => 'Migration completed!',
-        'details' => $result
+        'storage_path' => $dir,
+        'files' => $files,
+        'branding_files' => file_exists(public_path('storage/branding')) ? scandir(public_path('storage/branding')) : 'No branding dir'
     ]);
 });
 
 Route::get('/debug-log', function () {
     $info = [
         'public_disk_root' => config('filesystems.disks.public.root'),
-        'uploads_disk_root' => config('filesystems.disks.uploads.root'),
+        'storage_path_app_public' => storage_path('app/public'),
         'public_path' => public_path(),
         'base_path' => base_path(),
     ];
+    
+    // Find newly created files in the last 1 hour
+    $recentFiles = [];
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(storage_path()));
+    foreach ($iterator as $file) {
+        if ($file->isFile() && $file->getMTime() > (time() - 3600)) {
+            $recentFiles[] = $file->getPathname();
+        }
+    }
+    $info['recent_storage_files'] = $recentFiles;
     
     return response()->json($info);
 });

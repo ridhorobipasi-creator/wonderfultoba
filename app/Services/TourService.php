@@ -42,7 +42,7 @@ class TourService
             foreach ($data['remove_images'] as $imgToRemove) {
                 if (($key = array_search($imgToRemove, $currentImages)) !== false) {
                     unset($currentImages[$key]);
-                    Storage::disk('uploads')->delete($imgToRemove);
+                    Storage::disk('public')->delete($imgToRemove);
                 }
             }
         }
@@ -88,7 +88,7 @@ class TourService
     {
         if ($package->images) {
             foreach ($package->images as $image) {
-                Storage::disk('uploads')->delete($image);
+                Storage::disk('public')->delete($image);
             }
         }
 
@@ -106,7 +106,7 @@ class TourService
             'path' => $path,
             'category' => 'packages',
             'mime_type' => 'image/webp',
-            'size' => Storage::disk('uploads')->size($path),
+            'size' => Storage::disk('public')->size($path),
             'alt_text' => $packageName,
         ]);
     }

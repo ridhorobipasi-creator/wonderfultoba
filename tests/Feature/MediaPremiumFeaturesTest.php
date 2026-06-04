@@ -75,8 +75,8 @@ class MediaPremiumFeaturesTest extends TestCase
         $this->assertStringContainsString('Foto Red Image - Kategori Tours', $media->alt_text);
 
         // Verify that the files exist in public storage in WebP format
-        Storage::disk('uploads')->assertExists($media->path);
-        Storage::disk('uploads')->assertExists($media->thumb);
+        Storage::disk('public')->assertExists($media->path);
+        Storage::disk('public')->assertExists($media->thumb);
         $this->assertStringEndsWith('.webp', $media->path);
     }
 
@@ -95,7 +95,7 @@ class MediaPremiumFeaturesTest extends TestCase
         $response->assertStatus(200);
         $media = Media::first();
 
-        Storage::disk('uploads')->assertExists($media->path);
+        Storage::disk('public')->assertExists($media->path);
 
         // The file should be saved correctly in webp format
         $this->assertStringEndsWith('.webp', $media->path);
@@ -107,7 +107,7 @@ class MediaPremiumFeaturesTest extends TestCase
 
         // Create a physical file directly on the disk
         $file = $this->createFakeJpeg(10, 10);
-        Storage::disk('uploads')->put('gallery/tours/outside_file.jpg', file_get_contents($file->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/outside_file.jpg', file_get_contents($file->getRealPath()));
 
         $response = $this->actingAs($this->admin)->postJson(route('admin.media.sync'));
         $response->assertStatus(200);
@@ -127,7 +127,7 @@ class MediaPremiumFeaturesTest extends TestCase
 
         // Create a non-webp database entry and disk file
         $file = $this->createFakeJpeg(10, 10);
-        Storage::disk('uploads')->put('gallery/tours/convert_me.jpg', file_get_contents($file->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/convert_me.jpg', file_get_contents($file->getRealPath()));
 
         $media = Media::create([
             'filename' => 'convert_me.jpg',
@@ -150,9 +150,9 @@ class MediaPremiumFeaturesTest extends TestCase
         $this->assertNotNull($media->dominant_color);
 
         // Verify old file deleted and new WebP exists
-        Storage::disk('uploads')->assertMissing('gallery/tours/convert_me.jpg');
-        Storage::disk('uploads')->assertExists($media->path);
-        Storage::disk('uploads')->assertExists($media->thumb);
+        Storage::disk('public')->assertMissing('gallery/tours/convert_me.jpg');
+        Storage::disk('public')->assertExists($media->path);
+        Storage::disk('public')->assertExists($media->thumb);
     }
 
     public function test_it_audits_storage_and_detects_physical_orphan_files()
@@ -161,7 +161,7 @@ class MediaPremiumFeaturesTest extends TestCase
 
         // 1. Registered file
         $registeredFile = $this->createFakeJpeg(5, 5);
-        Storage::disk('uploads')->put('gallery/tours/registered.webp', file_get_contents($registeredFile->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/registered.webp', file_get_contents($registeredFile->getRealPath()));
         Media::create([
             'filename' => 'registered.webp',
             'original_name' => 'registered.webp',
@@ -174,7 +174,7 @@ class MediaPremiumFeaturesTest extends TestCase
 
         // 2. Orphan file on disk (not registered in database)
         $orphanFile = $this->createFakeJpeg(5, 5);
-        Storage::disk('uploads')->put('gallery/tours/orphan.webp', file_get_contents($orphanFile->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/orphan.webp', file_get_contents($orphanFile->getRealPath()));
 
         $response = $this->actingAs($this->admin)->getJson(route('admin.media.audit'));
         $response->assertStatus(200);
@@ -196,8 +196,8 @@ class MediaPremiumFeaturesTest extends TestCase
         Storage::fake('public');
 
         $orphanFile = $this->createFakeJpeg(5, 5);
-        Storage::disk('uploads')->put('gallery/tours/orphan.webp', file_get_contents($orphanFile->getRealPath()));
-        Storage::disk('uploads')->put('gallery/tours/thumbnails/orphan.webp', file_get_contents($orphanFile->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/orphan.webp', file_get_contents($orphanFile->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/thumbnails/orphan.webp', file_get_contents($orphanFile->getRealPath()));
 
         $response = $this->actingAs($this->admin)->postJson(route('admin.media.clean-orphans'), [
             'paths' => ['gallery/tours/orphan.webp'],
@@ -206,8 +206,8 @@ class MediaPremiumFeaturesTest extends TestCase
         $response->assertStatus(200);
 
         // Assert files are completely deleted
-        Storage::disk('uploads')->assertMissing('gallery/tours/orphan.webp');
-        Storage::disk('uploads')->assertMissing('gallery/tours/thumbnails/orphan.webp');
+        Storage::disk('public')->assertMissing('gallery/tours/orphan.webp');
+        Storage::disk('public')->assertMissing('gallery/tours/thumbnails/orphan.webp');
     }
 
     public function test_it_crops_an_image_using_base64_webp_payload()
@@ -216,7 +216,7 @@ class MediaPremiumFeaturesTest extends TestCase
 
         // Create a media record
         $file = $this->createFakeJpeg(200, 200);
-        Storage::disk('uploads')->put('gallery/tours/to_crop.webp', file_get_contents($file->getRealPath()));
+        Storage::disk('public')->put('gallery/tours/to_crop.webp', file_get_contents($file->getRealPath()));
 
         $media = Media::create([
             'filename' => 'to_crop.webp',
@@ -248,7 +248,7 @@ class MediaPremiumFeaturesTest extends TestCase
         // Verify database and file has updated properties (size, color, disk files)
         $media->refresh();
         $this->assertEquals('#0000ff', $media->dominant_color); // Our blue cropped image color
-        Storage::disk('uploads')->assertExists($media->path);
-        Storage::disk('uploads')->assertExists($media->thumb);
+        Storage::disk('public')->assertExists($media->path);
+        Storage::disk('public')->assertExists($media->thumb);
     }
 }

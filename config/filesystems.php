@@ -51,18 +51,6 @@ return [
             'report' => false,
         ],
 
-        // Persistent uploads disk — completely ignored in root .gitignore
-        // Storing files in public/uploads/ ensures they survive ANY git deployment
-        // (including FTP sync or git clean) and do not require symlink() support on Hostinger.
-        'uploads' => [
-            'driver' => 'local',
-            'root' => public_path('uploads'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/uploads',
-            'visibility' => 'public',
-            'throw' => false,
-            'report' => false,
-        ],
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

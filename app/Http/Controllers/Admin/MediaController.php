@@ -46,7 +46,7 @@ class MediaController extends Controller
 
     public function sync()
     {
-        $files = Storage::disk('uploads')->allFiles();
+        $files = Storage::disk('public')->allFiles();
         $indexedCount = 0;
         $extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
 
@@ -79,7 +79,7 @@ class MediaController extends Controller
             $dominantColor = null;
             if (extension_loaded('gd') && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
                 try {
-                    $absolutePath = Storage::disk('uploads')->path($file);
+                    $absolutePath = Storage::disk('public')->path($file);
                     $imgData = @file_get_contents($absolutePath);
                     if ($imgData) {
                         $image = @imagecreatefromstring($imgData);
@@ -98,7 +98,7 @@ class MediaController extends Controller
                 'path' => $file,
                 'category' => $category,
                 'mime_type' => 'image/'.($extension === 'jpg' ? 'jpeg' : $extension),
-                'size' => Storage::disk('uploads')->size($file),
+                'size' => Storage::disk('public')->size($file),
                 'thumb' => dirname($file).'/thumbnails/'.basename($file),
                 'dominant_color' => $dominantColor,
             ]);
@@ -350,14 +350,14 @@ class MediaController extends Controller
             $media->forceDelete();
             
             if (!empty($path)) {
-                if (Storage::disk('uploads')->exists($path)) {
-                    Storage::disk('uploads')->delete($path);
+                if (Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
                 }
 
                 // Also delete thumbnail
                 $thumbPath = dirname($path).'/thumbnails/'.basename($path);
-                if (Storage::disk('uploads')->exists($thumbPath)) {
-                    Storage::disk('uploads')->delete($thumbPath);
+                if (Storage::disk('public')->exists($thumbPath)) {
+                    Storage::disk('public')->delete($thumbPath);
                 }
             }
             $count++;
@@ -439,13 +439,13 @@ class MediaController extends Controller
             $media->forceDelete();
 
             // Aset statis: hanya hapus record DB, file fisik di public/images/ TIDAK dihapus
-            if (!$isStatic && !empty($path) && Storage::disk('uploads')->exists($path)) {
-                Storage::disk('uploads')->delete($path);
+            if (!$isStatic && !empty($path) && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
 
                 // Also delete thumbnail
                 $thumbPath = dirname($path).'/thumbnails/'.basename($path);
-                if (Storage::disk('uploads')->exists($thumbPath)) {
-                    Storage::disk('uploads')->delete($thumbPath);
+                if (Storage::disk('public')->exists($thumbPath)) {
+                    Storage::disk('public')->delete($thumbPath);
                 }
             }
 
@@ -489,7 +489,7 @@ class MediaController extends Controller
                     'filename' => basename($newPath),
                     'path' => $newPath,
                     'mime_type' => 'image/webp',
-                    'size' => Storage::disk('uploads')->size($newPath),
+                    'size' => Storage::disk('public')->size($newPath),
                     'thumb' => dirname($newPath).'/thumbnails/'.basename($newPath),
                     'dominant_color' => $this->lastDominantColor,
                     'blur_hash' => $this->lastBlurHash,
@@ -548,7 +548,7 @@ class MediaController extends Controller
      */
     public function audit()
     {
-        $allDiskFiles = Storage::disk('uploads')->allFiles();
+        $allDiskFiles = Storage::disk('public')->allFiles();
         $dbPaths = Media::pluck('path')->toArray();
 
         $dbPathsSet = array_flip($dbPaths);
@@ -569,14 +569,14 @@ class MediaController extends Controller
             }
 
             if (! isset($dbPathsSet[$file])) {
-                $size = Storage::disk('uploads')->size($file);
+                $size = Storage::disk('public')->size($file);
                 $orphanDiskFiles[] = [
                     'path' => $file,
                     'filename' => basename($file),
                     'size' => $size,
                     'size_formatted' => round($size / 1024, 1).' KB',
-                    'url' => Storage::disk('uploads')->url($file),
-                    'created_at' => date('Y-m-d H:i:s', Storage::disk('uploads')->lastModified($file)),
+                    'url' => Storage::disk('public')->url($file),
+                    'created_at' => date('Y-m-d H:i:s', Storage::disk('public')->lastModified($file)),
                 ];
                 $totalSize += $size;
             }
@@ -606,13 +606,13 @@ class MediaController extends Controller
                 continue;
             }
 
-            if (!empty($path) && Storage::disk('uploads')->exists($path)) {
-                Storage::disk('uploads')->delete($path);
+            if (!empty($path) && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
 
                 // Delete thumb if exists
                 $thumbPath = dirname($path).'/thumbnails/'.basename($path);
-                if (Storage::disk('uploads')->exists($thumbPath)) {
-                    Storage::disk('uploads')->delete($thumbPath);
+                if (Storage::disk('public')->exists($thumbPath)) {
+                    Storage::disk('public')->delete($thumbPath);
                 }
 
                 $deletedCount++;
@@ -649,7 +649,7 @@ class MediaController extends Controller
         }
 
         $path = $media->path;
-        Storage::disk('uploads')->put($path, $data);
+        Storage::disk('public')->put($path, $data);
 
         // Generate new thumbnail and extract dominant color
         if (extension_loaded('gd')) {
@@ -674,7 +674,7 @@ class MediaController extends Controller
                 $thumbData = ob_get_clean();
 
                 $thumbPath = dirname($path).'/thumbnails/'.basename($path);
-                Storage::disk('uploads')->put($thumbPath, $thumbData);
+                Storage::disk('public')->put($thumbPath, $thumbData);
 
                 // Generate responsive variants & blur hash
                 $this->generateResponsiveVariants($image, dirname($path), basename($path));

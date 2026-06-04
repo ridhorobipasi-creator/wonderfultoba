@@ -74,7 +74,7 @@ class Media extends Model
         $file = basename($this->path);
         $thumbPath = $dir.'/thumbnails/'.$file;
 
-        if (Storage::disk('uploads')->exists($thumbPath)) {
+        if (Storage::disk('public')->exists($thumbPath)) {
             return '/storage/' . ltrim($thumbPath, '/');
         }
 
