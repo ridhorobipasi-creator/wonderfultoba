@@ -1,5 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    # Force all requests in this directory to go to Laravel's index.php
-    RewriteRule ^(.*)$ /index.php [L]
-</IfModule>
