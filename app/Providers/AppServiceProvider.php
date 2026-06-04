@@ -118,30 +118,36 @@ class AppServiceProvider extends ServiceProvider
      */
     private function ensureUploadSymlinks(): void
     {
-        $uploadDirs = ['gallery', 'media'];
+        try {
+            $uploadDirs = ['gallery', 'media'];
 
-        foreach ($uploadDirs as $dir) {
-            $target = storage_path("app/uploads/{$dir}");
-            $link   = public_path("storage/{$dir}");
+            foreach ($uploadDirs as $dir) {
+                $target = storage_path("app/uploads/{$dir}");
+                $link   = public_path("storage/{$dir}");
 
-            // 1. Ensure the real persistent target directory exists
-            if (! is_dir($target)) {
-                @mkdir($target, 0755, true);
+                // 1. Ensure the real persistent target directory exists
+                if (! is_dir($target)) {
+                    @mkdir($target, 0755, true);
+                }
+
+                // 2. If the link path is a real directory (not a symlink), migrate its
+                //    contents to the persistent target then remove the directory so we
+                //    can replace it with a symlink.
+                if (is_dir($link) && ! is_link($link)) {
+                    $this->migrateDirectory($link, $target);
+                    // Remove the now-empty (or migrated) real directory
+                    @rmdir($link);
+                }
+
+                // 3. Create symlink if it does not exist (or was wiped by deploy)
+                if (! file_exists($link) && ! is_link($link)) {
+                    if (function_exists('symlink')) {
+                        @symlink($target, $link);
+                    }
+                }
             }
-
-            // 2. If the link path is a real directory (not a symlink), migrate its
-            //    contents to the persistent target then remove the directory so we
-            //    can replace it with a symlink.
-            if (is_dir($link) && ! is_link($link)) {
-                $this->migrateDirectory($link, $target);
-                // Remove the now-empty (or migrated) real directory
-                @rmdir($link);
-            }
-
-            // 3. Create symlink if it does not exist (or was wiped by deploy)
-            if (! file_exists($link) && ! is_link($link)) {
-                @symlink($target, $link);
-            }
+        } catch (\Throwable $e) {
+            // Silently fail during boot to prevent application/deploy crashes
         }
     }
 

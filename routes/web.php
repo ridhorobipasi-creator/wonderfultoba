@@ -267,11 +267,17 @@ Route::get('/sitemap.xml', [SettingController::class, 'generateSitemap']);
 
 // Proxy Route untuk melayani file storage jika Symlink tidak berfungsi (misal di Shared Hosting / CPanel / Hostinger)
 Route::get('/storage/{path}', function ($path) {
+    // Coba path standar (apakah symlink / real dir)
     $filePath = public_path('storage/' . $path);
     
-    // DEBUG: Jika file tidak ada, tampilkan path yang dicari untuk membantu proses debug
+    // Jika tidak ketemu di public_path, coba di persistent storage/app/uploads/
     if (!file_exists($filePath)) {
-        return response("File tidak ditemukan. Path yang dicari: " . $filePath, 404);
+        $persistentPath = storage_path('app/uploads/' . $path);
+        if (file_exists($persistentPath)) {
+            $filePath = $persistentPath;
+        } else {
+            return response("File tidak ditemukan. Path yang dicari: " . $filePath, 404);
+        }
     }
 
     return response()->file($filePath, [
