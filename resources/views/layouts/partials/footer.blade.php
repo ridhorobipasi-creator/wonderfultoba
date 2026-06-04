@@ -82,6 +82,7 @@
                 <ul class="space-y-3">
                     <li><a href="/about" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Tentang Kami') }}</a></li>
                     <li><a href="/payment" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Cara Pembayaran') }}</a></li>
+                    <li><a href="{{ route('booking.track.form') }}" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Lacak Pesanan') }}</a></li>
                     <li><a href="/terms" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Syarat & Ketentuan') }}</a></li>
                     <li><a href="/privacy" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Kebijakan Privasi') }}</a></li>
                     <li><a href="/tour/blog" class="text-slate-400 hover:text-white font-body-md text-xs transition-colors inline-block">{{ __('Pusat Artikel') }}</a></li>

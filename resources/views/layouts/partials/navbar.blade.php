@@ -136,9 +136,13 @@
                         :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Blog') }}</a>
                     
-                    <a href="/about" 
-                        :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
+                    <a href="/about"
+                        :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')"
                         class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Tentang Kami') }}</a>
+
+                    <a href="{{ route('booking.track.form') }}"
+                        :class="isScrolled ? ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')"
+                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Lacak Booking') }}</a>
                 </div>
 
                 <!-- Desktop Actions -->
@@ -228,6 +232,10 @@
                                 <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-info-circle"></i></div>
                                 {{ __('Tentang Kami') }}
                             </a>
+                            <a href="{{ route('booking.track.form') }}" @click="isMenuOpen = false" class="flex items-center gap-4 text-slate-700 font-semibold text-base">
+                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-map-marked-alt"></i></div>
+                                {{ __('Lacak Booking') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -298,14 +306,9 @@
                     >{{ __('Tentang Kami') }}</a>
                 </li>
                 <li>
-                    <a href="/tour/destinations"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/destinations*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
-                    >{{ __('Destinasi') }}</a>
-                </li>
-                <li>
-                    <a href="/testimonials"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('testimonials*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
-                    >{{ __('Testimoni') }}</a>
+                    <a href="{{ route('booking.track.form') }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                    >{{ __('Lacak Booking') }}</a>
                 </li>
             </ul>
         </div>

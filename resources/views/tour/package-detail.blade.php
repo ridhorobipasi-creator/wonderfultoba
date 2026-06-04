@@ -649,6 +649,14 @@
                                 {{ __('KONFIRMASI SEKARANG') }}
                             </a>
                         </div>
+
+                        @if(session('bookingCode'))
+                        <a href="{{ route('booking.track', session('bookingCode')) }}"
+                           class="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] font-semibold text-primary hover:text-secondary transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">travel_explore</span>
+                            {{ __('Lacak status pesanan Anda') }}
+                        </a>
+                        @endif
                     </div>
                 @else
                         <div class="flex justify-between items-end border-b border-slate-200 pb-4">
