@@ -167,7 +167,7 @@ trait HandlesImageUploads
                     'original_name' => $file->getClientOriginalName(),
                     'category' => $category ?? $directory,
                     'mime_type' => $mimeType,
-                    'size' => Storage::disk('public')->size($path),
+                    'size' => Storage::disk('uploads')->size($path),
                     'thumb' => $isWebp ? ($directory.'/thumbnails/'.basename($path)) : null,
                     'alt_text' => $altText,
                     'dominant_color' => $this->lastDominantColor,
@@ -217,18 +217,18 @@ trait HandlesImageUploads
     protected function uploadAndConvert($file, $directory = 'uploads', $quality = 80, $watermark = false)
     {
         // Ensure directory exists
-        if (! Storage::disk('public')->exists($directory)) {
-            Storage::disk('public')->makeDirectory($directory);
+        if (! Storage::disk('uploads')->exists($directory)) {
+            Storage::disk('uploads')->makeDirectory($directory);
         }
 
         // Ensure thumbnails directory exists
-        if (! Storage::disk('public')->exists($directory.'/thumbnails')) {
-            Storage::disk('public')->makeDirectory($directory.'/thumbnails');
+        if (! Storage::disk('uploads')->exists($directory.'/thumbnails')) {
+            Storage::disk('uploads')->makeDirectory($directory.'/thumbnails');
         }
 
         // Fallback if GD extension is not loaded
         if (! extension_loaded('gd')) {
-            return $file->store($directory, 'public');
+            return $file->store($directory, 'uploads');
         }
 
         $baseFilename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)).'-'.time();
@@ -277,7 +277,7 @@ trait HandlesImageUploads
                 ob_start();
                 \imagewebp($image, null, $quality);
                 $webpData = ob_get_clean();
-                Storage::disk('public')->put($path, $webpData);
+                Storage::disk('uploads')->put($path, $webpData);
 
                 // Thumbnail (400px width)
                 $targetWidth = 400;
@@ -291,7 +291,7 @@ trait HandlesImageUploads
                 ob_start();
                 imagewebp($thumbImg, null, 70);
                 $thumbData = ob_get_clean();
-                Storage::disk('public')->put($directory.'/thumbnails/'.$filename, $thumbData);
+                Storage::disk('uploads')->put($directory.'/thumbnails/'.$filename, $thumbData);
 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
@@ -310,7 +310,7 @@ trait HandlesImageUploads
             throw $e;
         }
 
-        return $file->store($directory, 'public');
+        return $file->store($directory, 'uploads');
     }
 
     /**
@@ -326,7 +326,7 @@ trait HandlesImageUploads
             return false;
         }
 
-        if (! Storage::disk('public')->exists($storagePath)) {
+        if (! Storage::disk('uploads')->exists($storagePath)) {
             return false;
         }
 
@@ -334,7 +334,7 @@ trait HandlesImageUploads
         if ($extension === 'webp') {
             // Even if already webp, extract dominant color for DB consistency
             try {
-                $absolutePath = Storage::disk('public')->path($storagePath);
+                $absolutePath = Storage::disk('uploads')->path($storagePath);
                 $imgData = @file_get_contents($absolutePath);
                 if ($imgData) {
                     $image = @imagecreatefromstring($imgData);
@@ -349,7 +349,7 @@ trait HandlesImageUploads
             return $storagePath;
         }
 
-        $absolutePath = Storage::disk('public')->path($storagePath);
+        $absolutePath = Storage::disk('uploads')->path($storagePath);
         $directory = dirname($storagePath);
         $baseFilename = pathinfo($storagePath, PATHINFO_FILENAME);
         $newFilename = $baseFilename.'.webp';
@@ -388,15 +388,15 @@ trait HandlesImageUploads
                 $this->generateResponsiveVariants($image, $directory, $newFilename);
 
                 // Ensure directory and thumbnails directory exist
-                if (! Storage::disk('public')->exists($directory.'/thumbnails')) {
-                    Storage::disk('public')->makeDirectory($directory.'/thumbnails');
+                if (! Storage::disk('uploads')->exists($directory.'/thumbnails')) {
+                    Storage::disk('uploads')->makeDirectory($directory.'/thumbnails');
                 }
 
                 // Convert to WebP
                 ob_start();
                 \imagewebp($image, null, $quality);
                 $webpData = ob_get_clean();
-                Storage::disk('public')->put($newStoragePath, $webpData);
+                Storage::disk('uploads')->put($newStoragePath, $webpData);
 
                 // Thumbnail (400px width)
                 $targetWidth = 400;
@@ -411,19 +411,19 @@ trait HandlesImageUploads
                 imagewebp($thumbImg, null, 70);
                 $thumbData = ob_get_clean();
                 $thumbPath = ($directory === '.' || $directory === '/') ? 'thumbnails/'.$newFilename : $directory.'/thumbnails/'.$newFilename;
-                Storage::disk('public')->put($thumbPath, $thumbData);
+                Storage::disk('uploads')->put($thumbPath, $thumbData);
 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
                 unset($webpData, $thumbData, $image, $thumbImg);
 
                 // Delete the old non-webp file
-                Storage::disk('public')->delete($storagePath);
+                Storage::disk('uploads')->delete($storagePath);
 
                 // Delete old thumbnail if it exists
                 $oldThumbPath = ($directory === '.' || $directory === '/') ? 'thumbnails/'.basename($storagePath) : $directory.'/thumbnails/'.basename($storagePath);
-                if (Storage::disk('public')->exists($oldThumbPath)) {
-                    Storage::disk('public')->delete($oldThumbPath);
+                if (Storage::disk('uploads')->exists($oldThumbPath)) {
+                    Storage::disk('uploads')->delete($oldThumbPath);
                 }
 
                 return $newStoragePath;
@@ -482,17 +482,17 @@ trait HandlesImageUploads
             $path = $directory.'/'.$filename;
 
             // Ensure directories exist
-            if (! Storage::disk('public')->exists($directory)) {
-                Storage::disk('public')->makeDirectory($directory);
+            if (! Storage::disk('uploads')->exists($directory)) {
+                Storage::disk('uploads')->makeDirectory($directory);
             }
-            if (! Storage::disk('public')->exists($directory.'/thumbnails')) {
-                Storage::disk('public')->makeDirectory($directory.'/thumbnails');
+            if (! Storage::disk('uploads')->exists($directory.'/thumbnails')) {
+                Storage::disk('uploads')->makeDirectory($directory.'/thumbnails');
             }
 
             // Fallback if GD is not loaded
             if (! extension_loaded('gd')) {
                 $originalPath = $directory.'/'.$baseFilename.'.jpg';
-                Storage::disk('public')->put($originalPath, $imgData);
+                Storage::disk('uploads')->put($originalPath, $imgData);
 
                 Media::updateOrCreate(
                     ['path' => $originalPath],
@@ -537,7 +537,7 @@ trait HandlesImageUploads
                 ob_start();
                 \imagewebp($image, null, 80);
                 $webpData = ob_get_clean();
-                Storage::disk('public')->put($path, $webpData);
+                Storage::disk('uploads')->put($path, $webpData);
 
                 // Thumbnail (400px width)
                 $targetWidth = 400;
@@ -551,7 +551,7 @@ trait HandlesImageUploads
                 ob_start();
                 imagewebp($thumbImg, null, 70);
                 $thumbData = ob_get_clean();
-                Storage::disk('public')->put($directory.'/thumbnails/'.$filename, $thumbData);
+                Storage::disk('uploads')->put($directory.'/thumbnails/'.$filename, $thumbData);
 
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
@@ -568,7 +568,7 @@ trait HandlesImageUploads
                         'original_name' => $originalName,
                         'category' => $category ?? $directory,
                         'mime_type' => 'image/webp',
-                        'size' => Storage::disk('public')->size($path),
+                        'size' => Storage::disk('uploads')->size($path),
                         'thumb' => $directory.'/thumbnails/'.$filename,
                         'alt_text' => $altText,
                         'dominant_color' => $dominantColor,
@@ -741,8 +741,8 @@ trait HandlesImageUploads
 
         foreach ($sizes as $name => $targetWidth) {
             $subDir = $directory.'/'.$name;
-            if (! Storage::disk('public')->exists($subDir)) {
-                Storage::disk('public')->makeDirectory($subDir);
+            if (! Storage::disk('uploads')->exists($subDir)) {
+                Storage::disk('uploads')->makeDirectory($subDir);
             }
 
             if ($width > $targetWidth) {
@@ -762,7 +762,7 @@ trait HandlesImageUploads
                 imagewebp($variantImg, null, 80);
                 $variantData = ob_get_clean();
 
-                Storage::disk('public')->put($subDir.'/'.$filename, $variantData);
+                Storage::disk('uploads')->put($subDir.'/'.$filename, $variantData);
                 imagedestroy($variantImg);
             } catch (\Exception $e) {
                 \Log::error("Responsive Variant Generation Error for {$name}: ".$e->getMessage());
