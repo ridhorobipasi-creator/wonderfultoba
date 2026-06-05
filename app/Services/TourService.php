@@ -78,6 +78,13 @@ class TourService
             ]);
         }
 
+        // 8. Sync Cities
+        if (isset($data['cityIds']) && is_array($data['cityIds'])) {
+            $package->cities()->sync($data['cityIds']);
+        } elseif (isset($data['cityIds']) && empty($data['cityIds'])) {
+            $package->cities()->detach();
+        }
+
         return $package;
     }
 
@@ -182,7 +189,7 @@ class TourService
     public function getAllPackages()
     {
         return Package::where('status', 'active')
-            ->with(['packageImages', 'city'])
+            ->with(['packageImages', 'city', 'cities'])
             ->orderBy('sortOrder')
             ->get();
     }

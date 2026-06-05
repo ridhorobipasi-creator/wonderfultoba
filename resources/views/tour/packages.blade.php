@@ -57,7 +57,7 @@
         
         get filteredPackages() {
             let filtered = this.packages.filter(p => {
-                const matchCity = this.filterCity === 'all' || String(p.cityId) === this.filterCity;
+                const matchCity = this.filterCity === 'all' || (p.cities && p.cities.some(c => String(c.id) === this.filterCity)) || String(p.cityId) === this.filterCity;
                 const matchSearch = p.translated_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
                                    (p.translated_description && p.translated_description.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 
@@ -192,7 +192,7 @@
                             <div class="p-6 flex flex-col flex-grow">
                                 <div class="flex items-center text-toba-green text-[9px] font-semibold uppercase tracking-wider mb-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                    <span x-text="cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara'"></span>
+                                    <span x-text="(pkg.cities && pkg.cities.length > 0) ? pkg.cities.map(c => c.name).join(', ') : (cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara')"></span>
                                 </div>
                                 <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
                                 <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>

@@ -48,6 +48,11 @@ class Package extends Model
         return $this->belongsTo(City::class, 'cityId');
     }
 
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, 'city_package', 'package_id', 'city_id');
+    }
+
     public function packageImages()
     {
         return $this->hasMany(PackageImage::class)->orderBy('sort_order');

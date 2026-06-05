@@ -295,14 +295,14 @@
 
                 <!-- City -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Kota Tujuan / City</label>
-                    <select name="cityId"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
-                        <option value="">Select City (Optional)</option>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Kota Tujuan / City (Bisa Pilih Banyak)</label>
+                    <select name="cityIds[]" multiple
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition" style="min-height: 120px;">
                         @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                            <option value="{{ $city->id }}" {{ in_array($city->id, old('cityIds', [])) ? 'selected' : '' }}>{{ $city->name }}</option>
                         @endforeach
                     </select>
+                    <p class="text-xs text-gray-500 mt-2">Tahan tombol Ctrl (Windows) atau Cmd (Mac) untuk memilih lebih dari satu kota.</p>
                 </div>
 
                 <!-- Featured Checkbox -->

@@ -95,7 +95,8 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:100',
             'status' => 'required|in:active,inactive',
             'isFeatured' => 'boolean',
-            'cityId' => 'nullable|exists:cities,id',
+            'cityIds' => 'nullable|array',
+            'cityIds.*' => 'exists:cities,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
             'itinerary' => 'nullable|array',
@@ -146,7 +147,8 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:100',
             'status' => 'required|in:active,inactive',
             'isFeatured' => 'boolean',
-            'cityId' => 'nullable|exists:cities,id',
+            'cityIds' => 'nullable|array',
+            'cityIds.*' => 'exists:cities,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
             'remove_images' => 'nullable|array',
@@ -281,5 +283,36 @@ class PackageController extends Controller
             'status' => $package->status,
             'message' => 'Status berhasil diubah ke '.strtoupper($package->status),
         ]);
+    }
+
+    public function duplicate(Package $package)
+    {
+        try {
+            $newPackage = $package->replicate();
+            $newPackage->name = $package->name . ' (Copy)';
+            $newPackage->slug = \Illuminate\Support\Str::slug($newPackage->name) . '-' . time();
+            $newPackage->status = 'inactive'; // Default duplicated packages to inactive
+            $newPackage->save();
+
+            // Replicate images
+            foreach ($package->packageImages as $image) {
+                $newPackage->packageImages()->create([
+                    'image_path' => $image->image_path,
+                    'sort_order' => $image->sort_order,
+                ]);
+            }
+
+            // Replicate cities
+            $newPackage->cities()->sync($package->cities->pluck('id')->toArray());
+
+            $this->logActivity('duplicated', "Duplicated package: {$package->name} to {$newPackage->name}", $newPackage);
+            SyncController::triggerSync();
+
+            return redirect()->route('admin.packages.edit', $newPackage->id)
+                ->with('success', 'Package successfully duplicated! You are now editing the copy.');
+        } catch (\Exception $e) {
+            Log::error('Package Duplication Failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to duplicate package. ' . $e->getMessage());
+        }
     }
 }

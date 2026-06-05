@@ -194,12 +194,20 @@
                                 <i class="fas fa-external-link-alt text-xs"></i>
                             </a>
                         </div>
-                        <form action="{{ route('admin.packages.destroy', $package) }}" method="POST" onsubmit="return confirm('Hapus paket ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-600 hover:text-white transition shadow-sm">
-                                <i class="fas fa-trash text-xs"></i>
-                            </button>
-                        </form>
+                        <div class="flex items-center gap-2">
+                            <form action="{{ route('admin.packages.duplicate', $package) }}" method="POST" onsubmit="return confirm('Duplikat paket ini?')">
+                                @csrf
+                                <button type="submit" class="w-10 h-10 rounded-xl bg-slate-50 text-indigo-500 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition shadow-sm" title="Duplikat Paket">
+                                    <i class="fas fa-copy text-xs"></i>
+                                </button>
+                            </form>
+                            <form action="{{ route('admin.packages.destroy', $package) }}" method="POST" onsubmit="return confirm('Hapus paket ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-600 hover:text-white transition shadow-sm" title="Hapus Paket">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
