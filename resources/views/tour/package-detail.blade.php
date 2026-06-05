@@ -165,7 +165,7 @@
         package_images: @js($packageImagesArray),
         city: @js($city),
         contact: {
-            whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['wa_number'] ?? '6282277848855' }}',
+            whatsapp: '{{ $siteSettings['cms_tour']['contact_whatsapp'] ?? $siteSettings['general']['contact_whatsapp'] ?? '6282277848855' }}',
             email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com' }}'
         },
         get waNumber() {
@@ -278,9 +278,13 @@
     </section>
 
     <!-- Gallery & Hero Section -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:items-start">
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <!-- LEFT COLUMN WRAPPER -->
+        <div class="contents md:block md:col-span-8">
+
         <!-- Hero/Gallery Part -->
-        <div class="md:col-span-8 md:col-start-1 md:row-start-1 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1">
+        <div class="space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1 mb-8 md:mb-12">
             <!-- Main Gallery -->
             <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
@@ -326,8 +330,10 @@
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
     </style>
 
+    </style>
+
         <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="md:col-span-4 md:col-start-9 md:row-start-1 md:row-span-2 relative order-2 h-full">
+        <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
             <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
                 @if(session('success'))
                     <div 
@@ -592,7 +598,7 @@
         </div>
 
         <!-- Content Part -->
-        <div class="md:col-span-8 md:col-start-1 md:row-start-2 space-y-16 animate-in fade-in slide-in-from-left-8 duration-1000 order-3">
+        <div class="space-y-16 animate-in fade-in slide-in-from-left-8 duration-1000 order-3 mt-8 md:mt-0">
             
             <!-- Section: Itinerary -->
             <div class="space-y-8" id="section-itinerary">
@@ -880,6 +886,7 @@
             </div>
         </div>
 
+        </div> <!-- END LEFT COLUMN WRAPPER -->
     </section>
 
     <!-- Floating Concierge Bar -->

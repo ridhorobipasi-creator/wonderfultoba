@@ -6,9 +6,9 @@
         isRegister: false,
         formLoading: false,
         contact: { 
-            phone: '{{ $siteSettings['general']['wa_number'] ?? '+62 813-2388-8207' }}', 
+            phone: '{{ $siteSettings['general']['contact_whatsapp'] ?? '+62 813-2388-8207' }}', 
             email: '{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}', 
-            whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855') }}' 
+            whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}' 
         }
     }"
     x-init="

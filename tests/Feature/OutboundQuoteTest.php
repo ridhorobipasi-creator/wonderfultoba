@@ -31,7 +31,7 @@ class OutboundQuoteTest extends TestCase
         // 1. Setup: Create necessary settings
         Setting::create([
             'key' => 'general',
-            'value' => ['whatsapp' => '6281260460461'],
+            'value' => ['contact_whatsapp' => '6281260460461'],
         ]);
 
         // 2. Action: Submit the form

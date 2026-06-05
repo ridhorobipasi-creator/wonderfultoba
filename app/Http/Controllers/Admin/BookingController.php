@@ -42,33 +42,7 @@ class BookingController extends Controller
     {
         $filters = $request->only(['status', 'type', 'search', 'date', 'month', 'year']);
 
-        // Build query manually to get all results for export
-        $query = Booking::with(['package']);
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('bookingCode', 'like', "%{$request->search}%")
-                    ->orWhere('customerName', 'like', "%{$request->search}%")
-                    ->orWhere('customerEmail', 'like', "%{$request->search}%");
-            });
-        }
-        if ($request->filled('date')) {
-            $query->whereDate('startDate', $request->date);
-        }
-        if ($request->filled('month')) {
-            $query->whereMonth('startDate', $request->month);
-        }
-        if ($request->filled('year')) {
-            $query->whereYear('startDate', $request->year);
-        }
-
-        $bookings = $query->latest('createdAt')->get();
+        $bookings = $this->bookingService->getAll($filters, true);
 
         $filename = 'bookings-export-'.date('Y-m-d').'.csv';
 

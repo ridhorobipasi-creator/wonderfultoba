@@ -121,7 +121,7 @@
                                 <i class="fab fa-whatsapp text-3xl"></i>
                                 <span class="text-[10px] font-black uppercase tracking-widest">WhatsApp Main Number</span>
                             </div>
-                            <input type="text" name="wa_number" value="{{ $general['wa_number'] ?? '628123456789' }}" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm">
+                            <input type="text" name="contact_whatsapp" value="{{ $general['contact_whatsapp'] ?? '628123456789' }}" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm">
                             <p class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest italic">Mulai dengan kode negara (misal: 62813...)</p>
                         </div>
                         <div class="space-y-2">
@@ -153,7 +153,7 @@
                     </div>
                     <div class="space-y-2">
                         <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fab fa-whatsapp text-emerald-400"></i> WhatsApp Kedua (CS Cadangan)</label>
-                        <input type="text" name="wa_number_2" value="{{ $general['wa_number_2'] ?? '' }}" placeholder="62813..." class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                        <input type="text" name="contact_whatsapp_2" value="{{ $general['contact_whatsapp_2'] ?? '' }}" placeholder="62813..." class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
                     </div>
                     <div class="space-y-2">
                         <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-clock text-slate-300"></i> Jam Operasional</label>

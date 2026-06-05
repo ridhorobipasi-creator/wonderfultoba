@@ -31,11 +31,11 @@
     $pax = (int) ($booking->metadata['pax'] ?? 1);
     $packageUrl = $booking->package ? route('tour.package.detail', $booking->package->slug) : route('tour.packages');
     $invoiceUrl = route('invoice.download', $booking->bookingCode);
-    $waSource = $siteSettings['cms_tour']['contact_wa']
-        ?? $siteSettings['general']['wa_number']
-        ?? $siteSettings['general']['whatsapp']
+    $waSource = $siteSettings['cms_tour']['contact_whatsapp']
+        ?? $siteSettings['general']['contact_whatsapp']
+        ?? $siteSettings['general']['contact_whatsapp']
         ?? $siteSettings['general']['contact_wa_1']
-        ?? $siteSettings['general']['contact_wa']
+        ?? $siteSettings['general']['contact_whatsapp']
         ?? config('services.whatsapp.number')
         ?? '';
     $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);

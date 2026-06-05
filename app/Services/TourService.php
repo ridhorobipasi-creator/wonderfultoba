@@ -102,21 +102,7 @@ class TourService
         return $package->delete();
     }
 
-    /**
-     * Helper to index file into Media Library.
-     */
-    private function indexToMedia($path, $originalName, $packageName)
-    {
-        return Media::create([
-            'filename' => basename($path),
-            'original_name' => $originalName,
-            'path' => $path,
-            'category' => 'packages',
-            'mime_type' => 'image/webp',
-            'size' => Storage::disk('public')->size($path),
-            'alt_text' => $packageName,
-        ]);
-    }
+
 
     /**
      * Clear tour related cache.

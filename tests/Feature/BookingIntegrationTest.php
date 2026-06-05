@@ -17,7 +17,7 @@ class BookingIntegrationTest extends TestCase
         // Disable throttle middleware to avoid rate limiting in tests
         $this->withoutMiddleware(ThrottleRequests::class);
         // Prepare settings and package
-        Setting::create(['key' => 'general', 'value' => ['whatsapp' => '6281260460461']]);
+        Setting::create(['key' => 'general', 'value' => ['contact_whatsapp' => '6281260460461']]);
 
         $package = Package::create([
             'slug' => 'integration-package',

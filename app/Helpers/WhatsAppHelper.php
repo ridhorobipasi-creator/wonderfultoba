@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Booking;
 
+/** @deprecated Tidak digunakan. Logika WA ada di PublicController. */
 class WhatsAppHelper
 {
     /**

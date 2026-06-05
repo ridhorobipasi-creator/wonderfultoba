@@ -6,7 +6,7 @@ use App\Models\Booking;
 
 class BookingRepository
 {
-    public function getAll(array $filters = [])
+    public function getAll(array $filters = [], bool $noPagination = false)
     {
         $query = Booking::with(['package']);
 
@@ -44,6 +44,10 @@ class BookingRepository
 
         if (isset($filters['date_to']) && $filters['date_to']) {
             $query->whereDate('startDate', '<=', $filters['date_to']);
+        }
+
+        if ($noPagination) {
+            return $query->latest('createdAt')->get();
         }
 
         return $query->latest('createdAt')->paginate($filters['per_page'] ?? 15);

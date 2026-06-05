@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\HasImageFallback;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GalleryImage extends Model
 {
+    use HasFactory;
     use \App\Traits\Syncable, HasImageFallback, SoftDeletes;
 
     const CREATED_AT = 'createdAt';

@@ -125,17 +125,17 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <i class="fab fa-whatsapp text-secondary shrink-0"></i>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['wa_number'] ?? '6282277848855') }}" target="_blank"
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['contact_whatsapp'] ?? '6282277848855') }}" target="_blank"
                            class="hover:text-secondary transition-colors">
-                            {{ $g['wa_number'] ?? '+62 813-2388-8207' }}
+                            {{ $g['contact_whatsapp'] ?? '+62 813-2388-8207' }}
                         </a>
                     </div>
-                    @if($g['wa_number_2'] ?? false)
+                    @if($g['contact_whatsapp_2'] ?? false)
                     <div class="flex items-center space-x-3">
                         <i class="fab fa-whatsapp text-secondary shrink-0"></i>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['wa_number_2']) }}" target="_blank"
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['contact_whatsapp_2']) }}" target="_blank"
                            class="hover:text-secondary transition-colors">
-                            {{ $g['wa_number_2'] }} <span class="text-slate-500">(CS 2)</span>
+                            {{ $g['contact_whatsapp_2'] }} <span class="text-slate-500">(CS 2)</span>
                         </a>
                     </div>
                     @endif

@@ -119,7 +119,7 @@
     <div class="header">
         <h1>Sujai Laketoba</h1>
         <p>Solusi Perjalanan & Outbound Terbaik di Sumatera Utara</p>
-        <p>Telp: {{ $settings['contact_wa'] ?? '+6281234567890' }} | Email: {{ $settings['contact_email'] ?? 'hello@sujailaketoba.com' }}</p>
+        <p>Telp: {{ $settings['contact_whatsapp'] ?? '+6281234567890' }} | Email: {{ $settings['contact_email'] ?? 'hello@sujailaketoba.com' }}</p>
     </div>
 
     <div class="package-title">{{ $package->name }}</div>

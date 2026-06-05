@@ -23,7 +23,7 @@ class GalleryController extends Controller
     {
         $validated = $request->validate([
             'caption' => 'required|string|max:255',
-            'category' => 'required|in:tour',
+            'category' => 'required|in:tour,outbound',
             'isActive' => 'boolean',
         ]);
 

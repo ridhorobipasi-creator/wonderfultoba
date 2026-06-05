@@ -341,13 +341,8 @@ class PublicController extends Controller
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
 
-            // Try all possible key variants for WhatsApp number (wa_number, whatsapp, contact_wa, contact_wa_1)
-            $waSource = $settings['contact_wa']
-                ?? $genSettings['wa_number']
-                ?? $genSettings['whatsapp']
-                ?? $genSettings['contact_wa_1']
-                ?? $genSettings['contact_wa']
-                ?? config('services.whatsapp.number')
+            $waSource = $genSettings['contact_whatsapp'] 
+                ?? config('services.whatsapp.number') 
                 ?? '';
             $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
 
@@ -417,15 +412,7 @@ class PublicController extends Controller
         return view('pages.about', compact('content', 'siteSettings', 'clients'));
     }
 
-    public function debugStorage() 
-    {
-        $dir = public_path('storage/gallery/uploads');
-        $files = file_exists($dir) ? scandir($dir) : 'Directory does not exist';
-        return response()->json([
-            'storage_path' => $dir,
-            'files' => $files,
-        ]);
-    }
+
 
     public function terms()
     {
@@ -462,7 +449,7 @@ class PublicController extends Controller
         ]);
 
         $generalSettings = Setting::where('key', 'general')->first()?->value ?? [];
-        $waSource = $generalSettings['whatsapp'] ?? config('services.whatsapp.number');
+        $waSource = $generalSettings['contact_whatsapp'] ?? config('services.whatsapp.number');
         $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
 
         if ($waNumber === '') {

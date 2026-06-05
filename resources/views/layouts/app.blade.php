@@ -133,9 +133,9 @@
         // Resolve the floating WhatsApp number from saved settings.
         // env() returns null once config is cached, so never read COMPANY_PHONE here.
         $waFloat = preg_replace('/[^0-9]/', '', (string) (
-            $siteSettings['general']['whatsapp']
-            ?? $siteSettings['general']['wa_number']
-            ?? $siteSettings['general']['contact_wa']
+            $siteSettings['general']['contact_whatsapp']
+            ?? $siteSettings['general']['contact_whatsapp']
+            ?? $siteSettings['general']['contact_whatsapp']
             ?? config('services.whatsapp.number')
             ?? ''
         ));

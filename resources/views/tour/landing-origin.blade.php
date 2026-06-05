@@ -21,7 +21,7 @@
         $sameAsLinks[] = 'https://www.youtube.com/' . $siteSettings['general']['social_youtube'];
     }
     $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('assets/img/logo.png'));
-    $schemaPhone   = '+' . preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6282277848855');
+    $schemaPhone   = '+' . preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855');
     $schemaEmail   = $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com';
     $schemaDesc    = $settings['meta_description'] ?? 'Agen perjalanan wisata Danau Toba terpercaya';
 

@@ -22,9 +22,6 @@ class AdminControllersTest extends TestCase
     {
         parent::setUp();
 
-        // Skip admin controller tests by default in CI/local runs
-        $this->markTestSkipped('AdminControllersTest skipped in automated runs.');
-
         // Create admin user
         $this->admin = User::factory()->create([
             'role' => 'superadmin',
@@ -33,7 +30,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_access_dashboard()
+    public function test_admin_can_access_dashboard()
     {
         $response = $this->actingAs($this->admin)->get('/admin');
 
@@ -42,7 +39,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_packages_index()
+    public function test_admin_can_view_packages_index()
     {
         Package::factory()->count(3)->create();
 
@@ -54,7 +51,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_filter_packages_by_status()
+    public function test_admin_can_filter_packages_by_status()
     {
         Package::factory()->create(['status' => 'active']);
         Package::factory()->create(['status' => 'inactive']);
@@ -67,7 +64,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_customer_with_transaction()
+    public function test_admin_can_create_customer_with_transaction()
     {
         Storage::fake('public');
 
@@ -95,7 +92,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function customer_creation_rolls_back_on_error()
+    public function test_customer_creation_rolls_back_on_error()
     {
         // Try to create customer with duplicate email
         Customer::factory()->create(['email' => 'duplicate@test.com']);
@@ -106,14 +103,14 @@ class AdminControllersTest extends TestCase
             'phone' => '08123456789',
         ]);
 
-        $response->assertSessionHas('error');
+        $response->assertSessionHasErrors('email');
 
         // Should only have 1 customer (the first one)
         $this->assertEquals(1, Customer::count());
     }
 
     /** @test */
-    public function admin_can_bulk_delete_customers()
+    public function test_admin_can_bulk_delete_customers()
     {
         $customers = Customer::factory()->count(3)->create();
         $ids = $customers->pluck('id')->toArray();
@@ -135,7 +132,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_export_customers()
+    public function test_admin_can_export_customers()
     {
         Customer::factory()->count(5)->create();
 
@@ -146,7 +143,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_blog_show_page()
+    public function test_admin_can_view_blog_show_page()
     {
         $blog = Blog::factory()->create([
             'title' => 'Test Blog',
@@ -162,7 +159,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_bulk_delete_blogs()
+    public function test_admin_can_bulk_delete_blogs()
     {
         $blogs = Blog::factory()->count(3)->create();
         $ids = $blogs->pluck('id')->toArray();
@@ -178,7 +175,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_filter_blogs_by_category()
+    public function test_admin_can_filter_blogs_by_category()
     {
         Blog::factory()->create(['category' => 'Tips Wisata']);
         Blog::factory()->create(['category' => 'Destinasi']);
@@ -191,7 +188,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_edit_gallery_item()
+    public function test_admin_can_edit_gallery_item()
     {
         $gallery = GalleryImage::factory()->create([
             'caption' => 'Old Caption',
@@ -206,7 +203,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_update_gallery_item()
+    public function test_admin_can_update_gallery_item()
     {
         $gallery = GalleryImage::factory()->create([
             'caption' => 'Old Caption',
@@ -229,7 +226,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_bulk_delete_packages()
+    public function test_admin_can_bulk_delete_packages()
     {
         $packages = Package::factory()->count(3)->create();
         $ids = $packages->pluck('id')->toArray();
@@ -245,7 +242,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function package_creation_with_transaction_works()
+    public function test_package_creation_with_transaction_works()
     {
         Storage::fake('public');
 
@@ -274,7 +271,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_customer_create_page()
+    public function test_admin_can_view_customer_create_page()
     {
         $response = $this->actingAs($this->admin)->get('/admin/customers/create');
 
@@ -283,7 +280,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_filter_customers_by_min_bookings()
+    public function test_admin_can_filter_customers_by_min_bookings()
     {
         Customer::factory()->create(['total_bookings' => 5]);
         Customer::factory()->create(['total_bookings' => 2]);
@@ -296,7 +293,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_bulk_delete_bookings()
+    public function test_admin_can_bulk_delete_bookings()
     {
         $bookings = Booking::factory()->count(3)->create();
         $ids = $bookings->pluck('id')->toArray();
@@ -312,7 +309,7 @@ class AdminControllersTest extends TestCase
     }
 
     /** @test */
-    public function error_handling_preserves_input_on_failure()
+    public function test_error_handling_preserves_input_on_failure()
     {
         // Try to create customer with invalid data
         $response = $this->actingAs($this->admin)->post('/admin/customers', [

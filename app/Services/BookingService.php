@@ -278,9 +278,9 @@ class BookingService
         return ['price' => $price, 'cost' => $cost];
     }
 
-    public function getAll(array $filters = [])
+    public function getAll(array $filters = [], bool $noPagination = false)
     {
-        return $this->repository->getAll($filters);
+        return $this->repository->getAll($filters, $noPagination);
     }
 
     public function find(int $id)
