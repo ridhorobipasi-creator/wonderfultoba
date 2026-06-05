@@ -75,9 +75,11 @@ class BookingService
                 return $createdBooking;
             });
 
-            // Notify Admins
+            // Notify Admins — must match the actual role names used by the role
+            // middleware (superadmin / admin_tour / admin_umum). The old list
+            // ('admin', 'superadmin') silently skipped admin_tour & admin_umum.
             try {
-                $admins = User::whereIn('role', ['admin', 'superadmin'])->get();
+                $admins = User::whereIn('role', ['superadmin', 'admin_tour', 'admin_umum'])->get();
                 Notification::send($admins, new NewBookingNotification($booking));
             } catch (\Exception $ne) {
                 Log::warning('Failed to send admin booking notification: '.$ne->getMessage());
