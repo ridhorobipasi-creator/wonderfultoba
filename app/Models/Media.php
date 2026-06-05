@@ -297,7 +297,7 @@ class Media extends Model
                     $details[] = [
                         'type' => 'Pengaturan Global',
                         'name' => 'Setting: ' . $setting->key,
-                        'edit_url' => route('admin.settings.index'),
+                        'edit_url' => route('admin.settings.general.index'),
                     ];
                 }
             }

@@ -97,6 +97,11 @@
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deskripsi Singkat Footer</label>
                             <textarea name="site_footer_desc" rows="4" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-500 leading-relaxed">{{ $general['site_footer_desc'] ?? 'Platform tour & travel terpercaya untuk eksplorasi Danau Toba dan sekitarnya.' }}</textarea>
                         </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Teks Copyright Footer</label>
+                            <input type="text" name="site_copyright" value="{{ $general['site_copyright'] ?? '' }}" placeholder="Sujai Laketoba" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Tahun & "All rights reserved" otomatis ditambahkan.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,6 +146,35 @@
                     </div>
                 </div>
 
+                <div class="pt-8 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-phone text-slate-300"></i> Nomor Telepon (Non-WA)</label>
+                        <input type="text" name="contact_phone" value="{{ $general['contact_phone'] ?? '' }}" placeholder="0632 21234" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fab fa-whatsapp text-emerald-400"></i> WhatsApp Kedua (CS Cadangan)</label>
+                        <input type="text" name="wa_number_2" value="{{ $general['wa_number_2'] ?? '' }}" placeholder="62813..." class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-clock text-slate-300"></i> Jam Operasional</label>
+                        <input type="text" name="operating_hours" value="{{ $general['operating_hours'] ?? '' }}" placeholder="Setiap hari, 08.00 - 21.00 WIB" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Kota</label>
+                            <input type="text" name="office_city" value="{{ $general['office_city'] ?? '' }}" placeholder="Balige" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Kode Pos</label>
+                            <input type="text" name="office_postal" value="{{ $general['office_postal'] ?? '' }}" placeholder="22312" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-map text-slate-300"></i> Embed Google Maps <span class="text-slate-300 normal-case">(opsional — tempel URL "src" dari kode embed)</span></label>
+                        <input type="text" name="google_maps_embed" value="{{ $general['google_maps_embed'] ?? '' }}" placeholder="https://www.google.com/maps/embed?pb=..." class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-[10px] text-slate-700">
+                    </div>
+                </div>
+
                 <div class="pt-8 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div class="space-y-2">
                         <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Instagram</label>
@@ -157,6 +191,18 @@
                     <div class="space-y-2">
                         <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Youtube</label>
                         <input type="text" name="social_youtube" value="{{ $general['social_youtube'] ?? '' }}" class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">X / Twitter</label>
+                        <input type="text" name="social_twitter" value="{{ $general['social_twitter'] ?? '' }}" placeholder="https://x.com/..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">LinkedIn</label>
+                        <input type="text" name="social_linkedin" value="{{ $general['social_linkedin'] ?? '' }}" placeholder="https://linkedin.com/company/..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Telegram</label>
+                        <input type="text" name="social_telegram" value="{{ $general['social_telegram'] ?? '' }}" placeholder="https://t.me/..." class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl font-bold text-[10px]">
                     </div>
                 </div>
 
@@ -233,6 +279,27 @@
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Google Analytics / GTM ID</label>
                             <input type="text" name="seo_ga_id" value="{{ $general['seo_ga_id'] ?? '' }}" placeholder="G-XXXXXXXXXX" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-black text-slate-400 text-xs tracking-widest">
                             <p class="text-[8px] font-bold text-slate-400 uppercase">Input ID saja, skrip akan ditambahkan otomatis.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fab fa-google text-rose-400"></i> Google Search Console</label>
+                            <input type="text" name="seo_google_verification" value="{{ $general['seo_google_verification'] ?? '' }}" placeholder="kode verifikasi (content dari meta tag)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-black text-slate-400 text-xs tracking-widest">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Tempel hanya nilai "content" dari meta google-site-verification.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 space-y-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-share-nodes text-indigo-400"></i> Gambar Share Default (og:image)</label>
+                        <p class="text-[9px] text-slate-400 font-bold italic">Tampil saat link situs dibagikan di WhatsApp / Facebook (untuk halaman tanpa gambar khusus). Rekomendasi 1200×630px.</p>
+                        <div class="flex items-center gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                            <div class="w-32 h-20 bg-white rounded-2xl shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 shrink-0">
+                                <img src="{{ $general['og_image_url'] ?? asset('assets/img/logo.png') }}" class="w-full h-full object-contain" id="preview-og-image">
+                            </div>
+                            <div class="flex-1">
+                                <input type="hidden" name="og_image_url" value="{{ $general['og_image_url'] ?? '' }}">
+                                <button type="button" @click="openMedia('og_image')" class="px-5 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-all shadow-sm">
+                                    <i class="fas fa-images mr-1"></i> Pilih dari Media
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -329,7 +396,7 @@
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <i class="fas fa-key text-slate-300"></i> API Key (ExchangeRate-API)
                             </label>
-                            <input type="text" name="finance[exchange_rate_api_key]" id="api_key_input" value="{{ $finance['exchange_rate_api_key'] ?? 'b753386c73cbdf1122c8f917' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                            <input type="text" name="finance[exchange_rate_api_key]" id="api_key_input" value="{{ $finance['exchange_rate_api_key'] ?? '' }}" placeholder="Tempel API Key ExchangeRate-API" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
                             <div class="flex items-center justify-between mt-2">
                                 <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Ambil dari app.exchangerate-api.com.</p>
                                 <button type="button" onclick="refreshRates()" class="text-[9px] font-bold px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
@@ -396,6 +463,9 @@
                     } else if (target === 'favicon') {
                         document.getElementById('preview-favicon').src = url;
                         document.querySelector('input[name="icon_url"]').value = url;
+                    } else if (target === 'og_image') {
+                        document.getElementById('preview-og-image').src = url;
+                        document.querySelector('input[name="og_image_url"]').value = url;
                     }
                 } 
             } 

@@ -14,6 +14,9 @@
     <meta name="description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
     <meta name="keywords" content="{{ strip_tags($__env->yieldContent('keywords', $siteSettings['general']['seo_meta_keywords'] ?? 'tour danau toba, travel sumatera utara')) }}">
     <link rel="canonical" href="{{ url()->current() }}">
+    @if(!empty($siteSettings['general']['seo_google_verification']))
+    <meta name="google-site-verification" content="{{ $siteSettings['general']['seo_google_verification'] }}">
+    @endif
     <link rel="icon" type="image/x-icon" href="{{ imageUrl($siteSettings['general']['icon_url'] ?? null, asset('favicon.ico')) }}">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1a6b4a">
@@ -24,18 +27,24 @@
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 
     <!-- Open Graph / Facebook -->
+    @php
+        $ogModel = $package ?? $post ?? null;
+        $ogDefault = $ogModel
+            ? ogBannerUrl($ogModel)
+            : (!empty($siteSettings['general']['og_image_url']) ? imageUrl($siteSettings['general']['og_image_url']) : ogBannerUrl(null));
+    @endphp
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ strip_tags($__env->yieldContent('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')) }}">
     <meta property="og:description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
-    <meta property="og:image" content="{{ $__env->yieldContent('og_image', ogBannerUrl($package ?? $post ?? null)) }}">
+    <meta property="og:image" content="{{ $__env->yieldContent('og_image', $ogDefault) }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ strip_tags($__env->yieldContent('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')) }}">
     <meta property="twitter:description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
-    <meta property="twitter:image" content="{{ $__env->yieldContent('og_image', ogBannerUrl($package ?? $post ?? null)) }}">
+    <meta property="twitter:image" content="{{ $__env->yieldContent('og_image', $ogDefault) }}">
 
     <!-- Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

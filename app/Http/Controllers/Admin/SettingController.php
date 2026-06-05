@@ -8,71 +8,10 @@ use App\Models\Package;
 use App\Models\Setting;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
 {
-    use \App\Traits\HandlesImageUploads, LogsActivity;
-
-    public function index()
-    {
-        $settings = Setting::all()->pluck('value', 'key');
-
-        return view('admin.settings.index', compact('settings'));
-    }
-
-    public function update(Request $request)
-    {
-        $data = $request->except('_token');
-        $allFiles = $request->allFiles();
-
-        // Handle File Uploads
-        foreach ($allFiles as $key => $files) {
-            if (is_array($files)) {
-                foreach ($files as $subKey => $file) {
-                    if ($file instanceof UploadedFile) {
-                        $path = $this->uploadAndIndex($file, 'branding', 'branding');
-                        $data[$key][$subKey.'_url'] = $path;
-                    }
-                }
-            } elseif ($files instanceof UploadedFile) {
-                $path = $this->uploadAndIndex($files, 'branding', 'branding');
-                $data[$key.'_url'] = $path;
-            }
-        }
-
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                // For array values (grouped settings), merge with existing data
-                $setting = Setting::firstOrNew(['key' => $key]);
-                if (! $setting->exists) {
-                    $setting->value = [];
-                }
-                $existingValue = $setting->value ?? [];
-
-                // Recursively merge to handle deep structures like tour_landing[hero][title]
-                $newValue = array_replace_recursive($existingValue, $value);
-
-                $setting->value = $newValue;
-                $setting->save();
-            } else {
-                // For simple key-value pairs (if any)
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value]
-                );
-            }
-        }
-
-        // Clear exchange rate cache in case it was modified
-        Cache::forget('exchange_rate_idr_to_SGD');
-        Cache::forget('exchange_rate_idr_to_MYR');
-
-        $this->logActivity('updated', 'Updated system engine settings', null, $data);
-
-        return redirect()->back()->with('success', 'Settings updated successfully!');
-    }
+    use LogsActivity;
 
     public function generateSitemap(Request $request)
     {

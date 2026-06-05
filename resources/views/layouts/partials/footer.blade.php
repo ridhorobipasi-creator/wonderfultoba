@@ -56,10 +56,31 @@
                         </a>
                     @endif
                     @if($siteSettings['general']['social_tiktok'] ?? false)
-                        <a href="{{ $siteSettings['general']['social_tiktok'] }}" 
+                        <a href="{{ $siteSettings['general']['social_tiktok'] }}"
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
                             <i class="fab fa-tiktok text-sm"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings['general']['social_twitter'] ?? false)
+                        <a href="{{ $siteSettings['general']['social_twitter'] }}"
+                           target="_blank"
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            <i class="fab fa-twitter text-sm"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings['general']['social_linkedin'] ?? false)
+                        <a href="{{ $siteSettings['general']['social_linkedin'] }}"
+                           target="_blank"
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            <i class="fab fa-linkedin-in text-sm"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings['general']['social_telegram'] ?? false)
+                        <a href="{{ $siteSettings['general']['social_telegram'] }}"
+                           target="_blank"
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            <i class="fab fa-telegram text-sm"></i>
                         </a>
                     @endif
                 </div>
@@ -92,33 +113,67 @@
             <!-- ── Contact ── -->
             <div>
                 <h4 class="text-white font-label-caps text-[10px] uppercase tracking-[0.2em] mb-6">{{ __('Alamat & Kontak') }}</h4>
+                @php
+                    $g = $siteSettings['general'] ?? [];
+                    $addressLine = $g['office_address'] ?? 'Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara 21174';
+                    $cityPostal = trim(($g['office_city'] ?? '').' '.($g['office_postal'] ?? ''));
+                @endphp
                 <div class="space-y-4 text-slate-400 font-body-md text-xs">
                     <div class="flex items-start space-x-3">
                         <i class="fas fa-map-marker-alt text-secondary mt-0.5 shrink-0"></i>
-                        <p>{{ $siteSettings['general']['office_address'] ?? 'Jl. Sisingamangaraja No. 1, Parapat, Sumatera Utara 21174' }}</p>
+                        <p>{{ $addressLine }}@if($cityPostal !== ''), {{ $cityPostal }}@endif</p>
                     </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fab fa-whatsapp text-secondary shrink-0"></i>
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['wa_number'] ?? '6282277848855') }}" target="_blank"
+                           class="hover:text-secondary transition-colors">
+                            {{ $g['wa_number'] ?? '+62 813-2388-8207' }}
+                        </a>
+                    </div>
+                    @if($g['wa_number_2'] ?? false)
+                    <div class="flex items-center space-x-3">
+                        <i class="fab fa-whatsapp text-secondary shrink-0"></i>
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['wa_number_2']) }}" target="_blank"
+                           class="hover:text-secondary transition-colors">
+                            {{ $g['wa_number_2'] }} <span class="text-slate-500">(CS 2)</span>
+                        </a>
+                    </div>
+                    @endif
+                    @if($g['contact_phone'] ?? false)
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-phone text-secondary shrink-0"></i>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['general']['wa_number'] ?? '+6282277848855') }}" 
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $g['contact_phone']) }}"
                            class="hover:text-secondary transition-colors">
-                            {{ $siteSettings['general']['wa_number'] ?? '+62 813-2388-8207' }}
+                            {{ $g['contact_phone'] }}
                         </a>
                     </div>
+                    @endif
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-envelope text-secondary shrink-0"></i>
-                        <a href="mailto:{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}"
+                        <a href="mailto:{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}"
                            class="hover:text-secondary transition-colors">
-                            {{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}
+                            {{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}
                         </a>
                     </div>
+                    @if($g['operating_hours'] ?? false)
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-clock text-secondary shrink-0"></i>
+                        <p>{{ $g['operating_hours'] }}</p>
+                    </div>
+                    @endif
                 </div>
+                @if($g['google_maps_embed'] ?? false)
+                <div class="mt-5 rounded-xl overflow-hidden border border-white/10">
+                    <iframe src="{{ $g['google_maps_embed'] }}" width="100%" height="140" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi {{ $brandName ?? 'Kantor' }}"></iframe>
+                </div>
+                @endif
             </div>
         </div>
 
         <!-- ── Bottom bar ── -->
         <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
                 <p class="text-slate-500 font-label-caps text-[10px] uppercase tracking-wider">
-                &copy; {{ date('Y') }} <span class="text-white/80">Sujai Laketoba</span>. {{ __('All rights reserved.') }}
+                &copy; {{ date('Y') }} <span class="text-white/80">{{ $siteSettings['general']['site_copyright'] ?? ($siteSettings['general']['site_name'] ?? 'Sujai Laketoba') }}</span>. {{ __('All rights reserved.') }}
             </p>
             <div class="flex items-center gap-4">
                 @php
