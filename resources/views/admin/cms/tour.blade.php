@@ -606,9 +606,9 @@ document.addEventListener('alpine:init', () => {
                                                         shortDescription: '{{ addslashes($p->shortDescription) }}',
                                                         slug: '{{ $p->slug }}',
                                                         locationTag: '{{ addslashes($p->locationTag) }}',
-                                                        price: {{ $p->price }},
-                                                        duration: '{{ $p->duration }}',
-                                                        image_path: '{{ $p->packageImages->first()?->image_path ?? ($p->images[0] ?? '') }}'
+                                                        price: {{ $p->price ?: 0 }},
+                                                        duration: '{{ addslashes($p->duration) }}',
+                                                        image_path: '{{ imageUrl($p->packageImages->first()?->image_path ?? ($p->images[0] ?? '')) }}'
                                                     })"
                                                     class="flex items-center gap-2 p-2 rounded-xl hover:bg-indigo-50 transition text-left group/pkg">
                                                 <div class="w-8 h-8 rounded-lg bg-slate-100 overflow-hidden shrink-0">
@@ -634,7 +634,7 @@ document.addEventListener('alpine:init', () => {
                                                         title: '{{ addslashes($b->title) }}',
                                                         shortDescription: '{{ addslashes($b->shortDescription) }}',
                                                         slug: '{{ $b->slug }}',
-                                                        thumbnail: '{{ $b->thumbnail }}'
+                                                        thumbnail: '{{ imageUrl($b->thumbnail) }}'
                                                     })"
                                                     class="flex items-center gap-2 p-2 rounded-xl hover:bg-orange-50 transition text-left group/blog">
                                                 <div class="w-8 h-8 rounded-lg bg-slate-100 overflow-hidden shrink-0">
@@ -659,7 +659,7 @@ document.addEventListener('alpine:init', () => {
                                                         id: {{ $g->id }},
                                                         title: '{{ addslashes($g->title) }}',
                                                         description: '{{ addslashes($g->description) }}',
-                                                        image_path: '{{ $g->image_path }}'
+                                                        image_path: '{{ imageUrl($g->image_path) }}'
                                                     })"
                                                     class="flex flex-col gap-2 p-1 rounded-xl hover:bg-emerald-50 transition text-left group/gallery">
                                                 <div class="w-full aspect-video rounded-lg bg-slate-100 overflow-hidden">

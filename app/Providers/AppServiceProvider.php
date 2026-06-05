@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         Package::observe(PackageObserver::class);
         Blog::observe(BlogObserver::class);
         Setting::observe(SettingObserver::class);
+        Booking::observe(\App\Observers\BookingObserver::class);
 
         // Share settings globally
         if (! $this->app->runningInConsole()) {
