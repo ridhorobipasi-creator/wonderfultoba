@@ -18,15 +18,15 @@ class DashboardService
         return Cache::remember('admin_dashboard_stats', 300, function () {
             return [
                 'revenue' => [
-                    'total' => Booking::where('status', 'confirmed')->sum('totalPrice'),
-                    'monthly' => Booking::where('status', 'confirmed')
+                    'total' => Booking::whereIn('status', ['confirmed', 'completed'])->sum('totalPrice'),
+                    'monthly' => Booking::whereIn('status', ['confirmed', 'completed'])
                         ->whereMonth('createdAt', now()->month)
                         ->sum('totalPrice'),
                     'growth' => $this->calculateGrowth(),
                 ],
                 'profit' => [
-                    'total' => Booking::where('status', 'confirmed')->sum(DB::raw('totalPrice - COALESCE(total_cost, 0)')),
-                    'monthly' => Booking::where('status', 'confirmed')
+                    'total' => Booking::whereIn('status', ['confirmed', 'completed'])->sum(DB::raw('totalPrice - COALESCE(total_cost, 0)')),
+                    'monthly' => Booking::whereIn('status', ['confirmed', 'completed'])
                         ->whereMonth('createdAt', now()->month)
                         ->sum(DB::raw('totalPrice - COALESCE(total_cost, 0)')),
                 ],
@@ -91,7 +91,7 @@ class DashboardService
     {
         $startDate = now()->subDays(6)->startOfDay();
 
-        $revenues = Booking::where('status', 'confirmed')
+        $revenues = Booking::whereIn('status', ['confirmed', 'completed'])
             ->where('createdAt', '>=', $startDate)
             ->select(
                 DB::raw('date(createdAt) as date'),
@@ -116,11 +116,11 @@ class DashboardService
 
     private function calculateGrowth()
     {
-        $currentMonth = Booking::where('status', 'confirmed')
+        $currentMonth = Booking::whereIn('status', ['confirmed', 'completed'])
             ->whereMonth('createdAt', now()->month)
             ->sum('totalPrice');
 
-        $lastMonth = Booking::where('status', 'confirmed')
+        $lastMonth = Booking::whereIn('status', ['confirmed', 'completed'])
             ->whereMonth('createdAt', now()->subMonth()->month)
             ->sum('totalPrice');
 
@@ -134,7 +134,10 @@ class DashboardService
     private function getTopPackages()
     {
         return Package::select('packages.name', DB::raw('COUNT(bookings.id) as booking_count'))
-            ->leftJoin('bookings', 'packages.id', '=', 'bookings.packageId')
+            ->leftJoin('bookings', function ($join) {
+                $join->on('packages.id', '=', 'bookings.packageId')
+                     ->whereIn('bookings.status', ['confirmed', 'completed']);
+            })
             ->groupBy('packages.id', 'packages.name')
             ->orderByDesc('booking_count')
             ->limit(5)
@@ -151,7 +154,7 @@ class DashboardService
             DB::raw("$monthExpr as month"),
             DB::raw('SUM(totalPrice) as total')
         )
-            ->where('status', 'confirmed')
+            ->whereIn('status', ['confirmed', 'completed'])
             ->whereYear('createdAt', now()->year)
             ->groupBy('month')
             ->orderBy('month')

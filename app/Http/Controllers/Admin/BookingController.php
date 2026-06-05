@@ -153,13 +153,10 @@ class BookingController extends Controller
     public function update(Request $request, Booking $booking)
     {
         $validated = $request->validate([
-            'startDate' => 'required|date|after_or_equal:today',
-            'endDate' => 'required|date|after_or_equal:startDate',
-            'customerName' => 'required|string|max:255',
-            'customerEmail' => 'required|email',
-            'customerPhone' => 'required|string',
-            'notes' => 'nullable|string',
             'status' => 'required|in:pending,confirmed,completed,cancelled',
+            'totalPrice' => 'required|numeric|min:0',
+            'total_cost' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
         ]);
 
         $this->bookingService->update($booking, $validated);

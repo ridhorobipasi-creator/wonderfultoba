@@ -29,7 +29,7 @@
             @csrf
             @method('PATCH')
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
                 <!-- Status -->
                 <div class="space-y-4">
                     <label class="block text-xs font-black text-gray-400 uppercase tracking-widest">Update Status</label>
@@ -47,6 +47,15 @@
                     <div class="relative">
                         <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
                         <input type="number" name="totalPrice" value="{{ $booking->totalPrice }}" class="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-gray-900">
+                    </div>
+                </div>
+
+                <!-- Total Cost -->
+                <div class="space-y-4">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest">Total Cost (HPP)</label>
+                    <div class="relative">
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
+                        <input type="number" name="total_cost" value="{{ $booking->total_cost ?? 0 }}" class="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-gray-900">
                     </div>
                 </div>
             </div>

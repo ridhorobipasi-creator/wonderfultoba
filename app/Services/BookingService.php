@@ -68,7 +68,7 @@ class BookingService
                 // Update customer stats
                 $customer->update([
                     'total_bookings' => $customer->bookings()->count(),
-                    'total_spent' => $customer->bookings()->where('status', 'confirmed')->sum('totalPrice'),
+                    'total_spent' => $customer->bookings()->whereIn('status', ['confirmed', 'completed'])->sum('totalPrice'),
                     'last_booking_at' => now(),
                 ]);
 

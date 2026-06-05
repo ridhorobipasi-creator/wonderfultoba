@@ -37,7 +37,7 @@ class ReportController extends Controller
         // 1. Monthly/Filtered Summary
         $monthlyBookings = $query->clone()
             ->with('package')
-            ->where('status', 'confirmed')
+            ->whereIn('status', ['confirmed', 'completed'])
             ->get();
 
         $stats = [
@@ -63,12 +63,12 @@ class ReportController extends Controller
         if ($isSqlite) {
             $yearlyBookings = Booking::whereBetween('createdAt', ["$year-01-01 00:00:00", "$year-12-31 23:59:59"])
                 ->with('package')
-                ->where('status', 'confirmed')
+                ->whereIn('status', ['confirmed', 'completed'])
                 ->get();
         } else {
             $yearlyBookings = Booking::whereYear('createdAt', $year)
                 ->with('package')
-                ->where('status', 'confirmed')
+                ->whereIn('status', ['confirmed', 'completed'])
                 ->get();
         }
 
@@ -80,7 +80,7 @@ class ReportController extends Controller
         // 4. Monthly Chart Data
         $monthExpr = $isSqlite ? "CAST(strftime('%m', createdAt) AS INTEGER)" : 'MONTH(createdAt)';
 
-        $chartDataQuery = Booking::where('status', 'confirmed');
+        $chartDataQuery = Booking::whereIn('status', ['confirmed', 'completed']);
         if ($isSqlite) {
             $chartDataQuery->whereBetween('createdAt', ["$year-01-01 00:00:00", "$year-12-31 23:59:59"]);
         } else {

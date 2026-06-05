@@ -12,7 +12,7 @@ class FinanceController extends Controller
 
     public function index()
     {
-        $transactions = Booking::where('status', 'confirmed')
+        $transactions = Booking::whereIn('status', ['confirmed', 'completed'])
             ->latest('createdAt')
             ->paginate(20);
 
@@ -21,7 +21,7 @@ class FinanceController extends Controller
 
     public function export()
     {
-        $transactions = Booking::where('status', 'confirmed')
+        $transactions = Booking::whereIn('status', ['confirmed', 'completed'])
             ->latest('createdAt')
             ->get();
 
