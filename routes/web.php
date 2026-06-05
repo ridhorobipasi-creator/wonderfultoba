@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CMSController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ErrorLogController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
@@ -216,6 +217,8 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/sitemap', [SettingController::class, 'generateSitemap'])->name('settings.sitemap');
         Route::get('logs', [ActivityLogController::class, 'index'])->name('logs.index');
+        Route::get('error-logs', [ErrorLogController::class, 'index'])->name('error-logs.index');
+        Route::post('error-logs/clear', [ErrorLogController::class, 'clear'])->name('error-logs.clear');
         Route::get('users/export', [UserController::class, 'export'])->name('users.export');
         Route::post('users/bulk-destroy', [UserController::class, 'bulkDestroy'])->name('users.bulk-destroy');
         Route::resource('users', UserController::class);

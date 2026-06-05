@@ -292,6 +292,12 @@
                                 <i class="fas fa-clock-rotate-left w-5 text-sm {{ request()->routeIs('admin.logs.*') ? 'text-white' : 'text-slate-400' }}"></i>
                                 Log Aktivitas
                             </a>
+                            <a href="{{ route('admin.error-logs.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-[13px]
+                                      {{ request()->routeIs('admin.error-logs.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-triangle-exclamation w-5 text-sm {{ request()->routeIs('admin.error-logs.*') ? 'text-white' : 'text-rose-400' }}"></i>
+                                Log Error Sistem
+                            </a>
                         </div>
                     </div>
                     @endif
