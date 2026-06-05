@@ -553,13 +553,13 @@ trait HandlesImageUploads
                 $thumbData = ob_get_clean();
                 Storage::disk('public')->put($directory.'/thumbnails/'.$filename, $thumbData);
 
+                // Generate Blur Hash & Responsive Variants BEFORE destroying the resource.
+                $this->lastBlurHash = $this->generateBlurHash($image);
+                $this->generateResponsiveVariants($image, $directory, $filename);
+
                 imagedestroy($thumbImg);
                 \imagedestroy($image);
                 unset($webpData, $thumbData, $image, $thumbImg);
-
-                // Generate Blur Hash & Responsive Variants
-                $this->lastBlurHash = $this->generateBlurHash($image);
-                $this->generateResponsiveVariants($image, $directory, $filename);
 
                 Media::updateOrCreate(
                     ['path' => $path],

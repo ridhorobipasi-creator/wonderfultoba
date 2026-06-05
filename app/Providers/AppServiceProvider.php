@@ -87,9 +87,14 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
 
-                // Share pending bookings count globally for notification bell
-                if (! $this->app->runningInConsole()) {
-                    $pendingBookingsCount = Booking::where('status', 'pending')->count();
+                // Share pending bookings count for the admin notification bell only.
+                // Cached + restricted to admin paths to avoid a COUNT query on every public request.
+                if (! $this->app->runningInConsole() && request()->is('admin*')) {
+                    $pendingBookingsCount = Cache::remember(
+                        'pending_bookings_count',
+                        60,
+                        fn () => Booking::where('status', 'pending')->count()
+                    );
                     view()->share('pendingBookingsCount', $pendingBookingsCount);
                 }
             } catch (\Exception $e) {

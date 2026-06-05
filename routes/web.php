@@ -39,9 +39,11 @@ Route::get('/home', function () {
 
 // Auth routes
 Route::get('/login', [WebAuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [WebAuthController::class, 'login']);
+Route::post('/login', [WebAuthController::class, 'login'])->middleware('throttle:10,1');
 Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
-Route::post('/register', [WebAuthController::class, 'register'])->name('register');
+Route::post('/register', [WebAuthController::class, 'register'])
+    ->name('register')
+    ->middleware('throttle:5,1');
 
 // API Sync (Realtime without Supabase)
 Route::get('/api/sync/version', [SyncController::class, 'getVersion'])->name('api.sync.version');

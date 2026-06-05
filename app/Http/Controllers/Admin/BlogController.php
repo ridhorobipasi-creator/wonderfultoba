@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Media;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,8 +29,10 @@ class BlogController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('title', 'like', "%{$search}%")
-                ->orWhere('content', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
         }
 
         if ($request->filled('category')) {
@@ -68,10 +71,16 @@ class BlogController extends Controller
 
         // Handle cover image input (dual mode: file upload or media library)
         if ($request->hasFile('cover_image')) {
-            $media = $this->uploadAndIndex($request->file('cover_image'), 'blogs', $validated['title']);
-            $validated['cover_image_id'] = $media->id;
+            $path = $this->uploadAndIndex(
+                $request->file('cover_image'),
+                'blogs',
+                null,
+                $validated['title']
+            );
+            $mediaRecord = Media::where('path', $path)->latest()->first();
+            $validated['cover_image_id'] = $mediaRecord?->id;
             // Keep legacy image field for backwards compatibility
-            $validated['image'] = $media->path;
+            $validated['image'] = $path;
         } elseif ($request->filled('cover_image_media_id')) {
             $validated['cover_image_id'] = $request->cover_image_media_id;
             // Keep legacy image field for backwards compatibility
