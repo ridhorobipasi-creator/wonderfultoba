@@ -162,4 +162,40 @@ class SettingController extends Controller
 
         return response($xml, 200, ['Content-Type' => 'application/xml']);
     }
+
+    public function refreshExchangeRates(Request $request)
+    {
+        try {
+            $setting = Setting::where('key', 'general')->first();
+            $apiKey = $setting->value['finance']['exchange_rate_api_key'] ?? '';
+
+            if (empty($apiKey)) {
+                return response()->json(['error' => 'API Key ExchangeRate-API belum disetel di pengaturan.'], 400);
+            }
+
+            $response = \Illuminate\Support\Facades\Http::get("https://v6.exchangerate-api.com/v6/{$apiKey}/latest/MYR");
+            if (!$response->successful()) {
+                return response()->json(['error' => 'Gagal menghubungi API kurs. Periksa API key.'], 400);
+            }
+
+            $data = $response->json();
+            $myrToIdr = $data['conversion_rates']['IDR'] ?? null;
+            $myrToSgd = $data['conversion_rates']['SGD'] ?? null;
+
+            if (!$myrToIdr || !$myrToSgd) {
+                return response()->json(['error' => 'Data kurs tidak valid dari API.'], 400);
+            }
+
+            $sgdToIdr = $myrToIdr / $myrToSgd; // Deriving SGD from MYR data
+
+            return response()->json([
+                'MYR' => round($myrToIdr, 2),
+                'SGD' => round($sgdToIdr, 2)
+            ]);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error refreshing exchange rates: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan sistem saat mengambil data kurs.'], 500);
+        }
+    }
 }

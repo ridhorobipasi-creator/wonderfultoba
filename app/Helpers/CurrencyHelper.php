@@ -23,44 +23,18 @@ class CurrencyHelper
             return 1.0;
         }
 
-        // Cache rates for 12 hours to prevent API limits
-        return Cache::remember('exchange_rate_idr_to_'.$targetCurrency, 43200, function () use ($targetCurrency) {
-            $settings = Setting::where('key', 'general')->value('value') ?? [];
-            $finance = $settings['finance'] ?? [];
-            
-            $type = $finance['exchange_rate_type'] ?? 'manual';
-            $apiKey = $finance['exchange_rate_api_key'] ?? 'b753386c73cbdf1122c8f917';
-            
-            // Default fallback manual rates (1 IDR = X TargetCurrency)
-            // Stored in settings as 1 TargetCurrency = X IDR
-            $manualMyrIdr = (float) ($finance['exchange_rate_manual_myr'] ?? 3500);
-            $manualSgdIdr = (float) ($finance['exchange_rate_manual_sgd'] ?? 11500);
-            
-            $fallbacks = [
-                'MYR' => $manualMyrIdr > 0 ? 1 / $manualMyrIdr : 0.00028,
-                'SGD' => $manualSgdIdr > 0 ? 1 / $manualSgdIdr : 0.000086,
-            ];
+        $settings = Setting::where('key', 'general')->value('value') ?? [];
+        $finance = $settings['finance'] ?? [];
+        
+        $manualMyrIdr = (float) ($finance['exchange_rate_manual_myr'] ?? 3500);
+        $manualSgdIdr = (float) ($finance['exchange_rate_manual_sgd'] ?? 11500);
+        
+        $fallbacks = [
+            'MYR' => $manualMyrIdr > 0 ? 1 / $manualMyrIdr : 0.00028,
+            'SGD' => $manualSgdIdr > 0 ? 1 / $manualSgdIdr : 0.000086,
+        ];
 
-            if ($type === 'auto' && !empty($apiKey)) {
-                try {
-                    $response = Http::timeout(5)->get("https://v6.exchangerate-api.com/v6/{$apiKey}/latest/IDR");
-
-                    if ($response->successful()) {
-                        $data = $response->json();
-                        $rates = $data['conversion_rates'] ?? [];
-                        if (isset($rates[$targetCurrency])) {
-                            return (float) $rates[$targetCurrency];
-                        }
-                    }
-
-                    Log::warning("Failed to fetch exchange rate for {$targetCurrency} from API. Using fallback rate.");
-                } catch (\Exception $e) {
-                    Log::error('Error fetching exchange rate: '.$e->getMessage());
-                }
-            }
-
-            return $fallbacks[$targetCurrency] ?? 1.0;
-        });
+        return $fallbacks[$targetCurrency] ?? 1.0;
     }
 
     /**

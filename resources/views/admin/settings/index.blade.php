@@ -325,40 +325,35 @@
                         </div>
                     </div>
 
-                    <div class="space-y-6">
                         <div class="space-y-4">
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-money-bill-transfer text-slate-300"></i> Mode Kurs MYR & SGD
-                            </label>
-                            <select name="finance[exchange_rate_type]" x-model="exchangeRateType" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
-                                <option value="manual" {{ ($finance['exchange_rate_type'] ?? 'manual') === 'manual' ? 'selected' : '' }}>Manual</option>
-                                <option value="auto" {{ ($finance['exchange_rate_type'] ?? 'manual') === 'auto' ? 'selected' : '' }}>Otomatis (API)</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-4" x-show="exchangeRateType === 'manual'">
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs Manual MYR (1 MYR =)
-                            </label>
-                            <div class="flex items-center mb-2">
-                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
-                                <input type="number" name="finance[exchange_rate_manual_myr]" value="{{ $finance['exchange_rate_manual_myr'] ?? 3500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
-                            </div>
-                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mt-4">
-                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs Manual SGD (1 SGD =)
-                            </label>
-                            <div class="flex items-center">
-                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
-                                <input type="number" name="finance[exchange_rate_manual_sgd]" value="{{ $finance['exchange_rate_manual_sgd'] ?? 11500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
-                            </div>
-                        </div>
-
-                        <div class="space-y-4" x-show="exchangeRateType === 'auto'">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <i class="fas fa-key text-slate-300"></i> API Key (ExchangeRate-API)
                             </label>
-                            <input type="text" name="finance[exchange_rate_api_key]" value="{{ $finance['exchange_rate_api_key'] ?? 'b753386c73cbdf1122c8f917' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
-                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Ambil dari app.exchangerate-api.com.</p>
+                            <input type="text" name="finance[exchange_rate_api_key]" id="api_key_input" value="{{ $finance['exchange_rate_api_key'] ?? 'b753386c73cbdf1122c8f917' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Ambil dari app.exchangerate-api.com.</p>
+                                <button type="button" onclick="refreshRates()" class="text-[9px] font-bold px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition">
+                                    <i class="fas fa-sync-alt mr-1"></i> Refresh Kurs dari API
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mt-6">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs MYR (1 MYR =)
+                            </label>
+                            <div class="flex items-center mb-2">
+                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
+                                <input type="number" name="finance[exchange_rate_manual_myr]" id="rate_myr_input" value="{{ $finance['exchange_rate_manual_myr'] ?? 3500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                            </div>
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mt-4">
+                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs SGD (1 SGD =)
+                            </label>
+                            <div class="flex items-center">
+                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
+                                <input type="number" name="finance[exchange_rate_manual_sgd]" id="rate_sgd_input" value="{{ $finance['exchange_rate_manual_sgd'] ?? 11500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                            </div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-2 italic">Nilai ini yang akan digunakan di website. Bisa diedit manual atau klik Refresh Kurs.</p>
                         </div>
                     </div>
                 </div>
@@ -405,6 +400,41 @@
                 } 
             } 
         }));
+    }
+    function refreshRates() {
+        Swal.fire({
+            title: 'Refresh Kurs?',
+            text: "Sistem akan mengambil kurs terbaru dari API. Pastikan Anda telah menyimpan API Key bila baru saja mengubahnya.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Refresh',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({ title: 'Memuat...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+                
+                fetch('{{ route('admin.settings.refresh-rates') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        Swal.fire('Gagal!', data.error, 'error');
+                    } else {
+                        document.getElementById('rate_myr_input').value = data.MYR;
+                        document.getElementById('rate_sgd_input').value = data.SGD;
+                        Swal.fire('Berhasil!', 'Kurs MYR dan SGD telah diperbarui. Jangan lupa klik Simpan Pengaturan.', 'success');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan sistem saat mengambil data.', 'error');
+                });
+            }
+        });
     }
 </script>
 @endpush

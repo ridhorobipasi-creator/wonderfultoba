@@ -215,6 +215,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
         Route::post('/settings/general', [GeneralSettingsController::class, 'update'])->name('settings.general.update');
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/refresh-rates', [SettingController::class, 'refreshExchangeRates'])->name('settings.refresh-rates');
         Route::post('/settings/sitemap', [SettingController::class, 'generateSitemap'])->name('settings.sitemap');
         Route::get('logs', [ActivityLogController::class, 'index'])->name('logs.index');
         Route::get('error-logs', [ErrorLogController::class, 'index'])->name('error-logs.index');
