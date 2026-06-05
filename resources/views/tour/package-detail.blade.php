@@ -332,271 +332,6 @@
 
     </style>
 
-        <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
-            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
-                @if(session('success'))
-                    <div 
-                        x-data="{ 
-                            countdown: 2, 
-                            redirectCancelled: false,
-                            timer: null,
-                            init() {
-                                this.timer = setInterval(() => {
-                                    if (this.countdown > 0 && !this.redirectCancelled) {
-                                        this.countdown--;
-                                    } else {
-                                        clearInterval(this.timer);
-                                        if (!this.redirectCancelled && '{{ session('whatsappUrl') }}') {
-                                            window.location.href = '{{ session('whatsappUrl') }}';
-                                        }
-                                    }
-                                }, 1000);
-                            },
-                            cancelRedirect() {
-                                this.redirectCancelled = true;
-                                if (this.timer) clearInterval(this.timer);
-                            }
-                        }"
-                        class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500"
-                    >
-                        <div class="w-14 h-14 bg-white text-secondary rounded-full flex items-center justify-center text-2xl shadow-sm border border-secondary/20 mx-auto mb-4">
-                            <span class="material-symbols-outlined text-[32px]">check_circle</span>
-                        </div>
-                        <h4 class="text-xl font-semibold font-headline-md text-primary mb-2">{{ __('Reservasi Terkirim') }}</h4>
-                        <p class="text-slate-600 font-body-md mb-6 text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Silakan lanjutkan konfirmasi via WhatsApp.') }}</p>
-                        
-                        <div class="inline-flex flex-col items-center px-6 py-4 bg-white rounded-lg border border-outline-variant mb-6 w-full">
-                            <p class="font-label-caps text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Booking ID</p>
-                            <p class="text-2xl font-semibold font-body-md text-primary tracking-wider">{{ session('bookingCode') }}</p>
-                        </div>
-                        
-                        <!-- Redirection Countdown Status -->
-                        <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
-                            <template x-if="!redirectCancelled && countdown > 0">
-                                <div class="flex items-center justify-center gap-2">
-                                    <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
-                                </div>
-                            </template>
-                            <template x-if="!redirectCancelled && countdown === 0">
-                                <span>Menghubungkan ke WhatsApp...</span>
-                            </template>
-                            <template x-if="redirectCancelled">
-                                <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
-                            </template>
-                        </div>
-                        
-                        <!-- Action Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <template x-if="!redirectCancelled && countdown > 0">
-                                <button 
-                                    @click="cancelRedirect()"
-                                    type="button"
-                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition-all focus:outline-none"
-                                >
-                                    {{ __('Batal Alihkan') }}
-                                </button>
-                            </template>
-                            <a 
-                                href="{{ session('whatsappUrl') }}"
-                                target="_blank"
-                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition-all flex items-center justify-center gap-2 group"
-                            >
-                                <span class="material-symbols-outlined text-[18px]">chat</span>
-                                {{ __('KONFIRMASI SEKARANG') }}
-                            </a>
-                        </div>
-
-                        @if(session('bookingCode'))
-                        <a href="{{ route('booking.track', session('bookingCode')) }}"
-                           class="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] font-semibold text-primary hover:text-secondary transition-colors">
-                            <span class="material-symbols-outlined text-[16px]">travel_explore</span>
-                            {{ __('Lacak status pesanan Anda') }}
-                        </a>
-                        @endif
-                    </div>
-                @else
-                        <div class="flex justify-between items-end border-b border-slate-200 pb-4">
-                        <div>
-                            <span class="font-label-caps text-[10px] text-slate-500 uppercase tracking-wider">{{ __('Mulai dari') }}</span>
-                            <div class="font-headline-md text-headline-md text-primary" x-text="AppCurrency.format(package.price)"></div>
-                        </div>
-                        @php $__rating = siteRating(); @endphp
-                        @if($__rating)
-                        <div class="text-right">
-                            <span class="text-secondary font-semibold font-body-md">★ {{ number_format($__rating['value'], 1) }}</span>
-                            @if($__rating['count'])
-                            <span class="text-slate-500 text-[11px] font-body-md block">
-                                @if($__rating['url'])
-                                    <a href="{{ $__rating['url'] }}" target="_blank" rel="noopener" class="hover:text-secondary transition-colors">{{ number_format($__rating['count']) }} {{ __('ulasan Google') }}</a>
-                                @else
-                                    {{ number_format($__rating['count']) }} {{ __('ulasan') }}
-                                @endif
-                            </span>
-                            @endif
-                        </div>
-                        @endif
-                    </div>
-
-                    @if(session('error'))
-                        <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs font-body-md">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    <form action="{{ route('tour.booking.submit') }}" method="POST" class="space-y-5" @submit="isSubmitting = true">
-                        @csrf
-                        <input type="hidden" name="packageId" :value="package.id">
-                        <input type="hidden" name="slug" :value="package.slug">
-                        <input type="hidden" name="notes" :value="serializedNotes">
-                        <input type="hidden" name="paxChildren" :value="paxChildren">
-                        <template x-for="(service, idx) in services.filter(s => s.selected)" :key="idx">
-                            <input type="hidden" name="selected_services[]" :value="service.name">
-                        </template>
-                        
-                        <!-- Nama Lengkap -->
-                        <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nama lengkap') }} <span class="text-red-500">*</span></label>
-                            <input type="text" name="customerName" x-model="customerName" required placeholder="{{ __('Nama sesuai identitas') }}" 
-                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
-                            @error('customerName') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Email & WhatsApp -->
-                        <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
-                                <input type="email" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" 
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
-                                @error('customerEmail') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-                            <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
-                                <input type="tel" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" 
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
-                                @error('customerPhone') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <!-- Tanggal Keberangkatan -->
-                        <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Pilih tanggal') }} <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <input type="date" name="startDate" x-model="startDate" required
-                                    min="{{ now()->format('Y-m-d') }}"
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all uppercase">
-                            </div>
-                            @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Pax Dewasa & Anak -->
-                        <!-- Input Pax Dewasa & Anak -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
-                                <div class="relative flex items-center">
-                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
-                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
-                                    <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
-                                </div>
-                                <template x-if="pkgTiers && pkgTiers.length > 0">
-                                    <p class="text-[10px] text-primary mt-1" x-text="`Rp ${AppCurrency.format(currentUnitPrice)} / pax`"></p>
-                                </template>
-                                @error('pax') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-                            <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
-                                <div class="relative flex items-center">
-                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
-                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
-                                    <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Layanan Tambahan -->
-                        <div class="space-y-3" x-show="services && services.length > 0">
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-1 block uppercase tracking-wider">{{ __('Layanan tambahan') }}</label>
-                            
-                            <template x-for="(service, idx) in services" :key="idx">
-                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="service.selected ? 'border-secondary bg-secondary/5' : ''">
-                                    <div class="flex items-center gap-3">
-                                        <span class="material-symbols-outlined text-secondary text-[22px]" x-text="service.icon || 'help'"></span>
-                                        <div>
-                                            <div class="font-body-md font-semibold text-slate-900 text-xs" x-text="service.name"></div>
-                                            <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(service.price)"></span></div>
-                                        </div>
-                                    </div>
-                                    <input type="checkbox" x-model="service.selected" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
-                                </label>
-                            </template>
-                        </div>
-
-                        <!-- Catatan User -->
-                        <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Catatan tambahan') }} <span class="text-[9px] text-slate-500">({{ __('Opsional') }})</span></label>
-                            <textarea x-model="notesUser" placeholder="{{ __('Permintaan khusus, hotel, alergi, penjemputan, dll.') }}" rows="2"
-                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all resize-none"></textarea>
-                        </div>
-
-                        <!-- Real-time Pricing Summary Card -->
-                        <div class="bg-slate-50 p-4 rounded-lg space-y-2 border border-slate-200">
-                            <div class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>{{ __('Ekspedisi Dewasa') }} (<span x-text="pax"></span>x)</span>
-                                <span x-text="AppCurrency.format(priceDewasa)"></span>
-                            </div>
-                            <div x-show="paxChildren > 0" class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>{{ __('Ekspedisi Anak-Anak') }} (<span x-text="paxChildren"></span>x)</span>
-                                <span x-text="AppCurrency.format(priceAnak)"></span>
-                            </div>
-                            <template x-for="(service, idx) in services" :key="idx">
-                                <div x-show="service.selected" class="flex justify-between text-xs text-slate-600 font-body-md">
-                                    <span x-text="service.name"></span>
-                                    <span x-text="AppCurrency.format(service.price)"></span>
-                                </div>
-                            </template>
-                            <div class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>{{ __('Pajak & Layanan') }} (<span x-text="taxPercentage"></span>%)</span>
-                                <span x-text="AppCurrency.format(pajakLayanan)"></span>
-                            </div>
-                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition-all duration-300 origin-right"
-                                 :class="totalChanged ? 'scale-[1.03] text-secondary font-bold' : ''">
-                                <span>Total Ringkasan</span>
-                                <span x-text="AppCurrency.format(totalAkhir)"></span>
-                            </div>
-                        </div>
-
-                        <!-- Honeypot Field -->
-                        <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                            <label for="website_url">Tinggalkan kolom ini kosong jika Anda manusia</label>
-                            <input type="text" name="website_url" id="website_url" value="" autocomplete="off" tabindex="-1">
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            :disabled="isSubmitting"
-                            class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
-                        >
-                            <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">
-                                <span class="material-symbols-outlined text-[18px]">calendar_month</span>
-                                {{ __('Pesan Sekarang') }}
-                            </span>
-                            <span x-show="isSubmitting" class="flex items-center gap-2">
-                                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                {{ __('Mengirim...') }}
-                            </span>
-                        </button>
-                        <p class="text-center text-[11px] text-slate-500 font-body-md">{{ __('Konfirmasi cepat tersedia untuk tanggal terpilih.') }}</p>
-                        <p class="text-center text-[9px] text-slate-400 font-body-md mt-1 leading-normal">
-                            * {{ __('Data Anda akan disimpan di sistem kami. Anda akan diarahkan ke WhatsApp untuk melakukan konfirmasi cepat.') }}
-                        </p>
-                    </form>
-                @endif
-            </div>
-        </div>
-
         <!-- Content Part -->
         <div class="space-y-16 animate-in fade-in slide-in-from-left-8 duration-1000 order-3 mt-8 md:mt-0">
             
@@ -887,6 +622,273 @@
         </div>
 
         </div> <!-- END LEFT COLUMN WRAPPER -->
+
+        <!-- Booking Form Sidebar (Sticky) -->
+        <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
+            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
+                @if(session('success'))
+                    <div 
+                        x-data="{ 
+                            countdown: 2, 
+                            redirectCancelled: false,
+                            timer: null,
+                            init() {
+                                this.timer = setInterval(() => {
+                                    if (this.countdown > 0 && !this.redirectCancelled) {
+                                        this.countdown--;
+                                    } else {
+                                        clearInterval(this.timer);
+                                        if (!this.redirectCancelled && '{{ session('whatsappUrl') }}') {
+                                            window.location.href = '{{ session('whatsappUrl') }}';
+                                        }
+                                    }
+                                }, 1000);
+                            },
+                            cancelRedirect() {
+                                this.redirectCancelled = true;
+                                if (this.timer) clearInterval(this.timer);
+                            }
+                        }"
+                        class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500"
+                    >
+                        <div class="w-14 h-14 bg-white text-secondary rounded-full flex items-center justify-center text-2xl shadow-sm border border-secondary/20 mx-auto mb-4">
+                            <span class="material-symbols-outlined text-[32px]">check_circle</span>
+                        </div>
+                        <h4 class="text-xl font-semibold font-headline-md text-primary mb-2">{{ __('Reservasi Terkirim') }}</h4>
+                        <p class="text-slate-600 font-body-md mb-6 text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Silakan lanjutkan konfirmasi via WhatsApp.') }}</p>
+                        
+                        <div class="inline-flex flex-col items-center px-6 py-4 bg-white rounded-lg border border-outline-variant mb-6 w-full">
+                            <p class="font-label-caps text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Booking ID</p>
+                            <p class="text-2xl font-semibold font-body-md text-primary tracking-wider">{{ session('bookingCode') }}</p>
+                        </div>
+                        
+                        <!-- Redirection Countdown Status -->
+                        <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
+                            <template x-if="!redirectCancelled && countdown > 0">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
+                                </div>
+                            </template>
+                            <template x-if="!redirectCancelled && countdown === 0">
+                                <span>Menghubungkan ke WhatsApp...</span>
+                            </template>
+                            <template x-if="redirectCancelled">
+                                <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
+                            </template>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <template x-if="!redirectCancelled && countdown > 0">
+                                <button 
+                                    @click="cancelRedirect()"
+                                    type="button"
+                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition-all focus:outline-none"
+                                >
+                                    {{ __('Batal Alihkan') }}
+                                </button>
+                            </template>
+                            <a 
+                                href="{{ session('whatsappUrl') }}"
+                                target="_blank"
+                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition-all flex items-center justify-center gap-2 group"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">chat</span>
+                                {{ __('KONFIRMASI SEKARANG') }}
+                            </a>
+                        </div>
+
+                        @if(session('bookingCode'))
+                        <a href="{{ route('booking.track', session('bookingCode')) }}"
+                           class="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] font-semibold text-primary hover:text-secondary transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">travel_explore</span>
+                            {{ __('Lacak status pesanan Anda') }}
+                        </a>
+                        @endif
+                    </div>
+                @else
+                        <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+                        <div>
+                            <span class="font-label-caps text-[10px] text-slate-500 uppercase tracking-wider">{{ __('Mulai dari') }}</span>
+                            <div class="font-headline-md text-headline-md text-primary" x-text="AppCurrency.format(package.price)"></div>
+                        </div>
+                        @php $__rating = siteRating(); @endphp
+                        @if($__rating)
+                        <div class="text-right">
+                            <span class="text-secondary font-semibold font-body-md">★ {{ number_format($__rating['value'], 1) }}</span>
+                            @if($__rating['count'])
+                            <span class="text-slate-500 text-[11px] font-body-md block">
+                                @if($__rating['url'])
+                                    <a href="{{ $__rating['url'] }}" target="_blank" rel="noopener" class="hover:text-secondary transition-colors">{{ number_format($__rating['count']) }} {{ __('ulasan Google') }}</a>
+                                @else
+                                    {{ number_format($__rating['count']) }} {{ __('ulasan') }}
+                                @endif
+                            </span>
+                            @endif
+                        </div>
+                        @endif
+                    </div>
+
+                    @if(session('error'))
+                        <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs font-body-md">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('tour.booking.submit') }}" method="POST" class="space-y-5" @submit="isSubmitting = true">
+                        @csrf
+                        <input type="hidden" name="packageId" :value="package.id">
+                        <input type="hidden" name="slug" :value="package.slug">
+                        <input type="hidden" name="notes" :value="serializedNotes">
+                        <input type="hidden" name="paxChildren" :value="paxChildren">
+                        <template x-for="(service, idx) in services.filter(s => s.selected)" :key="idx">
+                            <input type="hidden" name="selected_services[]" :value="service.name">
+                        </template>
+                        
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nama lengkap') }} <span class="text-red-500">*</span></label>
+                            <input type="text" name="customerName" x-model="customerName" required placeholder="{{ __('Nama sesuai identitas') }}" 
+                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                            @error('customerName') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Email & WhatsApp -->
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
+                                <input type="email" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" 
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                                @error('customerEmail') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
+                                <input type="tel" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" 
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                                @error('customerPhone') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Tanggal Keberangkatan -->
+                        <div>
+                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Pilih tanggal') }} <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="date" name="startDate" x-model="startDate" required
+                                    min="{{ now()->format('Y-m-d') }}"
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all uppercase">
+                            </div>
+                            @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Pax Dewasa & Anak -->
+                        <!-- Input Pax Dewasa & Anak -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
+                                <div class="relative flex items-center">
+                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                </div>
+                                <template x-if="pkgTiers && pkgTiers.length > 0">
+                                    <p class="text-[10px] text-primary mt-1" x-text="`Rp ${AppCurrency.format(currentUnitPrice)} / pax`"></p>
+                                </template>
+                                @error('pax') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
+                                <div class="relative flex items-center">
+                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Layanan Tambahan -->
+                        <div class="space-y-3" x-show="services && services.length > 0">
+                            <label class="font-label-caps text-label-caps text-slate-700 mb-1 block uppercase tracking-wider">{{ __('Layanan tambahan') }}</label>
+                            
+                            <template x-for="(service, idx) in services" :key="idx">
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="service.selected ? 'border-secondary bg-secondary/5' : ''">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-secondary text-[22px]" x-text="service.icon || 'help'"></span>
+                                        <div>
+                                            <div class="font-body-md font-semibold text-slate-900 text-xs" x-text="service.name"></div>
+                                            <div class="text-[10px] text-on-surface-variant font-body-md">+ <span x-text="AppCurrency.format(service.price)"></span></div>
+                                        </div>
+                                    </div>
+                                    <input type="checkbox" x-model="service.selected" class="w-4 h-4 text-secondary border-outline-variant focus:ring-0 rounded"/>
+                                </label>
+                            </template>
+                        </div>
+
+                        <!-- Catatan User -->
+                        <div>
+                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Catatan tambahan') }} <span class="text-[9px] text-slate-500">({{ __('Opsional') }})</span></label>
+                            <textarea x-model="notesUser" placeholder="{{ __('Permintaan khusus, hotel, alergi, penjemputan, dll.') }}" rows="2"
+                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all resize-none"></textarea>
+                        </div>
+
+                        <!-- Real-time Pricing Summary Card -->
+                        <div class="bg-slate-50 p-4 rounded-lg space-y-2 border border-slate-200">
+                            <div class="flex justify-between text-xs text-slate-600 font-body-md">
+                                <span>{{ __('Ekspedisi Dewasa') }} (<span x-text="pax"></span>x)</span>
+                                <span x-text="AppCurrency.format(priceDewasa)"></span>
+                            </div>
+                            <div x-show="paxChildren > 0" class="flex justify-between text-xs text-slate-600 font-body-md">
+                                <span>{{ __('Ekspedisi Anak-Anak') }} (<span x-text="paxChildren"></span>x)</span>
+                                <span x-text="AppCurrency.format(priceAnak)"></span>
+                            </div>
+                            <template x-for="(service, idx) in services" :key="idx">
+                                <div x-show="service.selected" class="flex justify-between text-xs text-slate-600 font-body-md">
+                                    <span x-text="service.name"></span>
+                                    <span x-text="AppCurrency.format(service.price)"></span>
+                                </div>
+                            </template>
+                            <div class="flex justify-between text-xs text-slate-600 font-body-md">
+                                <span>{{ __('Pajak & Layanan') }} (<span x-text="taxPercentage"></span>%)</span>
+                                <span x-text="AppCurrency.format(pajakLayanan)"></span>
+                            </div>
+                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition-all duration-300 origin-right"
+                                 :class="totalChanged ? 'scale-[1.03] text-secondary font-bold' : ''">
+                                <span>Total Ringkasan</span>
+                                <span x-text="AppCurrency.format(totalAkhir)"></span>
+                            </div>
+                        </div>
+
+                        <!-- Honeypot Field -->
+                        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                            <label for="website_url">Tinggalkan kolom ini kosong jika Anda manusia</label>
+                            <input type="text" name="website_url" id="website_url" value="" autocomplete="off" tabindex="-1">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button 
+                            type="submit" 
+                            :disabled="isSubmitting"
+                            class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
+                        >
+                            <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                                {{ __('Pesan Sekarang') }}
+                            </span>
+                            <span x-show="isSubmitting" class="flex items-center gap-2">
+                                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                {{ __('Mengirim...') }}
+                            </span>
+                        </button>
+                        <p class="text-center text-[11px] text-slate-500 font-body-md">{{ __('Konfirmasi cepat tersedia untuk tanggal terpilih.') }}</p>
+                        <p class="text-center text-[9px] text-slate-400 font-body-md mt-1 leading-normal">
+                            * {{ __('Data Anda akan disimpan di sistem kami. Anda akan diarahkan ke WhatsApp untuk melakukan konfirmasi cepat.') }}
+                        </p>
+                    </form>
+                @endif
+            </div>
+        </div>
+
+
     </section>
 
     <!-- Floating Concierge Bar -->
