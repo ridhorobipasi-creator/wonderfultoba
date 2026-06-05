@@ -8,6 +8,7 @@ use App\Services\BookingService;
 use App\Services\ReportService;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BookingController extends Controller
 {
@@ -134,6 +135,7 @@ class BookingController extends Controller
 
         $booking = $this->bookingService->create($validated);
         $this->logActivity('created', "Created booking: {$booking->bookingCode}", $booking);
+        Cache::forget('admin_dashboard_stats');
 
         return redirect()
             ->route('admin.bookings.show', $booking)
@@ -161,6 +163,7 @@ class BookingController extends Controller
 
         $this->bookingService->update($booking, $validated);
         $this->logActivity('updated', "Updated booking: {$booking->bookingCode}", $booking);
+        Cache::forget('admin_dashboard_stats');
 
         return redirect()
             ->route('admin.bookings.show', $booking)
@@ -172,6 +175,7 @@ class BookingController extends Controller
         $code = $booking->bookingCode;
         $this->bookingService->delete($booking);
         $this->logActivity('deleted', "Deleted booking: {$code}");
+        Cache::forget('admin_dashboard_stats');
 
         return redirect()
             ->route('admin.bookings.index')
@@ -186,6 +190,7 @@ class BookingController extends Controller
 
         $this->bookingService->updateStatus($booking, $validated['status']);
         $this->logActivity('status_updated', "Updated status of booking {$booking->bookingCode} to {$validated['status']}", $booking);
+        Cache::forget('admin_dashboard_stats');
 
         return back()->with('success', 'Booking status updated successfully');
     }
@@ -200,6 +205,7 @@ class BookingController extends Controller
 
         $this->bookingService->bulkDelete($ids);
         $this->logActivity('bulk_deleted', 'Bulk deleted '.count($ids).' bookings');
+        Cache::forget('admin_dashboard_stats');
 
         return response()->json(['message' => 'Bookings deleted successfully']);
     }

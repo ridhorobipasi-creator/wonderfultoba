@@ -141,9 +141,18 @@ class BookingService
         $selectedServices = $data['metadata']['selected_services'] ?? [];
 
         $taxPercentage = 11;
+        $surchargeWeekend = 0;
+        $surchargePeak = 0;
+        $peakStart = '';
+        $peakEnd = '';
+
         $setting = \App\Models\Setting::where('key', 'general')->first();
-        if ($setting && isset($setting->value['finance']['tax_percentage'])) {
-            $taxPercentage = (float) $setting->value['finance']['tax_percentage'];
+        if ($setting && isset($setting->value['finance'])) {
+            $taxPercentage = (float) ($setting->value['finance']['tax_percentage'] ?? 11);
+            $surchargeWeekend = (float) ($setting->value['finance']['surcharge_weekend'] ?? 0);
+            $surchargePeak = (float) ($setting->value['finance']['surcharge_peak'] ?? 0);
+            $peakStart = $setting->value['finance']['surcharge_peak_start'] ?? '';
+            $peakEnd = $setting->value['finance']['surcharge_peak_end'] ?? '';
         }
 
         if (isset($data['packageId'])) {
@@ -189,8 +198,61 @@ class BookingService
             }
 
             $totalSebelumPajak = $priceDewasa + $priceAnak + $additionalServicesPrice;
-            $pajakLayanan = round($totalSebelumPajak * ($taxPercentage / 100));
-            $totalAkhir = $totalSebelumPajak + $pajakLayanan;
+
+            // Apply Surcharges
+            $surchargeAmount = 0;
+            $appliedSurcharges = [];
+            $startDateObj = isset($data['startDate']) ? \Carbon\Carbon::parse($data['startDate']) : null;
+
+            if ($startDateObj) {
+                // 1. Check Weekend
+                if ($surchargeWeekend > 0 && $startDateObj->isWeekend()) {
+                    $amt = $totalSebelumPajak * ($surchargeWeekend / 100);
+                    $surchargeAmount += $amt;
+                    $appliedSurcharges[] = [
+                        'name' => "Weekend Surcharge ({$surchargeWeekend}%)",
+                        'amount' => $amt
+                    ];
+                }
+
+                // 2. Check Peak Season
+                if ($surchargePeak > 0 && !empty($peakStart) && !empty($peakEnd)) {
+                    try {
+                        $currentYear = $startDateObj->year;
+                        $startParts = explode('/', $peakStart);
+                        $endParts = explode('/', $peakEnd);
+                        
+                        if (count($startParts) == 2 && count($endParts) == 2) {
+                            $peakStartDate = \Carbon\Carbon::createFromDate($currentYear, $startParts[1], $startParts[0])->startOfDay();
+                            $peakEndDate = \Carbon\Carbon::createFromDate($currentYear, $endParts[1], $endParts[0])->endOfDay();
+
+                            // Handle year rollover (e.g. 20/12 to 05/01)
+                            if ($peakEndDate->lt($peakStartDate)) {
+                                if ($startDateObj->month <= $peakEndDate->month) {
+                                    $peakStartDate->subYear();
+                                } else {
+                                    $peakEndDate->addYear();
+                                }
+                            }
+
+                            if ($startDateObj->between($peakStartDate, $peakEndDate)) {
+                                $amt = $totalSebelumPajak * ($surchargePeak / 100);
+                                $surchargeAmount += $amt;
+                                $appliedSurcharges[] = [
+                                    'name' => "Peak Season Surcharge ({$surchargePeak}%)",
+                                    'amount' => $amt
+                                ];
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning('Failed to parse peak season dates: ' . $e->getMessage());
+                    }
+                }
+            }
+
+            $totalDenganSurcharge = $totalSebelumPajak + $surchargeAmount;
+            $pajakLayanan = round($totalDenganSurcharge * ($taxPercentage / 100));
+            $totalAkhir = $totalDenganSurcharge + $pajakLayanan;
 
             $price = $totalAkhir;
             $cost = ($costPerPerson * $pax) + ($costPerPerson * 0.5 * $paxChildren);
@@ -201,9 +263,12 @@ class BookingService
                 'pax_anak' => $paxChildren,
                 'price_anak_total' => $priceAnak,
                 'additional_services' => $detailedServices,
+                'subtotal_base' => $totalSebelumPajak,
+                'surcharges' => $appliedSurcharges,
+                'total_surcharge' => $surchargeAmount,
+                'subtotal_with_surcharge' => $totalDenganSurcharge,
                 'tax_percentage' => $taxPercentage,
                 'tax' => $pajakLayanan,
-                'subtotal' => $totalSebelumPajak,
                 'total' => $totalAkhir
             ];
         }

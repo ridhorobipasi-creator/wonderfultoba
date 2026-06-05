@@ -405,6 +405,37 @@
                             </div>
                         </div>
 
+                        <!-- Peak Season & Surcharge -->
+                        <div class="p-8 bg-amber-50 rounded-[2.5rem] space-y-4 mt-6">
+                            <div class="flex items-center gap-4 text-amber-600">
+                                <i class="fas fa-chart-line text-3xl"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">Harga Dinamis (Surcharge)</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Weekend Surcharge (%)</label>
+                                    <input type="number" step="1" name="finance[surcharge_weekend]" value="{{ $finance['surcharge_weekend'] ?? 0 }}" placeholder="mis. 5" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 shadow-sm">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Peak Season Surcharge (%)</label>
+                                    <input type="number" step="1" name="finance[surcharge_peak]" value="{{ $finance['surcharge_peak'] ?? 0 }}" placeholder="mis. 15" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 shadow-sm">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Mulai Peak Season (Tgl/Bln)</label>
+                                    <input type="text" name="finance[surcharge_peak_start]" value="{{ $finance['surcharge_peak_start'] ?? '' }}" placeholder="DD/MM (mis. 20/12)" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-bold text-slate-900 shadow-sm">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-amber-500/70 uppercase tracking-widest">Akhir Peak Season (Tgl/Bln)</label>
+                                    <input type="text" name="finance[surcharge_peak_end]" value="{{ $finance['surcharge_peak_end'] ?? '' }}" placeholder="DD/MM (mis. 05/01)" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-bold text-slate-900 shadow-sm">
+                                </div>
+                            </div>
+                            <p class="text-[8px] font-bold text-amber-400 uppercase tracking-widest italic">Otomatis menaikkan harga pada hari Sabtu-Minggu, atau pada rentang tanggal Peak Season.</p>
+                        </div>
+
                         <div class="space-y-4 mt-6">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <i class="fas fa-coins text-slate-300"></i> Nilai Kurs MYR (1 MYR =)
