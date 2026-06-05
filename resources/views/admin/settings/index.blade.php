@@ -402,39 +402,38 @@
         }));
     }
     function refreshRates() {
-        Swal.fire({
-            title: 'Refresh Kurs?',
-            text: "Sistem akan mengambil kurs terbaru dari API. Pastikan Anda telah menyimpan API Key bila baru saja mengubahnya.",
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Refresh',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({ title: 'Memuat...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+        if (confirm("Sistem akan mengambil kurs terbaru dari API. Pastikan Anda telah menyimpan API Key bila baru saja mengubahnya. Lanjutkan?")) {
+            const btn = event.currentTarget || document.querySelector('button[onclick="refreshRates()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memuat...';
+            btn.disabled = true;
+            
+            fetch('{{ route('admin.settings.refresh-rates') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
                 
-                fetch('{{ route('admin.settings.refresh-rates') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        Swal.fire('Gagal!', data.error, 'error');
-                    } else {
-                        document.getElementById('rate_myr_input').value = data.MYR;
-                        document.getElementById('rate_sgd_input').value = data.SGD;
-                        Swal.fire('Berhasil!', 'Kurs MYR dan SGD telah diperbarui. Jangan lupa klik Simpan Pengaturan.', 'success');
-                    }
-                })
-                .catch(error => {
-                    Swal.fire('Gagal!', 'Terjadi kesalahan sistem saat mengambil data.', 'error');
-                });
-            }
-        });
+                if (data.error) {
+                    alert('Gagal! ' + data.error);
+                } else {
+                    document.getElementById('rate_myr_input').value = data.MYR;
+                    document.getElementById('rate_sgd_input').value = data.SGD;
+                    alert('Berhasil! Kurs MYR dan SGD telah diperbarui. Jangan lupa klik Simpan Pengaturan di kanan bawah.');
+                }
+            })
+            .catch(error => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Gagal! Terjadi kesalahan sistem saat mengambil data.');
+            });
+        }
     }
 </script>
 @endpush
