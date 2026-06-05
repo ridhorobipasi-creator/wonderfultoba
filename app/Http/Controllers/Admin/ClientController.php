@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Models\Media;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -30,10 +31,12 @@ class ClientController extends Controller
 
         // Handle logo input (dual mode: file upload or media library)
         if ($request->hasFile('logo')) {
-            $media = $this->uploadAndIndex($request->file('logo'), 'general', $validated['name'] . ' Logo');
-            $validated['logo_id'] = $media->id;
+            // uploadAndIndex() returns a string path, not a Media model.
+            $path = $this->uploadAndIndex($request->file('logo'), 'general', null, $validated['name'] . ' Logo');
+            $mediaRecord = Media::where('path', $path)->latest()->first();
+            $validated['logo_id'] = $mediaRecord?->id;
             // Keep legacy logo field for backwards compatibility
-            $validated['logo'] = $media->path;
+            $validated['logo'] = $path;
         } elseif ($request->filled('logo_media_id')) {
             $validated['logo_id'] = $request->logo_media_id;
             // Keep legacy logo field for backwards compatibility

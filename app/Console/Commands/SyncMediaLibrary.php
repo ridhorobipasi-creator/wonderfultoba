@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class SyncMediaLibrary extends Command
 {
-    protected $signature = 'media:sync {--fresh : Delete all records and re-index from scratch}';
+    protected $signature = 'media:reindex {--fresh : Delete all records and re-index from scratch}';
 
-    protected $description = 'Sync all files in public storage into the Media Library table';
+    protected $description = 'Re-index all files in public storage into the Media Library table (renamed from media:sync to avoid clashing with SyncMediaCommand)';
 
     public function handle()
     {

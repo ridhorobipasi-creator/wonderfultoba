@@ -67,7 +67,7 @@
             <span class="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Dikonfirmasi</span>
         </div>
         <div class="bg-emerald-50/50 border border-emerald-100 p-4 rounded-2xl flex items-center gap-4">
-            <div class="text-2xl font-black text-emerald-600">{{ $statusSummary['finished'] }}</div>
+            <div class="text-2xl font-black text-emerald-600">{{ $statusSummary['completed'] }}</div>
             <span class="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Selesai</span>
         </div>
         <div class="bg-rose-50/50 border border-rose-100 p-4 rounded-2xl flex items-center gap-4">
@@ -156,7 +156,7 @@
                                     $statusStyles = [
                                         'pending' => 'bg-amber-100 text-amber-700',
                                         'confirmed' => 'bg-indigo-100 text-indigo-700',
-                                        'finished' => 'bg-emerald-100 text-emerald-700',
+                                        'completed' => 'bg-emerald-100 text-emerald-700',
                                         'cancelled' => 'bg-rose-100 text-rose-700'
                                     ];
                                     $statusStyle = $statusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600';

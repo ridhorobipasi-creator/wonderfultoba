@@ -83,10 +83,12 @@ class CityController extends Controller
 
         // Handle image input (dual mode: file upload or media library)
         if ($request->hasFile('city_image')) {
-            $media = $this->uploadAndIndex($request->file('city_image'), 'destinations', $validated['name']);
-            $validated['image_id'] = $media->id;
+            // uploadAndIndex() returns a string path, not a Media model.
+            $path = $this->uploadAndIndex($request->file('city_image'), 'destinations', null, $validated['name']);
+            $mediaRecord = Media::where('path', $path)->latest()->first();
+            $validated['image_id'] = $mediaRecord?->id;
             // Keep legacy image field for backwards compatibility
-            $validated['image'] = $media->path;
+            $validated['image'] = $path;
         } elseif ($request->filled('city_image_media_id')) {
             $validated['image_id'] = $request->city_image_media_id;
             // Keep legacy image field for backwards compatibility

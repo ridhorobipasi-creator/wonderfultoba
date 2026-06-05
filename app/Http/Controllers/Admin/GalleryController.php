@@ -71,13 +71,15 @@ class GalleryController extends Controller
 
         // Handle image input (dual mode: file upload or media library)
         if ($request->hasFile('gallery_image')) {
-            $media = $this->uploadAndIndex($request->file('gallery_image'), 'gallery', $validated['caption'] ?? 'Gallery Image');
-            
+            // uploadAndIndex() returns a string path, not a Media model.
+            $path = $this->uploadAndIndex($request->file('gallery_image'), 'gallery', null, $validated['caption'] ?? 'Gallery Image');
+            $mediaRecord = Media::where('path', $path)->latest()->first();
+
             $img = GalleryImage::create([
-                'caption' => $validated['caption'] ?? $media->original_name,
+                'caption' => $validated['caption'] ?? ($mediaRecord?->original_name ?? 'Gallery Image'),
                 'category' => $validated['category'],
-                'image_id' => $media->id,
-                'imageUrl' => $media->path, // Keep legacy field
+                'image_id' => $mediaRecord?->id,
+                'imageUrl' => $path, // Keep legacy field
                 'tags' => $validated['tags'] ?? [],
                 'isActive' => true,
             ]);

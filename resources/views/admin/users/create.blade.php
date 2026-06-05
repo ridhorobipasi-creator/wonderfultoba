@@ -70,7 +70,8 @@
                     <select name="role" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
                         <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Standard User</option>
-                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Tour Manager (Admin)</option>
+                        <option value="admin_tour" {{ old('role') == 'admin_tour' ? 'selected' : '' }}>Tour Manager (Admin Tour)</option>
+                        <option value="admin_umum" {{ old('role') == 'admin_umum' ? 'selected' : '' }}>Admin Umum (Keuangan & Pengaturan)</option>
                         <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>Superadmin (Full Access)</option>
                     </select>
                     <div class="mt-2 space-y-1">

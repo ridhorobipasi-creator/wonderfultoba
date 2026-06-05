@@ -55,7 +55,7 @@ class ReportController extends Controller
         $statusSummary = [
             'pending' => $statusCounts['pending'] ?? 0,
             'confirmed' => $statusCounts['confirmed'] ?? 0,
-            'finished' => $statusCounts['finished'] ?? 0,
+            'completed' => $statusCounts['completed'] ?? 0,
             'cancelled' => $statusCounts['cancelled'] ?? 0,
         ];
 
