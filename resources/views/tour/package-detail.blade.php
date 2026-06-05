@@ -278,7 +278,7 @@
     </section>
 
     <!-- Gallery & Hero Section -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:items-start">
         <!-- Hero/Gallery Part -->
         <div class="md:col-span-8 md:col-start-1 md:row-start-1 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1">
             <!-- Main Gallery -->
@@ -327,7 +327,7 @@
     </style>
 
         <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="md:col-span-4 md:col-start-9 md:row-start-1 md:row-span-2 relative order-2">
+        <div id="booking-form-sidebar" class="md:col-span-4 md:col-start-9 md:row-start-1 md:row-span-2 relative order-2 h-full">
             <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
                 @if(session('success'))
                     <div 
@@ -592,33 +592,18 @@
         </div>
 
         <!-- Content Part -->
-        <div class="md:col-span-8 md:col-start-1 md:row-start-2 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-3">
-            <!-- Tabs Navigation -->
-            <div class="border-b border-slate-200 overflow-x-auto no-scrollbar mb-8 pt-4">
-                <div class="flex gap-6">
-                    <button @click="activeTab = 'itinerary'" 
-                        :class="activeTab === 'itinerary' ? 'text-secondary border-b-2 border-secondary pb-4 font-semibold' : 'text-on-surface-variant hover:text-on-surface pb-4'"
-                        class="text-xs font-semibold font-label-caps uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">map</span>
-                        {{ __('AGENDA PERJALANAN') }}
-                    </button>
-                    <button @click="activeTab = 'pricing'" 
-                        :class="activeTab === 'pricing' ? 'text-secondary border-b-2 border-secondary pb-4 font-semibold' : 'text-on-surface-variant hover:text-on-surface pb-4'"
-                        class="text-xs font-semibold font-label-caps uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">payments</span>
-                        {{ __('BIAYA & FASILITAS') }}
-                    </button>
-                    <button @click="activeTab = 'reviews'" 
-                        :class="activeTab === 'reviews' ? 'text-secondary border-b-2 border-secondary pb-4 font-semibold' : 'text-on-surface-variant hover:text-on-surface pb-4'"
-                        class="text-xs font-semibold font-label-caps uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">grade</span>
-                        {{ __('ULASAN') }}
-                    </button>
+        <div class="md:col-span-8 md:col-start-1 md:row-start-2 space-y-16 animate-in fade-in slide-in-from-left-8 duration-1000 order-3">
+            
+            <!-- Section: Itinerary -->
+            <div class="space-y-8" id="section-itinerary">
+                <!-- Header Section Itinerary -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                        <span class="material-symbols-outlined text-[24px]">map</span>
+                    </div>
+                    <h2 class="font-headline-md text-2xl text-primary font-bold">{{ __('AGENDA PERJALANAN') }}</h2>
                 </div>
-            </div>
 
-            <!-- Tab Content: Itinerary -->
-            <div x-show="activeTab === 'itinerary'" class="space-y-8">
                 <!-- Ringkasan Pengalaman -->
                 <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200">
                     <h2 class="font-headline-md text-headline-md text-primary mb-4 md:mb-6">{{ __('Ringkasan Pengalaman') }}</h2>
@@ -712,8 +697,15 @@
                 </div>
             </div>
 
-            <!-- Tab Content: Pricing & Facilities -->
-            <div x-show="activeTab === 'pricing'" class="space-y-8">
+            <!-- Section: Pricing & Facilities -->
+            <div class="space-y-8 pt-8 border-t border-slate-200" id="section-pricing">
+                <!-- Header Section Pricing -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                        <span class="material-symbols-outlined text-[24px]">payments</span>
+                    </div>
+                    <h2 class="font-headline-md text-2xl text-primary font-bold">{{ __('BIAYA & FASILITAS') }}</h2>
+                </div>
                 <!-- Rincian Biaya -->
                 <div x-show="package.pricingDetails && package.pricingDetails.length > 0" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -797,8 +789,15 @@
                 </div>
             </div>
 
-            <!-- Tab Content: Reviews -->
-            <div x-show="activeTab === 'reviews'">
+            <!-- Section: Reviews -->
+            <div class="space-y-8 pt-8 border-t border-slate-200" id="section-reviews">
+                <!-- Header Section Reviews -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                        <span class="material-symbols-outlined text-[24px]">grade</span>
+                    </div>
+                    <h2 class="font-headline-md text-2xl text-primary font-bold">{{ __('ULASAN') }}</h2>
+                </div>
                 <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
                     @php
                         $testimonials = $siteSettings['cms_tour']['testimonials'] ?? [];
