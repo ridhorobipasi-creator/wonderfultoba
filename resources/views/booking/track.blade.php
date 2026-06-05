@@ -141,6 +141,41 @@
                 </div>
             </div>
 
+            @if(isset($booking->metadata['price_breakdown']))
+            @php $pb = $booking->metadata['price_breakdown']; @endphp
+            <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4">
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Rincian Biaya</p>
+                <div class="space-y-2 text-sm text-slate-600">
+                    <div class="flex justify-between">
+                        <span>Ekspedisi Dewasa ({{ $pb['pax_dewasa'] }}x)</span>
+                        <span>Rp {{ number_format($pb['price_dewasa_total'], 0, ',', '.') }}</span>
+                    </div>
+                    @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
+                    <div class="flex justify-between">
+                        <span>Ekspedisi Anak-Anak ({{ $pb['pax_anak'] }}x)</span>
+                        <span>Rp {{ number_format($pb['price_anak_total'], 0, ',', '.') }}</span>
+                    </div>
+                    @endif
+                    @if(isset($pb['additional_services']))
+                        @foreach($pb['additional_services'] as $srv)
+                        <div class="flex justify-between">
+                            <span>{{ $srv['name'] }}</span>
+                            <span>Rp {{ number_format($srv['price'], 0, ',', '.') }}</span>
+                        </div>
+                        @endforeach
+                    @endif
+                    <div class="flex justify-between">
+                        <span>Pajak & Layanan (11%)</span>
+                        <span>Rp {{ number_format($pb['tax'] ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 flex justify-between font-bold text-slate-950 mt-2">
+                        <span>Total Ringkasan</span>
+                        <span>Rp {{ number_format($pb['total'] ?? $booking->totalPrice, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             @if($booking->notes)
                 <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Catatan</p>

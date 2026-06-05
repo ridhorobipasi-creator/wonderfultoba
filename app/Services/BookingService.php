@@ -132,11 +132,19 @@ class BookingService
         return $code;
     }
 
-    private function calculateTotalPriceAndCost(array $data): array
+    private function calculateTotalPriceAndCost(array &$data): array
     {
         $price = 0;
         $cost = 0;
         $pax = $data['metadata']['pax'] ?? 1;
+        $paxChildren = $data['metadata']['paxChildren'] ?? 0;
+        $selectedServices = $data['metadata']['selected_services'] ?? [];
+
+        $taxPercentage = 11;
+        $setting = \App\Models\Setting::where('key', 'general')->first();
+        if ($setting && isset($setting->value['finance']['tax_percentage'])) {
+            $taxPercentage = (float) $setting->value['finance']['tax_percentage'];
+        }
 
         if (isset($data['packageId'])) {
             $package = Package::find($data['packageId']);
@@ -148,7 +156,7 @@ class BookingService
                 // Find matching pax tier
                 $match = null;
                 foreach ($package->pricingDetails as $detail) {
-                    if ($detail['pax'] == $pax) {
+                    if (isset($detail['pax']) && $detail['pax'] == $pax) {
                         $match = $detail;
                         break;
                     }
@@ -159,8 +167,45 @@ class BookingService
                 }
             }
 
-            $price = $pricePerPerson * $pax;
-            $cost = $costPerPerson * $pax;
+            $priceDewasa = $pricePerPerson * $pax;
+            $priceAnak = $pricePerPerson * 0.5 * $paxChildren;
+            
+            $additionalServicesPrice = 0;
+            $availableServices = $package->pricingDetails['additional_services'] ?? [
+                ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
+                ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
+            ];
+            
+            $detailedServices = [];
+            foreach ($availableServices as $srv) {
+                if (in_array($srv['name'], $selectedServices)) {
+                    $srvPrice = $srv['price'] ?? 0;
+                    $additionalServicesPrice += $srvPrice;
+                    $detailedServices[] = [
+                        'name' => $srv['name'],
+                        'price' => $srvPrice
+                    ];
+                }
+            }
+
+            $totalSebelumPajak = $priceDewasa + $priceAnak + $additionalServicesPrice;
+            $pajakLayanan = round($totalSebelumPajak * ($taxPercentage / 100));
+            $totalAkhir = $totalSebelumPajak + $pajakLayanan;
+
+            $price = $totalAkhir;
+            $cost = ($costPerPerson * $pax) + ($costPerPerson * 0.5 * $paxChildren);
+
+            $data['metadata']['price_breakdown'] = [
+                'pax_dewasa' => $pax,
+                'price_dewasa_total' => $priceDewasa,
+                'pax_anak' => $paxChildren,
+                'price_anak_total' => $priceAnak,
+                'additional_services' => $detailedServices,
+                'tax_percentage' => $taxPercentage,
+                'tax' => $pajakLayanan,
+                'subtotal' => $totalSebelumPajak,
+                'total' => $totalAkhir
+            ];
         }
 
         return ['price' => $price, 'cost' => $cost];

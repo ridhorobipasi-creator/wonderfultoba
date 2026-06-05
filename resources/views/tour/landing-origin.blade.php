@@ -93,7 +93,7 @@
                 Paket Wisata Danau Toba dari <span class="text-secondary">{{ $originName }}</span>
             </h1>
             <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-                Rencanakan liburan impian Anda ke Danau Toba dengan layanan premium kami. Penjemputan eksklusif, rute terkurasi, dan pengalaman tak terlupakan menanti Anda.
+                Penerbangan dan perjalanan Anda dari {{ $originName }} kini lebih mudah. Nikmati penjemputan VIP dari bandara Kualanamu / Silangit, rute terkurasi, dan pengalaman premium di Danau Toba tanpa ribet.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo Sujai Laketoba, saya tertarik paket wisata Danau Toba dari ' . $originName) }}" 
@@ -375,6 +375,13 @@
     <!-- Testimonials — minimal -->
     @if($settings['show_testimonials'] ?? true)
     @php
+        $dynamicTestimonial = [
+            'name' => 'Wisatawan dari ' . $originName,
+            'location' => $originName,
+            'text' => 'Sangat praktis liburan keluarga dari ' . $originName . ' berkat Sujai Laketoba. Mulai dari penjemputan di bandara hingga hotel, semuanya diurus dengan sangat profesional dan ramah.',
+            'image' => 'user3'
+        ];
+
         $testimonials = $settings['testimonials'] ?? [
             [
                 'name' => 'Julian Thorne',
@@ -389,6 +396,9 @@
                 'image' => 'user2'
             ]
         ];
+
+        // Insert the dynamic testimonial at the top
+        array_unshift($testimonials, $dynamicTestimonial);
     @endphp
     <section class="py-16 md:py-24 bg-surface">
         <div class="max-w-5xl mx-auto px-5 md:px-8">

@@ -218,6 +218,7 @@ class TourService
     {
         return Package::where('slug', $slug)
             ->where('status', 'active')
+            ->with(['packageImages', 'city'])
             ->first();
     }
 

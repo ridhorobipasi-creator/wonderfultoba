@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
 {
@@ -63,6 +64,10 @@ class SettingController extends Controller
                 );
             }
         }
+
+        // Clear exchange rate cache in case it was modified
+        Cache::forget('exchange_rate_idr_to_SGD');
+        Cache::forget('exchange_rate_idr_to_MYR');
 
         $this->logActivity('updated', 'Updated system engine settings', null, $data);
 

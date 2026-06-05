@@ -4,7 +4,7 @@
 @section('page-title', 'Pengaturan Umum')
 
 @section('content')
-<div x-data="{ activeTab: 'branding' }" class="space-y-8">
+<div x-data="{ activeTab: 'branding', exchangeRateType: '{{ $general['finance']['exchange_rate_type'] ?? 'manual' }}' }" class="space-y-8">
 
     <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 inline-flex items-center space-x-1">
         <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
@@ -18,6 +18,9 @@
         </button>
         <button @click="activeTab = 'company'" :class="activeTab === 'company' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
             <i class="fas fa-building mr-2"></i> Perusahaan & Invoice
+        </button>
+        <button @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition-all">
+            <i class="fas fa-coins mr-2"></i> Keuangan & Pajak
         </button>
     </div>
 
@@ -293,6 +296,69 @@
                                 <input type="text" name="company[bank_account_name]" value="{{ $company['bank_account_name'] ?? '' }}" placeholder="PT Sujai Laketoba Experience" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-bold text-slate-700 shadow-sm">
                             </div>
                             <p class="text-[8px] font-bold text-amber-400 uppercase tracking-widest italic">Instruksi transfer hanya muncul bila nomor rekening diisi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance Tab -->
+        @php $finance = $general['finance'] ?? []; @endphp
+        <div x-show="activeTab === 'finance'" x-transition class="space-y-8">
+            <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
+                <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                    <span class="w-2 h-8 bg-blue-500 rounded-full"></span> Pengaturan Keuangan
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="p-8 bg-blue-50 rounded-[2.5rem] space-y-4">
+                            <div class="flex items-center gap-4 text-blue-600">
+                                <i class="fas fa-percent text-3xl"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">Pajak & Layanan</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="number" step="0.1" name="finance[tax_percentage]" value="{{ $finance['tax_percentage'] ?? 11 }}" class="w-32 px-4 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm text-center">
+                                <span class="font-bold text-slate-500 text-xl">%</span>
+                            </div>
+                            <p class="text-[8px] font-bold text-blue-400 uppercase tracking-widest italic">Pajak akan ditambahkan di total akhir pemesanan paket.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-money-bill-transfer text-slate-300"></i> Mode Kurs MYR & SGD
+                            </label>
+                            <select name="finance[exchange_rate_type]" x-model="exchangeRateType" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                                <option value="manual" {{ ($finance['exchange_rate_type'] ?? 'manual') === 'manual' ? 'selected' : '' }}>Manual</option>
+                                <option value="auto" {{ ($finance['exchange_rate_type'] ?? 'manual') === 'auto' ? 'selected' : '' }}>Otomatis (API)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-4" x-show="exchangeRateType === 'manual'">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs Manual MYR (1 MYR =)
+                            </label>
+                            <div class="flex items-center mb-2">
+                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
+                                <input type="number" name="finance[exchange_rate_manual_myr]" value="{{ $finance['exchange_rate_manual_myr'] ?? 3500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                            </div>
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mt-4">
+                                <i class="fas fa-coins text-slate-300"></i> Nilai Kurs Manual SGD (1 SGD =)
+                            </label>
+                            <div class="flex items-center">
+                                <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
+                                <input type="number" name="finance[exchange_rate_manual_sgd]" value="{{ $finance['exchange_rate_manual_sgd'] ?? 11500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4" x-show="exchangeRateType === 'auto'">
+                            <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="fas fa-key text-slate-300"></i> API Key (ExchangeRate-API)
+                            </label>
+                            <input type="text" name="finance[exchange_rate_api_key]" value="{{ $finance['exchange_rate_api_key'] ?? 'b753386c73cbdf1122c8f917' }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-900">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest italic">Ambil dari app.exchangerate-api.com.</p>
                         </div>
                     </div>
                 </div>

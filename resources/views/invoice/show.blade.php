@@ -198,25 +198,86 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-100">
-                        <tr class="table-row-hover">
-                            <td class="py-6 px-6 align-top">
-                                <div class="flex items-start gap-3">
-                                    <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
-                                        <i class="fa-solid fa-map-location-dot text-sm"></i>
+                        @if(isset($booking->metadata['price_breakdown']))
+                            @php $pb = $booking->metadata['price_breakdown']; @endphp
+                            <!-- Ekspedisi Dewasa -->
+                            <tr class="table-row-hover border-b border-neutral-100">
+                                <td class="py-4 px-6 align-middle">
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
+                                            <i class="fa-solid fa-map-location-dot text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Dewasa)</p>
+                                            <p class="text-xs text-neutral-500 leading-relaxed">
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600"><i class="fa-solid fa-location-dot mr-1"></i> Destinasi: {{ $itemDest }}</span>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="font-bold text-neutral-900 text-base mb-1">{{ $itemName }}</p>
-                                        <p class="text-sm text-neutral-500 leading-relaxed">
-                                            {{ $itemDesc }} <br>
-                                            <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600"><i class="fa-solid fa-location-dot mr-1"></i> Destinasi: {{ $itemDest }}</span>
-                                        </p>
+                                </td>
+                                <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pb['pax_dewasa'] }}x</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($pb['price_dewasa_total'] / max($pb['pax_dewasa'], 1), 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_dewasa_total'], 0, ',', '.') }}</td>
+                            </tr>
+                            <!-- Anak-anak -->
+                            @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
+                            <tr class="table-row-hover border-b border-neutral-100">
+                                <td class="py-4 px-6 align-middle">
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-1 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 flex-shrink-0">
+                                            <i class="fa-solid fa-child text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Anak-anak)</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="py-6 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pax }} Pax</td>
-                            <td class="py-6 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($unitPrice, 0, ',', '.') }}</td>
-                            <td class="py-6 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
-                        </tr>
+                                </td>
+                                <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pb['pax_anak'] }}x</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($pb['price_anak_total'] / max($pb['pax_anak'], 1), 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_anak_total'], 0, ',', '.') }}</td>
+                            </tr>
+                            @endif
+                            <!-- Additional Services -->
+                            @if(isset($pb['additional_services']))
+                                @foreach($pb['additional_services'] as $srv)
+                                <tr class="table-row-hover border-b border-neutral-100">
+                                    <td class="py-4 px-6 align-middle">
+                                        <div class="flex items-start gap-3">
+                                            <div class="mt-1 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 flex-shrink-0">
+                                                <i class="fa-solid fa-star text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-neutral-900 text-sm mb-1">{{ $srv['name'] }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">1x</td>
+                                    <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($srv['price'], 0, ',', '.') }}</td>
+                                    <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($srv['price'], 0, ',', '.') }}</td>
+                                </tr>
+                                @endforeach
+                            @endif
+                        @else
+                            <tr class="table-row-hover">
+                                <td class="py-6 px-6 align-top">
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
+                                            <i class="fa-solid fa-map-location-dot text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-neutral-900 text-base mb-1">{{ $itemName }}</p>
+                                            <p class="text-sm text-neutral-500 leading-relaxed">
+                                                {{ $itemDesc }} <br>
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600"><i class="fa-solid fa-location-dot mr-1"></i> Destinasi: {{ $itemDest }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-6 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pax }} Pax</td>
+                                <td class="py-6 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($unitPrice, 0, ',', '.') }}</td>
+                                <td class="py-6 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
+                            </tr>
+                        @endif
                         <tr class="table-row-hover bg-white/50 h-8">
                             <td></td><td></td><td></td><td></td>
                         </tr>
@@ -265,11 +326,11 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Subtotal</span>
-                            <span class="font-bold text-neutral-800">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</span>
+                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? $booking->metadata['price_breakdown']['subtotal'] : $booking->totalPrice, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600 font-medium">Pajak (0%)</span>
-                            <span class="font-bold text-neutral-800">Rp 0</span>
+                            <span class="text-neutral-600 font-medium">Pajak & Layanan</span>
+                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['tax'] ?? 0) : 0, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Diskon</span>

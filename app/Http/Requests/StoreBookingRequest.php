@@ -29,6 +29,9 @@ class StoreBookingRequest extends FormRequest
             'customerPhone' => 'required|string',
             'startDate' => 'required|date|after_or_equal:today',
             'pax' => 'required|integer|min:1',
+            'paxChildren' => 'nullable|integer|min:0',
+            'selected_services' => 'nullable|array',
+            'selected_services.*' => 'string',
             'notes' => 'nullable|string',
         ];
     }

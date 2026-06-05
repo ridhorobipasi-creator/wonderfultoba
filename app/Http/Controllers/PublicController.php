@@ -184,7 +184,13 @@ class PublicController extends Controller
 
             $city = City::find($package->cityId);
 
-            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity'));
+            $taxPercentage = 11;
+            $setting = Setting::where('key', 'general')->first();
+            if ($setting && isset($setting->value['finance']['tax_percentage'])) {
+                $taxPercentage = (float) $setting->value['finance']['tax_percentage'];
+            }
+
+            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity', 'taxPercentage'));
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): ".$e->getMessage());
 
@@ -287,7 +293,11 @@ class PublicController extends Controller
                 'type' => 'package',
                 'endDate' => $endDate,
                 'status' => 'pending',
-                'metadata' => ['pax' => $validated['pax']],
+                'metadata' => [
+                    'pax' => $validated['pax'],
+                    'paxChildren' => $validated['paxChildren'] ?? 0,
+                    'selected_services' => $validated['selected_services'] ?? []
+                ],
             ]));
 
             // Set Carbon locale for date formatting

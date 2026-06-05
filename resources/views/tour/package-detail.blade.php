@@ -195,8 +195,9 @@
         get totalSebelumPajak() {
             return this.priceDewasa + this.priceAnak + this.additionalServicesPrice;
         },
+        taxPercentage: {{ isset($taxPercentage) ? $taxPercentage : 11 }},
         get pajakLayanan() {
-            return Math.round(this.totalSebelumPajak * 0.11);
+            return Math.round(this.totalSebelumPajak * (this.taxPercentage / 100));
         },
         get totalAkhir() {
             return this.totalSebelumPajak + this.pajakLayanan;
@@ -691,6 +692,10 @@
                         <input type="hidden" name="packageId" :value="package.id">
                         <input type="hidden" name="slug" :value="package.slug">
                         <input type="hidden" name="notes" :value="serializedNotes">
+                        <input type="hidden" name="paxChildren" :value="paxChildren">
+                        <template x-for="(service, idx) in services.filter(s => s.selected)" :key="idx">
+                            <input type="hidden" name="selected_services[]" :value="service.name">
+                        </template>
                         
                         <!-- Nama Lengkap -->
                         <div>
@@ -800,7 +805,7 @@
                                 </div>
                             </template>
                             <div class="flex justify-between text-xs text-slate-600 font-body-md">
-                                <span>{{ __('Pajak & Layanan') }} (11%)</span>
+                                <span>{{ __('Pajak & Layanan') }} (<span x-text="taxPercentage"></span>%)</span>
                                 <span x-text="AppCurrency.format(pajakLayanan)"></span>
                             </div>
                             <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition-all duration-300 origin-right"
