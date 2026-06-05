@@ -288,9 +288,17 @@
             </div>
         </div>
 
+        
+    <style>
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+
         <!-- Booking Form Sidebar (Sticky) -->
         <div id="booking-form-sidebar" class="col-span-12 md:col-span-4 relative md:row-span-2">
-            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto no-scrollbar">
+            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
                 @if(session('success'))
                     <div 
                         x-data="{ 
