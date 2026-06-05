@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@push('head')
+<style>
+    .hide-arrows::-webkit-outer-spin-button,
+    .hide-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .hide-arrows {
+        -moz-appearance: textfield;
+    }
+</style>
+@endpush
+
 @php
     $heroImages = collect();
     if ($package->packageImages && $package->packageImages->count() > 0) {
@@ -165,8 +178,9 @@
         totalChanged: false,
 
         // Booking form variables
-        pax: {{ old('pax', 2) }},
+        pax: {{ old('pax', 1) }},
         paxChildren: {{ old('paxChildren', 0) }},
+        pkgTiers: @js($package->pricingDetails['tiers'] ?? []),
         services: (@js($package->pricingDetails['additional_services'] ?? [
             ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
             ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
@@ -181,11 +195,27 @@
         customerPhone: '{{ old('customerPhone', '') }}',
         startDate: '{{ old('startDate', '') }}',
 
+        get currentUnitPrice() {
+            if (this.pkgTiers && this.pkgTiers.length > 0) {
+                // Find matching tier
+                const matchingTier = this.pkgTiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
+                if (matchingTier) {
+                    return matchingTier.price;
+                }
+                // Check if pax exceeds max tier, use the highest tier or default
+                const maxTier = [...this.pkgTiers].sort((a, b) => b.max_pax - a.max_pax)[0];
+                if (maxTier && this.pax > maxTier.max_pax) {
+                    return maxTier.price; // Optional logic: use max tier price for beyond
+                }
+            }
+            return this.package.price;
+        },
+
         get priceDewasa() {
-            return this.pax * this.package.price;
+            return this.pax * this.currentUnitPrice;
         },
         get priceAnak() {
-            return this.paxChildren * this.package.price * 0.5;
+            return this.paxChildren * (this.package.childPrice ? this.package.childPrice : (this.package.price * 0.5));
         },
         get additionalServicesPrice() {
             return (this.services || [])
@@ -248,9 +278,9 @@
     </section>
 
     <!-- Gallery & Hero Section -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-12 gap-gutter">
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
         <!-- Hero/Gallery Part -->
-        <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 ">
+        <div class="md:col-span-8 md:col-start-1 md:row-start-1 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1">
             <!-- Main Gallery -->
             <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
@@ -297,7 +327,7 @@
     </style>
 
         <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="col-span-12 md:col-span-4 relative md:row-span-2">
+        <div id="booking-form-sidebar" class="md:col-span-4 md:col-start-9 md:row-start-1 md:row-span-2 relative order-2">
             <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
                 @if(session('success'))
                     <div 
@@ -455,33 +485,27 @@
                         </div>
 
                         <!-- Pax Dewasa & Anak -->
+                        <!-- Input Pax Dewasa & Anak -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
-                                <select name="pax" x-model="pax" required class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
-                                    <option :value="1">1 {{ __('Orang') }}</option>
-                                    <option :value="2">2 {{ __('Orang') }}</option>
-                                    <option :value="3">3 {{ __('Orang') }}</option>
-                                    <option :value="4">4 {{ __('Orang') }}</option>
-                                    <option :value="5">5 {{ __('Orang') }}</option>
-                                    <option :value="6">6 {{ __('Orang') }}</option>
-                                    <option :value="7">7 {{ __('Orang') }}</option>
-                                    <option :value="8">8 {{ __('Orang') }}</option>
-                                    <option :value="9">9 {{ __('Orang') }}</option>
-                                    <option :value="10">10+ {{ __('Orang') }}</option>
-                                </select>
+                                <div class="relative flex items-center">
+                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                </div>
+                                <template x-if="pkgTiers && pkgTiers.length > 0">
+                                    <p class="text-[10px] text-primary mt-1" x-text="`Rp ${AppCurrency.format(currentUnitPrice)} / pax`"></p>
+                                </template>
                                 @error('pax') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
-                                <select x-model="paxChildren" class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
-                                    <option :value="0">0 {{ __('Orang') }}</option>
-                                    <option :value="1">1 {{ __('Orang') }}</option>
-                                    <option :value="2">2 {{ __('Orang') }}</option>
-                                    <option :value="3">3 {{ __('Orang') }}</option>
-                                    <option :value="4">4 {{ __('Orang') }}</option>
-                                    <option :value="5">5 {{ __('Orang') }}</option>
-                                </select>
+                                <div class="relative flex items-center">
+                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                </div>
                             </div>
                         </div>
 
@@ -568,7 +592,7 @@
         </div>
 
         <!-- Content Part -->
-        <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 ">
+        <div class="md:col-span-8 md:col-start-1 md:row-start-2 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-3">
             <!-- Tabs Navigation -->
             <div class="border-b border-slate-200 overflow-x-auto no-scrollbar mb-8 pt-4">
                 <div class="flex gap-6">

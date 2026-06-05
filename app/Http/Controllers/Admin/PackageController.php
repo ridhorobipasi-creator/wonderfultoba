@@ -109,11 +109,18 @@ class PackageController extends Controller
             'pricingDetails.additional_services.*.name' => 'required|string|max:255',
             'pricingDetails.additional_services.*.icon' => 'required|string|max:255',
             'pricingDetails.additional_services.*.price' => 'required|numeric|min:0',
+            'pricingDetails.tiers' => 'nullable|array',
+            'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
+            'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
+            'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);
         if (!isset($pricingDetails['additional_services'])) {
             $pricingDetails['additional_services'] = [];
+        }
+        if (!isset($pricingDetails['tiers'])) {
+            $pricingDetails['tiers'] = [];
         }
         $validated['pricingDetails'] = $pricingDetails;
 
@@ -162,11 +169,18 @@ class PackageController extends Controller
             'pricingDetails.additional_services.*.name' => 'required|string|max:255',
             'pricingDetails.additional_services.*.icon' => 'required|string|max:255',
             'pricingDetails.additional_services.*.price' => 'required|numeric|min:0',
+            'pricingDetails.tiers' => 'nullable|array',
+            'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
+            'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
+            'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);
         if (!isset($pricingDetails['additional_services'])) {
             $pricingDetails['additional_services'] = [];
+        }
+        if (!isset($pricingDetails['tiers'])) {
+            $pricingDetails['tiers'] = [];
         }
         $validated['pricingDetails'] = $pricingDetails;
 

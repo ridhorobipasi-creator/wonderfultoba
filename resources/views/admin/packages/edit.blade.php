@@ -280,8 +280,9 @@
                             </div>
                         </template>
 
-                        <div x-show="additionalServices.length === 0" class="text-center py-6 text-indigo-400 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-indigo-100 rounded-2xl">
-                            Belum ada layanan tambahan aktif
+
+                        <div x-show="tiers.length === 0" class="text-center py-6 text-indigo-400 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-indigo-100 rounded-2xl">
+                            Belum ada pengaturan harga grosir
                         </div>
                     </div>
                 </div>
@@ -409,6 +410,7 @@
                 ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
                 ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
             ]),
+            tiers: @js($package->pricingDetails['tiers'] ?? []),
             isSubmitting: false,
             localFiles: [],
             localPreviews: [],
@@ -418,6 +420,7 @@
             addInclude() { this.includes.push(''); },
             addExclude() { this.excludes.push(''); },
             addAdditionalService() { this.additionalServices.push({ name: '', icon: 'help', price: 0 }); },
+            addTier() { this.tiers.push({ min_pax: 1, max_pax: 9, price: 0 }); },
 
             selectedMedia: [],
             openPackageMediaPicker() {
