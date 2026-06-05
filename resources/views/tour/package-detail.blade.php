@@ -249,7 +249,8 @@
 
     <!-- Gallery & Hero Section -->
     <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-12 gap-gutter">
-        <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
+        <!-- Hero/Gallery Part -->
+        <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1 md:order-1">
             <!-- Main Gallery -->
             <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
@@ -285,7 +286,10 @@
                     </div>
                 </template>
             </div>
+        </div>
 
+        <!-- Content Part -->
+        <div class="col-span-12 md:col-span-8 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-3 md:order-3">
             <!-- Tabs Navigation -->
             <div class="border-b border-slate-200 overflow-x-auto no-scrollbar mb-8 pt-4">
                 <div class="flex gap-6">
@@ -575,8 +579,8 @@
         </div>
 
         <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="col-span-12 md:col-span-4 relative">
-            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6">
+        <div id="booking-form-sidebar" class="col-span-12 md:col-span-4 relative order-2 md:order-2 md:row-span-2">
+            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto no-scrollbar">
                 @if(session('success'))
                     <div 
                         x-data="{ 
