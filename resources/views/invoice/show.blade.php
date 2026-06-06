@@ -199,7 +199,11 @@
                     </thead>
                     <tbody class="divide-y divide-neutral-100">
                         @if(isset($booking->metadata['price_breakdown']))
-                            @php $pb = $booking->metadata['price_breakdown']; @endphp
+                            @php 
+                                $pb = $booking->metadata['price_breakdown']; 
+                                $paxDewasa = $pb['pax_dewasa'] ?? $pax;
+                                $priceDewasaTotal = $pb['price_dewasa_total'] ?? $booking->totalPrice;
+                            @endphp
                             <!-- Ekspedisi Dewasa -->
                             <tr class="table-row-hover border-b border-neutral-100">
                                 <td class="py-4 px-6 align-middle">
@@ -215,9 +219,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pb['pax_dewasa'] }}x</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($pb['price_dewasa_total'] / max($pb['pax_dewasa'], 1), 0, ',', '.') }}</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_dewasa_total'], 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $paxDewasa }}x</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($priceDewasaTotal / max($paxDewasa, 1), 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($priceDewasaTotal, 0, ',', '.') }}</td>
                             </tr>
                             <!-- Anak-anak -->
                             @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
@@ -233,8 +237,8 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pb['pax_anak'] }}x</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($pb['price_anak_total'] / max($pb['pax_anak'], 1), 0, ',', '.') }}</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_anak_total'], 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format(($pb['price_anak_total'] ?? 0) / max($pb['pax_anak'], 1), 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_anak_total'] ?? 0, 0, ',', '.') }}</td>
                             </tr>
                             @endif
                             <!-- Additional Services -->
@@ -326,7 +330,7 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Subtotal</span>
-                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? $booking->metadata['price_breakdown']['subtotal'] : $booking->totalPrice, 0, ',', '.') }}</span>
+                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['subtotal'] ?? $booking->totalPrice) : $booking->totalPrice, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Pajak & Layanan</span>
