@@ -80,8 +80,8 @@
                 <!-- Logo -->
                 <a href="/" class="flex items-center group w-auto shrink-0 mr-4 md:mr-8">
                     @php
-                        $logoLight = $siteSettings['general']['logo_light_url'] ?? null;
-                        $logoDark = $siteSettings['general']['logo_dark_url'] ?? null;
+                        $logoLight = asset('images/logo_compressed.webp');
+                        $logoDark = asset('images/logo_compressed.webp');
                         $brandName = $siteSettings['general']['site_name'] ?? 'Sujai Laketoba';
                     @endphp
 

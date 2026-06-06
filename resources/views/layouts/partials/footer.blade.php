@@ -8,7 +8,7 @@
             <div class="space-y-6 sm:col-span-2 lg:col-span-1">
                 <div class="flex items-center">
                     @php
-                        $logoDark = $siteSettings['general']['logo_dark_url'] ?? ($siteSettings['general']['logo_light_url'] ?? null);
+                        $logoDark = asset('images/logo_compressed.webp');
                         $brandName = $siteSettings['general']['site_name'] ?? 'Sujai Laketoba';
                     @endphp
 
