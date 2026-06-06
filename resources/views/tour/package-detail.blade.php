@@ -632,17 +632,20 @@
                             countdown: 2, 
                             redirectCancelled: false,
                             timer: null,
+                            hasUrl: {{ session('whatsappUrl') ? 'true' : 'false' }},
                             init() {
-                                this.timer = setInterval(() => {
-                                    if (this.countdown > 0 && !this.redirectCancelled) {
-                                        this.countdown--;
-                                    } else {
-                                        clearInterval(this.timer);
-                                        if (!this.redirectCancelled && '{{ session('whatsappUrl') }}') {
-                                            window.location.href = '{{ session('whatsappUrl') }}';
+                                if (this.hasUrl) {
+                                    this.timer = setInterval(() => {
+                                        if (this.countdown > 0 && !this.redirectCancelled) {
+                                            this.countdown--;
+                                        } else {
+                                            clearInterval(this.timer);
+                                            if (!this.redirectCancelled) {
+                                                window.location.href = '{!! session('whatsappUrl') !!}';
+                                            }
                                         }
-                                    }
-                                }, 1000);
+                                    }, 1000);
+                                }
                             },
                             cancelRedirect() {
                                 this.redirectCancelled = true;
@@ -655,7 +658,14 @@
                             <span class="material-symbols-outlined text-[32px]">check_circle</span>
                         </div>
                         <h4 class="text-xl font-semibold font-headline-md text-primary mb-2">{{ __('Reservasi Terkirim') }}</h4>
-                        <p class="text-slate-600 font-body-md mb-6 text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Silakan lanjutkan konfirmasi via WhatsApp.') }}</p>
+                        
+                        @if(session('warning'))
+                            <div class="p-3 bg-yellow-50 text-yellow-800 rounded-lg text-xs font-body-md mb-4 border border-yellow-200">
+                                {{ session('warning') }}
+                            </div>
+                        @else
+                            <p class="text-slate-600 font-body-md mb-6 text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Silakan lanjutkan konfirmasi via WhatsApp.') }}</p>
+                        @endif
                         
                         <div class="inline-flex flex-col items-center px-6 py-4 bg-white rounded-lg border border-outline-variant mb-6 w-full">
                             <p class="font-label-caps text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Booking ID</p>
@@ -663,22 +673,25 @@
                         </div>
                         
                         <!-- Redirection Countdown Status -->
-                        <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
-                            <template x-if="!redirectCancelled && countdown > 0">
-                                <div class="flex items-center justify-center gap-2">
-                                    <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
-                                </div>
-                            </template>
-                            <template x-if="!redirectCancelled && countdown === 0">
-                                <span>Menghubungkan ke WhatsApp...</span>
-                            </template>
-                            <template x-if="redirectCancelled">
-                                <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
-                            </template>
-                        </div>
+                        <template x-if="hasUrl">
+                            <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
+                                <template x-if="!redirectCancelled && countdown > 0">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
+                                    </div>
+                                </template>
+                                <template x-if="!redirectCancelled && countdown === 0">
+                                    <span>Menghubungkan ke WhatsApp...</span>
+                                </template>
+                                <template x-if="redirectCancelled">
+                                    <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
+                                </template>
+                            </div>
+                        </template>
                         
                         <!-- Action Buttons -->
+                        <template x-if="hasUrl">
                         <div class="flex flex-col sm:flex-row gap-3">
                             <template x-if="!redirectCancelled && countdown > 0">
                                 <button 
@@ -698,6 +711,7 @@
                                 {{ __('KONFIRMASI SEKARANG') }}
                             </a>
                         </div>
+                        </template>
 
                         @if(session('bookingCode'))
                         <a href="{{ route('booking.track', session('bookingCode')) }}"
@@ -736,7 +750,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('tour.booking.submit') }}" method="POST" class="space-y-5" @submit="isSubmitting = true">
+                    <form id="booking-form" action="{{ route('tour.booking.submit') }}" method="POST" class="space-y-5" @submit="isSubmitting = true">
                         @csrf
                         <input type="hidden" name="packageId" :value="package.id">
                         <input type="hidden" name="slug" :value="package.slug">
@@ -924,6 +938,21 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+@if($errors->any() || session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            const form = document.getElementById('booking-form');
+            if (form) {
+                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 500);
+    });
+</script>
+@endif
+@endpush
 
 <style>
     .glass-card {

@@ -341,9 +341,10 @@ class PublicController extends Controller
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
 
-            $waSource = $genSettings['contact_whatsapp'] 
+            $waSource = $settings['contact_whatsapp']
+                ?? $genSettings['contact_whatsapp'] 
                 ?? config('services.whatsapp.number') 
-                ?? '';
+                ?? '6282277848855'; // Fallback to match frontend
             $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
 
             // If there's no WhatsApp number configured, log and return success without WA URL
