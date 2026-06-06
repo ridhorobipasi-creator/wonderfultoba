@@ -106,7 +106,11 @@ class CMSController extends Controller
             $deepMerge = function (&$target, $source) use (&$deepMerge) {
                 foreach ((array) $source as $key => $value) {
                     if (is_array($value) && isset($target[$key]) && is_array($target[$key])) {
-                        $deepMerge($target[$key], $value);
+                        if (array_is_list($value)) {
+                            $target[$key] = $value;
+                        } else {
+                            $deepMerge($target[$key], $value);
+                        }
                     } else {
                         $target[$key] = $value;
                     }
