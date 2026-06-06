@@ -66,7 +66,7 @@
         city: {{ json_encode($city) }},
         contact: {
             whatsapp: '{{ $siteSettings['cms_tour']['contact_wa'] ?? $siteSettings['general']['whatsapp'] ?? '6281323888207' }}',
-            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@wonderfultoba.id' }}'
+            email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'info@wonderfultoba.com' }}'
         },
         get waNumber() {
             return (this.contact.whatsapp || '6281323888207').replace(/[^0-9]/g, '');
@@ -122,13 +122,6 @@
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Rating Wisatawan</span>
-                        <div class="flex items-center gap-2 text-white font-black text-2xl tracking-tight">
-                            <svg class="w-6 h-6 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <span>4.9</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
                         <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Mulai Dari</span>
                         <div class="flex items-baseline gap-1 text-white font-black text-3xl tracking-tighter">
                             <span class="text-toba-accent text-lg font-black mr-0.5">Rp</span>
@@ -167,12 +160,12 @@
                     <div class="relative z-10 mb-14 flex flex-col items-center text-center">
                         <div class="inline-flex items-center gap-3 px-5 py-2.5 bg-toba-green/10 text-toba-green rounded-full mb-8 border border-toba-green/20">
                             <div class="w-2 h-2 bg-toba-green rounded-full animate-pulse"></div>
-                            <span class="text-[10px] font-black uppercase tracking-[0.3em]">Form Reservasi Resmi</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em]">Form Permintaan Reservasi</span>
                         </div>
                         <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight mb-4">
                             Lengkapi Data <span class="text-toba-green">Perjalanan Anda</span>
                         </h3>
-                        <p class="text-slate-500 font-medium text-base max-w-xl leading-relaxed">Keamanan data Anda adalah prioritas kami. Semua informasi dienkripsi dengan standar keamanan tertinggi.</p>
+                        <p class="text-slate-500 font-medium text-base max-w-xl leading-relaxed">Data Anda kami jaga kerahasiaannya dan hanya digunakan untuk memproses permintaan reservasi ini.</p>
                     </div>
 
                     @if(session('success'))
@@ -183,11 +176,11 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                             </div>
-                            <h4 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Reservasi Diterima!</h4>
-                            <p class="text-slate-500 font-medium mb-12 max-w-sm mx-auto text-base">Kami telah menyimpan data pesanan Anda. Anda akan diarahkan ke WhatsApp dalam 3 detik...</p>
-                            
+                            <h4 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Permintaan Terkirim!</h4>
+                            <p class="text-slate-500 font-medium mb-12 max-w-sm mx-auto text-base">Permintaan Anda sudah kami catat. Tim kami akan mengonfirmasi ketersediaan & harga via WhatsApp. Anda akan diarahkan ke WhatsApp dalam 3 detik...</p>
+
                             <div class="inline-flex flex-col items-center px-16 py-10 bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 mb-14">
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Official Booking ID</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Kode Permintaan Anda</p>
                                 <p class="text-5xl font-black text-slate-900 tracking-widest">{{ session('bookingCode') }}</p>
                             </div>
                             
@@ -424,7 +417,7 @@
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                                 </div>
                                 <p class="font-black text-slate-900 text-sm uppercase tracking-widest mb-2">Safe & Secure</p>
-                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">Transaksi dan privasi Anda terjamin 100%.</p>
+                                <p class="text-xs text-slate-500 font-medium max-w-[200px]">Privasi & kerahasiaan data Anda kami jaga.</p>
                             </div>
                         </div>
                     </div>
@@ -706,17 +699,19 @@
 
                     <!-- PDF & Share -->
                     <div class="flex flex-col gap-4">
+                        @if(!empty($package->itinerary) || !empty($package->itineraryText))
                         <a href="{{ route('itinerary.download', $package->slug) }}" class="flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Download Itinerary PDF
                         </a>
-                        
+                        @endif
+
                         <!-- Contact Specialist Card -->
                         <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
                             <div class="absolute top-0 right-0 w-24 h-24 bg-toba-green/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                             <div class="flex items-center gap-4 mb-6 relative z-10">
                                 <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-toba-green overflow-hidden border-2 border-white shadow-sm">
-                                    <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
+                                    <img src="{{ imageUrl($siteSettings['cms_tour']['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($siteSettings['cms_tour']['specialist_name'] ?? 'Wonderful Toba') }}&background=064e3b&color=ffffff&bold=true'">
                                 </div>
                                 <div>
                                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $siteSettings['cms_tour']['specialist_title'] ?? 'Travel Specialist' }}</p>

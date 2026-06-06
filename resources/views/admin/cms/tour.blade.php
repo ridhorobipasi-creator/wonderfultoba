@@ -111,13 +111,13 @@ document.addEventListener('alpine:init', () => {
             }
         },
         
-        stat0: @json($settings['stat_value_0'] ?? '1.5K+'),
+        stat0: @json($settings['stat_value_0'] ?? ''),
         label0: @json($settings['stat_label_0'] ?? 'Trip Selesai'),
-        stat1: @json($settings['stat_value_1'] ?? '10K+'),
+        stat1: @json($settings['stat_value_1'] ?? ''),
         label1: @json($settings['stat_label_1'] ?? 'Wisatawan'),
-        stat2: @json($settings['stat_value_2'] ?? '50+'),
+        stat2: @json($settings['stat_value_2'] ?? ''),
         label2: @json($settings['stat_label_2'] ?? 'Destinasi'),
-        stat3: @json($settings['stat_value_3'] ?? '15+'),
+        stat3: @json($settings['stat_value_3'] ?? ''),
         label3: @json($settings['stat_label_3'] ?? 'Penghargaan'),
         
         fixPath(path) {
@@ -150,26 +150,20 @@ document.addEventListener('alpine:init', () => {
         specialist_name: @json($settings['specialist_name'] ?? 'Sarah Anggraini'),
         specialist_title: @json($settings['specialist_title'] ?? 'Travel Specialist'),
         specialist_desc: @json($settings['specialist_desc'] ?? 'Punya pertanyaan khusus? Saya siap membantu merencanakan liburan impian Anda.'),
-        specialist_image: @json($resolve($settings['specialist_image_url'] ?? '', 'https://i.pravatar.cc/100?u=staff1')),
-        
-        @php
-            $defaultTestimonials = [
-                ['name' => 'Andini Wijaya', 'location' => 'Jakarta, Indonesia', 'text' => 'Pelayanan sangat profesional. Tour guide ramah dan sangat menguasai medan. Itinerary juga tidak terlalu padat sehingga kami bisa benar-benar menikmati waktu.', 'image' => 'https://i.pravatar.cc/100?u=user1'],
-                ['name' => 'Budi Santoso', 'location' => 'Surabaya, Indonesia', 'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Wonderful Toba benar-benar kurasi yang terbaik untuk tamunya. Highly recommended!', 'image' => 'https://i.pravatar.cc/100?u=user2']
-            ];
-        @endphp
+        specialist_image: @json($resolve($settings['specialist_image_url'] ?? '', '')),
+
         testimonials: (() => {
-            let t = @json($settings['testimonials'] ?? $defaultTestimonials);
+            let t = @json($settings['testimonials'] ?? []);
             while(t.length < 4) t.push({name: '', location: '', text: '', image: ''});
             return t;
         })(),
 
         addTestimonial() {
             this.testimonials.push({
-                name: 'Nama Pengunjung',
-                location: 'Kota, Negara',
-                text: 'Tulis ulasan pengunjung di sini...',
-                image: 'https://i.pravatar.cc/100?u=' + Math.random()
+                name: '',
+                location: '',
+                text: '',
+                image: ''
             });
         },
 

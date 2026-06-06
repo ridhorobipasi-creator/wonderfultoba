@@ -27,7 +27,11 @@
 
     <!-- Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+
+    <!-- FontAwesome (deferred agar tidak memblokir render) -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
     
     <!-- Google Analytics (Dynamic from Settings) -->
     @if(!empty($siteSettings['general']['seo_ga_id']))
@@ -46,14 +50,12 @@
 </head>
 <body class="font-sans text-slate-900 bg-white selection:bg-green-100 selection:text-green-900 overflow-x-hidden" x-data="{ isDark: false }">
     
-    <!-- Navbar Placeholder (Will be converted soon) -->
     @include('layouts.partials.navbar')
 
     <main>
         @yield('content')
     </main>
 
-    <!-- Footer Placeholder (Will be converted soon) -->
     @include('layouts.partials.footer')
 
     <!-- Floating WhatsApp & Top -->

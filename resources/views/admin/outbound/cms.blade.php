@@ -176,7 +176,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 1 Value</label>
-                                    <input type="text" name="stat_value_0" value="{{ $settings['stat_value_0'] ?? '500+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                    <input type="text" name="stat_value_0" value="{{ $settings['stat_value_0'] ?? '' }}" placeholder="mis. 120+" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 1 Label</label>
@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 2 Value</label>
-                                    <input type="text" name="stat_value_1" value="{{ $settings['stat_value_1'] ?? '10k+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                    <input type="text" name="stat_value_1" value="{{ $settings['stat_value_1'] ?? '' }}" placeholder="mis. 3.000+" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 2 Label</label>
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 3 Value</label>
-                                    <input type="text" name="stat_value_2" value="{{ $settings['stat_value_2'] ?? '99%' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                    <input type="text" name="stat_value_2" value="{{ $settings['stat_value_2'] ?? '' }}" placeholder="mis. 98%" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 3 Label</label>
@@ -200,7 +200,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 4 Value</label>
-                                    <input type="text" name="stat_value_3" value="{{ $settings['stat_value_3'] ?? '15+' }}" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
+                                    <input type="text" name="stat_value_3" value="{{ $settings['stat_value_3'] ?? '' }}" placeholder="mis. 8+" class="w-full px-4 py-2 bg-slate-50 border-none rounded-xl font-black text-xs text-slate-900">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stat 4 Label</label>
@@ -627,18 +627,14 @@
 @endsection
 
 @php
-    $testimonialsFallback = [
-        ['name' => 'Bambang Heru', 'location' => 'HRD PT. Maju Bersama', 'text' => 'Program outbound yang luar biasa! Tim kami jadi lebih solid dan semangat bekerja meningkat drastis.', 'image' => imageUrl('https://i.pravatar.cc/100?u=user3')],
-        ['name' => 'Siska Amelia', 'location' => 'Manager Bank Mandiri', 'text' => 'Instruktur sangat profesional dan materi team building dikemas dengan sangat menarik.', 'image' => imageUrl('https://i.pravatar.cc/100?u=user4')]
-    ];
-    
-    // Ensure all testimonial images are resolved
-    $testimonials = $settings['testimonials'] ?? $testimonialsFallback;
+    // Mulai kosong: admin mengisi testimoni nyata sendiri (tanpa data dummy).
+    $testimonials = $settings['testimonials'] ?? [];
     foreach ($testimonials as &$t) {
-        $t['image'] = imageUrl($t['image']);
+        $t['image'] = imageUrl($t['image'] ?? null);
     }
-    
-    $specialistImage = imageUrl($settings['specialist_image_url'] ?? 'https://i.pravatar.cc/100?u=staff1');
+    unset($t);
+
+    $specialistImage = imageUrl($settings['specialist_image_url'] ?? null);
 @endphp
 
 @push('scripts')
@@ -678,10 +674,10 @@
 
             addTestimonial() {
                 this.testimonials.push({
-                    name: 'Nama Klien',
-                    location: 'Perusahaan/Kota',
-                    text: 'Tulis ulasan klien di sini...',
-                    image: 'https://i.pravatar.cc/100?u=' + Math.random()
+                    name: '',
+                    location: '',
+                    text: '',
+                    image: ''
                 });
             },
 

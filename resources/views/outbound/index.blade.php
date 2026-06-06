@@ -740,8 +740,8 @@
     </section>
     @endif
 
-    @if($settings['show_testimonials'] ?? true)
-    <!-- Testimonials -->
+    @if(($settings['show_testimonials'] ?? true) && !empty($settings['testimonials']))
+    <!-- Testimonials (hanya tampil bila ada testimoni nyata yang diisi admin) -->
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
@@ -756,10 +756,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 @php
-                    $testimonials = $settings['testimonials'] ?? [
-                        ['name' => 'Bambang Heru', 'location' => 'HRD PT. Maju Bersama', 'text' => 'Program outbound yang luar biasa! Tim kami jadi lebih solid dan semangat bekerja meningkat drastis.', 'image' => 'https://i.pravatar.cc/100?u=user3'],
-                        ['name' => 'Siska Amelia', 'location' => 'Manager Bank Mandiri', 'text' => 'Instruktur sangat profesional dan materi team building dikemas dengan sangat menarik.', 'image' => 'https://i.pravatar.cc/100?u=user4']
-                    ];
+                    $testimonials = $settings['testimonials'];
                 @endphp
                 @foreach($testimonials as $t)
                 <div class="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500 group">
@@ -886,28 +883,33 @@
         </div>
     </section>
 
-    @if($settings['show_stats'] ?? true)
+    @php
+        $hasAnyStat = collect(range(0, 3))->contains(fn($i) => !empty($settings['stat_value_'.$i] ?? null));
+    @endphp
+    @if(($settings['show_stats'] ?? true) && $hasAnyStat)
     <!-- Stats Section -->
     <section class="py-24 bg-white overflow-hidden relative">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
                 @php
-                    $statsDefaults = [
-                        0 => ['value' => '500+', 'label' => 'Instansi Terlayani'],
-                        1 => ['value' => '10k+', 'label' => 'Peserta Outbound'],
-                        2 => ['value' => '99%', 'label' => 'Tingkat Kepuasan'],
-                        3 => ['value' => '15+', 'label' => 'Tahun Pengalaman']
+                    $statLabelDefaults = [
+                        0 => 'Instansi Terlayani',
+                        1 => 'Peserta Outbound',
+                        2 => 'Tingkat Kepuasan',
+                        3 => 'Tahun Pengalaman',
                     ];
                 @endphp
                 @for($i=0; $i<4; $i++)
                     @php
-                        $val = $settings['stat_value_'.$i] ?? $statsDefaults[$i]['value'];
-                        $lbl = $settings['stat_label_'.$i] ?? $statsDefaults[$i]['label'];
+                        $val = $settings['stat_value_'.$i] ?? null;
+                        $lbl = $settings['stat_label_'.$i] ?? $statLabelDefaults[$i];
                     @endphp
+                    @if(!empty($val))
                     <div class="space-y-4">
                         <div class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">{{ $val }}</div>
                         <div class="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">{{ $lbl }}</div>
                     </div>
+                    @endif
                 @endfor
             </div>
         </div>
@@ -936,7 +938,7 @@
                     <div class="bg-white/10 p-6 rounded-[2rem] border border-white/20">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 rounded-full border-2 border-toba-green overflow-hidden shrink-0">
-                                <img src="{{ imageUrl($settings['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://i.pravatar.cc/100?u=staff1'">
+                                <img src="{{ imageUrl($settings['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($settings['specialist_name'] ?? 'Wonderful Toba') }}&background=064e3b&color=ffffff&bold=true'">
                             </div>
                             <div>
                                 <p class="text-[9px] font-black text-toba-green uppercase tracking-[0.2em]">{{ $settings['specialist_title'] ?? 'Corporate Expert' }}</p>

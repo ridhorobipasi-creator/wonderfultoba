@@ -48,6 +48,17 @@
         @endif
     </div>
 
+    <!-- Escape Nav: link sekunder agar pengunjung tidak terjebak hanya 2 pilihan -->
+    @php
+        $landingWa = $siteSettings['general']['whatsapp'] ?? preg_replace('/[^0-9]/', '', $siteSettings['general']['wa_number'] ?? '6281323888207');
+    @endphp
+    <nav class="fixed top-6 right-6 z-[110] flex items-center gap-0.5 sm:gap-1">
+        <a href="/about" class="px-3 py-2 text-white/80 hover:text-white text-[11px] font-bold uppercase tracking-widest transition-colors drop-shadow">Tentang</a>
+        <a href="/tour/gallery" class="px-3 py-2 text-white/80 hover:text-white text-[11px] font-bold uppercase tracking-widest transition-colors drop-shadow">Galeri</a>
+        <a href="/tour/blog" class="hidden sm:inline-block px-3 py-2 text-white/80 hover:text-white text-[11px] font-bold uppercase tracking-widest transition-colors drop-shadow">Blog</a>
+        <a href="https://wa.me/{{ $landingWa }}" target="_blank" rel="noopener" class="ml-1 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all">Kontak</a>
+    </nav>
+
     <main class="min-h-screen h-screen md:h-[100dvh] flex flex-col md:flex-row relative">
         @php
             $showOutbound = $siteSettings['cms_landing']['show_outbound'] ?? true;

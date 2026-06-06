@@ -47,13 +47,15 @@
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                         
-                        <!-- Floating Rating -->
+                        <!-- Floating Rating (hanya tampil bila ada data rating asli) -->
+                        @if(!empty($pkg->rating))
                         <div class="absolute top-6 left-6">
                             <div class="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star text-amber-400 fill-amber-400"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
-                                <span class="font-black text-slate-900 text-xs">{{ $pkg->rating ?? '4.9' }}</span>
+                                <span class="font-black text-slate-900 text-xs">{{ $pkg->rating }}</span>
                             </div>
                         </div>
+                        @endif
 
                         <div class="absolute bottom-6 left-6 right-6">
                             <div class="flex items-center text-toba-accent text-[10px] font-black uppercase tracking-[0.2em] mb-2">
@@ -106,10 +108,12 @@
                         </div>
                         <div class="col-span-4 space-y-6 pt-12">
                             <img src="{{ $whyImg2 }}" alt="Destinasi 2" class="rounded-[2rem] shadow-xl w-full h-48 md:h-72 object-cover animate-in fade-in slide-in-from-top-8 duration-1000 delay-300">
+                            @if(!empty($settings['stat_value_0']))
                             <div class="bg-toba-green p-8 rounded-[2rem] shadow-2xl text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-                                <p class="text-4xl font-black mb-1">{{ $settings['stat_value_0'] ?? '10k+' }}</p>
+                                <p class="text-4xl font-black mb-1">{{ $settings['stat_value_0'] }}</p>
                                 <p class="text-[10px] font-black uppercase tracking-widest opacity-80 leading-tight">{{ $settings['stat_label_0'] ?? 'Wisatawan Puas' }}</p>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -145,8 +149,8 @@
     </section>
     @endif
 
-    <!-- Premium Testimonials -->
-    @if($settings['show_testimonials'] ?? true)
+    <!-- Premium Testimonials (hanya tampil bila ada testimoni nyata yang diisi admin) -->
+    @if(($settings['show_testimonials'] ?? true) && !empty($settings['testimonials']))
     <section class="py-24 md:py-40 relative overflow-hidden bg-white">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pointer-events-none">
             <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="url(#grid)"/></svg>
@@ -164,10 +168,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
                 @php
-                    $testimonials = $settings['testimonials'] ?? [
-                        ['name' => 'Budi Santoso', 'text' => 'Pelayanan sangat memuaskan, hotel bintang 4 sesuai janji. Tour guide sangat ramah dan sabar.', 'image' => null],
-                        ['name' => 'Ani Wijaya', 'text' => 'Paket Danau Toba 3D2N sangat berkesan. Anak-anak senang sekali dengan kegiatannya.', 'image' => null]
-                    ];
+                    $testimonials = $settings['testimonials'];
                 @endphp
                 @foreach($testimonials as $t)
                 <div class="relative group">
@@ -189,7 +190,7 @@
                             </div>
                             <div>
                                 <p class="font-black text-slate-900 text-lg tracking-tight">{{ $t['name'] }}</p>
-                                <p class="text-[10px] text-toba-green font-black uppercase tracking-[0.2em]">{{ $t['location'] ?? 'Wisatawan Terverifikasi' }}</p>
+                                <p class="text-[10px] text-toba-green font-black uppercase tracking-[0.2em]">{{ $t['location'] ?? 'Pelanggan Wonderful Toba' }}</p>
                             </div>
                         </div>
                     </div>
@@ -207,7 +208,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="relative">
                         <div class="aspect-square rounded-[3rem] overflow-hidden relative z-10 ring-8 ring-white/5">
-                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://i.pravatar.cc/600?u=staff1') }}" alt="Specialist" class="w-full h-full object-cover">
+                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://ui-avatars.com/api/?name='.urlencode($settings['specialist_name'] ?? 'Wonderful Toba').'&size=600&background=064e3b&color=ffffff&bold=true') }}" alt="{{ $settings['specialist_name'] ?? 'Travel Specialist' }}" class="w-full h-full object-cover">
                         </div>
                         <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                     </div>
@@ -315,21 +316,17 @@
                     Siap Untuk <br/> <span class="text-toba-green">Petualangan Nyata?</span>
                 </h2>
                 <p class="text-xl text-slate-300 mb-12 font-medium leading-relaxed max-w-2xl">
-                    Bergabunglah dengan <span class="text-white font-black">{{ $settings['stat_value_1'] ?? '10K+' }}</span> petualang lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.
+                    @if(!empty($settings['stat_value_1']))
+                        Bergabunglah dengan <span class="text-white font-black">{{ $settings['stat_value_1'] }}</span> petualang lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.
+                    @else
+                        Temukan keindahan Sumatera Utara bersama tim Wonderful Toba — rencanakan perjalanan Anda hari ini.
+                    @endif
                 </p>
                 <div class="flex flex-col sm:flex-row items-center gap-6">
                     <a href="/tour/packages" class="bg-toba-green text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/30 group flex items-center gap-3">
                         <span>Pesan Paket Sekarang</span>
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <div class="flex -space-x-4">
-                        @for($i=1; $i<=4; $i++)
-                            <img src="https://i.pravatar.cc/100?u={{ $i }}" class="w-14 h-14 rounded-full border-4 border-slate-900 shadow-xl" alt="User avatar">
-                        @endfor
-                        <div class="w-14 h-14 rounded-full border-4 border-slate-900 bg-slate-800 flex items-center justify-center text-white text-[10px] font-black">
-                            +99
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
