@@ -795,6 +795,33 @@
                             @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
+                        <!-- Harga Bertingkat -->
+                        <template x-if="pkgTiers && pkgTiers.length > 0">
+                            <div class="mb-4 bg-primary-container/20 rounded-xl p-4 border border-primary/20">
+                                <h3 class="text-sm font-semibold text-on-surface mb-2 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">group</span>
+                                    {{ __('Harga Khusus (Lebih Banyak Lebih Murah!)') }}
+                                </h3>
+                                <div class="grid gap-2">
+                                    <template x-for="(tier, idx) in pkgTiers" :key="idx">
+                                        <div class="flex justify-between items-center text-xs md:text-sm" :class="pax >= tier.min_pax && (pax <= tier.max_pax || (idx === pkgTiers.length - 1 && pax > tier.max_pax)) ? 'font-bold text-primary bg-white p-1 rounded px-2 -mx-2 shadow-sm' : 'text-slate-600'">
+                                            <span>
+                                                <span x-text="tier.min_pax"></span>
+                                                <template x-if="tier.max_pax > tier.min_pax">
+                                                    <span> - <span x-text="tier.max_pax"></span></span>
+                                                </template>
+                                                <template x-if="tier.min_pax === tier.max_pax">
+                                                    <span></span>
+                                                </template>
+                                                {{ __('Pax') }}
+                                            </span>
+                                            <span x-text="AppCurrency.format(tier.price) + ' / pax'"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
                         <!-- Pax Dewasa & Anak -->
                         <!-- Input Pax Dewasa & Anak -->
                         <div class="grid grid-cols-2 gap-4">
@@ -806,7 +833,7 @@
                                     <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                                 <template x-if="pkgTiers && pkgTiers.length > 0">
-                                    <p class="text-[10px] text-primary mt-1" x-text="`Rp ${AppCurrency.format(currentUnitPrice)} / pax`"></p>
+                                    <p class="text-[10px] text-primary mt-1 font-semibold" x-text="`${AppCurrency.format(currentUnitPrice)} / pax`"></p>
                                 </template>
                                 @error('pax') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>

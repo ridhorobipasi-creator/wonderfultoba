@@ -164,17 +164,30 @@ class BookingService
 
             // Check if there are pricing details for specific pax count
             if ($package->pricingDetails && is_array($package->pricingDetails)) {
+                $tiers = $package->pricingDetails['tiers'] ?? [];
+                
                 // Find matching pax tier
                 $match = null;
-                foreach ($package->pricingDetails as $detail) {
-                    if (isset($detail['pax']) && $detail['pax'] == $pax) {
+                foreach ($tiers as $detail) {
+                    if (isset($detail['min_pax']) && isset($detail['max_pax']) && $pax >= $detail['min_pax'] && $pax <= $detail['max_pax']) {
                         $match = $detail;
                         break;
                     }
                 }
 
                 if ($match) {
-                    $pricePerPerson = $match['price_per_person'] ?? $match['price'] ?? $match['pricePerPerson'] ?? $pricePerPerson;
+                    $pricePerPerson = $match['price'] ?? $pricePerPerson;
+                } else {
+                    // If no match, check if pax exceeds max tier
+                    $maxTier = null;
+                    foreach ($tiers as $detail) {
+                        if (isset($detail['max_pax']) && (!$maxTier || $detail['max_pax'] > $maxTier['max_pax'])) {
+                            $maxTier = $detail;
+                        }
+                    }
+                    if ($maxTier && $pax > $maxTier['max_pax']) {
+                        $pricePerPerson = $maxTier['price'] ?? $pricePerPerson;
+                    }
                 }
             }
 
