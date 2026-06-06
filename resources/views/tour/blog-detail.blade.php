@@ -158,17 +158,17 @@
                             <a href="https://wa.me/?text={{ urlencode(__('Baca artikel ini dari Sujai Laketoba: ') . $post->translated_title . ' ' . url()->current()) }}" 
                                target="_blank"
                                class="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all">
-                                <i class="fab fa-whatsapp text-lg"></i>
+                                <x-icon name="whatsapp" class="w-5 h-5" />
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
                                target="_blank"
                                class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all">
-                                <i class="fab fa-facebook-f text-sm"></i>
+                                <x-icon name="facebook" class="w-4 h-4" />
                             </a>
                                      <button @click="navigator.clipboard.writeText(window.location.href)"
                                          class="w-10 h-10 bg-white text-outline border border-outline-variant rounded-xl flex items-center justify-center shadow-sm hover:bg-slate-50 transition-all"
                                          title="{{ __('Salin link') }}">
-                                <i class="fas fa-link text-sm"></i>
+                                <span class="material-symbols-outlined text-[18px]">link</span>
                             </button>
                         </div>
                     </div>

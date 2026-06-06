@@ -787,9 +787,9 @@
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
                                 <div class="relative flex items-center">
-                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
                                     <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
-                                    <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                    <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                                 <template x-if="pkgTiers && pkgTiers.length > 0">
                                     <p class="text-[10px] text-primary mt-1" x-text="`Rp ${AppCurrency.format(currentUnitPrice)} / pax`"></p>
@@ -799,9 +799,9 @@
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
                                 <div class="relative flex items-center">
-                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><i class="fas fa-minus text-xs"></i></button>
+                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
                                     <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
-                                    <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><i class="fas fa-plus text-xs"></i></button>
+                                    <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                             </div>
                         </div>

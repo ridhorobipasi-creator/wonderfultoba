@@ -67,7 +67,17 @@
     $infiniteSlides = array_merge($startClones, $preparedSlides, $endClones);
     $clonesCount = $clonesNeeded;
     $startIndex = $clonesCount;
+
+    // LCP image = first real slide (shown at $startIndex). Preload it in <head> so the
+    // browser fetches it in parallel with app.js instead of waiting for Alpine to render the <img>.
+    $lcpImage = $preparedSlides[0]['image_url'] ?? null;
 @endphp
+
+@if($lcpImage)
+@push('head')
+    <link rel="preload" as="image" href="{{ $lcpImage }}" fetchpriority="high">
+@endpush
+@endif
 
 <section id="home-hero-slider" class="relative w-full h-screen min-h-[600px] bg-slate-950 overflow-hidden" 
     @touchstart="handleTouchStart($event)"
@@ -285,8 +295,10 @@
                      :style="'width: ' + (100 / slides.length) + '%'">
                     {{-- Background --}}
                     <div class="absolute inset-0 -z-10">
-                        <img :src="slide.image_url" :alt="slide.title" 
+                        <img :src="slide.image_url" :alt="slide.title"
                              :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
+                             :fetchpriority="activeIndex == i ? 'high' : 'auto'"
+                             :loading="activeIndex == i ? 'eager' : 'lazy'"
                              class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/40"></div>
                         <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
@@ -393,6 +405,7 @@
                         >
                                <img :src="slide.image_url" :alt="slide.title || 'Slide image'"
                                    :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
+                                   loading="lazy"
                                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                             <div class="absolute bottom-4 left-4 right-4 text-white translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all z-10">

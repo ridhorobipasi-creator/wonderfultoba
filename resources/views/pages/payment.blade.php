@@ -23,7 +23,7 @@
         {{-- Deposit Info --}}
         <div class="card-flat p-6 md:p-8 mb-12 flex gap-5 items-start">
             <div class="w-10 h-10 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center shrink-0 border border-emerald-100">
-                <i class="fas fa-info text-sm"></i>
+                <span class="material-symbols-outlined text-[18px]">info</span>
             </div>
             <div>
                 <h3 class="text-slate-900 font-semibold text-base mb-1.5">Sistem Deposit / Booking Confirmation</h3>
@@ -84,7 +84,7 @@
                 <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition-all duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-university text-sm"></i>
+                            <span class="material-symbols-outlined text-[18px]">account_balance</span>
                         </div>
                         <div class="w-full">
                             <h3 class="font-bold text-slate-900 text-base mb-1.5">Transfer Bank Lokal (Indonesia)</h3>
@@ -109,7 +109,7 @@
                 <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition-all duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-globe text-sm"></i>
+                            <span class="material-symbols-outlined text-[18px]">public</span>
                         </div>
                         <div>
                             <h3 class="font-semibold text-slate-900 text-base mb-1.5">Transfer Bank Internasional (SWIFT)</h3>
@@ -155,7 +155,7 @@
             <h3 class="text-2xl md:text-3xl font-semibold text-slate-900 mb-3">Siap Memesan? / Ready to Book?</h3>
             <p class="text-slate-600 font-normal text-sm mb-8">Hubungi kami via WhatsApp dan kami akan pandu proses pembayaran step-by-step.</p>
             <a href="https://wa.me/6282277848855" target="_blank" class="cta-primary">
-                <i class="fab fa-whatsapp text-sm"></i>
+                <x-icon name="whatsapp" class="w-4 h-4" />
                 Chat via WhatsApp
             </a>
         </div>

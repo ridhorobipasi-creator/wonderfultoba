@@ -38,49 +38,49 @@
                         <a href="https://instagram.com/{{ str_replace('@', '', $siteSettings['general']['social_instagram']) }}" 
                            target="_blank" 
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-instagram text-sm"></i>
+                            <x-icon name="instagram" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_facebook'] ?? false)
                         <a href="{{ $siteSettings['general']['social_facebook'] }}" 
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-facebook-f text-sm"></i>
+                            <x-icon name="facebook" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_youtube'] ?? false)
                         <a href="{{ $siteSettings['general']['social_youtube'] }}" 
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-youtube text-sm"></i>
+                            <x-icon name="youtube" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_tiktok'] ?? false)
                         <a href="{{ $siteSettings['general']['social_tiktok'] }}"
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-tiktok text-sm"></i>
+                            <x-icon name="tiktok" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_twitter'] ?? false)
                         <a href="{{ $siteSettings['general']['social_twitter'] }}"
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-twitter text-sm"></i>
+                            <x-icon name="twitter" class="w-3.5 h-3.5" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_linkedin'] ?? false)
                         <a href="{{ $siteSettings['general']['social_linkedin'] }}"
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-linkedin-in text-sm"></i>
+                            <x-icon name="linkedin" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_telegram'] ?? false)
                         <a href="{{ $siteSettings['general']['social_telegram'] }}"
                            target="_blank"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
-                            <i class="fab fa-telegram text-sm"></i>
+                            <x-icon name="telegram" class="w-4 h-4" />
                         </a>
                     @endif
                 </div>
@@ -120,11 +120,11 @@
                 @endphp
                 <div class="space-y-4 text-slate-400 font-body-md text-xs">
                     <div class="flex items-start space-x-3">
-                        <i class="fas fa-map-marker-alt text-secondary mt-0.5 shrink-0"></i>
+                        <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5 shrink-0">location_on</span>
                         <p>{{ $addressLine }}@if($cityPostal !== ''), {{ $cityPostal }}@endif</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <i class="fab fa-whatsapp text-secondary shrink-0"></i>
+                        <x-icon name="whatsapp" class="w-4 h-4 text-secondary shrink-0" />
                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['contact_whatsapp'] ?? '6282277848855') }}" target="_blank"
                            class="hover:text-secondary transition-colors">
                             {{ $g['contact_whatsapp'] ?? '+62 813-2388-8207' }}
@@ -132,7 +132,7 @@
                     </div>
                     @if($g['contact_whatsapp_2'] ?? false)
                     <div class="flex items-center space-x-3">
-                        <i class="fab fa-whatsapp text-secondary shrink-0"></i>
+                        <x-icon name="whatsapp" class="w-4 h-4 text-secondary shrink-0" />
                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['contact_whatsapp_2']) }}" target="_blank"
                            class="hover:text-secondary transition-colors">
                             {{ $g['contact_whatsapp_2'] }} <span class="text-slate-500">(CS 2)</span>
@@ -141,7 +141,7 @@
                     @endif
                     @if($g['contact_phone'] ?? false)
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-phone text-secondary shrink-0"></i>
+                        <span class="material-symbols-outlined text-secondary text-[18px] shrink-0">call</span>
                         <a href="tel:{{ preg_replace('/[^0-9+]/', '', $g['contact_phone']) }}"
                            class="hover:text-secondary transition-colors">
                             {{ $g['contact_phone'] }}
@@ -149,7 +149,7 @@
                     </div>
                     @endif
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-envelope text-secondary shrink-0"></i>
+                        <span class="material-symbols-outlined text-secondary text-[18px] shrink-0">mail</span>
                         <a href="mailto:{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}"
                            class="hover:text-secondary transition-colors">
                             {{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}
@@ -157,7 +157,7 @@
                     </div>
                     @if($g['operating_hours'] ?? false)
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-clock text-secondary shrink-0"></i>
+                        <span class="material-symbols-outlined text-secondary text-[18px] shrink-0">schedule</span>
                         <p>{{ $g['operating_hours'] }}</p>
                     </div>
                     @endif

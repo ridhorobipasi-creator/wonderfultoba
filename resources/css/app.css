@@ -1,5 +1,4 @@
-/* Fonts loaded via <link rel="preconnect"> + <link> in the layout head for faster, non-render-blocking delivery. Only families actually used remain: Plus Jakarta Sans (body/headings) + Material Symbols (icons). */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap');
+/* Fonts (Plus Jakarta Sans + Material Symbols) are loaded non-render-blocking via <link> in the layout head. Keeping them out of this bundle avoids a render-blocking @import on the critical path. */
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

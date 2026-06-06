@@ -86,16 +86,19 @@
                     @endphp
 
                     @if($logoLight)
-                        <img 
-                            src="{{ $logoLight }}" 
-                            alt="{{ $brandName }}" 
+                        <img
+                            src="{{ $logoLight }}"
+                            alt="{{ $brandName }}"
                             x-show="!isScrolled"
+                            decoding="async"
                             class="h-10 w-auto object-contain transition-all"
                         />
-                        <img 
-                            src="{{ $logoDark ?? $logoLight }}" 
-                            alt="{{ $brandName }}" 
+                        <img
+                            src="{{ $logoDark ?? $logoLight }}"
+                            alt="{{ $brandName }}"
                             x-show="isScrolled"
+                            loading="lazy"
+                            decoding="async"
                             class="h-10 w-auto object-contain transition-all"
                         />
                     @else
@@ -177,7 +180,7 @@
                         :class="isScrolled ? 'bg-primary text-white' : 'bg-white/15 text-white border border-white/30'"
                         class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
                         aria-label="Hubungi via WhatsApp">
-                        <i class="fab fa-whatsapp text-base"></i>
+                        <x-icon name="whatsapp" class="w-4 h-4" />
                     </a>
                 </div>
             </div>
@@ -221,19 +224,19 @@
                         <span class="text-slate-500 font-bold text-[9px] uppercase tracking-[0.3em] mb-4 block">{{ __('Informasi') }}</span>
                         <div class="grid grid-cols-1 gap-4">
                             <a href="/tour/gallery" @click="isMenuOpen = false" class="flex items-center gap-4 text-slate-700 font-semibold text-base">
-                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-images"></i></div>
+                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[20px]">photo_library</span></div>
                                 {{ __('Galeri') }}
                             </a>
                             <a href="/tour/blog" @click="isMenuOpen = false" class="flex items-center gap-4 text-slate-700 font-semibold text-base">
-                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-newspaper"></i></div>
+                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[20px]">article</span></div>
                                 {{ __('Blog') }}
                             </a>
                             <a href="/about" @click="isMenuOpen = false" class="flex items-center gap-4 text-slate-700 font-semibold text-base">
-                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-info-circle"></i></div>
+                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[20px]">info</span></div>
                                 {{ __('Tentang Kami') }}
                             </a>
                             <a href="{{ route('booking.track.form') }}" @click="isMenuOpen = false" class="flex items-center gap-4 text-slate-700 font-semibold text-base">
-                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><i class="fas fa-map-marked-alt"></i></div>
+                                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[20px]">map</span></div>
                                 {{ __('Lacak Booking') }}
                             </a>
                         </div>
@@ -262,7 +265,7 @@
                 <!-- Action Buttons -->
                 <div class="pt-6 border-t border-white/5">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" class="w-full py-4 bg-primary text-white rounded-xl font-semibold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fab fa-whatsapp text-lg"></i>
+                        <x-icon name="whatsapp" class="w-5 h-5" />
                         {{ __('Hubungi Kami') }}
                     </a>
                 </div>
