@@ -24,7 +24,7 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Pilih atau unggah aset untuk digunakan kembali</p>
                 </div>
             </div>
-            <button @click="isOpen = false" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white text-slate-400 hover:text-rose-500 shadow-sm transition-all hover:rotate-90">
+            <button @click="isOpen = false" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white text-slate-400 hover:text-rose-500 shadow-sm transition hover:rotate-90">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -36,7 +36,7 @@
                 
                 <button @click="category = ''; fetchMedia()" 
                         :class="category === '' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'"
-                        class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition-all group">
+                        class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group">
                     <i class="fas fa-layer-group text-xs"></i>
                     <span class="text-[10px] font-black uppercase tracking-widest">All Assets</span>
                 </button>
@@ -44,7 +44,7 @@
                 <template x-for="cat in categories" :key="cat.name">
                     <button @click="category = cat.name; fetchMedia()" 
                             :class="category === cat.name ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'"
-                            class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition-all group">
+                            class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group">
                         <i class="fas text-xs" :class="cat.icon"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest" x-text="cat.name"></span>
                     </button>
@@ -58,10 +58,10 @@
                     <div class="flex-1 relative">
                         <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 text-sm"></i>
                         <input type="text" x-model="search" @input.debounce.500ms="fetchMedia()" placeholder="Search library..." 
-                               class="w-full pl-12 pr-6 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs text-slate-900 focus:ring-4 focus:ring-indigo-600/5 transition-all">
+                               class="w-full pl-12 pr-6 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs text-slate-900 focus:ring-4 focus:ring-indigo-600/5 transition">
                     </div>
                     
-                    <button @click="$refs.pickerUpload.click()" class="px-8 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center gap-3">
+                    <button @click="$refs.pickerUpload.click()" class="px-8 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition flex items-center gap-3">
                         <i class="fas fa-plus"></i> Upload New
                     </button>
                     <input type="file" x-ref="pickerUpload" class="hidden" multiple @change="uploadFiles($event)">
@@ -77,7 +77,7 @@
                         <template x-for="item in media" :key="item.id">
                             <button type="button" @click="toggleSelection(item)" 
                                     :class="isSelected(item) ? 'border-indigo-600 ring-2 ring-indigo-500 ring-offset-2' : 'border-slate-100 hover:border-indigo-600'"
-                                    class="group relative aspect-square rounded-[2.5rem] bg-white border overflow-hidden transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-indigo-100">
+                                    class="group relative aspect-square rounded-[2.5rem] bg-white border overflow-hidden transition duration-500 shadow-sm hover:shadow-2xl hover:shadow-indigo-100">
                                 <img :src="item.thumbnail_url" class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110">
                                 
                                 <!-- Selection indicator for multiple mode -->
@@ -109,11 +109,11 @@
                 <div class="px-8 py-6 border-t border-slate-50 bg-white flex justify-between items-center">
                     <!-- Pagination -->
                     <div x-show="lastPage > 1" class="flex gap-2">
-                        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all shadow-sm">
+                        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition shadow-sm">
                             <i class="fas fa-chevron-left text-xs"></i>
                         </button>
                         <div class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center shadow-lg" x-text="currentPage + ' / ' + lastPage"></div>
-                        <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all shadow-sm">
+                        <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition shadow-sm">
                             <i class="fas fa-chevron-right text-xs"></i>
                         </button>
                     </div>
@@ -126,7 +126,7 @@
                         <button @click="confirmSelection()" 
                                 :disabled="selectedItems.length === 0"
                                 :class="selectedItems.length > 0 ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
-                                class="px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg">
+                                class="px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition shadow-lg">
                             <i class="fas fa-check mr-2"></i>
                             Use Selected
                         </button>

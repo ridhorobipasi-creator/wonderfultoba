@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <button type="button" onclick="document.getElementById('write_form').submit()" class="px-10 py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl shadow-slate-200 flex items-center gap-2">
+            <button type="button" onclick="document.getElementById('write_form').submit()" class="px-10 py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition shadow-2xl shadow-slate-200 flex items-center gap-2">
                 Tayangkan Artikel
             </button>
         </div>
@@ -43,7 +43,7 @@
                     <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-5 sm:p-10 md:p-24 min-h-[1000px] relative">
                         <!-- CKEditor Container -->
                         <div id="editor-container" class="prose prose-slate max-w-none">
-                            <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition-all">{{ old('content') }}</textarea>
+                            <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition">{{ old('content') }}</textarea>
                         </div>
                     </div>
                 </div>

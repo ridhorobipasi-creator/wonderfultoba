@@ -51,10 +51,10 @@
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Kelola pesanan paket wisata</p>
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
-            <a href="{{ route('admin.bookings.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center shadow-sm">
+            <a href="{{ route('admin.bookings.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center shadow-sm">
                 <i class="fas fa-file-csv mr-2 text-emerald-500"></i> Export CSV
             </a>
-            <a href="{{ route('admin.bookings.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all shadow-xl shadow-slate-200 text-center">
+            <a href="{{ route('admin.bookings.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 text-center">
                 <i class="fas fa-plus mr-2"></i> Tambah Pesanan
             </a>
         </div>
@@ -116,7 +116,7 @@
                             <i class="fas fa-rotate-left text-xs"></i>
                         </a>
                     @endif
-                    <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all shadow-lg shadow-slate-100">
+                    <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-lg shadow-slate-100">
                         Filter Data
                     </button>
                 </div>
@@ -141,7 +141,7 @@
                                     <input type="checkbox" 
                                         @click="toggleAll(@js($groupIds))"
                                         :checked="isAllChecked(@js($groupIds))"
-                                        class="w-5 h-5 rounded-lg border-slate-300 text-toba-green focus:ring-toba-green/20 transition-all cursor-pointer">
+                                        class="w-5 h-5 rounded-lg border-slate-300 text-toba-green focus:ring-toba-green/20 transition cursor-pointer">
                                     
                                     <div class="flex items-center gap-2">
                                         <div class="w-1.5 h-1.5 rounded-full bg-toba-green"></div>
@@ -157,16 +157,16 @@
                         </tr>
 
                         @foreach($group as $booking)
-                            <tr class="group hover:bg-slate-50/30 transition-all duration-300" :class="selected.includes({{ $booking->id }}) ? 'bg-toba-green/5' : ''">
+                            <tr class="group hover:bg-slate-50/30 transition duration-300" :class="selected.includes({{ $booking->id }}) ? 'bg-toba-green/5' : ''">
                                 <td class="pl-8 py-5 shrink-0 w-10">
                                     <input type="checkbox" 
                                         value="{{ $booking->id }}" 
                                         x-model="selected"
-                                        class="w-5 h-5 rounded-lg border-slate-300 text-toba-green focus:ring-toba-green/20 transition-all cursor-pointer">
+                                        class="w-5 h-5 rounded-lg border-slate-300 text-toba-green focus:ring-toba-green/20 transition cursor-pointer">
                                 </td>
                                 <td class="px-6 py-5">
                                     <div class="flex items-center gap-5">
-                                        <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all shrink-0">
+                                        <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition shrink-0">
                                             <i class="fas fa-box-archive text-xs"></i>
                                         </div>
                                         <div class="min-w-0">

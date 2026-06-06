@@ -36,19 +36,19 @@
         <div class="mb-12">
             <h2 class="text-lg font-bold text-slate-900 mb-6 tracking-tight">Mata Uang yang Diterima / Accepted Currencies</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
                     <div class="text-3xl mb-3">🇲🇾</div>
                     <p class="font-semibold text-slate-900 text-lg">MYR</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Ringgit Malaysia</p>
                     <p class="text-emerald-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
                 </div>
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
                     <div class="text-3xl mb-3">🇸🇬</div>
                     <p class="font-semibold text-slate-900 text-lg">SGD</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Singapore Dollar</p>
                     <p class="text-emerald-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
                 </div>
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
                     <div class="text-3xl mb-3">🇮🇩</div>
                     <p class="font-semibold text-slate-900 text-lg">IDR</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Rupiah Indonesia</p>
@@ -63,7 +63,7 @@
             <div class="space-y-6">
 
                 {{-- Wise --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="font-bold text-base">W</span>
@@ -81,7 +81,7 @@
                 </div>
 
                 {{-- Bank Transfer --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">account_balance</span>
@@ -106,7 +106,7 @@
                 </div>
 
                 {{-- International SWIFT --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition-all duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">public</span>

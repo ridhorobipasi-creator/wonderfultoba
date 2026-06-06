@@ -106,11 +106,11 @@
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
                     <button @click="scrollPrev()"
-                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition-all">
+                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
                         <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                     </button>
                     <button @click="scrollNext()"
-                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition-all">
+                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
                         <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                     </button>
                 </div>
@@ -162,7 +162,7 @@
                                     {{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}
                                 </p>
                             </div>
-                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary-fixed group-hover:border-secondary-fixed group-hover:text-on-secondary-fixed transition-all duration-300">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary-fixed group-hover:border-secondary-fixed group-hover:text-on-secondary-fixed transition duration-300">
                                 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
         <!-- Modern Scroll Progress Bar for Packages -->
         <div class="max-w-7xl mx-auto px-6 md:px-8 mt-6">
             <div class="h-[3px] w-full bg-slate-100 rounded-full overflow-hidden relative">
-                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition-all duration-150"
+                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition duration-150"
                      :style="'width: ' + scrollPercent + '%'"></div>
             </div>
         </div>
@@ -277,7 +277,7 @@
                 </h2>
             </div>
             <a href="{{ route('tour.gallery') }}"
-               class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-secondary hover:border-secondary transition-all duration-300 group">
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-secondary hover:border-secondary transition duration-300 group">
                 <span class="material-symbols-outlined text-[16px]">photo_library</span>
                 <span class="font-label-caps text-[10px] uppercase tracking-wider">{{ __('Lihat Semua') }}</span>
                 <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -289,11 +289,11 @@
 
             {{-- Prev / Next arrows --}}
             <button @click="scrollPrev()"
-                    class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-60 hover:opacity-100">
+                    class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition duration-300 opacity-60 hover:opacity-100">
                 <span class="material-symbols-outlined text-[20px]">chevron_left</span>
             </button>
             <button @click="scrollNext()"
-                    class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition-all duration-300 opacity-60 hover:opacity-100">
+                    class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-secondary hover:border-secondary transition duration-300 opacity-60 hover:opacity-100">
                 <span class="material-symbols-outlined text-[20px]">chevron_right</span>
             </button>
 
@@ -309,7 +309,7 @@
 
                 <template x-for="(slide, i) in slides" :key="i">
                     <div class="flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card">
-                        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition-all duration-500 hover:border-secondary/40 hover:-translate-y-1">
+                        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition duration-500 hover:border-secondary/40 hover:-translate-y-1">
                             <img :src="slide.url"
                                  :alt="slide.caption || 'Sujai Laketoba'"
                                  class="w-full h-full object-cover transition-transform duration-[2s] group-hover/card:scale-105"
@@ -317,7 +317,7 @@
                                  onerror="this.src='{{ asset('images/home/tour.webp') }}'">
 
                             {{-- Hover overlay --}}
-                            <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-all duration-500 flex flex-col justify-end p-5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover/card:opacity-100 transition duration-500 flex flex-col justify-end p-5">
                                 <span x-show="slide.category"
                                       class="inline-block px-3 py-1 bg-secondary text-on-secondary text-[9px] font-bold uppercase tracking-widest rounded-lg mb-2 w-fit shadow-sm"
                                       x-text="slide.category"></span>
@@ -340,7 +340,7 @@
         <!-- Modern Scroll Progress Bar for Gallery -->
         <div class="max-w-7xl mx-auto px-6 md:px-8 mt-6">
             <div class="h-[3px] w-full bg-white/10 rounded-full overflow-hidden relative">
-                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition-all duration-150"
+                <div class="h-full bg-secondary rounded-full absolute left-0 top-0 transition duration-150"
                      :style="'width: ' + scrollPercent + '%'"></div>
             </div>
         </div>
@@ -419,7 +419,7 @@
                     <p class="text-white font-bold font-body-md text-sm">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
                     <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
                 </div>
-                <a class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition-all shrink-0"
+                <a class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0"
                    href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}">
                     <span class="material-symbols-outlined text-[16px]">chat</span>
                     {{ __('WhatsApp') }}
@@ -527,7 +527,7 @@
                     {{ __('Bergabunglah dengan') }} <span class="text-white font-bold">{{ $touristsCount }}</span> {{ __('wisatawan lainnya yang telah menemukan keindahan Sumatera Utara bersama kami.') }}
                 </p>
                 <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
-                    <a href="/tour/packages" class="bg-white text-primary px-8 py-4 md:px-12 md:py-6 rounded-2xl md:rounded-[2rem] font-bold text-sm uppercase tracking-[0.2em] hover:bg-secondary hover:text-white transition-all duration-500 shadow-2xl flex items-center gap-3 group">
+                    <a href="/tour/packages" class="bg-white text-primary px-8 py-4 md:px-12 md:py-6 rounded-2xl md:rounded-[2rem] font-bold text-sm uppercase tracking-[0.2em] hover:bg-secondary hover:text-white transition duration-500 shadow-2xl flex items-center gap-3 group">
                         <span>{{ __('Pesan Paket Sekarang') }}</span>
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>

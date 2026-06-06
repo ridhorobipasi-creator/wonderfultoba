@@ -78,7 +78,7 @@
 
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-2 gap-8 pt-8 border-t border-outline-variant/40">
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition duration-300 shadow-sm">
                             <p class="text-4xl font-headline-md font-semibold text-primary mb-1 tracking-tight">
                                 {{ $content['stat_years'] ?? '12+' }}
                             </p>
@@ -86,7 +86,7 @@
                                 {{ $content['stat_years_label'] ?? __('Tahun Pengalaman') }}
                             </p>
                         </div>
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all duration-300 shadow-sm">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition duration-300 shadow-sm">
                             @php
                                 $touristsCount = $content['stat_tourists'] ?? '5k+';
                             @endphp
@@ -120,7 +120,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
                 <!-- Vision Card (Premium Dark Theme) -->
-                <div class="group bg-white p-10 md:p-14 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+                <div class="group bg-white p-10 md:p-14 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between transition duration-300 hover:-translate-y-1">
                     <div>
                         <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-700 mb-10 shadow-sm group-hover:scale-105 transition-transform duration-500">
                             <span class="material-symbols-outlined text-3xl font-black">visibility</span>
@@ -138,7 +138,7 @@
                 </div>
 
                 <!-- Mission Card (Elegant White Theme) -->
-                <div class="group bg-white p-10 md:p-14 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+                <div class="group bg-white p-10 md:p-14 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between transition duration-300 hover:-translate-y-1">
                     <div>
                         <div class="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white mb-10 shadow-sm group-hover:scale-105 transition-transform duration-500">
                             <span class="material-symbols-outlined text-3xl font-black">task_alt</span>
@@ -185,7 +185,7 @@
                         Kami tidak sekadar menjual tiket perjalanan; kami merancang memori indah. Setiap detail kecil dari petualangan Anda dikuratori secara hati-hati oleh tim profesional kami.
                     </p>
                     <div class="pt-4">
-                        <a href="/tour/packages" class="inline-flex items-center gap-3 py-4 px-8 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold text-[10px] uppercase tracking-widest transition-all duration-300 shadow-sm group">
+                        <a href="/tour/packages" class="inline-flex items-center gap-3 py-4 px-8 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold text-[10px] uppercase tracking-widest transition duration-300 shadow-sm group">
                             <span>{{ __('Lihat Layanan Kami') }}</span>
                             <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
                         </a>
@@ -195,32 +195,32 @@
                 <div class="lg:col-span-7">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         
-                        <div class="card-flat-soft p-8 transition-all duration-300 hover:-translate-y-1 group">
-                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 shadow-sm">
+                        <div class="card-flat-soft p-8 transition duration-300 hover:-translate-y-1 group">
+                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition duration-300 shadow-sm">
                                 <span class="material-symbols-outlined text-2xl">diamond</span>
                             </div>
                             <h4 class="text-lg font-semibold text-slate-900 mb-2">Layanan Rapi</h4>
                             <p class="text-xs text-slate-600 font-normal leading-relaxed">Armada bersih, akomodasi jelas, dan proses yang mudah dipahami.</p>
                         </div>
                         
-                        <div class="card-flat-soft p-8 transition-all duration-300 hover:-translate-y-1 group">
-                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 shadow-sm">
+                        <div class="card-flat-soft p-8 transition duration-300 hover:-translate-y-1 group">
+                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition duration-300 shadow-sm">
                                 <span class="material-symbols-outlined text-2xl">badge</span>
                             </div>
                             <h4 class="text-lg font-semibold text-slate-900 mb-2">Guide Berpengalaman</h4>
                             <p class="text-xs text-slate-600 font-normal leading-relaxed">Didampingi pemandu lokal yang ramah dan paham rute.</p>
                         </div>
                         
-                        <div class="card-flat-soft p-8 transition-all duration-300 hover:-translate-y-1 group">
-                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 shadow-sm">
+                        <div class="card-flat-soft p-8 transition duration-300 hover:-translate-y-1 group">
+                            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-900 mb-6 group-hover:bg-slate-900 group-hover:text-white transition duration-300 shadow-sm">
                                 <span class="material-symbols-outlined text-2xl">verified_user</span>
                             </div>
                             <h4 class="text-lg font-semibold text-slate-900 mb-2">Aman & Terpercaya</h4>
                             <p class="text-xs text-slate-600 font-normal leading-relaxed">Proses pemesanan jelas dan dukungan yang responsif.</p>
                         </div>
                         
-                        <div class="p-8 bg-white rounded-3xl border border-outline-variant/20 shadow-lg transition-all duration-300 hover:border-secondary/40 hover:-translate-y-1 group">
-                            <div class="w-14 h-14 bg-surface-container rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-inner">
+                        <div class="p-8 bg-white rounded-3xl border border-outline-variant/20 shadow-lg transition duration-300 hover:border-secondary/40 hover:-translate-y-1 group">
+                            <div class="w-14 h-14 bg-surface-container rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition duration-500 shadow-inner">
                                 <span class="material-symbols-outlined text-2xl">support_agent</span>
                             </div>
                             <h4 class="text-lg font-bold text-primary mb-2">Support 24/7</h4>
@@ -253,8 +253,8 @@
                 @endphp
                 @foreach($svgPartners as $partner)
                 <div class="flex flex-col items-center gap-4 group">
-                    <div class="w-full h-16 flex items-center justify-center opacity-40 group-hover:opacity-100 transition-all duration-500">
-                        <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}" class="max-h-12 w-auto object-contain filter brightness-0 invert group-hover:scale-105 transition-all duration-500">
+                    <div class="w-full h-16 flex items-center justify-center opacity-40 group-hover:opacity-100 transition duration-500">
+                        <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}" class="max-h-12 w-auto object-contain filter brightness-0 invert group-hover:scale-105 transition duration-500">
                     </div>
                     <p class="text-on-primary-container text-[8px] font-black uppercase tracking-widest text-center group-hover:text-secondary-fixed transition-colors">
                         {{ $partner['name'] }}
@@ -289,11 +289,11 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                    <a href="/tour/packages" class="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-container text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-lg hover:-translate-y-0.5">
+                    <a href="/tour/packages" class="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-container text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition duration-300 shadow-lg hover:-translate-y-0.5">
                         {{ __('Pilih Paket Wisata') }}
                     </a>
                     
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" target="_blank" class="w-full sm:w-auto px-8 py-4 bg-white border border-outline-variant/30 text-on-surface hover:bg-surface-container-low rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" target="_blank" class="w-full sm:w-auto px-8 py-4 bg-white border border-outline-variant/30 text-on-surface hover:bg-surface-container-low rounded-2xl font-black text-[10px] uppercase tracking-widest transition duration-300 shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
                         {{ __('Chat WhatsApp') }}
                     </a>

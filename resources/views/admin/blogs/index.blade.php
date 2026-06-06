@@ -56,10 +56,10 @@
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Kelola artikel dan publikasi untuk wisatawan</p>
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
-            <a href="{{ route('admin.blogs.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
+            <a href="{{ route('admin.blogs.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export Excel
             </a>
-            <a href="{{ route('admin.blogs.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 text-center">
+            <a href="{{ route('admin.blogs.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 text-center">
                 <i class="fas fa-plus mr-2"></i> New Article
             </a>
         </div>
@@ -114,19 +114,19 @@
                             <input type="checkbox" 
                                 @click="toggleAll(@js($blogs->pluck('id')->toArray()))"
                                 :checked="isAllChecked(@js($blogs->pluck('id')->toArray()))"
-                                class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
+                                class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition cursor-pointer">
                         </td>
                         <td colspan="3" class="px-4 py-4">
                             <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Daftar Artikel</span>
                         </td>
                     </tr>
                     @forelse($blogs as $blog)
-                        <tr class="group hover:bg-slate-50/50 transition-all duration-300" :class="selected.includes({{ $blog->id }}) ? 'bg-slate-900/5' : ''">
+                        <tr class="group hover:bg-slate-50/50 transition duration-300" :class="selected.includes({{ $blog->id }}) ? 'bg-slate-900/5' : ''">
                             <td class="pl-8 py-6">
                                 <input type="checkbox" 
                                     value="{{ $blog->id }}" 
                                     x-model="selected"
-                                    class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
+                                    class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition cursor-pointer">
                             </td>
                             <td class="px-6 py-6">
                                 <div class="flex items-center gap-6">

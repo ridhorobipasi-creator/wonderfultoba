@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <button type="button" onclick="document.getElementById('write_form').submit()" class="px-10 py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl shadow-slate-200">
+            <button type="button" onclick="document.getElementById('write_form').submit()" class="px-10 py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition shadow-2xl shadow-slate-200">
                 Simpan Perubahan
             </button>
         </div>
@@ -44,7 +44,7 @@
                     <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-5 sm:p-10 md:p-24 min-h-[1000px] relative">
                         <!-- CKEditor Container -->
                         <div id="editor-container" class="prose prose-slate max-w-none">
-                            <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition-all">{{ old('content', $blog->content) }}</textarea>
+                            <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition">{{ old('content', $blog->content) }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -82,12 +82,12 @@
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="relative h-20 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
+                        <div class="relative h-20 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center bg-slate-50 hover:border-emerald-500 hover:bg-emerald-50 transition group cursor-pointer">
                             <input type="file" name="image" @change="previewLocalImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                             <i class="fas fa-upload text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
                             <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Upload Lokal</span>
                         </div>
-                        <div @click="openMediaPicker()" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition-all group cursor-pointer">
+                        <div @click="openMediaPicker()" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-emerald-500 hover:bg-emerald-50 transition group cursor-pointer">
                             <i class="fas fa-images text-lg text-slate-300 group-hover:text-emerald-500 mb-1"></i>
                             <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-emerald-600">Media Pusat</span>
                         </div>

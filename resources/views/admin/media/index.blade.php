@@ -16,7 +16,7 @@
     
     <!-- Drag & Drop Blur Overlay -->
     <div x-show="isDragging" 
-         class="absolute inset-0 bg-indigo-600/80 backdrop-blur-md z-[300] rounded-[3.5rem] flex flex-col items-center justify-center text-white p-8 transition-all duration-300"
+         class="absolute inset-0 bg-indigo-600/80 backdrop-blur-md z-[300] rounded-[3.5rem] flex flex-col items-center justify-center text-white p-8 transition duration-300"
          @dragover.prevent=""
          @drop.prevent="handleDrop($event); isDragging = false"
          @dragleave.prevent="isDragging = false"
@@ -43,14 +43,14 @@
         <nav class="bg-white rounded-[2.5rem] p-6 border border-slate-100 shadow-sm space-y-2">
             <div class="flex items-center justify-between px-4 mb-4">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Master Folders</p>
-                <button @click="createNewFolder()" class="w-6 h-6 rounded-lg bg-slate-50 text-slate-400 hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center">
+                <button @click="createNewFolder()" class="w-6 h-6 rounded-lg bg-slate-50 text-slate-400 hover:bg-indigo-600 hover:text-white transition flex items-center justify-center">
                     <i class="fas fa-plus text-[10px]"></i>
                 </button>
             </div>
             
             <button @click="setCategory('')" 
                     :class="filters.category === '' && activeTab === 'library' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
-                    class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all group">
+                    class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition group">
                 <div class="flex items-center gap-4">
                     <i class="fas fa-layer-group text-sm group-hover:scale-110 transition-transform"></i>
                     <span class="text-[11px] font-black uppercase tracking-widest">All Assets</span>
@@ -62,7 +62,7 @@
                 <div class="group/folder relative">
                     <button @click="setCategory(cat.name)" 
                             :class="filters.category === cat.name && activeTab === 'library' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
-                            class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all group">
+                            class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition group">
                         <div class="flex items-center gap-4">
                             <i class="fas text-sm group-hover:scale-110 transition-transform" :class="cat.icon"></i>
                             <span class="text-[11px] font-black uppercase tracking-widest" x-text="cat.name"></span>
@@ -83,7 +83,7 @@
             <p class="px-4 text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-4">Quick Filters</p>
             <button @click="setUsage('all')" 
                     :class="filters.usage === 'all' && activeTab === 'library' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'"
-                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group">
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition group">
                 <div class="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="fas fa-circle-nodes text-[10px]"></i>
                 </div>
@@ -91,7 +91,7 @@
             </button>
             <button @click="setUsage('orphan')" 
                     :class="filters.usage === 'orphan' && activeTab === 'library' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'text-white/40 hover:text-white'"
-                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group">
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition group">
                 <div class="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="fas fa-broom text-[10px]"></i>
                 </div>
@@ -101,7 +101,7 @@
             <!-- Storage Health Audit Tab Trigger -->
             <button @click="openAuditPanel()" 
                     :class="activeTab === 'audit' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-950/20' : 'text-white/40 hover:text-white'"
-                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group border border-white/5 mt-4">
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition group border border-white/5 mt-4">
                 <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <i class="fas fa-chart-pie text-[10px]"></i>
                 </div>
@@ -129,13 +129,13 @@
             <!-- Library View Actions -->
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto" x-show="activeTab === 'library'">
                 <input type="file" id="mediaUpload" multiple class="hidden" @change="uploadFiles($event)">
-                <label for="mediaUpload" class="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all cursor-pointer flex items-center justify-center gap-3 group">
+                <label for="mediaUpload" class="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition cursor-pointer flex items-center justify-center gap-3 group">
                     <i class="fas fa-upload group-hover:-translate-y-1 transition-transform"></i> Upload Foto
                 </label>
 
                 <!-- Dropdown Fitur Lanjutan -->
                 <div class="relative" x-data="{ advOpen: false }">
-                    <button @click="advOpen = !advOpen" @click.away="advOpen = false" class="w-full sm:w-auto px-6 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2">
+                    <button @click="advOpen = !advOpen" @click.away="advOpen = false" class="w-full sm:w-auto px-6 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center justify-center gap-2">
                         <i class="fas fa-cogs"></i> Fitur Lanjutan <i class="fas fa-chevron-down ml-1"></i>
                     </button>
                     <div x-show="advOpen" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 flex flex-col origin-top-right">
@@ -163,10 +163,10 @@
 
             <!-- Audit View Actions -->
             <div class="flex items-center gap-3" x-show="activeTab === 'audit'" x-cloak>
-                <button @click="fetchAuditData()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-3">
+                <button @click="fetchAuditData()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-3">
                     <i class="fas fa-rotate" :class="auditLoading ? 'animate-spin' : ''"></i> Rescan Storage
                 </button>
-                <button @click="activeTab = 'library'" class="px-8 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-3 shadow-sm">
+                <button @click="activeTab = 'library'" class="px-8 py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center gap-3 shadow-sm">
                     <i class="fas fa-folder-open"></i> Back to Library
                 </button>
             </div>
@@ -178,7 +178,7 @@
             <div class="relative group">
                 <i class="fas fa-search absolute left-7 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors"></i>
                 <input type="text" x-model="filters.search" @input.debounce.500ms="fetchMedia()" placeholder="Cari aset dalam folder ini..." 
-                       class="w-full pl-16 pr-8 py-6 bg-white border border-slate-100 rounded-[2rem] font-bold text-sm text-slate-900 shadow-sm focus:ring-[1rem] focus:ring-indigo-600/5 transition-all outline-none">
+                       class="w-full pl-16 pr-8 py-6 bg-white border border-slate-100 rounded-[2rem] font-bold text-sm text-slate-900 shadow-sm focus:ring-[1rem] focus:ring-indigo-600/5 transition outline-none">
             </div>
 
             <!-- Bulk Actions Floating Bar -->
@@ -192,19 +192,19 @@
                                 <p class="text-[12px] font-bold mt-1.5 uppercase tracking-widest">Ready to Manage</p>
                             </div>
                         </div>
-                        <button @click="selectedIds = []" class="lg:hidden w-10 h-10 bg-white/10 hover:bg-white/20 transition-all rounded-xl flex items-center justify-center text-white"><i class="fas fa-times"></i></button>
+                        <button @click="selectedIds = []" class="lg:hidden w-10 h-10 bg-white/10 hover:bg-white/20 transition rounded-xl flex items-center justify-center text-white"><i class="fas fa-times"></i></button>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 border-t lg:border-t-0 lg:border-l border-white/10 pt-4 lg:pt-0 lg:pl-10 w-full lg:w-auto justify-center">
-                        <button @click="openMoveModal()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                        <button @click="openMoveModal()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition flex items-center justify-center gap-2">
                             <i class="fas fa-up-down-left-right text-indigo-400"></i> Move
                         </button>
-                        <button @click="bulkDownload()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                        <button @click="bulkDownload()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition flex items-center justify-center gap-2">
                             <i class="fas fa-download text-emerald-400"></i> <span class="hidden sm:inline">Download</span><span class="sm:hidden">DL</span>
                         </button>
-                        <button @click="bulkDelete()" class="w-full lg:w-auto px-4 lg:px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-rose-950/40">
+                        <button @click="bulkDelete()" class="w-full lg:w-auto px-4 lg:px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition flex items-center justify-center gap-2 shadow-xl shadow-rose-950/40">
                             <i class="fas fa-trash"></i> <span class="hidden sm:inline">Delete Permanent</span><span class="sm:hidden">Delete</span>
                         </button>
-                        <button @click="selectedIds = []" class="hidden lg:block text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-all ml-4">Cancel</button>
+                        <button @click="selectedIds = []" class="hidden lg:block text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition ml-4">Cancel</button>
                     </div>
                 </div>
             </template>
@@ -212,7 +212,7 @@
             <!-- The Grid -->
             <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
                 <template x-for="item in media" :key="item.id">
-                    <div class="group relative aspect-square rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-700 transform hover:-translate-y-2"
+                    <div class="group relative aspect-square rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition duration-700 transform hover:-translate-y-2"
                          :class="selectedIds.includes(item.id) ? 'ring-[0.5rem] ring-indigo-600 ring-offset-4' : ''"
                          :style="item.dominant_color ? 'background-color: ' + item.dominant_color : 'background-color: #f8fafc'">
                         
@@ -225,11 +225,11 @@
 
                         <!-- Selection Indicator -->
                         <div class="absolute top-6 right-6 z-20">
-                            <input type="checkbox" :value="item.id" x-model="selectedIds" class="w-7 h-7 rounded-xl border-2 border-white/20 bg-black/40 text-indigo-600 focus:ring-0 cursor-pointer shadow-2xl transition-all">
+                            <input type="checkbox" :value="item.id" x-model="selectedIds" class="w-7 h-7 rounded-xl border-2 border-white/20 bg-black/40 text-indigo-600 focus:ring-0 cursor-pointer shadow-2xl transition">
                         </div>
 
                         <!-- Smart Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-8 flex flex-col justify-end">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 p-8 flex flex-col justify-end">
                             <div class="space-y-5">
                                 <div class="flex flex-wrap gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     <div class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-xl text-[7px] font-black uppercase tracking-widest text-white border border-white/20" x-text="item.category"></div>
@@ -237,14 +237,14 @@
                                 </div>
                                 
                                 <div class="flex gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-75">
-                                    <button @click="openEditModal(item)" class="flex-1 py-3.5 bg-white text-slate-900 rounded-[1.25rem] font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
+                                    <button @click="openEditModal(item)" class="flex-1 py-3.5 bg-white text-slate-900 rounded-[1.25rem] font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition shadow-xl">
                                         Manage
                                     </button>
-                                    <button @click="copyUrl(item.url)" class="w-11 h-11 bg-white/10 backdrop-blur-md text-white rounded-[1.25rem] flex items-center justify-center hover:bg-white hover:text-slate-900 transition-all border border-white/20">
+                                    <button @click="copyUrl(item.url)" class="w-11 h-11 bg-white/10 backdrop-blur-md text-white rounded-[1.25rem] flex items-center justify-center hover:bg-white hover:text-slate-900 transition border border-white/20">
                                         <i class="fas fa-link text-[11px]"></i>
                                     </button>
                                     <!-- Tombol hapus: disabled + tooltip untuk static assets -->
-                                    <button x-show="!item.is_static_asset" @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition-all shadow-xl">
+                                    <button x-show="!item.is_static_asset" @click="deleteItem(item.id)" class="w-11 h-11 bg-rose-500 text-white rounded-[1.25rem] flex items-center justify-center hover:bg-rose-600 transition shadow-xl">
                                         <i class="fas fa-trash text-[11px]"></i>
                                     </button>
                                     <div x-show="item.is_static_asset" class="w-11 h-11 bg-amber-500/80 text-white rounded-[1.25rem] flex items-center justify-center" title="Aset statis terlindungi dari penghapusan">
@@ -279,13 +279,13 @@
                     Showing <span class="text-slate-900" x-text="media.length"></span> of <span class="text-slate-900" x-text="stats.total"></span> Assets
                 </p>
                 <div class="flex items-center gap-3">
-                    <button @click="changePage(current_page - 1)" :disabled="current_page === 1" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
+                    <button @click="changePage(current_page - 1)" :disabled="current_page === 1" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition flex items-center justify-center">
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <div class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl">
                         Page <span x-text="current_page"></span> / <span x-text="last_page"></span>
                     </div>
-                    <button @click="changePage(current_page + 1)" :disabled="current_page === last_page" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition-all flex items-center justify-center">
+                    <button @click="changePage(current_page + 1)" :disabled="current_page === last_page" class="w-14 h-14 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition flex items-center justify-center">
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -325,7 +325,7 @@
                     </div>
                     
                     <template x-if="selectedAuditPaths.length > 0">
-                        <button @click="deleteSelectedAudits()" class="px-6 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-2">
+                        <button @click="deleteSelectedAudits()" class="px-6 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition shadow-lg flex items-center gap-2">
                             <i class="fas fa-trash"></i> Delete Selected (<span x-text="selectedAuditPaths.length"></span>)
                         </button>
                     </template>
@@ -397,11 +397,11 @@
             <div class="space-y-8">
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-4">Image Source URL</label>
-                    <input type="url" x-model="urlUploadData.url" placeholder="https://example.com/image.jpg" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                    <input type="url" x-model="urlUploadData.url" placeholder="https://example.com/image.jpg" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition outline-none">
                 </div>
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-4">SEO Alternative Text (Optional)</label>
-                    <input type="text" x-model="urlUploadData.alt_text" placeholder="Deskripsi gambar..." class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                    <input type="text" x-model="urlUploadData.alt_text" placeholder="Deskripsi gambar..." class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition outline-none">
                 </div>
                 
                 <!-- Watermark URL checkbox -->
@@ -410,7 +410,7 @@
                     <label for="urlWatermark" class="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer select-none">Watermark Brand</label>
                 </div>
 
-                <button @click="submitUrlUpload()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all disabled:opacity-50" :disabled="!urlUploadData.url || urlUploading">
+                <button @click="submitUrlUpload()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition disabled:opacity-50" :disabled="!urlUploadData.url || urlUploading">
                     <span x-show="!urlUploading">Download & Convert</span>
                     <span x-show="urlUploading">Downloading...</span>
                 </button>
@@ -428,9 +428,9 @@
             <div class="space-y-8">
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 ml-4">New Folder Name</label>
-                    <input type="text" x-model="renamingFolderData.new_name" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                    <input type="text" x-model="renamingFolderData.new_name" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition outline-none">
                 </div>
-                <button @click="saveRenameFolder()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all">
+                <button @click="saveRenameFolder()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition">
                     Update Folder Name
                 </button>
             </div>
@@ -451,19 +451,19 @@
                         <template x-for="cat in categories" :key="cat.name">
                             <button @click="moveTarget = cat.name" 
                                     :class="moveTarget === cat.name ? 'bg-indigo-600 text-white shadow-xl scale-105' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'"
-                                    class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all">
+                                    class="w-full flex items-center justify-between px-6 py-4 rounded-2xl transition">
                                 <div class="flex items-center gap-4">
                                     <i class="fas text-xs" :class="cat.icon"></i>
                                     <span class="text-[11px] font-black uppercase tracking-widest" x-text="cat.name"></span>
                                 </div>
                             </button>
                         </template>
-                        <button @click="moveTarget = prompt('New Folder Name?')" class="w-full px-6 py-4 bg-slate-50 text-slate-400 border border-dashed border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-indigo-400 hover:text-indigo-600 transition-all">
+                        <button @click="moveTarget = prompt('New Folder Name?')" class="w-full px-6 py-4 bg-slate-50 text-slate-400 border border-dashed border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-indigo-400 hover:text-indigo-600 transition">
                             + Create & Move to New
                         </button>
                     </div>
                 </div>
-                <button @click="saveMove()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all disabled:opacity-30" :disabled="!moveTarget">
+                <button @click="saveMove()" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition disabled:opacity-30" :disabled="!moveTarget">
                     Confirm Move
                 </button>
             </div>
@@ -479,7 +479,7 @@
                     <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none">File Properties</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4" x-text="editingItem?.mime_type + ' • ' + (editingItem?.size / 1024).toFixed(1) + ' KB'"></p>
                 </div>
-                <button @click="if (!isCropping) editingItem = null" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all" :disabled="isCropping">
+                <button @click="if (!isCropping) editingItem = null" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition" :disabled="isCropping">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -491,7 +491,7 @@
                     <img :src="editingItem?.url" id="cropperSourceImage" x-ref="cropperImage" class="max-h-full max-w-full object-contain">
                     
                     <!-- Crop Trigger Overlay Button -->
-                    <button @click="initCropper()" x-show="!isCropping" class="absolute bottom-4 left-4 px-5 py-2.5 bg-slate-900/80 backdrop-blur text-white hover:bg-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                    <button @click="initCropper()" x-show="!isCropping" class="absolute bottom-4 left-4 px-5 py-2.5 bg-slate-900/80 backdrop-blur text-white hover:bg-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-widest transition">
                         <i class="fas fa-crop-alt mr-2"></i> Crop Image
                     </button>
                     
@@ -508,11 +508,11 @@
                 <div class="grid grid-cols-1 gap-6" x-show="!isCropping">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Original Filename</label>
-                        <input type="text" x-model="editingItemData.filename" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none">
+                        <input type="text" x-model="editingItemData.filename" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition outline-none">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">SEO Alternative Text</label>
-                        <input type="text" x-model="editingItemData.alt_text" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition-all outline-none" placeholder="Deskripsi untuk Google Image...">
+                        <input type="text" x-model="editingItemData.alt_text" class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl font-bold text-sm focus:ring-8 focus:ring-indigo-600/5 transition outline-none" placeholder="Deskripsi untuk Google Image...">
                     </div>
                 </div>
 
@@ -541,7 +541,7 @@
                             </div>
                             <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 border border-slate-100 shadow-inner relative flex items-center justify-center group/blur-preview">
                                 <img :src="editingItem?.blur_hash || editingItem?.thumbnail_url" 
-                                     class="w-full h-full object-cover filter blur-[2px] scale-125 transition-all group-hover/blur-preview:blur-none group-hover/blur-preview:scale-100">
+                                     class="w-full h-full object-cover filter blur-[2px] scale-125 transition group-hover/blur-preview:blur-none group-hover/blur-preview:scale-100">
                             </div>
                         </div>
                     </div>
@@ -603,7 +603,7 @@
                             </div>
                             <a :href="'https://www.google.com/maps/search/?api=1&query=' + editingItem?.exif_data?.gps?.lat + ',' + editingItem?.exif_data?.gps?.lng" 
                                target="_blank" 
-                               class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-950/50 flex items-center gap-1.5 transition-all">
+                               class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-950/50 flex items-center gap-1.5 transition">
                                 <i class="fas fa-map-location-dot"></i> Buka Google Maps
                             </a>
                         </div>
@@ -627,7 +627,7 @@
                                         <p class="text-xs font-black text-slate-800 tracking-tight" x-text="link.name"></p>
                                     </div>
                                     <a :href="link.edit_url" 
-                                       class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-100 flex items-center gap-1.5 transition-all">
+                                       class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-100 flex items-center gap-1.5 transition">
                                         <i class="fas fa-pen-to-square"></i> Edit
                                     </a>
                                 </div>
@@ -651,12 +651,12 @@
             <!-- Footer Actions -->
             <div class="pt-6 border-t border-slate-100 mt-6 shrink-0">
                 <!-- Update Properties (Normal View) -->
-                <button @click="saveEdit()" x-show="!isCropping" class="w-full py-6 bg-slate-900 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition-all">
+                <button @click="saveEdit()" x-show="!isCropping" class="w-full py-6 bg-slate-900 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-600 transition">
                     Update All Properties
                 </button>
 
                 <!-- Crop Actions (Cropping View) -->
-                <button @click="saveCroppedImage()" x-show="isCropping" class="w-full py-6 bg-indigo-600 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-3">
+                <button @click="saveCroppedImage()" x-show="isCropping" class="w-full py-6 bg-indigo-600 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-indigo-700 transition flex items-center justify-center gap-3">
                     <i class="fas fa-check"></i> <span x-text="cropSaving ? 'Saving Crop...' : 'Save Cropped Image'"></span>
                 </button>
             </div>

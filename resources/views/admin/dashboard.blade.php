@@ -104,14 +104,14 @@
                     <div class="w-2 h-8 bg-toba-green rounded-full"></div>
                     Pesanan Terbaru
                 </h3>
-                <a href="{{ route('admin.bookings.index') }}" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">Lihat Semua</a>
+                <a href="{{ route('admin.bookings.index') }}" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition">Lihat Semua</a>
             </div>
             
             <div class="flex-1 space-y-4 overflow-y-auto custom-scrollbar max-h-[500px] pr-2">
                 <template x-for="booking in data.recent_bookings" :key="booking.id">
                     <div class="flex items-center justify-between group p-4 rounded-3xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 text-slate-400 flex items-center justify-center font-black group-hover:bg-slate-900 group-hover:text-white transition-all">
+                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 text-slate-400 flex items-center justify-center font-black group-hover:bg-slate-900 group-hover:text-white transition">
                                 <i class="fas" :class="booking.type === 'package' ? 'fa-box-archive' : 'fa-car-side'"></i>
                             </div>
                             <div>
@@ -157,7 +157,7 @@
                                 <span class="text-[10px] font-black text-toba-green" x-text="count + ' Booked'"></span>
                             </div>
                             <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                <div class="h-full bg-toba-green rounded-full transition-all duration-1000" :style="`width: ${Math.min(100, (count / 10) * 100)}%`"></div>
+                                <div class="h-full bg-toba-green rounded-full transition duration-1000" :style="`width: ${Math.min(100, (count / 10) * 100)}%`"></div>
                             </div>
                         </div>
                     </template>

@@ -46,7 +46,7 @@
                 $logoUrl = imageUrl($siteSettings['general']['logo_dark_url'] ?? null, asset('assets/img/logo-white.png'));
             @endphp
             @if(!empty($logoUrl))
-                <img src="{{ $logoUrl }}" class="h-14 w-auto object-contain brightness-0 invert opacity-90 transition-all hover:opacity-100" alt="Sujai Laketoba">
+                <img src="{{ $logoUrl }}" class="h-14 w-auto object-contain brightness-0 invert opacity-90 transition hover:opacity-100" alt="Sujai Laketoba">
             @else
                 <div class="flex items-center gap-3">
                     <span class="text-white font-outfit font-black text-2xl uppercase tracking-widest">Sujai Laketoba</span>
@@ -77,12 +77,12 @@
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5">
                 <a href="/" 
-                   class="w-full sm:w-auto px-8 py-4 bg-toba-green text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-toba-green/10 flex items-center justify-center gap-2.5">
+                   class="w-full sm:w-auto px-8 py-4 bg-toba-green text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 hover:scale-[1.02] transition duration-300 shadow-lg shadow-toba-green/10 flex items-center justify-center gap-2.5">
                     <i class="fas fa-home text-xs"></i>
                     {{ __('Kembali ke Beranda') }}
                 </a>
                 <a href="/tour/packages" 
-                   class="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2.5">
+                   class="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:scale-[1.02] transition duration-300 flex items-center justify-center gap-2.5">
                     <i class="fas fa-compass text-xs"></i>
                     {{ __('Jelajahi Paket') }}
                 </a>

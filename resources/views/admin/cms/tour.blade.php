@@ -256,14 +256,14 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full xl:w-[450px] flex-shrink-0 space-y-6">
         <!-- Tab Navigation -->
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1 overflow-x-auto no-scrollbar">
-            <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">Hero</button>
-            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">📸 Slider</button>
-            <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">⭐ Featured</button>
-            <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">Mengapa Kami</button>
-            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">👩‍💼 Specialist</button>
-            <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">💬 Ulasan</button>
-            <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">Statistik</button>
-            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all whitespace-nowrap">SEO</button>
+            <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Hero</button>
+            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
+            <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">⭐ Featured</button>
+            <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
+            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
+            <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">💬 Ulasan</button>
+            <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Statistik</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_tour') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -280,7 +280,7 @@ document.addEventListener('alpine:init', () => {
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
                                 <input type="checkbox" name="show_hero" value="1" {{ ($settings['show_hero'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-toba-green transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-toba-green transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
@@ -308,7 +308,7 @@ document.addEventListener('alpine:init', () => {
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Hero Utama</label>
                             <div class="relative group/hero overflow-hidden rounded-3xl bg-slate-900 aspect-video lg:aspect-[21/9] border-4 border-white shadow-2xl shadow-slate-200">
                                 <img :src="heroImage" class="w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-110">
-                                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover/hero:opacity-100 transition-all flex flex-col items-center justify-center gap-3">
+                                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover/hero:opacity-100 transition flex flex-col items-center justify-center gap-3">
                                     <button type="button" @click="openMedia('hero')" class="px-6 py-3 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform flex items-center gap-2">
                                         <i class="fas fa-images"></i> Pilih dari Media Library
                                     </button>
@@ -333,7 +333,7 @@ document.addEventListener('alpine:init', () => {
                             $apImg = $ap->packageImages->first()?->image_url
                                    ?? $ap->resolveImageUrl($ap->images[0] ?? null);
                         @endphp
-                        <label class="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all bg-slate-50 hover:bg-amber-50 hover:border hover:border-amber-200">
+                        <label class="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition bg-slate-50 hover:bg-amber-50 hover:border hover:border-amber-200">
                             <input type="checkbox" id="pkg_{{ $ap->id }}" name="featured_package_ids[]" value="{{ $ap->id }}"
                                    {{ in_array($ap->id, (array)$pinnedIds) ? 'checked' : '' }}
                                    class="w-4 h-4 accent-amber-500 rounded shrink-0">
@@ -413,7 +413,7 @@ document.addEventListener('alpine:init', () => {
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
                                 <input type="checkbox" name="show_stats" value="1" {{ ($settings['show_stats'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-slate-900 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-slate-900 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
@@ -444,7 +444,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="relative inline-block w-8 h-4">
                                 <input type="hidden" name="show_specialist" value="0">
                                 <input type="checkbox" name="show_specialist" value="1" {{ ($settings['show_specialist'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
@@ -486,7 +486,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="relative inline-block w-8 h-4">
                                 <input type="hidden" name="show_testimonials" value="0">
                                 <input type="checkbox" name="show_testimonials" value="1" {{ ($settings['show_testimonials'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-amber-400 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-amber-400 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
@@ -565,12 +565,12 @@ document.addEventListener('alpine:init', () => {
                             <div class="relative inline-block w-8 h-4">
                                 <input type="hidden" name="show_slider" value="0">
                                 <input type="checkbox" name="show_slider" value="1" {{ ($settings['show_slider'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
                     <div class="flex justify-end">
-                        <button type="button" @click="addSlide()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2">
+                        <button type="button" @click="addSlide()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center gap-2">
                             <i class="fas fa-plus"></i> Tambah Slide
                         </button>
                     </div>
@@ -578,7 +578,7 @@ document.addEventListener('alpine:init', () => {
                     <div class="space-y-6 max-h-[60vh] overflow-y-auto pr-2 no-scrollbar">
                         <template x-for="(slide, index) in slides" :key="index">
                             <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100 relative group">
-                                <button type="button" @click="removeSlide(index)" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-white text-slate-300 hover:text-rose-500 shadow-sm flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10">
+                                <button type="button" @click="removeSlide(index)" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-white text-slate-300 hover:text-rose-500 shadow-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10">
                                     <i class="fas fa-trash-can text-[10px]"></i>
                                 </button>
 
@@ -734,7 +734,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-toba-green transition-all flex items-center justify-center gap-3">
+            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-toba-green transition flex items-center justify-center gap-3">
                 <i class="fas fa-save"></i> Perbarui Halaman Tour
             </button>
         </form>
@@ -779,7 +779,7 @@ document.addEventListener('alpine:init', () => {
                         <template x-for="(slide, index) in slides" :key="index">
                             <button type="button" @click="activeSlideIdx = index" 
                                     :class="activeSlideIdx === index ? 'ring-2 ring-toba-accent ring-offset-2 ring-offset-slate-900 scale-105 opacity-100' : 'opacity-40 hover:opacity-100'"
-                                    class="relative shrink-0 w-24 h-32 rounded-2xl overflow-hidden transition-all duration-500">
+                                    class="relative shrink-0 w-24 h-32 rounded-2xl overflow-hidden transition duration-500">
                                 <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-black/40"></div>
                                 <div class="absolute bottom-2 left-2 right-2 text-left">
@@ -797,7 +797,7 @@ document.addEventListener('alpine:init', () => {
                     <template x-for="(slide, index) in slides" :key="index">
                         <button type="button" @click="activeSlideIdx = index" 
                                 :class="activeSlideIdx === index ? 'w-6 bg-toba-accent' : 'w-2 bg-white/40'"
-                                class="h-1.5 rounded-full transition-all"></button>
+                                class="h-1.5 rounded-full transition"></button>
                     </template>
                 </div>
             </div>
@@ -807,7 +807,7 @@ document.addEventListener('alpine:init', () => {
         <div x-show="activeTab !== 'slider'" x-transition>
             <!-- Live Hero Section -->
             <section class="relative h-[500px] flex items-center px-12 md:px-20 overflow-hidden">
-                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" :style="`background-image: url('${heroImage}')`"></div>
+                <div class="absolute inset-0 bg-cover bg-center transition duration-700" :style="`background-image: url('${heroImage}')`"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 
                 <div class="relative z-10 max-w-2xl space-y-8">

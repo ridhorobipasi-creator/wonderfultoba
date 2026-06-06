@@ -315,7 +315,7 @@
                 <template x-for="(imgObj, i) in package_images" :key="i">
                     <div @click="activeImg = i" 
                          :class="activeImg === i ? 'ring-2 ring-emerald-500 ring-offset-2' : 'border border-slate-200/50'"
-                         class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-90 transition-all duration-300 shadow-sm">
+                         class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-90 transition duration-300 shadow-sm">
                         <img class="w-full h-full object-cover" loading="lazy" decoding="async" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                     </div>
                 </template>
@@ -394,7 +394,7 @@
                                 $isActive = (isset($originCity) && strtolower($originCity) === strtolower(trim($cityLink)));
                             @endphp
                             <a href="{{ url('/tour/package/' . $package->slug . '-dari-' . $citySlug) }}"
-                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition
                                       {{ $isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600' }}">
                                 @if($isActive)<span class="material-symbols-outlined text-[13px]">check_circle</span>@endif
                                 {{ ucwords(trim($cityLink)) }}
@@ -424,7 +424,7 @@
                                     <template x-if="day.activities && day.activities.length > 0">
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                                             <template x-for="(act, j) in day.activities" :key="j">
-                                                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 transition-all">
+                                                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 transition">
                                                     <div class="w-1.5 h-1.5 bg-secondary rounded-full"></div>
                                                     <span class="text-xs font-medium text-slate-700" x-text="act"></span>
                                                 </div>
@@ -464,7 +464,7 @@
                         <template x-for="price in package.pricingDetails" :key="price.pax">
                             <div class="flex items-center justify-between p-5 bg-slate-50 rounded-xl border border-slate-200 group">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-secondary transition-all">
+                                    <div class="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-secondary transition">
                                         <span class="material-symbols-outlined text-[20px]">group</span>
                                     </div>
                                     <div>
@@ -551,7 +551,7 @@
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             @foreach($testimonials as $t)
-                            <div class="p-6 bg-slate-50 rounded-xl border border-slate-200 transition-all">
+                            <div class="p-6 bg-slate-50 rounded-xl border border-slate-200 transition">
                                 <div class="flex items-center gap-3 mb-4">
                                     @if(!empty($t['image']))
                                         <img src="{{ imageUrl($t['image']) }}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover bg-slate-200" alt="{{ $t['name'] }}" onerror="this.style.display='none'">
@@ -577,7 +577,7 @@
                             <h4 class="text-lg font-semibold text-slate-900 mb-2 font-headline-md">{{ __('Bagikan Pengalaman Anda') }}</h4>
                             <p class="text-slate-600 font-body-md max-w-sm mx-auto mb-8 text-sm leading-relaxed">{{ __('Sudah pernah bepergian bersama kami? Ceritamu akan sangat membantu orang lain memilih.') }}</p>
                             <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo Sujai Laketoba, saya ingin berbagi pengalaman wisata bersama kalian 😊')" target="_blank"
-                               class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-3.5 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition-all shadow-sm">
+                               class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-3.5 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition shadow-sm">
                                 <span class="material-symbols-outlined text-[18px]">chat</span>
                                 {{ __('Ceritakan Perjalananmu') }}
                             </a>
@@ -589,7 +589,7 @@
             <!-- Travel Specialist & PDF CTA Row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
                 <!-- PDF Download -->
-                <a href="{{ route('itinerary.download', $package->slug) }}" class="flex flex-col items-center justify-center p-8 bg-white border border-outline-variant rounded-xl shadow-lg hover:border-secondary hover:shadow-xl transition-all duration-300 group text-center h-full">
+                <a href="{{ route('itinerary.download', $package->slug) }}" class="flex flex-col items-center justify-center p-8 bg-white border border-outline-variant rounded-xl shadow-lg hover:border-secondary hover:shadow-xl transition duration-300 group text-center h-full">
                     <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[24px]">download</span>
                     </div>
@@ -613,7 +613,7 @@
                     <p class="text-[11px] text-slate-600 font-body-md font-normal leading-relaxed mb-4 relative z-10">{{ __($siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Kami siap bantu pilih paket yang paling pas.') }}</p>
                     <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
                        target="_blank"
-                       class="flex items-center justify-center gap-1.5 py-2.5 bg-primary/5 text-primary rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-on-primary transition-all relative z-10 border border-primary/20">
+                       class="flex items-center justify-center gap-1.5 py-2.5 bg-primary/5 text-primary rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-on-primary transition relative z-10 border border-primary/20">
                         <span class="material-symbols-outlined text-[16px]">chat</span>
                         {{ __('Tanya Sekarang') }}
                     </a>
@@ -684,7 +684,7 @@
                                 <button 
                                     @click="cancelRedirect()"
                                     type="button"
-                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition-all focus:outline-none"
+                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition focus:outline-none"
                                 >
                                     {{ __('Batal Alihkan') }}
                                 </button>
@@ -692,7 +692,7 @@
                             <a 
                                 href="{{ session('whatsappUrl') }}"
                                 target="_blank"
-                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition-all flex items-center justify-center gap-2 group"
+                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition flex items-center justify-center gap-2 group"
                             >
                                 <span class="material-symbols-outlined text-[18px]">chat</span>
                                 {{ __('KONFIRMASI SEKARANG') }}
@@ -750,7 +750,7 @@
                         <div>
                             <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nama lengkap') }} <span class="text-red-500">*</span></label>
                             <input type="text" name="customerName" x-model="customerName" required placeholder="{{ __('Nama sesuai identitas') }}" 
-                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                             @error('customerName') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
@@ -759,13 +759,13 @@
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
                                 <input type="email" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" 
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                                 @error('customerEmail') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
                                 <input type="tel" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" 
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all">
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                                 @error('customerPhone') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -776,7 +776,7 @@
                             <div class="relative">
                                 <input type="date" name="startDate" x-model="startDate" required
                                     min="{{ now()->format('Y-m-d') }}"
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all uppercase">
+                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition uppercase">
                             </div>
                             @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -788,7 +788,7 @@
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
                                 <div class="relative flex items-center">
                                     <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
-                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
                                     <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                                 <template x-if="pkgTiers && pkgTiers.length > 0">
@@ -800,7 +800,7 @@
                                 <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
                                 <div class="relative flex items-center">
                                     <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
-                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all hide-arrows">
+                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
                                     <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                             </div>
@@ -811,7 +811,7 @@
                             <label class="font-label-caps text-label-caps text-slate-700 mb-1 block uppercase tracking-wider">{{ __('Layanan tambahan') }}</label>
                             
                             <template x-for="(service, idx) in services" :key="idx">
-                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition-all" :class="service.selected ? 'border-secondary bg-secondary/5' : ''">
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-secondary transition" :class="service.selected ? 'border-secondary bg-secondary/5' : ''">
                                     <div class="flex items-center gap-3">
                                         <span class="material-symbols-outlined text-secondary text-[22px]" x-text="service.icon || 'help'"></span>
                                         <div>
@@ -828,7 +828,7 @@
                         <div>
                             <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Catatan tambahan') }} <span class="text-[9px] text-slate-500">({{ __('Opsional') }})</span></label>
                             <textarea x-model="notesUser" placeholder="{{ __('Permintaan khusus, hotel, alergi, penjemputan, dll.') }}" rows="2"
-                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition-all resize-none"></textarea>
+                                class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition resize-none"></textarea>
                         </div>
 
                         <!-- Real-time Pricing Summary Card -->
@@ -851,7 +851,7 @@
                                 <span>{{ __('Pajak & Layanan') }} (<span x-text="taxPercentage"></span>%)</span>
                                 <span x-text="AppCurrency.format(pajakLayanan)"></span>
                             </div>
-                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition-all duration-300 origin-right"
+                            <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold text-primary text-base font-body-md transition duration-300 origin-right"
                                  :class="totalChanged ? 'scale-[1.03] text-secondary font-bold' : ''">
                                 <span>Total Ringkasan</span>
                                 <span x-text="AppCurrency.format(totalAkhir)"></span>
@@ -868,7 +868,7 @@
                         <button 
                             type="submit" 
                             :disabled="isSubmitting"
-                            class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
+                            class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition duration-300 shadow-sm flex items-center justify-center gap-2"
                         >
                             <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">calendar_month</span>
@@ -900,7 +900,7 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-12 scale-95"
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-auto glass-card border border-slate-200 rounded-2xl px-5 md:px-8 py-3 z-50 hidden md:flex items-center justify-between gap-4 md:gap-12 shadow-lg transition-all duration-500 transform"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-auto glass-card border border-slate-200 rounded-2xl px-5 md:px-8 py-3 z-50 hidden md:flex items-center justify-between gap-4 md:gap-12 shadow-lg transition duration-500 transform"
         style="display: none;"
     >
         <div class="hidden md:flex items-center gap-2">

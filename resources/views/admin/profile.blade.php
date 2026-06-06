@@ -30,7 +30,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Nama Lengkap</label>
                         <div class="relative">
                             <input type="text" name="name" value="{{ old('name', $user->name) }}" required
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-user absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Alamat Email</label>
                         <div class="relative">
                             <input type="email" name="email" value="{{ old('email', $user->user_id ?? $user->email) }}" required
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-envelope absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Password Saat Ini (Hanya Jika Ingin Mengganti Password)</label>
                         <div class="relative">
                             <input type="password" name="current_password"
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-lock-open absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-rose-500 transition"></i>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Password Baru</label>
                         <div class="relative">
                             <input type="password" name="new_password"
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-lock absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Konfirmasi Password Baru</label>
                         <div class="relative">
                             <input type="password" name="new_password_confirmation"
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-check-circle absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
 
             <!-- Form Actions -->
             <div class="pt-10 border-t border-slate-50 flex items-center justify-end">
-                <button type="submit" class="px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-toba-green transition-all shadow-xl shadow-slate-200 group">
+                <button type="submit" class="px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 group">
                     <i class="fas fa-save mr-2 group-hover:scale-125 transition"></i> Simpan Perubahan
                 </button>
             </div>

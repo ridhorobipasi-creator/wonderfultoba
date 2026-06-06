@@ -15,7 +15,7 @@
         window.addEventListener('scroll', () => isScrolled = window.scrollY > 20);
         isScrolled = window.scrollY > 20;
     "
-    class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300"
+    class="fixed top-0 left-0 right-0 z-[100] transition duration-300"
 >
     <!-- Top Bar -->
     <div 
@@ -73,7 +73,7 @@
     <!-- Main Nav -->
     <nav 
         :class="isScrolled ? 'bg-white/80 backdrop-blur-xl py-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50' : 'bg-transparent py-5 border-transparent'"
-        class="transition-all duration-500"
+        class="transition duration-500"
     >
         <div class="max-w-7xl mx-auto px-4 lg:px-6 xl:px-8">
             <div class="flex justify-between items-center">
@@ -91,7 +91,7 @@
                             alt="{{ $brandName }}"
                             x-show="!isScrolled"
                             fetchpriority="high"
-                            class="h-10 w-auto object-contain transition-all"
+                            class="h-10 w-auto object-contain transition"
                         />
                         <img
                             src="{{ $logoDark ?? $logoLight }}"
@@ -99,7 +99,7 @@
                             x-show="isScrolled"
                             loading="lazy"
                             decoding="async"
-                            class="h-10 w-auto object-contain transition-all"
+                            class="h-10 w-auto object-contain transition"
                         />
                     @else
                         <div class="flex items-center space-x-2 md:space-x-3">
@@ -125,34 +125,34 @@
                 <div class="hidden lg:flex items-center space-x-8 shrink-0 w-max">
                     <a href="/" 
                         :class="isScrolled ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Beranda') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Beranda') }}</a>
 
                     <a href="/tour/packages" 
                         :class="isScrolled ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Paket Wisata') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Paket Wisata') }}</a>
                     
                     <a href="/tour/gallery" 
                         :class="isScrolled ? ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/gallery') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Galeri') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Galeri') }}</a>
                     
                     <a href="/tour/blog" 
                         :class="isScrolled ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')" 
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Blog') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Blog') }}</a>
                     
                     <a href="/about"
                         :class="isScrolled ? ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('about') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')"
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Tentang Kami') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Tentang Kami') }}</a>
 
                     <a href="{{ route('booking.track.form') }}"
                         :class="isScrolled ? ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-primary font-semibold' : 'text-slate-600 hover:text-secondary') : ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-secondary font-semibold' : 'text-white/80 hover:text-white')"
-                        class="font-semibold tracking-wider transition-all duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Lacak Booking') }}</a>
+                        class="font-semibold tracking-wider transition duration-200 whitespace-nowrap text-[11px] uppercase">{{ __('Lacak Booking') }}</a>
                 </div>
 
                 <!-- Desktop Actions -->
                 <div class="hidden lg:flex items-center space-x-6 shrink-0 ml-8">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer" 
                         :class="isScrolled ? 'border-primary text-primary hover:bg-primary hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-900'"
-                        class="px-5 py-2 rounded-lg border font-semibold text-xs tracking-wider transition-all flex items-center space-x-2 whitespace-nowrap uppercase"
+                        class="px-5 py-2 rounded-lg border font-semibold text-xs tracking-wider transition flex items-center space-x-2 whitespace-nowrap uppercase"
                     >
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         <span>{{ __('HUBUNGI KAMI') }}</span>
@@ -163,7 +163,7 @@
                 <div class="lg:hidden flex items-center gap-2">
                     <!-- Language Picker compact -->
                     <div x-data="{ open: false }" class="relative z-[110]">
-                        <button @click="open = !open" aria-label="Pilih Bahasa" :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'" class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all">
+                        <button @click="open = !open" aria-label="Pilih Bahasa" :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'" class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition">
                             @if(session('locale', 'my') === 'my') 🇲🇾
                             @elseif(session('locale', 'my') === 'id') 🇮🇩
                             @else 🇸🇬
@@ -178,7 +178,7 @@
                     <!-- WhatsApp CTA compact -->
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer"
                         :class="isScrolled ? 'bg-primary text-white' : 'bg-white/15 text-white border border-white/30'"
-                        class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                        class="w-8 h-8 rounded-lg flex items-center justify-center transition"
                         aria-label="Hubungi via WhatsApp">
                         <x-icon name="whatsapp" class="w-4 h-4" />
                     </a>
@@ -247,15 +247,15 @@
                 <div class="pt-6 border-t border-white/5">
                     <span class="text-slate-500 font-bold text-[9px] uppercase tracking-[0.3em] mb-3 block">{{ __('Pilih Bahasa & Mata Uang') }}</span>
                     <div class="grid grid-cols-3 gap-3">
-                        <a href="{{ route('change-locale', 'my') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all {{ session('locale', 'my') === 'my' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('change-locale', 'my') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition {{ session('locale', 'my') === 'my' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
                             <span class="text-xl mb-1">🇲🇾</span>
                             <span class="text-[9px] font-bold">MYR (RM)</span>
                         </a>
-                        <a href="{{ route('change-locale', 'id') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all {{ session('locale', 'my') === 'id' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('change-locale', 'id') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition {{ session('locale', 'my') === 'id' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
                             <span class="text-xl mb-1">🇮🇩</span>
                             <span class="text-[9px] font-bold">IDR (Rp)</span>
                         </a>
-                        <a href="{{ route('change-locale', 'en') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all {{ session('locale', 'my') === 'en' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('change-locale', 'en') }}" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition {{ session('locale', 'my') === 'en' ? 'border-primary bg-primary/5 text-slate-900 font-semibold' : 'border-slate-200 text-slate-600 hover:bg-slate-50' }}">
                             <span class="text-xl mb-1">🇸🇬</span>
                             <span class="text-[9px] font-bold">SGD (S$)</span>
                         </a>
@@ -285,32 +285,32 @@
             <ul class="flex items-center whitespace-nowrap px-4 py-0 gap-0">
                 <li>
                     <a href="/"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Beranda') }}</a>
                 </li>
                 <li>
                     <a href="/tour/packages"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Paket Wisata') }}</a>
                 </li>
                 <li>
                     <a href="/tour/gallery"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Galeri') }}</a>
                 </li>
                 <li>
                     <a href="/tour/blog"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Blog') }}</a>
                 </li>
                 <li>
                     <a href="/about"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Tentang Kami') }}</a>
                 </li>
                 <li>
                     <a href="{{ route('booking.track.form') }}"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Lacak Booking') }}</a>
                 </li>
             </ul>

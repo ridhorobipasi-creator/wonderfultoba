@@ -54,7 +54,7 @@
                         <i class="fas fa-rotate-left text-xs"></i>
                     </a>
                 @endif
-                <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all shadow-lg shadow-slate-100">
+                <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-lg shadow-slate-100">
                     Filter
                 </button>
             </div>

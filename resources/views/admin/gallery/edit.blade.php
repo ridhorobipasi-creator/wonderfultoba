@@ -64,7 +64,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative group cursor-pointer">
                                 <input type="radio" name="category" value="tour" {{ $gallery->category == 'tour' ? 'checked' : '' }} class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 transition-all">
+                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-indigo-600">
                                             <i class="fas fa-camera-retro text-xs"></i>
@@ -75,7 +75,7 @@
                             </label>
                             <label class="relative group cursor-pointer">
                                 <input type="radio" name="category" value="outbound" {{ $gallery->category == 'outbound' ? 'checked' : '' }} class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-orange-600">
                                             <i class="fas fa-mountain-sun text-xs"></i>

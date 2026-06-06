@@ -15,10 +15,10 @@
             
             <!-- Tabs Switcher -->
             <div class="flex bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
-                <button onclick="switchTab('destinasi')" id="btn-destinasi" class="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 bg-white text-slate-900 shadow-sm">
+                <button onclick="switchTab('destinasi')" id="btn-destinasi" class="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition duration-300 bg-white text-slate-900 shadow-sm">
                     Daftar Destinasi
                 </button>
-                <button onclick="switchTab('kategori')" id="btn-kategori" class="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 text-slate-400 hover:text-slate-600">
+                <button onclick="switchTab('kategori')" id="btn-kategori" class="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition duration-300 text-slate-400 hover:text-slate-600">
                     Kategori Kabupaten
                 </button>
             </div>
@@ -74,7 +74,7 @@
         <!-- Cities Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @forelse($cities as $city)
-                <div class="group bg-white rounded-[2.5rem] border border-slate-50 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500">
+                <div class="group bg-white rounded-[2.5rem] border border-slate-50 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition duration-500">
                     <div class="h-48 bg-slate-50 relative overflow-hidden">
                         @if($city->image)
                             <img src="{{ imageUrl($city->image) }}" alt="{{ $city->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">

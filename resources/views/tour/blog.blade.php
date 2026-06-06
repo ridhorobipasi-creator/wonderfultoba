@@ -74,7 +74,7 @@
                         <button
                             @click="activeCategory = cat"
                             :class="activeCategory === cat ? 'bg-primary text-white shadow-lg border-primary' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-primary border border-outline-variant/30'"
-                            class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer hover:-translate-y-0.5"
+                            class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider transition duration-300 whitespace-nowrap cursor-pointer hover:-translate-y-0.5"
                             x-text="cat"
                         ></button>
                     </template>
@@ -89,7 +89,7 @@
                         type="text"
                         placeholder="{{ __('Cari topik atau artikel...') }}"
                         x-model="searchQuery"
-                        class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl focus:ring-2 focus:ring-secondary/40 focus:border-secondary font-body-md text-on-background placeholder:text-outline/70 text-sm outline-none transition-all"
+                        class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl focus:ring-2 focus:ring-secondary/40 focus:border-secondary font-body-md text-on-background placeholder:text-outline/70 text-sm outline-none transition"
                     >
                 </div>
             </div>
@@ -100,7 +100,7 @@
 
         <!-- Featured Post -->
         <template x-if="featured">
-            <article class="group relative bg-primary rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700 mb-12 md:mb-20 min-h-[420px] md:min-h-[550px] flex flex-col justify-end border border-outline-variant/20">
+            <article class="group relative bg-primary rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition duration-700 mb-12 md:mb-20 min-h-[420px] md:min-h-[550px] flex flex-col justify-end border border-outline-variant/20">
                 <img :src="featured.image ? (featured.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.includes('/' + p) && !featured.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), featured.image) : featured.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.startsWith(p)) ? '/storage/' + featured.image.replace(/^\//, '') : '/storage/' + featured.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="featured.translated_title"
                     class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-[2s] ease-out">
                 
@@ -119,7 +119,7 @@
                     <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-5 md:mb-6 group-hover:text-secondary-fixed transition-colors leading-[1.1] tracking-tight" x-text="featured.translated_title"></h2>
                     <p class="text-surface-container-highest text-sm md:text-base font-light mb-8 line-clamp-2 leading-relaxed opacity-90" x-text="featured.excerpt || featured.content"></p>
                     
-                    <a :href="'/tour/blog/' + (featured.slug || featured.id)" class="inline-flex items-center gap-3 bg-white text-primary px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all duration-300 shadow-md hover:-translate-y-0.5 group/btn">
+                    <a :href="'/tour/blog/' + (featured.slug || featured.id)" class="inline-flex items-center gap-3 bg-white text-primary px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition duration-300 shadow-md hover:-translate-y-0.5 group/btn">
                         <span>{{ __('Baca Cerita Lengkap') }}</span>
                         <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover/btn:translate-x-1">arrow_forward</span>
                     </a>
@@ -130,7 +130,7 @@
         <!-- Blog Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             <template x-for="(post, i) in rest" :key="post.id">
-                <article class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden shadow-lg border border-outline-variant/20 hover:border-secondary/30 transition-all duration-500 hover:-translate-y-1.5 animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
+                <article class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden shadow-lg border border-outline-variant/20 hover:border-secondary/30 transition duration-500 hover:-translate-y-1.5 animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                     <a :href="'/tour/blog/' + (post.slug || post.id)" class="block relative overflow-hidden h-64">
                         <img :src="post.image ? (post.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.includes('/' + p) && !post.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), post.image) : post.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.startsWith(p)) ? '/storage/' + post.image.replace(/^\//, '') : '/storage/' + post.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.title"
                             loading="lazy" decoding="async"
@@ -168,7 +168,7 @@
             <h3 class="text-2xl font-headline-md text-primary mb-3 tracking-tight">{{ __('Artikel Belum Tersedia') }}</h3>
             <p class="text-on-surface-variant text-xs font-light max-w-xs mx-auto mb-8 leading-relaxed">{{ __('Kami sedang menyusun cerita perjalanan menarik untuk Anda. Silakan coba kategori lain atau reset pencarian.') }}</p>
             <button @click="activeCategory = '{{ __('Semua') }}'; searchQuery = ''"
-                class="bg-primary text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary-container transition-all duration-300 shadow-md hover:-translate-y-0.5 cursor-pointer">
+                class="bg-primary text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary-container transition duration-300 shadow-md hover:-translate-y-0.5 cursor-pointer">
                 {{ __('Reset Jurnal') }}
             </button>
         </div>

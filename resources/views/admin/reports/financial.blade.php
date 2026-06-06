@@ -105,7 +105,7 @@
                 @php $maxCount = max($monthlyChart) ?: 1; @endphp
                 @foreach($monthlyChart as $m => $count)
                     <div class="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
-                        <div class="w-full bg-indigo-100/50 group-hover:bg-indigo-200 rounded-t-lg transition-all relative overflow-hidden" 
+                        <div class="w-full bg-indigo-100/50 group-hover:bg-indigo-200 rounded-t-lg transition relative overflow-hidden" 
                              style="height: {{ max(6, ($count / $maxCount) * 100) }}%">
                             <div class="absolute inset-0 bg-indigo-500 opacity-20 group-hover:opacity-40 transition-opacity"></div>
                             @if($month !== 'all' && $m == $month)

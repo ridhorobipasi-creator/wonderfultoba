@@ -371,7 +371,7 @@
 
     <!-- Action Buttons (Visible only on screen) -->
     <div class="fixed bottom-8 right-8 flex flex-col gap-3 no-print z-50">
-        <button onclick="window.print()" class="group relative bg-brand hover:bg-brand-dark text-white font-medium w-12 h-12 rounded-full shadow-lg transition-all flex items-center justify-center hover:scale-105" title="Cetak / Simpan PDF">
+        <button onclick="window.print()" class="group relative bg-brand hover:bg-brand-dark text-white font-medium w-12 h-12 rounded-full shadow-lg transition flex items-center justify-center hover:scale-105" title="Cetak / Simpan PDF">
             <i class="fa-solid fa-print text-lg"></i>
             <span class="absolute right-14 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Cetak / Simpan PDF</span>
         </button>

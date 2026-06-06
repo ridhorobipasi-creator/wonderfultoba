@@ -37,49 +37,49 @@
                     @if($siteSettings['general']['social_instagram'] ?? false)
                         <a href="https://instagram.com/{{ str_replace('@', '', $siteSettings['general']['social_instagram']) }}" 
                            target="_blank" 
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="instagram" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_facebook'] ?? false)
                         <a href="{{ $siteSettings['general']['social_facebook'] }}" 
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="facebook" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_youtube'] ?? false)
                         <a href="{{ $siteSettings['general']['social_youtube'] }}" 
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="youtube" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_tiktok'] ?? false)
                         <a href="{{ $siteSettings['general']['social_tiktok'] }}"
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="tiktok" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_twitter'] ?? false)
                         <a href="{{ $siteSettings['general']['social_twitter'] }}"
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="twitter" class="w-3.5 h-3.5" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_linkedin'] ?? false)
                         <a href="{{ $siteSettings['general']['social_linkedin'] }}"
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="linkedin" class="w-4 h-4" />
                         </a>
                     @endif
                     @if($siteSettings['general']['social_telegram'] ?? false)
                         <a href="{{ $siteSettings['general']['social_telegram'] }}"
                            target="_blank"
-                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all">
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20 transition">
                             <x-icon name="telegram" class="w-4 h-4" />
                         </a>
                     @endif
@@ -180,7 +180,7 @@
                     $partnerLogoUrl = $siteSettings['cms_landing']['brand_partner_logo_url'] ?? 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Wonderful_Indonesia_logo.svg';
                 @endphp
                 <div class="flex items-center gap-3">
-                    <x-premium-image :src="$partnerLogoUrl" alt="Wonderful Indonesia" class="h-6 opacity-30 grayscale hover:grayscale-0 hover:opacity-70 transition-all" />
+                    <x-premium-image :src="$partnerLogoUrl" alt="Wonderful Indonesia" class="h-6 opacity-30 grayscale hover:grayscale-0 hover:opacity-70 transition" />
                     <span class="text-slate-500 font-label-caps text-[8px] uppercase tracking-wider leading-tight">{{ __('Agen Resmi') }}<br>Wonderful Indonesia</span>
                 </div>
             </div>

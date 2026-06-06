@@ -14,7 +14,7 @@
                 Kategori & metadata wilayah destinasi wisata
             </p>
         </div>
-        <a href="{{ route('admin.cities.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green hover:text-white transition-all">
+        <a href="{{ route('admin.cities.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green hover:text-white transition">
             <i class="fas fa-map-marker-alt"></i> Kelola Kota
         </a>
     </div>
@@ -40,11 +40,11 @@
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="px-8 py-3 bg-toba-green text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-toba-green/20">
+        <button type="submit" class="px-8 py-3 bg-toba-green text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition shadow-lg shadow-toba-green/20">
             <i class="fas fa-filter mr-2"></i>Filter
         </button>
         @if(request('province_id'))
-            <a href="{{ route('admin.regencies.index') }}" class="px-8 py-3 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">
+            <a href="{{ route('admin.regencies.index') }}" class="px-8 py-3 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition">
                 Reset
             </a>
         @endif
@@ -86,7 +86,7 @@
                         </td>
                         <td class="px-8 py-5 text-right">
                             <a href="{{ route('admin.regencies.edit', $regency) }}"
-                               class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all md:opacity-0 group-hover:opacity-100">
+                               class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition md:opacity-0 group-hover:opacity-100">
                                 <i class="fas fa-pen text-[9px]"></i> Edit
                             </a>
                         </td>
@@ -115,11 +115,11 @@
                 @if($regencies->onFirstPage())
                     <span class="px-4 py-2 bg-slate-100 text-slate-300 rounded-xl text-xs font-black cursor-not-allowed">← Prev</span>
                 @else
-                    <a href="{{ $regencies->previousPageUrl() }}" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black hover:bg-toba-green transition-all">← Prev</a>
+                    <a href="{{ $regencies->previousPageUrl() }}" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black hover:bg-toba-green transition">← Prev</a>
                 @endif
 
                 @if($regencies->hasMorePages())
-                    <a href="{{ $regencies->nextPageUrl() }}" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black hover:bg-toba-green transition-all">Next →</a>
+                    <a href="{{ $regencies->nextPageUrl() }}" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black hover:bg-toba-green transition">Next →</a>
                 @else
                     <span class="px-4 py-2 bg-slate-100 text-slate-300 rounded-xl text-xs font-black cursor-not-allowed">Next →</span>
                 @endif

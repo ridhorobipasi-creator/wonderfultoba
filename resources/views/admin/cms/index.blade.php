@@ -59,9 +59,9 @@ document.addEventListener('alpine:init', () => {
     <!-- LEFT: CONTROL PANEL (Form) -->
     <div class="w-full xl:w-[400px] flex-shrink-0 space-y-6">
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1">
-            <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Brand</button>
-            <button @click="activeTab = 'tour'" :class="activeTab === 'tour' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">Tour</button>
-            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition-all">SEO</button>
+            <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">Brand</button>
+            <button @click="activeTab = 'tour'" :class="activeTab === 'tour' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">Tour</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">SEO</button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_landing') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -78,7 +78,7 @@ document.addEventListener('alpine:init', () => {
                             <h3 class="text-base font-black text-amber-900 uppercase tracking-widest">Pengaturan Dipindahkan</h3>
                             <p class="text-[10px] font-bold text-amber-700/70 mt-2">Logo, Icon, dan Identitas Brand kini telah dipusatkan di menu **Pengaturan Sistem**.</p>
                         </div>
-                        <a href="{{ route('admin.settings.general.index') }}" class="px-6 py-3 bg-amber-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-700 transition-all">
+                        <a href="{{ route('admin.settings.general.index') }}" class="px-6 py-3 bg-amber-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-700 transition">
                             Buka Pengaturan Sistem
                         </a>
                     </div>
@@ -104,7 +104,7 @@ document.addEventListener('alpine:init', () => {
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Background Image</label>
                             
                             <div class="grid grid-cols-1 gap-4">
-                                <div @click="openCMSMediaPicker('tour')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-toba-green hover:bg-emerald-50 transition-all group cursor-pointer">
+                                <div @click="openCMSMediaPicker('tour')" class="h-20 border-2 border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-white hover:border-toba-green hover:bg-emerald-50 transition group cursor-pointer">
                                     <i class="fas fa-images text-lg text-slate-300 group-hover:text-toba-green mb-1"></i>
                                     <span class="text-[8px] font-black text-slate-400 uppercase group-hover:text-toba-green">Pilih dari Media Library</span>
                                 </div>
@@ -136,7 +136,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
+            <button type="submit" class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition flex items-center justify-center gap-3">
                 <i class="fas fa-cloud-arrow-up"></i> Simpan Publikasi
             </button>
         </form>

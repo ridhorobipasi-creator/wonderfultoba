@@ -68,7 +68,7 @@
                         <i class="fas fa-rotate-left text-xs"></i>
                     </a>
                 @endif
-                <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition-all shadow-lg shadow-slate-100">
+                <button type="submit" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-lg shadow-slate-100">
                     Filter
                 </button>
             </div>
@@ -90,7 +90,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($logs as $log)
-                        <tr class="group hover:bg-slate-50/30 transition-all duration-300">
+                        <tr class="group hover:bg-slate-50/30 transition duration-300">
                             @php
                                 $colors = [
                                     'created' => 'bg-emerald-50 text-emerald-600',
@@ -103,7 +103,7 @@
                             @endphp
                             <td class="pl-5 md:pl-10 pr-6 py-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition-all shrink-0">
+                                    <div class="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:bg-slate-900 group-hover:text-white transition shrink-0">
                                         <span class="text-xs font-black">{{ substr($log->user->name ?? 'S', 0, 1) }}</span>
                                     </div>
                                     <div class="min-w-0">

@@ -33,7 +33,7 @@
     
     <!-- Beautiful Floating Header -->
     <header class="fixed top-6 left-0 right-0 z-[100] px-4 md:px-8" x-data="{ mobileMenuOpen: false, langOpen: false }">
-        <nav class="max-w-7xl mx-auto bg-white/75 backdrop-blur-md border border-white/30 rounded-2xl px-6 py-3.5 flex items-center justify-between shadow-lg transition-all duration-300">
+        <nav class="max-w-7xl mx-auto bg-white/75 backdrop-blur-md border border-white/30 rounded-2xl px-6 py-3.5 flex items-center justify-between shadow-lg transition duration-300">
             <!-- Brand Logo -->
             <a href="/" class="flex items-center gap-3 focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg outline-none">
                 @php
@@ -65,7 +65,7 @@
                 <!-- Improved Language & Currency Selector -->
                 <div class="relative">
                     <button @click="langOpen = !langOpen" 
-                            class="flex items-center gap-2 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-900/10 px-3 py-2 rounded-xl text-slate-800 hover:text-emerald-800 transition-all focus-visible:ring-2 focus-visible:ring-emerald-500 outline-none"
+                            class="flex items-center gap-2 bg-slate-900/5 hover:bg-slate-900/10 border border-slate-900/10 px-3 py-2 rounded-xl text-slate-800 hover:text-emerald-800 transition focus-visible:ring-2 focus-visible:ring-emerald-500 outline-none"
                             aria-label="Pilih Bahasa dan Mata Uang">
                         <span class="text-xs font-bold tracking-wide uppercase flex items-center gap-1.5">
                             @if(session('locale', 'my') === 'my')
@@ -153,10 +153,10 @@
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row items-center gap-4">
-                    <a href="/tour" class="px-8 py-4 md:px-10 bg-slate-900 text-white border border-slate-900 rounded-xl font-bold text-sm tracking-wider hover:bg-emerald-800 hover:border-emerald-800 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 outline-none">
+                    <a href="/tour" class="px-8 py-4 md:px-10 bg-slate-900 text-white border border-slate-900 rounded-xl font-bold text-sm tracking-wider hover:bg-emerald-800 hover:border-emerald-800 transition duration-300 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 outline-none">
                         Mulai Liburan Anda
                     </a>
-                    <a href="/tour/packages" class="px-8 py-4 md:px-10 bg-white text-slate-900 border border-slate-200 rounded-xl font-bold text-sm tracking-wider hover:bg-slate-50 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 outline-none">
+                    <a href="/tour/packages" class="px-8 py-4 md:px-10 bg-white text-slate-900 border border-slate-200 rounded-xl font-bold text-sm tracking-wider hover:bg-slate-50 transition duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 outline-none">
                         Pilih Destinasi
                     </a>
                 </div>
@@ -165,12 +165,12 @@
     </main>
 
     <!-- Update Notification Toast -->
-    <div id="update-toast" class="fixed bottom-6 right-6 z-[200] bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-4 transition-all duration-500 translate-y-24 opacity-0 pointer-events-none">
+    <div id="update-toast" class="fixed bottom-6 right-6 z-[200] bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-4 transition duration-500 translate-y-24 opacity-0 pointer-events-none">
         <div class="flex flex-col gap-0.5">
             <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Konten Diperbarui</span>
             <span class="text-xs text-slate-300">Pembaruan tampilan halaman tersedia.</span>
         </div>
-        <button onclick="window.location.reload()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-emerald-400 outline-none">
+        <button onclick="window.location.reload()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition focus-visible:ring-2 focus-visible:ring-emerald-400 outline-none">
             Segarkan
         </button>
     </div>

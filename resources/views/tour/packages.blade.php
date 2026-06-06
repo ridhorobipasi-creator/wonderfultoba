@@ -108,7 +108,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search Box -->
                     <div class="relative group lg:col-span-2">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-focus-within:bg-toba-green group-focus-within:text-white transition-all shadow-sm">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-focus-within:bg-toba-green group-focus-within:text-white transition shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
                         </div>
                         <input type="text" placeholder="Cari destinasi atau paket..." x-model="searchQuery"
@@ -142,7 +142,7 @@
                     @foreach(['Semua', '1-3 Hari', '4-7 Hari', '7+ Hari'] as $d)
                     <button @click="filterDuration = '{{ $d }}'"
                         :class="filterDuration === '{{ $d }}' ? 'bg-toba-green text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/50'"
-                        class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all whitespace-nowrap">
+                        class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold transition whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
                         {{ $d }}
                     </button>
@@ -169,7 +169,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-br from-toba-green/20 via-slate-200/50 to-toba-accent/20 animate-pulse"
                                      x-show="!loaded"></div>
                                 <img :src="pkg.first_image" :alt="pkg.name" 
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-all duration-[1.5s]"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-[1.5s]"
                                      :class="loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'"
                                      style="transition: opacity 0.6s ease, transform 1.5s ease"
                                      loading="lazy" decoding="async"
@@ -184,7 +184,7 @@
                                     <div class="bg-slate-950 text-white px-2.5 py-1 rounded-lg text-[9px] font-semibold uppercase tracking-wider" x-text="pkg.duration"></div>
                                 </div>
 
-                                <button class="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition-all shadow-sm" aria-label="Simpan ke wishlist">
+                                <button class="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition shadow-sm" aria-label="Simpan ke wishlist">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
                                 </button>
                             </div>
@@ -204,7 +204,7 @@
                                             <span class="text-lg font-bold text-slate-900" x-text="pkg.formatted_price || '-'"></span>
                                         </div>
                                     </div>
-                                    <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-10 h-10 bg-slate-950 text-white rounded-xl flex items-center justify-center hover:bg-toba-green transition-all group/btn" aria-label="Lihat detail">
+                                    <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-10 h-10 bg-slate-950 text-white rounded-xl flex items-center justify-center hover:bg-toba-green transition group/btn" aria-label="Lihat detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right group-hover/btn:translate-x-0.5 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                                     </a>
                                 </div>
@@ -238,11 +238,11 @@
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">Tidak Menemukan Paket yang Cocok?</h3>
                     <p class="text-white/80 text-sm font-normal mb-8 max-w-lg mx-auto">Kami siap merancang itinerary khusus sesuai kebutuhan dan budget Anda.</p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-sm">
+                        <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             Konsultasi Gratis
                         </a>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-white/20 transition-all">
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-white/20 transition">
                             WhatsApp Kami
                         </a>
                     </div>

@@ -87,7 +87,7 @@
                         <button
                             @click="activeCategory = cat"
                             :class="activeCategory === cat ? 'bg-primary text-white shadow-lg border-primary' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-primary border border-outline-variant/30'"
-                            class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap cursor-pointer hover:-translate-y-0.5"
+                            class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider transition duration-300 whitespace-nowrap cursor-pointer hover:-translate-y-0.5"
                             x-text="cat === 'Semua' ? '{{ __('Semua') }}' : cat"
                         ></button>
                     </template>
@@ -102,7 +102,7 @@
                         type="text"
                         :placeholder="'{{ __('Cari foto atau momen...') }}'"
                         x-model="searchQuery"
-                        class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl focus:ring-2 focus:ring-secondary/40 focus:border-secondary font-body-md text-on-background placeholder:text-outline/70 text-sm outline-none transition-all"
+                        class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl focus:ring-2 focus:ring-secondary/40 focus:border-secondary font-body-md text-on-background placeholder:text-outline/70 text-sm outline-none transition"
                     >
                 </div>
             </div>
@@ -123,7 +123,7 @@
         <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-8 space-y-5 md:space-y-8">
             <template x-for="(img, index) in filteredImages" :key="index">
                 <div
-                    class="break-inside-avoid relative rounded-3xl overflow-hidden group cursor-pointer shadow-lg transition-all duration-[0.6s] border border-outline-variant/20 hover:border-secondary/40 hover:-translate-y-1 bg-white"
+                    class="break-inside-avoid relative rounded-3xl overflow-hidden group cursor-pointer shadow-lg transition duration-[0.6s] border border-outline-variant/20 hover:border-secondary/40 hover:-translate-y-1 bg-white"
                     @click="openLightbox(index)"
                     x-transition:enter="transition opacity duration-500"
                     x-transition:enter-start="opacity-0"
@@ -138,8 +138,8 @@
                     >
                     
                     <!-- Cinematic Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                        <div class="transform translate-y-4 group-hover:translate-y-0 transition-all duration-[0.4s]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <div class="transform translate-y-4 group-hover:translate-y-0 transition duration-[0.4s]">
                             <span x-show="img.category" class="inline-block px-3 py-1 bg-secondary text-white text-[9px] font-black uppercase tracking-widest rounded-lg mb-3 shadow-sm" x-text="img.category"></span>
                             <p x-show="img.caption" class="text-white text-base font-bold leading-tight tracking-tight mb-2" x-text="img.caption"></p>
                             <div class="flex items-center gap-1 text-secondary-fixed text-[9px] font-black uppercase tracking-widest">
@@ -150,7 +150,7 @@
                     </div>
 
                     <!-- Expansion Icon (Floating) -->
-                    <div class="absolute top-6 right-6 scale-0 group-hover:scale-100 transition-all duration-300 delay-75">
+                    <div class="absolute top-6 right-6 scale-0 group-hover:scale-100 transition duration-300 delay-75">
                         <div class="w-10 h-10 bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center text-white shadow-lg">
                             <span class="material-symbols-outlined text-lg">fullscreen</span>
                         </div>
@@ -167,7 +167,7 @@
             <h3 class="text-2xl font-headline-md text-primary mb-3 tracking-tight">{{ __('Koleksi Belum Ditemukan') }}</h3>
             <p class="text-on-surface-variant text-xs font-light max-w-xs mx-auto mb-8 leading-relaxed">{{ __('Kami belum menemukan foto yang sesuai dengan filter atau kata kunci Anda. Cobalah kategori lain atau kata kunci yang lebih umum.') }}</p>
             <button @click="activeCategory = 'Semua'; searchQuery = ''"
-                class="bg-primary text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary-container transition-all duration-300 shadow-md hover:-translate-y-0.5 cursor-pointer">
+                class="bg-primary text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary-container transition duration-300 shadow-md hover:-translate-y-0.5 cursor-pointer">
                 {{ __('Reset Galeri') }}
             </button>
         </div>
@@ -188,7 +188,7 @@
             <!-- Close Button -->
             <button
                 @click="closeLightbox()"
-                class="absolute top-6 right-6 w-12 h-12 bg-white/5 hover:bg-red-600 hover:text-white rounded-xl flex items-center justify-center text-white transition-all z-[210] border border-white/10 group cursor-pointer"
+                class="absolute top-6 right-6 w-12 h-12 bg-white/5 hover:bg-red-600 hover:text-white rounded-xl flex items-center justify-center text-white transition z-[210] border border-white/10 group cursor-pointer"
             >
                 <span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-500">close</span>
             </button>
@@ -202,13 +202,13 @@
             <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-6 md:px-12 pointer-events-none z-[210]">
                 <button
                     @click.stop="prev()"
-                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
+                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-2xl group-hover:-translate-x-0.5 transition-transform">chevron_left</span>
                 </button>
                 <button
                     @click.stop="next()"
-                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
+                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-2xl group-hover:translate-x-0.5 transition-transform">chevron_right</span>
                 </button>
@@ -235,7 +235,7 @@
                         <template x-if="filteredImages[lightbox.index].type === 'package' || filteredImages[lightbox.index].type === 'blog'">
                             <div class="mt-6">
                                 <a :href="filteredImages[lightbox.index].type === 'package' ? '/tour/package/' + filteredImages[lightbox.index].slug : '/tour/blog/' + filteredImages[lightbox.index].slug" 
-                                   class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all shadow-md">
+                                   class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition shadow-md">
                                     <span class="material-symbols-outlined text-sm">open_in_new</span>
                                     <span x-text="filteredImages[lightbox.index].type === 'package' ? '{{ __('Lihat Paket Wisata') }}' : '{{ __('Baca Artikel Selengkapnya') }}'"></span>
                                 </a>

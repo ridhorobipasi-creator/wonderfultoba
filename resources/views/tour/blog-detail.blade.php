@@ -53,8 +53,8 @@
             <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000">
                 {{-- Back button --}}
                 <a href="/tour/blog" 
-                   class="inline-flex items-center gap-2 text-white/80 hover:text-white font-bold text-xs uppercase tracking-wider mb-8 transition-all group">
-                    <div class="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-secondary group-hover:border-secondary transition-all">
+                   class="inline-flex items-center gap-2 text-white/80 hover:text-white font-bold text-xs uppercase tracking-wider mb-8 transition group">
+                    <div class="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-secondary group-hover:border-secondary transition">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                             <path d="M19 12H5M12 19l-7-7 7-7"/>
                         </svg>
@@ -141,7 +141,7 @@
                     @if(isset($post->tags) && count($post->tags) > 0)
                         <div class="mt-12 pt-8 border-t border-outline-variant/30 flex flex-wrap gap-2">
                             @foreach($post->tags as $tag)
-                                <span class="px-4 py-1.5 bg-surface-container-low text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-wider border border-outline-variant/30 hover:bg-secondary hover:text-on-secondary transition-all cursor-default">
+                                <span class="px-4 py-1.5 bg-surface-container-low text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-wider border border-outline-variant/30 hover:bg-secondary hover:text-on-secondary transition cursor-default">
                                     #{{ $tag }}
                                 </span>
                             @endforeach
@@ -157,16 +157,16 @@
                         <div class="flex items-center gap-3">
                             <a href="https://wa.me/?text={{ urlencode(__('Baca artikel ini dari Sujai Laketoba: ') . $post->translated_title . ' ' . url()->current()) }}" 
                                target="_blank"
-                               class="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all">
+                               class="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
                                 <x-icon name="whatsapp" class="w-5 h-5" />
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
                                target="_blank"
-                               class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition-all">
+                               class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
                                 <x-icon name="facebook" class="w-4 h-4" />
                             </a>
                                      <button @click="navigator.clipboard.writeText(window.location.href)"
-                                         class="w-10 h-10 bg-white text-outline border border-outline-variant rounded-xl flex items-center justify-center shadow-sm hover:bg-slate-50 transition-all"
+                                         class="w-10 h-10 bg-white text-outline border border-outline-variant rounded-xl flex items-center justify-center shadow-sm hover:bg-slate-50 transition"
                                          title="{{ __('Salin link') }}">
                                 <span class="material-symbols-outlined text-[18px]">link</span>
                             </button>
@@ -191,7 +191,7 @@
                                 {{ __('Wujudkan cerita petualangan Anda sendiri. Pilih paket wisata yang paling sesuai dengan jiwa petualang Anda.') }}
                             </p>
                             <a href="/tour/packages" 
-                               class="w-full flex items-center justify-center gap-2 py-3.5 bg-secondary text-on-secondary rounded-xl font-bold font-label-caps text-xs uppercase tracking-wider hover:bg-secondary/90 transition-all duration-300 shadow-md group">
+                               class="w-full flex items-center justify-center gap-2 py-3.5 bg-secondary text-on-secondary rounded-xl font-bold font-label-caps text-xs uppercase tracking-wider hover:bg-secondary/90 transition duration-300 shadow-md group">
                                 {{ __('Lihat Paket Wisata') }}
                                 <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -254,7 +254,7 @@
                             <div class="relative aspect-[16/10] rounded-3xl overflow-hidden mb-5 border border-outline-variant/20 shadow-sm">
                                 <img src="{{ $rp->image_url }}" alt="{{ $rp->translated_title }}" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]">
-                                <div class="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-5">
+                                <div class="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-5">
                                     <span class="font-label-caps text-[9px] text-secondary-fixed uppercase tracking-widest flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                         {{ __('Baca Artikel') }}
@@ -266,7 +266,7 @@
                                 <h4 class="text-base font-bold font-headline-md text-on-surface mb-2 group-hover:text-secondary transition-colors leading-tight tracking-tight line-clamp-2">
                                     {{ $rp->translated_title }}
                                 </h4>
-                                <span class="text-xs text-on-surface-variant group-hover:text-secondary transition-all font-body-md flex items-center gap-1">
+                                <span class="text-xs text-on-surface-variant group-hover:text-secondary transition font-body-md flex items-center gap-1">
                                     {{ __('Selanjutnya') }}
                                     <svg class="w-3.5 h-3.5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                         <path d="M5 12h14M12 5l7 7-7 7"/>

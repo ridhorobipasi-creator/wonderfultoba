@@ -50,7 +50,7 @@
                     @if($package->images && count($package->images) > 0)
                         <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mb-4">
                             @foreach($package->images as $image)
-                                <div class="relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm group transition-all"
+                                <div class="relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm group transition"
                                      :class="isRemoving('{{ $image }}') ? 'ring-4 ring-red-500 opacity-50 scale-95' : ''">
                                     <img src="{{ $package->resolveImageUrl($image) }}" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
@@ -364,7 +364,7 @@
 
                 <!-- Submit Buttons -->
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
-                    <button type="submit" :disabled="isSubmitting" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition-all shadow-md disabled:opacity-50">
+                    <button type="submit" :disabled="isSubmitting" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition shadow-md disabled:opacity-50">
                         <template x-if="!isSubmitting">
                             <div class="flex items-center">
                                 <i class="fas fa-save mr-2"></i> Update Package

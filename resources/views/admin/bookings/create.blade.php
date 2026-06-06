@@ -30,7 +30,7 @@
                 <div class="relative group">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Tipe Pesanan</label>
                     <select name="type" x-model="type" required
-                        class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition-all font-bold text-sm appearance-none cursor-pointer">
+                        class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-sm appearance-none cursor-pointer">
                         <option value="package">📦 Paket Wisata (Tour)</option>
                     </select>
                     <i class="fas fa-chevron-down absolute right-6 bottom-5 text-slate-300 pointer-events-none"></i>
@@ -39,7 +39,7 @@
                 <div class="relative group" x-show="type === 'package'">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Pilih Paket Wisata</label>
                     <select name="packageId" x-model="packageId" :required="type === 'package'"
-                        class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition-all font-bold text-sm appearance-none cursor-pointer">
+                        class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-sm appearance-none cursor-pointer">
                         <option value="">-- Pilih Paket --</option>
                         @foreach($packages as $pkg)
                             <option value="{{ $pkg->id }}">{{ $pkg->name }} (Rp {{ number_format($pkg->price / 1000) }}K)</option>
@@ -62,7 +62,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Tanggal Mulai</label>
                         <div class="relative">
                             <input type="date" name="startDate" x-model="startDate" required
-                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="far fa-calendar-alt absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Tanggal Selesai</label>
                         <div class="relative">
                             <input type="date" name="endDate" x-model="endDate" required
-                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="far fa-calendar-check absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Nama Lengkap</label>
                         <div class="relative">
                             <input type="text" name="customerName" placeholder="Contoh: John Doe" required
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-user absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Alamat Email</label>
                         <div class="relative">
                             <input type="email" name="customerEmail" placeholder="john@example.com" required
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-envelope absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Nomor WA / HP</label>
                         <div class="relative">
                             <input type="text" name="customerPhone" placeholder="0812..." required
-                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                                class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fab fa-whatsapp absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>
                     </div>
@@ -117,23 +117,23 @@
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Jumlah Peserta (Pax)</label>
                     <div class="relative">
                         <input type="number" name="pax" value="1" min="1" required
-                            class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                            class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                         <i class="fas fa-users absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                     </div>
                 </div>
                 <div class="md:col-span-2 group">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Catatan Tambahan</label>
                     <input type="text" name="notes" placeholder="Opsional..."
-                        class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition-all font-bold text-sm">
+                        class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                 </div>
             </div>
 
             <!-- Form Actions -->
             <div class="pt-10 border-t border-slate-50 flex flex-col sm:flex-row items-center gap-4">
-                <button type="submit" class="w-full sm:w-auto px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-toba-green transition-all shadow-xl shadow-slate-200 group">
+                <button type="submit" class="w-full sm:w-auto px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 group">
                     <i class="fas fa-save mr-2 group-hover:scale-125 transition"></i> Simpan Reservasi
                 </button>
-                <a href="{{ route('admin.bookings.index') }}" class="w-full sm:w-auto px-10 py-5 bg-slate-100 text-slate-500 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all text-center">
+                <a href="{{ route('admin.bookings.index') }}" class="w-full sm:w-auto px-10 py-5 bg-slate-100 text-slate-500 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition text-center">
                     Batal
                 </a>
             </div>

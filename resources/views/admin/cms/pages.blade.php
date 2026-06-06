@@ -95,7 +95,7 @@ document.addEventListener('alpine:init', () => {
                         </div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-6 flex items-center justify-between group hover:border-toba-green transition-all">
+                        <div class="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-6 flex items-center justify-between group hover:border-toba-green transition">
                             <div class="flex items-center gap-4">
                                 <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden shadow-inner">
                                     <img :src="imageUrl" class="w-full h-full object-cover">

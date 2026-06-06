@@ -137,7 +137,7 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-            <a href="{{ route('admin.gallery.export', request()->all()) }}" class="bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
+            <a href="{{ route('admin.gallery.export', request()->all()) }}" class="bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
             </a>
         </div>
@@ -196,7 +196,7 @@
             </div>
 
             <div class="w-full lg:w-2/3 flex flex-col gap-4">
-                <button type="button" @click="openMediaPickerForGallery()" class="w-full py-16 bg-white/5 border border-white/10 rounded-[2.5rem] text-white flex flex-col items-center justify-center gap-4 hover:bg-white/10 transition-all group">
+                <button type="button" @click="openMediaPickerForGallery()" class="w-full py-16 bg-white/5 border border-white/10 rounded-[2.5rem] text-white flex flex-col items-center justify-center gap-4 hover:bg-white/10 transition group">
                     <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-xl">
                         <i class="fas fa-images text-2xl"></i>
                     </div>
@@ -212,7 +212,7 @@
     <!-- Gallery View -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
         @forelse($images as $image)
-            <div class="group bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 relative"
+            <div class="group bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition duration-500 relative"
                  :class="selected.includes({{ $image->id }}) ? 'ring-4 ring-indigo-500' : ''">
                 
                 {{-- Bulk Checkbox --}}
@@ -220,14 +220,14 @@
                     <input type="checkbox" 
                         value="{{ $image->id }}" 
                         x-model="selected"
-                        class="w-5 h-5 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-indigo-500 focus:ring-indigo-500/20 transition-all cursor-pointer">
+                        class="w-5 h-5 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-indigo-500 focus:ring-indigo-500/20 transition cursor-pointer">
                 </div>
 
                 <div class="aspect-[4/5] relative overflow-hidden bg-slate-50">
                     <img src="{{ $image->image_url }}" alt="{{ $image->caption }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     
                     <!-- Smart Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 p-6 flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-6 flex flex-col justify-between">
                         <div class="flex justify-end gap-2">
                             <a href="{{ route('admin.gallery.edit', $image) }}" class="w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md text-white flex items-center justify-center hover:bg-indigo-600 transition">
                                 <i class="fas fa-pencil text-xs"></i>
@@ -314,7 +314,7 @@
              @click.self="preview = false">
             <div class="relative max-w-5xl max-h-full">
                 <img :src="previewUrl" class="max-h-[85vh] w-auto rounded-[2rem] shadow-2xl border-4 border-white/10">
-                <button @click="preview = false" class="absolute -top-4 -right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-2xl hover:bg-rose-500 hover:text-white transition-all">
+                <button @click="preview = false" class="absolute -top-4 -right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-2xl hover:bg-rose-500 hover:text-white transition">
                     <i class="fas fa-times"></i>
                 </button>
             </div>

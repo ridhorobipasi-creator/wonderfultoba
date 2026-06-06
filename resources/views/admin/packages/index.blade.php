@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="flex items-center gap-3 w-full md:w-auto">
-            <a href="{{ route('admin.packages.export', request()->all()) }}" class="flex-1 md:flex-none bg-white border border-slate-200 text-slate-600 px-5 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
+            <a href="{{ route('admin.packages.export', request()->all()) }}" class="flex-1 md:flex-none bg-white border border-slate-200 text-slate-600 px-5 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
             </a>
             <a href="{{ route('admin.packages.create') }}" class="flex-1 md:flex-none bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
@@ -130,7 +130,7 @@
     <!-- Premium Package Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         @forelse($packages as $package)
-            <div class="group bg-white rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 flex flex-col relative"
+            <div class="group bg-white rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition duration-500 flex flex-col relative"
                  :class="selected.includes({{ $package->id }}) ? 'ring-4 ring-emerald-500' : ''">
                 
                 {{-- Bulk Checkbox --}}
@@ -138,7 +138,7 @@
                     <input type="checkbox" 
                         value="{{ $package->id }}" 
                         x-model="selected"
-                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-emerald-500 focus:ring-emerald-500/20 transition-all cursor-pointer">
+                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-emerald-500 focus:ring-emerald-500/20 transition cursor-pointer">
                 </div>
 
                 <div class="h-64 relative overflow-hidden bg-slate-50">

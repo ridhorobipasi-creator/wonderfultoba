@@ -57,10 +57,10 @@
             <p class="text-gray-500 mt-1 text-sm font-bold uppercase tracking-widest text-[10px]">Administrasi Hak Akses & Akun Staff</p>
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
-            <a href="{{ route('admin.users.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center">
+            <a href="{{ route('admin.users.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export Excel
             </a>
-            <a href="{{ route('admin.users.create') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center bg-slate-900 text-white px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-100">
+            <a href="{{ route('admin.users.create') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center bg-slate-900 text-white px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-100">
                 <i class="fas fa-plus mr-2 text-xs"></i> New User
             </a>
         </div>
@@ -118,7 +118,7 @@
                             <input type="checkbox" 
                                 @click="toggleAll(@js($users->pluck('id')->toArray()))"
                                 :checked="isAllChecked(@js($users->pluck('id')->toArray()))"
-                                class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
+                                class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition cursor-pointer">
                         </th>
                         <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">User</th>
                         <th class="px-6 py-4 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Contact</th>
@@ -134,7 +134,7 @@
                                 <input type="checkbox" 
                                     value="{{ $user->id }}" 
                                     x-model="selected"
-                                    class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition-all cursor-pointer">
+                                    class="w-5 h-5 rounded-lg border-slate-300 text-slate-900 focus:ring-slate-900/20 transition cursor-pointer">
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
