@@ -214,8 +214,17 @@
         get priceDewasa() {
             return this.pax * this.currentUnitPrice;
         },
+        get currentChildUnitPrice() {
+            if (this.tiers && this.tiers.length > 0) {
+                let activeTier = this.tiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
+                if (activeTier && activeTier.child_price) {
+                    return activeTier.child_price;
+                }
+            }
+            return this.package.childPrice ? this.package.childPrice : (this.currentUnitPrice * 0.5);
+        },
         get priceAnak() {
-            return this.paxChildren * (this.package.childPrice ? this.package.childPrice : (this.package.price * 0.5));
+            return this.paxChildren * this.currentChildUnitPrice;
         },
         get additionalServicesPrice() {
             return (this.services || [])

@@ -113,6 +113,7 @@ class PackageController extends Controller
             'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
             'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
             'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
+            'pricingDetails.tiers.*.child_price' => 'nullable|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);
@@ -173,6 +174,7 @@ class PackageController extends Controller
             'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
             'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
             'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
+            'pricingDetails.tiers.*.child_price' => 'nullable|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);

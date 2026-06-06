@@ -161,6 +161,7 @@ class BookingService
             $package = Package::find($data['packageId']);
             $pricePerPerson = $package->price ?? 0;
             $costPerPerson = $package->cost_price ?? 0;
+            $childPricePerPerson = $package->childPrice ?? ($pricePerPerson * 0.5);
 
             // Check if there are pricing details for specific pax count
             if ($package->pricingDetails && is_array($package->pricingDetails)) {
@@ -177,6 +178,7 @@ class BookingService
 
                 if ($match) {
                     $pricePerPerson = $match['price'] ?? $pricePerPerson;
+                    $childPricePerPerson = $match['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
                 } else {
                     // If no match, check if pax exceeds max tier
                     $maxTier = null;
@@ -187,12 +189,13 @@ class BookingService
                     }
                     if ($maxTier && $pax > $maxTier['max_pax']) {
                         $pricePerPerson = $maxTier['price'] ?? $pricePerPerson;
+                        $childPricePerPerson = $maxTier['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
                     }
                 }
             }
 
             $priceDewasa = $pricePerPerson * $pax;
-            $priceAnak = $pricePerPerson * 0.5 * $paxChildren;
+            $priceAnak = $childPricePerPerson * $paxChildren;
             
             $additionalServicesPrice = 0;
             $availableServices = $package->pricingDetails['additional_services'] ?? [
