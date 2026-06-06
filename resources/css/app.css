@@ -3,6 +3,16 @@
 @import '@fontsource/plus-jakarta-sans/600.css';
 @import '@fontsource/plus-jakarta-sans/800.css';
 
+/* Material Symbols: self-hosted subset (101 ikon terpakai + cadangan travel).
+   448 KiB full icon font -> ~14 KiB. Lihat resources/fonts/_subset.py untuk regenerasi. */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/material-symbols-subset.woff2') format('woff2');
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

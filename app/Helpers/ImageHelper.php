@@ -363,6 +363,46 @@ if (! function_exists('imageUrl')) {
     }
 }
 
+if (! function_exists('imageSrcset')) {
+    /**
+     * Build a responsive srcset from an ALREADY-RESOLVED image URL using the
+     * "-400/-800" variant convention (public/images/sumut/foo.webp -> foo-400.webp, foo-800.webp).
+     *
+     * Pass the same URL you put in src="" (e.g. the output of imageUrl()/resolveImageUrl()).
+     * Returns '' when the file or its variants don't exist — so storage uploads that use a
+     * different variant scheme (mobile/medium/large) safely get no srcset instead of 404s.
+     */
+    function imageSrcset(?string $resolvedUrl): string
+    {
+        if (empty($resolvedUrl) || ! str_ends_with(strtolower($resolvedUrl), '.webp')) {
+            return '';
+        }
+
+        $rel = ltrim((string) parse_url($resolvedUrl, PHP_URL_PATH), '/');
+        // Skip if already a variant, or the base file isn't a local public asset.
+        if ($rel === '' || preg_match('/-(400|800)\.webp$/i', $rel) || ! is_file(public_path($rel))) {
+            return '';
+        }
+
+        $v400 = preg_replace('/\.webp$/i', '-400.webp', $rel);
+        $v800 = preg_replace('/\.webp$/i', '-800.webp', $rel);
+
+        $parts = [];
+        if (is_file(public_path($v400))) {
+            $parts[] = asset($v400).' 400w';
+        }
+        if (is_file(public_path($v800))) {
+            $parts[] = asset($v800).' 800w';
+        }
+        if (empty($parts)) {
+            return '';
+        }
+        $parts[] = $resolvedUrl.' 1200w';
+
+        return implode(', ', $parts);
+    }
+}
+
 if (! function_exists('dominantColor')) {
     /**
      * Get the dominant color hex code for an image path.

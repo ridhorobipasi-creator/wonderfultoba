@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Fonts are self-hosted (Plus Jakarta Sans) and bundled in Vite -->
-    <!-- Material Symbols loaded async to avoid 4MB local file -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap" rel="stylesheet"></noscript>
-    
+    <!-- Fonts fully self-hosted & bundled in Vite (Plus Jakarta Sans + subset Material Symbols). No external font requests. -->
+
     <!-- Preload Vite CSS to avoid render blocking delay -->
     {{-- Vite automatically handles standard preloads in modern Laravel versions, but we can explicitly hint it --}}
     @php

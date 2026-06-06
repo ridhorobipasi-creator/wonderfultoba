@@ -130,9 +130,12 @@
             <div class="flex-shrink-0 w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl cursor-pointer"
                      onclick="window.location.href='/tour/package/{{ $pkg->slug ?: $pkg->id }}'">
+                    @php $__pkgSrcset = imageSrcset($pkgImage); @endphp
                     <img alt="{{ $pkg->translated_name }}"
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                         src="{{ $pkgImage }}" loading="lazy"/>
+                         src="{{ $pkgImage }}"
+                         @if($__pkgSrcset) srcset="{{ $__pkgSrcset }}" sizes="(max-width: 640px) 80vw, (max-width: 768px) 45vw, (max-width: 1280px) 28vw, 25rem" @endif
+                         loading="lazy"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                     
                     @if($loop->first || ($pkg->isFeatured ?? false))

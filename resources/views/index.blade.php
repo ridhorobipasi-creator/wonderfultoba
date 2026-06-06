@@ -8,11 +8,8 @@
     <meta name="keywords" content="{{ $siteSettings['general']['seo_meta_keywords'] ?? 'paket wisata danau toba, travel medan toba, sujai laketoba, tour danau toba murah' }}">
     <link rel="icon" type="image/x-icon" href="{{ $siteSettings['general']['icon_url'] ?? asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
-    
+    {{-- Fonts self-hosted & bundled via app.css (Plus Jakarta Sans + subset Material Symbols) --}}
+
     <style>
         .split-overlay {
             background: linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.45) 100%);

@@ -96,7 +96,7 @@
     "src": "node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-vietnamese-800-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-GRZdD__m.css",
+    "file": "assets/app-Bf590Sid.css",
     "name": "app",
     "names": [
       "app.css"
@@ -127,8 +127,13 @@
       "assets/plus-jakarta-sans-latin-ext-800-normal-B6BjB2Ju.woff2",
       "assets/plus-jakarta-sans-latin-ext-800-normal-BPkb-LBK.woff",
       "assets/plus-jakarta-sans-latin-800-normal-CusIZhrK.woff2",
-      "assets/plus-jakarta-sans-latin-800-normal-BRNHt2w0.woff"
+      "assets/plus-jakarta-sans-latin-800-normal-BRNHt2w0.woff",
+      "assets/material-symbols-subset-B9_ixMdS.woff2"
     ]
+  },
+  "resources/fonts/material-symbols-subset.woff2": {
+    "file": "assets/material-symbols-subset-B9_ixMdS.woff2",
+    "src": "resources/fonts/material-symbols-subset.woff2"
   },
   "resources/js/app.js": {
     "file": "assets/app-g-vfJTrF.js",
