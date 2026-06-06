@@ -201,6 +201,58 @@
                     </div>
                 </div>
 
+                <!-- HARGA GROSIR / TIERED PRICING -->
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="text-sm font-black text-gray-900">Harga Grosir (Tiered Pricing)</h4>
+                            <p class="text-xs text-gray-500 mt-1">Atur harga berbeda berdasarkan jumlah orang (misal 1-9 pax = Rp 5jt, 10-15 pax = Rp 4.5jt)</p>
+                        </div>
+                        <button type="button" @click="addTier()" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-100 transition shadow-sm border border-indigo-100">
+                            <i class="fas fa-plus mr-1"></i> Add Tier
+                        </button>
+                    </div>
+
+                    <template x-for="(tier, index) in tiers" :key="index">
+                        <div class="flex flex-wrap gap-4 mb-4 p-4 bg-white rounded-xl border border-gray-200 relative group shadow-sm items-end">
+                            <!-- Min Pax -->
+                            <div class="flex-1 md:w-32">
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1">Min Orang</label>
+                                <input type="number" :name="'pricingDetails[tiers]['+index+'][min_pax]'" x-model.number="tier.min_pax" required min="1"
+                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                            </div>
+                            
+                            <!-- Max Pax -->
+                            <div class="flex-1 md:w-32">
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1">Max Orang</label>
+                                <input type="number" :name="'pricingDetails[tiers]['+index+'][max_pax]'" x-model.number="tier.max_pax" required min="1"
+                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                            </div>
+
+                            <!-- Harga -->
+                            <div class="w-full md:w-56">
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga per Orang (Rp)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">Rp</span>
+                                    <input type="number" :name="'pricingDetails[tiers]['+index+'][price]'" x-model.number="tier.price" required min="0" step="1000"
+                                        class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                </div>
+                            </div>
+
+                            <!-- Delete Button -->
+                            <div class="flex items-end pb-1">
+                                <button type="button" @click="tiers.splice(index, 1)" class="text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition">
+                                    <i class="fas fa-trash-alt text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div x-show="tiers.length === 0" class="text-center py-6 text-indigo-400 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-indigo-100 rounded-2xl">
+                        Belum ada pengaturan harga grosir
+                    </div>
+                </div>
+
                 <!-- PENGATURAN LANJUTAN (ACCORDION) -->
                 <div x-data="{ advancedOpen: false }" class="bg-gray-50 rounded-2xl border border-gray-200 mt-8">
                     <button type="button" @click="advancedOpen = !advancedOpen" class="w-full px-6 py-4 flex items-center justify-between focus:outline-none">
