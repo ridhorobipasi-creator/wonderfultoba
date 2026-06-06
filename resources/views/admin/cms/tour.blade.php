@@ -186,6 +186,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         specialist_name: @json($settings['specialist_name'] ?? 'Sarah Anggraini'),
+        specialist_wa: @json($settings['specialist_wa'] ?? ''),
         specialist_title: @json($settings['specialist_title'] ?? 'Travel Specialist'),
         specialist_desc: @json($settings['specialist_desc'] ?? 'Punya pertanyaan khusus? Saya siap membantu merencanakan liburan impian Anda.'),
         specialist_image: @json($resolve($settings['specialist_image_url'] ?? '', 'staff1')),
@@ -461,6 +462,10 @@ document.addEventListener('alpine:init', () => {
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Nama Lengkap</label>
                                     <input type="text" name="specialist_name" x-model="specialist_name" class="w-full px-4 py-2 bg-white border-none rounded-xl font-black text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Nomor WhatsApp</label>
+                                    <input type="text" name="specialist_wa" x-model="specialist_wa" placeholder="Contoh: 081234567890" class="w-full px-4 py-2 bg-white border-none rounded-xl font-black text-xs">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Jabatan / Title</label>

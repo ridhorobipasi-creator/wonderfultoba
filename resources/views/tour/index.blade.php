@@ -422,8 +422,9 @@
                     <p class="text-white font-bold font-body-md text-sm">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
                     <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
                 </div>
-                <a class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0"
-                   href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}">
+                <a target="_blank" rel="noopener"
+                   href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['specialist_wa'] ?? $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0">
                     <span class="material-symbols-outlined text-[16px]">chat</span>
                     {{ __('WhatsApp') }}
                 </a>

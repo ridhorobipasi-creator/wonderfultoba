@@ -620,7 +620,7 @@
                         </div>
                     </div>
                     <p class="text-[11px] text-slate-600 font-body-md font-normal leading-relaxed mb-4 relative z-10">{{ __($siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Kami siap bantu pilih paket yang paling pas.') }}</p>
-                    <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
+                    <a :href="'https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['cms_tour']['specialist_wa'] ?? $siteSettings['general']['contact_wa_1'] ?? '6282277848855') }}?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
                        target="_blank"
                        class="flex items-center justify-center gap-1.5 py-2.5 bg-primary/5 text-primary rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-on-primary transition relative z-10 border border-primary/20">
                         <span class="material-symbols-outlined text-[16px]">chat</span>
