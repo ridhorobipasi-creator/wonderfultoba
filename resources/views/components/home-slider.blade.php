@@ -275,12 +275,32 @@
             .hero-content h1 { font-size: 2.5rem !important; }
         }
 
-        /* Smooth Carousel Transition */
+    /* Smooth Carousel Transition */
         .carousel-strip {
             transition-property: transform;
             transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
         }
     </style>
+
+    {{-- Initial LCP Fallback (Removes itself once Alpine loads) --}}
+    @if(count($preparedSlides) > 0)
+    <div class="absolute inset-0 z-20" x-init="$el.remove()">
+        <img src="{{ $preparedSlides[0]['image_url'] }}" alt="{{ $preparedSlides[0]['title'] }}"
+             fetchpriority="high" loading="eager" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
+        
+        <div class="absolute inset-0 z-30">
+            <div class="w-full h-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 px-6 md:px-16 lg:px-24">
+                <div class="w-full lg:w-1/2 text-white">
+                    <span class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block">{{ $preparedSlides[0]['location'] }}</span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase">{{ $preparedSlides[0]['title'] }}</h1>
+                    <p class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3">{{ $preparedSlides[0]['subtitle'] }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     {{-- Main Carousel Strip --}}
     <div class="absolute inset-0 z-10">
