@@ -294,12 +294,12 @@
                      :class="activeIndex == i ? 'active-slide' : ''"
                      :style="'width: ' + (100 / slides.length) + '%'">
                     {{-- Background --}}
-                    <div class="absolute inset-0 -z-10">
-                        <img :src="slide.image_url" :alt="slide.title"
-                             :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
-                             :fetchpriority="activeIndex == i ? 'high' : 'auto'"
-                             :loading="activeIndex == i ? 'eager' : 'lazy'"
-                             class="w-full h-full object-cover">
+                      <div class="absolute inset-0 -z-10">
+                          <img :src="slide.image_url" :alt="slide.title"
+                               :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
+                               :fetchpriority="(activeIndex == i || slide.image_url == '{{ $lcpImage }}') ? 'high' : 'auto'"
+                               :loading="(activeIndex == i || slide.image_url == '{{ $lcpImage }}') ? 'eager' : 'lazy'"
+                               class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/40"></div>
                         <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
                     </div>
