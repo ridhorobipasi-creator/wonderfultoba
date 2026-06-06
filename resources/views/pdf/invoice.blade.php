@@ -162,7 +162,7 @@
                         @if($booking->type === 'package' && $booking->package)
                             <div class="item-name">{{ $booking->package->name }}</div>
                             <div class="item-desc">{{ $booking->package->duration ?? '' }} menikmati pesona wisata Sumatera Utara.</div>
-                            <span class="item-tag">Destinasi: {{ $booking->package->city->name ?? 'Sumatera Utara' }}</span>
+                            <span class="item-tag">Destinasi: {{ $booking->package->city?->name ?? 'Sumatera Utara' }}</span>
                         @else
                             <div class="item-name">Layanan {{ $companyName }}</div>
                             <div class="item-desc">Pemesanan layanan wisata.</div>

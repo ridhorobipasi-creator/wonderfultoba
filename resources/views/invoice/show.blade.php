@@ -85,7 +85,7 @@
     if ($booking->type === 'package' && $booking->package) {
         $itemName = $booking->package->name;
         $itemDesc = trim(($booking->package->duration ?? '') . ' menikmati pesona wisata Sumatera Utara.');
-        $itemDest = $booking->package->city->name ?? 'Sumatera Utara';
+        $itemDest = $booking->package->city?->name ?? 'Sumatera Utara';
     } else {
         $itemName = 'Layanan ' . $companyName;
         $itemDesc = 'Pemesanan layanan wisata.';
@@ -124,7 +124,7 @@
                         </div>
                     @endif
                     <div>
-                        <h1 class="font-serif text-3xl sm:text-4xl text-brand-dark font-bold tracking-tight mb-1">{{ Str::upper($companyName) }}</h1>
+                        <h1 class="font-serif text-3xl sm:text-4xl text-brand-dark font-bold tracking-tight mb-1">{{ \Illuminate\Support\Str::upper($companyName) }}</h1>
                         <p class="text-neutral-600 text-sm font-medium tracking-wide">{{ $legalName }}@if($taxId) &middot; NPWP: {{ $taxId }}@endif</p>
                     </div>
                 </div>

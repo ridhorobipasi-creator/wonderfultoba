@@ -52,8 +52,9 @@ class PdfController extends Controller
     public function streamInvoice($identifier)
     {
         try {
-            return $this->renderInvoice($identifier);
-        } catch (\Exception $e) {
+            $view = $this->renderInvoice($identifier);
+            return response((string) $view->render());
+        } catch (\Throwable $e) {
             Log::error('Invoice Render Error: '.$e->getMessage());
 
             return 'Gagal membuka invoice: '.$e->getMessage();
@@ -68,7 +69,7 @@ class PdfController extends Controller
                 ->firstOrFail();
 
             return app(InvoiceService::class)->downloadInvoice($booking);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Invoice Download Error: '.$e->getMessage());
 
             return 'Gagal mengunduh invoice: '.$e->getMessage();
