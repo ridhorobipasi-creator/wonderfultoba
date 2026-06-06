@@ -90,7 +90,7 @@
                             src="{{ $logoLight }}"
                             alt="{{ $brandName }}"
                             x-show="!isScrolled"
-                            decoding="async"
+                            fetchpriority="high"
                             class="h-10 w-auto object-contain transition-all"
                         />
                         <img
