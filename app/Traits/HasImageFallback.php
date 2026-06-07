@@ -8,9 +8,8 @@ trait HasImageFallback
      * Resolve image URL with storage/assets detection and placeholder fallback.
      * Delegates to the global imageUrl() helper for consistency.
      *
-     * @param string|null $path
-     * @param string|null $fallback
-     * @return string
+     * @param  string|null  $path
+     * @param  string|null  $fallback
      */
     public function resolveImageUrl($path, $fallback = null): string
     {

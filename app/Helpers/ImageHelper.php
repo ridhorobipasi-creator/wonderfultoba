@@ -13,7 +13,6 @@
  * Usage in PHP (Controller/Service):
  *   imageUrl($path)
  */
-
 if (! function_exists('imageUrl')) {
     function imageUrl(?string $path, ?string $fallback = null): string
     {
@@ -54,7 +53,7 @@ if (! function_exists('imageUrl')) {
         if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
             $webpPath = preg_replace('/\.(png|jpg|jpeg)$/i', '.webp', $clean);
             if (Storage::disk('public')->exists($webpPath)) {
-                return asset('storage/' . $webpPath);
+                return asset('storage/'.$webpPath);
             }
         }
         // --------------------------------------
@@ -62,16 +61,16 @@ if (! function_exists('imageUrl')) {
         // Paths that start with known media prefixes (from Media Library)
         foreach (['branding/', 'gallery/', 'cms/', 'packages/', 'blogs/', 'cities/'] as $prefix) {
             if (str_starts_with($clean, $prefix)) {
-                return asset('storage/' . $clean);
+                return asset('storage/'.$clean);
             }
         }
 
         // Final Fallback: Check if file exists in public/ directly, else assume storage
-        if (file_exists(public_path($clean)) && !is_dir(public_path($clean))) {
+        if (file_exists(public_path($clean)) && ! is_dir(public_path($clean))) {
             return asset($clean);
         }
 
-        return asset('storage/' . $clean);
+        return asset('storage/'.$clean);
     }
 }
 

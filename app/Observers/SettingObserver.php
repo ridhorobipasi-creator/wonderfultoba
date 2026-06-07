@@ -12,7 +12,7 @@ class SettingObserver
     {
         // Clear global site settings cache
         Cache::forget('site_settings_global');
-        
+
         // Clear tour specific settings cache if relevant
         if (str_starts_with($setting->key, 'cms_') || str_starts_with($setting->key, 'page_')) {
             (new TourService)->clearCache();

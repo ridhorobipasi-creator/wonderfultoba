@@ -27,7 +27,7 @@ return new class extends Migration
             $table->index(['status', 'createdAt']);
             $table->index('slug');
         });
-        
+
         Schema::table('settings', function (Blueprint $table) {
             $table->index('key');
         });
@@ -54,7 +54,7 @@ return new class extends Migration
             $table->dropIndex(['status', 'createdAt']);
             $table->dropIndex(['slug']);
         });
-        
+
         Schema::table('settings', function (Blueprint $table) {
             $table->dropIndex(['key']);
         });

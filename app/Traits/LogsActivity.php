@@ -11,10 +11,10 @@ trait LogsActivity
     /**
      * Log an administrative activity.
      *
-     * @param string $action
-     * @param string $description
-     * @param mixed $model
-     * @param array|null $changes
+     * @param  string  $action
+     * @param  string  $description
+     * @param  mixed  $model
+     * @param  array|null  $changes
      * @return void
      */
     protected function logActivity($action, $description, $model = null, $changes = null)

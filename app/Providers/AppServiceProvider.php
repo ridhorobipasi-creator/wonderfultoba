@@ -2,6 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Blog;
+use App\Models\Booking;
+use App\Models\Package;
+use App\Models\Setting;
+use App\Observers\BlogObserver;
+use App\Observers\PackageObserver;
+use App\Observers\SettingObserver;
+use App\Repositories\BookingRepository;
+use App\Services\BookingService;
+use App\Services\DashboardService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,32 +23,32 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Register Services
-        $this->app->singleton(\App\Services\DashboardService::class);
-        $this->app->singleton(\App\Services\BookingService::class);
-        
+        $this->app->singleton(DashboardService::class);
+        $this->app->singleton(BookingService::class);
+
         // Register Repositories
-        $this->app->singleton(\App\Repositories\BookingRepository::class);
+        $this->app->singleton(BookingRepository::class);
     }
 
     public function boot(): void
     {
         // Fix for cPanel Uploads: Auto create storage link if not exists
-        if (!file_exists(public_path('storage')) && function_exists('symlink')) {
+        if (! file_exists(public_path('storage')) && function_exists('symlink')) {
             @symlink(storage_path('app/public'), public_path('storage'));
         }
 
         // Register Observers
-        \App\Models\Package::observe(\App\Observers\PackageObserver::class);
-        \App\Models\Blog::observe(\App\Observers\BlogObserver::class);
-        \App\Models\Setting::observe(\App\Observers\SettingObserver::class);
+        Package::observe(PackageObserver::class);
+        Blog::observe(BlogObserver::class);
+        Setting::observe(SettingObserver::class);
 
         // Share settings globally
         if (! $this->app->runningInConsole()) {
             try {
                 // Point 4: Caching Site Settings for 24 hours
-                $decodedSettings = \Illuminate\Support\Facades\Cache::remember('site_settings_global', 86400, function () {
-                    $settings = \App\Models\Setting::all()->pluck('value', 'key')->toArray();
-                    
+                $decodedSettings = Cache::remember('site_settings_global', 86400, function () {
+                    $settings = Setting::all()->pluck('value', 'key')->toArray();
+
                     $decoded = [];
                     foreach ($settings as $key => $value) {
                         if (is_array($value)) {
@@ -47,11 +58,12 @@ class AppServiceProvider extends ServiceProvider
                             $decoded[$key] = (json_last_error() === JSON_ERROR_NONE) ? $decodedValue : $value;
                         }
                     }
+
                     return $decoded;
                 });
-                
+
                 view()->share('siteSettings', $decodedSettings);
-                
+
                 // Override Mail Config from Database Settings
                 if (isset($decodedSettings['mail'])) {
                     $mail = $decodedSettings['mail'];
@@ -69,10 +81,10 @@ class AppServiceProvider extends ServiceProvider
                         config(['mail.default' => $mail['driver']]);
                     }
                 }
-                
+
                 // Share pending bookings count globally for notification bell
                 if (! $this->app->runningInConsole()) {
-                    $pendingBookingsCount = \App\Models\Booking::where('status', 'pending')->count();
+                    $pendingBookingsCount = Booking::where('status', 'pending')->count();
                     view()->share('pendingBookingsCount', $pendingBookingsCount);
                 }
             } catch (\Exception $e) {

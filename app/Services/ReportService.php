@@ -19,7 +19,7 @@ class ReportService
         }
 
         $bookings = $query->get();
-        
+
         $data = [
             'bookings' => $bookings,
             'startDate' => $startDate ?? 'Awal',

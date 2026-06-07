@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Storage;
 class ClientController extends Controller
 {
     use HandlesImageUploads;
+
     public function index()
     {
         $clients = Client::orderBy('sortOrder')->get();
+
         return view('admin.clients.index', compact('clients'));
     }
 
@@ -31,7 +33,7 @@ class ClientController extends Controller
             'name' => $request->name,
             'logo' => $path,
             'website' => $request->website,
-            'sortOrder' => Client::max('sortOrder') + 1
+            'sortOrder' => Client::max('sortOrder') + 1,
         ]);
 
         return redirect()->back()->with('success', 'Client added!');
@@ -43,6 +45,7 @@ class ClientController extends Controller
             Storage::disk('public')->delete(str_replace('/storage/', '', $client->logo));
         }
         $client->delete();
+
         return redirect()->back()->with('success', 'Client removed!');
     }
 }

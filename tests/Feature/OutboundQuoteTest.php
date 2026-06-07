@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Setting;
 
 class OutboundQuoteTest extends TestCase
 {
@@ -18,7 +18,7 @@ class OutboundQuoteTest extends TestCase
         // 1. Setup: Create necessary settings
         Setting::create([
             'key' => 'general',
-            'value' => ['whatsapp' => '6281260460461']
+            'value' => ['whatsapp' => '6281260460461'],
         ]);
 
         // 2. Action: Submit the form
@@ -35,7 +35,7 @@ class OutboundQuoteTest extends TestCase
         $response->assertStatus(302); // Redirect back
         $response->assertSessionHas('success');
         $response->assertSessionHas('whatsappUrl');
-        
+
         $waUrl = session('whatsappUrl');
         $this->assertStringContainsString('wa.me/6281260460461', $waUrl);
         $this->assertStringContainsString('PT+Testing+Indonesia', $waUrl);

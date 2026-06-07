@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Booking;
+use App\Models\Setting;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
 
 class InvoiceService
 {
@@ -14,9 +14,9 @@ class InvoiceService
     public function generateInvoice(Booking $booking)
     {
         $siteSettings = [
-            'general' => \App\Models\Setting::where('key', 'general')->first()?->value ?? [],
-            'company' => \App\Models\Setting::where('key', 'company')->first()?->value ?? [],
-            'cms_landing' => \App\Models\Setting::where('key', 'cms_landing')->first()?->value ?? [],
+            'general' => Setting::where('key', 'general')->first()?->value ?? [],
+            'company' => Setting::where('key', 'company')->first()?->value ?? [],
+            'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
         ];
 
         $data = [
@@ -26,7 +26,7 @@ class InvoiceService
         ];
 
         $pdf = Pdf::loadView('pdf.invoice', $data);
-        
+
         return $pdf;
     }
 
@@ -36,6 +36,7 @@ class InvoiceService
     public function streamInvoice(Booking $booking)
     {
         $pdf = $this->generateInvoice($booking);
+
         return $pdf->stream("Invoice-{$booking->bookingCode}.pdf");
     }
 
@@ -45,6 +46,7 @@ class InvoiceService
     public function downloadInvoice(Booking $booking)
     {
         $pdf = $this->generateInvoice($booking);
+
         return $pdf->download("Invoice-{$booking->bookingCode}.pdf");
     }
 }

@@ -11,6 +11,7 @@ class OutboundVideoController extends Controller
     public function index()
     {
         $videos = OutboundVideo::latest()->get();
+
         return view('admin.outbound.videos.index', compact('videos'));
     }
 
@@ -29,6 +30,7 @@ class OutboundVideoController extends Controller
     public function destroy(OutboundVideo $video)
     {
         $video->delete();
+
         return redirect()->back()->with('success', 'Video removed!');
     }
 }

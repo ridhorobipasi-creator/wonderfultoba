@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasImageFallback;
 use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    use \App\Traits\HasImageFallback;
+    use HasImageFallback;
 
     const CREATED_AT = 'createdAt';
 

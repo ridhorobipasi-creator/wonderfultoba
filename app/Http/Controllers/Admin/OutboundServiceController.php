@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\OutboundService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -11,9 +12,11 @@ use Illuminate\Support\Facades\Storage;
 class OutboundServiceController extends Controller
 {
     use HandlesImageUploads;
+
     public function index()
     {
         $services = OutboundService::orderBy('orderPriority')->get();
+
         return view('admin.outbound.services.index', compact('services'));
     }
 
@@ -31,7 +34,7 @@ class OutboundServiceController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/services', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
 
@@ -58,17 +61,19 @@ class OutboundServiceController extends Controller
             }
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/services', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
 
         $service->update($validated);
+
         return redirect()->back()->with('success', 'Layanan berhasil diperbarui!');
     }
 
     public function destroy(OutboundService $service)
     {
         $service->delete();
+
         return redirect()->back()->with('success', 'Layanan berhasil dihapus!');
     }
 }

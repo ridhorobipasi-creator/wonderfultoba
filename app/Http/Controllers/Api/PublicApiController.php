@@ -17,7 +17,7 @@ use App\Models\PackageTier;
 use App\Models\Setting;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PublicApiController extends Controller
 {
@@ -100,14 +100,14 @@ class PublicApiController extends Controller
     {
         $validated = $request->validated();
         $package = Package::find($validated['packageId']);
-        
+
         if ($package && $package->isOutbound) {
             return response()->json(['error' => 'Pemesanan paket outbound hanya dapat dilakukan melalui WhatsApp.'], 400);
         }
 
         try {
             $bookingService = app(BookingService::class);
-            
+
             $bookingData = [
                 'type' => 'package',
                 'packageId' => $validated['packageId'],
@@ -128,17 +128,14 @@ class PublicApiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Booking berhasil dikirim!',
-                'data' => $booking
+                'data' => $booking,
             ], 201);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('API Booking Error: ' . $e->getMessage(), ['request' => $request->all()]);
+            Log::error('API Booking Error: '.$e->getMessage(), ['request' => $request->all()]);
+
             return response()->json(['error' => 'Maaf, terjadi kesalahan sistem saat memproses booking Anda.'], 500);
         }
     }
-
-
-
-
 
     public function getOutboundServices()
     {

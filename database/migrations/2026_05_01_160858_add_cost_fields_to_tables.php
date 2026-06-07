@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('packages', 'cost_price')) {
+        if (! Schema::hasColumn('packages', 'cost_price')) {
             Schema::table('packages', function (Blueprint $table) {
                 $table->double('cost_price')->nullable()->default(0)->after('price');
             });
         }
 
-        if (!Schema::hasColumn('bookings', 'total_cost')) {
+        if (! Schema::hasColumn('bookings', 'total_cost')) {
             Schema::table('bookings', function (Blueprint $table) {
                 $table->double('total_cost')->nullable()->default(0)->after('totalPrice');
             });

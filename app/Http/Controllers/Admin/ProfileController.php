@@ -35,11 +35,11 @@ class ProfileController extends Controller
 
         if ($request->filled('new_password')) {
             $user->password = Hash::make($validated['new_password']);
-            $this->logActivity('updated_password', "Changed own password");
+            $this->logActivity('updated_password', 'Changed own password');
         }
 
         $user->save();
-        $this->logActivity('updated_profile', "Updated profile information");
+        $this->logActivity('updated_profile', 'Updated profile information');
 
         return back()->with('success', 'Profile updated successfully!');
     }

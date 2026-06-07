@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Controller;
-use App\Models\Package;
 use App\Models\City;
+use App\Models\Package;
+use App\Services\TourService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class PackageController extends Controller
 {
     use HandlesImageUploads, LogsActivity;
+
     /**
      * Display a listing of the resource.
      */
@@ -25,9 +31,9 @@ class PackageController extends Controller
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('locationTag', 'like', "%{$search}%");
+                    ->orWhere('locationTag', 'like', "%{$search}%");
             });
         }
 
@@ -57,6 +63,7 @@ class PackageController extends Controller
     public function create()
     {
         $cities = City::orderBy('name')->get();
+
         return view('admin.packages.create', compact('cities'));
     }
 
@@ -74,13 +81,14 @@ class PackageController extends Controller
     public function edit(Package $package)
     {
         $cities = City::orderBy('name')->get();
+
         return view('admin.packages.edit', compact('package', 'cities'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, \App\Services\TourService $tourService)
+    public function store(Request $request, TourService $tourService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -108,19 +116,20 @@ class PackageController extends Controller
             $package = $tourService->savePackage($validated);
 
             $this->logActivity('created', "Created new package: {$package->name}", $package);
-            \App\Http\Controllers\Api\SyncController::triggerSync();
+            SyncController::triggerSync();
 
             return redirect()->route('admin.packages.index')->with('success', 'Package created successfully!');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Package Creation Failed: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Failed to create package. ' . $e->getMessage());
+            Log::error('Package Creation Failed: '.$e->getMessage());
+
+            return back()->withInput()->with('error', 'Failed to create package. '.$e->getMessage());
         }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Package $package, \App\Services\TourService $tourService)
+    public function update(Request $request, Package $package, TourService $tourService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -149,25 +158,26 @@ class PackageController extends Controller
             $tourService->savePackage($validated, $package);
 
             $this->logActivity('updated', "Updated package: {$package->name}", $package);
-            \App\Http\Controllers\Api\SyncController::triggerSync();
+            SyncController::triggerSync();
 
             return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully!');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Package Update Failed: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Failed to update package. ' . $e->getMessage());
+            Log::error('Package Update Failed: '.$e->getMessage());
+
+            return back()->withInput()->with('error', 'Failed to update package. '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Package $package, \App\Services\TourService $tourService)
+    public function destroy(Package $package, TourService $tourService)
     {
         $name = $package->name;
         $tourService->deletePackage($package);
 
         $this->logActivity('deleted', "Deleted package: {$name}");
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return redirect()->route('admin.packages.index')->with('success', 'Package deleted successfully!');
     }
@@ -175,10 +185,12 @@ class PackageController extends Controller
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (empty($ids)) return response()->json(['message' => 'No IDs provided'], 400);
+        if (empty($ids)) {
+            return response()->json(['message' => 'No IDs provided'], 400);
+        }
 
         Package::whereIn('id', $ids)->delete();
-        $this->logActivity('bulk_deleted', "Bulk deleted " . count($ids) . " packages");
+        $this->logActivity('bulk_deleted', 'Bulk deleted '.count($ids).' packages');
 
         return response()->json(['message' => 'Packages deleted successfully']);
     }
@@ -186,22 +198,39 @@ class PackageController extends Controller
     public function export(Request $request)
     {
         $format = $request->get('format', 'xlsx');
-        $filename = 'packages-export-' . date('Y-m-d') . '.' . $format;
-        
+        $filename = 'packages-export-'.date('Y-m-d').'.'.$format;
+
         $query = Package::query();
-        if ($request->filled('type')) $query->where('isOutbound', $request->type === 'outbound');
-        if ($request->filled('status')) $query->where('status', $request->status);
-        
+        if ($request->filled('type')) {
+            $query->where('isOutbound', $request->type === 'outbound');
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         $packages = $query->get();
 
-        return \Excel::download(new class($packages) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings, \Maatwebsite\Excel\Concerns\WithMapping {
+        return \Excel::download(new class($packages) implements FromCollection, WithHeadings, WithMapping
+        {
             protected $data;
-            public function __construct($data) { $this->data = $data; }
-            public function collection() { return $this->data; }
-            public function headings(): array {
+
+            public function __construct($data)
+            {
+                $this->data = $data;
+            }
+
+            public function collection()
+            {
+                return $this->data;
+            }
+
+            public function headings(): array
+            {
                 return ['ID', 'Nama', 'Lokasi', 'Harga', 'Durasi', 'Status', 'Tipe', 'Featured', 'Dibuat Pada'];
             }
-            public function map($row): array {
+
+            public function map($row): array
+            {
                 return [
                     $row->id,
                     $row->name,
@@ -211,7 +240,7 @@ class PackageController extends Controller
                     strtoupper($row->status),
                     $row->isOutbound ? 'Outbound' : 'Tour',
                     $row->isFeatured ? 'Ya' : 'Tidak',
-                    $row->createdAt->format('Y-m-d H:i')
+                    $row->createdAt->format('Y-m-d H:i'),
                 ];
             }
         }, $filename);
@@ -234,12 +263,12 @@ class PackageController extends Controller
         $package->save();
 
         $this->logActivity('toggled', "Toggled status of package: {$package->name} → {$package->status}", $package);
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return response()->json([
             'success' => true,
             'status' => $package->status,
-            'message' => 'Status berhasil diubah ke ' . strtoupper($package->status)
+            'message' => 'Status berhasil diubah ke '.strtoupper($package->status),
         ]);
     }
 }

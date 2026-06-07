@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Controller;
 use App\Models\GalleryImage;
+use App\Models\Media;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
-    use HandlesImageUploads, \App\Traits\LogsActivity;
+    use \App\Traits\LogsActivity, HandlesImageUploads;
 
     public function edit(GalleryImage $gallery)
     {
@@ -22,7 +24,7 @@ class GalleryController extends Controller
         $validated = $request->validate([
             'caption' => 'required|string|max:255',
             'category' => 'required|in:tour,outbound',
-            'isActive' => 'boolean'
+            'isActive' => 'boolean',
         ]);
 
         $gallery->update($validated);
@@ -34,15 +36,15 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         $query = GalleryImage::query();
-        
+
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
-        
+
         if ($request->filled('search')) {
             $query->where('caption', 'like', "%{$request->search}%");
         }
-        
+
         if ($request->filled('start_date')) {
             $query->whereDate('createdAt', '>=', $request->start_date);
         }
@@ -51,6 +53,7 @@ class GalleryController extends Controller
         }
 
         $images = $query->latest('createdAt')->paginate(20);
+
         return view('admin.gallery.index', compact('images'));
     }
 
@@ -80,9 +83,10 @@ class GalleryController extends Controller
             }
         }
 
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
+
         return redirect()->route('admin.gallery.index')
-            ->with('success', "$uploaded foto berhasil ditambahkan ke Galeri (" . strtoupper($request->category) . ").");
+            ->with('success', "$uploaded foto berhasil ditambahkan ke Galeri (".strtoupper($request->category).').');
     }
 
     public function destroy(GalleryImage $gallery)
@@ -94,7 +98,7 @@ class GalleryController extends Controller
         $cap = $gallery->caption;
         $gallery->delete();
         $this->logActivity('deleted', "Deleted gallery image: {$cap}");
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return redirect()->route('admin.gallery.index')
             ->with('success', 'Foto berhasil dihapus dari Galeri!');
@@ -102,17 +106,20 @@ class GalleryController extends Controller
 
     public function toggleStatus(GalleryImage $gallery)
     {
-        $gallery->update(['isActive' => !$gallery->isActive]);
+        $gallery->update(['isActive' => ! $gallery->isActive]);
+
         return back()->with('success', 'Status foto diperbarui.');
     }
 
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (empty($ids)) return response()->json(['message' => 'No IDs provided'], 400);
+        if (empty($ids)) {
+            return response()->json(['message' => 'No IDs provided'], 400);
+        }
 
         GalleryImage::whereIn('id', $ids)->delete();
-        $this->logActivity('bulk_deleted', "Bulk deleted " . count($ids) . " gallery images");
+        $this->logActivity('bulk_deleted', 'Bulk deleted '.count($ids).' gallery images');
 
         return response()->json(['message' => 'Gallery images deleted successfully']);
     }
@@ -125,7 +132,7 @@ class GalleryController extends Controller
         ]);
 
         $added = 0;
-        $media = \App\Models\Media::whereIn('id', $request->media_ids)->get();
+        $media = Media::whereIn('id', $request->media_ids)->get();
 
         foreach ($media as $item) {
             GalleryImage::create([
@@ -137,11 +144,11 @@ class GalleryController extends Controller
             $added++;
         }
 
-        \App\Http\Controllers\Api\SyncController::triggerSync();
+        SyncController::triggerSync();
 
         return response()->json([
             'success' => true,
-            'message' => "$added foto berhasil ditambahkan dari Galeri Pusat."
+            'message' => "$added foto berhasil ditambahkan dari Galeri Pusat.",
         ]);
     }
 

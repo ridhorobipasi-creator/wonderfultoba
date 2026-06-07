@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Syncable;
 use Illuminate\Database\Eloquent\Model;
 
 class OutboundService extends Model
 {
-    use \App\Traits\Syncable;
-    
+    use Syncable;
+
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';

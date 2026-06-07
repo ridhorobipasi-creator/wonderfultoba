@@ -4,26 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Models\Media;
 use App\Models\Province;
 use App\Models\Regency;
-use Illuminate\Http\Request;
 use App\Traits\HandlesImageUploads;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CityController extends Controller
 {
     use HandlesImageUploads;
+
     public function index(Request $request)
     {
         $query = City::with('regency.province');
-        
+
         if ($request->filled('search')) {
             $query->where('name', 'like', "%{$request->search}%");
         }
-        
+
         if ($request->filled('province_id')) {
-            $query->whereHas('regency', function($q) use ($request) {
+            $query->whereHas('regency', function ($q) use ($request) {
                 $q->where('province_id', $request->province_id);
             });
         }
@@ -34,10 +35,10 @@ class CityController extends Controller
 
         $cities = $query->orderBy('name')->paginate(15);
         $provinces = Province::orderBy('name')->get();
-        $regencies = $request->filled('province_id') 
-            ? Regency::where('province_id', $request->province_id)->orderBy('name')->get() 
+        $regencies = $request->filled('province_id')
+            ? Regency::where('province_id', $request->province_id)->orderBy('name')->get()
             : collect();
-        
+
         // For the Categories Tab
         $all_regencies = Regency::with('province')->orderBy('name')->get();
         if ($request->filled('cat_province_id')) {
@@ -53,6 +54,7 @@ class CityController extends Controller
     public function create()
     {
         $provinces = Province::orderBy('name')->get();
+
         return view('admin.cities.create', compact('provinces'));
     }
 
@@ -72,20 +74,20 @@ class CityController extends Controller
         if ($request->regency_id === 'manual') {
             $regency = Regency::firstOrCreate([
                 'name' => $request->regency_name_manual,
-                'province_id' => $request->province_id
+                'province_id' => $request->province_id,
             ]);
             $validated['regency_id'] = $regency->id;
         }
 
         $validated['slug'] = Str::slug($validated['name']);
-        
+
         if ($request->hasFile('image')) {
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'cities', 'destinations', $validated['name']);
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
-        
+
         $regency = Regency::with('province')->find($validated['regency_id']);
         $validated['region'] = $regency->province->name;
         $validated['district'] = $regency->name;
@@ -101,6 +103,7 @@ class CityController extends Controller
     {
         $provinces = Province::orderBy('name')->get();
         $regencies = Regency::where('province_id', $city->regency->province_id ?? 0)->orderBy('name')->get();
+
         return view('admin.cities.edit', compact('city', 'provinces', 'regencies'));
     }
 
@@ -120,7 +123,7 @@ class CityController extends Controller
         if ($request->regency_id === 'manual') {
             $regency = Regency::firstOrCreate([
                 'name' => $request->regency_name_manual,
-                'province_id' => $request->province_id
+                'province_id' => $request->province_id,
             ]);
             $validated['regency_id'] = $regency->id;
         }
@@ -128,14 +131,14 @@ class CityController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'cities', 'destinations', $validated['name']);
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
 
         if ($validated['name'] !== $city->name) {
             $validated['slug'] = Str::slug($validated['name']);
         }
-        
+
         $regency = Regency::with('province')->find($validated['regency_id']);
         $validated['region'] = $regency->province->name;
         $validated['district'] = $regency->name;
@@ -151,13 +154,14 @@ class CityController extends Controller
         $regencies = Regency::where('province_id', $request->province_id)
             ->orderBy('name')
             ->get();
-            
+
         return response()->json($regencies);
     }
 
     public function destroy(City $city)
     {
         $city->delete();
+
         return redirect()->route('admin.cities.index')
             ->with('success', 'Destinasi berhasil dihapus!');
     }

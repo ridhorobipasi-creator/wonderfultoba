@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\OutboundPartner;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class OutboundPartnerController extends Controller
 {
@@ -16,6 +17,7 @@ class OutboundPartnerController extends Controller
     public function index()
     {
         $partners = OutboundPartner::orderBy('orderPriority')->get();
+
         return view('admin.outbound.partners.index', compact('partners'));
     }
 
@@ -33,18 +35,18 @@ class OutboundPartnerController extends Controller
         if ($request->hasFile('logo')) {
             $validated['logo'] = $this->uploadAndIndex($request->file('logo'), 'outbound/partners', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['logo'] = $media->path;
         } else {
             $request->validate(['logo' => 'required']);
         }
 
-        $validated['isActive'] = $request->has('isActive') ? (bool)$request->isActive : true;
+        $validated['isActive'] = $request->has('isActive') ? (bool) $request->isActive : true;
         $validated['orderPriority'] = $validated['orderPriority'] ?? (OutboundPartner::max('orderPriority') + 1);
 
         OutboundPartner::create($validated);
         Cache::forget('outbound_partners');
-        
+
         return redirect()->back()->with('success', 'Partner berhasil ditambahkan!');
     }
 
@@ -65,11 +67,11 @@ class OutboundPartnerController extends Controller
             }
             $validated['logo'] = $this->uploadAndIndex($request->file('logo'), 'outbound/partners', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['logo'] = $media->path;
         }
 
-        $validated['isActive'] = $request->has('isActive') ? (bool)$request->isActive : false;
+        $validated['isActive'] = $request->has('isActive') ? (bool) $request->isActive : false;
 
         $partner->update($validated);
         Cache::forget('outbound_partners');

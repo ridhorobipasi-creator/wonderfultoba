@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (!Schema::hasTable('cars')) {
+        if (! Schema::hasTable('cars')) {
             Schema::create('cars', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
@@ -54,7 +54,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasColumn('bookings', 'carId')) {
+        if (! Schema::hasColumn('bookings', 'carId')) {
             Schema::table('bookings', function (Blueprint $table) {
                 $table->foreignId('carId')->nullable()->constrained('cars')->nullOnDelete();
             });

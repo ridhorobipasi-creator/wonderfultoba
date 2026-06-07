@@ -19,6 +19,7 @@ class Booking extends Model
     {
         return $this->customerEmail;
     }
+
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';
@@ -50,8 +51,6 @@ class Booking extends Model
     {
         return $this->belongsTo(Package::class, 'packageId');
     }
-
-
 
     // Scopes
     public function scopeConfirmed($query)

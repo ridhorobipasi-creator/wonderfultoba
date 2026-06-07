@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\CheckMaintenanceMode;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,10 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(\App\Http\Middleware\CheckMaintenanceMode::class);
-        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+        $middleware->append(CheckMaintenanceMode::class);
+        $middleware->append(SecurityHeaders::class);
         $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'role' => RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

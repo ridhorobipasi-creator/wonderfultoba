@@ -11,6 +11,7 @@ class OutboundTierController extends Controller
     public function index()
     {
         $tiers = PackageTier::orderBy('id')->get();
+
         return view('admin.outbound.tiers', compact('tiers'));
     }
 
@@ -18,7 +19,7 @@ class OutboundTierController extends Controller
     {
         $validated = $request->validate([
             'tierName' => 'required|string|max:100',
-            'tagline'  => 'nullable|string',
+            'tagline' => 'nullable|string',
         ]);
 
         PackageTier::create($validated);
@@ -30,7 +31,7 @@ class OutboundTierController extends Controller
     {
         $validated = $request->validate([
             'tierName' => 'required|string|max:100',
-            'tagline'  => 'nullable|string',
+            'tagline' => 'nullable|string',
         ]);
 
         $tier->update($validated);
@@ -41,6 +42,7 @@ class OutboundTierController extends Controller
     public function destroy(PackageTier $tier)
     {
         $tier->delete();
+
         return back()->with('success', 'Tier berhasil dihapus!');
     }
 }

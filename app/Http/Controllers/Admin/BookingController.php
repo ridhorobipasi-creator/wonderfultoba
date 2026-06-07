@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Services\BookingService;
-use Illuminate\Http\Request;
-
+use App\Services\ReportService;
 use App\Traits\LogsActivity;
+use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
     use LogsActivity;
+
     public function __construct(
         private BookingService $bookingService
     ) {}
@@ -39,36 +40,46 @@ class BookingController extends Controller
     public function export(Request $request)
     {
         $filters = $request->only(['status', 'type', 'search', 'date', 'month', 'year']);
-        
-        // Build query manually to get all results for export
-        $query = \App\Models\Booking::with(['package']);
 
-        if ($request->filled('status')) $query->where('status', $request->status);
-        if ($request->filled('type')) $query->where('type', $request->type);
+        // Build query manually to get all results for export
+        $query = Booking::with(['package']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('bookingCode', 'like', "%{$request->search}%")
-                  ->orWhere('customerName', 'like', "%{$request->search}%")
-                  ->orWhere('customerEmail', 'like', "%{$request->search}%");
+                    ->orWhere('customerName', 'like', "%{$request->search}%")
+                    ->orWhere('customerEmail', 'like', "%{$request->search}%");
             });
         }
-        if ($request->filled('date')) $query->whereDate('startDate', $request->date);
-        if ($request->filled('month')) $query->whereMonth('startDate', $request->month);
-        if ($request->filled('year')) $query->whereYear('startDate', $request->year);
+        if ($request->filled('date')) {
+            $query->whereDate('startDate', $request->date);
+        }
+        if ($request->filled('month')) {
+            $query->whereMonth('startDate', $request->month);
+        }
+        if ($request->filled('year')) {
+            $query->whereYear('startDate', $request->year);
+        }
 
         $bookings = $query->latest('createdAt')->get();
-        
-        $filename = 'bookings-export-' . date('Y-m-d') . '.csv';
-        
+
+        $filename = 'bookings-export-'.date('Y-m-d').'.csv';
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ];
-        
-        $callback = function() use ($bookings) {
+
+        $callback = function () use ($bookings) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Booking Code', 'Type', 'Item', 'Customer', 'Email', 'Phone', 'Start Date', 'End Date', 'Total Price', 'Status', 'Created At']);
-            
+
             foreach ($bookings as $booking) {
                 fputcsv($file, [
                     $booking->bookingCode,
@@ -86,7 +97,7 @@ class BookingController extends Controller
             }
             fclose($file);
         };
-        
+
         return response()->stream($callback, 200, $headers);
     }
 
@@ -94,11 +105,11 @@ class BookingController extends Controller
     {
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
-        
-        $reportService = app(\App\Services\ReportService::class);
+
+        $reportService = app(ReportService::class);
         $pdf = $reportService->generateBookingReport($startDate, $endDate);
-        
-        return $pdf->download('Booking-Report-' . date('Y-m-d') . '.pdf');
+
+        return $pdf->download('Booking-Report-'.date('Y-m-d').'.pdf');
     }
 
     public function create()
@@ -183,13 +194,13 @@ class BookingController extends Controller
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        
+
         if (empty($ids)) {
             return response()->json(['message' => 'No IDs provided'], 400);
         }
 
         $this->bookingService->bulkDelete($ids);
-        $this->logActivity('bulk_deleted', "Bulk deleted " . count($ids) . " bookings");
+        $this->logActivity('bulk_deleted', 'Bulk deleted '.count($ids).' bookings');
 
         return response()->json(['message' => 'Bookings deleted successfully']);
     }

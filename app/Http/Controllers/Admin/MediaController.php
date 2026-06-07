@@ -20,10 +20,14 @@ class MediaController extends Controller
 
         foreach ($files as $file) {
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($extension, $extensions) || str_contains($file, '/thumbnails/')) continue;
+            if (! in_array($extension, $extensions) || str_contains($file, '/thumbnails/')) {
+                continue;
+            }
 
             $exists = Media::where('path', $file)->exists();
-            if ($exists) continue;
+            if ($exists) {
+                continue;
+            }
 
             $category = 'uncategorized';
             $parts = explode('/', $file);
@@ -33,7 +37,9 @@ class MediaController extends Controller
                     $category = $parts[1];
                 } else {
                     $category = $parts[0];
-                    if (is_numeric($category)) $category = 'uploads';
+                    if (is_numeric($category)) {
+                        $category = 'uploads';
+                    }
                 }
             }
 
@@ -42,15 +48,15 @@ class MediaController extends Controller
                 'original_name' => basename($file),
                 'path' => $file,
                 'category' => $category,
-                'mime_type' => 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension),
+                'mime_type' => 'image/'.($extension === 'jpg' ? 'jpeg' : $extension),
                 'size' => Storage::disk('public')->size($file),
             ]);
             $indexedCount++;
         }
 
         return response()->json([
-            'success' => true, 
-            'message' => "Sinkronisasi berhasil! $indexedCount aset baru ditemukan dan ditambahkan."
+            'success' => true,
+            'message' => "Sinkronisasi berhasil! $indexedCount aset baru ditemukan dan ditambahkan.",
         ]);
     }
 
@@ -63,23 +69,24 @@ class MediaController extends Controller
         }
 
         if ($request->search) {
-            $query->where('original_name', 'like', '%' . $request->search . '%');
+            $query->where('original_name', 'like', '%'.$request->search.'%');
         }
 
         $media = $query->paginate(24);
-        
+
         // Append custom attributes to each item
-        $media->getCollection()->transform(function($item) {
+        $media->getCollection()->transform(function ($item) {
             $item->usage_count = $item->usage_count;
+
             return $item;
         });
 
         // Handle client-side usage filter (simple version)
         if ($request->usage === 'orphan') {
-            $filtered = $media->getCollection()->filter(fn($i) => $i->usage_count === 0);
+            $filtered = $media->getCollection()->filter(fn ($i) => $i->usage_count === 0);
             $media->setCollection($filtered);
         } elseif ($request->usage === 'used') {
-            $filtered = $media->getCollection()->filter(fn($i) => $i->usage_count > 0);
+            $filtered = $media->getCollection()->filter(fn ($i) => $i->usage_count > 0);
             $media->setCollection($filtered);
         }
 
@@ -87,18 +94,18 @@ class MediaController extends Controller
             ->selectRaw('count(*) as count')
             ->groupBy('category')
             ->get()
-            ->map(function($cat) {
+            ->map(function ($cat) {
                 return [
                     'name' => $cat->category,
                     'count' => $cat->count,
-                    'icon' => match($cat->category) {
+                    'icon' => match ($cat->category) {
                         'branding' => 'fa-award',
                         'cms' => 'fa-window-restore',
                         'icons' => 'fa-icons',
                         'uploads' => 'fa-cloud-arrow-up',
                         'assets' => 'fa-folder-open',
                         default => 'fa-folder'
-                    }
+                    },
                 ];
             });
 
@@ -108,8 +115,8 @@ class MediaController extends Controller
                 'categories' => $categories,
                 'stats' => [
                     'total' => Media::count(),
-                    'orphans' => Media::get()->filter(fn($m) => $m->usage_count === 0)->count()
-                ]
+                    'orphans' => Media::get()->filter(fn ($m) => $m->usage_count === 0)->count(),
+                ],
             ]);
         }
 
@@ -120,7 +127,7 @@ class MediaController extends Controller
     {
         $request->validate([
             'files.*' => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:2048',
-            'category' => 'nullable|string'
+            'category' => 'nullable|string',
         ]);
 
         $uploadedMedia = [];
@@ -128,18 +135,18 @@ class MediaController extends Controller
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $path = $this->uploadAndIndex($file, 'gallery/' . $category, $category);
-                
+                $path = $this->uploadAndIndex($file, 'gallery/'.$category, $category);
+
                 if ($path) {
-                    $uploadedMedia[] = \App\Models\Media::where('path', $path)->first();
+                    $uploadedMedia[] = Media::where('path', $path)->first();
                 }
             }
         }
 
         return response()->json([
             'success' => true,
-            'message' => count($uploadedMedia) . ' media berhasil diunggah.',
-            'data' => $uploadedMedia
+            'message' => count($uploadedMedia).' media berhasil diunggah.',
+            'data' => $uploadedMedia,
         ]);
     }
 
@@ -148,7 +155,7 @@ class MediaController extends Controller
         $validated = $request->validate([
             'category' => 'nullable|string',
             'alt_text' => 'nullable|string|max:255',
-            'order_priority' => 'nullable|integer'
+            'order_priority' => 'nullable|integer',
         ]);
 
         $media->update($validated);
@@ -163,7 +170,9 @@ class MediaController extends Controller
     public function bulkDestroy(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (empty($ids)) return response()->json(['success' => false, 'message' => 'Tidak ada aset yang dipilih.']);
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada aset yang dipilih.']);
+        }
 
         $mediaItems = Media::whereIn('id', $ids)->get();
         $count = 0;
@@ -173,9 +182,9 @@ class MediaController extends Controller
             $media->delete();
             if (Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
-                
+
                 // Also delete thumbnail
-                $thumbPath = dirname($path) . '/thumbnails/' . basename($path);
+                $thumbPath = dirname($path).'/thumbnails/'.basename($path);
                 if (Storage::disk('public')->exists($thumbPath)) {
                     Storage::disk('public')->delete($thumbPath);
                 }
@@ -185,27 +194,29 @@ class MediaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "$count aset berhasil dihapus secara permanen."
+            'message' => "$count aset berhasil dihapus secara permanen.",
         ]);
     }
 
     public function bulkDownload(Request $request)
     {
         $ids = $request->input('ids', []);
-        if (empty($ids)) return back()->with('error', 'Tidak ada aset yang dipilih.');
+        if (empty($ids)) {
+            return back()->with('error', 'Tidak ada aset yang dipilih.');
+        }
 
         $mediaItems = Media::whereIn('id', $ids)->get();
-        $zipName = 'wonderful_toba_assets_' . date('YmdHis') . '.zip';
-        $zipPath = storage_path('app/public/temp/' . $zipName);
+        $zipName = 'wonderful_toba_assets_'.date('YmdHis').'.zip';
+        $zipPath = storage_path('app/public/temp/'.$zipName);
 
-        if (!file_exists(dirname($zipPath))) {
+        if (! file_exists(dirname($zipPath))) {
             mkdir(dirname($zipPath), 0755, true);
         }
 
         $zip = new \ZipArchive;
-        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === true) {
             foreach ($mediaItems as $media) {
-                $filePath = storage_path('app/public/' . $media->path);
+                $filePath = storage_path('app/public/'.$media->path);
                 if (file_exists($filePath)) {
                     $zip->addFile($filePath, $media->filename);
                 }
@@ -220,7 +231,7 @@ class MediaController extends Controller
     {
         $request->validate([
             'ids' => 'required|array',
-            'category' => 'required|string'
+            'category' => 'required|string',
         ]);
 
         Media::whereIn('id', $request->ids)->update(['category' => $request->category]);
@@ -232,7 +243,7 @@ class MediaController extends Controller
     {
         $request->validate([
             'old_name' => 'required|string',
-            'new_name' => 'required|string'
+            'new_name' => 'required|string',
         ]);
 
         Media::where('category', $request->old_name)->update(['category' => $request->new_name]);
@@ -243,7 +254,7 @@ class MediaController extends Controller
     public function rename(Request $request, Media $media)
     {
         $request->validate(['filename' => 'required|string|max:255']);
-        
+
         $media->update(['original_name' => $request->filename]);
 
         return response()->json(['success' => true, 'message' => 'File berhasil diganti nama.']);
@@ -256,9 +267,9 @@ class MediaController extends Controller
 
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
-            
+
             // Also delete thumbnail
-            $thumbPath = dirname($path) . '/thumbnails/' . basename($path);
+            $thumbPath = dirname($path).'/thumbnails/'.basename($path);
             if (Storage::disk('public')->exists($thumbPath)) {
                 Storage::disk('public')->delete($thumbPath);
             }

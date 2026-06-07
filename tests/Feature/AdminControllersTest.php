@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Package;
-use App\Models\Customer;
 use App\Models\Blog;
-use App\Models\GalleryImage;
 use App\Models\Booking;
+use App\Models\Customer;
+use App\Models\GalleryImage;
+use App\Models\Package;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 
 class AdminControllersTest extends TestCase
 {
@@ -22,7 +21,7 @@ class AdminControllersTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user
         $this->admin = User::factory()->create([
             'role' => 'superadmin',
@@ -34,7 +33,7 @@ class AdminControllersTest extends TestCase
     public function admin_can_access_dashboard()
     {
         $response = $this->actingAs($this->admin)->get('/admin');
-        
+
         $response->assertStatus(200);
         $response->assertViewIs('admin.dashboard');
     }
@@ -43,9 +42,9 @@ class AdminControllersTest extends TestCase
     public function admin_can_view_packages_index()
     {
         Package::factory()->count(3)->create();
-        
+
         $response = $this->actingAs($this->admin)->get('/admin/packages');
-        
+
         $response->assertStatus(200);
         $response->assertViewIs('admin.packages.index');
         $response->assertViewHas('packages');
@@ -56,9 +55,9 @@ class AdminControllersTest extends TestCase
     {
         Package::factory()->create(['status' => 'active']);
         Package::factory()->create(['status' => 'inactive']);
-        
+
         $response = $this->actingAs($this->admin)->get('/admin/packages?status=active');
-        
+
         $response->assertStatus(200);
         $packages = $response->viewData('packages');
         $this->assertEquals(1, $packages->total());
@@ -68,7 +67,7 @@ class AdminControllersTest extends TestCase
     public function admin_can_create_customer_with_transaction()
     {
         Storage::fake('public');
-        
+
         $response = $this->actingAs($this->admin)->post('/admin/customers', [
             'name' => 'Test Customer',
             'email' => 'test@customer.com',
@@ -76,15 +75,15 @@ class AdminControllersTest extends TestCase
             'address' => 'Test Address',
             'notes' => 'Test Notes',
         ]);
-        
+
         $response->assertRedirect('/admin/customers');
         $response->assertSessionHas('success');
-        
+
         $this->assertDatabaseHas('customers', [
             'name' => 'Test Customer',
             'email' => 'test@customer.com',
         ]);
-        
+
         // Check activity log
         $this->assertDatabaseHas('activity_logs', [
             'action' => 'created',
@@ -97,15 +96,15 @@ class AdminControllersTest extends TestCase
     {
         // Try to create customer with duplicate email
         Customer::factory()->create(['email' => 'duplicate@test.com']);
-        
+
         $response = $this->actingAs($this->admin)->post('/admin/customers', [
             'name' => 'Test Customer',
             'email' => 'duplicate@test.com', // Duplicate email
             'phone' => '08123456789',
         ]);
-        
+
         $response->assertSessionHas('error');
-        
+
         // Should only have 1 customer (the first one)
         $this->assertEquals(1, Customer::count());
     }
@@ -115,16 +114,16 @@ class AdminControllersTest extends TestCase
     {
         $customers = Customer::factory()->count(3)->create();
         $ids = $customers->pluck('id')->toArray();
-        
+
         $response = $this->actingAs($this->admin)->postJson('/admin/customers/bulk-destroy', [
             'ids' => $ids,
         ]);
-        
+
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Customers deleted successfully']);
-        
+
         $this->assertEquals(0, Customer::count());
-        
+
         // Check activity log
         $this->assertDatabaseHas('activity_logs', [
             'action' => 'bulk_deleted',
@@ -136,9 +135,9 @@ class AdminControllersTest extends TestCase
     public function admin_can_export_customers()
     {
         Customer::factory()->count(5)->create();
-        
+
         $response = $this->actingAs($this->admin)->get('/admin/customers/export?format=xlsx');
-        
+
         $response->assertStatus(200);
         $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
@@ -151,9 +150,9 @@ class AdminControllersTest extends TestCase
             'content' => 'Test Content',
             'status' => 'published',
         ]);
-        
+
         $response = $this->actingAs($this->admin)->get("/admin/blogs/{$blog->id}");
-        
+
         $response->assertStatus(200);
         $response->assertViewIs('admin.blogs.show');
         $response->assertSee('Test Blog');
@@ -164,14 +163,14 @@ class AdminControllersTest extends TestCase
     {
         $blogs = Blog::factory()->count(3)->create();
         $ids = $blogs->pluck('id')->toArray();
-        
+
         $response = $this->actingAs($this->admin)->postJson('/admin/blogs/bulk-destroy', [
             'ids' => $ids,
         ]);
-        
+
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Blogs deleted successfully']);
-        
+
         $this->assertEquals(0, Blog::count());
     }
 
@@ -180,9 +179,9 @@ class AdminControllersTest extends TestCase
     {
         Blog::factory()->create(['category' => 'Tips Wisata']);
         Blog::factory()->create(['category' => 'Destinasi']);
-        
+
         $response = $this->actingAs($this->admin)->get('/admin/blogs?category=Tips+Wisata');
-        
+
         $response->assertStatus(200);
         $blogs = $response->viewData('blogs');
         $this->assertEquals(1, $blogs->total());
@@ -195,9 +194,9 @@ class AdminControllersTest extends TestCase
             'caption' => 'Old Caption',
             'category' => 'tour',
         ]);
-        
+
         $response = $this->actingAs($this->admin)->get("/admin/gallery/{$gallery->id}/edit");
-        
+
         $response->assertStatus(200);
         $response->assertViewIs('admin.gallery.edit');
         $response->assertSee('Old Caption');
@@ -210,15 +209,15 @@ class AdminControllersTest extends TestCase
             'caption' => 'Old Caption',
             'category' => 'tour',
         ]);
-        
+
         $response = $this->actingAs($this->admin)->put("/admin/gallery/{$gallery->id}", [
             'caption' => 'New Caption',
             'category' => 'outbound',
         ]);
-        
+
         $response->assertRedirect('/admin/gallery');
         $response->assertSessionHas('success');
-        
+
         $this->assertDatabaseHas('gallery_images', [
             'id' => $gallery->id,
             'caption' => 'New Caption',
@@ -231,14 +230,14 @@ class AdminControllersTest extends TestCase
     {
         $packages = Package::factory()->count(3)->create();
         $ids = $packages->pluck('id')->toArray();
-        
+
         $response = $this->actingAs($this->admin)->postJson('/admin/packages/bulk-destroy', [
             'ids' => $ids,
         ]);
-        
+
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Packages deleted successfully']);
-        
+
         $this->assertEquals(0, Package::count());
     }
 
@@ -246,7 +245,7 @@ class AdminControllersTest extends TestCase
     public function package_creation_with_transaction_works()
     {
         Storage::fake('public');
-        
+
         $response = $this->actingAs($this->admin)->post('/admin/packages', [
             'name' => 'Test Package',
             'shortDescription' => 'Short desc',
@@ -257,15 +256,15 @@ class AdminControllersTest extends TestCase
             'isFeatured' => true,
             'isOutbound' => false,
         ]);
-        
+
         $response->assertRedirect('/admin/packages');
         $response->assertSessionHas('success');
-        
+
         $this->assertDatabaseHas('packages', [
             'name' => 'Test Package',
             'price' => 1000000,
         ]);
-        
+
         // Check activity log
         $this->assertDatabaseHas('activity_logs', [
             'action' => 'created',
@@ -276,7 +275,7 @@ class AdminControllersTest extends TestCase
     public function admin_can_view_customer_create_page()
     {
         $response = $this->actingAs($this->admin)->get('/admin/customers/create');
-        
+
         $response->assertStatus(200);
         $response->assertViewIs('admin.customers.create');
     }
@@ -286,9 +285,9 @@ class AdminControllersTest extends TestCase
     {
         Customer::factory()->create(['total_bookings' => 5]);
         Customer::factory()->create(['total_bookings' => 2]);
-        
+
         $response = $this->actingAs($this->admin)->get('/admin/customers?min_bookings=3');
-        
+
         $response->assertStatus(200);
         $customers = $response->viewData('customers');
         $this->assertEquals(1, $customers->total());
@@ -299,14 +298,14 @@ class AdminControllersTest extends TestCase
     {
         $bookings = Booking::factory()->count(3)->create();
         $ids = $bookings->pluck('id')->toArray();
-        
+
         $response = $this->actingAs($this->admin)->postJson('/admin/bookings/bulk-destroy', [
             'ids' => $ids,
         ]);
-        
+
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Bookings deleted successfully']);
-        
+
         $this->assertEquals(0, Booking::count());
     }
 
@@ -318,7 +317,7 @@ class AdminControllersTest extends TestCase
             'name' => 'Test',
             'email' => 'invalid-email', // Invalid email
         ]);
-        
+
         $response->assertSessionHasErrors('email');
         $response->assertSessionHasInput('name', 'Test');
     }

@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
-use App\Models\Setting;
+use App\Models\Blog;
 use App\Models\City;
+use App\Models\Client;
+use App\Models\OutboundPartner;
+use App\Models\Package;
+use App\Models\Setting;
 use App\Services\BookingService;
 use App\Services\OutboundService;
 use App\Services\TourService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class PublicController extends Controller
 {
     protected $tourService;
+
     protected $outboundService;
+
     protected $bookingService;
 
     public function __construct(
@@ -34,7 +41,7 @@ class PublicController extends Controller
     public function index()
     {
         try {
-            $siteSettings = Cache::remember('site_settings_all', 3600, function() {
+            $siteSettings = Cache::remember('site_settings_all', 3600, function () {
                 return [
                     'cms_landing' => Setting::where('key', 'cms_landing')->first()?->value ?? [],
                     'cms_tour' => Setting::where('key', 'cms_tour')->first()?->value ?? [],
@@ -42,13 +49,14 @@ class PublicController extends Controller
                     'general' => Setting::where('key', 'general')->first()?->value ?? [],
                 ];
             });
-            
+
             $content = $siteSettings['cms_landing'];
-            
+
             return view('index', compact('content', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error('Error loading index page: ' . $e->getMessage());
-            return view('errors.500'); 
+            Log::error('Error loading index page: '.$e->getMessage());
+
+            return view('errors.500');
         }
     }
 
@@ -68,7 +76,8 @@ class PublicController extends Controller
 
             return view('tour.index', compact('settings', 'packages', 'blogs', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error('Error loading tour index: ' . $e->getMessage());
+            Log::error('Error loading tour index: '.$e->getMessage());
+
             return back()->with('error', 'Gagal memuat data tour. Silakan coba beberapa saat lagi.');
         }
     }
@@ -82,9 +91,11 @@ class PublicController extends Controller
             ];
             $packages = $this->tourService->getAllPackages();
             $cities = $this->tourService->getCities();
+
             return view('tour.packages', compact('packages', 'cities', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error('Error loading tour packages: ' . $e->getMessage());
+            Log::error('Error loading tour packages: '.$e->getMessage());
+
             return back()->with('error', 'Gagal memuat daftar paket.');
         }
     }
@@ -96,6 +107,7 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $images = $this->tourService->getGallery();
+
         return view('tour.gallery', compact('images', 'siteSettings'));
     }
 
@@ -106,6 +118,7 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $posts = $this->tourService->getBlogs();
+
         return view('tour.blog', compact('posts', 'siteSettings'));
     }
 
@@ -117,7 +130,7 @@ class PublicController extends Controller
                 'general' => Setting::where('key', 'general')->first()?->value ?? [],
             ];
             $package = $this->tourService->getPackageBySlug($slug);
-            if (!$package) {
+            if (! $package) {
                 return redirect()->route('tour.packages')->with('error', 'Paket tidak ditemukan.');
             }
 
@@ -125,9 +138,11 @@ class PublicController extends Controller
             $package->increment('views_count');
 
             $city = City::find($package->cityId);
+
             return view('tour.package-detail', compact('package', 'city', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error("Error loading package detail ($slug): " . $e->getMessage());
+            Log::error("Error loading package detail ($slug): ".$e->getMessage());
+
             return redirect()->route('tour.packages')->with('error', 'Gagal memuat detail paket.');
         }
     }
@@ -140,7 +155,7 @@ class PublicController extends Controller
                 'general' => Setting::where('key', 'general')->first()?->value ?? [],
             ];
             $post = $this->tourService->getBlogPost($slug);
-            if (!$post) {
+            if (! $post) {
                 return redirect()->route('tour.blog');
             }
 
@@ -148,9 +163,11 @@ class PublicController extends Controller
             $post->increment('views_count');
 
             $relatedPosts = $this->tourService->getRelatedBlogs($post->id);
+
             return view('tour.blog-detail', compact('post', 'relatedPosts', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error("Error loading blog detail ($slug): " . $e->getMessage());
+            Log::error("Error loading blog detail ($slug): ".$e->getMessage());
+
             return redirect()->route('tour.blog');
         }
     }
@@ -159,10 +176,10 @@ class PublicController extends Controller
     {
         try {
             $validated = $request->validated();
-            $package = $this->tourService->getPackageBySlug($request->slug ?? ''); 
-            
-            if (!$package) {
-                $package = \App\Models\Package::find($validated['packageId']);
+            $package = $this->tourService->getPackageBySlug($request->slug ?? '');
+
+            if (! $package) {
+                $package = Package::find($validated['packageId']);
             }
 
             if ($package && $package->isOutbound) {
@@ -172,9 +189,9 @@ class PublicController extends Controller
             $endDate = $validated['startDate'];
             if ($package && $package->duration) {
                 if (preg_match('/(\d+)\s*(Hari|Days|D|H)/i', $package->duration, $matches)) {
-                    $days = (int)$matches[1];
+                    $days = (int) $matches[1];
                     if ($days > 1) {
-                        $endDate = date('Y-m-d', strtotime($validated['startDate'] . ' + ' . ($days - 1) . ' days'));
+                        $endDate = date('Y-m-d', strtotime($validated['startDate'].' + '.($days - 1).' days'));
                     }
                 }
             }
@@ -187,18 +204,18 @@ class PublicController extends Controller
             ]));
 
             // Construct WhatsApp Message
-            $waMessage = "Halo Wonderful Toba, saya ingin memesan paket wisata.\n\n" .
-                         "*Detail Pesanan:*\n" .
-                         "- Kode Booking: " . $booking->bookingCode . "\n" .
-                         "- Paket: " . $package->name . "\n" .
-                         "- Nama: " . $validated['customerName'] . "\n" .
-                         "- Email: " . $validated['customerEmail'] . "\n" .
-                         "- WhatsApp: " . $validated['customerPhone'] . "\n" .
-                         "- Tanggal: " . date('d F Y', strtotime($validated['startDate'])) . "\n" .
-                         "- Peserta: " . $validated['pax'] . " Orang\n";
-            
-            if (!empty($validated['notes'])) {
-                $waMessage .= "- Catatan: " . $validated['notes'] . "\n";
+            $waMessage = "Halo Wonderful Toba, saya ingin memesan paket wisata.\n\n".
+                         "*Detail Pesanan:*\n".
+                         '- Kode Booking: '.$booking->bookingCode."\n".
+                         '- Paket: '.$package->name."\n".
+                         '- Nama: '.$validated['customerName']."\n".
+                         '- Email: '.$validated['customerEmail']."\n".
+                         '- WhatsApp: '.$validated['customerPhone']."\n".
+                         '- Tanggal: '.date('d F Y', strtotime($validated['startDate']))."\n".
+                         '- Peserta: '.$validated['pax']." Orang\n";
+
+            if (! empty($validated['notes'])) {
+                $waMessage .= '- Catatan: '.$validated['notes']."\n";
             }
 
             $waMessage .= "\nMohon konfirmasinya. Terima kasih!";
@@ -206,16 +223,17 @@ class PublicController extends Controller
             $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
             $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
             $waNumber = preg_replace('/[^0-9]/', '', $settings['contact_wa'] ?? $genSettings['whatsapp'] ?? '6281323888207');
-            
-            $waUrl = "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
+
+            $waUrl = "https://wa.me/{$waNumber}?text=".urlencode($waMessage);
 
             return back()->with([
                 'success' => 'Booking berhasil dikirim! Kami akan menghubungi Anda segera.',
                 'bookingCode' => $booking->bookingCode,
-                'whatsappUrl' => $waUrl
+                'whatsappUrl' => $waUrl,
             ]);
         } catch (\Exception $e) {
-            Log::error('Booking Submission Error: ' . $e->getMessage(), ['request' => $request->all()]);
+            Log::error('Booking Submission Error: '.$e->getMessage(), ['request' => $request->all()]);
+
             return back()->with('error', 'Terjadi kesalahan saat memproses pesanan. Tim IT kami telah dinotifikasi.');
         }
     }
@@ -234,13 +252,14 @@ class PublicController extends Controller
             $videos = $this->outboundService->getVideos();
             $locations = $this->outboundService->getLocations();
             $clients = $this->outboundService->getClients();
-            $partners = \App\Models\OutboundPartner::where('isActive', true)->orderBy('orderPriority')->get();
+            $partners = OutboundPartner::where('isActive', true)->orderBy('orderPriority')->get();
             $gallery = $this->outboundService->getGallery();
             $featuredPackages = $this->outboundService->getFeaturedPackages(3);
 
             return view('outbound.index', compact('services', 'videos', 'locations', 'clients', 'partners', 'gallery', 'settings', 'featuredPackages', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error('Outbound Page Error: ' . $e->getMessage());
+            Log::error('Outbound Page Error: '.$e->getMessage());
+
             return back()->with('error', 'Gagal memuat halaman Outbound.');
         }
     }
@@ -258,7 +277,8 @@ class PublicController extends Controller
 
             return view('outbound.packages', compact('packages', 'cities', 'tiers', 'siteSettings'));
         } catch (\Exception $e) {
-            Log::error('Outbound Packages Error: ' . $e->getMessage());
+            Log::error('Outbound Packages Error: '.$e->getMessage());
+
             return back()->with('error', 'Gagal memuat daftar paket outbound.');
         }
     }
@@ -269,7 +289,8 @@ class PublicController extends Controller
             'cms_outbound' => $this->outboundService->getOutboundSettings(),
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
-        $posts = \App\Models\Blog::where('status', 'published')->where('category', 'Outbound')->latest('createdAt')->get();
+        $posts = Blog::where('status', 'published')->where('category', 'Outbound')->latest('createdAt')->get();
+
         return view('outbound.blog', compact('posts', 'siteSettings'));
     }
 
@@ -280,7 +301,8 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $content = Setting::where('key', 'page_about')->first()?->value ?? [];
-        $clients = \App\Models\Client::orderBy('orderPriority')->get();
+        $clients = Client::orderBy('orderPriority')->get();
+
         return view('pages.about', compact('content', 'siteSettings', 'clients'));
     }
 
@@ -291,6 +313,7 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $content = Setting::where('key', 'page_terms')->first()?->value ?? [];
+
         return view('pages.terms', compact('content', 'siteSettings'));
     }
 
@@ -301,10 +324,11 @@ class PublicController extends Controller
             'general' => Setting::where('key', 'general')->first()?->value ?? [],
         ];
         $content = Setting::where('key', 'page_privacy')->first()?->value ?? [];
+
         return view('pages.privacy', compact('content', 'siteSettings'));
     }
 
-    public function submitQuote(Request $request, \App\Services\OutboundService $outboundService)
+    public function submitQuote(Request $request, OutboundService $outboundService)
     {
         try {
             $validated = $request->validate([
@@ -320,14 +344,14 @@ class PublicController extends Controller
 
             return back()->with([
                 'success' => 'Permintaan penawaran berhasil dikirim! Klik tombol di bawah untuk konfirmasi via WhatsApp.',
-                'whatsappUrl' => $waUrl
+                'whatsappUrl' => $waUrl,
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            Log::error('Quote Submission Error: ' . $e->getMessage());
+            Log::error('Quote Submission Error: '.$e->getMessage());
+
             return back()->with('error', 'Gagal mengirim permintaan penawaran.');
         }
     }
 }
-

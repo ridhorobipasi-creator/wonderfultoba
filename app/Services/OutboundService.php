@@ -2,35 +2,39 @@
 
 namespace App\Services;
 
+use App\Models\Client;
+use App\Models\GalleryImage;
+use App\Models\OutboundLocation;
+use App\Models\OutboundVideo;
+use App\Models\Package;
+use App\Models\PackageTier;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Log;
 
 class OutboundService
 {
     /**
      * Process an outbound quote request and generate WA Message.
      *
-     * @param array $data
      * @return string WhatsApp URL
      */
     public function processQuoteRequest(array $data)
     {
         // 1. Construct WhatsApp Message
-        $waMessage = "*PERMINTAAN PENAWARAN OUTBOUND*\n\n" .
-                     "Nama Instansi/PIC: " . $data['company_name'] . "\n" .
-                     "Jumlah Peserta: " . $data['participants'] . "\n" .
-                     "Lokasi Kegiatan: " . $data['location'] . "\n" .
-                     "Jenis Kegiatan: " . $data['activity_type'] . "\n" .
-                     "Estimasi Tanggal: " . date('d F Y', strtotime($data['estimated_date'])) . "\n" .
-                     "WhatsApp: " . $data['whatsapp'] . "\n\n" .
-                     "Mohon segera dibuatkan penawarannya. Terima kasih!";
+        $waMessage = "*PERMINTAAN PENAWARAN OUTBOUND*\n\n".
+                     'Nama Instansi/PIC: '.$data['company_name']."\n".
+                     'Jumlah Peserta: '.$data['participants']."\n".
+                     'Lokasi Kegiatan: '.$data['location']."\n".
+                     'Jenis Kegiatan: '.$data['activity_type']."\n".
+                     'Estimasi Tanggal: '.date('d F Y', strtotime($data['estimated_date']))."\n".
+                     'WhatsApp: '.$data['whatsapp']."\n\n".
+                     'Mohon segera dibuatkan penawarannya. Terima kasih!';
 
         // 2. Get Admin Phone Number from Settings
         $settings = Setting::where('key', 'cms_outbound')->first()?->value ?? [];
         $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
         $waNumber = preg_replace('/[^0-9]/', '', $settings['cta_whatsapp_number'] ?? $genSettings['whatsapp'] ?? '6281323888207');
-        
-        return "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
+
+        return "https://wa.me/{$waNumber}?text=".urlencode($waMessage);
     }
 
     /**
@@ -56,7 +60,7 @@ class OutboundService
      */
     public function getVideos()
     {
-        return \App\Models\OutboundVideo::latest('createdAt')->get();
+        return OutboundVideo::latest('createdAt')->get();
     }
 
     /**
@@ -64,7 +68,7 @@ class OutboundService
      */
     public function getLocations()
     {
-        return \App\Models\OutboundLocation::all();
+        return OutboundLocation::all();
     }
 
     /**
@@ -72,7 +76,7 @@ class OutboundService
      */
     public function getClients()
     {
-        return \App\Models\Client::where('isActive', true)
+        return Client::where('isActive', true)
             ->orderBy('orderPriority')
             ->get();
     }
@@ -82,7 +86,7 @@ class OutboundService
      */
     public function getGallery()
     {
-        return \App\Models\GalleryImage::where('isActive', true)
+        return GalleryImage::where('isActive', true)
             ->where('category', 'Outbound')
             ->orderBy('orderPriority')
             ->get();
@@ -93,7 +97,7 @@ class OutboundService
      */
     public function getFeaturedPackages($limit = 3)
     {
-        return \App\Models\Package::where('status', 'active')
+        return Package::where('status', 'active')
             ->where('isOutbound', true)
             ->where('isFeatured', true)
             ->orderBy('sortOrder')
@@ -106,7 +110,7 @@ class OutboundService
      */
     public function getPackages()
     {
-        return \App\Models\Package::where('status', 'active')
+        return Package::where('status', 'active')
             ->where('isOutbound', true)
             ->orderBy('sortOrder')
             ->get();
@@ -117,7 +121,6 @@ class OutboundService
      */
     public function getTiers()
     {
-        return \App\Models\PackageTier::where('category', 'outbound')->get();
+        return PackageTier::where('category', 'outbound')->get();
     }
 }
-

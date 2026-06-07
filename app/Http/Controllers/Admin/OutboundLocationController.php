@@ -3,18 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\OutboundLocation;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class OutboundLocationController extends Controller
 {
     use HandlesImageUploads;
+
     public function index()
     {
         $locations = OutboundLocation::latest()->get();
+
         return view('admin.outbound.locations.index', compact('locations'));
     }
 
@@ -29,12 +32,13 @@ class OutboundLocationController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/locations', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
 
         OutboundLocation::create($validated);
         Cache::forget('outbound_locations');
+
         return redirect()->back()->with('success', 'Lokasi berhasil ditambahkan!');
     }
 
@@ -52,12 +56,13 @@ class OutboundLocationController extends Controller
             }
             $validated['image'] = $this->uploadAndIndex($request->file('image'), 'outbound/locations', 'outbound');
         } elseif ($request->filled('media_id')) {
-            $media = \App\Models\Media::find($request->media_id);
+            $media = Media::find($request->media_id);
             $validated['image'] = $media->path;
         }
 
         $location->update($validated);
         Cache::forget('outbound_locations');
+
         return redirect()->back()->with('success', 'Lokasi berhasil diperbarui!');
     }
 
@@ -68,6 +73,7 @@ class OutboundLocationController extends Controller
         }
         $location->delete();
         Cache::forget('outbound_locations');
+
         return redirect()->back()->with('success', 'Lokasi berhasil dihapus!');
     }
 }

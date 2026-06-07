@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\FinancialExport;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -14,15 +16,15 @@ class ReportController extends Controller
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
         $isSqlite = DB::connection()->getDriverName() === 'sqlite';
-        
+
         if ($isSqlite) {
             // SQLite doesn't have whereYear/whereMonth functions that Laravel can always translate reliably if types differ
             // Use whereBetween for reliability
-            $startDate = "$year-" . ($month === 'all' ? '01' : str_pad($month, 2, '0', STR_PAD_LEFT)) . "-01 00:00:00";
+            $startDate = "$year-".($month === 'all' ? '01' : str_pad($month, 2, '0', STR_PAD_LEFT)).'-01 00:00:00';
             if ($month === 'all') {
                 $endDate = "$year-12-31 23:59:59";
             } else {
-                $endDate = date("Y-m-t 23:59:59", strtotime($startDate));
+                $endDate = date('Y-m-t 23:59:59', strtotime($startDate));
             }
             $query = Booking::whereBetween('createdAt', [$startDate, $endDate]);
         } else {
@@ -41,8 +43,8 @@ class ReportController extends Controller
         $stats = [
             'total_orders' => $monthlyBookings->count(),
             'revenue' => $monthlyBookings->sum('totalPrice'),
-            'tour' => $monthlyBookings->filter(fn($b) => $b->package && !$b->package->isOutbound)->count(),
-            'outbound' => $monthlyBookings->filter(fn($b) => $b->package && $b->package->isOutbound)->count(),
+            'tour' => $monthlyBookings->filter(fn ($b) => $b->package && ! $b->package->isOutbound)->count(),
+            'outbound' => $monthlyBookings->filter(fn ($b) => $b->package && $b->package->isOutbound)->count(),
         ];
 
         // 2. Status Summary (Monthly/Filtered)
@@ -75,12 +77,12 @@ class ReportController extends Controller
         $yearlySummary = [
             'orders' => $yearlyBookings->count(),
             'revenue' => $yearlyBookings->sum('totalPrice'),
-            'tour' => $yearlyBookings->filter(fn($b) => $b->package && !$b->package->isOutbound)->count(),
-            'outbound' => $yearlyBookings->filter(fn($b) => $b->package && $b->package->isOutbound)->count(),
+            'tour' => $yearlyBookings->filter(fn ($b) => $b->package && ! $b->package->isOutbound)->count(),
+            'outbound' => $yearlyBookings->filter(fn ($b) => $b->package && $b->package->isOutbound)->count(),
         ];
 
         // 4. Monthly Chart Data
-        $monthExpr = $isSqlite ? "CAST(strftime('%m', createdAt) AS INTEGER)" : "MONTH(createdAt)";
+        $monthExpr = $isSqlite ? "CAST(strftime('%m', createdAt) AS INTEGER)" : 'MONTH(createdAt)';
 
         $chartDataQuery = Booking::where('status', 'confirmed');
         if ($isSqlite) {
@@ -90,9 +92,9 @@ class ReportController extends Controller
         }
 
         $chartData = $chartDataQuery->select(
-                DB::raw("$monthExpr as month_num"),
-                DB::raw('count(*) as total')
-            )
+            DB::raw("$monthExpr as month_num"),
+            DB::raw('count(*) as total')
+        )
             ->groupBy('month_num')
             ->get()
             ->pluck('total', 'month_num')
@@ -119,16 +121,16 @@ class ReportController extends Controller
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
         $format = $request->get('format', 'csv');
-        
+
         $isSqlite = DB::connection()->getDriverName() === 'sqlite';
         $exportQuery = Booking::with(['package', 'customer']);
 
         if ($isSqlite) {
-            $startDate = "$year-" . ($month === 'all' ? '01' : str_pad($month, 2, '0', STR_PAD_LEFT)) . "-01 00:00:00";
+            $startDate = "$year-".($month === 'all' ? '01' : str_pad($month, 2, '0', STR_PAD_LEFT)).'-01 00:00:00';
             if ($month === 'all') {
                 $endDate = "$year-12-31 23:59:59";
             } else {
-                $endDate = date("Y-m-t 23:59:59", strtotime($startDate));
+                $endDate = date('Y-m-t 23:59:59', strtotime($startDate));
             }
             $exportQuery->whereBetween('createdAt', [$startDate, $endDate]);
         } else {
@@ -142,8 +144,9 @@ class ReportController extends Controller
 
         if ($format === 'xlsx') {
             $filename = "Laporan_Keuangan_{$year}_{$month}.xlsx";
-            return \Maatwebsite\Excel\Facades\Excel::download(
-                new \App\Exports\FinancialExport($bookings), 
+
+            return Excel::download(
+                new FinancialExport($bookings),
                 $filename
             );
         }
@@ -151,9 +154,9 @@ class ReportController extends Controller
         // Default CSV
         $filename = "Laporan_Keuangan_{$year}_{$month}.csv";
         $handle = fopen('php://output', 'w');
-        
+
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
 
         fputcsv($handle, ['No', 'Tgl Pesan', 'ID Transaksi', 'Tipe', 'Item', 'Pelanggan', 'Total', 'Status']);
 
@@ -166,7 +169,7 @@ class ReportController extends Controller
                 $booking->package?->name ?? 'Custom',
                 $booking->customer?->name ?? 'Demo User',
                 $booking->totalPrice,
-                ucfirst($booking->status)
+                ucfirst($booking->status),
             ]);
         }
 

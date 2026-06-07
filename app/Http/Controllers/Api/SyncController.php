@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use Illuminate\Http\Request;
 
 class SyncController extends Controller
 {
@@ -14,6 +13,7 @@ class SyncController extends Controller
     public function getVersion()
     {
         $version = Setting::where('key', 'cms_sync_version')->first()?->value ?? '0';
+
         return response()->json(['version' => $version]);
     }
 
@@ -24,7 +24,7 @@ class SyncController extends Controller
     {
         Setting::updateOrCreate(
             ['key' => 'cms_sync_version'],
-            ['value' => (string)time()]
+            ['value' => (string) time()]
         );
     }
 }
