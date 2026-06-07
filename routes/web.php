@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
     Route::resource('packages', PackageController::class);
 
     // Bookings
+    Route::get('bookings/kanban', [BookingController::class, 'kanban'])->name('bookings.kanban');
     Route::get('bookings/export', [BookingController::class, 'export'])->name('bookings.export');
     Route::post('bookings/bulk-destroy', [BookingController::class, 'bulkDestroy'])->name('bookings.bulk-destroy');
     Route::get('bookings/{booking}/invoice', [PdfController::class, 'streamInvoice'])->name('bookings.invoice');
@@ -148,6 +149,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_outbound,admin_umum
 Route::prefix('tour')->name('tour.')->group(function () {
     Route::get('/', [PublicController::class, 'tour'])->name('index');
     Route::get('/packages', [PublicController::class, 'tourPackages'])->name('packages');
+    Route::get('/custom', [PublicController::class, 'customTrip'])->name('custom');
     Route::get('/gallery', [PublicController::class, 'tourGallery'])->name('gallery');
     Route::get('/blog', [PublicController::class, 'tourBlog'])->name('blog');
     Route::get('/package/{slug}', [PublicController::class, 'tourPackageDetail'])->name('package.detail');

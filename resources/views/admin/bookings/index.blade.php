@@ -51,6 +51,9 @@
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Kelola pesanan paket wisata</p>
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
+            <a href="{{ route('admin.bookings.kanban') }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center shadow-sm">
+                <i class="fas fa-table-columns mr-2 text-violet-500"></i> Kanban
+            </a>
             <a href="{{ route('admin.bookings.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-center shadow-sm">
                 <i class="fas fa-file-csv mr-2 text-emerald-500"></i> Export CSV
             </a>

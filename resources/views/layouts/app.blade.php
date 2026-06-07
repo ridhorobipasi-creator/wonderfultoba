@@ -44,6 +44,8 @@
     </script>
     @endif
 
+    <style>[x-cloak]{display:none !important;}</style>
+
     @stack('styles')
     @stack('head')
     @stack('schema')
@@ -140,6 +142,9 @@
             }
         })();
     </script>
+
+    <!-- Smart Comparison bar + modal (global) -->
+    <x-compare-bar />
 
     <!-- Scripts -->
     @stack('scripts')

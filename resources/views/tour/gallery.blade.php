@@ -131,7 +131,8 @@
                     <img
                         :src="img.image_url"
                         :alt="img.caption || 'Galeri Wonderful Toba'"
-                        class="w-full object-cover transform group-hover:scale-110 transition-transform duration-[2s] ease-out"
+                        class="w-full object-cover transform group-hover:scale-110 transition-transform duration-[2s] ease-out bg-slate-200"
+                        :style="img.placeholder ? `background-image:url('${img.placeholder}');background-size:cover;background-position:center;` : ''"
                         loading="lazy"
                         decoding="async"
                     >

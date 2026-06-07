@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Lqip;
 use App\Traits\HasImageFallback;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,8 +16,18 @@ class GalleryImage extends Model
     const UPDATED_AT = 'updatedAt';
 
     protected $fillable = [
-        'imageUrl', 'caption', 'category', 'tags', 'eventDate', 'orderPriority', 'isActive',
+        'imageUrl', 'caption', 'category', 'tags', 'eventDate', 'orderPriority', 'isActive', 'placeholder',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (GalleryImage $img) {
+            $src = $img->attributes['imageUrl'] ?? null;
+            if (empty($img->placeholder) && ! empty($src)) {
+                $img->placeholder = Lqip::fromStoredPath($src);
+            }
+        });
+    }
 
     protected $casts = [
         'tags' => 'array',

@@ -100,6 +100,65 @@ class PublicController extends Controller
         }
     }
 
+    /**
+     * Custom Trip Builder — "Paket Suka-Suka".
+     * Pelanggan memilih base package + add-on, kalkulasi harga real-time (Alpine),
+     * lalu kirim rincian ke admin via WhatsApp.
+     */
+    public function customTrip()
+    {
+        try {
+            $siteSettings = [
+                'cms_tour' => $this->tourService->getTourSettings(),
+                'general' => Setting::where('key', 'general')->first()?->value ?? [],
+            ];
+
+            $packages = $this->tourService->getAllPackages()
+                ->map(fn ($p) => [
+                    'id' => $p->id,
+                    'name' => $p->name,
+                    'slug' => $p->slug,
+                    'price' => (float) $p->price,
+                    'duration' => $p->duration,
+                    'image' => $p->first_image,
+                    'location' => $p->city->name ?? $p->locationTag ?? 'Sumatera Utara',
+                ])->values();
+
+            // Add-on dapat dikelola lewat Setting 'tour_addons'; jika kosong pakai default berikut.
+            $addons = Setting::where('key', 'tour_addons')->first()?->value;
+            if (empty($addons) || ! is_array($addons)) {
+                $addons = $this->defaultTripAddons();
+            }
+
+            $waNumber = preg_replace('/[^0-9]/', '',
+                $siteSettings['cms_tour']['contact_wa']
+                ?? $siteSettings['general']['whatsapp']
+                ?? '6281323888207');
+
+            return view('tour.custom', compact('packages', 'addons', 'waNumber', 'siteSettings'));
+        } catch (\Exception $e) {
+            Log::error('Custom Trip Builder Error: '.$e->getMessage());
+
+            return back()->with('error', 'Gagal memuat halaman Buat Paket Suka-Suka.');
+        }
+    }
+
+    /**
+     * Daftar add-on default untuk Custom Trip Builder.
+     * `per`: 'trip' = sekali per perjalanan, 'pax' = dikali jumlah peserta.
+     */
+    private function defaultTripAddons(): array
+    {
+        return [
+            ['id' => 'photographer', 'name' => 'Jasa Fotografer Profesional', 'desc' => 'Dokumentasi foto sepanjang perjalanan', 'price' => 500000, 'per' => 'trip', 'icon' => 'fa-camera'],
+            ['id' => 'hotel4', 'name' => 'Upgrade Hotel Bintang 4', 'desc' => 'Naik kelas akomodasi ke hotel bintang 4', 'price' => 1000000, 'per' => 'pax', 'icon' => 'fa-hotel'],
+            ['id' => 'bbq', 'name' => 'BBQ Night di Samosir', 'desc' => 'Makan malam BBQ tepi Danau Toba', 'price' => 300000, 'per' => 'pax', 'icon' => 'fa-fire'],
+            ['id' => 'drone', 'name' => 'Aerial Drone Videography', 'desc' => 'Video udara sinematik destinasi', 'price' => 750000, 'per' => 'trip', 'icon' => 'fa-helicopter'],
+            ['id' => 'guide', 'name' => 'Private Tour Guide', 'desc' => 'Pemandu wisata pribadi berbahasa Inggris', 'price' => 400000, 'per' => 'trip', 'icon' => 'fa-user-tie'],
+            ['id' => 'pickup', 'name' => 'Penjemputan Bandara Kualanamu', 'desc' => 'Antar-jemput bandara PP', 'price' => 350000, 'per' => 'trip', 'icon' => 'fa-plane-arrival'],
+        ];
+    }
+
     public function tourGallery()
     {
         $siteSettings = [

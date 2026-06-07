@@ -37,6 +37,22 @@ class BookingController extends Controller
         return view('admin.bookings.index', compact('bookings'));
     }
 
+    /**
+     * Mini-CRM Kanban Board: booking dikelompokkan per status pipeline.
+     */
+    public function kanban()
+    {
+        $columns = Booking::kanbanColumns();
+
+        $bookings = Booking::with('package')
+            ->whereIn('status', array_keys($columns))
+            ->latest('updatedAt')
+            ->get()
+            ->groupBy('status');
+
+        return view('admin.bookings.kanban', compact('columns', 'bookings'));
+    }
+
     public function export(Request $request)
     {
         $filters = $request->only(['status', 'type', 'search', 'date', 'month', 'year']);
@@ -157,7 +173,7 @@ class BookingController extends Controller
             'customerEmail' => 'required|email',
             'customerPhone' => 'required|string',
             'notes' => 'nullable|string',
-            'status' => 'required|in:pending,confirmed,completed,cancelled',
+            'status' => 'required|'.Booking::statusRule(),
         ]);
 
         $this->bookingService->update($booking, $validated);
@@ -182,11 +198,19 @@ class BookingController extends Controller
     public function updateStatus(Request $request, Booking $booking)
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,confirmed,completed,cancelled',
+            'status' => 'required|'.Booking::statusRule(),
         ]);
 
         $this->bookingService->updateStatus($booking, $validated['status']);
         $this->logActivity('status_updated', "Updated status of booking {$booking->bookingCode} to {$validated['status']}", $booking);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'message' => 'Status diperbarui',
+                'status' => $booking->status,
+                'status_label' => $booking->status_label,
+            ]);
+        }
 
         return back()->with('success', 'Booking status updated successfully');
     }

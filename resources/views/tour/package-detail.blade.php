@@ -15,8 +15,10 @@
     // Normalize for AlpineJS thumbnails and ensure json_encode includes it BEFORE x-data evaluates
     $packageImagesArray = $heroImages->map(function($img) {
         $path = is_array($img) ? ($img['image_path'] ?? null) : ($img->image_path ?? null);
+        $placeholder = is_array($img) ? ($img['placeholder'] ?? null) : ($img->placeholder ?? null);
         return [
-            'url' => imageUrl($path)
+            'url' => imageUrl($path),
+            'placeholder' => $placeholder,
         ];
     })->toArray();
     $package->setAttribute('package_images', $packageImagesArray);
@@ -54,10 +56,15 @@
 </script>
 @endpush
 
+@push('head')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+@endpush
+
 @section('content')
-<div 
-    x-data="{ 
-        activeImg: 0, 
+<div
+    x-data="{
+        activeImg: 0,
         activeTab: 'itinerary',
         showBooking: {{ session('success') || session('error') || $errors->any() ? 'true' : 'false' }},
         isSubmitting: false,
@@ -81,10 +88,12 @@
     <div class="relative h-[75dvh] w-full overflow-hidden bg-slate-900">
 
         @foreach($heroImages as $i => $imgObj)
-            <img 
-                src="{{ imageUrl(is_array($imgObj) ? ($imgObj['image_path'] ?? null) : ($imgObj->image_path ?? null)) }}" 
+            @php $heroPlaceholder = is_array($imgObj) ? ($imgObj['placeholder'] ?? null) : ($imgObj->placeholder ?? null); @endphp
+            <img
+                src="{{ imageUrl(is_array($imgObj) ? ($imgObj['image_path'] ?? null) : ($imgObj->image_path ?? null)) }}"
                 class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out {{ $i === 0 ? 'opacity-60 scale-100 z-0' : 'opacity-0 scale-110 -z-10 pointer-events-none' }}"
                 :class="activeImg === {{ $i }} ? 'opacity-60 scale-100 z-0' : 'opacity-0 scale-110 -z-10 pointer-events-none'"
+                @if($heroPlaceholder) style="background-image:url('{{ $heroPlaceholder }}');background-size:cover;background-position:center;" @endif
                 fetchpriority="{{ $i === 0 ? 'high' : 'low' }}"
                 loading="{{ $i === 0 ? 'eager' : 'lazy' }}"
                 alt="{{ $package->name }} - Image {{ $i + 1 }}"
@@ -146,7 +155,9 @@
                         <button @click="activeImg = i"
                             :class="activeImg === i ? 'ring-4 ring-toba-green scale-105 shadow-2xl' : 'opacity-70 hover:opacity-100 border-2 border-white'"
                             class="w-24 h-24 md:w-32 md:h-32 rounded-[1.5rem] overflow-hidden transition-all duration-500 bg-slate-200">
-                            <img :src="imgObj.url" class="w-full h-full object-cover" loading="lazy" onerror="this.src='{{ asset('images/home/tour.webp') }}'">
+                            <img :src="imgObj.url" class="w-full h-full object-cover" loading="lazy"
+                                 :style="imgObj.placeholder ? `background-image:url('${imgObj.placeholder}');background-size:cover;background-position:center;` : ''"
+                                 onerror="this.src='{{ asset('images/home/tour.webp') }}'">
                         </button>
                     </template>
                 </div>
@@ -455,6 +466,22 @@
                         <div class="prose prose-lg prose-slate max-w-none text-slate-600 font-medium leading-relaxed" x-html="package.description"></div>
                     </div>
 
+                    <!-- Peta Rute Perjalanan (Leaflet + OpenStreetMap) -->
+                    <div class="bg-white rounded-3xl p-6 md:p-10 shadow-card border border-slate-200/70">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
+                            <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Rute Perjalanan</span>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-3 tracking-tight">Peta <span class="text-toba-green">Interaktif</span></h2>
+                        <p class="text-slate-500 font-medium text-sm mb-8 leading-relaxed">Gambaran rute wisata dari Bandara Kualanamu menuju kawasan Danau Toba. Geser & perbesar peta untuk menjelajah.</p>
+                        <div id="route-map" class="w-full h-[360px] md:h-[440px] rounded-2xl overflow-hidden border border-slate-100 z-0" wire:ignore></div>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=Bandara+Kualanamu&destination={{ urlencode(($city->name ?? 'Danau Toba').' Sumatera Utara') }}&travelmode=driving"
+                           target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 mt-5 text-toba-green font-black text-[10px] uppercase tracking-widest hover:text-slate-900 transition">
+                            <i class="fas fa-route"></i> Buka Rute di Google Maps
+                        </a>
+                    </div>
+
                     <!-- Visual Itinerary Timeline -->
                     <div x-show="package.itinerary || package.itineraryText" class="relative">
                         <div class="flex items-center space-x-3 mb-12">
@@ -692,11 +719,50 @@
 
                     <!-- PDF & Share -->
                     <div class="flex flex-col gap-4">
+                        @unless($package->isOutbound)
+                        <button type="button"
+                            @click="$store.compare.toggle({
+                                id: package.id, name: package.name, slug: package.slug, price: package.price, duration: package.duration,
+                                image: (package_images && package_images.length ? package_images[0].url : ''),
+                                location: locationDisplay,
+                                includes: package.includes || [], excludes: package.excludes || []
+                            })"
+                            :class="$store.compare.has(package.id) ? 'bg-toba-green text-white border-toba-green' : 'bg-slate-50 text-slate-900 border-slate-100 hover:bg-slate-900 hover:text-white'"
+                            class="flex items-center justify-center gap-3 py-6 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-500 border shadow-sm">
+                            <i class="fas" :class="$store.compare.has(package.id) ? 'fa-check' : 'fa-table-columns'"></i>
+                            <span x-text="$store.compare.has(package.id) ? 'Ditambahkan ke Perbandingan' : 'Bandingkan Paket Ini'"></span>
+                        </button>
+                        @endunless
+
                         @if(!empty($package->itinerary) || !empty($package->itineraryText))
-                        <a href="{{ route('itinerary.download', $package->slug) }}" class="flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            Download Itinerary PDF
-                        </a>
+                        <div x-data="{ showPdf: false, travelerName: '' }">
+                            <button type="button" @click="showPdf = true" class="w-full flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Download Itinerary PDF
+                            </button>
+
+                            <!-- Modal nama (opsional) -->
+                            <div x-cloak x-show="showPdf" class="fixed inset-0 z-[125] flex items-center justify-center p-5"
+                                 x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showPdf = false"></div>
+                                <div class="relative bg-white w-full max-w-md rounded-3xl shadow-premium p-8"
+                                     x-transition:enter="transition ease-out duration-300" x-transition:enter-start="scale-95 opacity-0" x-transition:enter-end="scale-100 opacity-100">
+                                    <div class="w-14 h-14 rounded-2xl bg-toba-green/10 text-toba-green flex items-center justify-center mb-5">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    </div>
+                                    <h4 class="text-xl font-black text-slate-900 tracking-tight mb-2">Personalisasi PDF Anda</h4>
+                                    <p class="text-sm text-slate-500 font-medium mb-6 leading-relaxed">Nama Anda akan tercetak di cover itinerary. PDF juga menyertakan QR code rute Google Maps. <span class="text-slate-400">(Opsional)</span></p>
+                                    <input type="text" x-model="travelerName" maxlength="60" placeholder="Nama Anda (opsional)"
+                                           @keydown.enter="window.location.href = '{{ route('itinerary.download', $package->slug) }}' + (travelerName ? ('?name=' + encodeURIComponent(travelerName)) : '')"
+                                           class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 focus:border-toba-green rounded-2xl font-bold text-slate-900 outline-none mb-5">
+                                    <div class="flex gap-3">
+                                        <button type="button" @click="showPdf = false" class="flex-1 py-4 rounded-2xl bg-slate-100 text-slate-600 font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition">Batal</button>
+                                        <a :href="'{{ route('itinerary.download', $package->slug) }}' + (travelerName ? ('?name=' + encodeURIComponent(travelerName)) : '')"
+                                           class="flex-1 py-4 rounded-2xl bg-toba-green text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition text-center">Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @endif
 
                         <!-- Contact Specialist Card -->
@@ -730,3 +796,42 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    (function () {
+        var el = document.getElementById('route-map');
+        if (!el || typeof L === 'undefined') return;
+
+        // Waypoint rute tipikal wisata Danau Toba (Sumatera Utara)
+        var stops = [
+            { name: 'Bandara Kualanamu', coords: [3.6422, 98.8853] },
+            { name: 'Kota Medan',        coords: [3.5952, 98.6722] },
+            { name: 'Berastagi',         coords: [3.1959, 98.5079] },
+            { name: 'Parapat',           coords: [2.6610, 98.9370] },
+            { name: 'Pulau Samosir',     coords: [2.6594, 98.8389] }
+        ];
+
+        var map = L.map(el, { scrollWheelZoom: false }).setView([3.0, 98.75], 8);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        var latlngs = stops.map(function (s) { return s.coords; });
+
+        stops.forEach(function (s, i) {
+            L.marker(s.coords).addTo(map)
+                .bindPopup('<strong>' + (i + 1) + '. ' + s.name + '</strong>');
+        });
+
+        L.polyline(latlngs, { color: '#059669', weight: 4, opacity: 0.8, dashArray: '8 8' }).addTo(map);
+        map.fitBounds(L.latLngBounds(latlngs).pad(0.15));
+
+        // Pastikan ukuran benar setelah layout/tab siap
+        setTimeout(function () { map.invalidateSize(); }, 300);
+    })();
+</script>
+@endpush

@@ -79,13 +79,51 @@
             font-size: 14px;
             margin-bottom: 5px;
         }
+        .prepared-for {
+            margin-top: 14px;
+            display: inline-block;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .prepared-for strong { color: #047857; }
+        .qr-box {
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f8fafc;
+        }
+        .qr-box td { vertical-align: middle; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>{{ $package->name }}</h1>
         <p>{{ $siteSettings['general']['site_name'] ?? 'Wonderful Toba' }} – Sumatera Utara</p>
+        @if(!empty($customerName))
+            <div class="prepared-for">Disiapkan khusus untuk: <strong>{{ $customerName }}</strong></div>
+        @endif
     </div>
+
+    @if(!empty($qrDataUri))
+    <div class="section">
+        <table class="qr-box" width="100%">
+            <tr>
+                <td width="130" align="center">
+                    <img src="{{ $qrDataUri }}" alt="QR Rute" width="110" height="110">
+                </td>
+                <td style="padding-left: 18px;">
+                    <div style="font-weight: bold; color: #0f172a; font-size: 15px; margin-bottom: 4px;">Scan Rute Perjalanan</div>
+                    <div style="font-size: 13px; color: #475569;">Pindai kode QR ini dengan kamera ponsel untuk membuka rute perjalanan
+                    dari Bandara Kualanamu menuju {{ $city->name ?? 'Danau Toba' }} di Google Maps.</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    @endif
 
     <div class="section">
         <div class="section-title">Informasi Paket</div>

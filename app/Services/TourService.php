@@ -171,8 +171,14 @@ class TourService
     {
         return Package::where('status', 'active')
             ->where('isOutbound', false)
+            ->with(['packageImages' => fn ($q) => $q->orderBy('sort_order')])
             ->orderBy('sortOrder')
-            ->get();
+            ->get()
+            ->each(function ($p) {
+                // Lampirkan LQIP gambar pertama untuk blur-up di kartu listing
+                $p->setAttribute('placeholder', $p->packageImages->first()?->placeholder);
+                $p->makeHidden('packageImages');
+            });
     }
 
     /**

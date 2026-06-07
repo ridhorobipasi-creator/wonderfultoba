@@ -106,6 +106,7 @@
                         ['label' => 'Tour',        'href' => '/tour',          'active' => request()->is('tour')],
                         ['label' => 'Outbound',    'href' => '/outbound',      'active' => request()->is('outbound*')],
                         ['label' => 'Paket',       'href' => '/tour/packages', 'active' => request()->is('tour/packages*')],
+                        ['label' => 'Paket Suka-Suka', 'href' => '/tour/custom', 'active' => request()->is('tour/custom')],
                         ['label' => 'Galeri',      'href' => '/tour/gallery',  'active' => request()->is('tour/gallery')],
                         ['label' => 'Blog',        'href' => '/tour/blog',     'active' => request()->is('tour/blog*')],
                         ['label' => 'Tentang',     'href' => '/about',         'active' => request()->is('about')],
@@ -181,6 +182,7 @@
                             <a href="/" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Beranda</a>
                             <a href="/tour" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Tour & Wisata</a>
                             <a href="/tour/packages" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Paket Wisata</a>
+                            <a href="/tour/custom" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Paket Suka-Suka</a>
                             <a href="/outbound" @click="isMenuOpen = false" class="block text-4xl font-black text-white tracking-tighter hover:text-toba-green transition-colors">Outbound</a>
                         </div>
                     </div>

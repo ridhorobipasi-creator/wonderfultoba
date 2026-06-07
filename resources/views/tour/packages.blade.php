@@ -124,13 +124,30 @@
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/70 shadow-card hover:shadow-premium hover:-translate-y-1 transition-all duration-300 group h-full flex flex-col">
                             <div class="relative h-72 overflow-hidden shrink-0">
                                 <img :src="pkg.first_image" :alt="pkg.name"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 bg-slate-200"
+                                     :style="pkg.placeholder ? `background-image:url('${pkg.placeholder}');background-size:cover;background-position:center;` : ''"
                                      loading="lazy" decoding="async">
 
                                 <div class="absolute top-5 left-5 flex flex-col space-y-2">
                                     <div class="bg-toba-green text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-soft" x-text="pkg.duration"></div>
                                 </div>
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                <!-- Tombol Bandingkan -->
+                                <button type="button"
+                                    @click.prevent="$store.compare.toggle({
+                                        id: pkg.id, name: pkg.name, slug: pkg.slug, price: pkg.price, duration: pkg.duration,
+                                        image: pkg.first_image,
+                                        location: (cities.find(c => String(c.id) === String(pkg.cityId))?.name) || 'Sumatera Utara',
+                                        includes: pkg.includes || [], excludes: pkg.excludes || []
+                                    })"
+                                    :class="$store.compare.has(pkg.id) ? 'bg-toba-green text-white shadow-lg shadow-toba-green/30' : 'bg-white/90 text-slate-700 hover:bg-white'"
+                                    class="absolute top-5 right-5 z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl backdrop-blur-md text-[10px] font-black uppercase tracking-widest transition-all shadow-soft"
+                                    :aria-label="$store.compare.has(pkg.id) ? 'Hapus dari perbandingan' : 'Tambah ke perbandingan'">
+                                    <i class="fas" :class="$store.compare.has(pkg.id) ? 'fa-check' : 'fa-plus'"></i>
+                                    <span x-text="$store.compare.has(pkg.id) ? 'Dibandingkan' : 'Bandingkan'"></span>
+                                </button>
+
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                             </div>
 
                             <div class="p-8 flex flex-col flex-grow">
@@ -181,11 +198,11 @@
                 </div>
                 <div class="relative z-10">
                     <h3 class="text-2xl md:text-4xl font-black text-white mb-4">Tidak Menemukan Paket yang Cocok?</h3>
-                    <p class="text-white/80 font-medium mb-8 max-w-xl mx-auto">Kami siap merancang itinerary khusus sesuai kebutuhan dan budget Anda.</p>
+                    <p class="text-white/80 font-medium mb-8 max-w-xl mx-auto">Racik sendiri perjalanan impian Anda dengan <strong>Paket Suka-Suka</strong>, atau biar tim kami yang merancang itinerary khusus untuk Anda.</p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="tel:+{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            Konsultasi Gratis
+                        <a href="{{ route('tour.custom') }}" class="flex items-center justify-center gap-2 bg-white text-toba-green px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                            Buat Paket Suka-Suka
                         </a>
                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-white/20 text-white border border-white/30 px-8 py-4 rounded-2xl font-black hover:bg-white/30 transition-all">
                             WhatsApp Kami
