@@ -62,7 +62,7 @@
 
         <!-- Filter Section -->
         <div class="max-w-7xl mx-auto px-4 -mt-20 relative z-20">
-            <div class="bg-white/90 backdrop-blur-2xl p-6 md:p-8 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-white/60 animate-in fade-in zoom-in duration-1000 delay-300">
+            <div class="bg-white/95 backdrop-blur-2xl p-6 md:p-8 rounded-3xl shadow-card border border-slate-200/70 animate-in fade-in zoom-in duration-1000 delay-300">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search Box -->
                     <div class="relative group lg:col-span-2">
@@ -121,28 +121,24 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <template x-for="(pkg, i) in filteredPackages" :key="pkg.id">
                     <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
-                        <div class="bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 group h-full flex flex-col">
+                        <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/70 shadow-card hover:shadow-premium hover:-translate-y-1 transition-all duration-300 group h-full flex flex-col">
                             <div class="relative h-72 overflow-hidden shrink-0">
-                                <img :src="pkg.first_image" :alt="pkg.name" 
-                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                <img :src="pkg.first_image" :alt="pkg.name"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                      loading="lazy" decoding="async">
-                                
-                                <div class="absolute top-5 left-5 flex flex-col space-y-2">
-                                    <div class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg" x-text="pkg.duration"></div>
-                                </div>
 
-                                <button class="absolute top-5 right-5 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition-all shadow-lg" aria-label="Simpan ke wishlist">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                                </button>
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <div class="absolute top-5 left-5 flex flex-col space-y-2">
+                                    <div class="bg-toba-green text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-soft" x-text="pkg.duration"></div>
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
 
                             <div class="p-8 flex flex-col flex-grow">
-                                <div class="flex items-center text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-3">
+                                <div class="flex items-center text-toba-green text-[10px] font-black uppercase tracking-[0.2em] mb-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                     <span x-text="cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara'"></span>
                                 </div>
-                                <h3 class="text-2xl font-black text-slate-900 mb-4 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tight" x-text="pkg.name"></h3>
+                                <h3 class="text-2xl font-black text-slate-900 mb-4 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.name"></h3>
                                 <p class="text-slate-500 text-sm leading-relaxed mb-8 line-clamp-2 font-medium flex-grow" x-text="pkg.description"></p>
                                 
                                 <div class="flex items-center justify-between pt-6 border-t border-slate-50">
@@ -164,14 +160,14 @@
             </div>
 
             <!-- Premium Empty State -->
-            <div x-show="filteredPackages.length === 0" class="text-center py-40 bg-slate-50 rounded-[4rem] border-2 border-dashed border-slate-200 animate-in fade-in zoom-in duration-700">
-                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-slate-200 text-slate-300">
+            <div x-show="filteredPackages.length === 0" class="text-center py-32 bg-slate-50 rounded-3xl border border-dashed border-slate-200 animate-in fade-in zoom-in duration-700">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-card text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-x"><path d="m16 16 5 5"></path><circle cx="10" cy="10" r="7"></circle><path d="m7 7 6 6"></path><path d="m13 7-6 6"></path></svg>
                 </div>
                 <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">Destinasi Belum Ditemukan</h3>
                 <p class="text-slate-500 font-medium max-w-md mx-auto mb-12 leading-relaxed">Kami tidak menemukan paket yang sesuai dengan kriteria Anda. Cobalah untuk mereset filter atau mencari dengan kata kunci lain.</p>
                 <button @click="searchQuery = ''; filterCity = 'all'; filterDuration = 'Semua'; sortBy = 'default'"
-                    class="bg-slate-900 text-white px-12 py-6 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-toba-green transition-all duration-500">
+                    class="btn-secondary hover:bg-toba-green">
                     Reset Semua Filter
                 </button>
             </div>
@@ -179,9 +175,9 @@
 
         <!-- Custom CTA Section -->
         <div class="max-w-7xl mx-auto px-4 mt-24 mb-24">
-            <div class="bg-gradient-to-r from-toba-green to-emerald-600 rounded-[2.5rem] p-10 md:p-14 text-center relative overflow-hidden">
+            <div class="bg-toba-green rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1200" alt="" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1200" alt="" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <div class="relative z-10">
                     <h3 class="text-2xl md:text-4xl font-black text-white mb-4">Tidak Menemukan Paket yang Cocok?</h3>

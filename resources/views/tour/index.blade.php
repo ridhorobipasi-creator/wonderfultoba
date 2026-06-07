@@ -13,7 +13,7 @@
 
     <!-- Featured Packages (Updated Style) -->
     @if($settings['show_featured'] ?? true)
-    <section class="py-24 bg-white relative overflow-hidden">
+    <section class="py-20 md:py-28 bg-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                 <div class="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-1000">
@@ -34,7 +34,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($packages->take(3) as $index => $pkg)
+                @forelse($packages->take(3) as $index => $pkg)
                 @php
                     $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
                     if (str_contains($pkgImage, 'unsplash')) {
@@ -42,8 +42,8 @@
                     }
                 @endphp
                 <div class="group cursor-pointer animate-in fade-in slide-in-from-bottom-12 duration-1000" style="animation-delay: {{ $index * 150 }}ms">
-                    <div class="relative h-[420px] rounded-[2rem] overflow-hidden mb-6 premium-shadow transition-all duration-700 hover:-translate-y-2 hover:shadow-toba-green/10">
-                        <img src="{{ $pkgImage }}" alt="{{ $pkg->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out">
+                    <div class="relative h-[420px] rounded-3xl overflow-hidden mb-6 premium-shadow transition-all duration-500 hover:-translate-y-1">
+                        <img src="{{ $pkgImage }}" alt="{{ $pkg->name }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                         
@@ -81,7 +81,12 @@
                         Lihat Detail <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                     </a>
                 </div>
-                @endforeach
+                @empty
+                <div class="md:col-span-3 text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                    <p class="text-slate-500 font-medium">Paket wisata segera hadir. Hubungi kami untuk paket khusus.</p>
+                    <a href="/tour/packages" class="btn-ghost mt-6">Lihat Semua Paket</a>
+                </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -89,9 +94,7 @@
 
     <!-- Why Us Section (Premium Asymmetric Design) -->
     @if($settings['show_about'] ?? true)
-    <section class="py-24 md:py-40 bg-slate-50 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-1/3 h-full bg-slate-100/50 skew-x-12 translate-x-20"></div>
-        
+    <section class="py-20 md:py-28 bg-slate-50 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                 <div class="lg:col-span-7 relative">
@@ -104,12 +107,12 @@
                             $ctaImg = imageUrl($settings['cta_image_url'] ?? null, 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=2000');
                         @endphp
                         <div class="col-span-8 animate-in fade-in zoom-in duration-1000">
-                            <img src="{{ $whyImg1 }}" alt="Wisata Danau Toba" class="rounded-[3rem] shadow-2xl w-full h-[400px] md:h-[600px] object-cover ring-8 ring-white">
+                            <img src="{{ $whyImg1 }}" alt="Wisata Danau Toba" loading="lazy" decoding="async" class="rounded-3xl shadow-card w-full h-[400px] md:h-[600px] object-cover ring-4 ring-white">
                         </div>
                         <div class="col-span-4 space-y-6 pt-12">
-                            <img src="{{ $whyImg2 }}" alt="Destinasi 2" class="rounded-[2rem] shadow-xl w-full h-48 md:h-72 object-cover animate-in fade-in slide-in-from-top-8 duration-1000 delay-300">
+                            <img src="{{ $whyImg2 }}" alt="Destinasi 2" loading="lazy" decoding="async" class="rounded-3xl shadow-soft w-full h-48 md:h-72 object-cover animate-in fade-in slide-in-from-top-8 duration-1000 delay-300">
                             @if(!empty($settings['stat_value_0']))
-                            <div class="bg-toba-green p-8 rounded-[2rem] shadow-2xl text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                            <div class="bg-toba-green p-8 rounded-3xl shadow-card text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                                 <p class="text-4xl font-black mb-1">{{ $settings['stat_value_0'] }}</p>
                                 <p class="text-[10px] font-black uppercase tracking-widest opacity-80 leading-tight">{{ $settings['stat_label_0'] ?? 'Wisatawan Puas' }}</p>
                             </div>
@@ -172,8 +175,8 @@
                 @endphp
                 @foreach($testimonials as $t)
                 <div class="relative group">
-                    <div class="absolute -inset-4 bg-slate-50 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-all duration-700 -z-10 scale-95 group-hover:scale-100"></div>
-                    <div class="bg-white border border-slate-100 rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 text-left relative overflow-hidden transition-all duration-500 group-hover:border-toba-green/20">
+                    <div class="absolute -inset-4 bg-slate-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 scale-95 group-hover:scale-100"></div>
+                    <div class="bg-white border border-slate-200/70 rounded-3xl p-10 md:p-14 shadow-card text-left relative overflow-hidden transition-all duration-300 group-hover:border-toba-green/20">
                         <i class="fas fa-quote-right absolute top-10 right-10 text-6xl text-slate-50"></i>
                         <div class="flex gap-1.5 mb-8">
                             @for($j=0; $j<5; $j++)
@@ -198,19 +201,19 @@
                 @endforeach
             </div>
         </div>
+    </section>
     @endif
 
     <!-- Specialist Section -->
     @if($settings['show_specialist'] ?? true)
-    <section class="py-24 bg-slate-900 relative overflow-hidden">
+    <section class="py-20 md:py-28 bg-slate-900 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
-            <div class="bg-white/5 backdrop-blur-xl rounded-[4rem] p-10 md:p-20 border border-white/10 relative overflow-hidden">
+            <div class="bg-white/5 backdrop-blur-xl rounded-3xl p-10 md:p-20 border border-white/10 relative overflow-hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="relative">
-                        <div class="aspect-square rounded-[3rem] overflow-hidden relative z-10 ring-8 ring-white/5">
-                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://ui-avatars.com/api/?name='.urlencode($settings['specialist_name'] ?? 'Wonderful Toba').'&size=600&background=064e3b&color=ffffff&bold=true') }}" alt="{{ $settings['specialist_name'] ?? 'Travel Specialist' }}" class="w-full h-full object-cover">
+                        <div class="aspect-square rounded-3xl overflow-hidden relative z-10 ring-4 ring-white/5">
+                            <img src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'https://ui-avatars.com/api/?name='.urlencode($settings['specialist_name'] ?? 'Wonderful Toba').'&size=600&background=064e3b&color=ffffff&bold=true') }}" alt="{{ $settings['specialist_name'] ?? 'Travel Specialist' }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                         </div>
-                        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                     </div>
                     <div class="animate-in fade-in slide-in-from-right-12 duration-1000">
                         <div class="flex items-center space-x-3 mb-8">
@@ -245,9 +248,9 @@
 
     <!-- Blog Section (Magazine Style) -->
     @if($settings['show_blogs'] ?? true)
-    <section class="py-24 md:py-40 bg-slate-50 overflow-hidden">
+    <section class="py-20 md:py-28 bg-slate-50 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                 <div class="max-w-2xl">
                     <div class="flex items-center space-x-3 mb-6">
                         <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
@@ -265,12 +268,12 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                @foreach($blogs as $blog)
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                @forelse($blogs as $blog)
                 <article class="group">
                     <a href="{{ route('tour.blog.detail', $blog->slug) }}" class="block">
-                        <div class="relative h-80 rounded-[2.5rem] overflow-hidden mb-8 shadow-xl">
-                            <img src="{{ $blog->image }}" alt="{{ $blog->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="relative h-80 rounded-3xl overflow-hidden mb-8 shadow-card">
+                            <img src="{{ $blog->image }}" alt="{{ $blog->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors"></div>
                             <div class="absolute top-6 left-6">
                                 <span class="bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-900">
@@ -293,23 +296,23 @@
                         </div>
                     </a>
                 </article>
-                @endforeach
+                @empty
+                <div class="md:col-span-3 text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200">
+                    <p class="text-slate-500 font-medium">Artikel akan segera terbit.</p>
+                </div>
+                @endforelse
             </div>
         </div>
     </section>
     @endif
 
     <!-- Cinema CTA -->
-    <section class="py-24 md:py-32 px-6 md:px-8 bg-white">
-        <div class="max-w-7xl mx-auto bg-slate-900 rounded-[4rem] p-12 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(15,23,42,0.3)]">
+    <section class="py-20 md:py-28 px-6 md:px-8 bg-white">
+        <div class="max-w-7xl mx-auto bg-slate-900 rounded-3xl p-12 md:p-20 relative overflow-hidden shadow-premium">
             <div class="absolute inset-0 opacity-40">
-                <img src="{{ $ctaImg }}" alt="" class="w-full h-full object-cover">
+                <img src="{{ $ctaImg }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
             </div>
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/60 to-transparent"></div>
-            
-            <!-- Animated Circles Overlay -->
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-toba-green/20 rounded-full blur-[120px]"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-toba-accent/10 rounded-full blur-[120px]"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/70 to-slate-900/30"></div>
 
             <div class="relative z-10 text-center lg:text-left max-w-4xl">
                 <h2 class="text-4xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[0.95]">
@@ -323,7 +326,7 @@
                     @endif
                 </p>
                 <div class="flex flex-col sm:flex-row items-center gap-6">
-                    <a href="/tour/packages" class="bg-toba-green text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/30 group flex items-center gap-3">
+                    <a href="/tour/packages" class="bg-toba-green text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-[0.2em] hover:bg-toba-accent transition-all duration-300 shadow-soft group flex items-center gap-3">
                         <span>Pesan Paket Sekarang</span>
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>

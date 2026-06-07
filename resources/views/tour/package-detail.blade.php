@@ -152,10 +152,7 @@
                 </div>
 
                 <!-- Embedded Booking Form: Premium Redesign -->
-                <div id="booking-form" class="relative group bg-white rounded-[3.5rem] shadow-[0_40px_100px_-20px_rgba(15,23,42,0.1)] border border-slate-100 animate-in fade-in slide-in-from-bottom-12 duration-1000 p-8 md:p-14 lg:p-16 overflow-hidden">
-                    
-                    <!-- Decorative Background -->
-                    <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-toba-green/5 rounded-full blur-[120px] -mr-[400px] -mt-[400px] pointer-events-none"></div>
+                <div id="booking-form" class="relative group bg-white rounded-3xl shadow-card border border-slate-200/70 animate-in fade-in slide-in-from-bottom-12 duration-1000 p-8 md:p-14 lg:p-16 overflow-hidden">
 
                     <div class="relative z-10 mb-14 flex flex-col items-center text-center">
                         <div class="inline-flex items-center gap-3 px-5 py-2.5 bg-toba-green/10 text-toba-green rounded-full mb-8 border border-toba-green/20">
@@ -169,7 +166,7 @@
                     </div>
 
                     @if(session('success'))
-                        <div class="py-16 px-8 bg-emerald-50/50 rounded-[3rem] border border-emerald-100 text-center animate-in zoom-in duration-1000" x-init="setTimeout(() => { window.location.href = '{{ session('whatsappUrl') }}' }, 3000)">
+                        <div class="py-16 px-8 bg-emerald-50/50 rounded-3xl border border-emerald-100 text-center animate-in zoom-in duration-1000" x-init="setTimeout(() => { window.location.href = '{{ session('whatsappUrl') }}' }, 3000)">
                             <div class="relative w-32 h-32 mx-auto mb-10">
                                 <div class="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping"></div>
                                 <div class="relative w-full h-full bg-white text-emerald-500 rounded-full flex items-center justify-center text-5xl shadow-2xl shadow-emerald-500/30 border-4 border-emerald-50">
@@ -179,7 +176,7 @@
                             <h4 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Permintaan Terkirim!</h4>
                             <p class="text-slate-500 font-medium mb-12 max-w-sm mx-auto text-base">Permintaan Anda sudah kami catat. Tim kami akan mengonfirmasi ketersediaan & harga via WhatsApp. Anda akan diarahkan ke WhatsApp dalam 3 detik...</p>
 
-                            <div class="inline-flex flex-col items-center px-16 py-10 bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 mb-14">
+                            <div class="inline-flex flex-col items-center px-16 py-10 bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 mb-14">
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Kode Permintaan Anda</p>
                                 <p class="text-5xl font-black text-slate-900 tracking-widest">{{ session('bookingCode') }}</p>
                             </div>
@@ -270,7 +267,7 @@
                             <button 
                                 type="submit" 
                                 :disabled="isSubmitting"
-                                class="w-full h-[5.5rem] bg-toba-green text-white rounded-[2.5rem] font-black text-sm md:text-base uppercase tracking-[0.4em] hover:bg-slate-900 hover:-translate-y-2 active:scale-95 transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.4)] flex items-center justify-center gap-6 group overflow-hidden relative border border-emerald-500"
+                                class="w-full h-[5.5rem] bg-toba-green text-white rounded-3xl font-black text-sm md:text-base uppercase tracking-[0.4em] hover:bg-slate-900 hover:-translate-y-1 active:scale-95 transition-all duration-300 shadow-soft flex items-center justify-center gap-6 group overflow-hidden relative"
                             >
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                                 
@@ -375,7 +372,7 @@
                             <button 
                                 type="submit" 
                                 :disabled="isSubmitting"
-                                class="w-full h-[5.5rem] bg-slate-900 text-white rounded-[2.5rem] font-black text-sm md:text-base uppercase tracking-[0.4em] hover:bg-toba-green hover:-translate-y-2 active:scale-95 transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(15,23,42,0.4)] hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.5)] flex items-center justify-center gap-6 group overflow-hidden relative border border-slate-700"
+                                class="w-full h-[5.5rem] bg-slate-900 text-white rounded-3xl font-black text-sm md:text-base uppercase tracking-[0.4em] hover:bg-toba-green hover:-translate-y-1 active:scale-95 transition-all duration-300 shadow-soft flex items-center justify-center gap-6 group overflow-hidden relative"
                             >
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                                 
@@ -449,7 +446,7 @@
                 <!-- Tab: Itinerary & Description -->
                 <div x-show="activeTab === 'itinerary'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-20">
                     <!-- About Section -->
-                    <div class="bg-white rounded-[3rem] p-10 md:p-14 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-50">
+                    <div class="bg-white rounded-3xl p-10 md:p-14 shadow-card border border-slate-200/70">
                         <div class="flex items-center space-x-3 mb-8">
                             <div class="h-1.5 w-12 bg-toba-green rounded-full"></div>
                             <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Tentang Paket</span>
@@ -465,7 +462,7 @@
                             <span class="text-toba-green font-black text-xs uppercase tracking-[0.4em]">Agenda Perjalanan</span>
                         </div>
                         
-                        <div x-show="package.itineraryText" class="bg-white rounded-[3rem] p-10 md:p-14 shadow-xl border border-slate-50 whitespace-pre-line text-slate-600 font-medium leading-relaxed" x-text="package.itineraryText"></div>
+                        <div x-show="package.itineraryText" class="bg-white rounded-3xl p-10 md:p-14 shadow-xl border border-slate-50 whitespace-pre-line text-slate-600 font-medium leading-relaxed" x-text="package.itineraryText"></div>
                         
                         <div x-show="!package.itineraryText && package.itinerary" class="space-y-12 relative">
                             <!-- Vertical line -->
@@ -479,7 +476,7 @@
                                         <span class="text-2xl font-black" x-text="day.day || (i + 1)"></span>
                                     </div>
                                     
-                                    <div class="bg-white rounded-[2.5rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-50 transition-all duration-500 group-hover:border-toba-green/20 group-hover:shadow-toba-green/10">
+                                    <div class="bg-white rounded-3xl p-10 md:p-12 shadow-card border border-slate-50 transition-all duration-500 group-hover:border-toba-green/20 group-hover:shadow-toba-green/10">
                                         <div class="flex items-center gap-4 mb-6 md:hidden">
                                             <div class="w-12 h-12 rounded-2xl bg-toba-green text-white flex items-center justify-center font-black">
                                                 <span x-text="day.day || (i + 1)"></span>
@@ -509,7 +506,7 @@
                 <!-- Tab: Pricing & Facilities -->
                 <div x-show="activeTab === 'pricing'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-16">
                     <!-- Pricing Table -->
-                    <div x-show="package.pricingDetails && package.pricingDetails.length > 0" class="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                    <div x-show="package.pricingDetails && package.pricingDetails.length > 0" class="bg-white rounded-3xl p-10 md:p-14 shadow-card border border-slate-100">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                             <div>
                                 <div class="flex items-center space-x-3 mb-4">
@@ -526,7 +523,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                             <template x-for="price in package.pricingDetails" :key="price.pax">
-                                <div class="flex items-center justify-between p-8 bg-slate-50 rounded-[2rem] border border-transparent hover:border-toba-green/20 transition-all group">
+                                <div class="flex items-center justify-between p-8 bg-slate-50 rounded-2xl border border-transparent hover:border-toba-green/20 transition-all group">
                                     <div class="flex items-center gap-5">
                                         <div class="w-14 h-14 rounded-2xl bg-white shadow-xl flex items-center justify-center text-toba-green group-hover:bg-toba-green group-hover:text-white transition-all">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -559,7 +556,7 @@
 
                     <!-- Inclusion / Exclusion -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                        <div class="bg-white rounded-3xl p-10 md:p-14 shadow-card border border-slate-100">
                             <h3 class="text-2xl font-black text-slate-900 mb-10 flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-200">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
@@ -575,7 +572,7 @@
                                 </template>
                             </ul>
                         </div>
-                        <div class="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                        <div class="bg-white rounded-3xl p-10 md:p-14 shadow-card border border-slate-100">
                             <h3 class="text-2xl font-black text-slate-900 mb-10 flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-2xl bg-slate-200 text-slate-500 flex items-center justify-center">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -596,7 +593,7 @@
 
                 <!-- Tab: Reviews -->
                 <div x-show="activeTab === 'reviews'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                    <div class="bg-white rounded-3xl p-10 md:p-14 shadow-card border border-slate-100">
                         @php
                             $testimonials = $siteSettings['cms_tour']['testimonials'] ?? [];
                         @endphp
@@ -608,7 +605,7 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 @foreach($testimonials as $t)
-                                <div class="p-8 bg-slate-50 rounded-[2.5rem] border border-transparent hover:border-toba-green/20 transition-all">
+                                <div class="p-8 bg-slate-50 rounded-3xl border border-transparent hover:border-toba-green/20 transition-all">
                                     <div class="flex items-center gap-4 mb-6">
                                         @if(!empty($t['image']))
                                             <img src="{{ imageUrl($t['image']) }}" class="w-12 h-12 rounded-2xl object-cover bg-slate-200" alt="{{ $t['name'] }}" onerror="this.style.display='none'">
@@ -635,7 +632,7 @@
                                 <h4 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Bagikan Pengalaman Anda</h4>
                                 <p class="text-slate-500 font-medium max-w-md mx-auto mb-10 leading-relaxed">Sudah pernah berwisata bersama kami? Kami sangat menghargai cerita perjalanan Anda.</p>
                                 <a :href="'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('Halo Wonderful Toba, saya ingin berbagi pengalaman wisata bersama kalian 😊')" target="_blank"
-                                   class="inline-flex items-center gap-3 bg-toba-green text-white px-10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-toba-green/20">
+                                   class="inline-flex items-center gap-3 bg-toba-green text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-toba-green/20">
                                     <i class="fab fa-whatsapp text-xl"></i>
                                     Ceritakan Perjalananmu
                                 </a>
@@ -649,11 +646,7 @@
             <div class="lg:col-span-4 relative">
                 <div class="sticky top-28 space-y-8 animate-in fade-in slide-in-from-right-12 duration-1000">
                     <!-- Booking Card -->
-                    <div class="bg-slate-900 rounded-[3.5rem] p-10 md:p-12 text-white shadow-[0_50px_100px_-20px_rgba(15,23,42,0.4)] relative overflow-hidden">
-                        <!-- Design elements -->
-                        <div class="absolute -top-24 -right-24 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
-                        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-toba-accent/10 rounded-full blur-[80px]"></div>
-                        
+                    <div class="bg-slate-900 rounded-3xl p-10 md:p-12 text-white shadow-premium relative overflow-hidden">
                         <div class="relative z-10">
                             <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">Reservasi Sekarang</span>
                             <h3 class="text-3xl font-black text-white mb-4 tracking-tighter leading-tight" x-text="package.name"></h3>
@@ -679,7 +672,7 @@
 
                             <a
                                 href="#booking-form"
-                                class="w-full py-6 bg-toba-green text-white rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/20 flex items-center justify-center gap-3 group"
+                                class="w-full py-6 bg-toba-green text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all duration-300 shadow-soft flex items-center justify-center gap-3 group"
                             >
                                 <i class="fas fa-calendar-check text-xl"></i>
                                 <span>ISI FORM BOOKING</span>
@@ -700,14 +693,14 @@
                     <!-- PDF & Share -->
                     <div class="flex flex-col gap-4">
                         @if(!empty($package->itinerary) || !empty($package->itineraryText))
-                        <a href="{{ route('itinerary.download', $package->slug) }}" class="flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
+                        <a href="{{ route('itinerary.download', $package->slug) }}" class="flex items-center justify-center gap-3 py-6 bg-slate-50 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 border border-slate-100 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Download Itinerary PDF
                         </a>
                         @endif
 
                         <!-- Contact Specialist Card -->
-                        <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
+                        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
                             <div class="absolute top-0 right-0 w-24 h-24 bg-toba-green/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                             <div class="flex items-center gap-4 mb-6 relative z-10">
                                 <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-toba-green overflow-hidden border-2 border-white shadow-sm">

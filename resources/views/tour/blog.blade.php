@@ -81,7 +81,7 @@
 
     <!-- Filter & Search (Sticky Premium) -->
     <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-20 relative z-30">
-        <div class="bg-white rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(15,23,42,0.1)] p-8 md:p-12 border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
+        <div class="bg-white rounded-3xl shadow-[0_50px_100px_-20px_rgba(15,23,42,0.1)] p-8 md:p-12 border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
                 <!-- Category Filters -->
                 <div class="flex flex-wrap justify-center lg:justify-start gap-3">
@@ -115,7 +115,7 @@
         
         <!-- Featured Post (Cinema Style) -->
         <template x-if="featured">
-            <article class="group relative bg-slate-900 rounded-[4rem] overflow-hidden shadow-2xl transition-all duration-700 mb-24 min-h-[500px] md:min-h-[600px] flex flex-col justify-end">
+            <article class="group relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 mb-24 min-h-[500px] md:min-h-[600px] flex flex-col justify-end">
                 <img :src="featured.image ? (featured.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p =\u003e featured.image.includes('/' + p) \u0026\u0026 !featured.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) =\u003e url.replace('/' + p, '/storage/' + p), featured.image) : featured.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p =\u003e featured.image.startsWith(p)) ? '/storage/' + featured.image.replace(/^\//, '') : '/storage/' + featured.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=1200'" :alt="featured.title"
                     class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[3s] ease-out">
                 
@@ -143,7 +143,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
             <template x-for="(post, i) in rest" :key="post.id">
                 <article class="group flex flex-col h-full animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
-                    <a :href="'/tour/blog/' + (post.slug || post.id)" class="block mb-8 relative overflow-hidden rounded-[2.5rem] shadow-xl h-72">
+                    <a :href="'/tour/blog/' + (post.slug || post.id)" class="block mb-8 relative overflow-hidden rounded-3xl shadow-xl h-72">
                         <img :src="post.image ? (post.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p =\u003e post.image.includes('/' + p) \u0026\u0026 !post.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) =\u003e url.replace('/' + p, '/storage/' + p), post.image) : post.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p =\u003e post.image.startsWith(p)) ? '/storage/' + post.image.replace(/^\//, '') : '/storage/' + post.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : 'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&q=80&w=800'" :alt="post.title"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s] ease-out">
                         <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors"></div>
@@ -171,7 +171,7 @@
         </div>
 
         <!-- Empty State -->
-        <div x-show="filteredPosts.length === 0" class="text-center py-40 bg-slate-50 rounded-[4rem] border-2 border-dashed border-slate-200">
+        <div x-show="filteredPosts.length === 0" class="text-center py-40 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-slate-200 text-slate-300">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             </div>

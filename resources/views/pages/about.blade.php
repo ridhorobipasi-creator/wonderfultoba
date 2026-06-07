@@ -34,14 +34,14 @@
         <div class="max-w-7xl mx-auto px-6 md:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                 <div class="lg:col-span-6 relative">
-                    <div class="relative z-10 aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl">
+                    <div class="relative z-10 aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                         <img src="{{ imageUrl($content['image_url'] ?? '2026/04/sumatra-panorama.webp') }}" alt="Wonderful Toba Story" class="w-full h-full object-cover">
                     </div>
                     <!-- Decorative Element -->
                     <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-toba-green/10 rounded-full blur-3xl -z-10"></div>
                     <div class="absolute -top-12 -left-12 w-48 h-48 bg-toba-accent/10 rounded-full blur-3xl -z-10"></div>
                     
-                    <div class="absolute -bottom-8 -left-8 bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-50 hidden md:block max-w-sm">
+                    <div class="absolute -bottom-8 -left-8 bg-white p-8 rounded-3xl shadow-2xl border border-slate-50 hidden md:block max-w-sm">
                         <div class="flex gap-1 mb-4">
                             @for($i=0; $i<5; $i++)
                                 <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -93,7 +93,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
                 <!-- Vision Card -->
-                <div class="group bg-white p-12 md:p-16 rounded-[4rem] shadow-2xl shadow-slate-200/50 border border-transparent hover:border-toba-green/20 transition-all duration-700">
+                <div class="group bg-white p-12 md:p-16 rounded-3xl shadow-2xl shadow-slate-200/50 border border-transparent hover:border-toba-green/20 transition-all duration-700">
                     <div class="w-20 h-20 bg-toba-green rounded-[1.5rem] flex items-center justify-center text-white mb-10 shadow-xl shadow-toba-green/30 group-hover:scale-110 transition-transform duration-500">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                     </div>
@@ -104,7 +104,7 @@
                 </div>
 
                 <!-- Mission Card -->
-                <div class="group bg-white p-12 md:p-16 rounded-[4rem] shadow-2xl shadow-slate-200/50 border border-transparent hover:border-slate-900/10 transition-all duration-700">
+                <div class="group bg-white p-12 md:p-16 rounded-3xl shadow-2xl shadow-slate-200/50 border border-transparent hover:border-slate-900/10 transition-all duration-700">
                     <div class="w-20 h-20 bg-slate-900 rounded-[1.5rem] flex items-center justify-center text-white mb-10 shadow-xl group-hover:scale-110 transition-transform duration-500">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     </div>
@@ -149,28 +149,28 @@
                 
                 <div class="lg:col-span-7">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        <div class="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
+                        <div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
                             <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-toba-green mb-8 group-hover:bg-toba-green group-hover:text-white transition-all">
                                 <i class="fas fa-gem text-xl"></i>
                             </div>
                             <h4 class="text-xl font-black text-slate-900 mb-3">Layanan Premium</h4>
                             <p class="text-sm text-slate-500 font-medium leading-relaxed">Armada terbaru dan hotel pilihan berkualitas terbaik.</p>
                         </div>
-                        <div class="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
+                        <div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
                             <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-toba-green mb-8 group-hover:bg-toba-green group-hover:text-white transition-all">
                                 <i class="fas fa-user-tie text-xl"></i>
                             </div>
                             <h4 class="text-xl font-black text-slate-900 mb-3">Guide Berlisensi</h4>
                             <p class="text-sm text-slate-500 font-medium leading-relaxed">Didampingi oleh guide lokal profesional yang informatif.</p>
                         </div>
-                        <div class="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
+                        <div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
                             <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-toba-green mb-8 group-hover:bg-toba-green group-hover:text-white transition-all">
                                 <i class="fas fa-shield-alt text-xl"></i>
                             </div>
                             <h4 class="text-xl font-black text-slate-900 mb-3">Aman & Terpercaya</h4>
                             <p class="text-sm text-slate-500 font-medium leading-relaxed">Berizin resmi dan memiliki reputasi terpercaya sejak 2012.</p>
                         </div>
-                        <div class="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
+                        <div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/30 hover:shadow-toba-green/10 transition-all group">
                             <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-toba-green mb-8 group-hover:bg-toba-green group-hover:text-white transition-all">
                                 <i class="fas fa-headset text-xl"></i>
                             </div>
@@ -205,7 +205,7 @@
 
     <!-- Call to Action -->
     <section class="py-24 md:py-32 px-6 md:px-8">
-        <div class="max-w-7xl mx-auto bg-slate-100 rounded-[4rem] p-12 md:p-24 relative overflow-hidden text-center">
+        <div class="max-w-7xl mx-auto bg-slate-100 rounded-3xl p-12 md:p-24 relative overflow-hidden text-center">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-toba-green/5 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-toba-accent/5 rounded-full blur-3xl"></div>
             
@@ -217,10 +217,10 @@
                     Siap untuk menjelajahi Sumatera Utara? Hubungi tim kami sekarang untuk merancang paket perjalanan impian Anda sendiri.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <a href="/tour/packages" class="px-12 py-6 bg-toba-green text-white rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-slate-900 transition-all shadow-2xl shadow-toba-green/30">
+                    <a href="/tour/packages" class="px-12 py-6 bg-toba-green text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-900 transition-all shadow-2xl shadow-toba-green/30">
                         Pilih Paket Wisata
                     </a>
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" target="_blank" class="px-12 py-6 bg-white text-slate-900 border border-slate-200 rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-slate-50 transition-all">
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['whatsapp'] ?? '6281323888207') }}" target="_blank" class="px-12 py-6 bg-white text-slate-900 border border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-50 transition-all">
                         Chat WhatsApp
                     </a>
                 </div>

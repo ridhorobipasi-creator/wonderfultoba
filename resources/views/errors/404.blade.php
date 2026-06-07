@@ -47,7 +47,7 @@
         <div class="relative mb-8">
             <p class="text-[12rem] md:text-[16rem] font-black text-white/5 leading-none select-none tracking-tighter">404</p>
             <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-24 h-24 bg-toba-green/10 border border-toba-green/20 rounded-[2rem] flex items-center justify-center backdrop-blur-sm">
+                <div class="w-24 h-24 bg-toba-green/10 border border-toba-green/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                     <i class="fas fa-map-location-dot text-toba-green text-3xl"></i>
                 </div>
             </div>

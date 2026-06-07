@@ -63,7 +63,7 @@
             
             <!-- Main Content: Article Body -->
             <div class="lg:col-span-8">
-                <article class="bg-white rounded-[3rem] p-10 md:p-20 shadow-[0_50px_100px_-20px_rgba(15,23,42,0.08)] border border-slate-50">
+                <article class="bg-white rounded-3xl p-10 md:p-20 shadow-[0_50px_100px_-20px_rgba(15,23,42,0.08)] border border-slate-50">
                     <!-- Intro Meta -->
                     <div class="flex items-center gap-4 mb-16 pb-10 border-b border-slate-50">
                         <div class="w-16 h-16 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-2xl shadow-xl">W</div>
@@ -88,7 +88,7 @@
                     @endif
 
                     <!-- Premium Share Bar -->
-                    <div class="mt-16 p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="mt-16 p-10 bg-slate-50 rounded-3xl border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div>
                             <h4 class="text-xl font-black text-slate-900 tracking-tight mb-1">Bagikan Inspirasi Ini</h4>
                             <p class="text-sm text-slate-500 font-medium">Bantu orang lain menemukan petualangan impian mereka.</p>
@@ -118,7 +118,7 @@
                 <div class="sticky top-28 space-y-8 animate-in fade-in slide-in-from-right-12 duration-1000">
                     
                     <!-- Sidebar CTA -->
-                    <div class="bg-slate-900 rounded-[3.5rem] p-10 md:p-12 text-white shadow-[0_50px_100px_-20px_rgba(15,23,42,0.4)] relative overflow-hidden">
+                    <div class="bg-slate-900 rounded-3xl p-10 md:p-12 text-white shadow-[0_50px_100px_-20px_rgba(15,23,42,0.4)] relative overflow-hidden">
                         <div class="absolute -top-24 -right-24 w-64 h-64 bg-toba-green/20 rounded-full blur-[80px]"></div>
                         <div class="relative z-10">
                             <span class="text-toba-accent font-black text-[11px] uppercase tracking-[0.4em] mb-6 block">Eksplorasi Sekarang</span>
@@ -126,7 +126,7 @@
                             <p class="text-slate-400 text-sm font-medium mb-10 leading-relaxed">
                                 Wujudkan cerita petualangan Anda sendiri. Pilih paket wisata yang paling sesuai dengan jiwa petualang Anda.
                             </p>
-                            <a href="/tour/packages" class="w-full flex items-center justify-center gap-3 py-6 bg-toba-green text-white rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/20 group">
+                            <a href="/tour/packages" class="w-full flex items-center justify-center gap-3 py-6 bg-toba-green text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-toba-accent hover:text-slate-900 transition-all duration-500 shadow-2xl shadow-toba-green/20 group">
                                 Lihat Paket Wisata
                                 <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
@@ -134,7 +134,7 @@
                     </div>
 
                     <!-- Social proof box -->
-                    <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
+                    <div class="bg-white rounded-3xl p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Penulis Resmi</p>
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-14 h-14 rounded-2xl bg-toba-green/10 text-toba-green flex items-center justify-center">
@@ -164,7 +164,7 @@
                     @foreach($relatedPosts as $rp)
                         <article class="group">
                             <a href="/tour/blog/{{ $rp->slug ?? $rp->id }}" class="block">
-                                <div class="relative h-64 rounded-[2.5rem] overflow-hidden mb-6 shadow-lg">
+                                <div class="relative h-64 rounded-3xl overflow-hidden mb-6 shadow-lg">
                                     <img src="{{ $rp->image }}" alt="{{ $rp->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                                     <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors"></div>
                                 </div>

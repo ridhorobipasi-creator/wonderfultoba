@@ -13,18 +13,6 @@
     <!-- FontAwesome Deferred -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"></noscript>
-    <style>
-        .split-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
-        }
-        .bg-zoom {
-            animation: ken-burns 20s infinite alternate;
-        }
-        @keyframes ken-burns {
-            from { transform: scale(1) translate(0,0); }
-            to { transform: scale(1.15) translate(-2%, -2%); }
-        }
-    </style>
 </head>
 <body class="font-sans overflow-x-hidden bg-black">
     <!-- Preload Hero Images for LCP -->
@@ -82,19 +70,19 @@
             
             <div class="absolute inset-0 flex flex-col justify-end p-8 md:p-16 lg:p-24 z-10">
                 <div class="overflow-hidden mb-4 md:mb-6">
-                    <span class="inline-block px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4 md:mb-6">B2B & Corporate</span>
+                    <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.25em] rounded-full mb-4 md:mb-6">B2B & Corporate</span>
                     <h2 class="text-4xl md:text-7xl lg:text-[6.5rem] font-black text-white leading-[0.85] tracking-tighter">
                         {!! nl2br(e($content['outbound_title'] ?? "Corporate\nOutbound.")) !!}
                     </h2>
                 </div>
-                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-80">
+                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-90">
                     {{ $content['outbound_subtitle'] ?? 'Solusi team building & gathering profesional untuk instansi Anda.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-700 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-500/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/outbound" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-white text-slate-900 rounded-full font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-soft hover:bg-toba-green hover:text-white transition-all duration-300">
                         Jelajahi Outbound
                     </a>
-                    <a href="/outbound" aria-label="Jelajahi Outbound" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                    <a href="/outbound" aria-label="Jelajahi Outbound" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 flex items-center justify-center text-white transition-all hover:bg-white hover:text-slate-900 overflow-hidden cursor-pointer shrink-0">
                         <i class="fas fa-arrow-right -rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -117,19 +105,19 @@
             
             <div class="absolute inset-0 flex flex-col justify-end items-end p-8 md:p-16 lg:p-24 text-right z-10">
                 <div class="overflow-hidden mb-4 md:mb-6">
-                    <span class="inline-block px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4 md:mb-6">Premium Leisure</span>
+                    <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.25em] rounded-full mb-4 md:mb-6">Premium Leisure</span>
                     <h2 class="text-4xl md:text-7xl lg:text-[6.5rem] font-black text-white leading-[0.85] tracking-tighter">
                         {!! nl2br(e($content['tour_title'] ?? "Tour &\nTravel.")) !!}
                     </h2>
                 </div>
-                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-80 text-right">
+                <p class="hidden sm:block text-slate-200 text-sm md:text-lg font-medium max-w-sm mb-8 md:mb-12 leading-relaxed opacity-90 text-right">
                     {{ $content['tour_subtitle'] ?? 'Eksplorasi keindahan Danau Toba dengan paket liburan eksklusif kami.' }}
                 </p>
                 <div class="flex items-center space-x-4 md:space-x-6">
-                    <a href="/tour" aria-label="Jelajahi Wisata" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white transition-all hover:bg-white hover:text-emerald-900 overflow-hidden cursor-pointer shrink-0">
+                    <a href="/tour" aria-label="Jelajahi Wisata" class="group/arrow relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 flex items-center justify-center text-white transition-all hover:bg-white hover:text-slate-900 overflow-hidden cursor-pointer shrink-0">
                         <i class="fas fa-arrow-left rotate-45 relative z-10 group-hover/arrow:rotate-0 transition-transform duration-500" aria-hidden="true"></i>
                     </a>
-                    <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-emerald-800 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl border border-emerald-400/20 hover:bg-white hover:text-emerald-900 transition-all duration-500">
+                    <a href="/tour" class="group/btn flex-1 sm:flex-none text-center px-8 py-4 md:px-10 md:py-5 bg-white text-slate-900 rounded-full font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-soft hover:bg-toba-green hover:text-white transition-all duration-300">
                         Jelajahi Wisata
                     </a>
                 </div>

@@ -19,7 +19,7 @@
             title: '{{ $settings['about_hero_title'] ?? 'Apa itu Outbound?' }}',
             description: '{{ $settings['about_hero_desc'] ?? 'Outbound adalah metode pembelajaran berbasis pengalaman di alam terbuka yang dirancang untuk membangun karakter, kepemimpinan, dan kerjasama tim secara efektif.' }}',
             statsLabel: '{{ $settings['stat_label_0'] ?? 'Instansi Terlayani' }}',
-            statsValue: '{{ $settings['stat_value_0'] ?? '500+' }}'
+            statsValue: '{{ $settings['stat_value_0'] ?? '' }}'
         },
         waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['cta_whatsapp_number'] ?? $siteSettings['general']['whatsapp'] ?? '6281323888207') }}',
         init() {
@@ -121,7 +121,7 @@
                         <div class="pl-8 text-xl leading-relaxed text-slate-600 font-medium" x-text="about.description"></div>
                     </div>
 
-                    <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative hover:shadow-[0_20px_60px_-15px_rgba(16,185,129,0.1)] transition-all duration-500">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-8 md:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] relative hover:shadow-[0_20px_60px_-15px_rgba(16,185,129,0.1)] transition-all duration-500">
                         <h3 class="text-xl md:text-2xl font-black mb-8 text-slate-900 flex items-center gap-4">
                             <span class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg">
                                 <i class="fas fa-star"></i>
@@ -132,24 +132,24 @@
                             @php
                                 $defaults = [
                                     1 => [
-                                        'title' => 'Trainer Bersertifikasi',
+                                        'title' => 'Trainer Berpengalaman',
                                         'icon' => 'fas fa-award',
-                                        'desc' => 'Tim trainer profesional bersertifikasi resmi BNSP dan AELI dengan pengalaman puluhan tahun.'
+                                        'desc' => 'Tim fasilitator yang berpengalaman menangani berbagai program outbound dan team building.'
                                     ],
                                     2 => [
                                         'title' => 'Program Custom',
                                         'icon' => 'fas fa-sliders',
-                                        'desc' => 'Program dirancang khusus berbasis Experiential Learning yang disesuaikan dengan corporate goals.'
+                                        'desc' => 'Program dirancang berbasis Experiential Learning dan disesuaikan dengan kebutuhan tim Anda.'
                                     ],
                                     3 => [
-                                        'title' => 'Keamanan Terjamin',
+                                        'title' => 'Utamakan Keselamatan',
                                         'icon' => 'fas fa-shield-halved',
-                                        'desc' => 'Peralatan berstandar internasional, asuransi, serta instruktur K3 tersertifikasi.'
+                                        'desc' => 'Peralatan terstandar dan prosedur keselamatan menjadi prioritas di setiap kegiatan.'
                                     ],
                                     4 => [
-                                        'title' => 'Kemitraan Resort',
+                                        'title' => 'Jaringan Lokasi',
                                         'icon' => 'fas fa-hotel',
-                                        'desc' => 'Koneksi luas dengan resort premium di Samosir, Sibolangit, Simalem, & Bukit Lawang.'
+                                        'desc' => 'Pilihan lokasi kegiatan di Samosir, Sibolangit, Simalem, & Bukit Lawang.'
                                     ]
                                 ];
                             @endphp
@@ -180,19 +180,21 @@
 
 
                 <div class="lg:col-span-5 relative mt-32 lg:mt-0">
-                    <div class="relative w-full md:w-4/5 ml-auto md:-right-4 top-0 z-10 rounded-[2.5rem] overflow-hidden shadow-2xl hover:-translate-y-2 transition-transform duration-500">
-                        <img src="{{ imageUrl($settings['about_image_1_url'] ?? $settings['about_image_1'] ?? null, 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=800') }}" alt="Team Building" class="w-full aspect-[4/5] object-cover">
+                    <div class="relative w-full md:w-4/5 ml-auto md:-right-4 top-0 z-10 rounded-3xl overflow-hidden shadow-card hover:-translate-y-1 transition-transform duration-300">
+                        <img src="{{ imageUrl($settings['about_image_1_url'] ?? $settings['about_image_1'] ?? null, 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=800') }}" alt="Team Building" loading="lazy" decoding="async" class="w-full aspect-[4/5] object-cover">
                     </div>
-                    <div class="absolute w-3/4 -bottom-12 -left-4 z-20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[6px] border-white hover:scale-105 transition-transform duration-500">
-                        <img src="{{ imageUrl($settings['about_image_2_url'] ?? $settings['about_image_2'] ?? null, 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800') }}" alt="Corporate Activity" class="w-full aspect-square object-cover">
+                    <div class="absolute w-3/4 -bottom-12 -left-4 z-20 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[6px] border-white hover:scale-105 transition-transform duration-500">
+                        <img src="{{ imageUrl($settings['about_image_2_url'] ?? $settings['about_image_2'] ?? null, 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800') }}" alt="Corporate Activity" loading="lazy" decoding="async" class="w-full aspect-square object-cover">
                     </div>
-                    <div class="absolute top-1/2 -left-8 lg:-left-12 z-30 bg-white/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] border border-white flex items-center gap-4">
-                        <div class="bg-gradient-to-br from-toba-green to-emerald-600 text-white w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-2xl shadow-inner shadow-white/20" x-text="about.statsValue"></div>
+                    @if(!empty($settings['stat_value_0']))
+                    <div class="absolute top-1/2 -left-8 lg:-left-12 z-30 bg-white/90 backdrop-blur-xl p-5 md:p-6 rounded-3xl shadow-soft border border-slate-100 flex items-center gap-4">
+                        <div class="bg-toba-green text-white w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-2xl" x-text="about.statsValue"></div>
                         <div>
                             <div class="font-black text-slate-900 text-sm md:text-base uppercase tracking-wider leading-none mb-1" x-text="about.statsLabel"></div>
                             <div class="text-slate-500 font-bold text-xs md:text-sm">Pengalaman Eksekusi</div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -345,11 +347,11 @@
                             $iconClass = 'fas fa-' . $iconClass;
                         }
                     @endphp
-                    <div class="group relative rounded-[2.5rem] p-1 overflow-hidden bg-gradient-to-b from-white/10 to-white/5 hover:from-toba-green/40 hover:to-toba-green/5 transition-colors duration-500">
+                    <div class="group relative rounded-3xl p-1 overflow-hidden bg-gradient-to-b from-white/10 to-white/5 hover:from-toba-green/40 hover:to-toba-green/5 transition-colors duration-500">
                         <div class="absolute inset-0 bg-toba-green/0 group-hover:bg-toba-green/10 blur-xl transition-all duration-700"></div>
                         <div class="relative w-full h-full bg-[#0d131f] rounded-[2.3rem] overflow-hidden flex flex-col items-start border border-white/5">
                             <div class="w-full h-56 relative overflow-hidden">
-                                <img src="{{ $svc->image }}" alt="{{ $svc->title }}" class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100">
+                                <img src="{{ $svc->image }}" alt="{{ $svc->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100">
                                 <div class="absolute inset-0 bg-gradient-to-b from-black/0 via-[#0d131f]/10 to-[#0d131f] translate-y-2"></div>
                                 <div class="absolute top-5 right-5 bg-black/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 shadow-2xl group-hover:bg-toba-green group-hover:border-toba-green transition-colors duration-300">
                                     <i class="{{ $iconClass }} text-toba-green group-hover:text-white transition-colors text-lg"></i>
@@ -388,11 +390,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @foreach($featuredPackages as $pkg)
                 <a href="/outbound/packages" class="group block">
-                    <div class="relative h-[450px] rounded-[3rem] overflow-hidden mb-6 shadow-2xl shadow-slate-200/50">
+                    <div class="relative h-[450px] rounded-3xl overflow-hidden mb-6 shadow-card">
                         @php
-                            $pImg = $pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? 'https://images.unsplash.com/photo-1522071823991-b580970ad00d?w=800');
+                            $pImg = imageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null), asset('images/home/outbound.webp'));
                         @endphp
-                        <img src="{{ asset($pImg) }}" alt="{{ $pkg->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="{{ $pImg }}" alt="{{ $pkg->name }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
                         <div class="absolute bottom-8 left-8 right-8">
                             <div class="flex items-center gap-3 mb-3">
@@ -427,10 +429,10 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach($locations as $loc)
-                <div class="bg-white rounded-[2.5rem] overflow-hidden border border-slate-100/80 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 group h-full flex flex-col">
+                <div class="bg-white rounded-3xl overflow-hidden border border-slate-100/80 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 group h-full flex flex-col">
                     <div class="relative h-64 overflow-hidden shrink-0">
-                        <img src="{{ imageUrl($loc->image) }}" alt="{{ $loc->name }}" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.2s] ease-out">
+                        <img src="{{ imageUrl($loc->image) }}" alt="{{ $loc->name }}" loading="lazy" decoding="async"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.2s] ease-out">
                         <div class="absolute top-5 left-5">
                             <div class="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-lg">
                                 <i class="fas fa-map-marker-alt text-toba-green text-xs"></i>
@@ -483,7 +485,7 @@
                 @endforeach
             </div>
             
-            <div class="aspect-video w-full max-w-5xl mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl bg-slate-900 relative ring-8 ring-white">
+            <div class="aspect-video w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-card bg-slate-900 relative ring-4 ring-white">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="w-16 h-16 border-4 border-toba-green/30 border-t-toba-green rounded-full animate-spin"></div>
                 </div>
@@ -612,7 +614,7 @@
                      @touchend="handleTouchEnd">
                     @foreach($gallery as $img)
                     <div class="px-4 shrink-0" :style="`width: ${100 / visibleCount}%`">
-                        <div class="group relative aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-xl border border-slate-100 cursor-pointer bg-slate-50"
+                        <div class="group relative aspect-[4/3] overflow-hidden rounded-3xl shadow-xl border border-slate-100 cursor-pointer bg-slate-50"
                              @click="openLightbox('{{ imageUrl($img->imageUrl) }}', '{{ $img->caption }}')">
                             <img src="{{ imageUrl($img->imageUrl) }}" alt="{{ $img->caption }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s] ease-out">
                             
@@ -677,7 +679,7 @@
             <div class="relative max-w-5xl w-full h-full flex flex-col items-center justify-center" @click.stop>
                 <img
                     :src="lightbox.imageUrl"
-                    class="max-w-full max-h-[70vh] object-contain rounded-[2.5rem] shadow-[0_50px_150px_-30px_rgba(0,0,0,1)] border border-white/10"
+                    class="max-w-full max-h-[70vh] object-contain rounded-3xl shadow-[0_50px_150px_-30px_rgba(0,0,0,1)] border border-white/10"
                     x-transition:enter="transition ease-out duration-500 delay-100"
                     x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100"
@@ -759,7 +761,7 @@
                     $testimonials = $settings['testimonials'];
                 @endphp
                 @foreach($testimonials as $t)
-                <div class="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500 group">
+                <div class="p-10 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-card transition-all duration-300 group">
                     <div class="flex gap-1 mb-8 text-amber-400">
                         @for($j=0; $j<5; $j++) <i class="fas fa-star text-xs"></i> @endfor
                     </div>
@@ -788,7 +790,7 @@
     <section id="penawaran" class="py-32 bg-slate-50 border-y border-slate-100">
         <div class="max-w-4xl mx-auto px-6">
             @if(session('success'))
-                <div class="mb-8 p-8 bg-emerald-500 text-white rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="mb-8 p-8 bg-emerald-500 text-white rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
                             <i class="fas fa-check"></i>
@@ -807,7 +809,7 @@
             @endif
 
             @if ($errors->any())
-                <div class="mb-8 p-6 bg-rose-500 text-white rounded-[2.5rem] shadow-xl">
+                <div class="mb-8 p-6 bg-rose-500 text-white rounded-3xl shadow-xl">
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0 mt-1">
                             <i class="fas fa-exclamation-triangle"></i>
@@ -824,7 +826,7 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
+            <div class="bg-white rounded-3xl shadow-card overflow-hidden border border-slate-200/70">
                 <div class="bg-toba-green p-12 text-white text-center relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
                     <div class="relative z-10">
@@ -933,9 +935,9 @@
                         </a>
                     </div>
                 </div>
-                <div class="bg-white/5 border border-white/10 rounded-[3rem] p-10 md:p-12 backdrop-blur-xl space-y-10">
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-10 md:p-12 backdrop-blur-xl space-y-10">
                     <!-- Specialist Card (Dynamic) -->
-                    <div class="bg-white/10 p-6 rounded-[2rem] border border-white/20">
+                    <div class="bg-white/10 p-6 rounded-2xl border border-white/20">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 rounded-full border-2 border-toba-green overflow-hidden shrink-0">
                                 <img src="{{ imageUrl($settings['specialist_image_url'] ?? null) }}" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($settings['specialist_name'] ?? 'Wonderful Toba') }}&background=064e3b&color=ffffff&bold=true'">

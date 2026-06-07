@@ -44,7 +44,7 @@
         </div>
 
         <!-- Filters -->
-        <div class="glass-card p-8 md:p-10 rounded-[3rem] shadow-2xl border-white/40 mb-16 sticky top-[80px] z-30 animate-fade-in-up delay-300">
+        <div class="glass-card p-8 md:p-10 rounded-3xl shadow-2xl border-white/40 mb-16 sticky top-[80px] z-30 animate-fade-in-up delay-300">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Search -->
                 <div class="relative group lg:col-span-2">
@@ -125,7 +125,7 @@
         </div>
 
         <!-- Empty State -->
-        <div x-show="filteredPackages.length === 0" class="text-center py-40 glass-card rounded-[3rem] animate-fade-in-up">
+        <div x-show="filteredPackages.length === 0" class="text-center py-40 glass-card rounded-3xl animate-fade-in-up">
             <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-200">
                 <i class="fas fa-search-minus text-4xl"></i>
             </div>

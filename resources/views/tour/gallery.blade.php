@@ -78,7 +78,7 @@
 
     <!-- Category Filter & Search Bar (Sticky Premium) -->
     <div class="max-w-7xl mx-auto px-6 md:px-8 -mt-20 relative z-30">
-        <div class="bg-white rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(15,23,42,0.1)] p-8 md:p-12 border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
+        <div class="bg-white rounded-3xl shadow-[0_50px_100px_-20px_rgba(15,23,42,0.1)] p-8 md:p-12 border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
                 <!-- Filters -->
                 <div class="flex flex-wrap justify-center lg:justify-start gap-3">
@@ -122,7 +122,7 @@
         <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
             <template x-for="(img, index) in filteredImages" :key="index">
                 <div
-                    class="break-inside-avoid relative rounded-[2.5rem] overflow-hidden group cursor-pointer shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-toba-green/20 border border-slate-50"
+                    class="break-inside-avoid relative rounded-3xl overflow-hidden group cursor-pointer shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-toba-green/20 border border-slate-50"
                     @click="openLightbox(index)"
                     x-transition:enter="transition opacity duration-500"
                     x-transition:enter-start="opacity-0"
@@ -159,7 +159,7 @@
         </div>
 
         <!-- Premium Empty State -->
-        <div x-show="filteredImages.length === 0" class="text-center py-40 bg-slate-50 rounded-[4rem] border-2 border-dashed border-slate-200 animate-in fade-in zoom-in duration-700">
+        <div x-show="filteredImages.length === 0" class="text-center py-40 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 animate-in fade-in zoom-in duration-700">
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-slate-200 text-slate-300">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
@@ -201,13 +201,13 @@
             <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-8 md:px-12 pointer-events-none z-[210]">
                 <button
                     @click.stop="prev()"
-                    class="w-20 h-20 bg-white/5 hover:bg-toba-green backdrop-blur-xl rounded-[2rem] flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-2xl group"
+                    class="w-20 h-20 bg-white/5 hover:bg-toba-green backdrop-blur-xl rounded-2xl flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-2xl group"
                 >
                     <svg class="w-8 h-8 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <button
                     @click.stop="next()"
-                    class="w-20 h-20 bg-white/5 hover:bg-toba-green backdrop-blur-xl rounded-[2rem] flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-2xl group"
+                    class="w-20 h-20 bg-white/5 hover:bg-toba-green backdrop-blur-xl rounded-2xl flex items-center justify-center text-white transition-all pointer-events-auto border border-white/10 shadow-2xl group"
                 >
                     <svg class="w-8 h-8 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                 </button>
@@ -218,7 +218,7 @@
                 <div class="relative max-w-6xl w-full h-full flex flex-col items-center justify-center p-8 md:p-20">
                     <img
                         :src="filteredImages[lightbox.index].image_url"
-                        class="max-w-full max-h-[75vh] object-contain rounded-[3rem] shadow-[0_50px_150px_-30px_rgba(0,0,0,1)] border border-white/10"
+                        class="max-w-full max-h-[75vh] object-contain rounded-3xl shadow-[0_50px_150px_-30px_rgba(0,0,0,1)] border border-white/10"
                         x-transition:enter="transition ease-out duration-700 delay-100"
                         x-transition:enter-start="opacity-0 scale-90 translate-y-10"
                         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
