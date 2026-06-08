@@ -19,6 +19,8 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * 
+     * 
      * Register any application services.
      */
     public function register(): void
@@ -41,17 +43,16 @@ class AppServiceProvider extends ServiceProvider
         Package::observe(PackageObserver::class);
         Blog::observe(BlogObserver::class);
         Setting::observe(SettingObserver::class);
-        Booking::observe(\App\Observers\BookingObserver::class);
 
         // Share settings globally
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             try {
                 // Point 4: Caching Site Settings - Automatically cleared on saved() via Observer
                 $decodedSettings = Cache::rememberForever('site_settings_global', function () {
                     $settings = Setting::query()
                         ->select(['key', 'value'])
                         ->get()
-                        ->mapWithKeys(fn ($setting) => [$setting->key => $setting->value])
+                        ->mapWithKeys(fn($setting) => [$setting->key => $setting->value])
                         ->toArray();
 
                     $decoded = [];
@@ -87,14 +88,9 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
 
-                // Share pending bookings count for the admin notification bell only.
-                // Cached + restricted to admin paths to avoid a COUNT query on every public request.
-                if (! $this->app->runningInConsole() && request()->is('admin*')) {
-                    $pendingBookingsCount = Cache::remember(
-                        'pending_bookings_count',
-                        60,
-                        fn () => Booking::where('status', 'pending')->count()
-                    );
+                // Share pending bookings count globally for notification bell
+                if (!$this->app->runningInConsole()) {
+                    $pendingBookingsCount = Booking::where('status', 'pending')->count();
                     view()->share('pendingBookingsCount', $pendingBookingsCount);
                 }
             } catch (\Exception $e) {

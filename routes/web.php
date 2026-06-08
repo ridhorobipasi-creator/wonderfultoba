@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PwaController;
 use App\Http\Controllers\WebAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,41 +53,10 @@ Route::get('/api/sync/version', [SyncController::class, 'getVersion'])->name('ap
 // The app itself still requires login; these only expose the manifest/asset links needed to build the APK.
 Route::get('/admin-app', fn () => view('admin.install'))->name('pwa.install');
 
-Route::get('/admin-app/manifest.webmanifest', function () {
-    return response()->json([
-        'name'             => 'Sujai Admin',
-        'short_name'       => 'Sujai Admin',
-        'description'      => 'Panel manajemen wisata Sujai Laketoba',
-        'start_url'        => '/admin/',
-        'scope'            => '/',
-        'display'          => 'standalone',
-        'orientation'      => 'portrait',
-        'background_color' => '#f8fafc',
-        'theme_color'      => '#1e40af',
-        'icons'            => [
-            ['src' => '/icon-192.png', 'sizes' => '192x192', 'type' => 'image/png', 'purpose' => 'any'],
-            ['src' => '/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'any'],
-            ['src' => '/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'maskable'],
-        ],
-    ], 200, ['Content-Type' => 'application/manifest+json']);
-})->name('pwa.manifest.public');
+Route::get('/admin-app/manifest.webmanifest', [PwaController::class, 'manifestPublic'])->name('pwa.manifest.public');
 
 // Digital Asset Links — verifies the APK owns this domain so the TWA opens without a URL bar.
-Route::get('/.well-known/assetlinks.json', function () {
-    $fingerprints = array_values(array_filter(array_map(
-        'trim',
-        explode(',', (string) config('services.pwa_android.fingerprint'))
-    )));
-
-    return response()->json([[
-        'relation' => ['delegate_permission/common.handle_all_urls'],
-        'target'   => [
-            'namespace'                => 'android_app',
-            'package_name'             => config('services.pwa_android.package'),
-            'sha256_cert_fingerprints' => $fingerprints,
-        ],
-    ]]);
-})->name('pwa.assetlinks');
+Route::get('/.well-known/assetlinks.json', [PwaController::class, 'assetLinks'])->name('pwa.assetlinks');
 
 // Admin Group
 Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('admin')->name('admin.')->group(function () {
@@ -172,45 +142,10 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::resource('clients', ClientController::class);
 
     // PWA - Admin Panel Progressive Web App
-    Route::get('/manifest.json', function () {
-        // Only Superadmin can access the manifest — returns 403 otherwise
-        if (!auth()->check() || !auth()->user()->isSuperAdmin()) {
-            abort(403, 'Access denied.');
-        }
-        $manifest = [
-            'name'             => 'Sujai Admin Panel',
-            'short_name'       => 'Sujai Admin',
-            'description'      => 'Panel manajemen wisata Sujai Laketoba — khusus Superadmin',
-            'start_url'        => '/admin/',
-            'scope'            => '/admin/',
-            'display'          => 'standalone',
-            'orientation'      => 'portrait',
-            'background_color' => '#f8fafc',
-            'theme_color'      => '#1e40af',
-            'categories'       => ['business', 'productivity'],
-            'icons'            => [
-                [
-                    'src'     => '/icon-192.png',
-                    'sizes'   => '192x192',
-                    'type'    => 'image/png',
-                    'purpose' => 'any maskable',
-                ],
-                [
-                    'src'     => '/icon-512.png',
-                    'sizes'   => '512x512',
-                    'type'    => 'image/png',
-                    'purpose' => 'any maskable',
-                ],
-            ],
-        ];
-        return response()->json($manifest)
-            ->header('Content-Type', 'application/manifest+json');
-    })->name('pwa.manifest');
+    Route::get('/manifest.json', [PwaController::class, 'manifestAdmin'])->name('pwa.manifest');
 
     // PWA Offline page
-    Route::get('/offline', function () {
-        return view('admin.offline');
-    })->name('pwa.offline');
+    Route::get('/offline', [PwaController::class, 'offline'])->name('pwa.offline');
 
     // System Settings (Superadmin Only)
     Route::middleware('role:superadmin,admin_umum')->group(function () {
