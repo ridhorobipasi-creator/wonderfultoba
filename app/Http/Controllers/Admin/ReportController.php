@@ -36,7 +36,7 @@ class ReportController extends Controller
 
         // 1. Monthly/Filtered Summary
         $monthlyBookings = $query->clone()
-            ->with('package')
+            ->with(['package' => fn ($q) => $q->withTrashed()])
             ->whereIn('status', ['confirmed', 'completed'])
             ->get();
 
@@ -62,12 +62,12 @@ class ReportController extends Controller
         // 3. Yearly Summary
         if ($isSqlite) {
             $yearlyBookings = Booking::whereBetween('createdAt', ["$year-01-01 00:00:00", "$year-12-31 23:59:59"])
-                ->with('package')
+                ->with(['package' => fn ($q) => $q->withTrashed()])
                 ->whereIn('status', ['confirmed', 'completed'])
                 ->get();
         } else {
             $yearlyBookings = Booking::whereYear('createdAt', $year)
-                ->with('package')
+                ->with(['package' => fn ($q) => $q->withTrashed()])
                 ->whereIn('status', ['confirmed', 'completed'])
                 ->get();
         }
@@ -103,7 +103,7 @@ class ReportController extends Controller
 
         // 5. Booking List
         $bookings = $query->clone()
-            ->with(['package', 'customer'])
+            ->with(['package' => fn ($q) => $q->withTrashed(), 'customer'])
             ->latest('createdAt')
             ->get();
 
@@ -119,7 +119,7 @@ class ReportController extends Controller
         $format = $request->get('format', 'csv');
 
         $isSqlite = DB::connection()->getDriverName() === 'sqlite';
-        $exportQuery = Booking::with(['package', 'customer']);
+        $exportQuery = Booking::with(['package' => fn ($q) => $q->withTrashed(), 'customer']);
 
         if ($isSqlite) {
             $startDate = "$year-".($month === 'all' ? '01' : str_pad($month, 2, '0', STR_PAD_LEFT)).'-01 00:00:00';

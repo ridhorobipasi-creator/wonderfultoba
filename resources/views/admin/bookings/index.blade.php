@@ -227,11 +227,11 @@
                                             <i class="fas fa-chevron-right text-[10px]"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.bookings.invoice', $booking) }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
+                                        <a href="{{ route('admin.bookings.invoice', $booking->bookingCode) }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
                                             <i class="fas fa-file-pdf text-[10px]"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.bookings.invoice.download', $booking) }}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 shadow-sm transition transform hover:-translate-y-0.5 border border-slate-200" title="Download PDF">
+                                        <a href="{{ route('admin.bookings.invoice.download', $booking->bookingCode) }}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 shadow-sm transition transform hover:-translate-y-0.5 border border-slate-200" title="Download PDF">
                                             <i class="fas fa-file-arrow-down text-[10px]"></i>
                                         </a>
 

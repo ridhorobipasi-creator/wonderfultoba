@@ -96,7 +96,7 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::post('gallery/store-from-media', [GalleryController::class, 'storeFromMedia'])->name('gallery.store-from-media');
     Route::post('gallery/{gallery}/toggle-status', [GalleryController::class, 'toggleStatus'])->name('gallery.toggle-status');
     Route::get('galleries', [GalleryController::class, 'index'])->name('galleries.index');
-    Route::resource('gallery', GalleryController::class);
+    Route::resource('gallery', GalleryController::class)->except(['create', 'show']);
 
     // CMS Management
     Route::get('/cms-halaman-utama', [CMSController::class, 'index'])->name('cms.index');
@@ -128,18 +128,18 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
     Route::post('media/audit/clean', [MediaController::class, 'cleanOrphanFiles'])->name('media.clean-orphans');
     Route::post('media/{media}/crop', [MediaController::class, 'crop'])->name('media.crop');
     Route::post('media/search', [MediaController::class, 'index'])->name('media.search');
-    Route::resource('media', MediaController::class)->parameters(['media' => 'media']);
+    Route::resource('media', MediaController::class)->parameters(['media' => 'media'])->except(['create', 'show', 'edit']);
 
     // Region Data
     Route::get('cities/regencies', [CityController::class, 'getRegencies'])->name('cities.regencies');
-    Route::resource('cities', CityController::class);
+    Route::resource('cities', CityController::class)->except(['show']);
     Route::resource('regencies', RegencyController::class)->only(['index', 'edit', 'update']);
 
     // Customers & Clients
     Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
     Route::post('customers/bulk-destroy', [CustomerController::class, 'bulkDestroy'])->name('customers.bulk-destroy');
     Route::resource('customers', CustomerController::class);
-    Route::resource('clients', ClientController::class);
+    Route::resource('clients', ClientController::class)->only(['index', 'store', 'destroy']);
 
     // PWA - Admin Panel Progressive Web App
     Route::get('/manifest.json', [PwaController::class, 'manifestAdmin'])->name('pwa.manifest');

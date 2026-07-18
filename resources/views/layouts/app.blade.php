@@ -43,18 +43,18 @@
             ? ogBannerUrl($ogModel)
             : (!empty($siteSettings['general']['og_image_url']) ? imageUrl($siteSettings['general']['og_image_url']) : ogBannerUrl(null));
     @endphp
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ isset($post) ? 'article' : 'website' }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ strip_tags($__env->yieldContent('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')) }}">
     <meta property="og:description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
     <meta property="og:image" content="{{ $__env->yieldContent('og_image', $ogDefault) }}">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ strip_tags($__env->yieldContent('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')) }}">
-    <meta property="twitter:description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
-    <meta property="twitter:image" content="{{ $__env->yieldContent('og_image', $ogDefault) }}">
+    <!-- Twitter (X reads the `name` attribute, not `property`) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ strip_tags($__env->yieldContent('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')) }}">
+    <meta name="twitter:description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
+    <meta name="twitter:image" content="{{ $__env->yieldContent('og_image', $ogDefault) }}">
 
     <!-- Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -141,8 +141,6 @@
         // env() returns null once config is cached, so never read COMPANY_PHONE here.
         $waFloat = preg_replace('/[^0-9]/', '', (string) (
             $siteSettings['general']['contact_whatsapp']
-            ?? $siteSettings['general']['contact_whatsapp']
-            ?? $siteSettings['general']['contact_whatsapp']
             ?? config('services.whatsapp.number')
             ?? ''
         ));
@@ -201,10 +199,37 @@
                     if (currentVersion === null) {
                         currentVersion = data.version;
                     } else if (data.version !== currentVersion) {
-                        // CMS content updated — auto-reload
-                        window.location.reload();
+                        // CMS content updated. Never yank a page out from under a
+                        // user who is filling a form — offer a refresh instead.
+                        if (isUserEditing()) {
+                            showRefreshBanner();
+                            stopPolling();
+                        } else {
+                            window.location.reload();
+                        }
                     }
                 } catch (e) {}
+            }
+
+            function isUserEditing() {
+                const active = document.activeElement;
+                if (active && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) return true;
+                return Array.from(document.querySelectorAll('input, textarea'))
+                    .some((el) => el.type !== 'hidden' && el.type !== 'submit' && el.value.trim() !== '');
+            }
+
+            function showRefreshBanner() {
+                if (document.getElementById('cms-refresh-banner')) return;
+                const bar = document.createElement('div');
+                bar.id = 'cms-refresh-banner';
+                bar.style.cssText = 'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;background:#1a6b4a;color:#fff;padding:10px 16px;border-radius:9999px;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:14px;display:flex;gap:12px;align-items:center';
+                bar.innerHTML = '<span>Konten telah diperbarui.</span>';
+                const btn = document.createElement('button');
+                btn.textContent = 'Muat ulang';
+                btn.style.cssText = 'background:#fff;color:#1a6b4a;border:none;padding:4px 12px;border-radius:9999px;font-weight:600;cursor:pointer';
+                btn.onclick = () => window.location.reload();
+                bar.appendChild(btn);
+                document.body.appendChild(bar);
             }
 
             function startPolling() {

@@ -46,3 +46,13 @@ Thumbs.db
 *.7z
 *.tt
 *.tmp
+
+# AI assistant artifacts & one-off dev scripts
+.aider*
+composer.phar
+/public/error_log
+
+# Credentials & signing keys — NEVER commit
+ssh.md
+informasi.md
+*.keystore

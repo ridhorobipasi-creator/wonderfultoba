@@ -15,6 +15,7 @@ use App\Services\TourService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -40,23 +41,6 @@ class PublicController extends Controller
 
             return $settings;
         });
-    }
-
-    /**
-     * Homepage / Split Landing Page
-     */
-    public function index()
-    {
-        try {
-            $siteSettings = $this->getSiteSettings(['cms_landing', 'cms_tour', 'general']);
-            $content = $siteSettings['cms_landing'];
-
-            return view('index', compact('content', 'siteSettings'));
-        } catch (\Exception $e) {
-            Log::error('Error loading index page: '.$e->getMessage());
-
-            return view('errors.500');
-        }
     }
 
     /**
@@ -176,10 +160,12 @@ class PublicController extends Controller
                 abort(404);
             }
 
-            // Session-based view counting — prevent F5 inflation
+            // Session-based view counting — prevent F5 inflation.
+            // Use a raw increment so it does not fire model events (which would
+            // clear the tour cache) nor bump updatedAt on every page view.
             $viewKey = 'viewed_package_'.$package->id;
             if (! session()->has($viewKey)) {
-                $package->increment('views_count');
+                DB::table('packages')->where('id', $package->id)->increment('views_count');
                 session()->put($viewKey, true);
             }
 
@@ -209,10 +195,11 @@ class PublicController extends Controller
                 abort(404);
             }
 
-            // Session-based view counting — prevent F5 inflation
+            // Session-based view counting — prevent F5 inflation.
+            // Raw increment: no model events (avoids cache clear), no updatedAt bump.
             $viewKey = 'viewed_blog_'.$post->id;
             if (! session()->has($viewKey)) {
-                $post->increment('views_count');
+                DB::table('blogs')->where('id', $post->id)->increment('views_count');
                 session()->put($viewKey, true);
             }
 

@@ -8,7 +8,9 @@ class BookingRepository
 {
     public function getAll(array $filters = [], bool $noPagination = false)
     {
-        $query = Booking::with(['package']);
+        // withTrashed so historical bookings keep their package name even after
+        // the package is soft-deleted (otherwise the relation resolves to null).
+        $query = Booking::with(['package' => fn ($q) => $q->withTrashed()]);
 
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -55,7 +57,7 @@ class BookingRepository
 
     public function find(int $id)
     {
-        return Booking::with(['package'])->findOrFail($id);
+        return Booking::with(['package' => fn ($q) => $q->withTrashed()])->findOrFail($id);
     }
 
     public function create(array $data)

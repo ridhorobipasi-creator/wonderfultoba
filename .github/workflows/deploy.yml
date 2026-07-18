@@ -70,7 +70,8 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
-        protocol: ftp
+        # Explicit TLS (FTPS) — credentials & files no longer travel in plaintext.
+        protocol: ftps
         timeout: 1800000
         log-level: verbose
         server-dir: public_html/
@@ -99,6 +100,13 @@ jobs:
           optimize.bat
           PRODUKSI.md
           rekap_project.md
+          ssh.md
+          informasi.md
+          DEPLOY.md
+          CLAUDE.md
+          PROJECT_KNOWLEDGE.md
+          task.md
+          android-build/**
           .github/**
           .env.example
           .env.production.example

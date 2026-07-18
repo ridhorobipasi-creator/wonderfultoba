@@ -10,7 +10,7 @@ class LocationSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function up(): void
+    public function run(): void
     {
         // Clear tables if needed or use updateOrInsert
 

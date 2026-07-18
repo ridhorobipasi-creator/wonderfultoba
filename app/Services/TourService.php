@@ -89,16 +89,12 @@ class TourService
     }
 
     /**
-     * Delete package assets.
+     * Soft-delete a package. Physical image files are intentionally kept so a
+     * subsequent restore() still has its images; orphaned files are reclaimed
+     * by the media audit clean-orphans command after permanent deletion.
      */
     public function deletePackage(Package $package)
     {
-        if ($package->images) {
-            foreach ($package->images as $image) {
-                Storage::disk('public')->delete($image);
-            }
-        }
-
         return $package->delete();
     }
 
@@ -133,51 +129,57 @@ class TourService
     }
 
     /**
-     * Get featured active tour packages.
+     * Get featured active tour packages. Cached; invalidated via clearCache().
      */
     public function getFeaturedPackages()
     {
-        $featured = Package::where('status', 'active')
-            ->where('isFeatured', true)
-            ->with(['packageImages', 'city'])
-            ->orderBy('sortOrder')
-            ->get();
-
-        // Fallback: if no featured packages, show all active ones
-        if ($featured->isEmpty()) {
-            return Package::where('status', 'active')
+        return Cache::remember('featured_packages', 600, function () {
+            $featured = Package::where('status', 'active')
+                ->where('isFeatured', true)
                 ->with(['packageImages', 'city'])
                 ->orderBy('sortOrder')
                 ->get();
-        }
 
-        return $featured;
+            // Fallback: if no featured packages, show all active ones
+            if ($featured->isEmpty()) {
+                return Package::where('status', 'active')
+                    ->with(['packageImages', 'city'])
+                    ->orderBy('sortOrder')
+                    ->get();
+            }
+
+            return $featured;
+        });
     }
 
     /**
      * Get tour blog posts. Does NOT filter by category so all published posts appear.
+     * Eager-loads coverImage (prevents N+1 on the appended image_url) and caches
+     * the full list; the optional limit is applied to the cached collection.
      */
     public function getBlogs($limit = null)
     {
-        $query = Blog::where('status', 'published')
-            ->latest('createdAt');
+        $blogs = Cache::remember('tour_blogs_all', 600, function () {
+            return Blog::where('status', 'published')
+                ->with('coverImage')
+                ->latest('createdAt')
+                ->get();
+        });
 
-        if ($limit) {
-            return $query->limit($limit)->get();
-        }
-
-        return $query->get();
+        return $limit ? $blogs->take($limit) : $blogs;
     }
 
     /**
-     * Get all active tour packages with eager loaded images and city.
+     * Get all active tour packages with eager loaded images and city. Cached.
      */
     public function getAllPackages()
     {
-        return Package::where('status', 'active')
-            ->with(['packageImages', 'city', 'cities'])
-            ->orderBy('sortOrder')
-            ->get();
+        return Cache::remember('tour_packages_all', 600, function () {
+            return Package::where('status', 'active')
+                ->with(['packageImages', 'city', 'cities'])
+                ->orderBy('sortOrder')
+                ->get();
+        });
     }
 
     /**
@@ -194,6 +196,7 @@ class TourService
     public function getGallery()
     {
         return GalleryImage::where('isActive', true)
+            ->with('imageMedia')
             ->where(function ($query) {
                 $query->where('category', 'tour')
                     ->orWhere('category', 'Tour')
@@ -209,10 +212,12 @@ class TourService
      */
     public function getPackageBySlug($slug)
     {
-        return Package::where('slug', $slug)
-            ->where('status', 'active')
-            ->with(['packageImages', 'city'])
-            ->first();
+        return Cache::remember("package_detail_{$slug}", 600, function () use ($slug) {
+            return Package::where('slug', $slug)
+                ->where('status', 'active')
+                ->with(['packageImages', 'city', 'cities'])
+                ->first();
+        });
     }
 
     /**
@@ -232,6 +237,7 @@ class TourService
     {
         return Blog::where('status', 'published')
             ->where('id', '!=', $currentId)
+            ->with('coverImage')
             ->latest('createdAt')
             ->limit($limit)
             ->get();

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Package;
 use App\Models\Setting;
 use App\Observers\BlogObserver;
+use App\Observers\BookingObserver;
 use App\Observers\PackageObserver;
 use App\Observers\SettingObserver;
 use App\Repositories\BookingRepository;
@@ -42,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         // Register Observers
         Package::observe(PackageObserver::class);
         Blog::observe(BlogObserver::class);
+        Booking::observe(BookingObserver::class);
         Setting::observe(SettingObserver::class);
 
         // Share settings globally

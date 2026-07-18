@@ -3,7 +3,6 @@ import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
-// Dispatch alpine:init so inline script components can register before Alpine starts
-document.dispatchEvent(new CustomEvent('alpine:init'));
-
+// Alpine.start() dispatches the real `alpine:init` event, at which point inline
+// scripts registering via addEventListener('alpine:init', ...) run exactly once.
 Alpine.start();

@@ -20,6 +20,7 @@ class DashboardService
                 'revenue' => [
                     'total' => Booking::whereIn('status', ['confirmed', 'completed'])->sum('totalPrice'),
                     'monthly' => Booking::whereIn('status', ['confirmed', 'completed'])
+                        ->whereYear('createdAt', now()->year)
                         ->whereMonth('createdAt', now()->month)
                         ->sum('totalPrice'),
                     'growth' => $this->calculateGrowth(),
@@ -27,6 +28,7 @@ class DashboardService
                 'profit' => [
                     'total' => Booking::whereIn('status', ['confirmed', 'completed'])->sum(DB::raw('totalPrice - COALESCE(total_cost, 0)')),
                     'monthly' => Booking::whereIn('status', ['confirmed', 'completed'])
+                        ->whereYear('createdAt', now()->year)
                         ->whereMonth('createdAt', now()->month)
                         ->sum(DB::raw('totalPrice - COALESCE(total_cost, 0)')),
                 ],
@@ -37,7 +39,7 @@ class DashboardService
                 ],
                 'users' => [
                     'total' => User::count(),
-                    'new_this_month' => User::whereMonth('created_at', now()->month)->count(),
+                    'new_this_month' => User::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count(),
                 ],
                 'packages' => [
                     'total' => Package::count(),
@@ -117,10 +119,12 @@ class DashboardService
     private function calculateGrowth()
     {
         $currentMonth = Booking::whereIn('status', ['confirmed', 'completed'])
+            ->whereYear('createdAt', now()->year)
             ->whereMonth('createdAt', now()->month)
             ->sum('totalPrice');
 
         $lastMonth = Booking::whereIn('status', ['confirmed', 'completed'])
+            ->whereYear('createdAt', now()->subMonth()->year)
             ->whereMonth('createdAt', now()->subMonth()->month)
             ->sum('totalPrice');
 
@@ -136,7 +140,8 @@ class DashboardService
         return Package::select('packages.name', DB::raw('COUNT(bookings.id) as booking_count'))
             ->leftJoin('bookings', function ($join) {
                 $join->on('packages.id', '=', 'bookings.packageId')
-                     ->whereIn('bookings.status', ['confirmed', 'completed']);
+                     ->whereIn('bookings.status', ['confirmed', 'completed'])
+                     ->whereNull('bookings.deleted_at');
             })
             ->groupBy('packages.id', 'packages.name')
             ->orderByDesc('booking_count')

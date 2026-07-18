@@ -56,7 +56,7 @@ Behavioral guidelines, cognitive frameworks, and reference rules derived from Ka
 ---
 
 ## 4. Technology Stack & Quality Standards
-- **Backend**: Laravel 11 (MVC architecture, Blade templates, Webpack/Vite asset compilation).
-- **Frontend**: Tailwind CSS, Alpine.js for interactive client-side logic.
+- **Backend**: Laravel 13 (PHP ^8.3, MVC architecture, Blade templates, Vite 8 asset compilation).
+- **Frontend**: Tailwind CSS 4, Alpine.js 3 for interactive client-side logic.
 - **Design Aesthetics**: Modern, premium, minimalist web design. Use rich aesthetics, sleek typography, harmonious color palettes, subtle transitions/micro-animations. Responsive layout is mandatory.
 - **SEO & Performance**: Use semantic HTML, unique descriptive IDs, appropriate meta tags, and optimize for fast page loads.

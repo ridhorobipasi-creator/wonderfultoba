@@ -1,7 +1,8 @@
-// Sujai Laketoba – Service Worker v1.0
-// Strategy: Cache-first for static assets, Network-first for pages
+// Sujai Laketoba – Service Worker v2.0
+// Strategy: cache-first for immutable assets, stale-while-revalidate for
+// uploaded media, network-first for pages.
 
-const CACHE_NAME = 'sujai-laketoba-v1';
+const CACHE_NAME = 'sujai-laketoba-v2';
 const STATIC_ASSETS = [
     '/',
     '/manifest.json',
@@ -22,7 +23,7 @@ self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
 
-// Activate: clean up old caches
+// Activate: clean up old caches (bumping CACHE_NAME evicts stale media)
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
@@ -36,38 +37,31 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
-// Fetch: Network-first strategy for navigation, Cache-first for assets
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Skip non-GET requests and admin routes
+    // Skip non-GET requests, admin routes and the API
     if (request.method !== 'GET') return;
     if (url.pathname.startsWith('/admin')) return;
     if (url.pathname.startsWith('/api')) return;
 
-    // For navigation requests (HTML pages): network-first
+    // Navigation requests (HTML pages): network-first with an offline fallback.
     if (request.mode === 'navigate') {
         event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    return response;
-                })
-                .catch(() => {
-                    return caches.match('/') || new Response('Offline – Please check your internet connection.', {
-                        headers: { 'Content-Type': 'text/plain' }
-                    });
-                })
+            fetch(request).catch(async () => {
+                const cached = await caches.match('/');
+                return cached || new Response(
+                    'Offline – Please check your internet connection.',
+                    { headers: { 'Content-Type': 'text/plain' } }
+                );
+            })
         );
         return;
     }
 
-    // For static assets (images, fonts, CSS, JS): cache-first
-    if (
-        url.pathname.startsWith('/icons/') ||
-        url.pathname.startsWith('/build/') ||
-        url.pathname.startsWith('/storage/')
-    ) {
+    // Immutable assets (versioned build output, static icons): cache-first.
+    if (url.pathname.startsWith('/icons/') || url.pathname.startsWith('/build/')) {
         event.respondWith(
             caches.match(request).then((cached) => {
                 if (cached) return cached;
@@ -77,9 +71,27 @@ self.addEventListener('fetch', (event) => {
                         caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                     }
                     return response;
-                }).catch(() => cached);
+                });
             })
         );
         return;
+    }
+
+    // Uploaded media (/storage): stale-while-revalidate. Serve the cached copy
+    // for speed, but always refetch in the background so a replaced image
+    // (same path, new content) is picked up on the next visit.
+    if (url.pathname.startsWith('/storage/')) {
+        event.respondWith(
+            caches.match(request).then((cached) => {
+                const network = fetch(request).then((response) => {
+                    if (response.ok) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    }
+                    return response;
+                }).catch(() => cached);
+                return cached || network;
+            })
+        );
     }
 });

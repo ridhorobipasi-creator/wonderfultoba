@@ -64,9 +64,9 @@ class PdfController extends Controller
     public function downloadInvoice($identifier)
     {
         try {
-            $booking = Booking::where('bookingCode', $identifier)
-                ->orWhere('id', $identifier)
-                ->firstOrFail();
+            // Match bookingCode ONLY — numeric ids would allow /invoice/1,2,3
+            // enumeration of other customers' data (IDOR).
+            $booking = Booking::where('bookingCode', $identifier)->firstOrFail();
 
             return app(InvoiceService::class)->downloadInvoice($booking);
         } catch (\Throwable $e) {
@@ -81,9 +81,9 @@ class PdfController extends Controller
      */
     private function renderInvoice($identifier)
     {
+        // bookingCode only (never id) — prevents invoice enumeration/IDOR.
         $booking = Booking::with(['package', 'package.city'])
             ->where('bookingCode', $identifier)
-            ->orWhere('id', $identifier)
             ->firstOrFail();
 
         $general = Setting::where('key', 'general')->first()?->value ?? [];
