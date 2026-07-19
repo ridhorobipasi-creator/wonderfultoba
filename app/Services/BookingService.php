@@ -199,8 +199,7 @@ class BookingService
             
             $additionalServicesPrice = 0;
             $availableServices = $package->pricingDetails['additional_services'] ?? [
-                ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
-                ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
+                ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000]
             ];
             
             $detailedServices = [];

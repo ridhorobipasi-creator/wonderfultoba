@@ -182,11 +182,10 @@
         paxChildren: {{ old('paxChildren', 0) }},
         pkgTiers: @js($package->pricingDetails['tiers'] ?? []),
         services: (@js($package->pricingDetails['additional_services'] ?? [
-            ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000],
-            ['name' => 'Pemandu Antropologi', 'icon' => 'person_pin', 'price' => 5500000]
+            ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000]
         ])).map(s => ({
             ...s,
-            selected: s.name === 'Pemandu Antropologi'
+            selected: false
         })),
         isSubmitting: false,
         notesUser: '{{ old('notesUser', '') }}',
