@@ -101,28 +101,35 @@
 
             <div class="mt-8 rounded-xl border border-slate-200 bg-white p-4">
                 <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Timeline</p>
-                <div class="mt-5 space-y-4">
-                    @foreach($activeSteps as $index => $step)
-                        @php
-                            $stepNumber = $index + 1;
-                            $isDone = $stepNumber <= $currentStep;
-                        @endphp
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full {{ $isDone ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400' }}">
-                                @if($isDone)
-                                    <span class="material-symbols-outlined text-sm">done</span>
-                                @else
-                                    <span class="h-2 w-2 rounded-full bg-slate-300"></span>
-                                @endif
+                <div class="mt-5 relative pl-2">
+                    <!-- Connecting Vertical Line -->
+                    <div class="absolute left-[1.4rem] top-4 bottom-4 w-px bg-slate-200"></div>
+                    
+                    <div class="space-y-6 relative">
+                        @foreach($activeSteps as $index => $step)
+                            @php
+                                $stepNumber = $index + 1;
+                                $isDone = $stepNumber <= $currentStep;
+                            @endphp
+                            <div class="flex items-start gap-4">
+                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isDone ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-200' }} shadow-sm transition-all duration-300">
+                                    @if($isDone)
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    @else
+                                        <span class="h-2.5 w-2.5 rounded-full bg-slate-200"></span>
+                                    @endif
+                                </div>
+                                <div class="pt-1.5">
+                                    <p class="text-sm font-bold {{ $isDone ? 'text-slate-900' : 'text-slate-400' }}">{{ $step }}</p>
+                                    @if($stepNumber === $currentStep)
+                                        <p class="mt-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded w-fit">Status saat ini</p>
+                                    @endif
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-sm font-bold {{ $isDone ? 'text-slate-950' : 'text-slate-400' }}">{{ $step }}</p>
-                                @if($stepNumber === $currentStep)
-                                    <p class="text-xs text-slate-500">Status saat ini</p>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
