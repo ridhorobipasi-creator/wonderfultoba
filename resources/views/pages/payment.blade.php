@@ -116,7 +116,7 @@
                             <p class="text-slate-600 font-normal text-sm leading-relaxed mb-2">Untuk transfer dari bank internasional. Harap diperhatikan bahwa biaya SWIFT dan konversi mata uang ditanggung oleh pengirim.</p>
                             <p class="text-slate-400 text-xs">For SWIFT transfers, please note that bank fees and currency conversion charges are borne by the sender.</p>
                             <div class="mt-4 card-flat-soft p-4 text-xs font-normal text-slate-600">
-                                <p>Untuk detail SWIFT code dan instruksi transfer internasional lengkap, silakan hubungi kami via WhatsApp: <strong>+62 813-2388-8207</strong></p>
+                                <p>Untuk detail SWIFT code dan instruksi transfer internasional lengkap, silakan hubungi kami via WhatsApp: <strong>{{ \App\Helpers\ContactHelper::whatsappDisplay() }}</strong></p>
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@
         <div class="card-flat-soft p-8 md:p-12 text-center">
             <h3 class="text-2xl md:text-3xl font-semibold text-slate-900 mb-3">Siap Memesan? / Ready to Book?</h3>
             <p class="text-slate-600 font-normal text-sm mb-8">Hubungi kami via WhatsApp dan kami akan pandu proses pembayaran step-by-step.</p>
-            <a href="https://wa.me/6282277848855" target="_blank" class="cta-primary">
+            <a href="{{ \App\Helpers\ContactHelper::whatsappLink() }}" target="_blank" class="cta-primary">
                 <x-icon name="whatsapp" class="w-4 h-4" />
                 Chat via WhatsApp
             </a>

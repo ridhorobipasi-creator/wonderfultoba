@@ -15,6 +15,11 @@ class SettingObserver
         Cache::forget('site_settings_all');
         Cache::forget('tour_homepage_data');
 
+        // Nomor kontak dipakai di hampir setiap halaman, jadi di-cache
+        // terpisah. Tanpa baris ini, admin mengganti nomor WhatsApp dan
+        // situs tetap menghubungi nomor lama tanpa gejala apa pun.
+        Cache::forget('contact_whatsapp_digits');
+
         // Clear all structured settings cache variants
         $patterns = [
             'site_settings_structured_cms_tour_general',

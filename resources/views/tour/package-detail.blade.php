@@ -157,19 +157,33 @@
 @endpush
 
 @section('content')
-<div 
-    x-data="{ 
-        activeImg: 0, 
+@php
+    // Dikumpulkan sekali, dengan tipe yang sudah pasti, lalu diserahkan ke
+    // Alpine lewat @json. Nilai kosong tidak boleh menghasilkan angka kosong.
+    $formOld = [
+        'pax' => max(1, (int) old('pax', 1)),
+        'paxChildren' => max(0, (int) old('paxChildren', 0)),
+        'notesUser' => (string) old('notesUser', ''),
+        'customerName' => (string) old('customerName', ''),
+        'customerEmail' => (string) old('customerEmail', ''),
+        'customerPhone' => (string) old('customerPhone', ''),
+        'startDate' => (string) old('startDate', ''),
+    ];
+@endphp
+
+<div
+    x-data="{
+        activeImg: 0,
         activeTab: 'itinerary',
         package: @js($package),
         package_images: @js($packageImagesArray),
         city: @js($city),
         contact: {
-            whatsapp: '{{ $siteSettings['cms_tour']['contact_whatsapp'] ?? $siteSettings['general']['contact_whatsapp'] ?? '6282277848855' }}',
+            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits()),
             email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com' }}'
         },
         get waNumber() {
-            return (this.contact.whatsapp || '6282277848855').replace(/[^0-9]/g, '');
+            return (this.contact.whatsapp || @json(\App\Helpers\ContactHelper::whatsappDigits())).replace(/[^0-9]/g, '');
         },
         get locationDisplay() {
             return this.city ? (this.city.type === 'international' ? (this.city.place || this.city.region || '') + ', ' + this.city.country : this.city.name) : (this.package.locationTag || 'Danau Toba');
@@ -177,22 +191,29 @@
         showConcierge: false,
         totalChanged: false,
 
-        // Booking form variables
-        pax: {{ old('pax', 1) }},
-        paxChildren: {{ old('paxChildren', 0) }},
+        // Booking form variables.
+        //
+        // Semua nilai diserahkan lewat direktif json Blade, tidak pernah
+        // diinterpolasi ke dalam string JS.
+        // Bentuk lamanya membungkus old() dengan tanda kutip
+        // tunggal: Blade mengubah apostrof jadi entity, browser
+        // mengembalikannya jadi apostrof, string JS terputus, dan SELURUH
+        // Alpine di halaman ini mati. Satu pembeli bernama O(apostrof)Brien
+        // yang gagal validasi sudah cukup. Nilai pax yang kosong dulu juga
+        // menghasilkan properti tanpa nilai, yang sama fatalnya.
+        pax: @json($formOld['pax']),
+        paxChildren: @json($formOld['paxChildren']),
         pkgTiers: @js($package->pricingDetails['tiers'] ?? []),
-        services: (@js($package->pricingDetails['additional_services'] ?? [
-            ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000]
-        ])).map(s => ({
+        services: (@js($package->pricingDetails['additional_services'] ?? [])).map(s => ({
             ...s,
             selected: false
         })),
         isSubmitting: false,
-        notesUser: '{{ old('notesUser', '') }}',
-        customerName: '{{ old('customerName', '') }}',
-        customerEmail: '{{ old('customerEmail', '') }}',
-        customerPhone: '{{ old('customerPhone', '') }}',
-        startDate: '{{ old('startDate', '') }}',
+        notesUser: @json($formOld['notesUser']),
+        customerName: @json($formOld['customerName']),
+        customerEmail: @json($formOld['customerEmail']),
+        customerPhone: @json($formOld['customerPhone']),
+        startDate: @json($formOld['startDate']),
 
         get currentUnitPrice() {
             if (this.pkgTiers && this.pkgTiers.length > 0) {
@@ -622,7 +643,7 @@
                         </div>
                     </div>
                     <p class="text-[11px] text-slate-600 font-body-md font-normal leading-relaxed mb-4 relative z-10">{{ __($siteSettings['cms_tour']['specialist_desc'] ?? 'Punya pertanyaan khusus? Kami siap bantu pilih paket yang paling pas.') }}</p>
-                    <a :href="'https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['cms_tour']['specialist_wa'] ?? $siteSettings['general']['contact_wa_1'] ?? '6282277848855') }}?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
+                    <a :href="'https://wa.me/{{ \App\Helpers\ContactHelper::specialistDigits() }}?text=' + encodeURIComponent('Halo ' + ('{{ $siteSettings['cms_tour']['specialist_name'] ?? 'Sarah' }}').split(' ')[0] + ', saya tertarik bertanya tentang paket: ' + package.translated_name)" 
                        target="_blank"
                        class="flex items-center justify-center gap-1.5 py-2.5 bg-primary/5 text-primary rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-on-primary transition relative z-10 border border-primary/20">
                         <span class="material-symbols-outlined text-[16px]">chat</span>

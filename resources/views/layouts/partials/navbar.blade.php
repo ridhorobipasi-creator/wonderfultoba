@@ -6,9 +6,9 @@
         isRegister: false,
         formLoading: false,
         contact: { 
-            phone: '{{ $siteSettings['general']['contact_whatsapp'] ?? '+62 813-2388-8207' }}', 
+            phone: @json(\App\Helpers\ContactHelper::whatsappDisplay()), 
             email: '{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}', 
-            whatsapp: '{{ preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855') }}' 
+            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits()) 
         }
     }"
     x-init="

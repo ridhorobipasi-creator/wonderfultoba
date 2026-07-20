@@ -20,7 +20,7 @@
         $sameAsLinks[] = 'https://www.youtube.com/' . $siteSettings['general']['social_youtube'];
     }
     $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('assets/img/logo.png'));
-    $schemaPhone   = '+' . preg_replace('/[^0-9]/', '', $siteSettings['general']['contact_whatsapp'] ?? '6282277848855');
+    $schemaPhone   = '+' . \App\Helpers\ContactHelper::whatsappDigits();
     $schemaEmail   = $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com';
     $schemaDesc    = $settings['meta_description'] ?? 'Agen perjalanan wisata Danau Toba terpercaya';
 
@@ -75,7 +75,7 @@
 @endpush
 
 @section('content')
-<div x-data="{ waNumber: '{{ preg_replace('/[^0-9]/', '', $settings['contact_wa_1'] ?? '6282277848855') }}' }">
+<div x-data="{ waNumber: @json(\App\Helpers\ContactHelper::whatsappDigits()) }">
     
     <!-- Premium Hero Slider -->
     @if($settings['show_slider'] ?? true)
@@ -423,7 +423,7 @@
                     <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
                 </div>
                 <a target="_blank" rel="noopener"
-                   href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['specialist_wa'] ?? $settings['contact_wa_1'] ?? '6282277848855') }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}"
+                   href="https://wa.me/{{ \App\Helpers\ContactHelper::specialistDigits() }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}"
                    class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0">
                     <span class="material-symbols-outlined text-[16px]">chat</span>
                     {{ __('WhatsApp') }}

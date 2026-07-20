@@ -63,3 +63,6 @@ ssh.md
 informasi.md
 *.keystore
 ROTASI-RAHASIA.*
+
+# Dump database — jangan pernah masuk riwayat
+*.sql

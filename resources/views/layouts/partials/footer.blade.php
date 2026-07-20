@@ -125,9 +125,9 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <x-icon name="whatsapp" class="w-4 h-4 text-secondary shrink-0" />
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $g['contact_whatsapp'] ?? '6282277848855') }}" target="_blank"
+                        <a href="{{ \App\Helpers\ContactHelper::whatsappLink() }}" target="_blank"
                            class="hover:text-secondary transition-colors">
-                            {{ $g['contact_whatsapp'] ?? '+62 813-2388-8207' }}
+                            {{ \App\Helpers\ContactHelper::whatsappDisplay() }}
                         </a>
                     </div>
                     @if($g['contact_whatsapp_2'] ?? false)
