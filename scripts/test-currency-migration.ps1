@@ -158,9 +158,12 @@ foreach ($line in $afterRaw) {
     $prev = $before[$id]
     if (-not $prev) { continue }
 
-    # Saran pembulatan komersial: ke atas ke kelipatan 10 terdekat, dikurangi 1.
-    # RM 340,91 -> RM 349. Angka saran, bukan keputusan.
-    $suggested = [math]::Ceiling($after / 10) * 10 - 1
+    # Pembulatan ke atas ke kelipatan 10, lalu -1 (RM 613,64 -> RM 649).
+    # SELALU >= hasil konversi, supaya tidak pernah memotong harga. Versi
+    # pertama memakai kelipatan 10 saja dan sempat menghasilkan RM 79 dari
+    # RM 79,55 — sebuah potongan harga yang menyamar sebagai pembulatan.
+    $suggested = [math]::Ceiling(($after + 0.01) / 50) * 50 - 1
+    if ($suggested -lt $after) { $suggested = [math]::Ceiling($after) }
 
     $rows += [PSCustomObject]@{
         Paket        = if ($prev.Name.Length -gt 34) { $prev.Name.Substring(0, 31) + "..." } else { $prev.Name }

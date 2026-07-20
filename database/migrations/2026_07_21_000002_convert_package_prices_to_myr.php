@@ -57,7 +57,21 @@ return new class extends Migration
         return ($settings['finance'][self::MARKER] ?? null) === 'MYR';
     }
 
-    protected function markConverted(string $currency): void
+    /**
+     * Record the new base currency, and pin the display rate to the rate the
+     * catalogue was actually converted at.
+     *
+     * These two must agree. The migration divides IDR prices by rate X; the
+     * site multiplies the resulting MYR back by whatever `exchange_rate_manual_myr`
+     * says. If those differ, every rupiah price silently shifts by the ratio
+     * between them — a rehearsal on real data showed a 2.1% increase from a
+     * settings value of 4492 against a migration rate of 4400. Writing the rate
+     * here makes the round trip exact by construction.
+     *
+     * The admin can still change the rate afterwards; that is a deliberate
+     * price change, which is different from an accidental one.
+     */
+    protected function markConverted(string $currency, ?float $rate = null): void
     {
         $row = DB::table('settings')->where('key', 'general')->first();
         if (! $row) {
@@ -66,6 +80,10 @@ return new class extends Migration
 
         $value = is_string($row->value) ? (json_decode($row->value, true) ?: []) : (array) $row->value;
         $value['finance'][self::MARKER] = $currency;
+
+        if ($rate && $currency === 'MYR') {
+            $value['finance']['exchange_rate_manual_myr'] = (string) $rate;
+        }
 
         DB::table('settings')->where('key', 'general')->update(['value' => json_encode($value)]);
     }
@@ -96,7 +114,7 @@ return new class extends Migration
         return $details;
     }
 
-    protected function rescale(callable $convert, string $marker): void
+    protected function rescale(callable $convert, string $marker, ?float $rate = null): void
     {
         DB::transaction(function () use ($convert) {
             DB::table('packages')->orderBy('id')->chunkById(100, function ($packages) use ($convert) {
@@ -126,7 +144,7 @@ return new class extends Migration
             });
         });
 
-        $this->markConverted($marker);
+        $this->markConverted($marker, $rate);
     }
 
     /**
@@ -153,7 +171,7 @@ return new class extends Migration
 
         $rate = $this->rate();
 
-        $this->rescale(fn ($amount) => round((float) $amount / $rate, 2), 'MYR');
+        $this->rescale(fn ($amount) => round((float) $amount / $rate, 2), 'MYR', $rate);
     }
 
     public function down(): void
