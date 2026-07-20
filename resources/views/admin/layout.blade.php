@@ -285,6 +285,14 @@
                                 <i class="fas fa-sliders w-5 text-sm {{ request()->routeIs('admin.settings.general.*') ? 'text-white' : 'text-slate-400' }}"></i>
                                 Pengaturan Dasar
                             </a>
+                            @if(auth()->user()?->role === 'superadmin')
+                            <a href="{{ route('admin.settings.app-config.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
+                                      {{ request()->routeIs('admin.settings.app-config.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-gears w-5 text-sm {{ request()->routeIs('admin.settings.app-config.*') ? 'text-white' : 'text-slate-400' }}"></i>
+                                Konfigurasi Aplikasi
+                            </a>
+                            @endif
                             <a href="{{ route('admin.users.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">

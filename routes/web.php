@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\AppConfigController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ClientController;
@@ -152,6 +153,13 @@ Route::middleware(['auth', 'role:superadmin,admin_tour,admin_umum'])->prefix('ad
         Route::get('/settings/general', [GeneralSettingsController::class, 'index'])->name('settings.general.index');
         Route::post('/settings/general', [GeneralSettingsController::class, 'update'])->name('settings.general.update');
         Route::post('/settings/refresh-rates', [SettingController::class, 'refreshExchangeRates'])->name('settings.refresh-rates');
+
+        // Application config. Superadmin only — deliberately narrower than the
+        // surrounding group, which also admits admin_umum.
+        Route::middleware('role:superadmin')->group(function () {
+            Route::get('/settings/app-config', [AppConfigController::class, 'index'])->name('settings.app-config.index');
+            Route::post('/settings/app-config', [AppConfigController::class, 'update'])->name('settings.app-config.update');
+        });
         Route::get('logs', [ActivityLogController::class, 'index'])->name('logs.index');
         Route::get('error-logs', [ErrorLogController::class, 'index'])->name('error-logs.index');
         Route::post('error-logs/clear', [ErrorLogController::class, 'clear'])->name('error-logs.clear');

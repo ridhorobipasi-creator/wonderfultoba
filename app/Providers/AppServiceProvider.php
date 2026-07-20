@@ -11,6 +11,7 @@ use App\Observers\BookingObserver;
 use App\Observers\PackageObserver;
 use App\Observers\SettingObserver;
 use App\Repositories\BookingRepository;
+use App\Services\AppConfigService;
 use App\Services\BookingService;
 use App\Services\DashboardService;
 use Carbon\Carbon;
@@ -71,6 +72,11 @@ class AppServiceProvider extends ServiceProvider
                 });
 
                 view()->share('siteSettings', $decodedSettings);
+
+                // Admin-editable config, layered over .env. Fed from the cache
+                // above so this costs no extra query. See config/editable.php —
+                // credentials are excluded there and enforced in the service.
+                AppConfigService::apply($decodedSettings[AppConfigService::STORAGE_KEY] ?? null);
 
                 // Override Mail Config from Database Settings
                 if (isset($decodedSettings['mail'])) {
