@@ -106,11 +106,11 @@
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
                     <button @click="scrollPrev()"
-                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
+                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition min-w-[40px]">
                         <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                     </button>
                     <button @click="scrollNext()"
-                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
+                            class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition min-w-[40px]">
                         <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                     </button>
                 </div>
@@ -387,7 +387,7 @@
                         </p>
                     </div>
                     {{-- Author --}}
-                    <div class="flex items-center gap-3 md:w-48 shrink-0">
+                    <div class="flex items-center gap-3 md:w-48 shrink-0 md:flex-col md:items-start">
                         <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-low shrink-0">
                             <img alt="{{ $t['name'] }}"
                                  src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
@@ -411,9 +411,9 @@
 
     <!-- Specialist — minimal inline -->
     @if($settings['show_specialist'] ?? true)
-    <section class="bg-surface pb-16 md:pb-20 px-5 md:px-8">
+    <section class="bg-surface pb-16 md:pb-20 px-4 md:px-8">
         <div class="max-w-5xl mx-auto">
-            <div class="bg-primary rounded-3xl px-6 py-7 md:px-10 md:py-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-8 text-center sm:text-left">
+            <div class="bg-primary rounded-3xl px-5 py-6 md:px-10 md:py-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left">
                 <img alt="{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}"
                      class="w-14 h-14 rounded-full object-cover border-2 border-white/10 shrink-0"
                      loading="lazy" decoding="async"
@@ -521,7 +521,7 @@
             <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-[120px]"></div>
 
             <div class="relative z-10 text-center lg:text-left max-w-4xl">
-                <h2 class="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-6 md:mb-8 tracking-tight leading-[1.05] md:leading-[0.95]">
+                <h2 class="text-2xl sm:text-4xl md:text-7xl font-bold text-white mb-5 md:mb-8 tracking-tight leading-[1.1] md:leading-[0.95]">
                     {{ __('Siap Untuk') }} <br/> <span class="text-white">{{ __('Petualangan Nyata?') }}</span>
                 </h2>
                 <p class="text-base md:text-xl text-slate-300 mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto lg:mx-0">

@@ -275,29 +275,46 @@
                 display: none !important;
             }
 
+            /* Make hero text fit mobile without overflow */
             .hero-content {
-                padding-top: 60px;
+                padding-top: 56px;
+                padding-bottom: 64px; /* Space for mobile nav buttons at bottom */
                 text-align: center;
                 left: 0 !important;
                 width: 100% !important;
-                padding-left: 20px;
-                padding-right: 20px;
+                padding-left: 16px;
+                padding-right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .hero-content h1 {
                 overflow-wrap: break-word;
-                font-size: 2rem !important;
-                margin-bottom: 0.75rem !important;
+                word-break: break-word;
+                font-size: 1.8rem !important;
+                line-height: 1.1 !important;
+                margin-bottom: 0.5rem !important;
             }
 
             .hero-content p {
-                font-size: 0.9rem !important;
-                margin-bottom: 1rem !important;
+                font-size: 0.85rem !important;
+                line-height: 1.5 !important;
+                margin-bottom: 0.75rem !important;
             }
 
-            /* Price + CTA row on mobile: smaller gap, centered */
+            /* Price + CTA row on mobile: compact */
             .hero-price-row {
-                margin-bottom: 0.5rem !important;
+                margin-bottom: 0 !important;
+                gap: 0.75rem !important;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            /* CTA button smaller on mobile */
+            .cta-primary, .cta-secondary {
+                padding: 0.625rem 1.25rem !important;
+                font-size: 0.75rem !important;
             }
         }
 
@@ -321,8 +338,8 @@
 
             <div class="absolute inset-0 z-30 flex items-center">
                 <div
-                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-32 lg:pb-48 px-6 md:px-16 lg:px-24">
-                    <div class="w-full lg:w-1/2 text-white -mt-16 lg:-mt-32">
+                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-12 pt-16 md:pt-20 pb-20 lg:pb-48 px-4 md:px-16 lg:px-24">
+                    <div class="w-full lg:w-1/2 text-white">
                         <span
                             class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block">{{ $preparedSlides[0]['location'] }}</span>
                         <h1
