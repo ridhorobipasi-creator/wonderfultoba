@@ -350,8 +350,8 @@
 
                     {{-- Content --}}
                     <div
-                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-32 lg:pb-48">
-                        <div class="hero-content w-full lg:w-1/2 text-white -mt-16 lg:-mt-32">
+                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-24 md:pt-28 pb-36 lg:pb-44">
+                        <div class="hero-content w-full lg:w-1/2 text-white">
                             <div :class="activeIndex == i ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-12 scale-95'"
                                 class="transition duration-1000 delay-300 ease-out">
                                 <span
@@ -400,52 +400,51 @@
         </div>
     </div>
 
-    {{-- Overlay Controls & Indicators --}}
-    <div class="absolute inset-0 z-30 pointer-events-none flex flex-col justify-end">
-        <div
-            class="w-full max-w-7xl mx-auto px-6 md:px-16 lg:px-24 pb-10 flex flex-col lg:flex-row items-end justify-between gap-8">
+    {{-- Overlay Controls & Indicators — bottom-left, absolutely pinned --}}
+    <div class="absolute bottom-10 left-6 md:left-16 lg:left-24 z-30 pointer-events-none hidden lg:flex flex-col gap-4">
 
-            {{-- Left: Minimal Dot Indicators + Counter --}}
-            <div class="hidden lg:flex flex-col gap-4 pointer-events-auto">
+        {{-- Slide Counter --}}
+        <div class="flex items-baseline gap-1 pointer-events-auto">
+            <span class="text-white text-2xl font-black leading-none tabular-nums"
+                x-text="String(((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal + 1).padStart(2,'0')"></span>
+            <span class="text-white/30 text-sm font-medium">/</span>
+            <span class="text-white/40 text-sm font-medium"
+                x-text="String(totalOriginal).padStart(2,'0')"></span>
+        </div>
 
-                {{-- Slide Counter --}}
-                <div class="flex items-baseline gap-1">
-                    <span class="text-white text-2xl font-black leading-none tabular-nums"
-                        x-text="String(((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal + 1).padStart(2,'0')"></span>
-                    <span class="text-white/30 text-sm font-medium">/</span>
-                    <span class="text-white/40 text-sm font-medium"
-                        x-text="String(totalOriginal).padStart(2,'0')"></span>
-                </div>
+        {{-- Thin progress line dots --}}
+        <div class="flex items-center gap-2 pointer-events-auto">
+            <template x-for="i in totalOriginal" :key="'dot-' + i">
+                <div class="h-[3px] rounded-full transition duration-500 cursor-pointer" @click="goTo(i-1)"
+                    :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) 
+                        ? 'w-8 bg-white' 
+                        : 'w-4 bg-white/30 hover:bg-white/60'"></div>
+            </template>
+        </div>
 
-                {{-- Thin progress line dots --}}
-                <div class="flex items-center gap-2">
-                    <template x-for="i in totalOriginal" :key="'dot-' + i">
-                        <div class="h-[3px] rounded-full transition duration-500 cursor-pointer" @click="goTo(i-1)"
-                            :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) 
-                                ? 'w-8 bg-white' 
-                                : 'w-4 bg-white/30 hover:bg-white/60'"></div>
-                    </template>
-                </div>
+        {{-- Prev / Next ghost buttons --}}
+        <div class="flex items-center gap-3 pointer-events-auto">
+            <button @click="prev()" aria-label="Previous slide"
+                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button @click="next()" aria-label="Next slide"
+                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
 
-                {{-- Prev / Next ghost buttons --}}
-                <div class="flex items-center gap-3">
-                    <button @click="prev()" aria-label="Previous slide"
-                        class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button @click="next()" aria-label="Next slide"
-                        class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+    {{-- Dummy pointer-events wrapper (keeps original z-layer intact) --}}
+    <div class="absolute inset-0 z-30 pointer-events-none">
 
-            {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
+        {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
+        <div class="absolute bottom-6 right-6 md:right-16 lg:right-24 z-30 pointer-events-none">
             <div class="hidden lg:block w-[468px] overflow-hidden pointer-events-auto py-4">
                 <div class="card-container flex items-center gap-6 carousel-strip" @pointerdown="beginCardDrag($event)"
                     @pointermove="moveCardDrag($event)" @pointerup="endCardDrag()" @pointerleave="endCardDrag()"
