@@ -33,8 +33,13 @@ class AppConfigService
 
         return collect(config('editable.fields', []))
             ->reject(function ($field, $key) use ($denied) {
-                $isDenied = in_array(strtoupper($key), $denied, true)
-                    || in_array(strtoupper(str_replace('.', '_', $field['config'] ?? '')), $denied, true);
+                $isDenied = in_array(strtoupper($key), $denied, true);
+
+                foreach (self::paths($field) as $path) {
+                    if (in_array(strtoupper(str_replace('.', '_', $path)), $denied, true)) {
+                        $isDenied = true;
+                    }
+                }
 
                 if ($isDenied) {
                     Log::warning("AppConfigService: refusing to expose denied config key '{$key}'.");
@@ -43,6 +48,25 @@ class AppConfigService
                 return $isDenied;
             })
             ->all();
+    }
+
+    /**
+     * Jalur config yang ditimpa sebuah field. Boleh satu string atau beberapa,
+     * karena satu nilai .env kadang memberi makan lebih dari satu kunci config
+     * (LOG_LEVEL, misalnya, dipakai kanal single dan daily sekaligus).
+     *
+     * @param  array  $field
+     * @return array
+     */
+    public static function paths(array $field)
+    {
+        $config = $field['config'] ?? null;
+
+        if (is_array($config)) {
+            return $config;
+        }
+
+        return $config ? [$config] : [];
     }
 
     /**
@@ -73,7 +97,8 @@ class AppConfigService
         $current = [];
 
         foreach (self::fields() as $key => $field) {
-            $current[$key] = $stored[$key] ?? config($field['config']);
+            $paths = self::paths($field);
+            $current[$key] = $stored[$key] ?? ($paths ? config($paths[0]) : null);
         }
 
         return $current;
@@ -97,7 +122,9 @@ class AppConfigService
 
         foreach (self::fields() as $key => $field) {
             if (array_key_exists($key, $stored)) {
-                $overrides[$field['config']] = $stored[$key];
+                foreach (self::paths($field) as $path) {
+                    $overrides[$path] = $stored[$key];
+                }
             }
         }
 

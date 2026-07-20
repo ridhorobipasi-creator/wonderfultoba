@@ -29,6 +29,100 @@ class AppConfigTest extends TestCase
         ]);
     }
 
+
+    /**
+     * Payload sah yang dibangun dari definisi field, bukan ditulis tangan.
+     * Dengan begitu menambah field baru tidak membuat test ini gagal palsu.
+     *
+     * @param  array  $override
+     * @return array
+     */
+    protected function validPayload(array $override = []): array
+    {
+        $payload = [];
+
+        foreach (AppConfigService::fields() as $key => $field) {
+            $payload[$key] = match ($field['type'] ?? 'text') {
+                'boolean' => false,
+                'number' => $this->validNumberFor($field),
+                'select' => $field['options'][0],
+                'email' => 'info@sujailaketoba.com',
+                'url' => 'https://sujailaketoba.com',
+                default => (string) (config(AppConfigService::paths($field)[0]) ?: 'Sujai Laketoba'),
+            };
+        }
+
+        return array_merge($payload, $override);
+    }
+
+    /**
+     * Angka yang pasti lolos aturan field itu sendiri. Lingkungan test
+     * menurunkan bcrypt rounds ke 4 demi kecepatan, jadi memakai nilai config
+     * apa adanya akan gagal validasi min:10.
+     *
+     * @param  array  $field
+     * @return int
+     */
+    protected function validNumberFor(array $field): int
+    {
+        $rules = $field['rules'] ?? '';
+        $min = preg_match('/min:(\d+)/', $rules, $m) ? (int) $m[1] : 1;
+        $max = preg_match('/max:(\d+)/', $rules, $m) ? (int) $m[1] : PHP_INT_MAX;
+
+        $current = (int) config(AppConfigService::paths($field)[0]);
+
+        return max($min, min($max, $current ?: $min));
+    }
+
+    public function test_every_field_points_at_a_real_config_key(): void
+    {
+        $fields = AppConfigService::fields();
+        $this->assertNotEmpty($fields, 'Tidak ada field sama sekali; test ini tidak menguji apa-apa.');
+
+        foreach ($fields as $key => $field) {
+            $paths = AppConfigService::paths($field);
+
+            $this->assertNotEmpty($paths, "Field '{$key}' tidak punya jalur config.");
+
+            foreach ($paths as $path) {
+                $this->assertTrue(
+                    config()->has($path),
+                    "Field '{$key}' menunjuk config('{$path}') yang tidak ada. ".
+                    'Salah ketik seperti ini membuat field tampil di panel tapi tidak mengubah apa pun.'
+                );
+            }
+        }
+    }
+
+    public function test_every_field_has_label_help_and_rules(): void
+    {
+        foreach (AppConfigService::fields() as $key => $field) {
+            $this->assertNotEmpty($field['label'] ?? null, "Field '{$key}' tanpa label.");
+            $this->assertNotEmpty($field['help'] ?? null, "Field '{$key}' tanpa penjelasan.");
+            $this->assertNotEmpty($field['rules'] ?? null, "Field '{$key}' tanpa aturan validasi.");
+
+            if (($field['type'] ?? '') === 'select') {
+                $this->assertNotEmpty($field['options'] ?? null, "Field select '{$key}' tanpa pilihan.");
+            }
+        }
+    }
+
+    public function test_no_credential_slipped_into_the_field_list(): void
+    {
+        $denied = array_map('strtolower', config('editable.denied'));
+
+        foreach (AppConfigService::fields() as $key => $field) {
+            $this->assertNotContains(strtolower($key), $denied, "Field '{$key}' ada di daftar terlarang.");
+            $this->assertStringNotContainsString('password', strtolower($key), "Field '{$key}' tampak seperti kredensial.");
+
+            foreach (AppConfigService::paths($field) as $path) {
+                $envish = strtolower(str_replace('.', '_', $path));
+                $this->assertStringNotContainsString('secret', $envish, "Field '{$key}' tampak seperti kredensial.");
+                $this->assertStringNotContainsString('password', $envish, "Field '{$key}' menunjuk jalur kredensial.");
+            }
+        }
+    }
+
     public function test_superadmin_can_open_the_panel(): void
     {
         $response = $this->actingAs($this->superadmin)
@@ -60,14 +154,13 @@ class AppConfigTest extends TestCase
 
     public function test_saved_value_overrides_config(): void
     {
-        $this->actingAs($this->superadmin)->post(route('admin.settings.app-config.update'), [
-            'app_name' => 'Sujai Laketoba Travel',
-            'app_url' => 'https://sujailaketoba.com',
-            'log_level' => 'error',
-            'mail_from_address' => 'info@sujailaketoba.com',
-            'mail_from_name' => 'Sujai Laketoba',
-            'session_lifetime' => 120,
-        ])->assertRedirect();
+        $this->actingAs($this->superadmin)
+            ->post(route('admin.settings.app-config.update'), $this->validPayload([
+                'app_name' => 'Sujai Laketoba Travel',
+                'session_lifetime' => 120,
+            ]))
+            ->assertSessionHasNoErrors()
+            ->assertRedirect();
 
         AppConfigService::apply();
 
@@ -101,18 +194,16 @@ class AppConfigTest extends TestCase
 
     public function test_crafted_post_cannot_introduce_a_denied_key(): void
     {
-        $this->actingAs($this->superadmin)->post(route('admin.settings.app-config.update'), [
-            'app_name' => 'Sujai Laketoba',
-            'app_url' => 'https://sujailaketoba.com',
-            'log_level' => 'error',
-            'mail_from_address' => 'info@sujailaketoba.com',
-            'mail_from_name' => 'Sujai Laketoba',
-            'session_lifetime' => 120,
-            // Not offered by the form. Must be discarded, not stored.
-            'DB_PASSWORD' => 'dibajak',
-            'APP_KEY' => 'base64:dibajak',
-            'db_password' => 'dibajak',
-        ]);
+        $this->actingAs($this->superadmin)->post(
+            route('admin.settings.app-config.update'),
+            $this->validPayload([
+                'app_name' => 'Sujai Laketoba',
+                // Tidak ditawarkan form. Harus dibuang, bukan disimpan.
+                'DB_PASSWORD' => 'dibajak',
+                'APP_KEY' => 'base64:dibajak',
+                'db_password' => 'dibajak',
+            ])
+        )->assertSessionHasNoErrors();
 
         $stored = AppConfigService::stored();
 
@@ -149,14 +240,9 @@ class AppConfigTest extends TestCase
     {
         $before = file_get_contents(base_path('.env'));
 
-        $this->actingAs($this->superadmin)->post(route('admin.settings.app-config.update'), [
-            'app_name' => 'Nama Baru',
-            'app_url' => 'https://sujailaketoba.com',
-            'log_level' => 'debug',
-            'mail_from_address' => 'info@sujailaketoba.com',
-            'mail_from_name' => 'Sujai Laketoba',
-            'session_lifetime' => 60,
-        ]);
+        $this->actingAs($this->superadmin)
+            ->post(route('admin.settings.app-config.update'), $this->validPayload(['app_name' => 'Nama Baru']))
+            ->assertSessionHasNoErrors();
 
         $this->assertSame($before, file_get_contents(base_path('.env')));
         $this->assertDatabaseHas('settings', ['key' => AppConfigService::STORAGE_KEY]);

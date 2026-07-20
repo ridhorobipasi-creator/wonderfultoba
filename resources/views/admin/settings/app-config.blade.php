@@ -58,6 +58,13 @@
 
                 <p class="mt-2 text-xs leading-relaxed text-slate-400">{{ $field['help'] }}</p>
 
+                @if(!empty($field['warn']))
+                    <p class="mt-2 flex items-start gap-2 text-xs leading-relaxed text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                        <i class="fas fa-triangle-exclamation mt-0.5"></i>
+                        <span>{{ $field['warn'] }}</span>
+                    </p>
+                @endif
+
                 @error($key)
                     <p class="mt-2 text-xs font-bold text-rose-600">{{ $message }}</p>
                 @enderror
