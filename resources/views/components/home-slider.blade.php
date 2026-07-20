@@ -309,8 +309,8 @@
 
             <div class="absolute inset-0 z-30 flex items-center">
                 <div
-                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-20 lg:pb-32 px-6 md:px-16 lg:px-24">
-                    <div class="w-full lg:w-1/2 text-white">
+                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-32 lg:pb-48 px-6 md:px-16 lg:px-24">
+                    <div class="w-full lg:w-1/2 text-white -mt-16 lg:-mt-32">
                         <span
                             class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block">{{ $preparedSlides[0]['location'] }}</span>
                         <h1
@@ -350,8 +350,8 @@
 
                     {{-- Content --}}
                     <div
-                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-20 lg:pb-32">
-                        <div class="hero-content w-full lg:w-1/2 text-white">
+                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-32 lg:pb-48">
+                        <div class="hero-content w-full lg:w-1/2 text-white -mt-16 lg:-mt-32">
                             <div :class="activeIndex == i ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-12 scale-95'"
                                 class="transition duration-1000 delay-300 ease-out">
                                 <span
