@@ -96,7 +96,7 @@
                 </div>
 
                 <!-- Date Range (Simplified) -->
-                <div class="flex items-center gap-3 w-full lg:w-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
                     <div class="group">
                         <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Dari</label>
                         <input type="date" name="date_from" value="{{ request('date_from') }}" 
@@ -209,7 +209,7 @@
 
                                 <td class="px-6 md:px-8 py-5 text-right">
                                     <div class="flex items-center justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <a href="https://wa.me/{{ (str_starts_with($booking->customerPhone ?? '', '0') ? '62' . substr(preg_replace('/[^0-9]/', '', $booking->customerPhone), 1) : preg_replace('/[^0-9]/', '', $booking->customerPhone ?? '')) }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="WhatsApp">
+                                        <a href="https://wa.me/{{ (str_starts_with($booking->customerPhone ?? '', '0') ? '62' . substr(preg_replace('/[^0-9]/', '', $booking->customerPhone), 1) : preg_replace('/[^0-9]/', '', $booking->customerPhone ?? '')) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="WhatsApp">
                                             <i class="fab fa-whatsapp text-xs"></i>
                                         </a>
 
@@ -217,27 +217,27 @@
                                         <form action="{{ route('admin.bookings.status', $booking) }}" method="POST" class="inline">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="status" value="confirmed">
-                                            <button type="submit" class="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="Confirm">
+                                            <button type="submit" class="w-11 h-11 flex items-center justify-center rounded-xl bg-blue-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="Confirm">
                                                 <i class="fas fa-check text-[10px]"></i>
                                             </button>
                                         </form>
                                         @endif
 
-                                        <a href="{{ route('admin.bookings.show', $booking) }}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg transition transform hover:-translate-y-0.5" title="Detail">
+                                        <a href="{{ route('admin.bookings.show', $booking) }}" class="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg transition transform hover:-translate-y-0.5" title="Detail">
                                             <i class="fas fa-chevron-right text-[10px]"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.bookings.invoice', $booking->bookingCode) }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
+                                        <a href="{{ route('admin.bookings.invoice', $booking->bookingCode) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
                                             <i class="fas fa-file-pdf text-[10px]"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.bookings.invoice.download', $booking->bookingCode) }}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 shadow-sm transition transform hover:-translate-y-0.5 border border-slate-200" title="Download PDF">
+                                        <a href="{{ route('admin.bookings.invoice.download', $booking->bookingCode) }}" class="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 shadow-sm transition transform hover:-translate-y-0.5 border border-slate-200" title="Download PDF">
                                             <i class="fas fa-file-arrow-down text-[10px]"></i>
                                         </a>
 
                                         <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST" class="inline" onsubmit="return confirm('Hapus pesanan ini?');">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition shadow-sm">
+                                            <button type="submit" class="w-11 h-11 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition shadow-sm">
                                                 <i class="fas fa-trash-can text-[10px]"></i>
                                             </button>
                                         </form>
@@ -277,9 +277,9 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-10"
-         class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4"
+         class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4"
          x-cloak>
-        <div class="bg-slate-900 text-white rounded-[2.5rem] p-5 shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
+        <div class="bg-slate-900 text-white rounded-[2.5rem] p-4 md:p-5 shadow-2xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
             <div class="flex items-center gap-4 pl-4">
                 <div class="w-10 h-10 rounded-2xl bg-toba-green flex items-center justify-center text-white text-sm font-black shadow-lg shadow-toba-green/20">
                     <span x-text="selected.length"></span>

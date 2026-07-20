@@ -163,7 +163,7 @@
                 <div class="lg:hidden flex items-center gap-2">
                     <!-- Language Picker compact -->
                     <div x-data="{ open: false }" class="relative z-[110]">
-                        <button @click="open = !open" aria-label="Pilih Bahasa" :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'" class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition">
+                        <button @click="open = !open" aria-label="Pilih Bahasa" :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'" class="w-11 h-11 rounded-lg flex items-center justify-center text-sm transition">
                             @if(session('locale', 'my') === 'my') 🇲🇾
                             @elseif(session('locale', 'my') === 'id') 🇮🇩
                             @else 🇸🇬
@@ -178,10 +178,18 @@
                     <!-- WhatsApp CTA compact -->
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer"
                         :class="isScrolled ? 'bg-primary text-white' : 'bg-white/15 text-white border border-white/30'"
-                        class="w-8 h-8 rounded-lg flex items-center justify-center transition"
+                        class="w-11 h-11 rounded-lg flex items-center justify-center transition"
                         aria-label="Hubungi via WhatsApp">
                         <x-icon name="whatsapp" class="w-4 h-4" />
                     </a>
+                    <!-- Menu Toggle -->
+                    <button @click="isMenuOpen = true" aria-label="Buka menu navigasi" :aria-expanded="isMenuOpen"
+                        :class="isScrolled ? 'text-slate-600 bg-slate-100' : 'text-white bg-white/10'"
+                        class="w-11 h-11 rounded-lg flex items-center justify-center transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -281,36 +289,36 @@
     <!-- Mobile Horizontal Scrollable Sub-Navbar -->
     <div class="lg:hidden border-t border-slate-200/60"
         :class="isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-white/90 backdrop-blur-md'">
-        <div class="overflow-x-auto no-scrollbar">
+        <div class="overflow-x-auto no-scrollbar snap-x overscroll-x-contain">
             <ul class="flex items-center whitespace-nowrap px-4 py-0 gap-0">
                 <li>
                     <a href="/"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Beranda') }}</a>
                 </li>
                 <li>
                     <a href="/tour/packages"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Paket Wisata') }}</a>
                 </li>
                 <li>
                     <a href="/tour/gallery"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Galeri') }}</a>
                 </li>
                 <li>
                     <a href="/tour/blog"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Blog') }}</a>
                 </li>
                 <li>
                     <a href="/about"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Tentang Kami') }}</a>
                 </li>
                 <li>
                     <a href="{{ route('booking.track.form') }}"
-                        class="inline-flex items-center px-3.5 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
                     >{{ __('Lacak Booking') }}</a>
                 </li>
             </ul>

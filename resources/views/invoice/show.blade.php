@@ -109,7 +109,7 @@
             <i class="fa-solid fa-mountain-sun text-[300px]"></i>
         </div>
 
-        <div class="p-10 sm:p-14 relative z-10 bg-pattern-subtle">
+        <div class="p-5 sm:p-10 md:p-14 relative z-10 bg-pattern-subtle">
 
             <!-- Header Section -->
             <div class="flex flex-col sm:flex-row justify-between items-start mb-10 pb-8 border-b-2 border-brand-light">
@@ -187,8 +187,8 @@
             </div>
 
             <!-- Table Section -->
-            <div class="mb-10 bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm">
-                <table class="w-full text-left border-collapse">
+            <div class="mb-10 bg-white rounded-xl border border-neutral-200 overflow-x-auto shadow-sm">
+                <table class="w-full min-w-[560px] text-left border-collapse">
                     <thead class="bg-neutral-50 border-b border-neutral-200">
                         <tr>
                             <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider w-1/2">Deskripsi Layanan</th>

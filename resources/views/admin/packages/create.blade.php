@@ -97,8 +97,8 @@
                                         <span x-text="index + 1"></span>
                                     </div>
                                     <input type="text" :name="'itinerary['+index+'][title]'" x-model="item.title" placeholder="Judul Hari (misal: Penjemputan & City Tour)"
-                                        class="flex-1 px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green/20 font-bold text-sm">
-                                    <button type="button" @click="removeDay(index)" class="text-gray-300 hover:text-red-500 transition px-2">
+                                        class="flex-1 min-w-0 px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green/20 font-bold text-sm">
+                                    <button type="button" @click="removeDay(index)" class="shrink-0 text-gray-300 hover:text-red-500 transition p-3">
                                         <i class="fas fa-trash-alt text-sm"></i>
                                     </button>
                                 </div>
@@ -268,7 +268,7 @@
                                 </div>
 
                                 <!-- Harga Dewasa & Anak -->
-                                <div class="flex-1 flex gap-4">
+                                <div class="flex-1 flex flex-col sm:flex-row gap-4">
                                     <div class="w-full md:flex-1 md:min-w-[140px]">
                                         <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga Dewasa (Rp)</label>
                                         <div class="relative">
@@ -378,7 +378,7 @@
             </div> <!-- End of Advanced Settings -->
 
                 <!-- Submit Buttons -->
-                <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-6 border-t border-gray-200">
                     <button type="submit" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition shadow-md">
                         <i class="fas fa-save mr-2"></i> Create Package
                     </button>

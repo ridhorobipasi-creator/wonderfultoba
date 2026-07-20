@@ -48,7 +48,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">Package Images</label>
                     
                     @if($package->images && count($package->images) > 0)
-                        <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mb-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-4">
                             @foreach($package->images as $image)
                                 <div class="relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm group transition"
                                      :class="isRemoving('{{ $image }}') ? 'ring-4 ring-red-500 opacity-50 scale-95' : ''">
@@ -75,7 +75,7 @@
                         </button>
                     </div>
 
-                    <div id="selected-media-container" class="grid grid-cols-4 sm:grid-cols-6 gap-4 mb-4" x-show="selectedMedia.length > 0">
+                    <div id="selected-media-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-4" x-show="selectedMedia.length > 0">
                         <template x-for="(item, idx) in selectedMedia" :key="'media'+item.id">
                             <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-indigo-500 shadow-lg group">
                                 <img :src="'/storage/' + (item.path.replace(/^\/?storage\//, ''))" class="w-full h-full object-cover">
@@ -96,7 +96,7 @@
                     </div>
 
                     <!-- Local Images Preview -->
-                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-4 mt-4" x-show="localPreviews.length > 0">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-4" x-show="localPreviews.length > 0">
                         <template x-for="(preview, idx) in localPreviews" :key="'local'+idx">
                             <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-emerald-500 shadow-lg group">
                                 <img :src="preview.url" class="w-full h-full object-cover">
@@ -146,8 +146,8 @@
                                         <span x-text="index + 1"></span>
                                     </div>
                                     <input type="text" :name="'itinerary['+index+'][title]'" x-model="item.title" placeholder="Judul Hari (misal: Penjemputan & City Tour)"
-                                        class="flex-1 px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green/20 font-bold text-sm">
-                                    <button type="button" @click="removeDay(index)" class="text-gray-300 hover:text-red-500 transition px-2">
+                                        class="flex-1 min-w-0 px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-toba-green/20 font-bold text-sm">
+                                    <button type="button" @click="removeDay(index)" class="shrink-0 text-gray-300 hover:text-red-500 transition p-3">
                                         <i class="fas fa-trash-alt text-sm"></i>
                                     </button>
                                 </div>
@@ -425,7 +425,7 @@
             </div> <!-- End of Advanced Settings -->
 
                 <!-- Submit Buttons -->
-                <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-6 border-t border-gray-200">
                     <button type="submit" :disabled="isSubmitting" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition shadow-md disabled:opacity-50">
                         <template x-if="!isSubmitting">
                             <div class="flex items-center">

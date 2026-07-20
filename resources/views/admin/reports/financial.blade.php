@@ -11,7 +11,7 @@
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Analisis Transaksi & Pendapatan</p>
         </div>
         
-        <form action="{{ route('admin.reports.financial') }}" method="GET" class="flex items-center gap-2">
+        <form action="{{ route('admin.reports.financial') }}" method="GET" class="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <select name="year" class="px-4 py-2 bg-white border border-slate-200 rounded-xl font-bold text-xs">
                 @for($y = date('Y'); $y >= 2024; $y--)
                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>

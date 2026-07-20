@@ -124,7 +124,7 @@
                     @endif
 
                     {{-- Article body --}}
-                    <div class="prose prose-lg md:prose-xl max-w-none text-slate-700 font-body-md leading-[1.8] tracking-[0.01em]
+                    <div class="prose prose-lg md:prose-xl max-w-none break-words [&_a]:break-all text-slate-700 font-body-md leading-[1.8] tracking-[0.01em]
                                 prose-headings:font-headline-md prose-headings:text-primary prose-headings:font-semibold
                                 prose-a:text-emerald-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                                 prose-strong:text-slate-900 prose-strong:font-bold

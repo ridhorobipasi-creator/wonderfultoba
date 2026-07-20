@@ -77,7 +77,7 @@
                     </div>
 
                     <!-- Stats Cards -->
-                    <div class="grid grid-cols-2 gap-8 pt-8 border-t border-outline-variant/40">
+                    <div class="grid grid-cols-2 gap-4 md:gap-8 pt-8 border-t border-outline-variant/40">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition duration-300 shadow-sm">
                             <p class="text-4xl font-headline-md font-semibold text-primary mb-1 tracking-tight">
                                 {{ $content['stat_years'] ?? '12+' }}

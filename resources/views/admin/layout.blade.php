@@ -7,7 +7,7 @@
    @submit.window="loading = true">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>@yield('title', 'Dashboard') - Sujai Laketoba Admin</title>
     @php
         $iconUrl = $siteSettings['general']['icon_url'] ?? ($siteSettings['cms_landing']['brand_icon_url'] ?? asset('favicon.ico'));
@@ -54,6 +54,7 @@
         #admin-wrapper {
             display: block;
             min-height: 100vh;
+            min-height: 100dvh;
             position: relative;
         }
 
@@ -63,6 +64,9 @@
             top: 0;
             left: 0;
             height: 100vh;
+            height: 100dvh;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
             width: 272px;
             background: white;
             border-right: 1px solid #F1F5F9;
@@ -90,6 +94,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            min-height: 100dvh;
             width: 100%;
             transition: padding-left 0.3s ease;
         }
@@ -116,7 +121,7 @@
                 {{-- Branding --}}
                 <div class="px-6 pt-8 pb-6 flex flex-col items-center text-center flex-shrink-0 border-b border-slate-50 relative">
                     {{-- Mobile Close Button --}}
-                    <button @click="sidebarOpen = false" class="lg:hidden absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:bg-slate-100 transition">
+                    <button @click="sidebarOpen = false" class="lg:hidden absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:bg-slate-100 transition">
                         <i class="fas fa-times text-xs"></i>
                     </button>
 
@@ -324,11 +329,11 @@
              :class="sidebarOpen && !isMobile ? 'sidebar-visible' : ''">
 
             {{-- Top Header --}}
-            <header class="glass sticky top-0 z-50 border-b border-slate-100 px-5 lg:px-8 py-4 flex items-center justify-between flex-shrink-0">
+            <header class="glass sticky top-0 z-50 pt-[env(safe-area-inset-top)] border-b border-slate-100 px-5 lg:px-8 py-4 flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-4">
                     {{-- Toggle Button --}}
                     <button @click="sidebarOpen = !sidebarOpen"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition focus:outline-none">
+                            class="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition focus:outline-none">
                         <i class="fas fa-bars text-xs"></i>
                     </button>
                     <div>
@@ -343,7 +348,7 @@
                     </div>
 
                     {{-- Global Search / Command Bar --}}
-                    <div class="hidden md:flex items-center ml-8 relative group" x-data="{ commandOpen: false }">
+                    <div class="hidden lg:flex items-center ml-8 relative group" x-data="{ commandOpen: false }">
                         <div class="relative">
                             <i class="fas fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 text-[10px] group-focus-within:text-toba-green transition-colors"></i>
                             <input type="text" 
@@ -361,7 +366,7 @@
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 translate-y-4"
                              x-transition:enter-end="opacity-100 translate-y-0"
-                             class="absolute top-full left-0 mt-3 w-[500px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-50 p-6 z-[100]" x-cloak>
+                             class="absolute top-full left-0 mt-3 w-[min(500px,calc(100vw-2rem))] bg-white rounded-[2.5rem] shadow-2xl border border-slate-50 p-6 z-[100]" x-cloak>
                             <div class="space-y-6">
                                 <div>
                                     <h4 class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-3 px-2">Shortcut Cepat</h4>

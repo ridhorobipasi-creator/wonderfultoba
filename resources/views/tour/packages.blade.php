@@ -84,7 +84,7 @@
 >
     <main class="flex-grow">
         <!-- Hero Section -->
-        <div class="relative h-[55vh] flex items-end overflow-hidden">
+        <div class="relative h-[55dvh] min-h-[320px] flex items-end overflow-hidden">
             @php
                 $heroImg = (count($packages) > 0 && count($packages[0]->packageImages) > 0) 
                     ? imageUrl($packages[0]->packageImages[0]->image_path) 
@@ -184,7 +184,7 @@
                                     <div class="bg-slate-950 text-white px-2.5 py-1 rounded-lg text-[9px] font-semibold uppercase tracking-wider" x-text="pkg.duration"></div>
                                 </div>
 
-                                <button class="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition shadow-sm" aria-label="Simpan ke wishlist">
+                                <button class="absolute top-4 right-4 w-11 h-11 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition shadow-sm" aria-label="Simpan ke wishlist">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
                                 </button>
                             </div>

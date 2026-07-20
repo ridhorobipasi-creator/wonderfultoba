@@ -46,9 +46,9 @@
                 <img :src="item.thumbnail_url || item.url" 
                      :alt="item.alt_text || 'Selected image'"
                      class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <div class="absolute inset-0 bg-slate-900/40 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition flex items-center justify-center">
                     <button type="button" @click="removeSelectedMedia(idx)" 
-                            class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg hover:bg-rose-600 transition">
+                            class="w-11 h-11 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg hover:bg-rose-600 transition">
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
@@ -83,9 +83,9 @@
                 <img :src="preview.url" 
                      :alt="preview.file.name"
                      class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <div class="absolute inset-0 bg-slate-900/40 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition flex items-center justify-center">
                     <button type="button" @click="removeLocalFile(idx)" 
-                            class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg hover:bg-rose-600 transition">
+                            class="w-11 h-11 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg hover:bg-rose-600 transition">
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>

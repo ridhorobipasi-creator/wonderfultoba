@@ -188,7 +188,7 @@
             <!-- Close Button -->
             <button
                 @click="closeLightbox()"
-                class="absolute top-6 right-6 w-12 h-12 bg-white/5 hover:bg-red-600 hover:text-white rounded-xl flex items-center justify-center text-white transition z-[210] border border-white/10 group cursor-pointer"
+                class="absolute top-[max(1.5rem,env(safe-area-inset-top))] right-6 w-12 h-12 bg-white/5 hover:bg-red-600 hover:text-white rounded-xl flex items-center justify-center text-white transition z-[210] border border-white/10 group cursor-pointer"
             >
                 <span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-500">close</span>
             </button>
@@ -199,16 +199,16 @@
             </div>
 
             <!-- Navigation Controls -->
-            <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-6 md:px-12 pointer-events-none z-[210]">
+            <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-3 md:px-12 pointer-events-none z-[210]">
                 <button
                     @click.stop="prev()"
-                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
+                    class="w-11 h-11 md:w-14 md:h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-2xl group-hover:-translate-x-0.5 transition-transform">chevron_left</span>
                 </button>
                 <button
                     @click.stop="next()"
-                    class="w-14 h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
+                    class="w-11 h-11 md:w-14 md:h-14 bg-white/5 hover:bg-secondary hover:text-white backdrop-blur-md rounded-2xl flex items-center justify-center text-white transition pointer-events-auto border border-white/10 shadow-lg group cursor-pointer"
                 >
                     <span class="material-symbols-outlined text-2xl group-hover:translate-x-0.5 transition-transform">chevron_right</span>
                 </button>

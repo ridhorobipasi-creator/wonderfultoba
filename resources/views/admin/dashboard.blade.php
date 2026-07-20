@@ -54,8 +54,8 @@
     </div>
 
     <!-- 2. QUICK STATS ROW -->
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        <div class="bg-white p-6 rounded-[2.5rem] border border-slate-50 shadow-sm flex items-center gap-5">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+        <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
             <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center text-lg">
                 <i class="fas fa-calendar-check"></i>
             </div>
@@ -64,7 +64,7 @@
                 <h4 class="text-xl font-black text-slate-900" x-text="data.bookings.active"></h4>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-[2.5rem] border border-slate-50 shadow-sm flex items-center gap-5">
+        <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
             <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">
                 <i class="fas fa-clock"></i>
             </div>
@@ -73,7 +73,7 @@
                 <h4 class="text-xl font-black text-slate-900" x-text="data.bookings.pending"></h4>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-[2.5rem] border border-slate-50 shadow-sm flex items-center gap-5">
+        <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-lg">
                 <i class="fas fa-check-double"></i>
             </div>
@@ -82,7 +82,7 @@
                 <h4 class="text-xl font-black text-slate-900" x-text="data.bookings.confirmed"></h4>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-[2.5rem] border border-slate-50 shadow-sm flex items-center gap-5">
+        <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
             <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-lg">
                 <i class="fas fa-users"></i>
             </div>
@@ -98,7 +98,7 @@
     <!-- 3. MAIN TRANSACTIONS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Recent Bookings -->
-        <div class="lg:col-span-2 bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-sm flex flex-col">
+        <div class="lg:col-span-2 bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-sm flex flex-col">
             <div class="flex items-center justify-between mb-8">
                 <h3 class="text-lg font-black text-slate-900 tracking-tight flex items-center gap-3">
                     <div class="w-2 h-8 bg-toba-green rounded-full"></div>
@@ -147,7 +147,7 @@
         <!-- Sidebar Activity -->
         <div class="space-y-8">
             <!-- Top Packages -->
-            <div class="bg-slate-900 p-10 rounded-[3.5rem] shadow-2xl text-white">
+            <div class="bg-slate-900 p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] shadow-2xl text-white">
                 <h3 class="text-sm font-black uppercase tracking-widest mb-8 text-white/50">Top Booked Packages</h3>
                 <div class="space-y-6">
                     <template x-for="(count, name) in data.top_packages" :key="name">
@@ -165,7 +165,7 @@
             </div>
 
             <!-- Top Viewed Content -->
-            <div class="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-sm">
+            <div class="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-sm">
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-8">Populer (Banyak Dilihat)</h3>
                 <div class="space-y-6">
                     <template x-for="pkg in data.top_views.packages" :key="pkg.id">
@@ -197,7 +197,7 @@
             </div>
 
             <!-- Recent Customers -->
-            <div class="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-sm">
+            <div class="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 shadow-sm">
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-8">Pelanggan Baru</h3>
                 <div class="space-y-6">
                     <template x-for="customer in data.recent_customers" :key="customer.id">

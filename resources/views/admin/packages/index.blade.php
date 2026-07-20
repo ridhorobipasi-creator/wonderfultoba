@@ -239,9 +239,9 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-10"
-         class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4"
+         class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:bottom-10 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4"
          x-cloak>
-        <div class="bg-slate-900 text-white rounded-[2.5rem] p-5 shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
+        <div class="bg-slate-900 text-white rounded-[2.5rem] p-4 md:p-5 shadow-2xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
             <div class="flex items-center gap-4 pl-4">
                 <div class="w-10 h-10 rounded-2xl {{ $bgColor }} flex items-center justify-center text-white text-sm font-black shadow-lg">
                     <span x-text="selected.length"></span>

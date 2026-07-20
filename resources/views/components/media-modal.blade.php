@@ -10,11 +10,11 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
     
-    <div class="bg-white w-full max-w-6xl h-[85vh] rounded-[4rem] shadow-2xl overflow-hidden flex flex-col border border-white/20 animate-in zoom-in duration-500"
+    <div class="bg-white w-full max-w-6xl h-[85dvh] rounded-2xl md:rounded-[4rem] shadow-2xl overflow-hidden flex flex-col border border-white/20 animate-in zoom-in duration-500"
          @click.away="isOpen = false">
         
         <!-- Header -->
-        <div class="px-10 py-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
+        <div class="px-4 py-4 md:px-10 md:py-8 border-b border-slate-50 flex items-center justify-between gap-3 bg-slate-50/50">
             <div class="flex items-center gap-6">
                 <div class="w-14 h-14 bg-indigo-600 rounded-[1.5rem] flex items-center justify-center text-white shadow-xl shadow-indigo-100">
                     <i class="fas fa-images text-xl"></i>
@@ -29,14 +29,14 @@
             </button>
         </div>
 
-        <div class="flex-1 flex overflow-hidden">
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <!-- Sidebar Folders -->
-            <aside class="w-64 border-r border-slate-50 p-6 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+            <aside class="w-full md:w-64 shrink-0 border-b md:border-b-0 md:border-r border-slate-50 p-3 md:p-6 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:overflow-y-auto custom-scrollbar">
                 <p class="px-4 text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] mb-3">Folders</p>
                 
                 <button @click="category = ''; fetchMedia()" 
                         :class="category === '' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'"
-                        class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group">
+                        class="shrink-0 md:w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group whitespace-nowrap">
                     <i class="fas fa-layer-group text-xs"></i>
                     <span class="text-[10px] font-black uppercase tracking-widest">All Assets</span>
                 </button>
@@ -44,7 +44,7 @@
                 <template x-for="cat in categories" :key="cat.name">
                     <button @click="category = cat.name; fetchMedia()" 
                             :class="category === cat.name ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'"
-                            class="w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group">
+                            class="shrink-0 md:w-full flex items-center gap-4 px-5 py-3 rounded-xl transition group whitespace-nowrap">
                         <i class="fas text-xs" :class="cat.icon"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest" x-text="cat.name"></span>
                     </button>
@@ -54,7 +54,7 @@
             <!-- Main Content Area -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Filters -->
-                <div class="px-8 py-4 bg-white border-b border-slate-50 flex items-center gap-4">
+                <div class="px-4 py-4 md:px-8 bg-white border-b border-slate-50 flex flex-wrap items-center gap-3 md:gap-4">
                     <div class="flex-1 relative">
                         <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 text-sm"></i>
                         <input type="text" x-model="search" @input.debounce.500ms="fetchMedia()" placeholder="Search library..." 
@@ -68,7 +68,7 @@
                 </div>
 
                 <!-- Grid -->
-                <div class="flex-1 overflow-y-auto p-10 custom-scrollbar bg-slate-50/30">
+                <div class="flex-1 overflow-y-auto p-4 md:p-10 custom-scrollbar bg-slate-50/30">
                     <div x-show="loading" class="h-full flex items-center justify-center">
                         <div class="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
                     </div>
@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- Footer Pagination -->
-                <div class="px-8 py-6 border-t border-slate-50 bg-white flex justify-between items-center">
+                <div class="px-4 py-4 md:px-8 md:py-6 border-t border-slate-50 bg-white flex flex-wrap gap-3 justify-between items-center">
                     <!-- Pagination -->
                     <div x-show="lastPage > 1" class="flex gap-2">
                         <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="w-12 h-12 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 disabled:opacity-20 transition shadow-sm">

@@ -6,25 +6,25 @@
 @section('content')
 <div x-data="{ activeTab: 'branding', exchangeRateType: '{{ $general['finance']['exchange_rate_type'] ?? 'manual' }}' }" class="space-y-8">
 
-    <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 inline-flex items-center space-x-1">
-        <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition">
+    <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-1 max-w-full overflow-x-auto no-scrollbar">
+        <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 md:px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">
             <i class="fas fa-palette mr-2"></i> Branding
         </button>
-        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition">
+        <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 md:px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">
             <i class="fas fa-address-book mr-2"></i> Kontak & WA
         </button>
-        <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition">
+        <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 md:px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">
             <i class="fas fa-search mr-2"></i> SEO Global
         </button>
-        <button @click="activeTab = 'company'" :class="activeTab === 'company' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition">
+        <button @click="activeTab = 'company'" :class="activeTab === 'company' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 md:px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">
             <i class="fas fa-building mr-2"></i> Perusahaan & Invoice
         </button>
-        <button @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition">
+        <button @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 md:px-8 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">
             <i class="fas fa-coins mr-2"></i> Keuangan & Pajak
         </button>
     </div>
 
-    <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8 pb-32">
         @csrf
         
         <!-- Branding Tab -->
@@ -459,7 +459,7 @@
         </div>
 
         <!-- Fixed Save Button -->
-        <div class="fixed bottom-10 right-10 z-[100]">
+        <div class="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-4 md:bottom-10 md:right-10 z-[100]">
             <button type="submit" class="group flex items-center gap-4 bg-slate-900 text-white px-8 py-5 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:bg-toba-green hover:scale-105 transition duration-300">
                 <i class="fas fa-save text-lg group-hover:rotate-12 transition-transform"></i>
                 Simpan Semua Perubahan

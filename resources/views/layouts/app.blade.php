@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="antialiased">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Fonts fully self-hosted & bundled in Vite (Plus Jakarta Sans + subset Material Symbols). No external font requests. -->
@@ -124,7 +124,7 @@
     @stack('head')
     @stack('schema')
 </head>
-<body class="font-sans text-slate-900 bg-white selection:bg-green-100 selection:text-green-900 overflow-x-hidden pb-24 md:pb-0" x-data="{ isDark: false }">
+<body class="font-sans text-slate-900 bg-white selection:bg-green-100 selection:text-green-900 overflow-x-hidden pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-0" x-data="{ isDark: false }">
     
     <!-- Navbar -->
     @include('layouts.partials.navbar')

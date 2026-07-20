@@ -5,11 +5,11 @@
 
 @section('content')
 <div class="max-w-5xl">
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center text-sm font-black text-toba-green uppercase tracking-widest hover:text-emerald-700 transition">
             <i class="fas fa-arrow-left mr-2"></i> Back to Bookings
         </a>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
             <a href="{{ route('admin.bookings.edit', $booking) }}" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition text-sm">
                 <i class="fas fa-edit mr-2"></i> Edit Booking
             </a>
@@ -35,7 +35,7 @@
             <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden p-8">
                 <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6">Booking Information</h3>
                 
-                <div class="grid grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Service Type</p>
                         <div class="flex items-center">

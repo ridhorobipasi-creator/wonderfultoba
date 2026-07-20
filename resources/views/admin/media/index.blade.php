@@ -121,7 +121,7 @@
                     <i class="fas fa-chevron-right text-[8px] opacity-30"></i>
                     <span class="text-indigo-600" x-text="activeTab === 'audit' ? 'Storage Health' : (filters.category || 'Home')"></span>
                 </div>
-                <h2 class="text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
                     <span x-text="activeTab === 'audit' ? 'STORAGE HEALTH' : (filters.category ? filters.category.toUpperCase() : 'GALLERY HUB')"></span>
                 </h2>
             </div>
@@ -162,7 +162,7 @@
             </div>
 
             <!-- Audit View Actions -->
-            <div class="flex items-center gap-3" x-show="activeTab === 'audit'" x-cloak>
+            <div class="flex flex-wrap items-center gap-3" x-show="activeTab === 'audit'" x-cloak>
                 <button @click="fetchAuditData()" class="px-8 py-5 bg-white border border-slate-200 text-slate-900 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-3">
                     <i class="fas fa-rotate" :class="auditLoading ? 'animate-spin' : ''"></i> Rescan Storage
                 </button>
@@ -212,7 +212,7 @@
             <!-- The Grid -->
             <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
                 <template x-for="item in media" :key="item.id">
-                    <div class="group relative aspect-square rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition duration-700 transform hover:-translate-y-2"
+                    <div class="group relative aspect-square rounded-3xl md:rounded-[3.5rem] bg-white border border-slate-50 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition duration-700 transform hover:-translate-y-2"
                          :class="selectedIds.includes(item.id) ? 'ring-[0.5rem] ring-indigo-600 ring-offset-4' : ''"
                          :style="item.dominant_color ? 'background-color: ' + item.dominant_color : 'background-color: #f8fafc'">
                         
@@ -229,7 +229,7 @@
                         </div>
 
                         <!-- Smart Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 p-8 flex flex-col justify-end">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition duration-500 p-4 md:p-8 flex flex-col justify-end">
                             <div class="space-y-5">
                                 <div class="flex flex-wrap gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                     <div class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-xl text-[7px] font-black uppercase tracking-widest text-white border border-white/20" x-text="item.category"></div>
@@ -390,7 +390,7 @@
     <!-- Modal: Upload from URL -->
     <div x-show="uploadingUrlModal" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="uploadingUrlModal = false"></div>
-        <div class="relative bg-white w-full max-w-lg rounded-[3.5rem] p-12 shadow-2xl" x-transition>
+        <div class="relative bg-white w-full max-w-lg rounded-3xl md:rounded-[3.5rem] p-6 md:p-12 shadow-2xl max-h-[90dvh] overflow-y-auto" x-transition>
             <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-4">Upload from URL</h3>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-10">Unduh & konversi otomatis ke WebP</p>
             
@@ -421,7 +421,7 @@
     <!-- Modal: Rename Folder -->
     <div x-show="renamingFolder" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="renamingFolder = null"></div>
-        <div class="relative bg-white w-full max-w-md rounded-[3.5rem] p-12 shadow-2xl" x-transition>
+        <div class="relative bg-white w-full max-w-md rounded-3xl md:rounded-[3.5rem] p-6 md:p-12 shadow-2xl max-h-[90dvh] overflow-y-auto" x-transition>
             <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-4">Rename Folder</h3>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-10">Folder: <span x-text="renamingFolderData.old_name" class="text-indigo-600"></span></p>
             
@@ -440,7 +440,7 @@
     <!-- Modal: Move Assets -->
     <div x-show="movingAssets" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="movingAssets = null"></div>
-        <div class="relative bg-white w-full max-w-md rounded-[3.5rem] p-12 shadow-2xl" x-transition>
+        <div class="relative bg-white w-full max-w-md rounded-3xl md:rounded-[3.5rem] p-6 md:p-12 shadow-2xl max-h-[90dvh] overflow-y-auto" x-transition>
             <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none mb-4">Move Items</h3>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-10">Relocate <span x-text="selectedIds.length" class="text-indigo-600"></span> selected items</p>
             
@@ -473,7 +473,7 @@
     <!-- Modal: Edit File / Rename & Crop -->
     <div x-show="editingItem" class="fixed inset-0 z-[210] flex items-center justify-center p-6" x-cloak>
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="if (!isCropping) editingItem = null"></div>
-        <div class="relative bg-white w-full max-w-xl rounded-[4rem] p-12 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" x-transition>
+        <div class="relative bg-white w-full max-w-xl rounded-[4rem] p-6 md:p-12 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col" x-transition>
             <div class="flex justify-between items-start mb-6 shrink-0">
                 <div>
                     <h3 class="text-3xl font-black text-slate-900 tracking-tighter leading-none">File Properties</h3>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="w-full max-w-full">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8 bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-5 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
         <div class="flex items-center gap-5">
             <div class="w-14 h-14 rounded-[1.25rem] bg-emerald-600 flex items-center justify-center text-white shadow-xl shadow-emerald-100">
                 <i class="fas fa-edit text-2xl"></i>
@@ -33,15 +33,15 @@
                 <div class="bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100 mb-8">
                     <label class="block text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-4 text-center">Judul Utama</label>
                     <input type="text" name="title" id="title" value="{{ old('title', $blog->title) }}" required
-                        class="w-full text-4xl font-black text-slate-900 placeholder:text-slate-100 border-none focus:ring-0 p-0 text-center mb-4">
+                        class="w-full text-2xl md:text-4xl font-black text-slate-900 placeholder:text-slate-100 border-none focus:ring-0 p-0 text-center mb-4">
                     <div class="flex justify-center">
                         <div class="h-1.5 w-24 bg-emerald-500 rounded-full"></div>
                     </div>
                 </div>
 
                 <!-- The "Paper" Editor -->
-                <div class="bg-slate-50 p-3 sm:p-8 md:p-16 rounded-2xl md:rounded-[3.5rem] border border-slate-100 min-h-[900px] flex justify-center relative">
-                    <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-5 sm:p-10 md:p-24 min-h-[1000px] relative">
+                <div class="bg-slate-50 p-3 sm:p-8 md:p-16 rounded-2xl md:rounded-[3.5rem] border border-slate-100 min-h-[400px] md:min-h-[900px] flex justify-center relative">
+                    <div class="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-5 sm:p-10 md:p-24 min-h-[400px] md:min-h-[1000px] relative">
                         <!-- CKEditor Container -->
                         <div id="editor-container" class="prose prose-slate max-w-none">
                             <textarea name="content" id="editor" rows="20" class="w-full px-6 py-4 bg-slate-50 border-none rounded-[2rem] font-medium text-sm leading-relaxed focus:ring-2 focus:ring-toba-green transition">{{ old('content', $blog->content) }}</textarea>
@@ -100,7 +100,6 @@
                             <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">Belum ada foto terpilih</p>
                         </div>
                         <input type="hidden" name="image_url" :value="imagePath">
-                        <input type="hidden" name="media_id" :value="selectedMedia ? selectedMedia.id : '">
                     </div>
                 </div>
 

@@ -257,14 +257,14 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full xl:w-[450px] flex-shrink-0 space-y-6">
         <!-- Tab Navigation -->
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1 overflow-x-auto no-scrollbar">
-            <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Hero</button>
-            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
-            <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">⭐ Featured</button>
-            <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
-            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
-            <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">💬 Ulasan</button>
-            <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">Statistik</button>
-            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 px-4 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
+            <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Hero</button>
+            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
+            <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">⭐ Featured</button>
+            <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
+            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
+            <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">💬 Ulasan</button>
+            <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Statistik</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_tour') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -811,7 +811,7 @@ document.addEventListener('alpine:init', () => {
         <!-- Tab: LIVE PREVIEW (Original Content) -->
         <div x-show="activeTab !== 'slider'" x-transition>
             <!-- Live Hero Section -->
-            <section class="relative h-[500px] flex items-center px-12 md:px-20 overflow-hidden">
+            <section class="relative h-[500px] flex items-center px-5 md:px-12 lg:px-20 overflow-hidden">
                 <div class="absolute inset-0 bg-cover bg-center transition duration-700" :style="`background-image: url('${heroImage}')`"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 
@@ -837,7 +837,7 @@ document.addEventListener('alpine:init', () => {
             </section>
 
             <!-- Live Stats Section -->
-            <section class="py-12 px-12 md:px-20 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <section class="py-12 px-5 md:px-12 lg:px-20 grid grid-cols-2 md:grid-cols-4 gap-8">
                 <template x-for="i in [0,1,2,3]">
                     <div class="space-y-1">
                         <div class="text-3xl font-black text-slate-900 tracking-tighter" x-text="$data['stat'+i]"></div>
@@ -851,7 +851,7 @@ document.addEventListener('alpine:init', () => {
             </section>
 
             <!-- Dummy Gallery Section -->
-            <section class="px-12 md:px-20 pb-20">
+            <section class="px-5 md:px-12 lg:px-20 pb-20">
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-xl font-black text-slate-900 tracking-tight">Galeri Perjalanan</h3>
                     <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">View All</span>

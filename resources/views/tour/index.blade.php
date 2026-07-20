@@ -120,14 +120,14 @@
         <div x-ref="pkgStrip"
              @mousedown="onDown($event)" @mousemove="onMove($event)" @mouseup="onUp()" @mouseleave="onUp()"
              @scroll="const max = el.scrollWidth - el.clientWidth; scrollPercent = max > 0 ? (el.scrollLeft / max) * 100 : 0"
-             class="flex gap-6 overflow-x-auto scroll-smooth px-6 md:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] pb-4 no-scrollbar select-none"
+             class="flex gap-6 overflow-x-auto scroll-smooth px-6 md:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] pb-4 no-scrollbar select-none snap-x snap-mandatory overscroll-x-contain"
              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
             @foreach($packages as $index => $pkg)
             @php
                 $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
             @endphp
-            <div class="flex-shrink-0 w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
+            <div class="flex-shrink-0 snap-start w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl cursor-pointer"
                      onclick="window.location.href='/tour/package/{{ $pkg->slug ?: $pkg->id }}'">
                     @php $__pkgSrcset = imageSrcset($pkgImage); @endphp
@@ -307,11 +307,11 @@
                  @mouseup="onMouseUp()"
                  @mouseleave="onMouseUp()"
                  @scroll="const max = scrollContainer.scrollWidth - scrollContainer.clientWidth; scrollPercent = max > 0 ? (scrollContainer.scrollLeft / max) * 100 : 0"
-                 class="flex gap-5 overflow-x-auto scroll-smooth px-6 md:px-8 pb-4 no-scrollbar select-none"
+                 class="flex gap-5 overflow-x-auto scroll-smooth px-6 md:px-8 pb-4 no-scrollbar select-none snap-x snap-mandatory overscroll-x-contain"
                  :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
                 <template x-for="(slide, i) in slides" :key="i">
-                    <div class="flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card">
+                    <div class="flex-shrink-0 snap-start w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card">
                         <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition duration-500 hover:border-secondary/40 hover:-translate-y-1">
                             <img :src="slide.url"
                                  :alt="slide.caption || 'Sujai Laketoba'"

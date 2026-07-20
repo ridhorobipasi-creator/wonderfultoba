@@ -260,7 +260,7 @@
     }"
     x-init="$watch('totalAkhir', value => { totalChanged = true; setTimeout(() => totalChanged = false, 500); })"
     @scroll.window="showConcierge = window.scrollY > 300"
-    class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-20"
+    class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-32 md:pt-28"
 >
     <!-- AI Context & Screen Reader Only Data -->
     <section class="sr-only" id="ai-context" aria-hidden="true">
@@ -294,7 +294,7 @@
         <!-- Hero/Gallery Part -->
         <div class="space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1 mb-8 md:mb-12">
             <!-- Main Gallery -->
-            <div class="relative h-[420px] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
+            <div class="relative h-[min(420px,60dvh)] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
                      fetchpriority="high" decoding="async"
                      :src="package_images[activeImg] ? package_images[activeImg].url : '{{ imageUrl($package->images[0] ?? null) }}'"
@@ -319,11 +319,11 @@
             </div>
             
             <!-- Thumbnails/Secondary Gallery -->
-            <div x-show="package_images && package_images.length > 1" class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+            <div x-show="package_images && package_images.length > 1" class="flex gap-4 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory overscroll-x-contain">
                 <template x-for="(imgObj, i) in package_images" :key="i">
                     <div @click="activeImg = i" 
                          :class="activeImg === i ? 'ring-2 ring-emerald-500 ring-offset-2' : 'border border-slate-200/50'"
-                         class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer hover:opacity-90 transition duration-300 shadow-sm">
+                         class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 snap-start cursor-pointer hover:opacity-90 transition duration-300 shadow-sm">
                         <img class="w-full h-full object-cover" loading="lazy" decoding="async" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                     </div>
                 </template>
@@ -633,7 +633,7 @@
 
         <!-- Booking Form Sidebar (Sticky) -->
         <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
-            <div class="sticky top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 max-h-[85vh] overflow-y-auto custom-scroll">
+            <div class="md:sticky md:top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 md:max-h-[85vh] md:overflow-y-auto custom-scroll">
                 @if(session('success'))
                     <div 
                         x-data="{ 

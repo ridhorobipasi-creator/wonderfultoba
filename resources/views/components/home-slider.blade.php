@@ -82,7 +82,7 @@
     @endpush
 @endif
 
-<section id="home-hero-slider" class="relative w-full h-screen min-h-[600px] bg-slate-950 overflow-hidden"
+<section id="home-hero-slider" class="relative w-full h-[100dvh] min-h-[420px] max-h-[900px] bg-slate-950 overflow-hidden"
     @touchstart="handleTouchStart($event)" @touchend="handleTouchEnd($event)" x-data="{ 
         activeIndex: {{ $startIndex }},
         totalOriginal: {{ $totalOriginal }},
@@ -285,7 +285,7 @@
             }
 
             .hero-content h1 {
-                font-size: 2.5rem !important;
+                overflow-wrap: break-word;
             }
         }
 
@@ -307,14 +307,14 @@
             <div class="absolute inset-0 bg-black/40"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
 
-            <div class="absolute inset-0 z-30">
+            <div class="absolute inset-0 z-30 flex items-center">
                 <div
-                    class="w-full h-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 px-6 md:px-16 lg:px-24">
+                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-20 lg:pb-32 px-6 md:px-16 lg:px-24">
                     <div class="w-full lg:w-1/2 text-white">
                         <span
                             class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block">{{ $preparedSlides[0]['location'] }}</span>
                         <h1
-                            class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase">
+                            class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase break-words">
                             {{ $preparedSlides[0]['title'] }}</h1>
                         <p
                             class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3">
@@ -350,14 +350,14 @@
 
                     {{-- Content --}}
                     <div
-                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20">
+                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 md:pt-20 pb-20 lg:pb-32">
                         <div class="hero-content w-full lg:w-1/2 text-white">
                             <div :class="activeIndex == i ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-12 scale-95'"
                                 class="transition duration-1000 delay-300 ease-out">
                                 <span
                                     class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block"
                                     x-text="slide.location"></span>
-                                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase"
+                                <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase break-words"
                                     x-text="slide.title"></h1>
                                 <p class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3"
                                     x-text="slide.subtitle"></p>

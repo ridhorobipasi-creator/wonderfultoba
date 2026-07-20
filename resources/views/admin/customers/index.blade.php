@@ -50,16 +50,16 @@
     }
 }">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
         <div>
             <h1 class="text-3xl font-black text-slate-900 tracking-tight">Database Pelanggan</h1>
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Manajemen profil dan histori transaksi wisatawan</p>
         </div>
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-            <a href="{{ route('admin.customers.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
+        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+            <a href="{{ route('admin.customers.export', request()->all()) }}" class="flex-1 lg:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
                 <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export Excel
             </a>
-            <a href="{{ route('admin.customers.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 text-center">
+            <a href="{{ route('admin.customers.create') }}" class="flex-1 lg:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 text-center">
                 <i class="fas fa-user-plus mr-2"></i> Tambah Pelanggan
             </a>
         </div>
