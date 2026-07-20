@@ -45,6 +45,20 @@ Deploy steps (example)
 
 4. Set proper permissions for storage and bootstrap/cache.
 
+Currency migration (one-time, July 2026)
+- `2026_07_21_000002_convert_package_prices_to_myr` rewrites the selling price
+  list from IDR to MYR. It aborts unless you set the rate explicitly:
+
+    PRICE_MIGRATION_MYR_IDR=4400
+
+- TAKE A DATABASE DUMP FIRST. `down()` multiplies back by the same rate, but
+  rounding to 2 decimals loses the remainder, so it does not restore the
+  original figures exactly.
+- Bookings are NOT converted; they are labelled with the currency they were
+  made in and keep a frozen `totalPrice_idr` for reporting.
+- After migrating, review and round the catalogue prices in the admin panel —
+  a straight division produces values like RM 340.91.
+
 Rollback/Notes
 - Keep DB backups before running migrations on production.
 - If using shared hosting (FTP), upload the `public` folder contents to the public_html and other files to above-root.

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\CurrencyHelper;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Package;
@@ -46,6 +47,16 @@ class BookingService
                 $data['totalPrice'] = $prices['price'];
                 $data['total_cost'] = $prices['cost'];
 
+                // Freeze the currency of this booking. totalPrice follows the
+                // package price list (ringgit); totalPrice_idr is stamped once,
+                // here, and is what every report and tax figure reads later. It
+                // must never be re-derived, or an admin editing the exchange
+                // rate would retroactively change issued invoices and past
+                // months' revenue.
+                $data['currency'] = CurrencyHelper::PRICE_BASE;
+                $data['exchange_rate_idr'] = CurrencyHelper::getRate('IDR');
+                $data['totalPrice_idr'] = CurrencyHelper::toIdr($prices['price']);
+
                 // Set default status
                 $data['status'] = $data['status'] ?? 'pending';
 
@@ -68,7 +79,10 @@ class BookingService
                 // Update customer stats
                 $customer->update([
                     'total_bookings' => $customer->bookings()->count(),
-                    'total_spent' => $customer->bookings()->whereIn('status', ['confirmed', 'completed'])->sum('totalPrice'),
+                    // Sum the frozen IDR figures, not totalPrice: bookings made
+                    // before the ringgit price list are stored in rupiah, so
+                    // adding raw totalPrice across both would be meaningless.
+                    'total_spent' => $customer->bookings()->whereIn('status', ['confirmed', 'completed'])->sum('totalPrice_idr'),
                     'last_booking_at' => now(),
                 ]);
 
@@ -198,9 +212,10 @@ class BookingService
             $priceAnak = $childPricePerPerson * $paxChildren;
             
             $additionalServicesPrice = 0;
-            $availableServices = $package->pricingDetails['additional_services'] ?? [
-                ['name' => 'Private Jet Charter', 'icon' => 'flight_takeoff', 'price' => 120000000]
-            ];
+            // No configured extras means no extras. The old placeholder here
+            // ("Private Jet Charter", 120000000) was a demo leftover that could
+            // be selected and billed.
+            $availableServices = $package->pricingDetails['additional_services'] ?? [];
             
             $detailedServices = [];
             foreach ($availableServices as $srv) {
@@ -268,7 +283,9 @@ class BookingService
             }
 
             $totalDenganSurcharge = $totalSebelumPajak + $surchargeAmount;
-            $pajakLayanan = round($totalDenganSurcharge * ($taxPercentage / 100));
+            // 2 decimals: prices are in ringgit now, so rounding to whole units
+            // would discard sen on every booking.
+            $pajakLayanan = round($totalDenganSurcharge * ($taxPercentage / 100), 2);
             $totalAkhir = $totalDenganSurcharge + $pajakLayanan;
 
             $price = $totalAkhir;

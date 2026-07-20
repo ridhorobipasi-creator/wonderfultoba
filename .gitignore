@@ -51,6 +51,7 @@ Thumbs.db
 .aider*
 composer.phar
 /public/error_log
+/image.png
 
 # Credentials & signing keys — NEVER commit
 ssh.md
