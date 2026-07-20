@@ -287,38 +287,56 @@
     </nav>
 
     <!-- Mobile Horizontal Scrollable Sub-Navbar -->
-    <div class="lg:hidden border-t border-slate-200/60"
-        :class="isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-white/90 backdrop-blur-md'">
+    <div class="lg:hidden transition-colors duration-500"
+        :class="isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm border-t border-slate-200/60' : 'bg-slate-900/40 backdrop-blur-md border-t border-white/10'">
         <div class="overflow-x-auto no-scrollbar snap-x overscroll-x-contain">
             <ul class="flex items-center whitespace-nowrap px-4 py-0 gap-0">
                 <li>
                     <a href="/"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('/') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('/') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Beranda') }}</a>
                 </li>
                 <li>
                     <a href="/tour/packages"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/packages*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('tour/packages*') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Paket Wisata') }}</a>
                 </li>
                 <li>
                     <a href="/tour/gallery"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/gallery*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('tour/gallery*') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('tour/gallery*') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Galeri') }}</a>
                 </li>
                 <li>
                     <a href="/tour/blog"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('tour/blog*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('tour/blog*') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Blog') }}</a>
                 </li>
                 <li>
                     <a href="/about"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('about*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('about*') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('about*') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Tentang Kami') }}</a>
                 </li>
                 <li>
                     <a href="{{ route('booking.track.form') }}"
-                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition border-b-2 {{ request()->is('track-booking*') ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40' }}"
+                        class="inline-flex items-center snap-start px-3.5 py-3.5 min-h-[44px] text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 border-b-2"
+                        :class="isScrolled 
+                            ? ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-primary border-primary' : 'text-slate-500 border-transparent hover:text-primary hover:border-primary/40')
+                            : ({{ request()->is('track-booking*') ? 'true' : 'false' }} ? 'text-white border-white' : 'text-white/60 border-transparent hover:text-white hover:border-white/40')"
                     >{{ __('Lacak Booking') }}</a>
                 </li>
             </ul>

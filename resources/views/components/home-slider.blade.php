@@ -277,8 +277,8 @@
 
             /* Make hero text fit mobile without overflow */
             .hero-content {
-                padding-top: 40px;
-                padding-bottom: 100px; /* Space for mobile nav buttons + fixed bottom CTA bar */
+                padding-top: 20px;
+                padding-bottom: 120px; /* Space for mobile nav buttons + fixed bottom CTA bar */
                 text-align: center;
                 left: 0 !important;
                 width: 100% !important;
@@ -292,9 +292,10 @@
             .hero-content h1 {
                 overflow-wrap: break-word;
                 word-break: break-word;
-                font-size: 1.8rem !important;
-                line-height: 1.1 !important;
-                margin-bottom: 0.5rem !important;
+                font-size: 2.1rem !important;
+                line-height: 1.05 !important;
+                margin-bottom: 0.75rem !important;
+                text-shadow: 0 4px 24px rgba(0,0,0,0.5);
             }
 
             .hero-content p {
