@@ -109,7 +109,11 @@
                         @endphp
                         <div class="flex items-center gap-3">
                             <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full {{ $isDone ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400' }}">
-                                <span class="material-symbols-outlined text-sm">{{ $isDone ? 'check' : 'radio_button_unchecked' }}</span>
+                                @if($isDone)
+                                    <span class="material-symbols-outlined text-sm">done</span>
+                                @else
+                                    <span class="h-2 w-2 rounded-full bg-slate-300"></span>
+                                @endif
                             </div>
                             <div>
                                 <p class="text-sm font-bold {{ $isDone ? 'text-slate-950' : 'text-slate-400' }}">{{ $step }}</p>
