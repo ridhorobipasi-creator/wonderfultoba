@@ -286,6 +286,18 @@
 
             .hero-content h1 {
                 overflow-wrap: break-word;
+                font-size: 2rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+
+            .hero-content p {
+                font-size: 0.9rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            /* Price + CTA row on mobile: smaller gap, centered */
+            .hero-price-row {
+                margin-bottom: 0.5rem !important;
             }
         }
 
@@ -350,7 +362,7 @@
 
                     {{-- Content --}}
                     <div
-                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 pt-24 md:pt-28 pb-36 lg:pb-44">
+                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-12 pt-20 md:pt-28 pb-28 lg:pb-44 px-0 lg:px-0">
                         <div class="hero-content w-full lg:w-1/2 text-white">
                             <div :class="activeIndex == i ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-12 scale-95'"
                                 class="transition duration-1000 delay-300 ease-out">
@@ -362,13 +374,13 @@
                                 <p class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3"
                                     x-text="slide.subtitle"></p>
 
-                                <div class="flex items-center gap-8 mb-12 lg:justify-start justify-center"
+                                <div class="hero-price-row flex items-center gap-4 lg:gap-8 mb-4 lg:mb-12 lg:justify-start justify-center flex-wrap"
                                     x-show="slide.type !== 'blog' && slide.price > 0">
                                     <div class="flex flex-col text-left">
                                         <span
                                             class="text-[10px] text-toba-accent uppercase tracking-widest mb-1 font-bold">{{ __('Investasi Wisata') }}</span>
                                         <div class="flex items-baseline gap-1">
-                                            <span class="text-2xl font-black"
+                                            <span class="text-xl lg:text-2xl font-black"
                                                 x-text="AppCurrency.format(slide.price)"></span>
                                         </div>
                                     </div>
@@ -380,7 +392,7 @@
                                         </svg>
                                     </a>
                                 </div>
-                                <div class="flex items-center gap-8 mb-12 lg:justify-start justify-center"
+                                <div class="flex items-center gap-4 lg:gap-8 mb-4 lg:mb-12 lg:justify-start justify-center"
                                     x-show="slide.type === 'blog' || !slide.price || slide.price == 0">
                                     <a :href="slide.cta_link" class="cta-secondary px-8 py-4 md:px-10 md:py-5">
                                         <span x-text="slide.cta_text || 'Baca Selengkapnya'"></span>
@@ -476,4 +488,28 @@
             </div>
         </div>
     </div>
+
+    {{-- Mobile-only nav buttons: pinned bottom-center, never overlaps content --}}
+    <div class="lg:hidden absolute bottom-4 left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none">
+        <button @click="prev()" aria-label="Previous slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        {{-- Mobile dot indicators --}}
+        <div class="flex items-center gap-2 pointer-events-auto">
+            <template x-for="i in totalOriginal" :key="'mdot-' + i">
+                <div class="h-[3px] rounded-full transition duration-500 cursor-pointer" @click="goTo(i-1)"
+                    :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1)
+                        ? 'w-6 bg-white'
+                        : 'w-3 bg-white/40'"></div>
+            </template>
+        </div>
+        <button @click="next()" aria-label="Next slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+
 </section>

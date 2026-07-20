@@ -51,7 +51,7 @@ class CurrencyHelper
     public static function formatPrice($priceInIdr, $locale = null)
     {
         if (is_null($locale)) {
-            $locale = session('locale', 'id'); // Default Indonesia (id)
+            $locale = session('locale', 'my'); // Default Malaysia (my)
         }
 
         switch ($locale) {

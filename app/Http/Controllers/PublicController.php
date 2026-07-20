@@ -289,7 +289,7 @@ class PublicController extends Controller
             ]));
 
             // Set Carbon locale for date formatting
-            $locale = session('locale', 'id');
+            $locale = session('locale', 'my');
             $carbonLocaleMap = ['id' => 'id', 'my' => 'ms', 'en' => 'en'];
             $carbonLocale = $carbonLocaleMap[$locale] ?? 'id';
             $formattedDate = Carbon::parse($validated['startDate'])
