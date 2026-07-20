@@ -43,11 +43,18 @@ class CurrencyHelper
      * How each currency is written. Keyed by ISO code so that records can be
      * rendered in the currency they were agreed in, independent of who is
      * looking at them.
+     *
+     * 'decimals' is the SHOP WINDOW form — a price tag reads better whole
+     * ("RM 78", not "RM 77.92"). 'recordDecimals' is what a document that
+     * states an amount owed must use; hiding sen there would print a total
+     * the customer cannot reconcile against what they transfer. Child pricing
+     * defaults to half the adult fare, so an odd price produces sen the very
+     * first time someone books with a child.
      */
     public const CURRENCIES = [
-        'MYR' => ['symbol' => 'RM ', 'decimals' => 2, 'decPoint' => '.', 'thousandsSep' => ','],
-        'IDR' => ['symbol' => 'Rp ', 'decimals' => 0, 'decPoint' => ',', 'thousandsSep' => '.'],
-        'SGD' => ['symbol' => 'S$ ', 'decimals' => 2, 'decPoint' => '.', 'thousandsSep' => ','],
+        'MYR' => ['symbol' => 'RM ', 'decimals' => 0, 'recordDecimals' => 2, 'decPoint' => '.', 'thousandsSep' => ','],
+        'IDR' => ['symbol' => 'Rp ', 'decimals' => 0, 'recordDecimals' => 0, 'decPoint' => ',', 'thousandsSep' => '.'],
+        'SGD' => ['symbol' => 'S$ ', 'decimals' => 0, 'recordDecimals' => 2, 'decPoint' => '.', 'thousandsSep' => ','],
     ];
 
     /** Which currency each site locale shops in. */
@@ -174,6 +181,35 @@ class CurrencyHelper
      */
     public static function formatIn($amount, $currency, $withSymbol = true)
     {
+        return self::render($amount, $currency, 'decimals', $withSymbol);
+    }
+
+    /**
+     * Format an amount that a document states as owed, earned, or paid —
+     * invoices, the tracking page, financial exports.
+     *
+     * Identical to formatIn() except it keeps the sen. A price tag may round;
+     * a figure someone is about to transfer may not.
+     *
+     * @param  float|null  $amount
+     * @param  string  $currency
+     * @param  bool  $withSymbol
+     * @return string
+     */
+    public static function formatRecord($amount, $currency, $withSymbol = true)
+    {
+        return self::render($amount, $currency, 'recordDecimals', $withSymbol);
+    }
+
+    /**
+     * @param  float|null  $amount
+     * @param  string  $currency
+     * @param  string  $precisionKey  'decimals' | 'recordDecimals'
+     * @param  bool  $withSymbol
+     * @return string
+     */
+    protected static function render($amount, $currency, $precisionKey, $withSymbol)
+    {
         if (is_null($amount) || $amount === '') {
             return '-';
         }
@@ -182,7 +218,7 @@ class CurrencyHelper
 
         $formatted = number_format(
             (float) $amount,
-            $config['decimals'],
+            $config[$precisionKey] ?? $config['decimals'],
             $config['decPoint'],
             $config['thousandsSep']
         );

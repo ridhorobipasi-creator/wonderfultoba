@@ -51,8 +51,8 @@ class FinancialExport implements FromCollection, WithHeadings, WithMapping
             // IDR value that bookkeeping reconciles against. A single column
             // would be ambiguous now that bookings carry their own currency.
             $booking->currency,
-            CurrencyHelper::formatIn($booking->totalPrice, $booking->currency),
-            CurrencyHelper::formatIn($booking->totalPrice_idr, 'IDR'),
+            CurrencyHelper::formatRecord($booking->totalPrice, $booking->currency),
+            CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR'),
             ucfirst($booking->status),
         ];
     }

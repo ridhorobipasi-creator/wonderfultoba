@@ -159,12 +159,12 @@
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Estimasi Total</p>
-                    <p class="mt-2 font-bold text-slate-950">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</p>
+                    <p class="mt-2 font-bold text-slate-950">{{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice, $booking->currency) }}</p>
                     @if($booking->currency !== 'IDR')
                     {{-- The amount agreed is above; this is only a reference for
                          transfers from an Indonesian bank, at the rate frozen
                          when the booking was made. --}}
-                    <p class="mt-1 text-xs text-slate-400">≈ {{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice_idr, 'IDR') }} <span class="whitespace-nowrap">(kurs {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }})</span></p>
+                    <p class="mt-1 text-xs text-slate-400">≈ {{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR') }} <span class="whitespace-nowrap">(kurs {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }})</span></p>
                     @endif
                 </div>
             </div>
@@ -182,29 +182,29 @@
                 <div class="space-y-2 text-sm text-slate-600">
                     <div class="flex justify-between">
                         <span>Ekspedisi Dewasa ({{ $pb['pax_dewasa'] }}x)</span>
-                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['price_dewasa_total'], $cur) }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['price_dewasa_total'], $cur) }}</span>
                     </div>
                     @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
                     <div class="flex justify-between">
                         <span>Ekspedisi Anak-Anak ({{ $pb['pax_anak'] }}x)</span>
-                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['price_anak_total'], $cur) }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['price_anak_total'], $cur) }}</span>
                     </div>
                     @endif
                     @if(isset($pb['additional_services']))
                         @foreach($pb['additional_services'] as $srv)
                         <div class="flex justify-between">
                             <span>{{ $srv['name'] }}</span>
-                            <span>{{ \App\Helpers\CurrencyHelper::formatIn($srv['price'], $cur) }}</span>
+                            <span>{{ \App\Helpers\CurrencyHelper::formatRecord($srv['price'], $cur) }}</span>
                         </div>
                         @endforeach
                     @endif
                     <div class="flex justify-between">
                         <span>Pajak & Layanan ({{ $pb['tax_percentage'] ?? 11 }}%)</span>
-                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['tax'] ?? 0, $cur) }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['tax'] ?? 0, $cur) }}</span>
                     </div>
                     <div class="pt-2 border-t border-slate-100 flex justify-between font-bold text-slate-950 mt-2">
                         <span>Total Ringkasan</span>
-                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['total'] ?? $booking->totalPrice, $cur) }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['total'] ?? $booking->totalPrice, $cur) }}</span>
                     </div>
                 </div>
             </div>

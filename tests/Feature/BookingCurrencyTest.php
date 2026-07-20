@@ -52,24 +52,38 @@ class BookingCurrencyTest extends TestCase
 
         // 350 is 350, whatever currency it is labelled with. Only the
         // presentation changes.
-        $this->assertSame('RM 350.00', CurrencyHelper::formatIn(350, 'MYR'));
+        $this->assertSame('RM 350', CurrencyHelper::formatIn(350, 'MYR'));
         $this->assertSame('Rp 350', CurrencyHelper::formatIn(350, 'IDR'));
-        $this->assertSame('S$ 350.00', CurrencyHelper::formatIn(350, 'SGD'));
+        $this->assertSame('S$ 350', CurrencyHelper::formatIn(350, 'SGD'));
     }
 
     public function test_format_price_converts_the_selling_price_per_locale(): void
     {
         $this->setRate(4400);
 
-        $this->assertSame('RM 350.00', CurrencyHelper::formatPrice(350, 'my'));
+        $this->assertSame('RM 350', CurrencyHelper::formatPrice(350, 'my'));
         $this->assertSame('Rp 1.540.000', CurrencyHelper::formatPrice(350, 'id'));
+    }
+
+    public function test_price_tags_round_but_documents_keep_the_sen(): void
+    {
+        // A child fare is half the adult fare, so an odd price produces sen on
+        // the first booking that includes a child. The shop window may round
+        // that away; an invoice may not, or the customer transfers a figure
+        // that does not match what was recorded.
+        $this->assertSame('RM 325', CurrencyHelper::formatIn(324.50, 'MYR'));
+        $this->assertSame('RM 324.50', CurrencyHelper::formatRecord(324.50, 'MYR'));
+
+        // Rupiah has no subunit in use here, so both forms agree.
+        $this->assertSame('Rp 6.000.000', CurrencyHelper::formatIn(6000000, 'IDR'));
+        $this->assertSame('Rp 6.000.000', CurrencyHelper::formatRecord(6000000, 'IDR'));
     }
 
     public function test_unknown_currency_does_not_pass_through_silently(): void
     {
         // A ringgit amount must never be rendered under an unrecognised label
         // as though nothing were wrong.
-        $this->assertSame('RM 350.00', CurrencyHelper::formatIn(350, 'EUR'));
+        $this->assertSame('RM 350', CurrencyHelper::formatIn(350, 'EUR'));
     }
 
     public function test_booking_amounts_do_not_move_when_the_rate_changes(): void
