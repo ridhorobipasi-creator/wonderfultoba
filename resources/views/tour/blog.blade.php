@@ -101,7 +101,7 @@
         <!-- Featured Post -->
         <template x-if="featured">
             <article class="group relative bg-primary rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition duration-700 mb-12 md:mb-20 min-h-[420px] md:min-h-[550px] flex flex-col justify-end border border-outline-variant/20">
-                <img :src="featured.image ? (featured.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.includes('/' + p) && !featured.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), featured.image) : featured.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => featured.image.startsWith(p)) ? '/storage/' + featured.image.replace(/^\//, '') : '/storage/' + featured.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="featured.translated_title"
+                <img :src="featured.image_url || '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="featured.translated_title"
                     class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-[2s] ease-out">
                 
                 <!-- Overlays -->
@@ -132,7 +132,7 @@
             <template x-for="(post, i) in rest" :key="post.id">
                 <article class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden shadow-lg border border-outline-variant/20 hover:border-secondary/30 transition duration-500 hover:-translate-y-1.5 animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                     <a :href="'/tour/blog/' + (post.slug || post.id)" class="block relative overflow-hidden h-64">
-                        <img :src="post.image ? (post.image.startsWith('http') ? (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.includes('/' + p) && !post.image.includes('/storage/' + p)) ? ['assets/', 'images/', 'branding/', 'gallery/'].reduce((url, p) => url.replace('/' + p, '/storage/' + p), post.image) : post.image) : (['assets/', 'images/', 'branding/', 'gallery/'].some(p => post.image.startsWith(p)) ? '/storage/' + post.image.replace(/^\//, '') : '/storage/' + post.image.replace(/^\/*storage\//, '').replace(/^\//, ''))) : '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.title"
+                        <img :src="post.image_url || '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.title"
                             loading="lazy" decoding="async"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out">
                         <div class="absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors"></div>
