@@ -277,8 +277,8 @@
 
             /* Make hero text fit mobile without overflow */
             .hero-content {
-                padding-top: 56px;
-                padding-bottom: 64px; /* Space for mobile nav buttons at bottom */
+                padding-top: 40px;
+                padding-bottom: 100px; /* Space for mobile nav buttons + fixed bottom CTA bar */
                 text-align: center;
                 left: 0 !important;
                 width: 100% !important;
@@ -303,12 +303,18 @@
                 margin-bottom: 0.75rem !important;
             }
 
-            /* Price + CTA row on mobile: compact */
+            /* Price + CTA row on mobile: compact and centered */
             .hero-price-row {
                 margin-bottom: 0 !important;
                 gap: 0.75rem !important;
                 flex-wrap: wrap;
                 justify-content: center;
+                align-items: center;
+            }
+
+            .hero-price-col {
+                text-align: center;
+                align-items: center;
             }
 
             /* CTA button smaller on mobile */
@@ -393,7 +399,7 @@
 
                                 <div class="hero-price-row flex items-center gap-4 lg:gap-8 mb-4 lg:mb-12 lg:justify-start justify-center flex-wrap"
                                     x-show="slide.type !== 'blog' && slide.price > 0">
-                                    <div class="flex flex-col text-left">
+                                    <div class="hero-price-col flex flex-col text-center lg:text-left items-center lg:items-start">
                                         <span
                                             class="text-[10px] text-toba-accent uppercase tracking-widest mb-1 font-bold">{{ __('Investasi Wisata') }}</span>
                                         <div class="flex items-baseline gap-1">
@@ -506,8 +512,8 @@
         </div>
     </div>
 
-    {{-- Mobile-only nav buttons: pinned bottom-center, never overlaps content --}}
-    <div class="lg:hidden absolute bottom-4 left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none">
+    {{-- Mobile-only nav buttons: pinned bottom, adjusted for fixed CTA bar --}}
+    <div class="lg:hidden absolute bottom-24 left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none">
         <button @click="prev()" aria-label="Previous slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
