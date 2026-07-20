@@ -97,21 +97,31 @@ try {
 
     # Jangan pernah ikut ke server: kredensial, berkas lokal, dan apa pun yang
     # akan menimpa konfigurasi produksi.
-    $excluded = @(
-        ".git", ".github", "node_modules", "deploy",
-        ".env", ".env.example", ".env.backup",
-        "ssh.md", "informasi.md", "ROTASI-RAHASIA.md",
-        "storage\logs", "database\database.sqlite",
-        "tests", "phpunit.xml",
-        ".vscode", ".idea", "image.png"
+    #
+    # POLA, bukan nama persis. Versi pertama skrip ini mencocokkan nama secara
+    # harfiah dan meloloskan '.env.sujai' serta 'ROTASI-RAHASIA.pdf' ke dalam
+    # artefak — keduanya berisi kredensial sungguhan.
+    $excludedPatterns = @(
+        '.git', '.github', '.deploy', 'node_modules', 'deploy',
+        '.env*',                 # SEMUA berkas env. Server punya .env-nya sendiri.
+        'ROTASI-RAHASIA*',       # dokumen rotasi rahasia, format apa pun
+        'ssh*', 'informasi*',
+        'tests', 'phpunit.xml*',
+        '.vscode', '.idea', 'image.png'
     )
+
+    function Test-Excluded($name) {
+        foreach ($pattern in $excludedPatterns) {
+            if ($name -like $pattern) { return $true }
+        }
+        return $false
+    }
 
     New-Item -ItemType Directory -Path $staging | Out-Null
 
     Get-ChildItem -Path $projectRoot -Force | ForEach-Object {
-        $name = $_.Name
-        if ($excluded -contains $name) { return }
-        Copy-Item -Path $_.FullName -Destination (Join-Path $staging $name) -Recurse -Force
+        if (Test-Excluded $_.Name) { return }
+        Copy-Item -Path $_.FullName -Destination (Join-Path $staging $_.Name) -Recurse -Force
     }
 
     # Buang sub-path yang dikecualikan dan mungkin ikut terbawa induknya.
@@ -122,11 +132,29 @@ try {
     # Pastikan storage/logs tetap ada sebagai folder kosong.
     New-Item -ItemType Directory -Path (Join-Path $staging "storage\logs") -Force | Out-Null
 
-    # Jaring pengaman: kalau .env sampai lolos, hentikan sebelum dikemas.
-    if (Test-Path (Join-Path $staging ".env")) {
+    # Jaring pengaman terakhir: sisir SELURUH staging, bukan hanya akarnya.
+    # Daftar pengecualian di atas hanya menahan yang sudah terpikirkan; sapuan
+    # ini menahan yang belum. vendor/ dilewati karena berkas .env.example milik
+    # dependensi tidak berisi rahasia siapa pun.
+    Write-Step "Menyisir staging untuk kredensial"
+
+    $forbidden = Get-ChildItem -Path $staging -Recurse -Force -File -ErrorAction SilentlyContinue |
+        Where-Object {
+            $_.FullName -notmatch '\\vendor\\' -and (
+                $_.Name -like '.env*' -or
+                $_.Name -like 'ROTASI-RAHASIA*' -or
+                $_.Name -like 'ssh.*' -or
+                $_.Name -like 'informasi.*' -or
+                $_.Extension -eq '.sqlite'
+            )
+        }
+
+    if ($forbidden) {
+        $list = ($forbidden | ForEach-Object { $_.FullName.Replace($staging, '') }) -join "`n    "
         Remove-Item $staging -Recurse -Force
-        throw "BERHENTI: .env ikut masuk staging. Artefak dibatalkan agar kredensial tidak terkirim."
+        throw "BERHENTI: berkas sensitif masuk ke staging. Artefak dibatalkan.`n    $list"
     }
+    Write-Ok "Bersih — tidak ada berkas kredensial di staging"
 
     Compress-Archive -Path (Join-Path $staging "*") -DestinationPath $zipPath -CompressionLevel Optimal
     Remove-Item $staging -Recurse -Force

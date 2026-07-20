@@ -53,6 +53,11 @@ composer.phar
 /public/error_log
 /image.png
 
+# Artefak & staging deploy — besar, dan .deploy/ pernah berisi salinan
+# database.sqlite. Tidak ada yang perlu masuk riwayat.
+/deploy/
+/.deploy/
+
 # Credentials & signing keys — NEVER commit
 ssh.md
 informasi.md
