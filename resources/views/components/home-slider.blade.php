@@ -513,7 +513,7 @@
     </div>
 
     {{-- Mobile-only nav buttons: pinned bottom, adjusted for fixed CTA bar --}}
-    <div class="lg:hidden absolute bottom-24 left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none">
+    <div class="lg:hidden absolute left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none" style="bottom: 96px;">
         <button @click="prev()" aria-label="Previous slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
