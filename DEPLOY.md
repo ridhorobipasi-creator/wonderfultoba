@@ -45,6 +45,16 @@ Deploy steps (example)
 
 4. Set proper permissions for storage and bootstrap/cache.
 
+Rehearse the currency migration first (recommended)
+- `scripts/test-currency-migration.ps1` restores a production dump into a
+  separate test database, runs the migration there, and prints a before/after
+  price table. Production is never touched.
+
+    .\scripts\test-currency-migration.ps1 -DumpFile backup.sql -Rate 4400
+
+- It also asserts that no existing booking amount moved, and refuses to run on
+  a dump that is suspiciously small or has no packages in it.
+
 Currency migration (one-time, July 2026)
 - `2026_07_21_000002_convert_package_prices_to_myr` rewrites the selling price
   list from IDR to MYR. It aborts unless you set the rate explicitly:
