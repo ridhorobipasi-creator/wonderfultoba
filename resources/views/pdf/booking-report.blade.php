@@ -31,7 +31,7 @@
         </div>
         <div class="stat-box" style="margin-left: 3%;">
             <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Total Pendapatan</div>
-            <div style="font-size: 16px; font-weight: bold; color: #059669;">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
+            <div style="font-size: 16px; font-weight: bold; color: #059669;">{{ \App\Helpers\CurrencyHelper::formatIn($totalRevenue, 'IDR') }}</div>
         </div>
         <div class="stat-box" style="margin-left: 3%;">
             <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Dicetak Pada</div>
@@ -59,7 +59,7 @@
                 <td>{{ $b->package->name ?? 'N/A' }}</td>
                 <td>{{ $b->startDate }}</td>
                 <td>{{ $b->metadata['pax'] ?? 1 }}</td>
-                <td>Rp {{ number_format($b->totalPrice, 0, ',', '.') }}</td>
+                <td>{{ \App\Helpers\CurrencyHelper::formatIn($b->totalPrice, $b->currency) }}</td>
                 <td>
                     <span class="status-{{ strtolower($b->status) }}">{{ ucfirst($b->status) }}</span>
                 </td>

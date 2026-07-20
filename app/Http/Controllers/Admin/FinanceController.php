@@ -34,7 +34,7 @@ class FinanceController extends Controller
 
         $callback = function () use ($transactions) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'Booking Code', 'Customer', 'Email', 'Type', 'Item', 'Total Price', 'Booking Date']);
+            fputcsv($file, ['ID', 'Booking Code', 'Customer', 'Email', 'Type', 'Item', 'Currency', 'Total Price', 'Total Price (IDR)', 'Booking Date']);
 
             foreach ($transactions as $booking) {
                 fputcsv($file, [
@@ -44,7 +44,9 @@ class FinanceController extends Controller
                     $booking->customerEmail,
                     ucfirst($booking->type),
                     $booking->package->name ?? 'N/A',
+                    $booking->currency,
                     $booking->totalPrice,
+                    $booking->totalPrice_idr,
                     $booking->createdAt->format('Y-m-d H:i'),
                 ]);
             }

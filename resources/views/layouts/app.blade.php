@@ -91,24 +91,27 @@
     @endif
 
     @php
+        // Seeded from CurrencyHelper so the presentation rules live in one
+        // place. Restating them here is how the two drift apart.
         $activeLocale = session('locale', 'my');
-        $rate = \App\Helpers\CurrencyHelper::getRate($activeLocale === 'en' ? 'SGD' : ($activeLocale === 'my' ? 'MYR' : 'IDR'));
-        $symbol = $activeLocale === 'en' ? 'S$ ' : ($activeLocale === 'my' ? 'RM ' : 'Rp ');
-        $decimals = $activeLocale === 'id' ? 0 : 2;
-        $thousandsSep = $activeLocale === 'id' ? '.' : ',';
-        $decPoint = $activeLocale === 'id' ? ',' : '.';
+        $activeCurrency = \App\Helpers\CurrencyHelper::currencyFor($activeLocale);
+        $currencyConfig = \App\Helpers\CurrencyHelper::config($activeCurrency);
+        $rate = \App\Helpers\CurrencyHelper::getRate($activeCurrency);
     @endphp
     <script>
         window.AppCurrency = {
             locale: @json($activeLocale),
+            currency: @json($activeCurrency),
             rate: {{ $rate }},
-            symbol: @json($symbol),
-            decimals: {{ $decimals }},
-            thousandsSep: @json($thousandsSep),
-            decPoint: @json($decPoint),
-            format: function(priceInIdr) {
-                if (priceInIdr === null || priceInIdr === undefined || priceInIdr === '') return '-';
-                let converted = priceInIdr * this.rate;
+            symbol: @json($currencyConfig['symbol']),
+            decimals: {{ $currencyConfig['decimals'] }},
+            thousandsSep: @json($currencyConfig['thousandsSep']),
+            decPoint: @json($currencyConfig['decPoint']),
+            // Takes a SELLING price in MYR (the currency the catalogue is
+            // stored in) and renders it for the active locale.
+            format: function(priceInMyr) {
+                if (priceInMyr === null || priceInMyr === undefined || priceInMyr === '') return '-';
+                let converted = priceInMyr * this.rate;
                 let formatted = parseFloat(converted).toFixed(this.decimals);
                 
                 // Format thousands separator

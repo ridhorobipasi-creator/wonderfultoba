@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Total Price</p>
-                        <p class="text-xl font-black text-toba-green">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</p>
+                        <p class="text-xl font-black text-toba-green">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</p>
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Start Date</p>

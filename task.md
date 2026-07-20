@@ -387,26 +387,29 @@ sendiri ketika admin menyunting kurs.
 - [x] `Booking` model: fillable + cast decimal (dulu `double`, membatalkan tujuan migration 0718)
 - [x] Test suite hijau 48/48
 
-## Belum — sapuan tampilan (~60 titik)
+## Selesai — sapuan tampilan
 
-- [ ] `layouts/app.blade.php:94-120` — `window.AppCurrency` menduplikasi tabel mata uang; seed dari `CurrencyHelper::CURRENCIES`. Parameter `format(priceInIdr)` salah nama.
-- [ ] `invoice/show.blade.php` + `pdf/invoice.blade.php` — render pakai `currency` milik pesanan, cantumkan kurs & padanan IDR. Label `Total Tagihan (IDR)` di `pdf/invoice.blade.php:200` sudah tidak benar untuk semua kasus.
-- [ ] `booking/track.blade.php:151,162,167,174,180,184` — sama, ikut mata uang pesanan
-- [ ] `PublicController.php:317` — pesan WA hard-code `'Rp '`
-- [ ] Admin (17 view): format `"K"`/`"jt"` tidak bermakna di skala ringgit —
-      `bookings/index:177,190`, `customers/index:144,153`, `customers/show:34,112`,
-      `packages/index:171`, `packages/show:112,120,129,134`, `finance/index:15,24,70`,
-      `reports/financial:55,92,184`, `dashboard:23,28,128`, `cms/tour:348,624,775`
-      (`cms/tour:775` `parseInt` memotong sen)
-- [ ] Form admin: prefix `Rp` + `step="1000"` + placeholder `120000000` —
-      `packages/create:139,151,177,220-223,247,273-284,414,425`, `packages/edit:188-198,209,234-247,285,328-331,472,483`
-- [ ] Laporan & ekspor wajib pakai `totalPrice_idr`, bukan `totalPrice` —
-      `DashboardService:21,25,29,33,100-160`, `ReportService:27`, `ReportController:45,77`,
-      `FinancialExport:47`, `CustomerController:69` (filter `min_spent` skalanya berubah)
-- [ ] schema.org `priceCurrency: "IDR"` -> MYR — `package-detail:121-122`, `packages:28`, `package-detail:269`
-- [ ] Kalkulator Alpine `package-detail:887-906` harus cocok persis dengan `BookingService`, termasuk `round(...,2)`
-- [ ] Regenerasi cache banner OG (`OgBannerService`) — harga ter-render di PNG
-- [ ] `settings/index.blade.php:441` default kurs `3500` -> selaraskan dengan `CurrencyHelper::DEFAULT_MYR_IDR`
+- [x] `layouts/app.blade.php` — `window.AppCurrency` di-seed dari `CurrencyHelper::CURRENCIES`; parameter `format()` diganti nama jadi `priceInMyr`
+- [x] `invoice/show.blade.php` + `pdf/invoice.blade.php` — render pakai `currency` milik pesanan; label `(IDR)` jadi dinamis; ditambah padanan Rupiah + kurs terkunci + tanggalnya
+- [x] `booking/track.blade.php` — ikut mata uang pesanan, padanan IDR, pajak baca `tax_percentage` (dulu ditulis keras 11%)
+- [x] `PublicController.php` — pesan WA ikut mata uang pesanan
+- [x] Agregasi omzet pindah ke `totalPrice_idr` — `DashboardService`, `ReportService`, `ReportController`, `finance/index`. Laba `totalPrice_idr - total_cost` kini sama-sama IDR.
+- [x] Ekspor CSV/Excel dapat kolom `Mata Uang` + `Total (IDR)` — `FinancialExport`, `ReportController`, `FinanceController`
+- [x] 15 view admin — singkatan "K"/"jt" dihapus, harga paket MYR, nominal pesanan ikut mata uangnya, modal tetap IDR
+- [x] Form admin — prefix `RM`, `step="0.01"`, placeholder & default JS diperbaiki; `cost_price` tetap Rupiah + keterangan
+- [x] schema.org `priceCurrency` -> `CurrencyHelper::PRICE_BASE`
+- [x] Kalkulator Alpine `package-detail` — pembulatan pajak 2 desimal, cocok dengan `BookingService`
+- [x] `settings/index.blade.php` — default kurs baca dari `CurrencyHelper`, tidak lagi `3500` sendiri
+- [x] `tests/Feature/BookingCurrencyTest.php` — 6 test baru; yang terpenting membuktikan nominal pesanan TIDAK bergerak saat kurs diubah
+- [x] Bug timeline `track.blade.php` — `$currentStep` meleset satu langkah di 3 status; pembatalan kini merah dengan ikon silang
+- [x] Test suite 54/54 hijau, `npm run build` hijau
+
+## Belum
+
+- [ ] Regenerasi cache banner OG (`OgBannerService`) — harga ter-render ke dalam PNG. Jalankan setelah migrasi + pembulatan harga.
+- [ ] `invoice/show.blade.php:83` — `$unitPrice = totalPrice / pax` dihitung dari total yang SUDAH termasuk pajak (temuan Batch 1C, belum disentuh)
+- [ ] `finance/index.blade.php` — kartu ringkasan hanya menjumlahkan halaman aktif (paginasi 20/hal). Masalah lama, bukan dari perubahan ini.
+- [ ] Sisa temuan audit lain di Batch 1/2/3 yang bukan soal mata uang
 
 ## Sebelum deploy — WAJIB
 

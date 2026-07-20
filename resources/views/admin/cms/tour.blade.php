@@ -345,7 +345,7 @@ document.addEventListener('alpine:init', () => {
 
                             <div class="flex-1 min-w-0">
                                 <p class="font-black text-slate-900 text-xs truncate">{{ $ap->name }}</p>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $ap->locationTag ?? 'Sumatera Utara' }} · Rp {{ number_format($ap->price, 0, ',', '.') }}</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $ap->locationTag ?? 'Sumatera Utara' }} · {{ \App\Helpers\CurrencyHelper::formatIn($ap->price, 'MYR') }}</p>
                             </div>
                             @if($ap->isFeatured)
                                 <span class="text-amber-400 text-xs">⭐</span>
@@ -621,7 +621,7 @@ document.addEventListener('alpine:init', () => {
                                                 </div>
                                                 <div class="flex-1 min-w-0">
                                                     <p class="text-[9px] font-black text-slate-900 truncate">{{ $p->name }}</p>
-                                                    <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Rp {{ number_format($p->price, 0, ',', '.') }}</p>
+                                                    <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest">{{ \App\Helpers\CurrencyHelper::formatIn($p->price, 'MYR') }}</p>
                                                 </div>
                                             </button>
                                             @endforeach
@@ -772,7 +772,7 @@ document.addEventListener('alpine:init', () => {
                                     <div class="px-6 py-3 bg-toba-green text-white rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl" x-text="slide.cta_text"></div>
                                     <div x-show="slide.price > 0" class="flex flex-col">
                                         <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Mulai Dari</span>
-                                        <span class="text-lg font-black text-toba-accent" x-text="'Rp ' + parseInt(slide.price).toLocaleString('id-ID')"></span>
+                                        <span class="text-lg font-black text-toba-accent" x-text="'RM ' + Number(slide.price).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span>
                                     </div>
                                 </div>
                             </div>
@@ -927,7 +927,7 @@ document.addEventListener('alpine:init', () => {
                     image_url: '',
                     location: 'Sumatera Utara',
                     duration: '3 Hari 2 Malam',
-                    price: '1.500.000',
+                    price: '350.00',
                     cta_text: 'Lihat Detail',
                     cta_link: '#',
                     type: 'manual'

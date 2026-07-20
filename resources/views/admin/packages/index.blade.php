@@ -168,7 +168,7 @@
                     <div class="absolute bottom-6 right-6">
                         <div class="bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl border border-white/10 backdrop-blur-md">
                             <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1 text-center">Mulai Dari</p>
-                            <p class="text-lg font-black tracking-tight leading-none">Rp {{ number_format($package->price / 1000, 0) }}K</p>
+                            <p class="text-lg font-black tracking-tight leading-none">{{ \App\Helpers\CurrencyHelper::formatIn($package->price, 'MYR') }}</p>
                         </div>
                     </div>
                 </div>

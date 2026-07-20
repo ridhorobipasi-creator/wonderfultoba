@@ -136,8 +136,8 @@
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Price (Adult) *</label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
-                            <input type="number" name="price" value="{{ old('price') }}" required min="0" step="1000"
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">RM</span>
+                            <input type="number" name="price" value="{{ old('price') }}" required min="0" step="0.01"
                                 class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition @error('price') border-red-500 @enderror">
                         </div>
                         @error('price')
@@ -148,8 +148,8 @@
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Price (Child)</label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
-                            <input type="number" name="childPrice" value="{{ old('childPrice') }}" min="0" step="1000"
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">RM</span>
+                            <input type="number" name="childPrice" value="{{ old('childPrice') }}" min="0" step="0.01"
                                 class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-toba-green focus:border-transparent transition">
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                                 <input type="number" name="cost_price" value="{{ old('cost_price') }}" min="0" step="1000"
                                     class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition" placeholder="Opsional">
                             </div>
-                            <p class="mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Digunakan untuk menghitung laba bersih</p>
+                            <p class="mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Dicatat dalam Rupiah (dibayar ke vendor lokal), berbeda dari harga jual yang dalam Ringgit</p>
                         </div>
 
                 <!-- Layanan Tambahan (Additional Services) - DYNAMIC CRUD -->
@@ -217,10 +217,10 @@
 
                                 <!-- Harga -->
                                 <div class="w-full md:w-56">
-                                    <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga (Rp)</label>
+                                    <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga (RM)</label>
                                     <div class="relative">
-                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">Rp</span>
-                                        <input type="number" :name="'pricingDetails[additional_services]['+index+'][price]'" x-model.number="service.price" placeholder="120000000" required min="0" step="1000"
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
+                                        <input type="number" :name="'pricingDetails[additional_services]['+index+'][price]'" x-model.number="service.price" placeholder="350.00" required min="0" step="0.01"
                                             class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
                                     </div>
                                 </div>
@@ -244,7 +244,7 @@
                         <div class="flex items-center justify-between mb-4">
                             <div>
                                 <h4 class="text-sm font-black text-gray-900">Harga Grosir (Tiered Pricing)</h4>
-                                <p class="text-xs text-gray-500 mt-1">Atur harga berbeda berdasarkan jumlah orang (misal 1-9 pax = Rp 5jt, 10-15 pax = Rp 4.5jt)</p>
+                                <p class="text-xs text-gray-500 mt-1">Atur harga berbeda berdasarkan jumlah orang (misal 1-9 pax = RM 350, 10-15 pax = RM 320)</p>
                             </div>
                             <button type="button" @click="addTier()" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-100 transition shadow-sm border border-indigo-100">
                                 <i class="fas fa-plus mr-1"></i> Add Tier
@@ -270,18 +270,18 @@
                                 <!-- Harga Dewasa & Anak -->
                                 <div class="flex-1 flex flex-col sm:flex-row gap-4">
                                     <div class="w-full md:flex-1 md:min-w-[140px]">
-                                        <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga Dewasa (Rp)</label>
+                                        <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga Dewasa (RM)</label>
                                         <div class="relative">
-                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">Rp</span>
-                                            <input type="number" :name="'pricingDetails[tiers]['+index+'][price]'" x-model.number="tier.price" required min="0" step="1000"
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
+                                            <input type="number" :name="'pricingDetails[tiers]['+index+'][price]'" x-model.number="tier.price" required min="0" step="0.01"
                                                 class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
                                         </div>
                                     </div>
                                     <div class="w-full md:flex-1 md:min-w-[140px]">
-                                        <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga Anak (Rp)</label>
+                                        <label class="block text-[10px] font-bold text-gray-500 mb-1">Harga Anak (RM)</label>
                                         <div class="relative">
-                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">Rp</span>
-                                            <input type="number" :name="'pricingDetails[tiers]['+index+'][child_price]'" x-model.number="tier.child_price" min="0" step="1000" placeholder="Kosongkan jika default"
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
+                                            <input type="number" :name="'pricingDetails[tiers]['+index+'][child_price]'" x-model.number="tier.child_price" min="0" step="0.01" placeholder="Kosongkan jika default"
                                                 class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
                                         </div>
                                     </div>
@@ -411,7 +411,7 @@
             includes: [],
             excludes: [],
             additionalServices: [
-                { name: 'Private Jet Charter', icon: 'flight_takeoff', price: 120000000 }
+                { name: 'Private Jet Charter', icon: 'flight_takeoff', price: 0 }
             ],
             tiers: [],
             localFiles: [],

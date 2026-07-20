@@ -31,7 +31,7 @@
                     </div>
                     <div class="p-5 rounded-3xl bg-slate-50 text-center">
                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lifetime Value</p>
-                        <p class="text-xl font-black text-emerald-600">Rp {{ number_format($customer->total_spent / 1000, 0) }}K</p>
+                        <p class="text-xl font-black text-emerald-600">{{ \App\Helpers\CurrencyHelper::formatIn($customer->total_spent, 'IDR') }}</p>
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                                         </span>
                                     </td>
                                     <td class="px-5 md:px-10 py-6 text-right">
-                                        <span class="text-xs font-black text-slate-900 whitespace-nowrap">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</span>
+                                        <span class="text-xs font-black text-slate-900 whitespace-nowrap">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</span>
                                     </td>
                                 </tr>
                             @endforeach

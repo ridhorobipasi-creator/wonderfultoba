@@ -109,7 +109,7 @@
                 <div class="pt-8 border-t border-slate-50">
                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Harga Dewasa</p>
                     <p class="text-4xl font-black text-slate-900 tracking-tighter">
-                        <span class="text-lg text-toba-green mr-1">Rp</span>{{ number_format($package->price) }}
+                        <span class="text-lg text-toba-green mr-1">RM</span>{{ \App\Helpers\CurrencyHelper::formatIn($package->price, 'MYR', false) }}
                     </p>
                 </div>
 
@@ -117,7 +117,7 @@
                     <div class="pt-8 border-t border-slate-50">
                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Harga Anak</p>
                         <p class="text-3xl font-black text-slate-900 tracking-tighter">
-                            <span class="text-lg text-toba-green mr-1">Rp</span>{{ number_format($package->childPrice) }}
+                            <span class="text-lg text-toba-green mr-1">RM</span>{{ \App\Helpers\CurrencyHelper::formatIn($package->childPrice, 'MYR', false) }}
                         </p>
                     </div>
                 @endif
@@ -126,13 +126,20 @@
                     <div class="pt-8 border-t border-slate-50 bg-amber-50 -mx-10 p-10 rounded-b-[2.5rem]">
                         <p class="text-[9px] font-black text-amber-600 uppercase tracking-widest mb-3">Harga Modal (Internal)</p>
                         <p class="text-2xl font-black text-slate-900 tracking-tighter">
-                            <span class="text-lg text-amber-500 mr-1">Rp</span>{{ number_format($package->cost_price) }}
+                            <span class="text-lg text-amber-500 mr-1">Rp</span>{{ \App\Helpers\CurrencyHelper::formatIn($package->cost_price, 'IDR', false) }}
                         </p>
-                        <div class="mt-4 p-4 bg-white/50 rounded-2xl">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Estimasi Laba</p>
-                            <p class="text-lg font-black text-emerald-600">
-                                + Rp {{ number_format($package->price - $package->cost_price) }}
-                            </p>
+                        {{-- Margin tidak dihitung di sini: harga jual dicatat dalam MYR, modal dalam IDR.
+                             Mengurangkan keduanya menghasilkan angka tanpa arti, jadi kedua nominal
+                             ditampilkan terpisah apa adanya. --}}
+                        <div class="mt-4 p-4 bg-white/50 rounded-2xl space-y-3">
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Harga Jual</p>
+                                <p class="text-lg font-black text-emerald-600">{{ \App\Helpers\CurrencyHelper::formatIn($package->price, 'MYR') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Harga Modal</p>
+                                <p class="text-lg font-black text-slate-900">{{ \App\Helpers\CurrencyHelper::formatIn($package->cost_price, 'IDR') }}</p>
+                            </div>
                         </div>
                     </div>
                 @endif

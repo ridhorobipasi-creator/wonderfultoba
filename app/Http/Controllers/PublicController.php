@@ -314,7 +314,7 @@ class PublicController extends Controller
                          '- '.__('WhatsApp').': '.$validated['customerPhone']."\n".
                          '- '.__('Tanggal').': '.$formattedDate."\n".
                          '- '.__('Peserta').': '.$validated['pax'].' '.__('Orang')."\n".
-                         '- '.__('Estimasi Total').': Rp '.number_format((float) $booking->totalPrice, 0, ',', '.')."\n".
+                         '- '.__('Estimasi Total').': '.\App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency)."\n".
                          '- '.__('Tanggal Booking').': '.$bookingDate."\n\n".
                          '*'.__('Link Penting:')."*\n".
                          '- '.__('Invoice').': '.$invoiceUrl."\n".

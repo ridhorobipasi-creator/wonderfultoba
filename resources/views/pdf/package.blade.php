@@ -128,7 +128,7 @@
         <table>
             <tr>
                 <td><strong>Durasi:</strong> {{ $package->duration }}</td>
-                <td class="price">Rp {{ number_format($package->price, 0, ',', '.') }} <span style="font-size:12px;color:#64748b;font-weight:normal;">/ pax</span></td>
+                <td class="price">{{ \App\Helpers\CurrencyHelper::formatIn($package->price, \App\Helpers\CurrencyHelper::PRICE_BASE) }} <span style="font-size:12px;color:#64748b;font-weight:normal;">/ pax</span></td>
             </tr>
             <tr>
                 <td><strong>Lokasi:</strong> {{ $package->locationTag ?? 'Sumatera Utara' }}</td>

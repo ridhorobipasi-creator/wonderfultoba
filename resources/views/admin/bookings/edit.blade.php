@@ -45,8 +45,9 @@
                 <div class="space-y-4">
                     <label class="block text-xs font-black text-gray-400 uppercase tracking-widest">Total Price Adjustment</label>
                     <div class="relative">
-                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
-                        <input type="number" name="totalPrice" value="{{ $booking->totalPrice }}" class="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-gray-900">
+                        {{-- Nominal pesanan dibekukan dalam mata uangnya sendiri, jadi simbolnya ikut booking. --}}
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold">{{ trim(\App\Helpers\CurrencyHelper::config($booking->currency)['symbol']) }}</span>
+                        <input type="number" name="totalPrice" value="{{ $booking->totalPrice }}" step="0.01" class="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-gray-900">
                     </div>
                 </div>
 

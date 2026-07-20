@@ -47,12 +47,16 @@
         'cancelled' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dibatalkan'],
     ];
     $activeSteps = $steps[$booking->status] ?? $steps['pending'];
+    // The furthest step actually reached. Each status lands ON its own label,
+    // so the last step of a finished or cancelled booking is filled in rather
+    // than left grey — the previous numbers stopped one short every time.
     $currentStep = match ($booking->status) {
-        'confirmed' => 2,
-        'completed' => 3,
-        'cancelled' => 2,
-        default => 1,
+        'confirmed' => 3,   // Dikonfirmasi
+        'completed' => 4,   // Trip Selesai
+        'cancelled' => 3,   // Dibatalkan
+        default => 2,       // Menunggu Konfirmasi
     };
+    $isCancelled = $booking->status === 'cancelled';
 @endphp
 
 @section('content')
@@ -110,10 +114,17 @@
                             @php
                                 $stepNumber = $index + 1;
                                 $isDone = $stepNumber <= $currentStep;
+                                // A cancellation is the one outcome that must not
+                                // read as a completed green step.
+                                $isCancelStep = $isCancelled && $stepNumber === $currentStep;
                             @endphp
                             <div class="flex items-start gap-4">
-                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isDone ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-200' }} shadow-sm transition-all duration-300">
-                                    @if($isDone)
+                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isCancelStep ? 'bg-rose-600 border-rose-600 text-white' : ($isDone ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-200') }} shadow-sm transition-all duration-300">
+                                    @if($isCancelStep)
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    @elseif($isDone)
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                         </svg>
@@ -124,7 +135,7 @@
                                 <div class="pt-1.5">
                                     <p class="text-sm font-bold {{ $isDone ? 'text-slate-900' : 'text-slate-400' }}">{{ $step }}</p>
                                     @if($stepNumber === $currentStep)
-                                        <p class="mt-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded w-fit">Status saat ini</p>
+                                        <p class="mt-1 text-xs font-semibold {{ $isCancelStep ? 'text-rose-600 bg-rose-50' : 'text-emerald-600 bg-emerald-50' }} px-2 py-0.5 rounded w-fit">Status saat ini</p>
                                     @endif
                                 </div>
                             </div>
@@ -148,40 +159,52 @@
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Estimasi Total</p>
-                    <p class="mt-2 font-bold text-slate-950">Rp {{ number_format((float) $booking->totalPrice, 0, ',', '.') }}</p>
+                    <p class="mt-2 font-bold text-slate-950">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</p>
+                    @if($booking->currency !== 'IDR')
+                    {{-- The amount agreed is above; this is only a reference for
+                         transfers from an Indonesian bank, at the rate frozen
+                         when the booking was made. --}}
+                    <p class="mt-1 text-xs text-slate-400">≈ {{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice_idr, 'IDR') }} <span class="whitespace-nowrap">(kurs {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }})</span></p>
+                    @endif
                 </div>
             </div>
 
             @if(isset($booking->metadata['price_breakdown']))
-            @php $pb = $booking->metadata['price_breakdown']; @endphp
+            @php
+                $pb = $booking->metadata['price_breakdown'];
+                // Every figure in this breakdown was recorded in the booking's
+                // own currency. Render it as stored — never re-convert, or the
+                // customer sees different numbers each time the rate changes.
+                $cur = $booking->currency;
+            @endphp
             <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4">
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Rincian Biaya</p>
                 <div class="space-y-2 text-sm text-slate-600">
                     <div class="flex justify-between">
                         <span>Ekspedisi Dewasa ({{ $pb['pax_dewasa'] }}x)</span>
-                        <span>Rp {{ number_format($pb['price_dewasa_total'], 0, ',', '.') }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['price_dewasa_total'], $cur) }}</span>
                     </div>
                     @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
                     <div class="flex justify-between">
                         <span>Ekspedisi Anak-Anak ({{ $pb['pax_anak'] }}x)</span>
-                        <span>Rp {{ number_format($pb['price_anak_total'], 0, ',', '.') }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['price_anak_total'], $cur) }}</span>
                     </div>
                     @endif
                     @if(isset($pb['additional_services']))
                         @foreach($pb['additional_services'] as $srv)
                         <div class="flex justify-between">
                             <span>{{ $srv['name'] }}</span>
-                            <span>Rp {{ number_format($srv['price'], 0, ',', '.') }}</span>
+                            <span>{{ \App\Helpers\CurrencyHelper::formatIn($srv['price'], $cur) }}</span>
                         </div>
                         @endforeach
                     @endif
                     <div class="flex justify-between">
-                        <span>Pajak & Layanan (11%)</span>
-                        <span>Rp {{ number_format($pb['tax'] ?? 0, 0, ',', '.') }}</span>
+                        <span>Pajak & Layanan ({{ $pb['tax_percentage'] ?? 11 }}%)</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['tax'] ?? 0, $cur) }}</span>
                     </div>
                     <div class="pt-2 border-t border-slate-100 flex justify-between font-bold text-slate-950 mt-2">
                         <span>Total Ringkasan</span>
-                        <span>Rp {{ number_format($pb['total'] ?? $booking->totalPrice, 0, ',', '.') }}</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatIn($pb['total'] ?? $booking->totalPrice, $cur) }}</span>
                     </div>
                 </div>
             </div>

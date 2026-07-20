@@ -25,7 +25,7 @@
                 'offers'      => [
                     '@type'        => 'Offer',
                     'price'        => (string) $pkgPrice,
-                    'priceCurrency'=> 'IDR',
+                    'priceCurrency'=> \App\Helpers\CurrencyHelper::PRICE_BASE,
                     'availability' => 'https://schema.org/InStock',
                     'seller'       => ['@type' => 'TravelAgency', 'name' => 'Sujai Laketoba'],
                 ],

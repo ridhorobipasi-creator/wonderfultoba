@@ -42,7 +42,7 @@
                         class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:border-toba-green transition font-bold text-sm appearance-none cursor-pointer">
                         <option value="">-- Pilih Paket --</option>
                         @foreach($packages as $pkg)
-                            <option value="{{ $pkg->id }}">{{ $pkg->name }} (Rp {{ number_format($pkg->price / 1000) }}K)</option>
+                            <option value="{{ $pkg->id }}">{{ $pkg->name }} ({{ \App\Helpers\CurrencyHelper::formatIn($pkg->price, 'MYR') }})</option>
                         @endforeach
                     </select>
                     <i class="fas fa-chevron-down absolute right-6 bottom-5 text-slate-300 pointer-events-none"></i>

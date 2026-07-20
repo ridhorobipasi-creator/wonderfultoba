@@ -118,7 +118,7 @@
       "offers": {
         "@@type": "Offer",
         "url": "{{ url()->current() }}",
-        "priceCurrency": "IDR",
+        "priceCurrency": "{{ \App\Helpers\CurrencyHelper::PRICE_BASE }}",
         "price": "{{ $package->price }}",
         "availability": "https://schema.org/InStock"
       }
@@ -235,7 +235,10 @@
         },
         taxPercentage: {{ isset($taxPercentage) ? $taxPercentage : 11 }},
         get pajakLayanan() {
-            return Math.round(this.totalSebelumPajak * (this.taxPercentage / 100));
+            // Must match BookingService::calculateTotalPriceAndCost exactly —
+            // 2 decimals, because prices are in ringgit and rounding to whole
+            // units here would quote a different total than the server charges.
+            return Math.round(this.totalSebelumPajak * (this.taxPercentage / 100) * 100) / 100;
         },
         get totalAkhir() {
             return this.totalSebelumPajak + this.pajakLayanan;
@@ -266,7 +269,7 @@
     <section class="sr-only" id="ai-context" aria-hidden="true">
         <h2>AI Context: {{ $package->translated_name }}</h2>
         <p>{{ $package->translated_description }}</p>
-        <p>Price: IDR {{ number_format($package->price, 0, ',', '.') }}</p>
+        <p>Price: {{ \App\Helpers\CurrencyHelper::formatIn($package->price, \App\Helpers\CurrencyHelper::PRICE_BASE) }}</p>
         @if(!empty($package->pricingDetails['includes']))
         <h3>Includes</h3>
         <ul>

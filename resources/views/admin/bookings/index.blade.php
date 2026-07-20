@@ -174,7 +174,7 @@
                                             <h4 class="text-sm font-black text-slate-900 tracking-tight truncate">{{ $booking->customerName }}</h4>
                                             <div class="md:hidden flex flex-wrap items-center gap-2 mt-1">
                                                 <p class="text-[10px] font-bold text-slate-500 truncate max-w-[150px]">{{ $booking->package->name ?? 'N/A' }}</p>
-                                                <span class="text-[9px] font-black text-slate-900 uppercase">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</span>
+                                                <span class="text-[9px] font-black text-slate-900 uppercase">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +187,7 @@
 
                                 <td class="px-8 py-5 text-center hidden md:table-cell">
                                     <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Total Bayar</p>
-                                    <p class="text-xs font-black text-slate-900">Rp {{ number_format($booking->totalPrice / 1000, 0) }}K</p>
+                                    <p class="text-xs font-black text-slate-900">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</p>
                                 </td>
 
                                 <td class="px-6 md:px-8 py-5">

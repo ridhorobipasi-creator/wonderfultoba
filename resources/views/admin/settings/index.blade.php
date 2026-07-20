@@ -442,14 +442,14 @@
                             </label>
                             <div class="flex items-center mb-2">
                                 <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
-                                <input type="number" name="finance[exchange_rate_manual_myr]" id="rate_myr_input" value="{{ $finance['exchange_rate_manual_myr'] ?? 3500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                                <input type="number" name="finance[exchange_rate_manual_myr]" id="rate_myr_input" value="{{ $finance['exchange_rate_manual_myr'] ?? \App\Helpers\CurrencyHelper::DEFAULT_MYR_IDR }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
                             </div>
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mt-4">
                                 <i class="fas fa-coins text-slate-300"></i> Nilai Kurs SGD (1 SGD =)
                             </label>
                             <div class="flex items-center">
                                 <span class="px-4 py-4 bg-slate-100 rounded-l-2xl font-bold text-slate-500">Rp</span>
-                                <input type="number" name="finance[exchange_rate_manual_sgd]" id="rate_sgd_input" value="{{ $finance['exchange_rate_manual_sgd'] ?? 11500 }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
+                                <input type="number" name="finance[exchange_rate_manual_sgd]" id="rate_sgd_input" value="{{ $finance['exchange_rate_manual_sgd'] ?? \App\Helpers\CurrencyHelper::DEFAULT_SGD_IDR }}" class="w-full px-6 py-4 bg-slate-50 border-none rounded-r-2xl font-bold text-slate-900">
                             </div>
                             <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-2 italic">Nilai ini yang akan digunakan di website. Bisa diedit manual atau klik Refresh Kurs.</p>
                         </div>

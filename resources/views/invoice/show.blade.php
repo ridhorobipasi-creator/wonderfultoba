@@ -82,6 +82,11 @@
     $pax        = max((int) ($booking->metadata['pax'] ?? 1), 1);
     $unitPrice  = $booking->totalPrice / $pax;
 
+    // The currency this invoice was issued in, frozen when the booking was
+    // made. An invoice is a record: it must read the same today as it did the
+    // day it was sent, whatever the exchange rate has done since.
+    $cur = $booking->currency;
+
     if ($booking->type === 'package' && $booking->package) {
         $itemName = $booking->package->name;
         $itemDesc = trim(($booking->package->duration ?? '') . ' menikmati pesona wisata Sumatera Utara.');
@@ -220,8 +225,8 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $paxDewasa }}x</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($priceDewasaTotal / max($paxDewasa, 1), 0, ',', '.') }}</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($priceDewasaTotal, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">{{ \App\Helpers\CurrencyHelper::formatIn($priceDewasaTotal / max($paxDewasa, 1), $cur) }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">{{ \App\Helpers\CurrencyHelper::formatIn($priceDewasaTotal, $cur) }}</td>
                             </tr>
                             <!-- Anak-anak -->
                             @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
@@ -237,8 +242,8 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pb['pax_anak'] }}x</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format(($pb['price_anak_total'] ?? 0) / max($pb['pax_anak'], 1), 0, ',', '.') }}</td>
-                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($pb['price_anak_total'] ?? 0, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-700">{{ \App\Helpers\CurrencyHelper::formatIn(($pb['price_anak_total'] ?? 0) / max($pb['pax_anak'], 1), $cur) }}</td>
+                                <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">{{ \App\Helpers\CurrencyHelper::formatIn($pb['price_anak_total'] ?? 0, $cur) }}</td>
                             </tr>
                             @endif
                             <!-- Additional Services -->
@@ -256,8 +261,8 @@
                                         </div>
                                     </td>
                                     <td class="py-4 px-6 align-middle text-center font-semibold text-neutral-700">1x</td>
-                                    <td class="py-4 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($srv['price'], 0, ',', '.') }}</td>
-                                    <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($srv['price'], 0, ',', '.') }}</td>
+                                    <td class="py-4 px-6 align-middle text-right text-neutral-700">{{ \App\Helpers\CurrencyHelper::formatIn($srv['price'], $cur) }}</td>
+                                    <td class="py-4 px-6 align-middle text-right text-neutral-900 font-bold">{{ \App\Helpers\CurrencyHelper::formatIn($srv['price'], $cur) }}</td>
                                 </tr>
                                 @endforeach
                             @endif
@@ -278,8 +283,8 @@
                                     </div>
                                 </td>
                                 <td class="py-6 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pax }} Pax</td>
-                                <td class="py-6 px-6 align-middle text-right text-neutral-700">Rp {{ number_format($unitPrice, 0, ',', '.') }}</td>
-                                <td class="py-6 px-6 align-middle text-right text-neutral-900 font-bold">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
+                                <td class="py-6 px-6 align-middle text-right text-neutral-700">{{ \App\Helpers\CurrencyHelper::formatIn($unitPrice, $cur) }}</td>
+                                <td class="py-6 px-6 align-middle text-right text-neutral-900 font-bold">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $cur) }}</td>
                             </tr>
                         @endif
                         <tr class="table-row-hover bg-white/50 h-8">
@@ -330,25 +335,34 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Subtotal</span>
-                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['subtotal'] ?? $booking->totalPrice) : $booking->totalPrice, 0, ',', '.') }}</span>
+                            <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatIn(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['subtotal'] ?? $booking->totalPrice) : $booking->totalPrice, $cur) }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Pajak & Layanan</span>
-                            <span class="font-bold text-neutral-800">Rp {{ number_format(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['tax'] ?? 0) : 0, 0, ',', '.') }}</span>
+                            <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatIn(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['tax'] ?? 0) : 0, $cur) }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600 font-medium">Diskon</span>
-                            <span class="font-bold text-neutral-800">- Rp 0</span>
+                            <span class="font-bold text-neutral-800">- {{ \App\Helpers\CurrencyHelper::formatIn(0, $cur) }}</span>
                         </div>
 
                         <div class="pt-4 border-t border-neutral-300 border-dashed">
                             <div class="flex justify-between items-end">
                                 <div>
                                     <span class="block text-brand-dark font-bold uppercase tracking-wider text-xs mb-1">Total Tagihan</span>
-                                    <span class="block text-[10px] text-neutral-500">(IDR)</span>
+                                    <span class="block text-[10px] text-neutral-500">({{ $cur }})</span>
                                 </div>
-                                <span class="text-2xl font-bold text-brand-dark">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</span>
+                                <span class="text-2xl font-bold text-brand-dark">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $cur) }}</span>
                             </div>
+                            @if($cur !== 'IDR')
+                            {{-- Reference only, at the rate frozen on the booking date.
+                                 The amount owed is the figure above. --}}
+                            <p class="mt-3 text-right text-[11px] leading-relaxed text-neutral-500">
+                                Setara {{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice_idr, 'IDR') }}
+                                (kurs 1 {{ $cur }} = Rp {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }},
+                                dikunci {{ optional($booking->createdAt)->format('d/m/Y') }}).
+                            </p>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,8 @@
                 <i class="fas fa-map-location-dot"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Omzet Tour</p>
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->sum('totalPrice'), 0, ',', '.') }}</h3>
+            {{-- Agregat omzet selalu IDR: dijumlahkan dari totalPrice_idr yang dibekukan saat pemesanan. --}}
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($transactions->sum('totalPrice_idr'), 'IDR') }}</h3>
         </div>
 
         <!-- Average Value -->
@@ -21,7 +22,7 @@
                 <i class="fas fa-chart-line"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rata-rata Transaksi</p>
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Rp {{ number_format($transactions->avg('totalPrice'), 0, ',', '.') }}</h3>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($transactions->avg('totalPrice_idr'), 'IDR') }}</h3>
         </div>
 
         <!-- Total Bookings -->
@@ -67,7 +68,7 @@
                             </div>
                         </td>
                         <td class="px-10 py-8 text-xs font-bold text-slate-400 hidden lg:table-cell">{{ $booking->createdAt ? $booking->createdAt->format('d M Y, H:i') : '-' }}</td>
-                        <td class="px-5 md:px-10 py-6 md:py-8 text-xs font-black text-slate-900 text-right whitespace-nowrap">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
+                        <td class="px-5 md:px-10 py-6 md:py-8 text-xs font-black text-slate-900 text-right whitespace-nowrap">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</td>
                         <td class="px-10 py-8 text-center hidden sm:table-cell">
                             <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">
                                 Berhasil

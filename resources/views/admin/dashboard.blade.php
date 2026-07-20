@@ -20,12 +20,12 @@
                 </div>
                 <div class="flex items-baseline gap-2">
                     <span class="text-xl font-black text-white/70">Rp</span>
-                    <h3 class="text-4xl font-black tracking-tight" x-text="(data.revenue.total / 1000).toLocaleString() + 'K'"></h3>
+                    <h3 class="text-4xl font-black tracking-tight" x-text="Number(data.revenue.total).toLocaleString('id-ID')"></h3>
                 </div>
                 <div class="mt-8 flex items-center gap-4">
                     <div class="px-4 py-2 bg-white/10 rounded-2xl backdrop-blur-md">
                         <p class="text-[8px] font-black uppercase text-white/50 mb-0.5">Bulan Ini</p>
-                        <p class="text-xs font-black" x-text="'Rp ' + (data.revenue.monthly / 1000).toLocaleString() + 'K'"></p>
+                        <p class="text-xs font-black" x-text="'Rp ' + Number(data.revenue.monthly).toLocaleString('id-ID')"></p>
                     </div>
                     <div class="px-4 py-2 bg-emerald-500/20 rounded-2xl border border-emerald-500/20 backdrop-blur-md">
                         <p class="text-[8px] font-black uppercase text-emerald-400 mb-0.5">Growth</p>
@@ -125,7 +125,8 @@
                         </div>
                         <div class="flex items-center gap-6">
                             <div class="text-right">
-                                <p class="text-sm font-black text-slate-900" x-text="'Rp ' + (booking.totalPrice / 1000).toLocaleString() + 'K'"></p>
+                                {{-- Nominal pesanan dirender dalam mata uang yang dibekukan saat dipesan, bukan dikonversi ulang. --}}
+                                <p class="text-sm font-black text-slate-900" x-text="new Intl.NumberFormat(booking.currency === 'IDR' ? 'id-ID' : 'en-MY', { style: 'currency', currency: booking.currency || 'IDR' }).format(booking.totalPrice)"></p>
                                 <span class="px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest mt-1 inline-block" 
                                       :class="{
                                           'bg-amber-50 text-amber-600': booking.status === 'pending',

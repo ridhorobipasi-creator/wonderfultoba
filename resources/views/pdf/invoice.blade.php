@@ -169,8 +169,8 @@
                         @endif
                     </td>
                     <td style="text-align: center;">{{ $pax }} Pax</td>
-                    <td style="text-align: right;">Rp {{ number_format($unitPrice, 0, ',', '.') }}</td>
-                    <td style="text-align: right; font-weight: bold; color: #1a202c;">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">{{ \App\Helpers\CurrencyHelper::formatIn($unitPrice, $booking->currency) }}</td>
+                    <td style="text-align: right; font-weight: bold; color: #1a202c;">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -194,10 +194,10 @@
                 <td width="44%" style="vertical-align: top;">
                     <div class="calc">
                         <table width="100%" cellpadding="0" cellspacing="0">
-                            <tr><td class="k">Subtotal</td><td class="v">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td></tr>
-                            <tr><td class="k">Pajak (0%)</td><td class="v">Rp 0</td></tr>
-                            <tr><td class="k">Diskon</td><td class="v">- Rp 0</td></tr>
-                            <tr class="sep"><td class="total-k">Total Tagihan (IDR)</td><td class="total-v">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</td></tr>
+                            <tr><td class="k">Subtotal</td><td class="v">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</td></tr>
+                            <tr><td class="k">Pajak</td><td class="v">{{ \App\Helpers\CurrencyHelper::formatIn(data_get($booking->metadata, 'price_breakdown.tax', 0), $booking->currency) }}</td></tr>
+                            <tr><td class="k">Diskon</td><td class="v">- {{ \App\Helpers\CurrencyHelper::formatIn(0, $booking->currency) }}</td></tr>
+                            <tr class="sep"><td class="total-k">Total Tagihan ({{ $booking->currency }})</td><td class="total-v">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</td></tr>
                         </table>
                     </div>
                 </td>

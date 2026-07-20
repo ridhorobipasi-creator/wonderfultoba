@@ -141,7 +141,7 @@
                                         {{-- Condensed stats for mobile (columns hidden) --}}
                                         <div class="md:hidden flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
                                             <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[9px] font-black">{{ $customer->total_bookings }} Trip</span>
-                                            <span class="text-[10px] font-black text-slate-900">Rp {{ number_format($customer->total_spent / 1000, 0) }}K</span>
+                                            <span class="text-[10px] font-black text-slate-900">{{ \App\Helpers\CurrencyHelper::formatIn($customer->total_spent, 'IDR') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                 <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black">{{ $customer->total_bookings }} Trip</span>
                             </td>
                             <td class="px-8 py-5 text-center hidden md:table-cell">
-                                <span class="text-xs font-black text-slate-900">Rp {{ number_format($customer->total_spent / 1000, 0) }}K</span>
+                                <span class="text-xs font-black text-slate-900">{{ \App\Helpers\CurrencyHelper::formatIn($customer->total_spent, 'IDR') }}</span>
                             </td>
                             <td class="px-8 py-5 hidden lg:table-cell">
                                 @if($customer->last_booking_at)

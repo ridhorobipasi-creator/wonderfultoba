@@ -100,7 +100,7 @@
             </tr>
             <tr>
                 <td class="label">Harga Mulai Dari</td>
-                <td>Rp {{ number_format($package->price, 0, ',', '.') }} / orang</td>
+                <td>{{ \App\Helpers\CurrencyHelper::formatIn($package->price, \App\Helpers\CurrencyHelper::PRICE_BASE) }} / orang</td>
             </tr>
         </table>
     </div>

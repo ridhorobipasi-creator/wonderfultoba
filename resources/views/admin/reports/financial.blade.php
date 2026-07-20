@@ -52,7 +52,7 @@
                 <i class="fas fa-money-bill-trend-up"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendapatan</p>
-            <p class="text-xl font-black text-slate-900 mt-1">Rp {{ number_format($stats['revenue'], 0, ',', '.') }}</p>
+            <p class="text-xl font-black text-slate-900 mt-1">{{ \App\Helpers\CurrencyHelper::formatIn($stats['revenue'], 'IDR') }}</p>
         </div>
     </div>
 
@@ -89,7 +89,7 @@
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Total Pesanan</p>
                 </div>
                 <div class="bg-white/10 p-5 md:p-6 rounded-2xl backdrop-blur-sm border border-white/10 min-w-0 md:min-w-[150px]">
-                    <p class="text-[20px] font-black leading-none text-white">Rp {{ number_format($yearlySummary['revenue'] / 1000000, 1) }}jt</p>
+                    <p class="text-[20px] font-black leading-none text-white">{{ \App\Helpers\CurrencyHelper::formatIn($yearlySummary['revenue'], 'IDR') }}</p>
                     <p class="text-[9px] font-black uppercase tracking-widest text-indigo-100 mt-2">Pendapatan</p>
                 </div>
             </div>
@@ -181,7 +181,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap">
-                                    <p class="text-xs font-black text-slate-900">Rp {{ number_format($booking->totalPrice, 0, ',', '.') }}</p>
+                                    <p class="text-xs font-black text-slate-900">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</p>
                                 </td>
                             </tr>
                         @empty
