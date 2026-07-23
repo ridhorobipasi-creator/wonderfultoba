@@ -83,7 +83,7 @@
             </div>
         </div>
         <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-lg">
+            <div class="w-12 h-12 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center text-lg">
                 <i class="fas fa-users"></i>
             </div>
             <div>
@@ -176,7 +176,7 @@
                                 <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Tour Package</p>
                             </div>
                             <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl">
-                                <i class="fas fa-eye text-indigo-500 text-[10px]"></i>
+                                <i class="fas fa-eye text-green-700 text-[10px]"></i>
                                 <span class="text-[10px] font-black text-slate-900" x-text="pkg.views_count"></span>
                             </div>
                         </div>

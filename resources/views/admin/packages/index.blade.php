@@ -195,7 +195,7 @@
                         <div class="flex items-center gap-2">
                             <form action="{{ route('admin.packages.duplicate', $package) }}" method="POST" onsubmit="return confirm('Duplikat paket ini?')">
                                 @csrf
-                                <button type="submit" class="w-10 h-10 rounded-xl bg-slate-50 text-indigo-500 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition shadow-sm" title="Duplikat Paket">
+                                <button type="submit" class="w-10 h-10 rounded-xl bg-slate-50 text-green-700 flex items-center justify-center hover:bg-green-800 hover:text-white transition shadow-sm" title="Duplikat Paket">
                                     <i class="fas fa-copy text-xs"></i>
                                 </button>
                             </form>

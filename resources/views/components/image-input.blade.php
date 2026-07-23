@@ -26,8 +26,8 @@
     <!-- Media Library Picker Button -->
     <div class="flex flex-col gap-4 mb-4">
         <button type="button" @click="openMediaPicker()" 
-                class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
-            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-green-700 hover:bg-green-100/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
+            <div class="w-14 h-14 rounded-2xl bg-green-100 text-green-800 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
                 <i class="fas fa-images text-2xl"></i>
             </div>
             <p class="text-lg font-black text-slate-800 tracking-tight">Pilih dari Media Library</p>
@@ -42,7 +42,7 @@
          :class="{{ $multiple ? '\'grid-cols-3 sm:grid-cols-4 md:grid-cols-6\'' : '\'grid-cols-1\'' }}" 
          x-show="selectedMedia.length > 0">
         <template x-for="(item, idx) in selectedMedia" :key="'media-' + item.id">
-            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-indigo-500 shadow-lg group">
+            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-green-700 shadow-lg group">
                 <img :src="item.thumbnail_url || item.url" 
                      :alt="item.alt_text || 'Selected image'"
                      class="w-full h-full object-cover">
@@ -56,7 +56,7 @@
                 <input type="hidden" 
                        :name="{{ $multiple ? "'{$name}_media_ids[]'" : "'{$name}_media_id'" }}" 
                        :value="item.id">
-                <div class="absolute top-1 right-1 bg-indigo-600 text-[7px] text-white px-2 py-1 rounded-full font-black tracking-widest">LIBRARY</div>
+                <div class="absolute top-1 right-1 bg-green-800 text-[7px] text-white px-2 py-1 rounded-full font-black tracking-widest">LIBRARY</div>
             </div>
         </template>
     </div>

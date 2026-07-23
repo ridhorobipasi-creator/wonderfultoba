@@ -25,7 +25,7 @@
                 <!-- Section 1: Identity -->
                 <div class="space-y-8">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center">
                             <i class="fas fa-user-tag text-xs"></i>
                         </div>
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-900">Identitas Pelanggan</h3>

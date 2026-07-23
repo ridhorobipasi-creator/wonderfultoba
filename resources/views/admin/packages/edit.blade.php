@@ -66,8 +66,8 @@
                     @endif
 
                     <div class="flex flex-col gap-4 mb-4">
-                        <button type="button" @click="openPackageMediaPicker()" class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
-                            <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                        <button type="button" @click="openPackageMediaPicker()" class="w-full border-2 border-dashed border-gray-300 rounded-2xl p-10 text-center hover:border-green-700 hover:bg-green-100/30 transition group bg-gray-50/50 flex flex-col items-center justify-center gap-3">
+                            <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-800 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
                                 <i class="fas fa-images text-3xl"></i>
                             </div>
                             <p class="text-lg font-black text-slate-800 tracking-tight mt-2">Pilih dari Galeri Pusat</p>
@@ -77,7 +77,7 @@
 
                     <div id="selected-media-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-4" x-show="selectedMedia.length > 0">
                         <template x-for="(item, idx) in selectedMedia" :key="'media'+item.id">
-                            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-indigo-500 shadow-lg group">
+                            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-green-700 shadow-lg group">
                                 <img :src="'/storage/' + (item.path.replace(/^\/?storage\//, ''))" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                                     <button type="button" @click="selectedMedia.splice(idx, 1)" class="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-lg">
@@ -85,7 +85,7 @@
                                     </button>
                                 </div>
                                 <input type="hidden" name="media_ids[]" :value="item.id">
-                                <div class="absolute top-1 right-1 bg-indigo-600 text-[7px] text-white px-1.5 py-0.5 rounded-full font-black tracking-widest">GALLERY</div>
+                                <div class="absolute top-1 right-1 bg-green-800 text-[7px] text-white px-1.5 py-0.5 rounded-full font-black tracking-widest">GALLERY</div>
                             </div>
                         </template>
                     </div>
@@ -208,7 +208,7 @@
                             <h4 class="text-sm font-black text-gray-900">Harga Grosir (Tiered Pricing)</h4>
                             <p class="text-xs text-gray-500 mt-1">Atur harga berbeda berdasarkan jumlah orang (misal 1-9 pax = RM 350, 10-15 pax = RM 320)</p>
                         </div>
-                        <button type="button" @click="addTier()" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-100 transition shadow-sm border border-indigo-100">
+                        <button type="button" @click="addTier()" class="px-4 py-2 bg-green-100 text-green-800 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-green-200 transition shadow-sm border border-green-200">
                             <i class="fas fa-plus mr-1"></i> Add Tier
                         </button>
                     </div>
@@ -219,14 +219,14 @@
                             <div class="flex-1 md:w-32">
                                 <label class="block text-[10px] font-bold text-gray-500 mb-1">Min Orang</label>
                                 <input type="number" :name="'pricingDetails[tiers]['+index+'][min_pax]'" x-model.number="tier.min_pax" required min="1"
-                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                             </div>
                             
                             <!-- Max Pax -->
                             <div class="flex-1 md:w-32">
                                 <label class="block text-[10px] font-bold text-gray-500 mb-1">Max Orang</label>
                                 <input type="number" :name="'pricingDetails[tiers]['+index+'][max_pax]'" x-model.number="tier.max_pax" required min="1"
-                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                             </div>
 
                             <!-- Harga -->
@@ -235,7 +235,7 @@
                                 <div class="relative">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
                                     <input type="number" :name="'pricingDetails[tiers]['+index+'][price]'" x-model.number="tier.price" required min="0" step="0.01"
-                                        class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                        class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                                 </div>
                             </div>
 
@@ -245,7 +245,7 @@
                                 <div class="relative">
                                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
                                     <input type="number" :name="'pricingDetails[tiers]['+index+'][child_price]'" x-model.number="tier.child_price" min="0" step="0.01" placeholder="Kosongkan jika default"
-                                        class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                        class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                                 </div>
                             </div>
 
@@ -258,7 +258,7 @@
                         </div>
                     </template>
 
-                    <div x-show="tiers.length === 0" class="text-center py-6 text-indigo-400 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-indigo-100 rounded-2xl">
+                    <div x-show="tiers.length === 0" class="text-center py-6 text-green-600 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-green-200 rounded-2xl">
                         Belum ada pengaturan harga grosir
                     </div>
                 </div>
@@ -290,27 +290,27 @@
                         </div>
 
                 <!-- Layanan Tambahan (Additional Services) - DYNAMIC CRUD -->
-                <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100 space-y-4">
+                <div class="bg-green-100/50 rounded-2xl p-6 border border-green-200 space-y-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-sm font-black text-indigo-950 flex items-center gap-2">
-                                <i class="fas fa-hand-holding-usd text-indigo-600"></i> Layanan Tambahan (Additional Services)
+                            <h3 class="text-sm font-black text-green-950 flex items-center gap-2">
+                                <i class="fas fa-hand-holding-usd text-green-800"></i> Layanan Tambahan (Additional Services)
                             </h3>
-                            <p class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mt-1">Kelola opsi layanan berbayar tambahan untuk paket ini</p>
+                            <p class="text-[10px] font-bold text-green-700 uppercase tracking-widest mt-1">Kelola opsi layanan berbayar tambahan untuk paket ini</p>
                         </div>
-                        <button type="button" @click="addAdditionalService()" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-indigo-700 transition shadow-sm">
+                        <button type="button" @click="addAdditionalService()" class="bg-green-800 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-green-900 transition shadow-sm">
                             <i class="fas fa-plus mr-1"></i> Tambah Layanan
                         </button>
                     </div>
 
                     <div class="space-y-3">
                         <template x-for="(service, index) in additionalServices" :key="index">
-                            <div class="flex flex-col md:flex-row gap-4 p-4 bg-white border border-indigo-100 rounded-xl relative group animate-in fade-in duration-200">
+                            <div class="flex flex-col md:flex-row gap-4 p-4 bg-white border border-green-200 rounded-xl relative group animate-in fade-in duration-200">
                                 <!-- Nama Layanan -->
                                 <div class="flex-1">
                                     <label class="block text-[10px] font-bold text-gray-500 mb-1">Nama Layanan</label>
                                     <input type="text" :name="'pricingDetails[additional_services]['+index+'][name]'" x-model="service.name" placeholder="misal: Private Jet Charter" required
-                                        class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                        class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                                 </div>
                                 
                                 <!-- Icon -->
@@ -318,7 +318,7 @@
                                     <label class="block text-[10px] font-bold text-gray-500 mb-1">Material Icon Name</label>
                                     <div class="relative">
                                         <input type="text" :name="'pricingDetails[additional_services]['+index+'][icon]'" x-model="service.icon" placeholder="misal: flight_takeoff" required
-                                            class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                            class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                                         <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm" x-text="service.icon || 'help'"></span>
                                     </div>
                                 </div>
@@ -329,7 +329,7 @@
                                     <div class="relative">
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-bold">RM</span>
                                         <input type="number" :name="'pricingDetails[additional_services]['+index+'][price]'" x-model.number="service.price" placeholder="350.00" required min="0" step="0.01"
-                                            class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-indigo-300">
+                                            class="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:ring-2 focus:ring-green-400">
                                     </div>
                                 </div>
 
@@ -343,7 +343,7 @@
                         </template>
 
 
-                        <div x-show="tiers.length === 0" class="text-center py-6 text-indigo-400 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-indigo-100 rounded-2xl">
+                        <div x-show="tiers.length === 0" class="text-center py-6 text-green-600 text-xs font-bold uppercase tracking-widest bg-white border-2 border-dashed border-green-200 rounded-2xl">
                             Belum ada pengaturan harga grosir
                         </div>
                     </div>

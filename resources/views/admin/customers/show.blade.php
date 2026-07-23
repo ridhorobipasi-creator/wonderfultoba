@@ -18,7 +18,7 @@
         <!-- Profile Info -->
         <div class="lg:col-span-1 space-y-8">
             <div class="bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-sm text-center">
-                <div class="w-24 h-24 rounded-[2.5rem] bg-indigo-50 text-indigo-500 flex items-center justify-center font-black text-3xl uppercase mx-auto mb-6 shadow-xl shadow-indigo-50">
+                <div class="w-24 h-24 rounded-[2.5rem] bg-green-100 text-green-700 flex items-center justify-center font-black text-3xl uppercase mx-auto mb-6 shadow-xl shadow-green-100">
                     {{ substr($customer->name, 0, 1) }}
                 </div>
                 <h2 class="text-2xl font-black text-slate-900 tracking-tight">{{ $customer->name }}</h2>

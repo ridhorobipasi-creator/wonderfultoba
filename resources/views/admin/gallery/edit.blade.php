@@ -64,12 +64,12 @@
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative group cursor-pointer">
                                 <input type="radio" name="category" value="tour" {{ $gallery->category == 'tour' ? 'checked' : '' }} class="peer sr-only">
-                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 transition">
+                                <div class="p-4 rounded-2xl border-2 border-slate-50 bg-slate-50 group-hover:bg-slate-100 peer-checked:border-green-700 peer-checked:bg-green-100 transition">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-indigo-600">
+                                        <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm text-green-800">
                                             <i class="fas fa-camera-retro text-xs"></i>
                                         </div>
-                                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 peer-checked:text-indigo-900">Tour</span>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 peer-checked:text-green-950">Tour</span>
                                     </div>
                                 </div>
                             </label>

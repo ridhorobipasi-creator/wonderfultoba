@@ -83,7 +83,7 @@
                     </div>
                     <div class="space-y-2 pt-6 border-t border-white/5">
                         <p class="text-[9px] font-black text-white/30 uppercase tracking-widest">Slug (URL)</p>
-                        <div class="p-3 bg-white/5 rounded-xl text-[10px] font-mono text-indigo-300 break-all">
+                        <div class="p-3 bg-white/5 rounded-xl text-[10px] font-mono text-green-400 break-all">
                             /blogs/{{ $blog->slug }}
                         </div>
                     </div>

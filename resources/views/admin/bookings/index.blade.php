@@ -227,7 +227,7 @@
                                             <i class="fas fa-chevron-right text-[10px]"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.bookings.invoice', $booking->bookingCode) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
+                                        <a href="{{ route('admin.bookings.invoice', $booking->bookingCode) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-green-700 text-white shadow-lg transition transform hover:-translate-y-0.5" title="View PDF">
                                             <i class="fas fa-file-pdf text-[10px]"></i>
                                         </a>
 

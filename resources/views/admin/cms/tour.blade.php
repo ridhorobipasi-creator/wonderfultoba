@@ -258,13 +258,13 @@ document.addEventListener('alpine:init', () => {
         <!-- Tab Navigation -->
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1 overflow-x-auto no-scrollbar">
             <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Hero</button>
-            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
+            <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-green-800 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
             <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">⭐ Featured</button>
             <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
             <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-green-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
             <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">💬 Ulasan</button>
             <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Statistik</button>
-            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-green-800 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_tour') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -537,7 +537,7 @@ document.addEventListener('alpine:init', () => {
                 <!-- SEO Tab -->
                 <div x-show="activeTab === 'seo'" x-transition class="space-y-6">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-2xl bg-green-100 text-green-800 flex items-center justify-center">
                             <i class="fas fa-search"></i>
                         </div>
                         <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest">Optimasi SEO Halaman</h4>
@@ -546,15 +546,15 @@ document.addEventListener('alpine:init', () => {
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SEO Meta Title</label>
-                            <input type="text" name="meta_title" value="{{ $settings['meta_title'] ?? '' }}" placeholder="Sujai Laketoba | Paket Wisata Terbaik" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-xs shadow-inner">
+                            <input type="text" name="meta_title" value="{{ $settings['meta_title'] ?? '' }}" placeholder="Sujai Laketoba | Paket Wisata Terbaik" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-800 font-bold text-slate-900 text-xs shadow-inner">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SEO Meta Description</label>
-                            <textarea name="meta_description" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-600 text-xs leading-relaxed shadow-inner" placeholder="Jelajahi keindahan Danau Toba dengan paket wisata premium kami...">{{ $settings['meta_description'] ?? '' }}</textarea>
+                            <textarea name="meta_description" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-800 font-bold text-slate-600 text-xs leading-relaxed shadow-inner" placeholder="Jelajahi keindahan Danau Toba dengan paket wisata premium kami...">{{ $settings['meta_description'] ?? '' }}</textarea>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">SEO Meta Keywords</label>
-                            <input type="text" name="meta_keywords" value="{{ $settings['meta_keywords'] ?? '' }}" placeholder="wisata toba, tour samosir, travel medan" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-xs shadow-inner">
+                            <input type="text" name="meta_keywords" value="{{ $settings['meta_keywords'] ?? '' }}" placeholder="wisata toba, tour samosir, travel medan" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-800 font-bold text-slate-900 text-xs shadow-inner">
                         </div>
                     </div>
                 </div>
@@ -562,20 +562,20 @@ document.addEventListener('alpine:init', () => {
                 <!-- Slider Tab (Now as the Editor) -->
                 <div x-show="activeTab === 'slider'" x-transition class="space-y-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h4 class="text-sm font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-indigo-600"></span> NIF Dynamic Slider
+                        <h4 class="text-sm font-black text-green-800 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-800"></span> NIF Dynamic Slider
                         </h4>
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
                                 <input type="hidden" name="show_slider" value="0">
                                 <input type="checkbox" name="show_slider" value="1" {{ ($settings['show_slider'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-green-800 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
                     <div class="flex justify-end">
-                        <button type="button" @click="addSlide()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center gap-2">
+                        <button type="button" @click="addSlide()" class="px-4 py-2 bg-green-800 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-green-300 hover:bg-green-900 transition flex items-center gap-2">
                             <i class="fas fa-plus"></i> Tambah Slide
                         </button>
                     </div>
@@ -601,7 +601,7 @@ document.addEventListener('alpine:init', () => {
 
                                     <!-- Package Picker -->
                                     <div x-show="slide.type === 'package'" class="space-y-2">
-                                        <p class="text-[8px] font-black text-indigo-600 uppercase tracking-widest">Pilih Paket Tour</p>
+                                        <p class="text-[8px] font-black text-green-800 uppercase tracking-widest">Pilih Paket Tour</p>
                                         <div class="grid grid-cols-1 gap-2 max-h-[150px] overflow-y-auto no-scrollbar bg-white p-2 rounded-2xl border border-slate-100">
                                             @foreach($packages as $p)
                                             <button type="button" 
@@ -615,7 +615,7 @@ document.addEventListener('alpine:init', () => {
                                                         duration: '{{ addslashes($p->duration) }}',
                                                         image_path: '{{ imageUrl($p->packageImages->first()?->image_path ?? ($p->images[0] ?? '')) }}'
                                                     })"
-                                                    class="flex items-center gap-2 p-2 rounded-xl hover:bg-indigo-50 transition text-left group/pkg">
+                                                    class="flex items-center gap-2 p-2 rounded-xl hover:bg-green-100 transition text-left group/pkg">
                                                 <div class="w-8 h-8 rounded-lg bg-slate-100 overflow-hidden shrink-0">
                                                     <img src="{{ imageUrl($p->packageImages->first()?->image_path ?? ($p->images[0] ?? '')) }}" class="w-full h-full object-cover">
                                                 </div>

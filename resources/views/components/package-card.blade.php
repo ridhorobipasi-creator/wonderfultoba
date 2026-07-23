@@ -24,7 +24,7 @@
         <!-- Badges -->
         <div class="absolute top-5 left-5 flex flex-col space-y-2">
             @if($package->isFeatured ?? false)
-            <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
+            <div class="bg-gradient-to-r from-toba-orange to-toba-orange-dark text-white px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
                 <span class="text-xs">🔥</span> 
                 <span class="font-bold text-[10px] uppercase tracking-widest">{{ __('Terpopuler') }}</span>
             </div>

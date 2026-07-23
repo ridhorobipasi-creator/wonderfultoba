@@ -91,7 +91,7 @@
 
                 @error('city_image') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
                 @error('image_id') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest group-hover:text-indigo-600">Pilih dari Galeri</p>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest group-hover:text-green-800">Pilih dari Galeri</p>
                         </div>
                     </div>
 

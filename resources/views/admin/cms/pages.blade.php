@@ -161,7 +161,7 @@ document.addEventListener('alpine:init', () => {
             @csrf
             <div class="flex items-center justify-between mb-10">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-lg">
+                    <div class="w-12 h-12 rounded-2xl bg-green-700 flex items-center justify-center text-white shadow-lg">
                         <i class="fas fa-shield-halved text-sm"></i>
                     </div>
                     <div>
@@ -169,7 +169,7 @@ document.addEventListener('alpine:init', () => {
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Perlindungan Data Pelanggan</p>
                     </div>
                 </div>
-                <button type="submit" class="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition">Simpan Perubahan</button>
+                <button type="submit" class="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-green-800 transition">Simpan Perubahan</button>
             </div>
 
             <div class="space-y-3">

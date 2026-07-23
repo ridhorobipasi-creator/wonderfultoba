@@ -123,7 +123,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($customers as $customer)
-                        <tr class="group hover:bg-slate-50/30 transition-colors" :class="selected.includes({{ $customer->id }}) ? 'bg-indigo-50/50' : ''">
+                        <tr class="group hover:bg-slate-50/30 transition-colors" :class="selected.includes({{ $customer->id }}) ? 'bg-green-100/50' : ''">
                             <td class="pl-8 py-5">
                                 <input type="checkbox" 
                                     value="{{ $customer->id }}" 
@@ -132,7 +132,7 @@
                             </td>
                             <td class="px-8 py-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center font-black text-xs uppercase group-hover:bg-slate-900 group-hover:text-white transition shrink-0">
+                                    <div class="w-10 h-10 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center font-black text-xs uppercase group-hover:bg-slate-900 group-hover:text-white transition shrink-0">
                                         {{ substr($customer->name, 0, 1) }}
                                     </div>
                                     <div class="min-w-0">
@@ -206,7 +206,7 @@
          x-cloak>
         <div class="bg-slate-900 text-white rounded-[2.5rem] p-5 shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
             <div class="flex items-center gap-4 pl-4">
-                <div class="w-10 h-10 rounded-2xl bg-indigo-500 flex items-center justify-center text-white text-sm font-black shadow-lg">
+                <div class="w-10 h-10 rounded-2xl bg-green-700 flex items-center justify-center text-white text-sm font-black shadow-lg">
                     <span x-text="selected.length"></span>
                 </div>
                 <div>

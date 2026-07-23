@@ -61,7 +61,7 @@ document.addEventListener('alpine:init', () => {
         <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-slate-100 flex items-center space-x-1">
             <button @click="activeTab = 'branding'" :class="activeTab === 'branding' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">Brand</button>
             <button @click="activeTab = 'tour'" :class="activeTab === 'tour' ? 'bg-toba-green text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">Tour</button>
-            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">SEO</button>
+            <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-green-800 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="flex-1 py-3 rounded-[1.2rem] font-black text-[8px] uppercase tracking-widest transition">SEO</button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_landing') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -120,17 +120,17 @@ document.addEventListener('alpine:init', () => {
 
                 <!-- SEO Tab -->
                 <div x-show="activeTab === 'seo'" x-transition class="space-y-6">
-                    <h4 class="text-sm font-black text-indigo-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-indigo-600"></span> SEO & Meta Tags
+                    <h4 class="text-sm font-black text-green-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-800"></span> SEO & Meta Tags
                     </h4>
                     <div class="space-y-4">
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Meta Title (Browser Tab)</label>
-                            <input type="text" name="meta_title" x-model="metaTitle" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-bold text-slate-900 text-sm">
+                            <input type="text" name="meta_title" x-model="metaTitle" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-800 font-bold text-slate-900 text-sm">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Meta Description</label>
-                            <textarea name="meta_description" x-model="metaDescription" rows="5" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-600 font-medium text-slate-600 text-xs leading-relaxed"></textarea>
+                            <textarea name="meta_description" x-model="metaDescription" rows="5" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-800 font-medium text-slate-600 text-xs leading-relaxed"></textarea>
                         </div>
                     </div>
                 </div>

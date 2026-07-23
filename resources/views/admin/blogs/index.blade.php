@@ -200,7 +200,7 @@
          x-cloak>
         <div class="bg-slate-900 text-white rounded-[2.5rem] p-5 shadow-2xl flex items-center justify-between border border-white/10 backdrop-blur-xl bg-opacity-90">
             <div class="flex items-center gap-4 pl-4">
-                <div class="w-10 h-10 rounded-2xl bg-indigo-500 flex items-center justify-center text-white text-sm font-black shadow-lg">
+                <div class="w-10 h-10 rounded-2xl bg-green-700 flex items-center justify-center text-white text-sm font-black shadow-lg">
                     <span x-text="selected.length"></span>
                 </div>
                 <div>

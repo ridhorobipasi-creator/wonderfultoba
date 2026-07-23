@@ -65,7 +65,7 @@
                 {{-- Wise --}}
                 <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
-                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 bg-toba-green/8 text-toba-green rounded-xl flex items-center justify-center shrink-0">
                             <span class="font-bold text-base">W</span>
                         </div>
                         <div>
@@ -83,7 +83,7 @@
                 {{-- Bank Transfer --}}
                 <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
-                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 bg-toba-green/8 text-toba-green rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">account_balance</span>
                         </div>
                         <div class="w-full">
@@ -108,7 +108,7 @@
                 {{-- International SWIFT --}}
                 <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
-                        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 bg-toba-green/8 text-toba-green rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">public</span>
                         </div>
                         <div>

@@ -18,7 +18,7 @@
 
         <!-- Average Value -->
         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm transition hover:shadow-xl hover:shadow-slate-100 group">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <div class="w-12 h-12 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-chart-line"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rata-rata Transaksi</p>

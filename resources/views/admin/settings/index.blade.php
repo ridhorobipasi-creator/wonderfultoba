@@ -41,7 +41,7 @@
                             <div class="relative group h-32 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 overflow-hidden flex flex-col items-center justify-center p-4">
                                 <img src="{{ $general['logo_light_url'] ?? asset('assets/img/logo.png') }}" class="max-h-full object-contain" id="preview-logo-light">
                                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                                    <button type="button" @click="openMedia('logo_light')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition"><i class="fas fa-images"></i></button>
+                                    <button type="button" @click="openMedia('logo_light')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-green-700 transition"><i class="fas fa-images"></i></button>
                                 </div>
                                 <input type="hidden" name="logo_light_url" value="{{ $general['logo_light_url'] ?? '' }}">
                             </div>
@@ -52,7 +52,7 @@
                             <div class="relative group h-32 rounded-3xl bg-slate-900 border-2 border-dashed border-slate-700 overflow-hidden flex flex-col items-center justify-center p-4">
                                 <img src="{{ $general['logo_dark_url'] ?? asset('assets/img/logo-white.png') }}" class="max-h-full object-contain" id="preview-logo-dark">
                                 <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                                    <button type="button" @click="openMedia('logo_dark')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-indigo-500 transition"><i class="fas fa-images"></i></button>
+                                    <button type="button" @click="openMedia('logo_dark')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-green-700 transition"><i class="fas fa-images"></i></button>
                                 </div>
                                 <input type="hidden" name="logo_dark_url" value="{{ $general['logo_dark_url'] ?? '' }}">
                             </div>
@@ -70,7 +70,7 @@
                                     <p class="text-[8px] text-slate-400 leading-relaxed font-bold uppercase tracking-tighter">Format .ico atau .png (64x64px)</p>
                                     <input type="hidden" name="icon_url" value="{{ $general['icon_url'] ?? '' }}">
                                 </div>
-                                <button type="button" @click="openMedia('favicon')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 transition shadow-sm">
+                                <button type="button" @click="openMedia('favicon')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-green-700 transition shadow-sm">
                                     <i class="fas fa-images text-xs"></i>
                                 </button>
                             </div>
@@ -241,11 +241,11 @@
             <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
-                        <span class="w-2 h-8 bg-indigo-500 rounded-full"></span> Global SEO & Indexing
+                        <span class="w-2 h-8 bg-green-700 rounded-full"></span> Global SEO & Indexing
                     </h3>
-                    <div class="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full">
-                        <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-                        <span class="text-[8px] font-black text-indigo-600 uppercase tracking-widest">Live Optimization</span>
+                    <div class="flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full">
+                        <div class="w-2 h-2 rounded-full bg-green-700 animate-pulse"></div>
+                        <span class="text-[8px] font-black text-green-800 uppercase tracking-widest">Live Optimization</span>
                     </div>
                 </div>
 
@@ -268,8 +268,8 @@
                             <textarea name="seo_meta_keywords" rows="3" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-slate-500 text-xs">{{ $general['seo_meta_keywords'] ?? 'danau toba, tour samosir, travel medan, paket wisata sumatera utara' }}</textarea>
                         </div>
                         <div class="space-y-3">
-                            <label class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Daftar Kota Target SEO (pSEO Origins)</label>
-                            <textarea name="seo_pseo_origins" rows="3" placeholder="Jakarta, Surabaya, Malaysia, Singapore" class="w-full px-6 py-4 bg-indigo-50/50 border-none rounded-2xl font-bold text-indigo-900 text-xs">{{ $general['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia' }}</textarea>
+                            <label class="text-[10px] font-black text-green-700 uppercase tracking-widest">Daftar Kota Target SEO (pSEO Origins)</label>
+                            <textarea name="seo_pseo_origins" rows="3" placeholder="Jakarta, Surabaya, Malaysia, Singapore" class="w-full px-6 py-4 bg-green-100/50 border-none rounded-2xl font-bold text-green-950 text-xs">{{ $general['seo_pseo_origins'] ?? 'Jakarta, Surabaya, Bandung, Bali, Batam, Palembang, Makassar, Semarang, Yogyakarta, Kuala Lumpur, Singapore, Penang, Pekanbaru, Padang, Malaysia' }}</textarea>
                             <p class="text-[8px] font-bold text-slate-400 uppercase">Pisahkan dengan koma. Akan otomatis membuat halaman target SEO & masuk ke Sitemap.</p>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                     </div>
 
                     <div class="pt-4 border-t border-slate-100 space-y-3">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-share-nodes text-indigo-400"></i> Gambar Share Default (og:image)</label>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-share-nodes text-green-600"></i> Gambar Share Default (og:image)</label>
                         <p class="text-[9px] text-slate-400 font-bold italic">Tampil saat link situs dibagikan di WhatsApp / Facebook (untuk halaman tanpa gambar khusus). Rekomendasi 1200×630px.</p>
                         <div class="flex items-center gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100">
                             <div class="w-32 h-20 bg-white rounded-2xl shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 shrink-0">
@@ -296,7 +296,7 @@
                             </div>
                             <div class="flex-1">
                                 <input type="hidden" name="og_image_url" value="{{ $general['og_image_url'] ?? '' }}">
-                                <button type="button" @click="openMedia('og_image')" class="px-5 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition shadow-sm">
+                                <button type="button" @click="openMedia('og_image')" class="px-5 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-green-700 transition shadow-sm">
                                     <i class="fas fa-images mr-1"></i> Pilih dari Media
                                 </button>
                             </div>

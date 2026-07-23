@@ -184,7 +184,7 @@
                             <a href="{{ route('admin.customers.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.customers.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-user-group w-5 text-sm {{ request()->routeIs('admin.customers.*') ? 'text-white' : 'text-indigo-500' }}"></i>
+                                <i class="fas fa-user-group w-5 text-sm {{ request()->routeIs('admin.customers.*') ? 'text-white' : 'text-green-500' }}"></i>
                                 Daftar Pelanggan
                             </a>
 
@@ -192,7 +192,7 @@
                             <a href="{{ route('admin.reports.financial') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.reports.financial') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-file-invoice-dollar w-5 text-sm {{ request()->routeIs('admin.reports.financial') ? 'text-white' : 'text-rose-500' }}"></i>
+                                <i class="fas fa-file-invoice-dollar w-5 text-sm {{ request()->routeIs('admin.reports.financial') ? 'text-white' : 'text-green-500' }}"></i>
                                 Laporan Keuangan
                             </a>
                             @endif
@@ -206,7 +206,7 @@
                             <a href="{{ route('admin.cms.tour') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.cms.tour') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-sky-400' }}"></i>
+                                <i class="fas fa-display w-5 text-sm {{ request()->routeIs('admin.cms.tour') ? 'text-white' : 'text-green-500' }}"></i>
                                 Halaman Beranda Web
                             </a>
                             <a href="{{ route('admin.blogs.index') }}"
@@ -218,7 +218,7 @@
                             <a href="{{ route('admin.media.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.media.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-fuchsia-500' }}"></i>
+                                <i class="fas fa-photo-film w-5 text-sm {{ request()->routeIs('admin.media.*') ? 'text-white' : 'text-green-500' }}"></i>
                                 Media Pusat
                             </a>
                              @if(auth()->user()->isSuperAdmin())
@@ -232,14 +232,14 @@
                              <a href="{{ route('admin.gallery.index', ['category' => 'tour']) }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                        {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                 <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'text-white' : 'text-indigo-400' }}"></i>
+                                 <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'text-white' : 'text-green-500' }}"></i>
                                  Galeri Tour
                              </a>
                              @if(auth()->user()->isSuperAdmin())
                              <a href="{{ route('admin.cms.pages') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                        {{ request()->routeIs('admin.cms.pages') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                 <i class="fas fa-file-invoice w-5 text-sm {{ request()->routeIs('admin.cms.pages') ? 'text-white' : 'text-rose-500' }}"></i>
+                                 <i class="fas fa-file-invoice w-5 text-sm {{ request()->routeIs('admin.cms.pages') ? 'text-white' : 'text-green-500' }}"></i>
                                  Halaman Statis
                              </a>
                              @endif
@@ -296,7 +296,7 @@
                             <a href="{{ route('admin.users.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-user-shield w-5 text-sm {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-indigo-400' }}"></i>
+                                <i class="fas fa-user-shield w-5 text-sm {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-green-500' }}"></i>
                                 Manajemen Pengguna
                             </a>
                             <a href="{{ route('admin.logs.index') }}"
@@ -383,8 +383,8 @@
                                             <div class="w-8 h-8 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-xs"><i class="fas fa-plus"></i></div>
                                             <span class="text-[10px] font-black uppercase text-slate-700">Buat Paket Baru</span>
                                         </a>
-                                        <a href="{{ route('admin.blogs.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-indigo-50 transition border border-transparent hover:border-indigo-100">
-                                            <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs"><i class="fas fa-feather"></i></div>
+                                        <a href="{{ route('admin.blogs.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-green-100 transition border border-transparent hover:border-green-200">
+                                            <div class="w-8 h-8 rounded-xl bg-green-200 text-green-800 flex items-center justify-center text-xs"><i class="fas fa-feather"></i></div>
                                             <span class="text-[10px] font-black uppercase text-slate-700">Tulis Artikel</span>
                                         </a>
                                     </div>
