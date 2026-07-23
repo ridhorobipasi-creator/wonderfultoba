@@ -109,6 +109,9 @@
 }
 
 @layer base {
+  /* Alpine: sembunyikan elemen x-show sebelum Alpine boot (anti flash-of-open-dropdown) */
+  [x-cloak] { display: none !important; }
+
   .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-weight: normal;

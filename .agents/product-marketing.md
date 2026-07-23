@@ -33,6 +33,5 @@ We handle the logistics so the customer can focus entirely on enjoying the natur
 - Homepage (`/`)
 - Tour Packages (`/tour/packages`)
 - Package Detail (`/tour/package/{slug}`)
-- Car Rental (`/sewa-mobil`)
 - About Us (`/about`)
 - Gallery (`/tour/gallery`)

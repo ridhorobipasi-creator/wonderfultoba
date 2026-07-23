@@ -1,132 +1,242 @@
-<header 
-    x-data="{ 
-        isMenuOpen: false, 
-        contact: { 
-            phone: @json(\App\Helpers\ContactHelper::whatsappDisplay()), 
-            email: '{{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}', 
-            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits()) 
+@php
+    $g = $siteSettings['general'] ?? [];
+    $officeAddress = $g['office_address'] ?? 'Jl. Danau Toba No. 12C Gg Lawu, Medan & Samosir, Sumatera Utara 20111';
+    $socials = array_filter([
+        'facebook'  => $g['social_facebook'] ?? null,
+        'tiktok'    => $g['social_tiktok'] ?? null,
+        'youtube'   => $g['social_youtube'] ?? null,
+        'instagram' => !empty($g['social_instagram'])
+            ? 'https://instagram.com/' . str_replace('@', '', $g['social_instagram'])
+            : null,
+    ]);
+    $activeLocale = session('locale', 'my');
+    $locales = [
+        'my' => '🇲🇾 MYR (Melayu)',
+        'id' => '🇮🇩 IDR (Indonesia)',
+        'en' => '🇸🇬 SGD (English)',
+    ];
+    $localeShort = ['my' => '🇲🇾 MYR', 'id' => '🇮🇩 IDR', 'en' => '🇸🇬 SGD'];
+
+    // Satu sumber kebenaran untuk menu — desktop & drawer mobile membacanya sama.
+    $navLinks = [
+        ['label' => __('Tentang Kami'),     'url' => '/about',         'active' => request()->is('about')],
+        ['label' => __('Blog'),             'url' => '/tour/blog',     'active' => request()->is('tour/blog*')],
+        ['label' => __('Kontak'),           'url' => route('booking.track.form'), 'active' => request()->is('track-booking*')],
+    ];
+@endphp
+
+<header
+    x-data="{
+        isMenuOpen: false,
+        scrolled: false,
+        contact: {
+            phone: @json(\App\Helpers\ContactHelper::whatsappDisplay()),
+            email: '{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}',
+            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits())
         }
     }"
+    x-init="$watch('isMenuOpen', open => document.body.classList.toggle('overflow-hidden', open))"
+    @keydown.escape.window="isMenuOpen = false"
     class="relative z-[100] w-full font-sans"
 >
-    <!-- 1. Topbar Oranye Presisi Zaza Tour -->
-    <div class="hidden sm:block bg-[#e67e22] text-white py-1.5">
-        <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-[12px] font-bold">
-            <!-- Left Info Location -->
-            <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span>Jl. Danau Toba No. 12C Gg Lawu, Medan & Samosir, Sumatera Utara 20111</span>
+    <!-- 1. Topbar Oranye -->
+    <div class="hidden sm:block bg-gradient-to-r from-[#e67e22] via-[#e3801f] to-[#d97a17] text-white">
+        <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-6 py-2 text-[12px] font-bold">
+            <!-- Lokasi Kantor -->
+            <div class="flex items-center gap-2 min-w-0">
+                <svg class="w-4 h-4 shrink-0 text-white/90" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span class="truncate tracking-tight text-white/95">{{ $officeAddress }}</span>
             </div>
-            
-            <!-- Right Social Icons & Language Dropdown -->
-            <div class="flex items-center space-x-5">
-                <div class="flex items-center space-x-3.5 text-[13px]">
-                    <a href="#" aria-label="Facebook" class="hover:opacity-80 transition"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="TikTok" class="hover:opacity-80 transition"><i class="fab fa-tiktok"></i></a>
-                    <a href="#" aria-label="YouTube" class="hover:opacity-80 transition"><i class="fab fa-youtube"></i></a>
-                    <a href="#" aria-label="Instagram" class="hover:opacity-80 transition"><i class="fab fa-instagram"></i></a>
-                </div>
+
+            <!-- Sosial + Bahasa -->
+            <div class="flex items-center gap-4 shrink-0">
+                @if(count($socials))
+                    <div class="flex items-center gap-1.5">
+                        @foreach($socials as $name => $url)
+                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
+                               aria-label="{{ ucfirst($name) }}"
+                               class="w-7 h-7 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+                                <x-icon :name="$name" class="w-[15px] h-[15px]" />
+                            </a>
+                        @endforeach
+                    </div>
+                    <span class="w-px h-4 bg-white/30" aria-hidden="true"></span>
+                @endif
 
                 <div x-data="{ open: false }" class="relative z-[110]">
-                    <button @click="open = !open" class="flex items-center hover:opacity-80 transition-opacity focus:outline-none text-[11px] font-bold uppercase">
-                        <span class="mr-1">
-                            @if(session('locale', 'my') === 'my') 🇲🇾 MYR
-                            @elseif(session('locale', 'my') === 'id') 🇮🇩 IDR
-                            @else 🇸🇬 SGD
-                            @endif
-                        </span>
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    <button @click="open = !open" type="button"
+                            :aria-expanded="open" aria-haspopup="true"
+                            class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide hover:bg-white/20 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+                        <span>{{ $localeShort[$activeLocale] ?? $localeShort['my'] }}</span>
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
                     </button>
-                    <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-1 w-44 bg-white text-slate-800 rounded-md shadow-xl py-1 border border-slate-200 text-xs font-semibold z-[200]">
-                        <a href="{{ route('change-locale', 'my') }}" class="flex items-center px-4 py-2 hover:bg-orange-50 hover:text-[#e67e22] {{ session('locale', 'my') === 'my' ? 'bg-orange-50 text-[#e67e22]' : '' }}">🇲🇾 MYR (Melayu)</a>
-                        <a href="{{ route('change-locale', 'id') }}" class="flex items-center px-4 py-2 hover:bg-orange-50 hover:text-[#e67e22] {{ session('locale', 'my') === 'id' ? 'bg-orange-50 text-[#e67e22]' : '' }}">🇮🇩 IDR (Indonesia)</a>
-                        <a href="{{ route('change-locale', 'en') }}" class="flex items-center px-4 py-2 hover:bg-orange-50 hover:text-[#e67e22] {{ session('locale', 'my') === 'en' ? 'bg-orange-50 text-[#e67e22]' : '' }}">🇸🇬 SGD (English)</a>
+                    <div x-show="open" x-cloak @click.away="open = false"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute right-0 mt-2 w-48 bg-white text-slate-700 rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5 py-1.5 text-xs font-semibold overflow-hidden z-[200]">
+                        @foreach($locales as $code => $label)
+                            <a href="{{ route('change-locale', $code) }}"
+                               class="flex items-center justify-between gap-2 px-4 py-2 transition-colors hover:bg-orange-50 hover:text-[#e67e22] {{ $activeLocale === $code ? 'bg-orange-50 text-[#e67e22]' : '' }}">
+                                <span>{{ $label }}</span>
+                                @if($activeLocale === $code)
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+                                @endif
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. Main Nav Putih Zaza Tour Presisi -->
-    <nav class="bg-white py-3.5 shadow-sm border-b border-slate-100">
+    <!-- 2. Main Nav Putih (sticky) -->
+    <nav @scroll.window="scrolled = window.scrollY > 24"
+         :class="scrolled ? 'shadow-lg shadow-slate-900/[0.07] py-2.5' : 'shadow-sm py-3.5'"
+         class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 z-[120]">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
-                <!-- Logo Type Zaza Tour style -->
-                <a href="/" class="flex items-center shrink-0 mr-6">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-3xl md:text-4xl font-black tracking-tight text-[#e67e22] uppercase font-sans">SUJAI</span>
-                        <span class="text-3xl md:text-4xl font-bold tracking-tight text-[#1b4372] italic font-serif" style="font-family: 'Brush Script MT', cursive, sans-serif;">Tour</span>
-                    </div>
+            <div class="flex justify-between items-center gap-4">
+                <!-- Logo -->
+                <a href="/" aria-label="{{ $g['site_name'] ?? 'Sujai Tour' }} — Beranda"
+                   class="group flex items-baseline gap-1 shrink-0 mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e67e22]/50 focus-visible:ring-offset-4 rounded">
+                    <span class="text-3xl md:text-[2.1rem] font-black tracking-tight text-[#e67e22] uppercase leading-none transition-colors duration-300 group-hover:text-[#d35400]">SUJAI</span>
+                    <span class="text-3xl md:text-[2.1rem] font-bold tracking-tight text-[#1b4372] italic leading-none"
+                          style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span>
                 </a>
 
-                <!-- Nav Links Zaza Style -->
-                <div class="hidden lg:flex items-center space-x-8 text-[15px] font-extrabold text-[#2c3e50]">
-                    <a href="/" class="transition duration-200 {{ request()->is('/') ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">{{ __('Home') }}</a>
-                    
+                <!-- Nav Links Desktop -->
+                <div class="hidden lg:flex items-center gap-7 text-[15px] font-extrabold text-[#2c3e50]">
+                    @php $isHome = request()->is('/'); @endphp
+                    <a href="/" @if($isHome) aria-current="page" @endif
+                       class="group relative py-2 transition-colors duration-200 {{ $isHome ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">
+                        {{ __('Home') }}
+                        <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-[#e67e22] transition-all duration-300 {{ $isHome ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                    </a>
+
                     <!-- Dropdown Paket -->
-                    <div x-data="{ openPkg: false }" class="relative" @mouseleave="openPkg = false">
-                        <a href="/tour/packages" @mouseenter="openPkg = true" class="flex items-center gap-1 transition duration-200 {{ request()->is('tour/packages*') ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">
+                    @php $isPkg = request()->is('tour/packages*'); @endphp
+                    <div x-data="{ openPkg: false }" @mouseenter="openPkg = true" @mouseleave="openPkg = false" class="relative">
+                        <a href="/tour/packages" @if($isPkg) aria-current="page" @endif
+                           :aria-expanded="openPkg"
+                           class="group relative flex items-center gap-1 py-2 transition-colors duration-200 {{ $isPkg ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">
                             <span>{{ __('Paket Wisata Toba') }}</span>
-                            <svg class="w-4 h-4 text-[#e67e22] font-bold stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                            <svg class="w-4 h-4 stroke-[3] transition-transform duration-200" :class="openPkg && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-[#e67e22] transition-all duration-300 {{ $isPkg ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                         </a>
-                        <div x-show="openPkg" x-transition class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 border border-slate-100 z-[200]">
-                            <a href="/tour/packages" class="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-[#e67e22]">{{ __('Semua Paket Tour') }}</a>
-                            <a href="/tour/packages?type=private" class="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-[#e67e22]">{{ __('Private VIP Tour') }}</a>
-                            <a href="/tour/packages?type=family" class="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-[#e67e22]">{{ __('Paket Rombongan Keluarga') }}</a>
+                        <!-- pt-3 jadi jembatan hover supaya menu tidak tertutup saat kursor turun -->
+                        <div x-show="openPkg" x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-1.5"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="absolute left-0 top-full pt-3 w-64 z-[200]">
+                            <div class="bg-white rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5 py-2 overflow-hidden">
+                                <a href="/tour/packages" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-[#e67e22] hover:bg-orange-50 hover:text-[#e67e22] transition-all duration-200">{{ __('Semua Paket Tour') }}</a>
+                                <a href="/tour/packages?type=private" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-[#e67e22] hover:bg-orange-50 hover:text-[#e67e22] transition-all duration-200">{{ __('Private VIP Tour') }}</a>
+                                <a href="/tour/packages?type=family" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-[#e67e22] hover:bg-orange-50 hover:text-[#e67e22] transition-all duration-200">{{ __('Paket Rombongan Keluarga') }}</a>
+                            </div>
                         </div>
                     </div>
 
-                    <a href="/tour/packages" class="transition duration-200 hover:text-[#e67e22]">{{ __('Sewa Mobil & Bus') }}</a>
-                    <a href="/about" class="transition duration-200 {{ request()->is('about') ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">{{ __('Tentang Kami') }}</a>
-                    <a href="/tour/blog" class="transition duration-200 {{ request()->is('tour/blog*') ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">{{ __('Blog') }}</a>
-                    <a href="{{ route('booking.track.form') }}" class="transition duration-200 {{ request()->is('track-booking*') ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">{{ __('Kontak') }}</a>
+                    @foreach($navLinks as $link)
+                        <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
+                           class="group relative py-2 transition-colors duration-200 {{ $link['active'] ? 'text-[#e67e22]' : 'hover:text-[#e67e22]' }}">
+                            {{ $link['label'] }}
+                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-[#e67e22] transition-all duration-300 {{ $link['active'] ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                        </a>
+                    @endforeach
                 </div>
 
-                <!-- CTA Button Zaza Style (Orange Pill + Blue Circle WA Icon) -->
-                <div class="hidden lg:flex items-center shrink-0 ml-4">
-                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noreferrer" 
-                        class="bg-[#e67e22] hover:bg-[#d35400] text-white pl-7 pr-1.5 py-1.5 rounded-full font-black text-[13px] tracking-wider transition duration-300 shadow-sm flex items-center gap-3 uppercase"
-                    >
+                <!-- CTA Desktop -->
+                <div class="hidden lg:flex items-center shrink-0">
+                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
+                       class="group bg-[#e67e22] hover:bg-[#d35400] text-white pl-6 pr-1.5 py-1.5 rounded-full font-black text-[13px] tracking-wider uppercase flex items-center gap-3 shadow-md shadow-[#e67e22]/25 hover:shadow-lg hover:shadow-[#e67e22]/35 hover:-translate-y-0.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e67e22]/50 focus-visible:ring-offset-2">
                         <span>{{ __('HUBUNGI KAMI!') }}</span>
-                        <div class="w-8 h-8 bg-[#0088cc] rounded-full flex items-center justify-center text-white shrink-0 shadow-inner">
+                        <span class="w-8 h-8 bg-[#0088cc] rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                             <x-icon name="whatsapp" class="w-4 h-4" />
-                        </div>
+                        </span>
                     </a>
                 </div>
 
-                <!-- Mobile Navigation Toggle -->
+                <!-- Aksi Mobile -->
                 <div class="lg:hidden flex items-center gap-2">
-                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" class="w-9 h-9 rounded-full bg-[#e67e22] text-white flex items-center justify-center">
+                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
+                       aria-label="{{ __('HUBUNGI KAMI!') }}"
+                       class="w-9 h-9 rounded-full bg-[#e67e22] text-white flex items-center justify-center shadow-md shadow-[#e67e22]/25 active:scale-95 transition-transform">
                         <x-icon name="whatsapp" class="w-4 h-4" />
                     </a>
-                    <button @click="isMenuOpen = true" class="p-2 text-slate-700 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <button @click="isMenuOpen = true" type="button"
+                            aria-label="{{ __('Buka menu') }}" :aria-expanded="isMenuOpen"
+                            class="p-2 -mr-2 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e67e22]/50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Mobile Drawer -->
-        <div x-show="isMenuOpen" x-transition class="lg:hidden fixed inset-0 bg-white z-[150] p-6 flex flex-col justify-between">
-            <div>
-                <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-                    <span class="text-2xl font-black text-[#e67e22]">SUJAI<span class="text-[#1b4372] italic font-serif">Tour</span></span>
-                    <button @click="isMenuOpen = false" class="text-slate-500 text-2xl font-bold">&times;</button>
-                </div>
-                <div class="mt-6 space-y-4 text-base font-bold text-slate-800">
-                    <a href="/" class="block hover:text-[#e67e22]">{{ __('Home') }}</a>
-                    <a href="/tour/packages" class="block hover:text-[#e67e22]">{{ __('Paket Wisata Toba') }}</a>
-                    <a href="/tour/packages" class="block hover:text-[#e67e22]">{{ __('Sewa Mobil & Bus') }}</a>
-                    <a href="/about" class="block hover:text-[#e67e22]">{{ __('Tentang Kami') }}</a>
-                    <a href="/tour/blog" class="block hover:text-[#e67e22]">{{ __('Blog') }}</a>
-                    <a href="{{ route('booking.track.form') }}" class="block hover:text-[#e67e22]">{{ __('Kontak') }}</a>
-                </div>
-            </div>
-            <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" class="w-full py-3 bg-[#e67e22] text-white rounded-full font-bold text-center uppercase tracking-wider flex items-center justify-center gap-2">
-                <span>HUBUNGI KAMI!</span>
-                <x-icon name="whatsapp" class="w-4 h-4" />
-            </a>
-        </div>
     </nav>
-</header>
 
+    <!-- Drawer Mobile -->
+    <div x-show="isMenuOpen" x-cloak class="lg:hidden fixed inset-0 z-[150]" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div x-show="isMenuOpen" @click="isMenuOpen = false"
+             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+
+        <!-- Panel -->
+        <div x-show="isMenuOpen"
+             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
+             class="absolute inset-y-0 right-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100">
+                <span class="text-2xl font-black text-[#e67e22] leading-none">SUJAI<span class="text-[#1b4372] italic font-bold ml-1" style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span></span>
+                <button @click="isMenuOpen = false" type="button" aria-label="{{ __('Tutup menu') }}"
+                        class="w-9 h-9 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-800 flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-3 py-4">
+                @php
+                    $mobileLinks = array_merge(
+                        [
+                            ['label' => __('Home'), 'url' => '/', 'active' => request()->is('/')],
+                            ['label' => __('Paket Wisata Toba'), 'url' => '/tour/packages', 'active' => request()->is('tour/packages*')],
+                        ],
+                        $navLinks
+                    );
+                @endphp
+                @foreach($mobileLinks as $link)
+                    <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
+                       class="flex items-center justify-between px-3 py-3 rounded-xl text-base font-bold transition-colors {{ $link['active'] ? 'bg-orange-50 text-[#e67e22]' : 'text-slate-800 hover:bg-slate-50 hover:text-[#e67e22]' }}">
+                        <span>{{ $link['label'] }}</span>
+                        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                @endforeach
+            </nav>
+
+            <div class="px-6 py-5 border-t border-slate-100 space-y-4" style="padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));">
+                @if(count($socials))
+                    <div class="flex items-center justify-center gap-3">
+                        @foreach($socials as $name => $url)
+                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ ucfirst($name) }}"
+                               class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-[#e67e22] hover:text-white flex items-center justify-center transition-colors duration-200">
+                                <x-icon :name="$name" class="w-4 h-4" />
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+                <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
+                   class="w-full py-3.5 bg-[#e67e22] hover:bg-[#d35400] text-white rounded-full font-black text-sm text-center uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-[#e67e22]/30 transition-colors">
+                    <span>{{ __('HUBUNGI KAMI!') }}</span>
+                    <x-icon name="whatsapp" class="w-4 h-4" />
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
