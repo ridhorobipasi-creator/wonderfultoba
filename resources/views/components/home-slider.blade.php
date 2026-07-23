@@ -3,537 +3,153 @@
 @php
     $slides = $settings['homepage_slides'] ?? [];
 
-    // If no explicit slides, but Hero settings exist, use them as the only slide
     if (empty($slides) && !empty($settings['hero_title'])) {
         $slides[] = [
             'title' => $settings['hero_title'],
             'subtitle' => $settings['hero_subtitle'] ?? '',
             'image_url' => $settings['hero_image_url'] ?? null,
-            'location' => 'Sujai Laketoba',
-            'price' => 0,
-            'cta_link' => $settings['hero_cta_link'] ?? '/tour/packages',
-            'cta_text' => $settings['hero_cta_text'] ?? 'Lihat Paket'
+            'cta_link' => $settings['hero_cta_link'] ?? '#rental',
         ];
     }
 
-    // Fallback added back to prevent slider from disappearing when settings are empty
     if (empty($slides)) {
-        $slides[] = [
-            'title' => 'Eksplorasi Keindahan',
-            'subtitle' => 'Danau Toba',
-            'image_url' => null,
-            'location' => 'Sujai Laketoba',
-            'price' => 0,
-            'cta_link' => '/tour/packages',
-            'cta_text' => 'Lihat Paket'
+        $slides = [
+            [
+                'image_url' => asset('images/slider/slider-1-85.png'),
+                'image_webp' => asset('images/slider/slider-1-85.png.webp'),
+                'alt' => 'Slider 1',
+                'cta_link' => '#rental'
+            ],
+            [
+                'image_url' => asset('images/slider/slider-2-99.png'),
+                'image_webp' => asset('images/slider/slider-2-99.png.webp'),
+                'alt' => 'Slider 2',
+                'cta_link' => '#rental'
+            ],
         ];
+    } else {
+        $slides = array_map(function ($slide) {
+            $slide = (array) $slide;
+            $url = $slide['image_url'] ?? null;
+            if (is_string($url)) {
+                $url = preg_replace('/^(\/?storage\/)+/', '', $url);
+            }
+            $imgUrl = imageUrl($url);
+            $slide['image_url'] = $imgUrl;
+            $slide['image_webp'] = str_replace(['.png', '.jpg', '.jpeg'], '.webp', $imgUrl);
+            $slide['alt'] = $slide['title'] ?? 'Slider';
+            $slide['cta_link'] = $slide['cta_link'] ?? '#rental';
+            return $slide;
+        }, $slides);
     }
-
-    // We now use the global imageUrl() helper defined in ImageHelper.php
-    $preparedSlides = array_values(array_map(function ($slide) {
-        $slide = (array) $slide;
-        $url = $slide['image_url'] ?? null;
-
-        // Ensure we don't have double storage/storage/
-        if (is_string($url)) {
-            $url = preg_replace('/^(\/?storage\/)+/', '', $url);
-        }
-
-        $slide['image_url'] = imageUrl($url);
-        $slide['image_url_400'] = str_replace('.webp', '-400.webp', $slide['image_url']);
-        $slide['image_url_800'] = str_replace('.webp', '-800.webp', $slide['image_url']);
-        return $slide;
-    }, $slides));
-
-    $totalOriginal = count($preparedSlides);
-
-    // We need enough clones to fill the 3-card preview container + buffer for fast clicking
-    $clonesNeeded = 6;
-
-    // Helper to generate repeated array elements to reach needed count
-    $generateClones = function ($array, $count, $fromEnd = false) {
-        if (empty($array))
-            return [];
-        $result = [];
-        while (count($result) < $count) {
-            $result = array_merge($result, $array);
-        }
-        if ($fromEnd) {
-            return array_slice($result, -$count);
-        }
-        return array_slice($result, 0, $count);
-    };
-
-    $startClones = $generateClones($preparedSlides, $clonesNeeded, true);
-    $endClones = $generateClones($preparedSlides, $clonesNeeded, false);
-
-    $infiniteSlides = array_merge($startClones, $preparedSlides, $endClones);
-    $clonesCount = $clonesNeeded;
-    $startIndex = $clonesCount;
-
-    // LCP image = first real slide (shown at $startIndex). Preload it in <head> so the
-    // browser fetches it in parallel with app.js instead of waiting for Alpine to render the <img>.
-    $lcpImage = $preparedSlides[0]['image_url'] ?? null;
 @endphp
 
-@if($lcpImage)
-    @push('head')
-        <link rel="preload" as="image" href="{{ $lcpImage }}" fetchpriority="high">
-    @endpush
-@endif
+<style>
+.custom-shape-divider-bottom-1744098144 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+    z-index: 20;
+    pointer-events: none;
+}
 
-<section id="home-hero-slider" class="relative w-full h-[100dvh] min-h-[420px] max-h-[900px] bg-slate-950 overflow-hidden"
-    @touchstart="handleTouchStart($event)" @touchend="handleTouchEnd($event)" x-data="{ 
-        activeIndex: {{ $startIndex }},
-        totalOriginal: {{ $totalOriginal }},
-        clonesCount: {{ $clonesCount }},
-        isTransitioning: true,
-        autoplayInterval: null,
-        touchStartX: 0,
-        isDraggingCards: false,
-        dragStartX: 0,
-        dragOffsetX: 0,
-        dragPointerId: null,
-        previewStep: 204,
-        slides: @js($infiniteSlides),
-        
+.custom-shape-divider-bottom-1744098144 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 60px;
+}
+
+@media (min-width: 768px) {
+    .custom-shape-divider-bottom-1744098144 svg {
+        height: 120px;
+    }
+}
+
+.custom-shape-divider-bottom-1744098144 .shape-fill {
+    fill: #FFFFFF;
+}
+
+.carousel-home .carousel-item {
+    height: 60vh;
+    min-height: 380px;
+    max-height: 800px;
+}
+
+@media (min-width: 768px) {
+    .carousel-home .carousel-item {
+        height: 85vh;
+    }
+}
+
+.carousel-home .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 10;
+}
+</style>
+
+<section class="position-relative relative">
+    <div class="custom-shape-divider-bottom-1744098144">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+        </svg>
+    </div>
+    <div id="carouselExample" class="carousel carousel-fade slide carousel-home relative" x-data="{
+        activeSlide: 0,
+        totalSlides: {{ count($slides) }},
+        timer: null,
         init() {
-            this.$nextTick(() => {
-                this.computePreviewStep();
-                window.addEventListener('resize', () => this.computePreviewStep());
-                document.addEventListener('visibilitychange', () => {
-                    if (document.hidden) this.stopAutoplay();
-                    else if (this.totalOriginal > 1) this.startAutoplay();
-                });
-                window.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft') return this.prev();
-                    if (e.key === 'ArrowRight') return this.next();
-                    if (e.key === ' ' || e.key === 'Spacebar') {
-                        e.preventDefault();
-                        if (this.autoplayInterval) this.stopAutoplay(); else if (this.totalOriginal > 1) this.startAutoplay();
-                    }
-                });
-            });
-
-            if (this.totalOriginal > 1) {
-                this.startAutoplay();
+            if (this.totalSlides > 1) {
+                this.timer = setInterval(() => { this.next(); }, 4000);
             }
         },
-
-        computePreviewStep() {
-            this.$nextTick(() => {
-                const preview = document.querySelector('#home-hero-slider .card-preview');
-                const container = document.querySelector('#home-hero-slider .card-container');
-                if (!preview) return;
-                const rect = preview.getBoundingClientRect();
-                let gap = 0;
-                if (container) {
-                    const style = getComputedStyle(container);
-                    gap = parseFloat(style.columnGap) || parseFloat(style.gap) || 0;
-                }
-                this.previewStep = Math.round(rect.width + gap);
-            });
-        },
-        
-        startAutoplay() {
-            this.stopAutoplay();
-            this.autoplayInterval = setInterval(() => {
-                this.next();
-            }, 8000); 
-        },
-        
-        stopAutoplay() {
-            if (this.autoplayInterval) {
-                clearInterval(this.autoplayInterval);
-                this.autoplayInterval = null;
-            }
-        },
-        
         next() {
-            this.isTransitioning = true;
-            this.activeIndex++;
-            this.startAutoplay();
+            this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
         },
-        
         prev() {
-            this.isTransitioning = true;
-            this.activeIndex--;
-            this.startAutoplay();
-        },
-        
-        goTo(index) {
-            this.isTransitioning = true;
-            this.activeIndex = index + this.clonesCount;
-            this.startAutoplay();
-        },
-
-        beginCardDrag(e) {
-            if (e.pointerType === 'mouse' && e.button !== 0) return;
-            try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
-            this.isDraggingCards = true;
-            this.dragPointerId = e.pointerId;
-            this.dragStartX = e.clientX;
-            this.dragOffsetX = 0;
-            this.isTransitioning = false;
-            this.stopAutoplay();
-        },
-
-        moveCardDrag(e) {
-            if (!this.isDraggingCards) return;
-            this.dragOffsetX = e.clientX - this.dragStartX;
-        },
-
-        endCardDrag(e) {
-            if (!this.isDraggingCards) return;
-            try { if (this.dragPointerId != null) e.target.releasePointerCapture(this.dragPointerId); } catch (err) {}
-
-            const threshold = 60;
-            const delta = this.dragOffsetX;
-
-            this.isDraggingCards = false;
-            this.dragOffsetX = 0;
-            this.dragPointerId = null;
-
-            if (Math.abs(delta) > threshold) {
-                if (delta < 0) this.next(); else this.prev();
-                return;
-            }
-
-            // restore transition and resume autoplay
-            this.isTransitioning = true;
-            this.startAutoplay();
-        },
-
-        handleTouchStart(e) {
-            this.touchStartX = e.touches[0].clientX;
-        },
-
-        handleTouchEnd(e) {
-            let touchEndX = e.changedTouches[0].clientX;
-            if (this.touchStartX - touchEndX > 50) this.next();
-            if (this.touchStartX - touchEndX < -50) this.prev();
-        },
-
-        handleTransitionEnd() {
-            if (this.activeIndex >= this.totalOriginal + this.clonesCount || this.activeIndex < this.clonesCount) {
-                this.isTransitioning = false;
-                let offset = this.activeIndex - this.clonesCount;
-                let realIndex = ((offset % this.totalOriginal) + this.totalOriginal) % this.totalOriginal + this.clonesCount;
-                this.activeIndex = realIndex;
-                this.$nextTick(() => {
-                    // Force reflow to apply the transform without transition
-                    void document.querySelector('#home-hero-slider .carousel-strip').offsetHeight;
-                    this.isTransitioning = true;
-                });
-            }
-        },
+            this.activeSlide = (this.activeSlide - 1 + this.totalSlides) % this.totalSlides;
+        }
     }">
-
-    <style>
-        .hero-slide-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-        }
-
-        .hero-slide-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .active-slide img {
-            transform: scale(1.1) translateX(20px);
-        }
-
-        .card-preview {
-            width: 140px;
-            height: 220px;
-            border-radius: 16px;
-            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: pointer;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #0f172a;
-        }
-
-        .card-preview:hover {
-            transform: translateY(-15px) scale(1.05);
-            border-color: rgba(255, 255, 255, 0.4);
-            z-index: 50;
-        }
-
-        .active-card {
-            border-color: #fbbf24 !important;
-            box-shadow: 0 0 40px rgba(251, 191, 36, 0.4);
-            transform: translateY(-10px);
-        }
-
-        @media (max-width: 768px) {
-            .card-container {
-                display: none !important;
-            }
-
-            /* Make hero text fit mobile without overflow */
-            .hero-content {
-                padding-top: 20px;
-                padding-bottom: 120px; /* Space for mobile nav buttons + fixed bottom CTA bar */
-                text-align: center;
-                left: 0 !important;
-                width: 100% !important;
-                padding-left: 16px;
-                padding-right: 16px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hero-content h1 {
-                overflow-wrap: break-word;
-                word-break: break-word;
-                font-size: 2.1rem !important;
-                line-height: 1.05 !important;
-                margin-bottom: 0.75rem !important;
-                text-shadow: 0 4px 24px rgba(0,0,0,0.5);
-            }
-
-            .hero-content p {
-                font-size: 0.85rem !important;
-                line-height: 1.5 !important;
-                margin-bottom: 0.75rem !important;
-            }
-
-            /* Price + CTA row on mobile: compact and centered */
-            .hero-price-row {
-                margin-bottom: 0 !important;
-                gap: 0.75rem !important;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .hero-price-col {
-                text-align: center;
-                align-items: center;
-            }
-
-            /* CTA button smaller on mobile */
-            .cta-primary, .cta-secondary {
-                padding: 0.625rem 1.25rem !important;
-                font-size: 0.75rem !important;
-            }
-        }
-
-        /* Smooth Carousel Transition */
-        .carousel-strip {
-            transition-property: transform;
-            transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
-        }
-    </style>
-
-    {{-- Initial LCP Fallback (Removes itself once Alpine loads) --}}
-    @if(count($preparedSlides) > 0)
-        <div class="absolute inset-0 z-20" x-init="$el.remove()">
-            <img src="{{ $preparedSlides[0]['image_url'] }}" 
-                 srcset="{{ $preparedSlides[0]['image_url_400'] }} 400w, {{ $preparedSlides[0]['image_url_800'] }} 800w, {{ $preparedSlides[0]['image_url'] }} 1200w"
-                 sizes="(max-width: 768px) 100vw, 100vw"
-                 alt="{{ $preparedSlides[0]['title'] }}" fetchpriority="high"
-                loading="eager" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/40"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
-
-            <div class="absolute inset-0 z-30 flex items-center">
-                <div
-                    class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-12 pt-32 md:pt-40 lg:pt-48 pb-16 lg:pb-24 px-4 md:px-16 lg:px-24">
-                    <div class="w-full lg:w-1/2 text-white">
-                        <span
-                            class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block">{{ $preparedSlides[0]['location'] }}</span>
-                        <h1
-                            class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase break-words">
-                            {{ $preparedSlides[0]['title'] }}</h1>
-                        <p
-                            class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3">
-                            {{ $preparedSlides[0]['subtitle'] }}</p>
-                    </div>
+        <div class="carousel-inner relative w-full overflow-hidden">
+            @foreach($slides as $index => $slide)
+                <div class="carousel-item transition-opacity duration-1000 ease-in-out absolute inset-0 w-full h-full"
+                     x-show="activeSlide === {{ $index }}"
+                     x-transition:enter="transition-opacity duration-1000"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition-opacity duration-1000"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     :class="{ 'relative active': activeSlide === {{ $index }} }">
+                    <a class="text-decoration-none inner-link block w-full h-full" href="{{ $slide['cta_link'] }}">
+                        <div class="overlay"></div>
+                        <picture class="w-full h-full block">
+                            <source srcset="{{ $slide['image_webp'] }}" class="img-fluid w-100 h-100 w-full h-full object-cover object-center" type="image/webp">
+                            <img src="{{ $slide['image_url'] }}" alt="{{ $slide['alt'] }}" class="img-fluid w-100 h-100 w-full h-full object-cover object-center">
+                        </picture>
+                    </a>
                 </div>
-            </div>
-        </div>
-    @endif
-
-    {{-- Main Carousel Strip --}}
-    <div class="absolute inset-0 z-10">
-        <div class="flex h-full carousel-strip" @transitionend="handleTransitionEnd()"
-            :class="isTransitioning ? 'duration-[1000ms]' : 'duration-0'"
-            :style="'width: ' + (slides.length * 100) + '%; transform: translateX(-' + (activeIndex * (100 / slides.length)) + '%)'">
-
-            <template x-for="(slide, i) in slides" :key="'slide-' + i">
-                <div class="h-full relative shrink-0 flex items-center px-6 md:px-16 lg:px-24 overflow-hidden"
-                    :class="activeIndex == i ? 'active-slide' : ''" :style="'width: ' + (100 / slides.length) + '%'">
-                    {{-- Background --}}
-                    <div class="absolute inset-0 -z-10">
-                        <img :src="slide.image_url" :alt="slide.title"
-                            :srcset="`${slide.image_url_400} 400w, ${slide.image_url_800} 800w, ${slide.image_url} 1200w`"
-                            sizes="(max-width: 768px) 100vw, 100vw"
-                            :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
-                            :fetchpriority="(activeIndex == i || slide.image_url == '{{ $lcpImage }}') ? 'high' : 'auto'"
-                            :loading="(activeIndex == i || slide.image_url == '{{ $lcpImage }}') ? 'eager' : 'lazy'"
-                            class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/40"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent">
-                        </div>
-                    </div>
-
-                    {{-- Content --}}
-                    <div
-                        class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-12 pt-32 md:pt-40 lg:pt-48 pb-16 lg:pb-24 px-0 lg:px-0">
-                        <div class="hero-content w-full lg:w-1/2 text-white">
-                            <div :class="activeIndex == i ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-12 scale-95'"
-                                class="transition duration-1000 delay-300 ease-out">
-                                <span
-                                    class="text-toba-accent uppercase tracking-[0.3em] font-black text-[10px] mb-4 block"
-                                    x-text="slide.location"></span>
-                                <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-none tracking-tighter uppercase break-words"
-                                    x-text="slide.title"></h1>
-                                <p class="text-slate-300 text-lg md:text-xl mb-10 max-w-xl opacity-80 font-medium line-clamp-2 md:line-clamp-3"
-                                    x-text="slide.subtitle"></p>
-
-                                <div class="hero-price-row flex items-center gap-4 lg:gap-8 mb-4 lg:mb-12 lg:justify-start justify-center flex-wrap"
-                                    x-show="slide.type !== 'blog' && slide.price > 0">
-                                    <div class="hero-price-col flex flex-col text-center lg:text-left items-center lg:items-start">
-                                        <span
-                                            class="text-[10px] text-toba-accent uppercase tracking-widest mb-1 font-bold">{{ __('Investasi Wisata') }}</span>
-                                        <div class="flex items-baseline gap-1">
-                                            <span class="text-xl lg:text-2xl font-black"
-                                                x-text="AppCurrency.format(slide.price)"></span>
-                                        </div>
-                                    </div>
-                                    <a :href="slide.cta_link" class="cta-primary px-8 py-4 md:px-10 md:py-5">
-                                        <span>Explore Now</span>
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3"
-                                            viewBox="0 0 24 24">
-                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="flex items-center gap-4 lg:gap-8 mb-4 lg:mb-12 lg:justify-start justify-center"
-                                    x-show="slide.type === 'blog' || !slide.price || slide.price == 0">
-                                    <a :href="slide.cta_link" class="cta-secondary px-8 py-4 md:px-10 md:py-5">
-                                        <span x-text="slide.cta_text || 'Baca Selengkapnya'"></span>
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3"
-                                            viewBox="0 0 24 24">
-                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- Placeholder for layout balance on large screens --}}
-                        <div class="hidden lg:block w-1/2"></div>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>
-
-    {{-- Overlay Controls & Indicators — bottom-left, absolutely pinned --}}
-    <div class="absolute bottom-10 left-6 md:left-16 lg:left-24 z-30 pointer-events-none hidden lg:flex flex-col gap-4">
-
-        {{-- Slide Counter --}}
-        <div class="flex items-baseline gap-1 pointer-events-auto">
-            <span class="text-white text-2xl font-black leading-none tabular-nums"
-                x-text="String(((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal + 1).padStart(2,'0')"></span>
-            <span class="text-white/30 text-sm font-medium">/</span>
-            <span class="text-white/40 text-sm font-medium"
-                x-text="String(totalOriginal).padStart(2,'0')"></span>
+            @endforeach
         </div>
 
-        {{-- Thin progress line dots --}}
-        <div class="flex items-center gap-2 pointer-events-auto">
-            <template x-for="i in totalOriginal" :key="'dot-' + i">
-                <div class="h-[3px] rounded-full transition duration-500 cursor-pointer" @click="goTo(i-1)"
-                    :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1) 
-                        ? 'w-8 bg-white' 
-                        : 'w-4 bg-white/30 hover:bg-white/60'"></div>
-            </template>
-        </div>
-
-        {{-- Prev / Next ghost buttons --}}
-        <div class="flex items-center gap-3 pointer-events-auto">
-            <button @click="prev()" aria-label="Previous slide"
-                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                        d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button @click="next()" aria-label="Next slide"
-                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 hover:border-white transition duration-300 backdrop-blur-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    {{-- Dummy pointer-events wrapper (keeps original z-layer intact) --}}
-    <div class="absolute inset-0 z-30 pointer-events-none">
-
-        {{-- Card Preview Container Wrapper (Viewport for 3 cards) --}}
-        <div class="absolute bottom-6 right-6 md:right-16 lg:right-24 z-30 pointer-events-none">
-            <div class="hidden lg:block w-[468px] overflow-hidden pointer-events-auto py-4">
-                <div class="card-container flex items-center gap-6 carousel-strip" @pointerdown="beginCardDrag($event)"
-                    @pointermove="moveCardDrag($event)" @pointerup="endCardDrag()" @pointerleave="endCardDrag()"
-                    @pointercancel="endCardDrag()" style="touch-action: pan-y; user-select: none;"
-                    :class="isTransitioning ? 'duration-[800ms]' : 'duration-0'"
-                    :style="'transform: translateX(calc(-' + (activeIndex * previewStep) + 'px + ' + dragOffsetX + 'px))'">
-                    <template x-for="(slide, i) in slides" :key="'card-' + i">
-                        <div class="card-preview shrink-0 relative group overflow-hidden"
-                            :class="activeIndex == i ? 'active-card' : 'opacity-40 scale-95 hover:opacity-70'"
-                            @click="isTransitioning = true; activeIndex = i; startAutoplay()">
-                               <img :src="slide.image_url_400" :alt="slide.title || 'Slide image'"
-                                   :srcset="`${slide.image_url_400} 400w`"
-                                   sizes="140px"
-                                   :onerror="`this.onerror=null; this.src='${'{{ asset('images/home/tour.webp') }}'}'`"
-                                   loading="lazy"
-                                   class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors">
-                            </div>
-                            <div
-                                class="absolute bottom-4 left-4 right-4 text-white translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition z-10">
-                                <p class="text-[9px] font-black uppercase tracking-widest mb-0.5 text-white/60"
-                                    x-text="slide.location"></p>
-                                <h3 class="text-[11px] font-black uppercase leading-tight line-clamp-2"
-                                    x-text="slide.title"></h3>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Mobile-only nav buttons: pinned bottom, adjusted for fixed CTA bar --}}
-    <div class="lg:hidden absolute left-0 right-0 z-30 flex items-center justify-center gap-4 pointer-events-none" style="bottom: 96px;">
-        <button @click="prev()" aria-label="Previous slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-            </svg>
+        @if(count($slides) > 1)
+        <button class="carousel-control-prev absolute top-0 bottom-0 left-0 flex items-center justify-center p-4 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline z-30" type="button" @click="prev()">
+            <span class="carousel-control-prev-icon w-8 h-8 flex items-center justify-center bg-black/40 rounded-full text-white" aria-hidden="true">❮</span>
+            <span class="visually-hidden hidden">Previous</span>
         </button>
-        {{-- Mobile dot indicators --}}
-        <div class="flex items-center gap-2 pointer-events-auto">
-            <template x-for="i in totalOriginal" :key="'mdot-' + i">
-                <div class="h-[3px] rounded-full transition duration-500 cursor-pointer" @click="goTo(i-1)"
-                    :class="((activeIndex - clonesCount) % totalOriginal + totalOriginal) % totalOriginal == (i-1)
-                        ? 'w-6 bg-white'
-                        : 'w-3 bg-white/40'"></div>
-            </template>
-        </div>
-        <button @click="next()" aria-label="Next slide" class="pointer-events-auto w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white bg-black/30 backdrop-blur-sm active:scale-95 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-            </svg>
+        <button class="carousel-control-next absolute top-0 bottom-0 right-0 flex items-center justify-center p-4 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline z-30" type="button" @click="next()">
+            <span class="carousel-control-next-icon w-8 h-8 flex items-center justify-center bg-black/40 rounded-full text-white" aria-hidden="true">❯</span>
+            <span class="visually-hidden hidden">Next</span>
         </button>
+        @endif
     </div>
-
 </section>
+
