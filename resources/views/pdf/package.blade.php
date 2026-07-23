@@ -13,7 +13,7 @@
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #10B981;
+            border-bottom: 2px solid #10b951;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
@@ -48,7 +48,7 @@
             font-size: 14px;
         }
         .meta-info strong {
-            color: #10B981;
+            color: #10b951;
         }
         .price {
             font-size: 20px;
@@ -91,7 +91,7 @@
         }
         .itinerary-day {
             font-weight: bold;
-            color: #10B981;
+            color: #10b951;
             font-size: 14px;
         }
         .itinerary-title {

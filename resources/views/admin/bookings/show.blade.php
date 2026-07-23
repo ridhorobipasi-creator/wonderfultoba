@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-5xl">
     <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center text-sm font-black text-toba-green uppercase tracking-widest hover:text-emerald-700 transition">
+        <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center text-sm font-black text-toba-green uppercase tracking-widest hover:text-green-700 transition">
             <i class="fas fa-arrow-left mr-2"></i> Back to Bookings
         </a>
         <div class="flex flex-wrap gap-3">
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <div class="flex items-center p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                        <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 mr-4">
+                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600 mr-4">
                             <i class="fab fa-whatsapp"></i>
                         </div>
                         <div>
@@ -108,7 +108,7 @@
             <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden p-8 text-center">
                 <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-4">Current Status</p>
                 <div class="inline-flex px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6 {{ 
-                    $booking->status === 'confirmed' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
+                    $booking->status === 'confirmed' ? 'bg-green-100 text-green-700 border border-green-200' : 
                     ($booking->status === 'cancelled' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-amber-100 text-amber-700 border border-amber-200') 
                 }}">
                     {{ $booking->status }}
@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-toba-green to-emerald-700 rounded-[2rem] p-8 text-white shadow-xl shadow-toba-green/20">
+            <div class="bg-gradient-to-br from-toba-green to-green-700 rounded-[2rem] p-8 text-white shadow-xl shadow-toba-green/20">
                 <i class="fas fa-info-circle text-2xl mb-4 opacity-50"></i>
                 <h4 class="font-black text-lg mb-2 leading-tight">Need help with this booking?</h4>
                 <p class="text-white/70 text-xs mb-6 font-medium">Contact technical support if you encounter issues with payment processing or database synchronization.</p>

@@ -6,17 +6,31 @@ Catatan teknis ringkas yang tidak tersurat dari kode. Lihat juga `CLAUDE.md` unt
 
 ## Palet Merek
 
-Semua warna didefinisikan sebagai token di `resources/css/app.css` blok `@theme`. **Jangan tulis hex mentah / arbitrary value (`text-[#...]`) di Blade** — tambahkan token baru kalau memang perlu.
+### ATURAN UTAMA: semua hijau wajib di hue 143°
 
-**Hijau — hanya SATU. Jangan tambah varian baru.**
+Ini satu-satunya aturan yang tidak boleh dilanggar. Yang bikin warna terasa "beda-beda" bukan gelap-terangnya, tapi **hue**-nya. Per commit terakhir, ke-53 hijau di seluruh kode duduk di 142–144°.
+
+**Konsekuensi praktis:**
+
+- **Pakai skala `green-*` Tailwind, JANGAN `emerald-*` / `teal-*`.** Ini jebakan utamanya: `emerald` ada di hue ~160°, `teal` ~175°, sementara merek kita 143°. Sekilas sama-sama hijau, tapi disandingkan langsung terasa dari dua merek berbeda. Seluruh 288 kelas `emerald-*`/`teal-*` sudah ditukar ke `green-*`.
+- **Jangan tulis hex mentah di Blade.** Kalau terpaksa (mis. CSS inline untuk PDF), pastikan hue-nya 143°.
+
+Cek cepat sebelum commit — kalau keluarannya bukan `0`, ada hijau nyasar:
+
+```bash
+grep -rhoE "(emerald|teal)-[0-9]{2,3}" resources/ | wc -l
+```
+
+**Token hijau:**
 
 | Token | Hex | Peran | Kontras di putih |
 |---|---|---|---|
-| `--color-toba-green` | `#166534` | **satu-satunya hijau merek** — logo, link, ikon, tombol, aksen admin | 7.13:1 |
-| `--color-primary` | `#052e16` | bukan warna identitas; hanya latar gelap besar (hero, band CTA) agar teks putih terbaca | 14.91:1 |
-| `--color-toba-light` | `#f0fdf4` | bukan warna identitas; nyaris putih, untuk latar lembut | — |
+| `--color-toba-green` | `#166534` | **hijau merek** — logo, link, ikon, tombol, aksen admin | 7.13:1 |
+| `--color-primary` | `#052e15` | latar gelap besar (hero, band CTA) agar teks putih terbaca | 14.91:1 |
+| `--color-primary-container` | `#0b3c1e` | hover & blok sorot | 12.51:1 |
+| `--color-on-primary-container` | `#77a789` | teks di atas `primary-container` | — |
 
-Butuh hijau yang lebih terang/gelap untuk sesuatu? **Jangan bikin hex baru.** Pakai modifier opasitas Tailwind di atas token yang ada (`bg-toba-green/10`, `shadow-primary/30`) supaya nilainya tetap satu sumber.
+Butuh hijau yang lebih terang/gelap? **Jangan bikin hex baru.** Pakai modifier opasitas Tailwind (`bg-toba-green/10`, `shadow-primary/30`) supaya nilainya tetap satu sumber.
 
 **Oranye — warna aksi (CTA):**
 
@@ -31,9 +45,13 @@ Aturan pakai: **hijau = identitas, oranye = ajakan bertindak.** Oranye jangan di
 
 **Catatan build:** `app.css` punya `@source '../../storage/framework/views/*.php'`. Kalau cache view sedang hangat saat `npm run build`, CSS hasil build membengkak ~13 KB dari kelas duplikat. Jalankan `php artisan view:clear` sebelum build produksi.
 
-**Kontras yang diketahui turun:** label lokasi & harga di preview slider `admin/cms/tour.blade.php` (baris 768, 775) adalah teks hijau di atas panel gelap. Dulu `#15803d` (3.56:1), sekarang `#166534` (2.50:1) — keduanya sudah gagal AA sejak awal. Kalau mau diperbaiki, ubah teksnya jadi putih, jangan tambah hijau baru.
+**Kontras yang diketahui turun:** label lokasi & harga di preview slider `admin/cms/tour.blade.php` adalah teks hijau di atas panel gelap. Dulu `#15803d` (3.56:1), sekarang `#166534` (2.50:1) — keduanya sudah gagal AA sejak awal. Kalau mau diperbaiki, ubah teksnya jadi putih, jangan tambah hijau baru.
 
-**Utang teknis:** masih ada dua sistem penamaan token yang jalan berdampingan — token Material (`primary`, `secondary`, `surface`, `on-*`) dipakai halaman publik, token `toba-*` dipakai panel admin (±279 pemakaian). Nilainya sudah disatukan ke ramp yang sama, tapi penamaannya belum. Penggabungan penuh = sweep besar di `resources/views/admin`.
+**Token warna dibersihkan dari 52 → 25.** Yang dihapus semuanya nol pemakaian: seluruh keluarga `tertiary-*` (maroon), `*-fixed`/`*-fixed-dim`, `inverse-*`, `surface-tint`, `toba-light`, `toba-blue`. Sudah diverifikasi tidak ada satu pun referensi `var(--color-*)` di luar blok `@theme`.
+
+**Emas masih jadi aksen kedua.** `--color-secondary: #735c00` dan turunannya (hue 43–48°) dipakai ~197 kali. Ini keluarga warna terpisah dari hijau & oranye — belum diputuskan mau disatukan atau dipertahankan sebagai aksen sah.
+
+**Utang teknis:** masih ada dua sistem penamaan token yang jalan berdampingan — token Material (`primary`, `secondary`, `surface`, `on-*`) dipakai halaman publik, token `toba-*` dipakai panel admin (±279 pemakaian). Nilainya sudah satu hue, tapi penamaannya belum. Penggabungan penuh = sweep besar di `resources/views/admin`.
 
 ---
 

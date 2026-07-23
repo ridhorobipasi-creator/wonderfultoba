@@ -230,7 +230,7 @@
 
         <!-- Custom CTA Section -->
         <div class="max-w-7xl mx-auto px-5 md:px-8 mt-16 md:mt-24 mb-16 md:mb-24">
-            <div class="bg-gradient-to-r from-toba-green to-emerald-600 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-sm">
+            <div class="bg-gradient-to-r from-toba-green to-green-600 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-sm">
                 <div class="absolute inset-0 opacity-10">
                     <img src="{{ imageUrl('sumatra-panorama') }}" alt="Paket wisata - destinasi" loading="lazy" decoding="async" class="w-full h-full object-cover">
                 </div>

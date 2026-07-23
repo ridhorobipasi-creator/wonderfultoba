@@ -58,7 +58,7 @@
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
             <a href="{{ route('admin.users.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
-                <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export Excel
+                <i class="fas fa-file-excel mr-2 text-green-500"></i> Export Excel
             </a>
             <a href="{{ route('admin.users.create') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center bg-slate-900 text-white px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-100">
                 <i class="fas fa-plus mr-2 text-xs"></i> New User

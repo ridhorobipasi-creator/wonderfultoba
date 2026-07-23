@@ -20,7 +20,7 @@
                 </div>
                 <h1 class="text-4xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-6 animate-fade-in-up">
                     Dedikasi Untuk <br />
-                    <span class="text-emerald-300">{{ __('Pariwisata Sumut') }}</span>
+                    <span class="text-green-300">{{ __('Pariwisata Sumut') }}</span>
                 </h1>
                 <p class="text-slate-200 text-sm md:text-lg font-normal max-w-2xl leading-relaxed animate-fade-in-up delay-100">
                     {{ __('Kami membantu orang liburan dengan rapi, nyaman, dan mudah dipahami dari awal sampai selesai.') }}
@@ -122,7 +122,7 @@
                 <!-- Vision Card (Premium Dark Theme) -->
                 <div class="group bg-white p-10 md:p-14 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between transition duration-300 hover:-translate-y-1">
                     <div>
-                        <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-700 mb-10 shadow-sm group-hover:scale-105 transition-transform duration-500">
+                        <div class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center text-green-700 mb-10 shadow-sm group-hover:scale-105 transition-transform duration-500">
                             <span class="material-symbols-outlined text-3xl font-black">visibility</span>
                         </div>
                         <h3 class="text-2xl font-headline-md text-slate-900 mb-6 tracking-tight">
@@ -153,7 +153,7 @@
                             @foreach($missions as $mission)
                                 @if(trim($mission))
                                 <li class="flex items-start gap-4">
-                                    <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                                    <div class="w-6 h-6 rounded-full bg-green-50 text-green-700 flex items-center justify-center shrink-0 mt-0.5">
                                         <span class="material-symbols-outlined text-sm font-black">done</span>
                                     </div>
                                     <span class="text-sm md:text-base text-slate-600 font-normal leading-relaxed">

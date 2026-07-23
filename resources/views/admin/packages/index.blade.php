@@ -9,10 +9,8 @@
 
 @section('content')
 @php
-    $primaryColor = 'emerald';
-    $primaryHex = '#10b981';
-    $bgColor = 'bg-emerald-500';
-    $shadowColor = 'shadow-emerald-100';
+    $bgColor = 'bg-green-500';
+    $shadowColor = 'shadow-green-100';
 @endphp
 
 <div class="space-y-10 w-full max-w-none" x-data="{ 
@@ -70,7 +68,7 @@
         </div>
         <div class="flex items-center gap-3 w-full md:w-auto">
             <a href="{{ route('admin.packages.export', request()->all()) }}" class="flex-1 md:flex-none bg-white border border-slate-200 text-slate-600 px-5 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
-                <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
+                <i class="fas fa-file-excel mr-2 text-green-500"></i> Export
             </a>
             <a href="{{ route('admin.packages.create') }}" class="flex-1 md:flex-none bg-slate-900 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
                 <i class="fas fa-plus-circle text-sm"></i> Baru
@@ -131,14 +129,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         @forelse($packages as $package)
             <div class="group bg-white rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border border-slate-50 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition duration-500 flex flex-col relative"
-                 :class="selected.includes({{ $package->id }}) ? 'ring-4 ring-emerald-500' : ''">
+                 :class="selected.includes({{ $package->id }}) ? 'ring-4 ring-green-500' : ''">
                 
                 {{-- Bulk Checkbox --}}
                 <div class="absolute top-6 left-6 z-20">
                     <input type="checkbox" 
                         value="{{ $package->id }}" 
                         x-model="selected"
-                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-emerald-500 focus:ring-emerald-500/20 transition cursor-pointer">
+                        class="w-6 h-6 rounded-lg border-white/20 bg-black/20 backdrop-blur-md text-green-500 focus:ring-green-500/20 transition cursor-pointer">
                 </div>
 
                 <div class="h-64 relative overflow-hidden bg-slate-50">
@@ -175,12 +173,12 @@
 
                 <div class="p-6 md:p-10 flex-1 flex flex-col">
                     <div class="flex items-center gap-3 mb-4 text-slate-400">
-                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-2 text-emerald-500"></i> {{ $package->locationTag ?? 'Sumatera Utara' }}</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-2 text-green-500"></i> {{ $package->locationTag ?? 'Sumatera Utara' }}</span>
                         <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-clock mr-2 text-emerald-500"></i> {{ $package->duration ?? '3D2N' }}</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest"><i class="fas fa-clock mr-2 text-green-500"></i> {{ $package->duration ?? '3D2N' }}</span>
                     </div>
                     
-                    <h3 class="text-xl font-black text-slate-900 tracking-tight mb-4 leading-tight group-hover:text-emerald-600 transition-colors">{{ $package->name }}</h3>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tight mb-4 leading-tight group-hover:text-green-600 transition-colors">{{ $package->name }}</h3>
                     <p class="text-sm font-medium text-slate-400 line-clamp-2 leading-relaxed mb-8 flex-1">
                         {{ $package->shortDescription ?? 'Deskripsi paket belum tersedia.' }}
                     </p>

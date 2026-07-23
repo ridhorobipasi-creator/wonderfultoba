@@ -25,7 +25,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .glow-effect {
-            box-shadow: 0 0 80px -10px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 80px -10px rgba(16, 185, 81, 0.25);
         }
     </style>
 </head>
@@ -34,7 +34,7 @@
     <!-- Premium Animated Background Particles -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-toba-green/10 blur-[150px] animate-pulse" style="animation-duration: 8s;"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-emerald-500/5 blur-[120px] animate-pulse" style="animation-duration: 12s;"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-green-500/5 blur-[120px] animate-pulse" style="animation-duration: 12s;"></div>
         <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.015) 1px, transparent 0); background-size: 32px 32px;"></div>
     </div>
 
@@ -77,7 +77,7 @@
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5">
                 <a href="/" 
-                   class="w-full sm:w-auto px-8 py-4 bg-toba-green text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 hover:scale-[1.02] transition duration-300 shadow-lg shadow-toba-green/10 flex items-center justify-center gap-2.5">
+                   class="w-full sm:w-auto px-8 py-4 bg-toba-green text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-green-500 hover:scale-[1.02] transition duration-300 shadow-lg shadow-toba-green/10 flex items-center justify-center gap-2.5">
                     <i class="fas fa-home text-xs"></i>
                     {{ __('Kembali ke Beranda') }}
                 </a>

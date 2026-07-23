@@ -52,7 +52,7 @@
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
             <a href="{{ route('admin.bookings.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center shadow-sm">
-                <i class="fas fa-file-csv mr-2 text-emerald-500"></i> Export CSV
+                <i class="fas fa-file-csv mr-2 text-green-500"></i> Export CSV
             </a>
             <a href="{{ route('admin.bookings.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-toba-green transition shadow-xl shadow-slate-200 text-center">
                 <i class="fas fa-plus mr-2"></i> Tambah Pesanan
@@ -195,7 +195,7 @@
                                         @php
                                             $colors = [
                                                 'pending' => 'bg-amber-50 text-amber-600',
-                                                'confirmed' => 'bg-emerald-50 text-emerald-600',
+                                                'confirmed' => 'bg-green-50 text-green-600',
                                                 'completed' => 'bg-blue-50 text-blue-600',
                                                 'cancelled' => 'bg-rose-50 text-rose-600',
                                             ];
@@ -209,7 +209,7 @@
 
                                 <td class="px-6 md:px-8 py-5 text-right">
                                     <div class="flex items-center justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <a href="https://wa.me/{{ (str_starts_with($booking->customerPhone ?? '', '0') ? '62' . substr(preg_replace('/[^0-9]/', '', $booking->customerPhone), 1) : preg_replace('/[^0-9]/', '', $booking->customerPhone ?? '')) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="WhatsApp">
+                                        <a href="https://wa.me/{{ (str_starts_with($booking->customerPhone ?? '', '0') ? '62' . substr(preg_replace('/[^0-9]/', '', $booking->customerPhone), 1) : preg_replace('/[^0-9]/', '', $booking->customerPhone ?? '')) }}" target="_blank" class="w-11 h-11 flex items-center justify-center rounded-xl bg-green-500 text-white shadow-lg transition transform hover:-translate-y-0.5" title="WhatsApp">
                                             <i class="fab fa-whatsapp text-xs"></i>
                                         </a>
 

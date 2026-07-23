@@ -30,7 +30,7 @@
                 <i class="fas fa-file-excel"></i>
                 Export Excel
             </a>
-            <a href="{{ route('admin.reports.financial.export', ['year' => $year, 'month' => $month, 'format' => 'csv']) }}" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">
+            <a href="{{ route('admin.reports.financial.export', ['year' => $year, 'month' => $month, 'format' => 'csv']) }}" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-bold text-xs hover:bg-green-700 transition shadow-lg shadow-green-600/20">
                 <i class="fas fa-file-csv"></i>
                 Export CSV
             </a>
@@ -48,7 +48,7 @@
         </div>
         
         <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-green-50 flex items-center justify-center text-green-600 mb-4">
                 <i class="fas fa-money-bill-trend-up"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendapatan</p>
@@ -66,9 +66,9 @@
             <div class="text-2xl font-black text-indigo-600">{{ $statusSummary['confirmed'] }}</div>
             <span class="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Dikonfirmasi</span>
         </div>
-        <div class="bg-emerald-50/50 border border-emerald-100 p-4 rounded-2xl flex items-center gap-4">
-            <div class="text-2xl font-black text-emerald-600">{{ $statusSummary['completed'] }}</div>
-            <span class="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Selesai</span>
+        <div class="bg-green-50/50 border border-green-100 p-4 rounded-2xl flex items-center gap-4">
+            <div class="text-2xl font-black text-green-600">{{ $statusSummary['completed'] }}</div>
+            <span class="text-[10px] font-black text-green-700 uppercase tracking-widest">Selesai</span>
         </div>
         <div class="bg-rose-50/50 border border-rose-100 p-4 rounded-2xl flex items-center gap-4">
             <div class="text-2xl font-black text-rose-600">{{ $statusSummary['cancelled'] }}</div>
@@ -109,7 +109,7 @@
                              style="height: {{ max(6, ($count / $maxCount) * 100) }}%">
                             <div class="absolute inset-0 bg-indigo-500 opacity-20 group-hover:opacity-40 transition-opacity"></div>
                             @if($month !== 'all' && $m == $month)
-                                <div class="absolute inset-0 bg-toba-green shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
+                                <div class="absolute inset-0 bg-toba-green shadow-[0_0_15px_rgba(16,185,81,0.5)]"></div>
                             @endif
                         </div>
                         <span class="text-[7px] font-black text-slate-400 uppercase tracking-tighter">{{ ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][$m-1] }}</span>
@@ -156,7 +156,7 @@
                                     $statusStyles = [
                                         'pending' => 'bg-amber-100 text-amber-700',
                                         'confirmed' => 'bg-indigo-100 text-indigo-700',
-                                        'completed' => 'bg-emerald-100 text-emerald-700',
+                                        'completed' => 'bg-green-100 text-green-700',
                                         'cancelled' => 'bg-rose-100 text-rose-700'
                                     ];
                                     $statusStyle = $statusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600';

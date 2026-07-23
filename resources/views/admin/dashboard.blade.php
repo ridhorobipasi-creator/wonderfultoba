@@ -27,9 +27,9 @@
                         <p class="text-[8px] font-black uppercase text-white/50 mb-0.5">Bulan Ini</p>
                         <p class="text-xs font-black" x-text="'Rp ' + Number(data.revenue.monthly).toLocaleString('id-ID')"></p>
                     </div>
-                    <div class="px-4 py-2 bg-emerald-500/20 rounded-2xl border border-emerald-500/20 backdrop-blur-md">
-                        <p class="text-[8px] font-black uppercase text-emerald-400 mb-0.5">Growth</p>
-                        <p class="text-xs font-black text-emerald-400" x-text="'+' + (data.revenue.growth || 0) + '%'"></p>
+                    <div class="px-4 py-2 bg-green-500/20 rounded-2xl border border-green-500/20 backdrop-blur-md">
+                        <p class="text-[8px] font-black uppercase text-green-400 mb-0.5">Growth</p>
+                        <p class="text-xs font-black text-green-400" x-text="'+' + (data.revenue.growth || 0) + '%'"></p>
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-50 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 md:gap-5">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-lg">
+            <div class="w-12 h-12 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center text-lg">
                 <i class="fas fa-check-double"></i>
             </div>
             <div>
@@ -130,7 +130,7 @@
                                 <span class="px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest mt-1 inline-block" 
                                       :class="{
                                           'bg-amber-50 text-amber-600': booking.status === 'pending',
-                                          'bg-emerald-50 text-emerald-600': booking.status === 'confirmed',
+                                          'bg-green-50 text-green-600': booking.status === 'confirmed',
                                           'bg-blue-50 text-blue-600': booking.status === 'completed',
                                           'bg-rose-50 text-rose-600': booking.status === 'cancelled'
                                       }"
@@ -189,7 +189,7 @@
                                 <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Blog Post</p>
                             </div>
                             <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl">
-                                <i class="fas fa-eye text-emerald-500 text-[10px]"></i>
+                                <i class="fas fa-eye text-green-500 text-[10px]"></i>
                                 <span class="text-[10px] font-black text-slate-900" x-text="blog.views_count"></span>
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                                 <p class="text-xs font-black text-slate-900 truncate" x-text="customer.name"></p>
                                 <p class="text-[10px] font-bold text-slate-400 truncate" x-text="customer.phone"></p>
                             </div>
-                            <a :href="`https://wa.me/${customer.phone.replace(/[^0-9]/g, '')}`" target="_blank" class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center ml-auto shadow-lg shadow-emerald-500/20">
+                            <a :href="`https://wa.me/${customer.phone.replace(/[^0-9]/g, '')}`" target="_blank" class="w-8 h-8 rounded-xl bg-green-500 text-white flex items-center justify-center ml-auto shadow-lg shadow-green-500/20">
                                 <i class="fab fa-whatsapp text-xs"></i>
                             </a>
                         </div>
@@ -257,7 +257,7 @@
                         },
                         elements: {
                             line: { tension: 0.4 },
-                            point: { radius: 4, hoverRadius: 6, backgroundColor: '#10b981', borderColor: '#fff', borderWidth: 2 }
+                            point: { radius: 4, hoverRadius: 6, backgroundColor: '#10b951', borderColor: '#fff', borderWidth: 2 }
                         }
                     }
                 });
@@ -271,13 +271,13 @@
                     labels: source.map(d => d.label),
                     datasets: [{
                         data: source.map(d => d.total),
-                        borderColor: isRevenue ? '#10b981' : '#6366f1',
+                        borderColor: isRevenue ? '#10b951' : '#6366f1',
                         borderWidth: 3,
                         fill: true,
                         backgroundColor: (context) => {
                             const ctx = context.chart.ctx;
                             const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                            gradient.addColorStop(0, isRevenue ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)');
+                            gradient.addColorStop(0, isRevenue ? 'rgba(16, 185, 81, 0.15)' : 'rgba(99, 102, 241, 0.15)');
                             gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                             return gradient;
                         }

@@ -10,7 +10,7 @@
 
         {{-- Header --}}
         <div class="text-center mb-12 md:mb-16">
-            <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full">{{ __('Informasi') }}</span>
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-green-50 border border-green-100 text-green-700 text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full">{{ __('Informasi') }}</span>
             <h1 class="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mt-6">
                 {{ __('Cara') }} <span class="text-toba-green">{{ __('Pembayaran') }}</span>
             </h1>
@@ -22,7 +22,7 @@
 
         {{-- Deposit Info --}}
         <div class="card-flat p-6 md:p-8 mb-12 flex gap-5 items-start">
-            <div class="w-10 h-10 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center shrink-0 border border-emerald-100">
+            <div class="w-10 h-10 bg-green-50 text-green-700 rounded-xl flex items-center justify-center shrink-0 border border-green-100">
                 <span class="material-symbols-outlined text-[18px]">info</span>
             </div>
             <div>
@@ -36,23 +36,23 @@
         <div class="mb-12">
             <h2 class="text-lg font-bold text-slate-900 mb-6 tracking-tight">Mata Uang yang Diterima / Accepted Currencies</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 text-center hover:border-green-200 transition duration-300">
                     <div class="text-3xl mb-3">🇲🇾</div>
                     <p class="font-semibold text-slate-900 text-lg">MYR</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Ringgit Malaysia</p>
-                    <p class="text-emerald-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
+                    <p class="text-green-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
                 </div>
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 text-center hover:border-green-200 transition duration-300">
                     <div class="text-3xl mb-3">🇸🇬</div>
                     <p class="font-semibold text-slate-900 text-lg">SGD</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Singapore Dollar</p>
-                    <p class="text-emerald-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
+                    <p class="text-green-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
                 </div>
-                <div class="card-flat p-6 text-center hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 text-center hover:border-green-200 transition duration-300">
                     <div class="text-3xl mb-3">🇮🇩</div>
                     <p class="font-semibold text-slate-900 text-lg">IDR</p>
                     <p class="text-slate-400 text-xs font-normal mt-0.5">Rupiah Indonesia</p>
-                    <p class="text-emerald-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
+                    <p class="text-green-700 font-semibold text-xs tracking-wider mt-3">✓ Diterima</p>
                 </div>
             </div>
         </div>
@@ -63,13 +63,13 @@
             <div class="space-y-6">
 
                 {{-- Wise --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0">
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="font-bold text-base">W</span>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-slate-900 text-base mb-1.5">Wise (TransferWise) — <span class="text-emerald-700 font-medium">Rekomendasi untuk Tamu Internasional</span></h3>
+                            <h3 class="font-semibold text-slate-900 text-base mb-1.5">Wise (TransferWise) — <span class="text-green-700 font-medium">Rekomendasi untuk Tamu Internasional</span></h3>
                             <p class="text-slate-600 font-normal text-sm leading-relaxed mb-2">Metode paling murah dan tercepat untuk transfer dari Singapura dan Malaysia. Tidak ada biaya tersembunyi dan kurs mendekati nilai pasar.</p>
                             <p class="text-slate-400 text-xs">Best option for international guests. Low fees, transparent exchange rate, supports MYR and SGD.</p>
                             <div class="mt-4 card-flat-soft p-4 text-xs font-normal text-slate-600">
@@ -81,7 +81,7 @@
                 </div>
 
                 {{-- Bank Transfer --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">account_balance</span>
@@ -106,7 +106,7 @@
                 </div>
 
                 {{-- International SWIFT --}}
-                <div class="card-flat p-6 md:p-8 hover:border-emerald-200 transition duration-300">
+                <div class="card-flat p-6 md:p-8 hover:border-green-200 transition duration-300">
                     <div class="flex items-start gap-5">
                         <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-[18px]">public</span>
@@ -138,9 +138,9 @@
             <div class="space-y-4">
                 @foreach($faqs as $i => $faq)
                 <div class="card-flat overflow-hidden">
-                    <button @click="open = open === {{ $i }} ? null : {{ $i }}" class="w-full flex items-center justify-between p-5 text-left font-semibold text-sm text-slate-900 hover:text-emerald-700 transition-colors outline-none">
+                    <button @click="open = open === {{ $i }} ? null : {{ $i }}" class="w-full flex items-center justify-between p-5 text-left font-semibold text-sm text-slate-900 hover:text-green-700 transition-colors outline-none">
                         <span>{{ $faq['q'] }}</span>
-                        <svg class="w-4 h-4 shrink-0 ml-4 transition-transform text-slate-400" :class="open === {{ $i }} ? 'rotate-180 text-emerald-700' : ''" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-4 h-4 shrink-0 ml-4 transition-transform text-slate-400" :class="open === {{ $i }} ? 'rotate-180 text-green-700' : ''" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div x-show="open === {{ $i }}" x-transition class="px-5 pb-5 text-slate-500 font-normal text-xs leading-relaxed border-t border-slate-50/50 pt-3">
                         {{ $faq['a'] }}

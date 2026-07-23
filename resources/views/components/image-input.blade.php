@@ -79,7 +79,7 @@
          :class="{{ $multiple ? '\'grid-cols-3 sm:grid-cols-4 md:grid-cols-6\'' : '\'grid-cols-1\'' }}" 
          x-show="localPreviews.length > 0">
         <template x-for="(preview, idx) in localPreviews" :key="'local-' + idx">
-            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-emerald-500 shadow-lg group">
+            <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-green-500 shadow-lg group">
                 <img :src="preview.url" 
                      :alt="preview.file.name"
                      class="w-full h-full object-cover">
@@ -89,7 +89,7 @@
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
-                <div class="absolute top-1 right-1 bg-emerald-600 text-[7px] text-white px-2 py-1 rounded-full font-black tracking-widest">LOCAL</div>
+                <div class="absolute top-1 right-1 bg-green-600 text-[7px] text-white px-2 py-1 rounded-full font-black tracking-widest">LOCAL</div>
             </div>
         </template>
     </div>

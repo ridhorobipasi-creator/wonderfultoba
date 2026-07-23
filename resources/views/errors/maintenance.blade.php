@@ -28,7 +28,7 @@
 
         <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Butuh bantuan mendesak?</p>
-            <a href="https://wa.me/628123456789" class="inline-flex items-center gap-3 px-8 py-4 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition shadow-xl shadow-emerald-100">
+            <a href="https://wa.me/628123456789" class="inline-flex items-center gap-3 px-8 py-4 bg-green-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-green-600 transition shadow-xl shadow-green-100">
                 <i class="fab fa-whatsapp"></i> Hubungi WhatsApp
             </a>
         </div>

@@ -305,13 +305,13 @@
                 <!-- Dynamic Includes & Excludes Editor -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Includes -->
-                    <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+                    <div class="bg-green-50 rounded-2xl p-5 border border-green-100">
                         <div class="flex items-center justify-between mb-4">
                             <div>
-                                <h3 class="text-sm font-black text-emerald-900">✅ Yang Termasuk</h3>
-                                <p class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest mt-0.5">Fasilitas yang didapat</p>
+                                <h3 class="text-sm font-black text-green-900">✅ Yang Termasuk</h3>
+                                <p class="text-[9px] font-bold text-green-600 uppercase tracking-widest mt-0.5">Fasilitas yang didapat</p>
                             </div>
-                            <button type="button" @click="addInclude()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-emerald-700 transition">
+                            <button type="button" @click="addInclude()" class="bg-green-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-green-700 transition">
                                 <i class="fas fa-plus mr-1"></i> Tambah
                             </button>
                         </div>
@@ -319,13 +319,13 @@
                             <template x-for="(item, index) in includes" :key="'inc'+index">
                                 <div class="flex items-center gap-2">
                                     <input type="text" :name="'includes['+index+']'" x-model="includes[index]" placeholder="contoh: Tiket Masuk"
-                                        class="flex-1 px-3 py-2 bg-white border-none rounded-xl text-xs font-bold focus:ring-2 focus:ring-emerald-300">
-                                    <button type="button" @click="includes.splice(index, 1)" class="text-emerald-300 hover:text-red-500 transition">
+                                        class="flex-1 px-3 py-2 bg-white border-none rounded-xl text-xs font-bold focus:ring-2 focus:ring-green-300">
+                                    <button type="button" @click="includes.splice(index, 1)" class="text-green-300 hover:text-red-500 transition">
                                         <i class="fas fa-times text-xs"></i>
                                     </button>
                                 </div>
                             </template>
-                            <div x-show="includes.length === 0" class="text-center py-4 text-emerald-400 text-[10px] font-bold uppercase tracking-widest">Belum ada item</div>
+                            <div x-show="includes.length === 0" class="text-center py-4 text-green-400 text-[10px] font-bold uppercase tracking-widest">Belum ada item</div>
                         </div>
                     </div>
 
@@ -379,7 +379,7 @@
 
                 <!-- Submit Buttons -->
                 <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-6 border-t border-gray-200">
-                    <button type="submit" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition shadow-md">
+                    <button type="submit" class="inline-flex items-center justify-center bg-gradient-to-r from-toba-green to-green-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-toba-green/30 transition shadow-md">
                         <i class="fas fa-save mr-2"></i> Create Package
                     </button>
                     <a href="{{ route('admin.packages.index') }}" class="inline-flex items-center justify-center bg-gray-100 text-gray-700 px-8 py-3 rounded-xl font-bold hover:bg-gray-200 transition">

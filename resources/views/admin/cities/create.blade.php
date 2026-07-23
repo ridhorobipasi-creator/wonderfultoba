@@ -61,8 +61,8 @@
                             <!-- Manual Input Field -->
                             <div x-show="regencyId === 'manual'" x-transition class="relative group">
                                 <input type="text" name="regency_name_manual" placeholder="Ketik Nama Kabupaten Baru..."
-                                    class="w-full px-6 py-4 bg-emerald-50 border-2 border-emerald-100 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition font-bold text-emerald-700 placeholder:text-emerald-200">
-                                <div class="absolute right-6 top-1/2 -translate-y-1/2 text-emerald-400">
+                                    class="w-full px-6 py-4 bg-green-50 border-2 border-green-100 rounded-2xl focus:ring-4 focus:ring-green-500/10 focus:border-green-500 transition font-bold text-green-700 placeholder:text-green-200">
+                                <div class="absolute right-6 top-1/2 -translate-y-1/2 text-green-400">
                                     <i class="fas fa-pen-nib"></i>
                                 </div>
                             </div>

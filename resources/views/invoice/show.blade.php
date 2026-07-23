@@ -13,9 +13,9 @@
                 extend: {
                     colors: {
                         brand: {
-                            dark: '#004d40',
-                            DEFAULT: '#006B54',
-                            light: '#e0f2f1',
+                            dark: '#004d1e',
+                            DEFAULT: '#006b29',
+                            light: '#e0f2e7',
                             accent: '#d4af37',
                         },
                         neutral: {
@@ -55,7 +55,7 @@
             left: 0;
             right: 0;
             height: 8px;
-            background: linear-gradient(90deg, #004d40 0%, #006B54 50%, #d4af37 100%);
+            background: linear-gradient(90deg, #004d1e 0%, #006b29 50%, #d4af37 100%);
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
         }
@@ -99,8 +99,8 @@
 
     $statusMap = [
         'pending'   => ['label' => 'MENUNGGU PEMBAYARAN', 'bg' => 'bg-amber-100',   'text' => 'text-amber-700',   'border' => 'border-amber-200',   'dot' => 'bg-amber-500'],
-        'confirmed' => ['label' => 'PEMBAYARAN DIKONFIRMASI', 'bg' => 'bg-emerald-100', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'dot' => 'bg-emerald-500'],
-        'completed' => ['label' => 'SELESAI',              'bg' => 'bg-emerald-100', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'dot' => 'bg-emerald-500'],
+        'confirmed' => ['label' => 'PEMBAYARAN DIKONFIRMASI', 'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
+        'completed' => ['label' => 'SELESAI',              'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
         'cancelled' => ['label' => 'DIBATALKAN',           'bg' => 'bg-rose-100',    'text' => 'text-rose-700',    'border' => 'border-rose-200',    'dot' => 'bg-rose-500'],
     ];
     $st = $statusMap[$booking->status] ?? $statusMap['pending'];

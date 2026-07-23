@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="flex items-center gap-4 pt-8 border-t border-gray-100">
-                    <button type="submit" class="flex-1 bg-toba-green text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-xl shadow-toba-green/20">
+                    <button type="submit" class="flex-1 bg-toba-green text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-toba-green/20">
                         <i class="fas fa-upload mr-2"></i> Start Upload
                     </button>
                     <a href="{{ route('admin.gallery.index') }}" class="px-8 py-4 bg-gray-100 text-gray-600 rounded-2xl font-black uppercase tracking-widest hover:bg-gray-200 transition">

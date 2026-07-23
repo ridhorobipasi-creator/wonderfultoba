@@ -57,7 +57,7 @@
         </div>
         <div class="flex items-center gap-3 w-full sm:w-auto">
             <a href="{{ route('admin.blogs.export', request()->all()) }}" class="flex-1 sm:flex-none bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
-                <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export Excel
+                <i class="fas fa-file-excel mr-2 text-green-500"></i> Export Excel
             </a>
             <a href="{{ route('admin.blogs.create') }}" class="flex-1 sm:flex-none bg-slate-900 text-white px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition shadow-xl shadow-slate-200 text-center">
                 <i class="fas fa-plus mr-2"></i> New Article
@@ -148,7 +148,7 @@
 
                             <td class="px-8 py-6 hidden md:table-cell text-center">
                                 <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Status</p>
-                                <span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest {{ $blog->status === 'published' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600' }}">
+                                <span class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest {{ $blog->status === 'published' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600' }}">
                                     {{ $blog->status }}
                                 </span>
                             </td>

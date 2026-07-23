@@ -199,7 +199,7 @@
                             <i class="fas fa-up-down-left-right text-indigo-400"></i> Move
                         </button>
                         <button @click="bulkDownload()" class="flex-1 lg:flex-none px-4 lg:px-7 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition flex items-center justify-center gap-2">
-                            <i class="fas fa-download text-emerald-400"></i> <span class="hidden sm:inline">Download</span><span class="sm:hidden">DL</span>
+                            <i class="fas fa-download text-green-400"></i> <span class="hidden sm:inline">Download</span><span class="sm:hidden">DL</span>
                         </button>
                         <button @click="bulkDelete()" class="w-full lg:w-auto px-4 lg:px-7 py-4 bg-rose-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-rose-600 transition flex items-center justify-center gap-2 shadow-xl shadow-rose-950/40">
                             <i class="fas fa-trash"></i> <span class="hidden sm:inline">Delete Permanent</span><span class="sm:hidden">Delete</span>
@@ -367,7 +367,7 @@
                             <template x-if="!auditLoading && (!auditData.orphans || auditData.orphans.length === 0)">
                                 <tr>
                                     <td colspan="5" class="py-20 text-center text-slate-400 font-bold text-sm">
-                                        <i class="fas fa-circle-check text-emerald-400 text-3xl mb-4"></i>
+                                        <i class="fas fa-circle-check text-green-400 text-3xl mb-4"></i>
                                         <p>Hebat! Tidak ditemukan file yatim (orphan) fisik di disk. Penyimpanan Anda 100% sehat.</p>
                                     </td>
                                 </tr>
@@ -535,7 +535,7 @@
                         <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100 flex items-center justify-between">
                             <div class="flex-1 pr-3">
                                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Loading Placeholder</p>
-                                <p class="text-[10px] font-bold text-emerald-600 mt-2 flex items-center gap-1.5">
+                                <p class="text-[10px] font-bold text-green-600 mt-2 flex items-center gap-1.5">
                                     <i class="fas fa-circle-check"></i> Active WebP Base64
                                 </p>
                             </div>
@@ -554,17 +554,17 @@
                         </div>
                         <div class="grid grid-cols-3 gap-3 pt-1">
                             <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
-                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <i class="fas fa-circle-check text-green-500 text-xs"></i>
                                 <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Large</p>
                                 <p class="text-[9px] font-bold text-slate-700 mt-0.5">1200px</p>
                             </div>
                             <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
-                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <i class="fas fa-circle-check text-green-500 text-xs"></i>
                                 <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Medium</p>
                                 <p class="text-[9px] font-bold text-slate-700 mt-0.5">800px</p>
                             </div>
                             <div class="bg-white border border-indigo-100/30 rounded-2xl p-3 text-center">
-                                <i class="fas fa-circle-check text-emerald-500 text-xs"></i>
+                                <i class="fas fa-circle-check text-green-500 text-xs"></i>
                                 <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1.5">Mobile</p>
                                 <p class="text-[9px] font-bold text-slate-700 mt-0.5">480px</p>
                             </div>

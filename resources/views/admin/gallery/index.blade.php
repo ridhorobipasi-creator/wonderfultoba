@@ -138,7 +138,7 @@
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
             <a href="{{ route('admin.gallery.export', request()->all()) }}" class="bg-white border border-slate-200 text-slate-600 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition text-center">
-                <i class="fas fa-file-excel mr-2 text-emerald-500"></i> Export
+                <i class="fas fa-file-excel mr-2 text-green-500"></i> Export
             </a>
         </div>
     </div>

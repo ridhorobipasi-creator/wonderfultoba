@@ -177,7 +177,7 @@
                             <a href="{{ route('admin.bookings.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.bookings.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-clipboard-list w-5 text-sm {{ request()->routeIs('admin.bookings.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                                <i class="fas fa-clipboard-list w-5 text-sm {{ request()->routeIs('admin.bookings.*') ? 'text-white' : 'text-green-500' }}"></i>
                                 Daftar Pesanan
                             </a>
 
@@ -212,7 +212,7 @@
                             <a href="{{ route('admin.blogs.index') }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.blogs.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                <i class="fas fa-pen-nib w-5 text-sm {{ request()->routeIs('admin.blogs.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                                <i class="fas fa-pen-nib w-5 text-sm {{ request()->routeIs('admin.blogs.*') ? 'text-white' : 'text-green-500' }}"></i>
                                 Blog / Artikel
                             </a>
                             <a href="{{ route('admin.media.index') }}"
@@ -225,7 +225,7 @@
                              <a href="{{ route('admin.cities.index') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                        {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                 <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'text-white' : 'text-teal-500' }}"></i>
+                                 <i class="fas fa-location-dot w-5 text-sm {{ request()->routeIs('admin.cities.*') || request()->routeIs('admin.regencies.*') ? 'text-white' : 'text-green-500' }}"></i>
                                  Kota Tujuan
                              </a>
                              @endif
@@ -253,7 +253,7 @@
                             <a href="{{ route('admin.packages.index', ['type' => 'tour']) }}"
                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
                                       {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
-                                 <i class="fas fa-map w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'text-white' : 'text-emerald-500' }}"></i>
+                                 <i class="fas fa-map w-5 text-sm {{ request()->routeIs('admin.packages.*') && request('type', 'tour') == 'tour' ? 'text-white' : 'text-green-500' }}"></i>
                                  Paket Tour Wisata
                             </a>
                         </div>
@@ -379,8 +379,8 @@
                                 <div>
                                     <h4 class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-3 px-2">Shortcut Cepat</h4>
                                     <div class="grid grid-cols-2 gap-2">
-                                        <a href="{{ route('admin.packages.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
-                                            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs"><i class="fas fa-plus"></i></div>
+                                        <a href="{{ route('admin.packages.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-green-50 transition border border-transparent hover:border-green-100">
+                                            <div class="w-8 h-8 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-xs"><i class="fas fa-plus"></i></div>
                                             <span class="text-[10px] font-black uppercase text-slate-700">Buat Paket Baru</span>
                                         </a>
                                         <a href="{{ route('admin.blogs.create') }}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-indigo-50 transition border border-transparent hover:border-indigo-100">
@@ -488,7 +488,7 @@
                              x-transition:leave="transition ease-in duration-300"
                              x-transition:leave-start="opacity-100 translate-x-0 scale-100"
                              x-transition:leave-end="opacity-0 translate-x-20 scale-95"
-                             class="bg-white/90 backdrop-blur-2xl border border-emerald-100 p-6 rounded-[2rem] flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.1)] pointer-events-auto overflow-hidden relative group">
+                             class="bg-white/90 backdrop-blur-2xl border border-green-100 p-6 rounded-[2rem] flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.1)] pointer-events-auto overflow-hidden relative group">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-toba-green"></div>
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-2xl bg-toba-green text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-toba-green/20">

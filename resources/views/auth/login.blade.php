@@ -6,7 +6,7 @@
     <title>Login - Sujai Laketoba Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gradient-to-br from-toba-green to-emerald-700 min-h-screen flex items-center justify-center p-4" x-data="{ isSubmitting: false }">
+<body class="bg-gradient-to-br from-toba-green to-green-700 min-h-screen flex items-center justify-center p-4" x-data="{ isSubmitting: false }">
     <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-8">

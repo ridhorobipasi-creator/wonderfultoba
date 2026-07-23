@@ -5,16 +5,16 @@
     <title>Booking Report</title>
     <style>
         body { font-family: sans-serif; font-size: 11px; color: #333; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #10b981; padding-bottom: 10px; }
-        .title { font-size: 18px; font-weight: bold; color: #064e3b; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #10b951; padding-bottom: 10px; }
+        .title { font-size: 18px; font-weight: bold; color: #166534; }
         .stats { margin-bottom: 20px; }
         .stat-box { display: inline-block; width: 30%; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .table th { background: #10b981; color: white; padding: 10px; text-align: left; }
+        .table th { background: #10b951; color: white; padding: 10px; text-align: left; }
         .table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
         .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 9px; color: #94a3b8; }
         .status-pending { color: #f59e0b; font-weight: bold; }
-        .status-confirmed { color: #10b981; font-weight: bold; }
+        .status-confirmed { color: #10b951; font-weight: bold; }
         .status-cancelled { color: #ef4444; font-weight: bold; }
     </style>
 </head>
@@ -31,7 +31,7 @@
         </div>
         <div class="stat-box" style="margin-left: 3%;">
             <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Total Pendapatan</div>
-            <div style="font-size: 16px; font-weight: bold; color: #059669;">{{ \App\Helpers\CurrencyHelper::formatIn($totalRevenue, 'IDR') }}</div>
+            <div style="font-size: 16px; font-weight: bold; color: #05963d;">{{ \App\Helpers\CurrencyHelper::formatIn($totalRevenue, 'IDR') }}</div>
         </div>
         <div class="stat-box" style="margin-left: 3%;">
             <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Dicetak Pada</div>

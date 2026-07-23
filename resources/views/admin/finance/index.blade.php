@@ -7,8 +7,8 @@
 <div class="space-y-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Revenue Tour -->
-        <div class="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm transition hover:shadow-xl hover:shadow-emerald-50 group">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <div class="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm transition hover:shadow-xl hover:shadow-green-50 group">
+            <div class="w-12 h-12 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-map-location-dot"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Omzet Tour</p>
@@ -70,7 +70,7 @@
                         <td class="px-10 py-8 text-xs font-bold text-slate-400 hidden lg:table-cell">{{ $booking->createdAt ? $booking->createdAt->format('d M Y, H:i') : '-' }}</td>
                         <td class="px-5 md:px-10 py-6 md:py-8 text-xs font-black text-slate-900 text-right whitespace-nowrap">{{ \App\Helpers\CurrencyHelper::formatIn($booking->totalPrice, $booking->currency) }}</td>
                         <td class="px-10 py-8 text-center hidden sm:table-cell">
-                            <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">
+                            <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-green-50 text-green-600 border border-green-100">
                                 Berhasil
                             </span>
                         </td>

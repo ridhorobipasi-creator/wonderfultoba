@@ -31,7 +31,7 @@
                     </div>
                     <div class="p-5 rounded-3xl bg-slate-50 text-center">
                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lifetime Value</p>
-                        <p class="text-xl font-black text-emerald-600">{{ \App\Helpers\CurrencyHelper::formatIn($customer->total_spent, 'IDR') }}</p>
+                        <p class="text-xl font-black text-green-600">{{ \App\Helpers\CurrencyHelper::formatIn($customer->total_spent, 'IDR') }}</p>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                                     @php
                                         $colors = [
                                             'pending' => 'bg-amber-50 text-amber-600',
-                                            'confirmed' => 'bg-emerald-50 text-emerald-600',
+                                            'confirmed' => 'bg-green-50 text-green-600',
                                             'completed' => 'bg-blue-50 text-blue-600',
                                             'cancelled' => 'bg-rose-50 text-rose-600',
                                         ];

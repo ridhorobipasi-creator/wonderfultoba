@@ -111,18 +111,18 @@
         <div x-show="activeTab === 'contact'" x-transition class="space-y-8">
             <div class="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-10">
                 <h3 class="text-xl font-black text-slate-900 flex items-center gap-3">
-                    <span class="w-2 h-8 bg-emerald-500 rounded-full"></span> Konfigurasi Kontak & WA
+                    <span class="w-2 h-8 bg-green-500 rounded-full"></span> Konfigurasi Kontak & WA
                 </h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div class="space-y-6">
-                        <div class="p-8 bg-emerald-50 rounded-[2.5rem] space-y-4">
-                            <div class="flex items-center gap-4 text-emerald-600">
+                        <div class="p-8 bg-green-50 rounded-[2.5rem] space-y-4">
+                            <div class="flex items-center gap-4 text-green-600">
                                 <i class="fab fa-whatsapp text-3xl"></i>
                                 <span class="text-[10px] font-black uppercase tracking-widest">WhatsApp Main Number</span>
                             </div>
                             <input type="text" name="contact_whatsapp" value="{{ $general['contact_whatsapp'] ?? '628123456789' }}" class="w-full px-6 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm">
-                            <p class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest italic">Mulai dengan kode negara (misal: 62813...)</p>
+                            <p class="text-[8px] font-bold text-green-400 uppercase tracking-widest italic">Mulai dengan kode negara (misal: 62813...)</p>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">WA Welcome Message</label>
@@ -152,7 +152,7 @@
                         <input type="text" name="contact_phone" value="{{ $general['contact_phone'] ?? '' }}" placeholder="0632 21234" class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fab fa-whatsapp text-emerald-400"></i> WhatsApp Kedua (CS Cadangan)</label>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2"><i class="fab fa-whatsapp text-green-400"></i> WhatsApp Kedua (CS Cadangan)</label>
                         <input type="text" name="contact_whatsapp_2" value="{{ $general['contact_whatsapp_2'] ?? '' }}" placeholder="62813..." class="w-full px-5 py-3 bg-slate-50 border-none rounded-xl font-bold text-xs text-slate-700">
                     </div>
                     <div class="space-y-2">

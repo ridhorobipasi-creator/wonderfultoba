@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         @if(!empty($coverExif['gps']['lat']) && !empty($coverExif['gps']['lng']))
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg font-semibold tracking-wide transition-colors">
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 hover:bg-green-100 rounded-lg font-semibold tracking-wide transition-colors">
                             <span class="material-symbols-outlined text-[14px]">location_on</span>
                             {{ __('Titik Lokasi') }}
                         </a>
@@ -126,9 +126,9 @@
                     {{-- Article body --}}
                     <div class="prose prose-lg md:prose-xl max-w-none break-words [&_a]:break-all text-slate-700 font-body-md leading-[1.8] tracking-[0.01em]
                                 prose-headings:font-headline-md prose-headings:text-primary prose-headings:font-semibold
-                                prose-a:text-emerald-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                                prose-a:text-green-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                                 prose-strong:text-slate-900 prose-strong:font-bold
-                                prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:bg-emerald-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:text-slate-700 prose-blockquote:not-italic prose-blockquote:rounded-r-xl
+                                prose-blockquote:border-l-4 prose-blockquote:border-green-500 prose-blockquote:bg-green-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:text-slate-700 prose-blockquote:not-italic prose-blockquote:rounded-r-xl
                                 prose-img:rounded-2xl prose-img:shadow-sm">
                         @if(!empty($post->content) && strlen($post->content) > 10)
                             {!! nl2br($post->content) !!}
@@ -157,7 +157,7 @@
                         <div class="flex items-center gap-3">
                             <a href="https://wa.me/?text={{ urlencode(__('Baca artikel ini dari Sujai Laketoba: ') . $post->translated_title . ' ' . url()->current()) }}" 
                                target="_blank"
-                               class="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
+                               class="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
                                 <x-icon name="whatsapp" class="w-5 h-5" />
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 

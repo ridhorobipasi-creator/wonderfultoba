@@ -55,7 +55,7 @@
                             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Alamat Email</p>
                             <p class="text-lg font-black text-slate-900 tracking-tight">{{ $user->email }}</p>
                             @if($user->email_verified_at)
-                                <span class="inline-flex items-center mt-1 text-[10px] font-bold text-emerald-600">
+                                <span class="inline-flex items-center mt-1 text-[10px] font-bold text-green-600">
                                     <i class="fas fa-circle-check mr-1.5"></i> Terverifikasi
                                 </span>
                             @endif

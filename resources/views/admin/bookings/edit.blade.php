@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-4xl">
     <div class="mb-8">
-        <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center text-sm font-black text-toba-green uppercase tracking-widest hover:text-emerald-700 transition">
+        <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center text-sm font-black text-toba-green uppercase tracking-widest hover:text-green-700 transition">
             <i class="fas fa-arrow-left mr-2"></i> Back to Bookings
         </a>
     </div>
@@ -18,7 +18,7 @@
                 <p class="text-sm text-gray-500 font-bold mt-1 uppercase tracking-wider">Customer: {{ $booking->customerName }}</p>
             </div>
             <div class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest {{ 
-                $booking->status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' : 
+                $booking->status === 'confirmed' ? 'bg-green-100 text-green-700' : 
                 ($booking->status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700') 
             }}">
                 {{ $booking->status }}
@@ -90,7 +90,7 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button type="submit" class="flex-1 bg-toba-green text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-xl shadow-toba-green/20">
+                <button type="submit" class="flex-1 bg-toba-green text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition shadow-xl shadow-toba-green/20">
                     Update Booking
                 </button>
                 <a href="{{ route('admin.bookings.index') }}" class="px-8 py-4 bg-gray-100 text-gray-600 rounded-2xl font-black uppercase tracking-widest hover:bg-gray-200 transition">

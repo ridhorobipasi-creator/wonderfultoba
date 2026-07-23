@@ -330,10 +330,10 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 md:bottom-10 md:left-10 bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-[1.5rem] max-w-[92%] md:max-w-[75%] shadow-glass">
                     <div class="flex items-center gap-2 mb-3">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="font-label-caps text-[10px] md:text-xs text-emerald-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        <span class="font-label-caps text-[10px] md:text-xs text-green-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
                         @if(isset($originCity) && $originCity)
-                            <span class="ml-2 bg-emerald-500/80 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
+                            <span class="ml-2 bg-green-500/80 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
                                 Dari {{ $originCity }}
                             </span>
                         @endif
@@ -346,7 +346,7 @@
             <div x-show="package_images && package_images.length > 1" class="flex gap-4 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory overscroll-x-contain">
                 <template x-for="(imgObj, i) in package_images" :key="i">
                     <div @click="activeImg = i" 
-                         :class="activeImg === i ? 'ring-2 ring-emerald-500 ring-offset-2' : 'border border-slate-200/50'"
+                         :class="activeImg === i ? 'ring-2 ring-green-500 ring-offset-2' : 'border border-slate-200/50'"
                          class="min-w-[140px] md:min-w-[180px] h-24 md:h-32 rounded-xl overflow-hidden flex-shrink-0 snap-start cursor-pointer hover:opacity-90 transition duration-300 shadow-sm">
                         <img class="w-full h-full object-cover" loading="lazy" decoding="async" :src="imgObj.url" :style="imgObj.blur_hash ? 'background-image: url(' + imgObj.blur_hash + '); background-size: cover; background-position: center; filter: blur(4px);' : ''" onload="this.style.filter='none'; this.style.backgroundImage='none';" onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                     </div>
@@ -399,7 +399,7 @@
                             </div>
                         </div>
                         @if(!empty($coverExif['gps']['lat']) && !empty($coverExif['gps']['lng']))
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg font-semibold tracking-wide transition-colors">
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ $coverExif['gps']['lat'] }},{{ $coverExif['gps']['lng'] }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 hover:bg-green-100 rounded-lg font-semibold tracking-wide transition-colors">
                             <span class="material-symbols-outlined text-[16px]">location_on</span>
                             {{ __('Lihat Lokasi Persis') }}
                         </a>

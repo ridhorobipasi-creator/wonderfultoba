@@ -13,7 +13,7 @@
         'confirmed' => [
             'label' => 'Dikonfirmasi',
             'description' => 'Booking sudah dikonfirmasi. Silakan simpan kode booking dan invoice Anda.',
-            'class' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+            'class' => 'bg-green-50 text-green-700 border-green-200',
         ],
         'completed' => [
             'label' => 'Selesai',
@@ -62,11 +62,11 @@
 @section('content')
 <section class="relative overflow-hidden bg-slate-950 text-white" x-data="{ copied: false, copyCode() { navigator.clipboard.writeText('{{ $booking->bookingCode }}'); this.copied = true; setTimeout(() => this.copied = false, 1800); } }">
     <div class="absolute inset-0 opacity-30">
-        <div class="h-full w-full bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.35),_transparent_38%),linear-gradient(135deg,_#020617,_#0f172a_46%,_#064e3b)]"></div>
+        <div class="h-full w-full bg-[radial-gradient(circle_at_top_left,_rgba(16,185,81,0.35),_transparent_38%),linear-gradient(135deg,_#020617,_#0f172a_46%,_#064e22)]"></div>
     </div>
 
     <div class="relative mx-auto max-w-5xl px-5 py-20 md:px-8 md:py-28">
-        <p class="text-xs font-bold uppercase tracking-[0.28em] text-emerald-300">Tracking Booking</p>
+        <p class="text-xs font-bold uppercase tracking-[0.28em] text-green-300">Tracking Booking</p>
         <h1 class="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
             {{ $booking->bookingCode }}
         </h1>
@@ -74,7 +74,7 @@
             Simpan kode booking ini saat berkomunikasi dengan admin Sujai Laketoba.
         </p>
         <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-            <button type="button" @click="copyCode()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-emerald-50">
+            <button type="button" @click="copyCode()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-green-50">
                 <span class="material-symbols-outlined text-base">content_copy</span>
                 <span x-text="copied ? 'Kode Tersalin' : 'Copy Kode Booking'"></span>
             </button>
@@ -119,7 +119,7 @@
                                 $isCancelStep = $isCancelled && $stepNumber === $currentStep;
                             @endphp
                             <div class="flex items-start gap-4">
-                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isCancelStep ? 'bg-rose-600 border-rose-600 text-white' : ($isDone ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-200') }} shadow-sm transition-all duration-300">
+                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isCancelStep ? 'bg-rose-600 border-rose-600 text-white' : ($isDone ? 'bg-green-600 border-green-600 text-white' : 'bg-white border-slate-200') }} shadow-sm transition-all duration-300">
                                     @if($isCancelStep)
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -135,7 +135,7 @@
                                 <div class="pt-1.5">
                                     <p class="text-sm font-bold {{ $isDone ? 'text-slate-900' : 'text-slate-400' }}">{{ $step }}</p>
                                     @if($stepNumber === $currentStep)
-                                        <p class="mt-1 text-xs font-semibold {{ $isCancelStep ? 'text-rose-600 bg-rose-50' : 'text-emerald-600 bg-emerald-50' }} px-2 py-0.5 rounded w-fit">Status saat ini</p>
+                                        <p class="mt-1 text-xs font-semibold {{ $isCancelStep ? 'text-rose-600 bg-rose-50' : 'text-green-600 bg-green-50' }} px-2 py-0.5 rounded w-fit">Status saat ini</p>
                                     @endif
                                 </div>
                             </div>
@@ -221,16 +221,16 @@
         <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Link Booking</p>
             <div class="mt-5 space-y-3">
-                <a href="{{ $invoiceUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50">
+                <a href="{{ $invoiceUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
                     <span>Invoice</span>
                     <span class="material-symbols-outlined text-base">open_in_new</span>
                 </a>
-                <a href="{{ $packageUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50">
+                <a href="{{ $packageUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
                     <span>Lihat Paket</span>
                     <span class="material-symbols-outlined text-base">travel_explore</span>
                 </a>
                 @if($waNumber)
-                    <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-emerald-600 px-4 py-4 text-sm font-bold text-white transition hover:bg-emerald-700">
+                    <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-green-600 px-4 py-4 text-sm font-bold text-white transition hover:bg-green-700">
                         <span>Hubungi Admin</span>
                         <span class="material-symbols-outlined text-base">chat</span>
                     </a>

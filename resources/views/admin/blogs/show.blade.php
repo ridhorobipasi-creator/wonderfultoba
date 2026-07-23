@@ -65,7 +65,7 @@
             <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white space-y-6 shadow-2xl">
                 <div class="flex items-center justify-between">
                     <h3 class="text-[11px] font-black uppercase tracking-widest text-white/40">Status Artikel</h3>
-                    <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest {{ $blog->status === 'published' ? 'bg-emerald-500' : 'bg-amber-500' }}">
+                    <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest {{ $blog->status === 'published' ? 'bg-green-500' : 'bg-amber-500' }}">
                         {{ $blog->status }}
                     </span>
                 </div>

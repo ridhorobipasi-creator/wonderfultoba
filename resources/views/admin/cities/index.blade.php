@@ -105,7 +105,7 @@
                     </div>
                     <div class="p-8">
                         <div class="flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500 text-[10px]">
+                            <div class="w-6 h-6 rounded-lg bg-green-50 flex items-center justify-center text-green-500 text-[10px]">
                                 <i class="fas fa-location-dot"></i>
                             </div>
                             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $city->regency->name ?? 'Umum' }}</span>
@@ -179,7 +179,7 @@
                         </td>
                         <td class="px-8 py-6">
                             @if($reg->category)
-                                <span class="px-3 py-1.5 rounded-xl bg-emerald-50 text-[9px] font-black text-emerald-600 uppercase tracking-widest border border-emerald-100">
+                                <span class="px-3 py-1.5 rounded-xl bg-green-50 text-[9px] font-black text-green-600 uppercase tracking-widest border border-green-100">
                                     {{ $reg->category }}
                                 </span>
                             @else

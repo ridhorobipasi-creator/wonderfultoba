@@ -12,7 +12,7 @@
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #059669;
+            border-bottom: 2px solid #05963d;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
@@ -23,7 +23,7 @@
             text-transform: uppercase;
         }
         .header p {
-            color: #059669;
+            color: #05963d;
             font-weight: bold;
             margin: 5px 0 0 0;
         }
@@ -34,7 +34,7 @@
             font-size: 18px;
             font-weight: bold;
             color: #0f172a;
-            border-left: 4px solid #059669;
+            border-left: 4px solid #05963d;
             padding-left: 10px;
             margin-bottom: 15px;
             background: #f8fafc;

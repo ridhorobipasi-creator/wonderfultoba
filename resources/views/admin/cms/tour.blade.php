@@ -261,7 +261,7 @@ document.addEventListener('alpine:init', () => {
             <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">📸 Slider</button>
             <button type="button" @click="activeTab = 'featured'" :class="activeTab === 'featured' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">⭐ Featured</button>
             <button type="button" @click="activeTab = 'about'" :class="activeTab === 'about' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Mengapa Kami</button>
-            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
+            <button type="button" @click="activeTab = 'specialist'" :class="activeTab === 'specialist' ? 'bg-green-500 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">👩‍💼 Specialist</button>
             <button type="button" @click="activeTab = 'testimonials'" :class="activeTab === 'testimonials' ? 'bg-amber-400 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">💬 Ulasan</button>
             <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">Statistik</button>
             <button @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'" class="shrink-0 px-4 py-3 rounded-[1.2rem] font-black text-[10px] uppercase tracking-widest transition whitespace-nowrap">SEO</button>
@@ -437,15 +437,15 @@ document.addEventListener('alpine:init', () => {
                 <!-- Specialist Tab -->
                 <div x-show="activeTab === 'specialist'" x-transition class="space-y-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h4 class="text-sm font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Travel Specialist
+                        <h4 class="text-sm font-black text-green-500 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span> Travel Specialist
                         </h4>
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
                                 <input type="hidden" name="show_specialist" value="0">
                                 <input type="checkbox" name="show_specialist" value="1" {{ ($settings['show_specialist'] ?? true) ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
+                                <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-green-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
                         </label>
                     </div>
@@ -475,7 +475,7 @@ document.addEventListener('alpine:init', () => {
                         </div>
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Pesan Sapaan (Deskripsi)</label>
-                            <textarea name="specialist_desc" x-model="specialist_desc" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 font-medium text-slate-600 text-xs leading-relaxed"></textarea>
+                            <textarea name="specialist_desc" x-model="specialist_desc" rows="4" class="w-full px-5 py-3.5 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 font-medium text-slate-600 text-xs leading-relaxed"></textarea>
                         </div>
                     </div>
                 </div>
@@ -656,7 +656,7 @@ document.addEventListener('alpine:init', () => {
 
                                     <!-- Gallery Picker -->
                                     <div x-show="slide.type === 'gallery'" class="space-y-2">
-                                        <p class="text-[8px] font-black text-emerald-600 uppercase tracking-widest">Pilih Foto Galeri</p>
+                                        <p class="text-[8px] font-black text-green-600 uppercase tracking-widest">Pilih Foto Galeri</p>
                                         <div class="grid grid-cols-2 gap-2 max-h-[150px] overflow-y-auto no-scrollbar bg-white p-2 rounded-2xl border border-slate-100">
                                             @foreach($gallery as $g)
                                             <button type="button" 
@@ -666,7 +666,7 @@ document.addEventListener('alpine:init', () => {
                                                         description: '{{ addslashes($g->description) }}',
                                                         image_path: '{{ imageUrl($g->image_path) }}'
                                                     })"
-                                                    class="flex flex-col gap-2 p-1 rounded-xl hover:bg-emerald-50 transition text-left group/gallery">
+                                                    class="flex flex-col gap-2 p-1 rounded-xl hover:bg-green-50 transition text-left group/gallery">
                                                 <div class="w-full aspect-video rounded-lg bg-slate-100 overflow-hidden">
                                                     <img src="{{ imageUrl($g->image_path) }}" class="w-full h-full object-cover">
                                                 </div>
@@ -817,13 +817,13 @@ document.addEventListener('alpine:init', () => {
                 
                 <div class="relative z-10 max-w-2xl space-y-8">
                     <div class="flex items-center gap-3">
-                        <span class="w-8 h-px bg-emerald-500"></span>
-                        <span class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">Sujai Laketoba Tour</span>
+                        <span class="w-8 h-px bg-green-500"></span>
+                        <span class="text-green-400 text-[10px] font-black uppercase tracking-[0.3em]">Sujai Laketoba Tour</span>
                     </div>
                     <h1 class="text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter" x-text="heroTitle"></h1>
                     <p class="text-slate-200 text-sm font-medium leading-relaxed max-w-lg opacity-80" x-text="heroSubtitle"></p>
                     <div class="pt-4">
-                        <button type="button" class="px-8 py-4 bg-emerald-500 text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20" x-text="ctaText"></button>
+                        <button type="button" class="px-8 py-4 bg-green-500 text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-xl shadow-green-500/20" x-text="ctaText"></button>
                     </div>
                 </div>
 
@@ -866,7 +866,7 @@ document.addEventListener('alpine:init', () => {
 
         <!-- Overlay Status -->
         <div class="absolute top-6 right-6 z-50 flex items-center gap-3">
-            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-emerald-500/20">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-green-500 text-white text-[8px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-green-500/20">
                 <span class="w-1 h-1 rounded-full bg-white animate-pulse"></span> Tour Sync
             </div>
             <div class="px-3 py-1.5 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest rounded-lg">Live Preview</div>
