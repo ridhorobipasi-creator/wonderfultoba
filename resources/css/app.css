@@ -21,11 +21,14 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand Colors - Sujai Laketoba (Darkened for Accessibility) */
-  --color-toba-green: #166534;      /* Emerald 800 - Lebih kontras */
-  --color-toba-accent: #15803d;     /* Emerald 700 - Lebih solid */
+  /* Brand Colors - Sujai Laketoba
+     Satu ramp emerald (hue 142-145deg). Jangan tambah hijau di luar ramp ini. */
+  --color-toba-green: #166534;      /* Emerald 800 - HIJAU MEREK, kontras 7.13:1 di putih */
+  --color-toba-accent: #15803d;     /* Emerald 700 - hover/aksen */
   --color-toba-light: #f0fdf4;      /* Hijau sangat muda */
   --color-toba-blue: #075985;       /* Sky 800 */
+  --color-toba-orange: #e67e22;     /* Oranye CTA - tombol & state aktif */
+  --color-toba-orange-dark: #d35400; /* Oranye hover */
   /* Premium Shadows - Softened for Minimalist look */
   --shadow-premium: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
   --shadow-glass: 0 4px 20px 0 rgba(15, 23, 42, 0.03);
@@ -60,7 +63,7 @@
   --color-on-primary-container: #77a788;
   --color-surface-dim: #dcd9d9;
   --color-on-secondary: #ffffff;
-  --color-primary: #002513;
+  --color-primary: #052e16;         /* Emerald 950 - sejajar ramp toba-green */
   --color-outline: #717972;
   --color-on-tertiary-container: #ce8a90;
   --color-on-secondary-fixed: #241a00;

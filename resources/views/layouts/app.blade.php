@@ -29,7 +29,7 @@
     @endif
     <link rel="icon" type="image/x-icon" href="{{ imageUrl($siteSettings['general']['icon_url'] ?? null, asset('favicon.ico')) }}">
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#1a6b4a">
+    <meta name="theme-color" content="#166534">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -225,11 +225,11 @@
                 if (document.getElementById('cms-refresh-banner')) return;
                 const bar = document.createElement('div');
                 bar.id = 'cms-refresh-banner';
-                bar.style.cssText = 'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;background:#1a6b4a;color:#fff;padding:10px 16px;border-radius:9999px;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:14px;display:flex;gap:12px;align-items:center';
+                bar.style.cssText = 'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;background:#166534;color:#fff;padding:10px 16px;border-radius:9999px;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:14px;display:flex;gap:12px;align-items:center';
                 bar.innerHTML = '<span>Konten telah diperbarui.</span>';
                 const btn = document.createElement('button');
                 btn.textContent = 'Muat ulang';
-                btn.style.cssText = 'background:#fff;color:#1a6b4a;border:none;padding:4px 12px;border-radius:9999px;font-weight:600;cursor:pointer';
+                btn.style.cssText = 'background:#fff;color:#166534;border:none;padding:4px 12px;border-radius:9999px;font-weight:600;cursor:pointer';
                 btn.onclick = () => window.location.reload();
                 bar.appendChild(btn);
                 document.body.appendChild(bar);
