@@ -107,7 +107,14 @@ try {
         'ROTASI-RAHASIA*',       # dokumen rotasi rahasia, format apa pun
         'ssh*', 'informasi*',
         'tests', 'phpunit.xml*',
-        '.vscode', '.idea', 'image.png'
+        '.vscode', '.idea', 'image.png',
+        # Ditambahkan setelah artefak 2026-07-23 kedapatan membawa dua dump
+        # database produksi ke dalam zip. Kalau zip itu diekstrak ke webroot,
+        # seluruh isi database bisa diunduh siapa pun yang menebak namanya.
+        '*.sql',                 # dump database, TIDAK PERNAH boleh naik
+        '*.zip',                 # artefak deploy lama yang tergeletak di root
+        '.composer',             # cache composer lokal (~40 MB, isinya dev deps)
+        '*.pdf', '*.md'          # dokumen kerja; server tidak memerlukannya
     )
 
     function Test-Excluded($name) {
@@ -145,7 +152,8 @@ try {
                 $_.Name -like 'ROTASI-RAHASIA*' -or
                 $_.Name -like 'ssh.*' -or
                 $_.Name -like 'informasi.*' -or
-                $_.Extension -eq '.sqlite'
+                $_.Extension -eq '.sqlite' -or
+                $_.Extension -eq '.sql'      # dump database di mana pun letaknya
             )
         }
 
