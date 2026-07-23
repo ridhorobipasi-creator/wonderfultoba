@@ -414,8 +414,8 @@
                     $pSEOCities    = array_filter(array_map('trim', explode(',', $originsString)));
                 @endphp
                 @if(count($pSEOCities) > 0)
-                <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-6 md:p-8">
-                    <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">
+                <div class="bg-toba-green/5 border border-toba-green/15 rounded-2xl p-6 md:p-8">
+                    <p class="text-[10px] font-black text-toba-green uppercase tracking-widest mb-4">
                         <span class="material-symbols-outlined text-[14px] align-middle mr-1">flight_takeoff</span>
                         Paket ini tersedia keberangkatan dari:
                     </p>
@@ -427,7 +427,7 @@
                             @endphp
                             <a href="{{ url('/tour/package/' . $package->slug . '-dari-' . $citySlug) }}"
                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition
-                                      {{ $isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600' }}">
+                                      {{ $isActive ? 'bg-toba-green text-white shadow-sm' : 'bg-white text-toba-green border border-toba-green/25 hover:bg-toba-green hover:text-white hover:border-toba-green' }}">
                                 @if($isActive)<span class="material-symbols-outlined text-[13px]">check_circle</span>@endif
                                 {{ ucwords(trim($cityLink)) }}
                             </a>
