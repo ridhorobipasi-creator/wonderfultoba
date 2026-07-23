@@ -39,8 +39,8 @@
     @keydown.escape.window="isMenuOpen = false"
     class="relative z-[100] w-full font-sans"
 >
-    <!-- 1. Topbar Oranye -->
-    <div class="hidden sm:block bg-gradient-to-r from-toba-orange via-[#e3801f] to-[#d97a17] text-white">
+    <!-- 1. Topbar (strip identitas — hijau merek) -->
+    <div class="hidden sm:block bg-gradient-to-r from-toba-green via-toba-green to-primary text-white">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-6 py-2 text-[12px] font-bold">
             <!-- Lokasi Kantor -->
             <div class="flex items-center gap-2 min-w-0">
@@ -80,7 +80,7 @@
                          class="absolute right-0 mt-2 w-48 bg-white text-slate-700 rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5 py-1.5 text-xs font-semibold overflow-hidden z-[200]">
                         @foreach($locales as $code => $label)
                             <a href="{{ route('change-locale', $code) }}"
-                               class="flex items-center justify-between gap-2 px-4 py-2 transition-colors hover:bg-orange-50 hover:text-toba-orange {{ $activeLocale === $code ? 'bg-orange-50 text-toba-orange' : '' }}">
+                               class="flex items-center justify-between gap-2 px-4 py-2 transition-colors hover:bg-toba-green/5 hover:text-toba-green {{ $activeLocale === $code ? 'bg-toba-green/5 text-toba-green' : '' }}">
                                 <span>{{ $label }}</span>
                                 @if($activeLocale === $code)
                                     <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
@@ -101,9 +101,9 @@
             <div class="flex justify-between items-center gap-4">
                 <!-- Logo -->
                 <a href="/" aria-label="{{ $g['site_name'] ?? 'Sujai Tour' }} — Beranda"
-                   class="group flex items-baseline gap-1 shrink-0 mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-orange/50 focus-visible:ring-offset-4 rounded">
-                    <span class="text-3xl md:text-[2.1rem] font-black tracking-tight text-toba-orange uppercase leading-none transition-colors duration-300 group-hover:text-toba-orange-dark">SUJAI</span>
-                    <span class="text-3xl md:text-[2.1rem] font-bold tracking-tight text-[#1b4372] italic leading-none"
+                   class="group flex items-baseline gap-1 shrink-0 mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-green/50 focus-visible:ring-offset-4 rounded">
+                    <span class="text-3xl md:text-[2.1rem] font-black tracking-tight text-toba-green uppercase leading-none transition-colors duration-300 group-hover:text-primary">SUJAI</span>
+                    <span class="text-3xl md:text-[2.1rem] font-bold tracking-tight text-toba-green italic leading-none"
                           style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span>
                 </a>
 
@@ -111,9 +111,9 @@
                 <div class="hidden lg:flex items-center gap-7 text-[15px] font-extrabold text-[#2c3e50]">
                     @php $isHome = request()->is('/'); @endphp
                     <a href="/" @if($isHome) aria-current="page" @endif
-                       class="group relative py-2 transition-colors duration-200 {{ $isHome ? 'text-toba-orange' : 'hover:text-toba-orange' }}">
+                       class="group relative py-2 transition-colors duration-200 {{ $isHome ? 'text-toba-green' : 'hover:text-toba-green' }}">
                         {{ __('Home') }}
-                        <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-orange transition-all duration-300 {{ $isHome ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                        <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $isHome ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </a>
 
                     <!-- Dropdown Paket -->
@@ -121,10 +121,10 @@
                     <div x-data="{ openPkg: false }" @mouseenter="openPkg = true" @mouseleave="openPkg = false" class="relative">
                         <a href="/tour/packages" @if($isPkg) aria-current="page" @endif
                            :aria-expanded="openPkg"
-                           class="group relative flex items-center gap-1 py-2 transition-colors duration-200 {{ $isPkg ? 'text-toba-orange' : 'hover:text-toba-orange' }}">
+                           class="group relative flex items-center gap-1 py-2 transition-colors duration-200 {{ $isPkg ? 'text-toba-green' : 'hover:text-toba-green' }}">
                             <span>{{ __('Paket Wisata Toba') }}</span>
                             <svg class="w-4 h-4 stroke-[3] transition-transform duration-200" :class="openPkg && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
-                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-orange transition-all duration-300 {{ $isPkg ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $isPkg ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                         </a>
                         <!-- pt-3 jadi jembatan hover supaya menu tidak tertutup saat kursor turun -->
                         <div x-show="openPkg" x-cloak
@@ -136,18 +136,18 @@
                              x-transition:leave-end="opacity-0"
                              class="absolute left-0 top-full pt-3 w-64 z-[200]">
                             <div class="bg-white rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5 py-2 overflow-hidden">
-                                <a href="/tour/packages" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-orange hover:bg-orange-50 hover:text-toba-orange transition-all duration-200">{{ __('Semua Paket Tour') }}</a>
-                                <a href="/tour/packages?type=private" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-orange hover:bg-orange-50 hover:text-toba-orange transition-all duration-200">{{ __('Private VIP Tour') }}</a>
-                                <a href="/tour/packages?type=family" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-orange hover:bg-orange-50 hover:text-toba-orange transition-all duration-200">{{ __('Paket Rombongan Keluarga') }}</a>
+                                <a href="/tour/packages" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Semua Paket Tour') }}</a>
+                                <a href="/tour/packages?type=private" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Private VIP Tour') }}</a>
+                                <a href="/tour/packages?type=family" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Paket Rombongan Keluarga') }}</a>
                             </div>
                         </div>
                     </div>
 
                     @foreach($navLinks as $link)
                         <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
-                           class="group relative py-2 transition-colors duration-200 {{ $link['active'] ? 'text-toba-orange' : 'hover:text-toba-orange' }}">
+                           class="group relative py-2 transition-colors duration-200 {{ $link['active'] ? 'text-toba-green' : 'hover:text-toba-green' }}">
                             {{ $link['label'] }}
-                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-orange transition-all duration-300 {{ $link['active'] ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $link['active'] ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                         </a>
                     @endforeach
                 </div>
@@ -172,7 +172,7 @@
                     </a>
                     <button @click="isMenuOpen = true" type="button"
                             aria-label="{{ __('Buka menu') }}" :aria-expanded="isMenuOpen"
-                            class="p-2 -mr-2 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-orange/50">
+                            class="p-2 -mr-2 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-green/50">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
                 </div>
@@ -194,7 +194,7 @@
              x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
              class="absolute inset-y-0 right-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100">
-                <span class="text-2xl font-black text-toba-orange leading-none">SUJAI<span class="text-[#1b4372] italic font-bold ml-1" style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span></span>
+                <span class="text-2xl font-black text-toba-green leading-none">SUJAI<span class="text-toba-green italic font-bold ml-1" style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span></span>
                 <button @click="isMenuOpen = false" type="button" aria-label="{{ __('Tutup menu') }}"
                         class="w-9 h-9 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-800 flex items-center justify-center transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
@@ -213,7 +213,7 @@
                 @endphp
                 @foreach($mobileLinks as $link)
                     <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
-                       class="flex items-center justify-between px-3 py-3 rounded-xl text-base font-bold transition-colors {{ $link['active'] ? 'bg-orange-50 text-toba-orange' : 'text-slate-800 hover:bg-slate-50 hover:text-toba-orange' }}">
+                       class="flex items-center justify-between px-3 py-3 rounded-xl text-base font-bold transition-colors {{ $link['active'] ? 'bg-toba-green/5 text-toba-green' : 'text-slate-800 hover:bg-slate-50 hover:text-toba-green' }}">
                         <span>{{ $link['label'] }}</span>
                         <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
                     </a>
@@ -225,7 +225,7 @@
                     <div class="flex items-center justify-center gap-3">
                         @foreach($socials as $name => $url)
                             <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ ucfirst($name) }}"
-                               class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-toba-orange hover:text-white flex items-center justify-center transition-colors duration-200">
+                               class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-toba-green hover:text-white flex items-center justify-center transition-colors duration-200">
                                 <x-icon :name="$name" class="w-4 h-4" />
                             </a>
                         @endforeach

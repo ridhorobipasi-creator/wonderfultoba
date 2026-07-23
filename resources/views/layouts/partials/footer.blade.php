@@ -20,9 +20,9 @@
                         />
                     @else
                         <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 bg-secondary rounded-lg flex items-center justify-center text-on-secondary font-bold text-lg">S</div>
+                            <div class="w-9 h-9 bg-toba-green rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
                             <span class="text-lg font-bold font-headline-md text-on-primary tracking-tight uppercase">
-                                Sujai <span class="text-secondary">Laketoba</span>
+                                Sujai <span class="text-green-400">Laketoba</span>
                             </span>
                         </div>
                     @endif
