@@ -15,7 +15,7 @@
         window.addEventListener('scroll', () => isScrolled = window.scrollY > 20);
         isScrolled = window.scrollY > 20;
     "
-    class="fixed top-0 left-0 right-0 z-[100] transition duration-300"
+    class="relative z-[100] transition duration-300 bg-slate-900 text-white"
 >
     <!-- Top Bar -->
     <div 
@@ -72,7 +72,7 @@
 
     <!-- Main Nav -->
     <nav 
-        :class="isScrolled ? 'bg-white/80 backdrop-blur-xl py-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50' : 'bg-transparent py-5 border-transparent'"
+        :class="isScrolled ? 'bg-slate-900/95 backdrop-blur-xl py-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-b border-slate-800' : 'bg-slate-900 py-4 border-b border-slate-800'"
         class="transition duration-500"
     >
         <div class="max-w-7xl mx-auto px-4 lg:px-6 xl:px-8">
