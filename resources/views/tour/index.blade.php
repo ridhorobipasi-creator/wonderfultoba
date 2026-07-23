@@ -510,7 +510,7 @@
 
     <!-- Cinema CTA -->
     <section class="py-16 md:py-32 px-5 md:px-8 bg-surface">
-        <div class="max-w-7xl mx-auto bg-primary rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,37,19,0.3)]">
+        <div class="max-w-7xl mx-auto bg-primary rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px] shadow-primary/30">
             <div class="absolute inset-0 opacity-40">
                 <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? 'Call to action image' }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
             </div>

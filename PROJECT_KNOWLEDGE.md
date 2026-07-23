@@ -8,14 +8,15 @@ Catatan teknis ringkas yang tidak tersurat dari kode. Lihat juga `CLAUDE.md` unt
 
 Semua warna didefinisikan sebagai token di `resources/css/app.css` blok `@theme`. **Jangan tulis hex mentah / arbitrary value (`text-[#...]`) di Blade** — tambahkan token baru kalau memang perlu.
 
-**Hijau — satu ramp emerald (hue 142–145°):**
+**Hijau — hanya SATU. Jangan tambah varian baru.**
 
 | Token | Hex | Peran | Kontras di putih |
 |---|---|---|---|
-| `--color-primary` | `#052e16` | permukaan gelap besar (hero, band CTA) | 14.91:1 |
-| `--color-toba-green` | `#166534` | **hijau merek** — logo, link, ikon, aksen admin | 7.13:1 |
-| `--color-toba-accent` | `#15803d` | hover/state di atas hijau merek | 5.02:1 |
-| `--color-toba-light` | `#f0fdf4` | latar lembut | — |
+| `--color-toba-green` | `#166534` | **satu-satunya hijau merek** — logo, link, ikon, tombol, aksen admin | 7.13:1 |
+| `--color-primary` | `#052e16` | bukan warna identitas; hanya latar gelap besar (hero, band CTA) agar teks putih terbaca | 14.91:1 |
+| `--color-toba-light` | `#f0fdf4` | bukan warna identitas; nyaris putih, untuk latar lembut | — |
+
+Butuh hijau yang lebih terang/gelap untuk sesuatu? **Jangan bikin hex baru.** Pakai modifier opasitas Tailwind di atas token yang ada (`bg-toba-green/10`, `shadow-primary/30`) supaya nilainya tetap satu sumber.
 
 **Oranye — warna aksi (CTA):**
 
@@ -27,6 +28,10 @@ Semua warna didefinisikan sebagai token di `resources/css/app.css` blok `@theme`
 Aturan pakai: **hijau = identitas, oranye = ajakan bertindak.** Oranye jangan dipakai untuk teks isi karena kontrasnya hanya 2.85:1 di putih (gagal AA) — aman hanya sebagai latar tombol dengan teks putih.
 
 `theme-color` di `layouts/app.blade.php` dan `theme_color` di `public/manifest.json` mengikuti `#166534`; ubah bertiga sekaligus kalau hijau merek berganti.
+
+**Catatan build:** `app.css` punya `@source '../../storage/framework/views/*.php'`. Kalau cache view sedang hangat saat `npm run build`, CSS hasil build membengkak ~13 KB dari kelas duplikat. Jalankan `php artisan view:clear` sebelum build produksi.
+
+**Kontras yang diketahui turun:** label lokasi & harga di preview slider `admin/cms/tour.blade.php` (baris 768, 775) adalah teks hijau di atas panel gelap. Dulu `#15803d` (3.56:1), sekarang `#166534` (2.50:1) — keduanya sudah gagal AA sejak awal. Kalau mau diperbaiki, ubah teksnya jadi putih, jangan tambah hijau baru.
 
 **Utang teknis:** masih ada dua sistem penamaan token yang jalan berdampingan — token Material (`primary`, `secondary`, `surface`, `on-*`) dipakai halaman publik, token `toba-*` dipakai panel admin (±279 pemakaian). Nilainya sudah disatukan ke ramp yang sama, tapi penamaannya belum. Penggabungan penuh = sweep besar di `resources/views/admin`.
 

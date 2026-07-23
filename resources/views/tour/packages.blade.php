@@ -96,7 +96,7 @@
                 <div class="animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <span class="inline-flex items-center gap-2 px-3 py-1 bg-toba-green/20 backdrop-blur-md border border-white/10 text-white text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full mb-4">Eksplorasi Indonesia & Dunia</span>
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1]">
-                        Paket Wisata <span class="text-toba-accent">Pilihan Terbaik</span>
+                        Paket Wisata <span class="text-toba-green">Pilihan Terbaik</span>
                     </h1>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-slate-200 transition-colors duration-300 group h-full flex flex-col shadow-sm">
                             <div class="relative h-64 overflow-hidden shrink-0" x-data="{ loaded: false }">
                                 <!-- Blur placeholder -->
-                                <div class="absolute inset-0 bg-gradient-to-br from-toba-green/20 via-slate-200/50 to-toba-accent/20 animate-pulse"
+                                <div class="absolute inset-0 bg-gradient-to-br from-toba-green/20 via-slate-200/50 to-toba-green/20 animate-pulse"
                                      x-show="!loaded"></div>
                                 <img :src="pkg.first_image" :alt="pkg.name" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition duration-[1.5s]"

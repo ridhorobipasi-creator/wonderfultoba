@@ -765,14 +765,14 @@ document.addEventListener('alpine:init', () => {
                     <div class="w-full lg:w-1/2 text-white">
                         <template x-for="(slide, index) in slides" :key="index">
                             <div x-show="activeSlideIdx === index" x-transition class="space-y-6">
-                                <span class="inline-flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.3em] text-toba-accent" x-text="slide.location"></span>
+                                <span class="inline-flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.3em] text-toba-green" x-text="slide.location"></span>
                                 <h2 class="text-4xl font-black leading-tight tracking-tighter" x-text="slide.title"></h2>
                                 <p class="text-slate-300 text-[10px] leading-relaxed max-w-xs opacity-90" x-text="slide.subtitle"></p>
                                 <div class="flex items-center gap-4 pt-4">
                                     <div class="px-6 py-3 bg-toba-green text-white rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl" x-text="slide.cta_text"></div>
                                     <div x-show="slide.price > 0" class="flex flex-col">
                                         <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Mulai Dari</span>
-                                        <span class="text-lg font-black text-toba-accent" x-text="'RM ' + Number(slide.price).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span>
+                                        <span class="text-lg font-black text-toba-green" x-text="'RM ' + Number(slide.price).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span>
                                     </div>
                                 </div>
                             </div>
@@ -783,7 +783,7 @@ document.addEventListener('alpine:init', () => {
                     <div class="w-full lg:w-1/2 flex justify-end gap-3 overflow-x-auto no-scrollbar pb-4">
                         <template x-for="(slide, index) in slides" :key="index">
                             <button type="button" @click="activeSlideIdx = index" 
-                                    :class="activeSlideIdx === index ? 'ring-2 ring-toba-accent ring-offset-2 ring-offset-slate-900 scale-105 opacity-100' : 'opacity-40 hover:opacity-100'"
+                                    :class="activeSlideIdx === index ? 'ring-2 ring-toba-green ring-offset-2 ring-offset-slate-900 scale-105 opacity-100' : 'opacity-40 hover:opacity-100'"
                                     class="relative shrink-0 w-24 h-32 rounded-2xl overflow-hidden transition duration-500">
                                 <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-black/40"></div>
@@ -801,7 +801,7 @@ document.addEventListener('alpine:init', () => {
                 <div class="flex gap-1">
                     <template x-for="(slide, index) in slides" :key="index">
                         <button type="button" @click="activeSlideIdx = index" 
-                                :class="activeSlideIdx === index ? 'w-6 bg-toba-accent' : 'w-2 bg-white/40'"
+                                :class="activeSlideIdx === index ? 'w-6 bg-toba-green' : 'w-2 bg-white/40'"
                                 class="h-1.5 rounded-full transition"></button>
                     </template>
                 </div>
