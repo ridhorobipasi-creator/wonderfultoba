@@ -88,26 +88,16 @@
                      x-transition:leave-start="opacity-100"
                      x-transition:leave-end="opacity-0">
                     <a href="{{ $slide['cta_link'] }}" class="block w-full h-full group">
-                        {{-- Overlay --}}
-                        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition duration-700 z-10"></div>
+                        {{-- Overlay tipis agar poster tetap terlihat --}}
+                        <div class="absolute inset-0 bg-black/20 z-10"></div>
                         <picture class="block w-full h-full">
                             <source srcset="{{ $slide['image_webp'] }}" type="image/webp">
                             <img src="{{ $slide['image_url'] }}" alt="{{ $slide['alt'] }}"
-                                 class="w-full h-full object-cover object-top transition duration-1000 group-hover:scale-105">
+                                 class="w-full h-full object-cover object-top">
                         </picture>
-                        {{-- Text Content ZazaTour Style --}}
-                        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-                            @if(!empty($slide['title']))
-                                <h2 class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-3 md:mb-5 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-serif italic tracking-wide">
-                                    {{ $slide['title'] }}
-                                </h2>
-                            @endif
-                            @if(!empty($slide['subtitle']))
-                                <p class="text-lg md:text-2xl text-gray-100 font-medium mb-8 md:mb-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-3xl">
-                                    {{ $slide['subtitle'] }}
-                                </p>
-                            @endif
-                            <span class="inline-block bg-toba-orange hover:bg-orange-600 text-white font-bold py-3 md:py-4 px-8 md:px-10 rounded-full shadow-[0_4px_15px_rgba(230,126,34,0.6)] transition-all duration-300 hover:scale-105 uppercase tracking-wider text-sm md:text-base border border-orange-400">
+                        {{-- Hanya tombol BOOK NOW --}}
+                        <div class="absolute inset-0 z-20 flex items-end justify-center pb-20">
+                            <span class="inline-block bg-toba-orange hover:bg-orange-600 text-white font-bold py-3 md:py-4 px-10 md:px-14 rounded-full shadow-[0_4px_20px_rgba(230,126,34,0.7)] transition-all duration-300 hover:scale-105 uppercase tracking-widest text-sm md:text-base border border-orange-400">
                                 BOOK NOW!
                             </span>
                         </div>
