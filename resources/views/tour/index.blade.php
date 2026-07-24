@@ -76,9 +76,17 @@
 
 @section('content')
 <div x-data="{ waNumber: @json(\App\Helpers\ContactHelper::whatsappDigits()) }">
-    
+
+    {{-- H1 semantik halaman. sr-only karena slider kini hanya gambar + tombol,
+         tak ada tempat wajar untuk heading terlihat tanpa merusak desainnya.
+         Diletakkan di level halaman (di luar guard show_slider) supaya satu h1
+         ini tetap ada meski slider dimatikan. --}}
+    <h1 class="sr-only">{{ $settings['hero_title'] ?? __('Sujai Laketoba — Paket Wisata Danau Toba & Sumatera Utara') }}</h1>
+
     <!-- Premium Hero Slider -->
+    @if($settings['show_slider'] ?? true)
     <x-home-slider :settings="$settings" :packages="$packages" />
+    @endif
 
     <!-- Featured Packages -->
     @if($settings['show_featured'] ?? true)
