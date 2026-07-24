@@ -13,67 +13,62 @@
     $image = imageUrl($rawImage);
 @endphp
 
-<div class="card-flat overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full rounded-2xl">
+<a href="/tour/package/{{ $package->slug }}"
+   class="group relative block overflow-hidden rounded-2xl bg-slate-900 shadow-md hover:shadow-xl transition-all duration-500"
+   style="aspect-ratio: 3/4;">
 
     {{-- Gambar --}}
-    <div class="relative h-52 overflow-hidden shrink-0">
-        <img
-            src="{{ $image }}"
-            alt="{{ $package->name }}"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-        >
+    <img
+        src="{{ $image }}"
+        alt="{{ $package->name }}"
+        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+    >
 
-        {{-- Badge Popular --}}
-        @if($package->isFeatured ?? false)
-        <div class="absolute top-3 left-3">
-            <span class="bg-toba-orange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
-                🔥 {{ __('Terpopuler') }}
-            </span>
-        </div>
-        @endif
+    {{-- Gradient Overlay — bawah lebih gelap agar teks jelas --}}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/10"></div>
 
-        {{-- Badge Durasi --}}
-        <div class="absolute top-3 right-3">
-            <span class="bg-slate-900/75 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                {{ $package->duration }}
-            </span>
-        </div>
+    {{-- Badge Kiri Atas --}}
+    @if($package->isFeatured ?? false)
+    <div class="absolute top-3.5 left-3.5 z-10">
+        <span class="inline-flex items-center gap-1 bg-toba-orange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md">
+            🔥 {{ __('Terpopuler') }}
+        </span>
+    </div>
+    @endif
 
-        {{-- Gradient Overlay --}}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+    {{-- Badge Durasi Kanan Atas --}}
+    <div class="absolute top-3.5 right-3.5 z-10">
+        <span class="inline-flex items-center bg-white/15 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider border border-white/20 px-2.5 py-1 rounded-full">
+            {{ $package->duration }}
+        </span>
     </div>
 
-    {{-- Konten --}}
-    <div class="p-5 flex flex-col flex-grow">
+    {{-- Konten bawah --}}
+    <div class="absolute inset-x-0 bottom-0 z-10 p-4 pb-5">
+
         {{-- Lokasi --}}
-        <div class="flex items-center text-slate-400 text-[11px] font-medium uppercase tracking-widest mb-2 gap-1.5">
-            <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="flex items-center gap-1 text-white/70 text-[10.5px] font-medium uppercase tracking-widest mb-1.5">
+            <svg class="w-2.5 h-2.5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             <span class="truncate">{{ $displayLocation }}</span>
             @if($isInternational) <span>✈️</span> @endif
         </div>
 
         {{-- Nama Paket --}}
-        <h3 class="text-[15px] font-semibold text-slate-900 mb-2 line-clamp-2 leading-snug group-hover:text-toba-green transition-colors">
+        <h3 class="text-white font-semibold text-[15px] leading-snug line-clamp-2 mb-3 group-hover:text-toba-orange transition-colors duration-300">
             {{ $package->name }}
         </h3>
 
-        {{-- Deskripsi --}}
-        <p class="text-slate-500 text-[13px] leading-relaxed line-clamp-2 mb-4 flex-grow">
-            {{ $package->description }}
-        </p>
-
         {{-- Harga + CTA --}}
-        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+        <div class="flex items-center justify-between">
             <div>
-                <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-0.5">{{ __('Mulai dari') }}</p>
-                <span class="text-lg font-bold text-slate-900">
+                <p class="text-white/50 text-[9.5px] font-semibold uppercase tracking-widest mb-0.5">{{ __('Mulai dari') }}</p>
+                <span class="text-white text-[17px] font-bold leading-none">
                     {{ \App\Helpers\CurrencyHelper::formatPrice($package->price) }}
                 </span>
             </div>
-            <a href="/tour/package/{{ $package->slug }}"
-               class="w-10 h-10 bg-slate-900 hover:bg-toba-green text-white rounded-xl flex items-center justify-center transition-colors duration-300 group/btn">
-                <svg class="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
+            <span class="w-9 h-9 bg-white/15 backdrop-blur-sm border border-white/25 text-white rounded-full flex items-center justify-center group-hover:bg-toba-orange group-hover:border-toba-orange transition-all duration-300">
+                <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
         </div>
     </div>
-</div>
+</a>
