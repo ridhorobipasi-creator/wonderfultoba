@@ -62,7 +62,7 @@
         }
     }">
         {{-- Slides --}}
-        <div class="relative w-full overflow-hidden" style="height: 60vh; min-height: 380px; max-height: 800px;">
+        <div class="relative w-full overflow-hidden h-[60vh] md:h-[85vh] min-h-[420px] md:min-h-[650px] max-h-[950px]">
             @foreach($slides as $index => $slide)
                 <div class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                      x-show="activeSlide === {{ $index }}"
