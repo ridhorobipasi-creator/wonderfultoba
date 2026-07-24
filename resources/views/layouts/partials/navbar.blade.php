@@ -164,12 +164,11 @@
                     @endforeach
                 </div>
 
-                <!-- CTA Desktop (Solid Clean Button) -->
-                <div class="hidden lg:flex items-center shrink-0 ml-4">
+                <div class="hidden lg:flex items-center shrink-0 ml-6">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
-                       class="group bg-slate-900 hover:bg-toba-green text-white px-5 py-2.5 rounded-full font-medium text-[13px] tracking-wide flex items-center gap-2.5 transition-colors duration-300">
+                       class="group bg-slate-900 hover:bg-toba-green text-white px-7 py-3 rounded-full font-medium text-[14px] tracking-wide flex items-center gap-3 transition-colors duration-300">
                         <span>{{ __('Hubungi Kami') }}</span>
-                        <x-icon name="whatsapp" class="w-4 h-4 opacity-80 group-hover:opacity-100 transition-opacity" />
+                        <x-icon name="whatsapp" class="w-[18px] h-[18px] opacity-90 group-hover:opacity-100 transition-opacity" />
                     </a>
                 </div>
 
