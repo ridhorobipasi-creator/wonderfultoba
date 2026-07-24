@@ -95,8 +95,8 @@
 
     <!-- 2. Main Nav Putih (sticky, clean) -->
     <nav @scroll.window="scrolled = window.scrollY > 24"
-         :class="scrolled ? 'shadow-sm shadow-slate-900/5 py-3.5' : 'py-4 md:py-5'"
-         class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 z-[120]">
+         :class="scrolled ? 'shadow-md py-3' : 'py-4 md:py-5'"
+         class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 py-4 md:py-5 transition-all duration-300 z-[120]">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center gap-4">
                 <!-- Logo -->
