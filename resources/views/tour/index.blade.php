@@ -359,23 +359,11 @@
 
 
     <!-- Testimonials — minimal -->
-    @if($settings['show_testimonials'] ?? true)
-    @php
-        $testimonials = $settings['testimonials'] ?? [
-            [
-                'name' => 'Julian Thorne',
-                'location' => 'London, UK',
-                'text' => 'Perhatian terhadap detail sangat menakjubkan. Kami menjelajahi jantung Sumatera tanpa repot mengatur jadwal. Mulai dari penjemputan di Kualanamu hingga makan malam di tepi Samosir, semuanya dirancang sempurna.',
-                'image' => 'user1'
-            ],
-            [
-                'name' => 'Isabella Chen',
-                'location' => 'Singapura',
-                'text' => 'Sangat puas dengan pilihan hotel dan restorannya. Sujai Laketoba mengkurasi tempat-tempat otentik yang jarang diketahui turis biasa. Sangat direkomendasikan untuk liburan keluarga.',
-                'image' => 'user2'
-            ]
-        ];
-    @endphp
+    {{-- Hanya render bila admin sudah mengisi testimoni ASLI. Tidak ada
+         placeholder fiktif: testimoni karangan melanggar UU Perlindungan
+         Konsumen, dan section kosong lebih baik daripada nama palsu. --}}
+    @php $testimonials = $settings['testimonials'] ?? []; @endphp
+    @if(($settings['show_testimonials'] ?? true) && count($testimonials))
     <section class="py-16 md:py-24 bg-surface">
         <div class="max-w-5xl mx-auto px-5 md:px-8">
             <div class="flex items-center gap-3 mb-10 md:mb-12">

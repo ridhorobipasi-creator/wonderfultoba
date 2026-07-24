@@ -29,10 +29,13 @@
                 <span class="font-bold text-[10px] uppercase tracking-widest">{{ __('Terpopuler') }}</span>
             </div>
             @endif
+            @php $__cardRating = siteRating(); @endphp
+            @if($__cardRating)
             <div class="bg-white/95 px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-sm border border-slate-200 w-fit">
                 <svg class="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span class="font-semibold text-slate-800 text-[10px] uppercase tracking-wider">4.8</span>
+                <span class="font-semibold text-slate-800 text-[10px] uppercase tracking-wider">{{ number_format($__cardRating['value'], 1) }}</span>
             </div>
+            @endif
             <div class="bg-slate-900 text-white px-3 py-1.5 rounded-xl text-[10px] font-semibold uppercase tracking-widest shadow-sm">
                 {{ $package->duration }}
             </div>

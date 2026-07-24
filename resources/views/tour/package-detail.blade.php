@@ -209,6 +209,7 @@
             selected: false
         })),
         isSubmitting: false,
+        termsAccepted: false,
         notesUser: @json($formOld['notesUser']),
         customerName: @json($formOld['customerName']),
         customerEmail: @json($formOld['customerEmail']),
@@ -286,9 +287,11 @@
     @scroll.window="showConcierge = window.scrollY > 300"
     class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-32 md:pt-28"
 >
-    <!-- AI Context & Screen Reader Only Data -->
-    <section class="sr-only" id="ai-context" aria-hidden="true">
-        <h2>AI Context: {{ $package->translated_name }}</h2>
+    {{-- Ringkasan teks untuk pembaca layar & crawler. sr-only saja (TANPA
+         aria-hidden) supaya teknologi bantu ikut membacanya — ini pola sah,
+         bukan teks tersembunyi khusus bot. --}}
+    <section class="sr-only" id="package-summary">
+        <h2>{{ $package->translated_name }}</h2>
         <p>{{ $package->translated_description }}</p>
         <p>Price: {{ \App\Helpers\CurrencyHelper::formatIn($package->price, \App\Helpers\CurrencyHelper::PRICE_BASE) }}</p>
         @if(!empty($package->pricingDetails['includes']))
@@ -787,15 +790,16 @@
                         <input type="hidden" name="packageId" :value="package.id">
                         <input type="hidden" name="slug" :value="package.slug">
                         <input type="hidden" name="notes" :value="serializedNotes">
-                        <input type="hidden" name="paxChildren" :value="paxChildren">
+                        {{-- paxChildren dikirim oleh input angka yang terlihat di bawah; hidden
+                             duplikat dihapus (dulu mengirim field yang sama dua kali). --}}
                         <template x-for="(service, idx) in services.filter(s => s.selected)" :key="idx">
                             <input type="hidden" name="selected_services[]" :value="service.name">
                         </template>
                         
                         <!-- Nama Lengkap -->
                         <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nama lengkap') }} <span class="text-red-500">*</span></label>
-                            <input type="text" name="customerName" x-model="customerName" required placeholder="{{ __('Nama sesuai identitas') }}" 
+                            <label for="bk-customerName" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nama lengkap') }} <span class="text-red-500">*</span></label>
+                            <input type="text" id="bk-customerName" name="customerName" x-model="customerName" required placeholder="{{ __('Nama sesuai identitas') }}" autocomplete="name"
                                 class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                             @error('customerName') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -803,14 +807,14 @@
                         <!-- Email & WhatsApp -->
                         <div class="grid grid-cols-1 gap-4">
                             <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
-                                <input type="email" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" 
+                                <label for="bk-customerEmail" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
+                                <input type="email" id="bk-customerEmail" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" autocomplete="email" inputmode="email"
                                     class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                                 @error('customerEmail') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
-                                <input type="tel" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" 
+                                <label for="bk-customerPhone" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
+                                <input type="tel" id="bk-customerPhone" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" autocomplete="tel" inputmode="tel"
                                     class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
                                 @error('customerPhone') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
@@ -818,10 +822,10 @@
 
                         <!-- Tanggal Keberangkatan -->
                         <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Pilih tanggal') }} <span class="text-red-500">*</span></label>
+                            <label for="bk-startDate" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Pilih tanggal') }} <span class="text-red-500">*</span></label>
                             <div class="relative">
-                                <input type="date" name="startDate" x-model="startDate" required
-                                    min="{{ now()->format('Y-m-d') }}"
+                                <input type="date" id="bk-startDate" name="startDate" x-model="startDate" required
+                                    min="{{ now()->addDays((int) (optional(\App\Models\Setting::where('key','booking_settings')->first())->value['min_advance_days'] ?? 1))->format('Y-m-d') }}"
                                     class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition uppercase">
                             </div>
                             @error('startDate') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
@@ -858,10 +862,10 @@
                         <!-- Input Pax Dewasa & Anak -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
+                                <label for="bk-pax" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Tamu dewasa') }} <span class="text-red-500">*</span></label>
                                 <div class="relative flex items-center">
-                                    <button type="button" @click="if(pax > 1) pax--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
-                                    <input type="number" name="pax" x-model.number="pax" required min="1" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
+                                    <button type="button" @click="if(pax > 1) pax--" aria-label="{{ __('Kurangi tamu dewasa') }}" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
+                                    <input type="number" id="bk-pax" name="pax" x-model.number="pax" required min="1" max="99" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
                                     <button type="button" @click="pax++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                                 <template x-if="pkgTiers && pkgTiers.length > 0">
@@ -870,10 +874,10 @@
                                 @error('pax') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
+                                <label for="bk-paxChildren" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Anak-anak') }}</label>
                                 <div class="relative flex items-center">
-                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
-                                    <input type="number" name="paxChildren" x-model.number="paxChildren" min="0" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
+                                    <button type="button" @click="if(paxChildren > 0) paxChildren--" aria-label="{{ __('Kurangi anak-anak') }}" class="absolute left-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-l-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">remove</span></button>
+                                    <input type="number" id="bk-paxChildren" name="paxChildren" x-model.number="paxChildren" min="0" max="99" class="w-full text-center border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition hide-arrows">
                                     <button type="button" @click="paxChildren++" class="absolute right-0 top-0 bottom-0 px-4 text-gray-500 hover:bg-gray-100 rounded-r-lg transition focus:outline-none"><span class="material-symbols-outlined text-[16px]">add</span></button>
                                 </div>
                             </div>
@@ -899,8 +903,8 @@
 
                         <!-- Catatan User -->
                         <div>
-                            <label class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Catatan tambahan') }} <span class="text-[9px] text-slate-500">({{ __('Opsional') }})</span></label>
-                            <textarea x-model="notesUser" placeholder="{{ __('Permintaan khusus, hotel, alergi, penjemputan, dll.') }}" rows="2"
+                            <label for="bk-notes" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Catatan tambahan') }} <span class="text-[9px] text-slate-500">({{ __('Opsional') }})</span></label>
+                            <textarea id="bk-notes" x-model="notesUser" placeholder="{{ __('Permintaan khusus, hotel, alergi, penjemputan, dll.') }}" rows="2"
                                 class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition resize-none"></textarea>
                         </div>
 
@@ -937,10 +941,26 @@
                             <input type="text" name="website_url" id="website_url" value="" autocomplete="off" tabindex="-1">
                         </div>
 
+                        <!-- Persetujuan S&K + Kebijakan Privasi (wajib) -->
+                        <div>
+                            <label for="bk-terms" class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="bk-terms" name="terms" value="1" x-model="termsAccepted" required
+                                    class="mt-0.5 w-4 h-4 shrink-0 text-secondary border-outline-variant rounded focus:ring-1 focus:ring-secondary">
+                                <span class="text-[11px] text-slate-600 font-body-md leading-relaxed">
+                                    {!! __('Saya menyetujui :terms dan :privacy, termasuk kebijakan pembatalan & pengembalian dana.', [
+                                        'terms' => '<a href="'.route('terms').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Syarat & Ketentuan').'</a>',
+                                        'privacy' => '<a href="'.route('privacy').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Kebijakan Privasi').'</a>',
+                                    ]) !!}
+                                </span>
+                            </label>
+                            @error('terms') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
                         <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            :disabled="isSubmitting"
+                        <button
+                            type="submit"
+                            :disabled="isSubmitting || !termsAccepted"
+                            :class="(isSubmitting || !termsAccepted) ? 'opacity-50 cursor-not-allowed' : ''"
                             class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition duration-300 shadow-sm flex items-center justify-center gap-2"
                         >
                             <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">
