@@ -773,64 +773,81 @@ document.addEventListener('alpine:init', () => {
     <!-- RIGHT: LIVE PREVIEW & SLIDER MANAGEMENT -->
     <div class="flex-1 bg-white rounded-[3.5rem] overflow-hidden relative shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-8 border-slate-900/50 min-h-[600px] xl:h-[85vh] sticky top-8 overflow-y-auto no-scrollbar">
         
-        <!-- Tab: SLIDER PREVIEW (Snippet B) -->
-        <div x-show="activeTab === 'slider'" x-transition class="h-full bg-slate-900 relative overflow-hidden">
-            <!-- Backgrounds -->
+        <!-- Tab: SLIDER PREVIEW — 1:1 dengan tampilan homepage sesungguhnya -->
+        <div x-show="activeTab === 'slider'" x-transition class="relative overflow-hidden bg-black" style="height:100%;">
+
+            <!-- Slide Backgrounds -->
             <template x-for="(slide, index) in slides" :key="index">
-                <div x-show="activeSlideIdx === index" x-transition.opacity.duration.1000ms class="absolute inset-0">
-                    <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                <div x-show="activeSlideIdx === index"
+                     style="position:absolute;inset:0;transition:opacity 0.9s ease-in-out;"
+                     :style="activeSlideIdx === index ? 'opacity:1;z-index:2;' : 'opacity:0;z-index:1;'">
+                    <img :src="fixPath(slide.image_url) || '/images/sumut/toba_hero.webp'"
+                         class="w-full h-full object-cover object-center"
+                         style="display:block;">
+                    <!-- Gradient overlay bawah — persis homepage -->
+                    <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0.55) 100%);z-index:2;"></div>
                 </div>
             </template>
 
-            <!-- Slider Content UI -->
-            <div class="relative z-10 h-full flex items-center p-12">
-                <div class="w-full flex flex-col lg:flex-row items-center gap-8">
-                    <!-- Left: Text -->
-                    <div class="w-full lg:w-1/2 text-white">
-                        <template x-for="(slide, index) in slides" :key="index">
-                            <div x-show="activeSlideIdx === index" x-transition class="space-y-6">
-                                <span class="inline-flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.3em] text-toba-green" x-text="slide.location"></span>
-                                <h2 class="text-4xl font-black leading-tight tracking-tighter" x-text="slide.title"></h2>
-                                <p class="text-slate-300 text-[10px] leading-relaxed max-w-xs opacity-90" x-text="slide.subtitle"></p>
-                                <div class="flex items-center gap-4 pt-4">
-                                    <div class="px-6 py-3 bg-toba-green text-white rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl" x-text="slide.cta_text"></div>
-                                    <div x-show="slide.price > 0" class="flex flex-col">
-                                        <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Mulai Dari</span>
-                                        <span class="text-lg font-black text-toba-green" x-text="'RM ' + Number(slide.price).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
+            <!-- BOOK NOW Button — tengah bawah, persis homepage -->
+            <div style="position:absolute;bottom:72px;left:0;right:0;display:flex;justify-content:center;z-index:20;">
+                <template x-for="(slide, index) in slides" :key="'btn-'+index">
+                    <a x-show="activeSlideIdx === index"
+                       :href="slide.cta_link || '#'"
+                       style="display:inline-flex;align-items:center;gap:8px;background:#E67E22;color:#fff;font-weight:800;padding:12px 44px;border-radius:9999px;letter-spacing:0.12em;text-transform:uppercase;font-size:13px;border:2px solid rgba(255,255,255,0.35);box-shadow:0 6px 28px rgba(230,126,34,0.65);white-space:nowrap;text-decoration:none;animation:pulse-glow 2.5s infinite;">
+                        <span x-text="slide.cta_text || 'Book Now!'"></span>
+                    </a>
+                </template>
+            </div>
 
-                    <!-- Right: Thumbnails -->
-                    <div class="w-full lg:w-1/2 flex justify-end gap-3 overflow-x-auto no-scrollbar pb-4">
-                        <template x-for="(slide, index) in slides" :key="index">
-                            <button type="button" @click="activeSlideIdx = index" 
-                                    :class="activeSlideIdx === index ? 'ring-2 ring-toba-green ring-offset-2 ring-offset-slate-900 scale-105 opacity-100' : 'opacity-40 hover:opacity-100'"
-                                    class="relative shrink-0 w-24 h-32 rounded-2xl overflow-hidden transition duration-500">
-                                <img :src="fixPath(slide.image_url) || fixPath('tour')" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-black/40"></div>
-                                <div class="absolute bottom-2 left-2 right-2 text-left">
-                                    <p class="text-[6px] font-black text-white truncate uppercase" x-text="slide.title"></p>
-                                </div>
-                            </button>
-                        </template>
+            <!-- Dot Indicators -->
+            <div style="position:absolute;bottom:56px;left:50%;transform:translateX(-50%);z-index:25;display:flex;gap:7px;align-items:center;">
+                <template x-for="(slide, index) in slides" :key="'dot-'+index">
+                    <button type="button" @click="activeSlideIdx = index"
+                            style="height:5px;border-radius:9999px;border:none;cursor:pointer;transition:all 0.35s;padding:0;"
+                            :style="activeSlideIdx === index ? 'width:20px;background:white;' : 'width:5px;background:rgba(255,255,255,0.45);'">
+                    </button>
+                </template>
+            </div>
+
+            <!-- Arrow Prev/Next -->
+            <button type="button" @click="activeSlideIdx = (activeSlideIdx - 1 + slides.length) % slides.length"
+                    style="position:absolute;top:50%;left:12px;transform:translateY(-50%);z-index:25;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.38);color:white;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;backdrop-filter:blur(4px);margin-top:-25px;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" @click="activeSlideIdx = (activeSlideIdx + 1) % slides.length"
+                    style="position:absolute;top:50%;right:12px;transform:translateY(-50%);z-index:25;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.38);color:white;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;backdrop-filter:blur(4px);margin-top:-25px;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            <!-- Features Bar — overlay bawah, persis homepage -->
+            <div style="position:absolute;bottom:0;left:0;right:0;z-index:20;background:rgba(15,15,15,0.88);backdrop-filter:blur(8px);display:flex;align-items:stretch;justify-content:center;">
+                <div style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:white;flex:1;justify-content:center;border-right:1px solid rgba(255,255,255,0.10);">
+                    <div style="width:30px;height:30px;border-radius:50%;background:#E67E22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                     </div>
+                    <div><p style="font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.06em;">Booking Mudah</p><p style="font-size:8px;color:#999;">Tanpa Ribet</p></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:white;flex:1;justify-content:center;border-right:1px solid rgba(255,255,255,0.10);">
+                    <div style="width:30px;height:30px;border-radius:50%;background:#E67E22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div><p style="font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.06em;">Proses Cepat</p><p style="font-size:8px;color:#999;">CS 24/7 Fast Respon</p></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:white;flex:1;justify-content:center;border-right:1px solid rgba(255,255,255,0.10);">
+                    <div style="width:30px;height:30px;border-radius:50%;background:#E67E22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <div><p style="font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.06em;">Banyak Pilihan</p><p style="font-size:8px;color:#999;">Paket Fleksibel</p></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:white;flex:1;justify-content:center;">
+                    <div style="width:30px;height:30px;border-radius:50%;background:#E67E22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div><p style="font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.06em;">Harga Terbaik</p><p style="font-size:8px;color:#999;">Terjangkau & Premium</p></div>
                 </div>
             </div>
 
-            <!-- Navigation Controls -->
-            <div class="absolute bottom-10 left-12 z-20 flex items-center gap-4">
-                <div class="flex gap-1">
-                    <template x-for="(slide, index) in slides" :key="index">
-                        <button type="button" @click="activeSlideIdx = index" 
-                                :class="activeSlideIdx === index ? 'w-6 bg-toba-green' : 'w-2 bg-white/40'"
-                                class="h-1.5 rounded-full transition"></button>
-                    </template>
-                </div>
-            </div>
         </div>
 
         <!-- Tab: LIVE PREVIEW (Original Content) -->
