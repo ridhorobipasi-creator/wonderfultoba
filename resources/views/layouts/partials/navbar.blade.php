@@ -39,8 +39,8 @@
     @keydown.escape.window="isMenuOpen = false"
     class="relative z-[100] w-full font-sans"
 >
-    <!-- 1. Topbar (strip identitas — hijau merek) -->
-    <div class="hidden sm:block bg-gradient-to-r from-toba-green via-toba-green to-primary text-white">
+    <!-- 1. Topbar (strip identitas — orange merek seperti ZazaTour) -->
+    <div class="hidden sm:block bg-toba-orange text-white">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-6 py-2 text-[12px] font-bold">
             <!-- Lokasi Kantor -->
             <div class="flex items-center gap-2 min-w-0">
