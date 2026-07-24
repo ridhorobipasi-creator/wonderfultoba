@@ -166,9 +166,9 @@
 
                 <div class="hidden lg:flex items-center shrink-0 ml-6">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
-                       class="group bg-slate-900 hover:bg-toba-green text-white px-7 py-3 rounded-full font-medium text-[14px] tracking-wide flex items-center gap-3 transition-colors duration-300">
+                       class="group inline-flex items-center gap-2.5 border border-toba-green text-toba-green hover:bg-toba-green hover:text-white px-6 py-2.5 rounded-full font-medium text-[13.5px] tracking-wide transition-all duration-300">
                         <span>{{ __('Hubungi Kami') }}</span>
-                        <x-icon name="whatsapp" class="w-[18px] h-[18px] opacity-90 group-hover:opacity-100 transition-opacity" />
+                        <x-icon name="whatsapp" class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                     </a>
                 </div>
 
