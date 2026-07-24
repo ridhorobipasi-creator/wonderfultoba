@@ -134,11 +134,23 @@
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100"
                              x-transition:leave-end="opacity-0"
-                             class="absolute left-0 top-full pt-3 w-64 z-[200]">
+                             class="absolute left-0 top-full pt-3 w-80 z-[200]">
                             <div class="bg-white rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5 py-2 overflow-hidden">
                                 <a href="/tour/packages" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Semua Paket Tour') }}</a>
-                                <a href="/tour/packages?type=private" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Private VIP Tour') }}</a>
-                                <a href="/tour/packages?type=family" class="block px-4 py-2.5 text-sm font-bold text-slate-700 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 hover:text-toba-green transition-all duration-200">{{ __('Paket Rombongan Keluarga') }}</a>
+                                @if(count($navPackages ?? []))
+                                    <div class="my-1.5 border-t border-slate-100"></div>
+                                    <div class="max-h-[60vh] overflow-y-auto">
+                                        @foreach($navPackages as $navPkg)
+                                            <a href="/tour/package/{{ $navPkg->slug }}"
+                                               class="block px-4 py-2.5 border-l-[3px] border-transparent hover:border-toba-green hover:bg-toba-green/5 transition-all duration-200 group/item">
+                                                <span class="block text-sm font-bold text-slate-700 group-hover/item:text-toba-green leading-snug">{{ $navPkg->translated_name }}</span>
+                                                @if($navPkg->duration)
+                                                    <span class="block mt-0.5 text-[11px] font-semibold text-slate-400">{{ $navPkg->duration }}</span>
+                                                @endif
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -203,14 +215,51 @@
 
             <nav class="flex-1 overflow-y-auto px-3 py-4">
                 @php
-                    $mobileLinks = array_merge(
-                        [
-                            ['label' => __('Home'), 'url' => '/', 'active' => request()->is('/')],
-                            ['label' => __('Paket Wisata Toba'), 'url' => '/tour/packages', 'active' => request()->is('tour/packages*')],
-                        ],
-                        $navLinks
-                    );
+                    $isPkgMobile = request()->is('tour/packages*') || request()->is('tour/package/*');
+                    // Home & Paket dirender manual di bawah; sisanya tetap dari $navLinks.
+                    $mobileLinks = $navLinks;
                 @endphp
+
+                <a href="/" @if(request()->is('/')) aria-current="page" @endif
+                   class="flex items-center justify-between px-3 py-3 rounded-xl text-base font-bold transition-colors {{ request()->is('/') ? 'bg-toba-green/5 text-toba-green' : 'text-slate-800 hover:bg-slate-50 hover:text-toba-green' }}">
+                    <span>{{ __('Home') }}</span>
+                    <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+                </a>
+
+                <!-- Paket: tautan ke daftar + tombol terpisah untuk membuka rincian paket -->
+                <div x-data="{ openPkgMobile: {{ $isPkgMobile ? 'true' : 'false' }} }">
+                    <div class="flex items-center rounded-xl {{ $isPkgMobile ? 'bg-toba-green/5' : '' }}">
+                        <a href="/tour/packages" @if($isPkgMobile) aria-current="page" @endif
+                           class="flex-1 px-3 py-3 rounded-xl text-base font-bold transition-colors {{ $isPkgMobile ? 'text-toba-green' : 'text-slate-800 hover:bg-slate-50 hover:text-toba-green' }}">
+                            {{ __('Paket Wisata Toba') }}
+                        </a>
+                        @if(count($navPackages ?? []))
+                            <button @click="openPkgMobile = !openPkgMobile" type="button"
+                                    :aria-expanded="openPkgMobile" aria-label="{{ __('Lihat daftar paket') }}"
+                                    class="w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 hover:text-toba-green transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-green/50">
+                                <svg class="w-4 h-4 transition-transform duration-200" :class="openPkgMobile && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                        @endif
+                    </div>
+                    @if(count($navPackages ?? []))
+                        <div x-show="openPkgMobile" x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-1"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="mt-1 ml-3 pl-3 border-l border-slate-100 space-y-0.5">
+                            @foreach($navPackages as $navPkg)
+                                <a href="/tour/package/{{ $navPkg->slug }}"
+                                   class="block px-3 py-2.5 rounded-lg text-slate-700 hover:bg-slate-50 hover:text-toba-green transition-colors">
+                                    <span class="block text-sm font-bold leading-snug">{{ $navPkg->translated_name }}</span>
+                                    @if($navPkg->duration)
+                                        <span class="block mt-0.5 text-[11px] font-semibold text-slate-400">{{ $navPkg->duration }}</span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
                 @foreach($mobileLinks as $link)
                     <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
                        class="flex items-center justify-between px-3 py-3 rounded-xl text-base font-bold transition-colors {{ $link['active'] ? 'bg-toba-green/5 text-toba-green' : 'text-slate-800 hover:bg-slate-50 hover:text-toba-green' }}">

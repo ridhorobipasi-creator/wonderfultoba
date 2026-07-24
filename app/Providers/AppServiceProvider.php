@@ -14,8 +14,10 @@ use App\Repositories\BookingRepository;
 use App\Services\AppConfigService;
 use App\Services\BookingService;
 use App\Services\DashboardService;
+use App\Services\TourService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -46,6 +48,13 @@ class AppServiceProvider extends ServiceProvider
         Blog::observe(BlogObserver::class);
         Booking::observe(BookingObserver::class);
         Setting::observe(SettingObserver::class);
+
+        // Dropdown navbar membaca katalog paket yang sebenarnya, jadi menu tidak
+        // pernah menjanjikan halaman yang tidak ada. Cache-nya dibersihkan oleh
+        // PackageObserver -> TourService::clearCache().
+        View::composer('layouts.partials.navbar', function ($view) {
+            $view->with('navPackages', (new TourService)->getNavPackages());
+        });
 
         // Share settings globally
         if (!$this->app->runningInConsole()) {

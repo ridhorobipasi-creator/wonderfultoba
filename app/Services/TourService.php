@@ -106,6 +106,7 @@ class TourService
     public function clearCache($slug = null)
     {
         Cache::forget('tour_packages_all');
+        Cache::forget('tour_packages_nav');
         Cache::forget('featured_packages');
         Cache::forget('tour_blogs_all');
         Cache::forget('tour_homepage_data');
@@ -179,6 +180,19 @@ class TourService
                 ->with(['packageImages', 'city', 'cities'])
                 ->orderBy('sortOrder')
                 ->get();
+        });
+    }
+
+    /**
+     * Slim package list for the navbar dropdown. Hanya kolom yang dirender menu,
+     * supaya murah dipanggil di setiap halaman.
+     */
+    public function getNavPackages()
+    {
+        return Cache::remember('tour_packages_nav', 600, function () {
+            return Package::where('status', 'active')
+                ->orderBy('sortOrder')
+                ->get(['id', 'slug', 'name', 'duration', 'translations']);
         });
     }
 
