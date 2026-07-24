@@ -25,7 +25,7 @@
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('cmsTourHandler', () => ({
-        activeTab: 'hero',
+        activeTab: 'slider',
         heroTitle: @json($settings['hero_title'] ?? 'Liburan Sempurna di Sumatera Utara.'),
         heroSubtitle: @json($settings['hero_subtitle'] ?? 'Kami mengatur seluruh perjalanan Anda. Nikmati udara pagi Berastagi dan keindahan Samosir tanpa perlu pusing menyusun itinerary.'),
         heroImage: @json($resolve($settings['hero_image_url'] ?? '', 'sumatra-panorama')),
@@ -257,9 +257,6 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full xl:w-[450px] flex-shrink-0 space-y-6">
         <!-- Tab Navigation — scrollable, responsive, tidak tabrakan -->
         <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-1 overflow-x-auto no-scrollbar" style="scrollbar-width:none;">
-            <button type="button" @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-toba-green text-white shadow' : 'text-slate-500 hover:bg-slate-100'" class="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wide transition whitespace-nowrap">
-                🏠 <span>Hero</span>
-            </button>
             <button type="button" @click="activeTab = 'slider'" :class="activeTab === 'slider' ? 'bg-green-800 text-white shadow' : 'text-slate-500 hover:bg-slate-100'" class="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wide transition whitespace-nowrap">
                 📸 <span>Slider</span>
             </button>
