@@ -88,7 +88,7 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error('Error loading tour index: '.$e->getMessage());
 
-            return back()->with('error', 'Gagal memuat data tour. Silakan coba beberapa saat lagi.');
+            return abort(500, 'Gagal memuat data tour. Terjadi gangguan koneksi sistem.');
         }
     }
 
