@@ -78,9 +78,7 @@
 <div x-data="{ waNumber: @json(\App\Helpers\ContactHelper::whatsappDigits()) }">
     
     <!-- Premium Hero Slider -->
-    @if($settings['show_slider'] ?? true)
     <x-home-slider :settings="$settings" :packages="$packages" />
-    @endif
 
     <!-- Featured Packages -->
     @if($settings['show_featured'] ?? true)

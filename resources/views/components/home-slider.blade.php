@@ -65,8 +65,19 @@
             this.activeSlide = (this.activeSlide - 1 + this.totalSlides) % this.totalSlides;
         }
     }">
+        {{-- Responsive Height Style for Production Without NPM Build --}}
+        <style>
+            .hero-slider-container {
+                height: 50vh;
+                min-height: 380px;
+                max-height: 800px;
+            }
+            @media (min-width: 640px) { .hero-slider-container { height: 65vh; min-height: 480px; } }
+            @media (min-width: 768px) { .hero-slider-container { height: 75vh; min-height: 600px; } }
+            @media (min-width: 1024px) { .hero-slider-container { height: 80vh; min-height: 600px; } }
+        </style>
         {{-- Slides --}}
-        <div class="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh] min-h-[380px] sm:min-h-[480px] md:min-h-[600px] max-h-[800px]">
+        <div class="relative w-full overflow-hidden hero-slider-container">
             @foreach($slides as $index => $slide)
                 <div class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                      x-show="activeSlide === {{ $index }}"
