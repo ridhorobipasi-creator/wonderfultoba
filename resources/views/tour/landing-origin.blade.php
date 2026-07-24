@@ -151,8 +151,9 @@
                 $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
             @endphp
             <div class="flex-shrink-0 snap-start w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-2xl cursor-pointer"
-                     onclick="window.location.href='/tour/package/{{ $pkg->slug ?: $pkg->id }}'">
+                <a href="/tour/package/{{ $pkg->slug ?: $pkg->id }}"
+                   aria-label="{{ $pkg->translated_name }}"
+                   class="block relative aspect-[3/4] overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2">
                     <img alt="{{ $pkg->translated_name }}"
                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                          src="{{ $pkgImage }}" loading="lazy"/>
@@ -190,7 +191,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             @endforeach
 
@@ -454,13 +455,13 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             @foreach($blogs as $blog)
-            <div class="group cursor-pointer" onclick="window.location.href='{{ route('tour.blog.detail', $blog->slug) }}'">
+            <a href="{{ route('tour.blog.detail', $blog->slug) }}" class="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded-lg">
                 <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
                     <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
                 </div>
                 <span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
                 <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight">{{ $blog->translated_title }}</h3>
-            </div>
+            </a>
             @endforeach
         </div>
     </section>

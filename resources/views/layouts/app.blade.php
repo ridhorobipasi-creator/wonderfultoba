@@ -181,7 +181,7 @@
         <a href="{{ route('tour.packages') }}" 
            class="flex-[1.2] bg-secondary-fixed text-on-secondary-fixed rounded-xl py-3 flex items-center justify-center gap-1.5 font-black text-[10px] uppercase tracking-[0.1em] shadow-md shadow-secondary/20 transition-transform active:scale-95">
            <span class="material-symbols-outlined text-[15px] shrink-0">travel_explore</span>
-           <span class="mt-0.5">{{ __('Tempah') }}</span>
+           <span class="mt-0.5">{{ __('Pesan') }}</span>
         </a>
     </div>
 
