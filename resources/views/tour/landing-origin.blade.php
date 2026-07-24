@@ -147,51 +147,8 @@
              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
             @foreach($packages as $index => $pkg)
-            @php
-                $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
-            @endphp
-            <div class="flex-shrink-0 snap-start w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
-                <a href="/tour/package/{{ $pkg->slug ?: $pkg->id }}"
-                   aria-label="{{ $pkg->translated_name }}"
-                   class="block relative aspect-[3/4] overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2">
-                    <img alt="{{ $pkg->translated_name }}"
-                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                         src="{{ $pkgImage }}" loading="lazy"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                    
-                    @if($loop->first || ($pkg->isFeatured ?? false))
-                    <div class="absolute top-5 left-5 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-lg flex items-center gap-1.5 z-10">
-                        <span class="text-xs">🔥</span> {{ __('Terpopuler') }}
-                    </div>
-                    @endif
-
-                    @php $__r = siteRating(); @endphp
-                    @if($__r)
-                    <div class="absolute top-5 right-5 bg-black/60 backdrop-blur-md px-3 py-1 border border-white/10 rounded-full flex items-center gap-1.5 shadow-lg">
-                        <span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="text-white font-label-caps text-[11px] font-bold">{{ number_format($__r['value'], 1) }}</span>
-                    </div>
-                    @endif
-
-                    <div class="absolute bottom-0 left-0 w-full p-6 text-white">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="material-symbols-outlined text-[16px]">location_on</span>
-                            <span class="font-label-caps text-[10px] tracking-wider">{{ strtoupper(__($pkg->locationTag ?? 'Sumatera Utara')) }}</span>
-                        </div>
-                        <h3 class="font-headline-md text-[22px] md:text-[26px] mb-3 line-clamp-2 leading-tight">{{ $pkg->translated_name }}</h3>
-                        <div class="flex justify-between items-center">
-                            <div class="bg-secondary-fixed px-4 py-2.5 rounded-2xl border border-white/25 shadow-lg flex flex-col justify-center">
-                                <p class="font-label-caps text-[9px] text-on-secondary-fixed-variant font-bold uppercase tracking-widest leading-none mb-1.5">{{ __('Mulai dari') }}</p>
-                                <p class="font-headline-md text-[18px] md:text-[20px] text-on-secondary-fixed font-black leading-none tracking-tight">
-                                    {{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}
-                                </p>
-                            </div>
-                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary-fixed group-hover:border-secondary-fixed group-hover:text-on-secondary-fixed transition duration-300">
-                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+            <div class="flex-shrink-0 snap-start w-[260px] sm:w-[280px] md:w-[310px]">
+                <x-package-card :package="$pkg" />
             </div>
             @endforeach
 

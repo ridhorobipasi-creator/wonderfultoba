@@ -130,54 +130,8 @@
              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
             @foreach($packages as $index => $pkg)
-            @php
-                $pkgImage = $pkg->resolveImageUrl($pkg->packageImages->first()?->image_path ?? ($pkg->images[0] ?? null));
-            @endphp
-            <div class="flex-shrink-0 snap-start w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
-                <a href="/tour/package/{{ $pkg->slug ?: $pkg->id }}"
-                   aria-label="{{ $pkg->translated_name }}"
-                   class="block relative aspect-[3/4] overflow-hidden rounded-[1.5rem] shadow-md group-hover:shadow-2xl transform group-hover:-translate-y-2 transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2">
-                    @php $__pkgSrcset = imageSrcset($pkgImage); @endphp
-                    <img alt="{{ $pkg->translated_name }}"
-                         class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
-                         src="{{ $pkgImage }}"
-                         @if($__pkgSrcset) srcset="{{ $__pkgSrcset }}" sizes="(max-width: 640px) 80vw, (max-width: 768px) 45vw, (max-width: 1280px) 28vw, 25rem" @endif
-                         loading="lazy"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
-                    
-                    @if($loop->first || ($pkg->isFeatured ?? false))
-                    <div class="absolute top-5 left-5 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-lg flex items-center gap-1.5 z-10">
-                        <span class="text-xs">🔥</span> {{ __('Terpopuler') }}
-                    </div>
-                    @endif
-
-                    @php $__r = siteRating(); @endphp
-                    @if($__r)
-                    <div class="absolute top-5 right-5 bg-black/60 backdrop-blur-md px-3 py-1 border border-white/10 rounded-full flex items-center gap-1.5 shadow-lg">
-                        <span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                        <span class="text-white font-label-caps text-[11px] font-bold">{{ number_format($__r['value'], 1) }}</span>
-                    </div>
-                    @endif
-
-                    <div class="absolute bottom-0 left-0 w-full p-7 text-white transform transition-transform duration-500 group-hover:translate-y-0">
-                        <div class="flex items-center gap-2 mb-3 opacity-90">
-                            <span class="material-symbols-outlined text-[16px]">location_on</span>
-                            <span class="font-label-caps text-[11px] tracking-widest font-semibold">{{ strtoupper(__($pkg->locationTag ?? 'Sumatera Utara')) }}</span>
-                        </div>
-                        <h3 class="font-headline-md text-[24px] md:text-[28px] mb-5 line-clamp-2 leading-tight tracking-tight drop-shadow-md">{{ $pkg->translated_name }}</h3>
-                        <div class="flex justify-between items-end">
-                            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 shadow-lg flex flex-col justify-center transition-all duration-300 group-hover:bg-white/20">
-                                <p class="font-label-caps text-[10px] text-white/80 font-semibold uppercase tracking-widest leading-none mb-2">{{ __('Mulai dari') }}</p>
-                                <p class="font-headline-md text-[20px] md:text-[22px] text-white font-black leading-none tracking-tight">
-                                    {{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}
-                                </p>
-                            </div>
-                            <div class="w-12 h-12 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg shadow-secondary/30 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+            <div class="flex-shrink-0 snap-start w-[260px] sm:w-[280px] md:w-[310px]">
+                <x-package-card :package="$pkg" />
             </div>
             @endforeach
 
