@@ -289,26 +289,26 @@
                  :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
                 <template x-for="(slide, i) in slides" :key="i">
-                    <div class="flex-shrink-0 snap-start w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card">
-                        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition duration-500 hover:border-secondary/40 hover:-translate-y-1">
+                    <div class="flex-shrink-0 snap-start w-[220px] sm:w-[250px] md:w-[280px] group/card py-2">
+                        <div class="relative h-64 md:h-72 rounded-2xl overflow-hidden shadow-lg border border-white/10 transition-all duration-500 ease-out group-hover/card:shadow-2xl group-hover/card:shadow-black/50 group-hover/card:-translate-y-2">
                             <img :src="slide.url"
                                  :alt="slide.caption || 'Sujai Laketoba'"
-                                 class="w-full h-full object-cover transition-transform duration-[2s] group-hover/card:scale-105"
+                                 class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover/card:scale-105"
                                  loading="lazy"
                                  onerror="this.src='{{ asset('images/home/tour.webp') }}'">
 
-                            {{-- Hover overlay --}}
-                            <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover/card:opacity-100 transition duration-500 flex flex-col justify-end p-5">
+                            {{-- Gradient overlay permanent --}}
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent flex flex-col justify-end p-4">
                                 <span x-show="slide.category"
-                                      class="inline-block px-3 py-1 bg-secondary text-on-secondary text-[9px] font-bold uppercase tracking-widest rounded-lg mb-2 w-fit shadow-sm"
+                                      class="inline-block px-2.5 py-0.5 bg-toba-orange text-white text-[9px] font-bold uppercase tracking-wider rounded-full mb-1.5 w-fit shadow-sm"
                                       x-text="slide.category"></span>
                                 <p x-show="slide.caption"
-                                   class="text-white text-sm font-bold leading-tight mb-1"
+                                   class="text-white text-[13px] font-semibold leading-snug line-clamp-2"
                                    x-text="slide.caption"></p>
                             </div>
 
                             {{-- Index badge --}}
-                            <div class="absolute top-3 left-3 z-10 w-8 h-8 bg-black/30 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center">
+                            <div class="absolute top-3 left-3 z-10 w-7 h-7 bg-white/20 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-sm">
                                 <span class="text-white text-[10px] font-bold" x-text="String(i + 1).padStart(2, '0')"></span>
                             </div>
                         </div>
