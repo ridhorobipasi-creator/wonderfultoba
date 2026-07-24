@@ -579,7 +579,7 @@ document.addEventListener('alpine:init', () => {
                 <div x-show="activeTab === 'slider'" x-transition class="space-y-6">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-sm font-black text-green-800 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-green-800"></span> NIF Dynamic Slider
+                            <span class="w-2 h-2 rounded-full bg-green-800"></span> 📸 Dynamic Hero Slider
                         </h4>
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
@@ -735,6 +735,18 @@ document.addEventListener('alpine:init', () => {
                                                 <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Durasi</label>
                                                 <input type="text" x-model="slide.duration" class="w-full px-3 py-2 bg-white rounded-xl border-none font-bold text-[9px] text-slate-900">
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTA Fields — Tombol & Link per slide -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="space-y-1">
+                                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Teks Tombol</label>
+                                            <input type="text" x-model="slide.cta_text" placeholder="Book Now!" class="w-full px-3 py-2 bg-white rounded-xl border-none font-bold text-[10px] text-slate-900">
+                                        </div>
+                                        <div class="space-y-1">
+                                            <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Target Link</label>
+                                            <input type="text" x-model="slide.cta_link" placeholder="/tour/packages" class="w-full px-3 py-2 bg-white rounded-xl border-none font-bold text-[10px] text-slate-900">
                                         </div>
                                     </div>
 
