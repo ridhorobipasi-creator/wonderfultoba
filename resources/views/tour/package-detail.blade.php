@@ -333,7 +333,7 @@
                         <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                         <span class="font-label-caps text-[10px] md:text-xs text-green-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>
                         @if(isset($originCity) && $originCity)
-                            <span class="ml-2 bg-green-500/80 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
+                            <span class="ml-2 bg-toba-green/80 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
                                 Dari {{ $originCity }}
                             </span>
                         @endif

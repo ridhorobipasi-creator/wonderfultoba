@@ -26,14 +26,14 @@
                 name="booking_code"
                 value="{{ old('booking_code') }}"
                 placeholder="Contoh: WT-ABC123"
-                class="mt-3 w-full rounded-xl border border-slate-200 px-4 py-4 text-base font-bold uppercase tracking-wide text-slate-950 outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                class="mt-3 w-full rounded-xl border border-slate-200 px-4 py-4 text-base font-bold uppercase tracking-wide text-slate-950 outline-none transition focus:border-toba-green focus:ring-4 focus:ring-toba-green/10"
                 required
             >
             @error('booking_code')
                 <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
             @enderror
 
-            <button type="submit" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-green-700">
+            <button type="submit" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-toba-green px-5 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-primary-container">
                 <span class="material-symbols-outlined text-base">search</span>
                 Lihat Track
             </button>

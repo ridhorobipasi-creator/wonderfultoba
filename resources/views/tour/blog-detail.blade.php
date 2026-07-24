@@ -157,7 +157,7 @@
                         <div class="flex items-center gap-3">
                             <a href="https://wa.me/?text={{ urlencode(__('Baca artikel ini dari Sujai Laketoba: ') . $post->translated_title . ' ' . url()->current()) }}" 
                                target="_blank"
-                               class="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
+                               class="w-10 h-10 bg-toba-green text-white rounded-xl flex items-center justify-center shadow-sm hover:scale-105 transition">
                                 <x-icon name="whatsapp" class="w-5 h-5" />
                             </a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 

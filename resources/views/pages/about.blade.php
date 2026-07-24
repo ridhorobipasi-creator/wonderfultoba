@@ -294,7 +294,7 @@
                     </a>
                     
                     <a href="{{ \App\Helpers\ContactHelper::whatsappLink() }}" target="_blank" class="w-full sm:w-auto px-8 py-4 bg-white border border-outline-variant/30 text-on-surface hover:bg-surface-container-low rounded-2xl font-black text-[10px] uppercase tracking-widest transition duration-300 shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-toba-green animate-pulse"></span>
                         {{ __('Chat WhatsApp') }}
                     </a>
                 </div>

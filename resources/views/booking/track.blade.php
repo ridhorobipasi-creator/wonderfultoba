@@ -119,7 +119,7 @@
                                 $isCancelStep = $isCancelled && $stepNumber === $currentStep;
                             @endphp
                             <div class="flex items-start gap-4">
-                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isCancelStep ? 'bg-rose-600 border-rose-600 text-white' : ($isDone ? 'bg-green-600 border-green-600 text-white' : 'bg-white border-slate-200') }} shadow-sm transition-all duration-300">
+                                <div class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 {{ $isCancelStep ? 'bg-rose-600 border-rose-600 text-white' : ($isDone ? 'bg-toba-green border-toba-green text-white' : 'bg-white border-slate-200') }} shadow-sm transition-all duration-300">
                                     @if($isCancelStep)
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -230,7 +230,7 @@
                     <span class="material-symbols-outlined text-base">travel_explore</span>
                 </a>
                 @if($waNumber)
-                    <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-green-600 px-4 py-4 text-sm font-bold text-white transition hover:bg-green-700">
+                    <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-toba-green px-4 py-4 text-sm font-bold text-white transition hover:bg-primary-container">
                         <span>Hubungi Admin</span>
                         <span class="material-symbols-outlined text-base">chat</span>
                     </a>

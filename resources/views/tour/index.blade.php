@@ -424,7 +424,7 @@
                 </div>
                 <a target="_blank" rel="noopener"
                    href="https://wa.me/{{ \App\Helpers\ContactHelper::specialistDigits() }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0">
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-toba-green hover:bg-primary-container text-white rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0">
                     <span class="material-symbols-outlined text-[16px]">chat</span>
                     {{ __('WhatsApp') }}
                 </a>

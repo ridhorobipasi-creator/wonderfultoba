@@ -157,7 +157,7 @@
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
                        class="group bg-toba-orange hover:bg-toba-orange-dark text-white pl-6 pr-1.5 py-1.5 rounded-full font-black text-[13px] tracking-wider uppercase flex items-center gap-3 shadow-md shadow-toba-orange/25 hover:shadow-lg hover:shadow-toba-orange/35 hover:-translate-y-0.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-orange/50 focus-visible:ring-offset-2">
                         <span>{{ __('HUBUNGI KAMI!') }}</span>
-                        <span class="w-8 h-8 bg-[#0088cc] rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                        <span class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                             <x-icon name="whatsapp" class="w-4 h-4" />
                         </span>
                     </a>
