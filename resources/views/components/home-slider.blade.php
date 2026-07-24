@@ -68,8 +68,8 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    /* Height = full viewport minus navbar (~88px) */
-    height: calc(100vh - 88px);
+    /* Height = full viewport minus total header (~115px) */
+    height: calc(100vh - 115px);
     min-height: 480px;
     max-height: 880px;
     background: #000;
