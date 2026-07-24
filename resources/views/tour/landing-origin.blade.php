@@ -335,63 +335,66 @@
          yang di-generate per halaman pSEO (15 kota) + nama fiktif Julian/Isabella
          — testimoni karangan melanggar UU Perlindungan Konsumen. Section kosong
          lebih baik daripada kesaksian palsu. --}}
+    <!-- Testimonials — Modern & Elegant -->
     @php $testimonials = $settings['testimonials'] ?? []; @endphp
     @if(($settings['show_testimonials'] ?? true) && count($testimonials))
-    <section class="py-16 md:py-24 bg-surface">
+    <section class="py-16 md:py-24 bg-slate-50/50 border-t border-b border-slate-100">
         <div class="max-w-5xl mx-auto px-5 md:px-8">
             <div class="flex items-center gap-3 mb-10 md:mb-12">
-                <span class="w-6 h-px bg-secondary"></span>
-                <span class="text-[10px] font-bold text-secondary uppercase tracking-[0.25em]">{{ __('Testimoni') }}</span>
+                <span class="w-6 h-px bg-toba-green"></span>
+                <span class="text-[11px] font-bold text-toba-green uppercase tracking-[0.25em]">{{ __('Testimoni Wisatawan') }}</span>
             </div>
 
-            <div class="space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @foreach($testimonials as $t)
-                <div class="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
-                    {{-- Quote --}}
-                    <div class="flex-1">
-                        <p class="font-headline-md text-[18px] md:text-[22px] text-primary leading-relaxed italic">
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 mb-4">
+                            @for($i=0; $i<5; $i++)
+                            <svg class="w-4 h-4 fill-amber-400 text-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            @endfor
+                        </div>
+                        <p class="text-slate-700 text-sm md:text-[15px] leading-relaxed font-medium italic mb-6">
                             "{{ __($t['text']) }}"
                         </p>
                     </div>
-                    {{-- Author --}}
-                    <div class="flex items-center gap-3 md:w-48 shrink-0">
-                        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-low shrink-0">
-                            <img alt="{{ $t['name'] }}"
-                                 src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
-                                 class="w-full h-full object-cover">
-                        </div>
+                    <div class="flex items-center gap-3.5 pt-4 border-t border-slate-100">
+                        <img alt="{{ $t['name'] }}"
+                             src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
+                             loading="lazy" decoding="async"
+                             class="w-11 h-11 rounded-full object-cover shrink-0 ring-2 ring-slate-100">
                         <div>
-                            <p class="text-xs font-bold text-on-surface font-body-md">{{ $t['name'] }}</p>
-                            <p class="text-[10px] text-on-surface-variant font-body-md">{{ __($t['location'] ?? 'Wisatawan Terverifikasi') }}</p>
+                            <p class="text-sm font-bold text-slate-900 leading-tight">{{ $t['name'] }}</p>
+                            <p class="text-xs text-slate-400 mt-0.5 font-medium">{{ __($t['location'] ?? 'Wisatawan Terverifikasi') }}</p>
                         </div>
                     </div>
                 </div>
-                @if(!$loop->last)
-                    <div class="h-px bg-outline-variant/40"></div>
-                @endif
                 @endforeach
             </div>
         </div>
     </section>
     @endif
 
-    <!-- Specialist — minimal inline -->
+    <!-- Specialist — High Contrast Banner -->
     @if($settings['show_specialist'] ?? true)
-    <section class="bg-surface pb-16 md:pb-20 px-5 md:px-8">
+    <section class="py-12 md:py-16 px-4 md:px-8">
         <div class="max-w-5xl mx-auto">
-            <div class="bg-primary rounded-3xl px-6 py-7 md:px-10 md:py-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-8 text-center sm:text-left">
-                <img alt="{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}"
-                     class="w-14 h-14 rounded-full object-cover border-2 border-white/10 shrink-0"
-                     src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'staff1') }}"/>
-                <div class="flex-1 text-center sm:text-left">
-                    <p class="text-white font-bold font-body-md text-sm">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
-                    <p class="text-white/50 font-body-md text-xs">{{ __('Punya pertanyaan? Saya siap membantu merencanakan liburan impian Anda.') }}</p>
+            <div class="bg-slate-900 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
+                <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
+                    <img alt="{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}"
+                         class="w-14 h-14 rounded-full object-cover ring-2 ring-toba-green/50 shrink-0"
+                         loading="lazy" decoding="async"
+                         src="{{ imageUrl($settings['specialist_image_url'] ?? '', 'staff1') }}"/>
+                    <div>
+                        <p class="text-white font-bold text-base md:text-lg leading-tight">{{ $settings['specialist_name'] ?? 'Sarah Anggraini' }}</p>
+                        <p class="text-slate-300 text-xs md:text-sm font-medium mt-1">{{ __('Ada pertanyaan? Saya bersedia membantu merancang percutian impian anda.') }}</p>
+                    </div>
                 </div>
                 <a target="_blank" rel="noopener"
                    href="https://wa.me/{{ \App\Helpers\ContactHelper::specialistDigits() }}?text={{ urlencode('Halo ' . ($settings['specialist_name'] ?? 'Sarah') . ', saya ingin tanya paket tour...') }}"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-toba-green hover:bg-primary-container text-white rounded-xl font-label-caps text-[10px] uppercase tracking-widest transition shrink-0">
-                    <span class="material-symbols-outlined text-[16px]">chat</span>
-                    {{ __('WhatsApp') }}
+                   class="inline-flex items-center gap-2.5 px-6 py-3 bg-toba-green hover:bg-emerald-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-md shrink-0 transform hover:scale-105">
+                    <x-icon name="whatsapp" class="w-4 h-4" />
+                    <span>{{ __('WHATSAPP') }}</span>
                 </a>
             </div>
         </div>
