@@ -136,14 +136,14 @@
             <div class="flex-shrink-0 snap-start w-[80vw] sm:w-[45vw] md:w-[31vw] lg:w-[28vw] xl:w-[25rem] group">
                 <a href="/tour/package/{{ $pkg->slug ?: $pkg->id }}"
                    aria-label="{{ $pkg->translated_name }}"
-                   class="block relative aspect-[3/4] overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2">
+                   class="block relative aspect-[3/4] overflow-hidden rounded-[1.5rem] shadow-md group-hover:shadow-2xl transform group-hover:-translate-y-2 transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2">
                     @php $__pkgSrcset = imageSrcset($pkgImage); @endphp
                     <img alt="{{ $pkg->translated_name }}"
-                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                         class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                          src="{{ $pkgImage }}"
                          @if($__pkgSrcset) srcset="{{ $__pkgSrcset }}" sizes="(max-width: 640px) 80vw, (max-width: 768px) 45vw, (max-width: 1280px) 28vw, 25rem" @endif
                          loading="lazy"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
                     
                     @if($loop->first || ($pkg->isFeatured ?? false))
                     <div class="absolute top-5 left-5 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-lg flex items-center gap-1.5 z-10">
@@ -159,21 +159,21 @@
                     </div>
                     @endif
 
-                    <div class="absolute bottom-0 left-0 w-full p-6 text-white">
-                        <div class="flex items-center gap-2 mb-2">
+                    <div class="absolute bottom-0 left-0 w-full p-7 text-white transform transition-transform duration-500 group-hover:translate-y-0">
+                        <div class="flex items-center gap-2 mb-3 opacity-90">
                             <span class="material-symbols-outlined text-[16px]">location_on</span>
-                            <span class="font-label-caps text-[10px] tracking-wider">{{ strtoupper(__($pkg->locationTag ?? 'Sumatera Utara')) }}</span>
+                            <span class="font-label-caps text-[11px] tracking-widest font-semibold">{{ strtoupper(__($pkg->locationTag ?? 'Sumatera Utara')) }}</span>
                         </div>
-                        <h3 class="font-headline-md text-[22px] md:text-[26px] mb-3 line-clamp-2 leading-tight">{{ $pkg->translated_name }}</h3>
-                        <div class="flex justify-between items-center">
-                            <div class="bg-secondary-fixed px-4 py-2.5 rounded-2xl border border-white/25 shadow-lg flex flex-col justify-center">
-                                <p class="font-label-caps text-[9px] text-on-secondary-fixed-variant font-bold uppercase tracking-widest leading-none mb-1.5">{{ __('Mulai dari') }}</p>
-                                <p class="font-headline-md text-[18px] md:text-[20px] text-on-secondary-fixed font-black leading-none tracking-tight">
+                        <h3 class="font-headline-md text-[24px] md:text-[28px] mb-5 line-clamp-2 leading-tight tracking-tight drop-shadow-md">{{ $pkg->translated_name }}</h3>
+                        <div class="flex justify-between items-end">
+                            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 shadow-lg flex flex-col justify-center transition-all duration-300 group-hover:bg-white/20">
+                                <p class="font-label-caps text-[10px] text-white/80 font-semibold uppercase tracking-widest leading-none mb-2">{{ __('Mulai dari') }}</p>
+                                <p class="font-headline-md text-[20px] md:text-[22px] text-white font-black leading-none tracking-tight">
                                     {{ \App\Helpers\CurrencyHelper::formatPrice($pkg->price) }}
                                 </p>
                             </div>
-                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:bg-secondary-fixed group-hover:border-secondary-fixed group-hover:text-on-secondary-fixed transition duration-300">
-                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                            <div class="w-12 h-12 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg shadow-secondary/30 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                             </div>
                         </div>
                     </div>
@@ -318,11 +318,11 @@
                  :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
                 <template x-for="(slide, i) in slides" :key="i">
-                    <div class="flex-shrink-0 snap-start w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card">
-                        <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition duration-500 hover:border-secondary/40 hover:-translate-y-1">
+                    <div class="flex-shrink-0 snap-start w-[75vw] sm:w-[45vw] md:w-[30vw] lg:w-[23vw] group/card py-4">
+                        <div class="relative aspect-[3/4] rounded-[1.5rem] overflow-hidden shadow-lg border border-white/10 transition-all duration-500 ease-out group-hover/card:shadow-2xl group-hover/card:shadow-black/50 group-hover/card:-translate-y-3">
                             <img :src="slide.url"
                                  :alt="slide.caption || 'Sujai Laketoba'"
-                                 class="w-full h-full object-cover transition-transform duration-[2s] group-hover/card:scale-105"
+                                 class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover/card:scale-110"
                                  loading="lazy"
                                  onerror="this.src='{{ asset('images/home/tour.webp') }}'">
 
@@ -442,12 +442,12 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             @foreach($blogs as $blog)
-            <a href="{{ route('tour.blog.detail', $blog->slug) }}" class="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded-lg">
-                <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
-                    <img alt="{{ $blog->translated_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
+            <a href="{{ route('tour.blog.detail', $blog->slug) }}" class="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded-[1.5rem] p-4 bg-white shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+                <div class="aspect-[16/10] overflow-hidden rounded-xl mb-5 shadow-sm bg-slate-100">
+                    <img alt="{{ $blog->translated_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" src="{{ $blog->image_url }}"/>
                 </div>
-                <span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
-                <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight">{{ $blog->translated_title }}</h3>
+                <span class="font-label-caps text-[10px] text-secondary bg-secondary/10 px-3 py-1 rounded-full font-bold uppercase tracking-widest mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
+                <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight tracking-tight">{{ $blog->translated_title }}</h3>
             </a>
             @endforeach
         </div>

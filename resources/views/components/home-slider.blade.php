@@ -101,9 +101,9 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(to bottom,
-        rgba(0,0,0,0.05) 0%,
-        rgba(0,0,0,0.10) 55%,
-        rgba(0,0,0,0.55) 100%
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.2) 40%,
+        rgba(0,0,0,0.7) 100%
     );
     z-index: 2;
 }
@@ -113,32 +113,30 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #E67E22;
+    background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
     color: #fff;
     font-weight: 800;
-    padding: 14px 52px;
+    padding: 15px 56px;
     border-radius: 9999px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     font-size: 14px;
-    border: 2px solid rgba(255,255,255,0.35);
-    box-shadow: 0 6px 28px rgba(230,126,34,0.65), 0 0 0 0 rgba(230,126,34,0.4);
-    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(230,126,34,0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     white-space: nowrap;
     text-decoration: none;
-    animation: pulse-glow 2.5s infinite;
+    animation: pulse-glow 3s infinite;
 }
 .sujai-book-btn:hover {
-    background: #D35400;
-    box-shadow: 0 10px 36px rgba(230,126,34,0.85);
-    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(230,126,34,0.7);
+    transform: translateY(-2px) scale(1.05);
     text-decoration: none;
     color: #fff;
 }
 @keyframes pulse-glow {
-    0%   { box-shadow: 0 6px 28px rgba(230,126,34,0.65), 0 0 0 0 rgba(230,126,34,0.4); }
-    50%  { box-shadow: 0 6px 28px rgba(230,126,34,0.65), 0 0 0 12px rgba(230,126,34,0); }
-    100% { box-shadow: 0 6px 28px rgba(230,126,34,0.65), 0 0 0 0 rgba(230,126,34,0); }
+    0%   { box-shadow: 0 10px 30px rgba(230,126,34,0.5), 0 0 0 0 rgba(230,126,34,0.4); }
+    50%  { box-shadow: 0 10px 30px rgba(230,126,34,0.5), 0 0 0 15px rgba(230,126,34,0); }
+    100% { box-shadow: 0 10px 30px rgba(230,126,34,0.5), 0 0 0 0 rgba(230,126,34,0); }
 }
 @media (max-width: 640px) {
     .sujai-book-btn { padding: 12px 36px; font-size: 12px; }
@@ -198,8 +196,10 @@
     left: 0;
     right: 0;
     z-index: 30;
-    background: rgba(15,15,15,0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -220,14 +220,15 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #E67E22;
+    background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+    box-shadow: 0 4px 10px rgba(230,126,34,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
-.sujai-feat-title { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.3; }
-.sujai-feat-sub   { font-size: 10px; color: #999; line-height: 1.3; }
+.sujai-feat-title { font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.3; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+.sujai-feat-sub   { font-size: 10px; color: rgba(255,255,255,0.7); line-height: 1.3; }
 
 @media (max-width: 640px) {
     .sujai-features-bar { flex-wrap: wrap; }

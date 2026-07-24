@@ -40,12 +40,12 @@
     class="relative z-[100] w-full font-sans"
 >
     <!-- 1. Topbar (strip identitas — hijau merek) -->
-    <div class="hidden sm:block bg-gradient-to-r from-toba-green via-toba-green to-primary text-white">
-        <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-6 py-2 text-[12px] font-bold">
+    <div class="hidden sm:block bg-gradient-to-r from-toba-green to-[#1b4332] text-white">
+        <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-6 py-2.5 text-[12.5px] font-medium tracking-wide">
             <!-- Lokasi Kantor -->
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2 min-w-0 opacity-95 hover:opacity-100 transition-opacity">
                 <svg class="w-4 h-4 shrink-0 text-white/90" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span class="truncate tracking-tight text-white/95">{{ $officeAddress }}</span>
+                <span class="truncate">{{ $officeAddress }}</span>
             </div>
 
             <!-- Sosial + Bahasa -->
@@ -66,7 +66,7 @@
                 <div x-data="{ open: false }" class="relative z-[110]">
                     <button @click="open = !open" type="button"
                             :aria-expanded="open" aria-haspopup="true"
-                            class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide hover:bg-white/20 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-bold uppercase tracking-wide bg-white/10 hover:bg-white/20 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
                         <span>{{ $localeShort[$activeLocale] ?? $localeShort['my'] }}</span>
                         <svg class="w-3 h-3 transition-transform duration-200" :class="open && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
                     </button>
@@ -95,7 +95,7 @@
 
     <!-- 2. Main Nav Putih (sticky) -->
     <nav @scroll.window="scrolled = window.scrollY > 24"
-         :class="scrolled ? 'shadow-lg shadow-slate-900/[0.07] py-2.5' : 'shadow-sm py-3.5'"
+         :class="scrolled ? 'shadow-md shadow-slate-900/[0.04] py-3' : 'py-4'"
          class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 z-[120]">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center gap-4">
@@ -108,12 +108,12 @@
                 </a>
 
                 <!-- Nav Links Desktop -->
-                <div class="hidden lg:flex items-center gap-7 text-[15px] font-extrabold text-[#2c3e50]">
+                <div class="hidden lg:flex items-center gap-8 text-[14.5px] font-bold text-slate-700">
                     @php $isHome = request()->is('/'); @endphp
                     <a href="/" @if($isHome) aria-current="page" @endif
-                       class="group relative py-2 transition-colors duration-200 {{ $isHome ? 'text-toba-green' : 'hover:text-toba-green' }}">
+                       class="group relative py-2 transition-colors duration-300 {{ $isHome ? 'text-toba-green' : 'hover:text-toba-green' }}">
                         {{ __('Home') }}
-                        <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $isHome ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                        <span class="absolute left-0 -bottom-1 h-[2px] rounded-full bg-toba-green transition-all duration-300 ease-out {{ $isHome ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </a>
 
                     <!-- Dropdown Paket -->
@@ -121,10 +121,10 @@
                     <div x-data="{ openPkg: false }" @mouseenter="openPkg = true" @mouseleave="openPkg = false" class="relative">
                         <a href="/tour/packages" @if($isPkg) aria-current="page" @endif
                            :aria-expanded="openPkg"
-                           class="group relative flex items-center gap-1 py-2 transition-colors duration-200 {{ $isPkg ? 'text-toba-green' : 'hover:text-toba-green' }}">
+                           class="group relative flex items-center gap-1.5 py-2 transition-colors duration-300 {{ $isPkg ? 'text-toba-green' : 'hover:text-toba-green' }}">
                             <span>{{ __('Paket Wisata Toba') }}</span>
-                            <svg class="w-4 h-4 stroke-[3] transition-transform duration-200" :class="openPkg && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
-                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $isPkg ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                            <svg class="w-4 h-4 transition-transform duration-300" :class="openPkg && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            <span class="absolute left-0 -bottom-1 h-[2px] rounded-full bg-toba-green transition-all duration-300 ease-out {{ $isPkg ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                         </a>
                         <!-- pt-3 jadi jembatan hover supaya menu tidak tertutup saat kursor turun -->
                         <div x-show="openPkg" x-cloak
@@ -157,19 +157,19 @@
 
                     @foreach($navLinks as $link)
                         <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
-                           class="group relative py-2 transition-colors duration-200 {{ $link['active'] ? 'text-toba-green' : 'hover:text-toba-green' }}">
+                           class="group relative py-2 transition-colors duration-300 {{ $link['active'] ? 'text-toba-green' : 'hover:text-toba-green' }}">
                             {{ $link['label'] }}
-                            <span class="absolute left-0 -bottom-0.5 h-[3px] rounded-full bg-toba-green transition-all duration-300 {{ $link['active'] ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
+                            <span class="absolute left-0 -bottom-1 h-[2px] rounded-full bg-toba-green transition-all duration-300 ease-out {{ $link['active'] ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                         </a>
                     @endforeach
                 </div>
 
                 <!-- CTA Desktop -->
-                <div class="hidden lg:flex items-center shrink-0">
+                <div class="hidden lg:flex items-center shrink-0 ml-4">
                     <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
-                       class="group bg-toba-orange hover:bg-toba-orange-dark text-white pl-6 pr-1.5 py-1.5 rounded-full font-black text-[13px] tracking-wider uppercase flex items-center gap-3 shadow-md shadow-toba-orange/25 hover:shadow-lg hover:shadow-toba-orange/35 hover:-translate-y-0.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toba-orange/50 focus-visible:ring-offset-2">
-                        <span>{{ __('HUBUNGI KAMI!') }}</span>
-                        <span class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                       class="group relative overflow-hidden bg-gradient-to-r from-toba-orange to-orange-500 hover:from-toba-orange hover:to-orange-600 text-white pl-6 pr-2 py-2 rounded-full font-bold text-[13px] tracking-wide flex items-center gap-3 shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-2">
+                        <span class="relative z-10">{{ __('Hubungi Kami') }}</span>
+                        <span class="relative z-10 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
                             <x-icon name="whatsapp" class="w-4 h-4" />
                         </span>
                     </a>
