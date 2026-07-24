@@ -13,74 +13,66 @@
     $image = imageUrl($rawImage);
 @endphp
 
-<div class="card-flat overflow-hidden hover:shadow-md transition duration-300 group flex flex-col h-full">
-    <div class="relative h-64 md:h-72 overflow-hidden shrink-0">
+<div class="card-flat overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full rounded-2xl">
+
+    {{-- Gambar --}}
+    <div class="relative h-52 overflow-hidden shrink-0">
         <img
             src="{{ $image }}"
             alt="{{ $package->name }}"
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         >
-        
-        <!-- Badges -->
-        <div class="absolute top-5 left-5 flex flex-col space-y-2">
-            @if($package->isFeatured ?? false)
-            <div class="bg-gradient-to-r from-toba-orange to-toba-orange-dark text-white px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
-                <span class="text-xs">🔥</span> 
-                <span class="font-bold text-[10px] uppercase tracking-widest">{{ __('Terpopuler') }}</span>
-            </div>
-            @endif
-            @php $__cardRating = siteRating(); @endphp
-            @if($__cardRating)
-            <div class="bg-white/95 px-3 py-1.5 rounded-xl flex items-center space-x-1.5 shadow-sm border border-slate-200 w-fit">
-                <svg class="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span class="font-semibold text-slate-800 text-[10px] uppercase tracking-wider">{{ number_format($__cardRating['value'], 1) }}</span>
-            </div>
-            @endif
-            <div class="bg-slate-900 text-white px-3 py-1.5 rounded-xl text-[10px] font-semibold uppercase tracking-widest shadow-sm">
+
+        {{-- Badge Popular --}}
+        @if($package->isFeatured ?? false)
+        <div class="absolute top-3 left-3">
+            <span class="bg-toba-orange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
+                🔥 {{ __('Terpopuler') }}
+            </span>
+        </div>
+        @endif
+
+        {{-- Badge Durasi --}}
+        <div class="absolute top-3 right-3">
+            <span class="bg-slate-900/75 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
                 {{ $package->duration }}
-            </div>
+            </span>
         </div>
 
-        <!-- Wishlist -->
-        <button
-            class="absolute top-5 right-5 w-11 h-11 md:w-10 md:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-rose-500 transition"
-        >
-            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
-
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {{-- Gradient Overlay --}}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
     </div>
 
-    <div class="p-6 md:p-8 flex flex-col flex-grow">
-        <div class="flex items-center text-slate-500 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3">
-            <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>{{ $displayLocation }}</span>
-            @if($isInternational) <span class="ml-1.5">✈️</span> @endif
+    {{-- Konten --}}
+    <div class="p-5 flex flex-col flex-grow">
+        {{-- Lokasi --}}
+        <div class="flex items-center text-slate-400 text-[11px] font-medium uppercase tracking-widest mb-2 gap-1.5">
+            <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="truncate">{{ $displayLocation }}</span>
+            @if($isInternational) <span>✈️</span> @endif
         </div>
-        
-        <h3 class="text-xl md:text-2xl font-semibold text-slate-900 mb-4 line-clamp-1 group-hover:text-primary transition-colors tracking-tight">
+
+        {{-- Nama Paket --}}
+        <h3 class="text-[15px] font-semibold text-slate-900 mb-2 line-clamp-2 leading-snug group-hover:text-toba-green transition-colors">
             {{ $package->name }}
         </h3>
-        
-        <p class="text-slate-600 text-sm leading-relaxed mb-8 line-clamp-2 font-normal">
+
+        {{-- Deskripsi --}}
+        <p class="text-slate-500 text-[13px] leading-relaxed line-clamp-2 mb-4 flex-grow">
             {{ $package->description }}
         </p>
-        
-        <div class="flex items-center justify-between pt-6 border-t border-slate-50 mt-auto">
+
+        {{-- Harga + CTA --}}
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
             <div>
-                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">{{ __('Mulai dari') }}</p>
-                <div class="flex items-baseline space-x-1">
-                    <span class="text-xl md:text-2xl font-black text-slate-900">
-                        {{ \App\Helpers\CurrencyHelper::formatPrice($package->price) }}
-                    </span>
-                </div>
+                <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-0.5">{{ __('Mulai dari') }}</p>
+                <span class="text-lg font-bold text-slate-900">
+                    {{ \App\Helpers\CurrencyHelper::formatPrice($package->price) }}
+                </span>
             </div>
-            <a
-                href="/tour/package/{{ $package->slug }}"
-                class="w-12 h-12 md:w-14 md:h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-slate-800 transition shadow-sm group/btn"
-            >
-                <svg class="w-5 h-5 md:w-6 md:h-6 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <a href="/tour/package/{{ $package->slug }}"
+               class="w-10 h-10 bg-slate-900 hover:bg-toba-green text-white rounded-xl flex items-center justify-center transition-colors duration-300 group/btn">
+                <svg class="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
         </div>
     </div>
