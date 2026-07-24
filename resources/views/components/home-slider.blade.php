@@ -117,14 +117,32 @@
 <section class="relative w-full" x-data="{
     activeSlide: 0,
     totalSlides: {{ count($slides) }},
+    touchStartX: 0,
+    touchEndX: 0,
     init() {
         if (this.totalSlides > 1) {
             setInterval(() => { this.activeSlide = (this.activeSlide + 1) % this.totalSlides; }, 5000);
         }
+    },
+    onTouchStart(e) {
+        this.touchStartX = e.changedTouches[0].screenX;
+    },
+    onTouchEnd(e) {
+        this.touchEndX = e.changedTouches[0].screenX;
+        const diff = this.touchStartX - this.touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
+            } else {
+                this.activeSlide = (this.activeSlide - 1 + this.totalSlides) % this.totalSlides;
+            }
+        }
     }
 }" x-init="init()">
 
-    <div class="hero-wrap">
+    <div class="hero-wrap"
+         @touchstart="onTouchStart($event)"
+         @touchend="onTouchEnd($event)">
         @foreach($slides as $index => $slide)
         <div class="absolute inset-0 w-full h-full"
              style="transition: opacity 0.8s ease-in-out;"
