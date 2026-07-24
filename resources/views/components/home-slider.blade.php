@@ -62,7 +62,7 @@
         }
     }">
         {{-- Slides --}}
-        <div class="relative w-full overflow-hidden h-[60vh] md:h-[85vh] min-h-[420px] md:min-h-[650px] max-h-[900px]">
+        <div class="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh] min-h-[380px] sm:min-h-[480px] md:min-h-[600px] max-h-[800px]">
             @foreach($slides as $index => $slide)
                 <div class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                      x-show="activeSlide === {{ $index }}"
@@ -74,11 +74,11 @@
                      x-transition:leave-end="opacity-0">
                     <a href="{{ $slide['cta_link'] }}" class="block w-full h-full">
                         {{-- Overlay --}}
-                        <div class="absolute inset-0 bg-black/25 z-10"></div>
+                        <div class="absolute inset-0 bg-black/15 z-10"></div>
                         <picture class="block w-full h-full">
                             <source srcset="{{ $slide['image_webp'] }}" type="image/webp">
                             <img src="{{ $slide['image_url'] }}" alt="{{ $slide['alt'] }}"
-                                 class="w-full h-full object-cover object-center">
+                                 class="w-full h-full object-cover object-top">
                         </picture>
                     </a>
                 </div>
