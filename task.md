@@ -1,3 +1,28 @@
+# SELESAI sesi 2026-07-24 (terverifikasi render lokal + validator)
+
+Batch "Trust & Jalur Uang" + a11y — semua di bawah ini DIKERJAKAN & di-push (sujai+origin):
+- **Data palsu dihapus**: testimoni fiktif (homepage + pSEO 15 kota), rating 4.8 hardcoded
+  -> pakai `siteRating()` (sembunyi bila belum ada rating asli). Commit a207940.
+- **Form booking**: label terhubung (for/id, dulu 1/10), checkbox consent S&K+Privasi wajib
+  (link /terms /privacy), submit disabled sampai dicentang. Commit a207940.
+- **Validasi** `StoreBookingRequest`: pax max 99, phone regex, lead time dari
+  `min_advance_days`, `terms=accepted`. Hapus input paxChildren ganda. Commit a207940.
+- **Cloaking** `sr-only aria-hidden id=ai-context` -> buang aria-hidden (kini sr-only sah). a207940.
+- **Kartu keyboard-accessible**: paket + blog `<div onclick>` -> `<a href>` di index & landing-origin. 6e449d3.
+- **i18n** CTA `__('Tempah')` -> `__('Pesan')` + lang en/id/my. 6e449d3.
+- Sebelumnya: navbar dropdown katalog asli (4724fdf), migration peran user (eb943cb),
+  h1 semantik + toggle show_slider (4f66385).
+
+BELUM (butuh keputusan bisnis / risiko tinggi — JANGAN diklaim beres):
+- Harga MYR hasil migrasi janggal (RM 333.93 dst) -> bulatkan manual (komersial).
+- Invoice WEB `show.blade.php` 3 CDN -> DITUNDA sengaja: PDF email sudah bebas CDN
+  (dokumen kritis aman); migrasi web = ganti config Tailwind 4 + host font + risiko rusak.
+- Klaim mitra/NIB/alamat legal/status PKP (terms.blade, about.blade) -> keputusan bisnis.
+- Ekor Batch 2/3: gallery filter, pagination, wishlist button, breadcrumb, terjemahan
+  payment/track/invoice, isAvailable() stub. Belum disentuh.
+
+---
+
 # Task — Redesign Besar Mobile-First (Sujai Laketoba)
 
 Tujuan: seluruh situs **mobile-first, lancar, ringan, enak dilihat**. Dikerjakan bertahap agar tidak merusak situs yang sudah jalan.
