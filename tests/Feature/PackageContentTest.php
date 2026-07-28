@@ -1,0 +1,107 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Package;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class PackageContentTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private function makePackage(): Package
+    {
+        return Package::create([
+            'slug' => 'paket-isi-lengkap',
+            'name' => 'Paket Isi Lengkap',
+            'shortDescription' => 'Ringkas',
+            'description' => 'Lengkap',
+            'images' => [],
+            'includes' => ['Hotel bintang 3', 'Transportasi AC', 'Tiket masuk'],
+            'excludes' => ['Tiket pesawat', 'Pengeluaran pribadi'],
+            'itinerary' => [
+                ['day' => 1, 'title' => 'Penjemputan - Parapat', 'activities' => ['Jemput bandara', 'Makan siang']],
+                ['day' => 2, 'title' => 'Samosir', 'activities' => ['Tomok', 'Tuktuk']],
+            ],
+            'pricingDetails' => [],
+            'translations' => [],
+            'price' => 500,
+            'duration' => '2 Hari',
+            'status' => 'active',
+            'isFeatured' => true,
+        ]);
+    }
+
+    /**
+     * Ambil objek `package` yang benar-benar dikirim ke Alpine di halaman detail.
+     */
+    private function payloadFrom(string $html): array
+    {
+        $this->assertMatchesRegularExpression("/package:\s*JSON\.parse\('/", $html, 'payload package tidak ditemukan');
+        preg_match("/package:\s*JSON\.parse\('(.*?)'\),/s", $html, $m);
+        // Isinya literal string JS (Js::from meng-escape kutip jadi " agar
+        // aman di dalam atribut). Dibungkus tanda kutip lalu di-decode sekali
+        // sebagai string JSON — itu membalik escape JS-nya persis seperti yang
+        // dilakukan browser sebelum JSON.parse berjalan.
+        $jsLiteral = json_decode('"'.$m[1].'"');
+        $this->assertIsString($jsLiteral, 'literal JS payload tidak bisa dibaca');
+
+        $decoded = json_decode($jsLiteral, true);
+        $this->assertIsArray($decoded, 'payload package bukan JSON yang sah');
+
+        return $decoded;
+    }
+
+    public function test_detail_page_binds_only_to_keys_that_exist_in_the_payload(): void
+    {
+        // Penjaga umum untuk seluruh kelas bug ini. "Termasuk" dan "Tidak
+        // Termasuk" dulu membaca package.package_includes / package_excludes --
+        // relasi yang tidak pernah ikut dimuat, jadi kuncinya bahkan tidak ada
+        // di objek package. x-for berjalan atas undefined dan tidak merender
+        // apa pun: kedua kotak kosong di SETIAP paket, tanpa satu pun error,
+        // sementara datanya duduk lengkap di package.includes.
+        $package = $this->makePackage();
+
+        $html = $this->get(route('tour.package.detail', $package->slug))
+            ->assertOk()
+            ->getContent();
+
+        $payload = $this->payloadFrom($html);
+
+        preg_match_all('/x-for="\([^)]*\) in \(package\.([a-zA-Z_]+)/', $html, $matches);
+        $this->assertNotEmpty($matches[1], 'tidak ada x-for atas package.* yang ditemukan');
+
+        foreach (array_unique($matches[1]) as $key) {
+            $this->assertArrayHasKey(
+                $key,
+                $payload,
+                "template merender package.{$key}, tapi kunci itu tidak ada di payload -- daftarnya akan terbit kosong tanpa error"
+            );
+        }
+    }
+
+    public function test_detail_page_no_longer_reads_the_unloaded_relation(): void
+    {
+        $package = $this->makePackage();
+
+        $this->get(route('tour.package.detail', $package->slug))
+            ->assertOk()
+            ->assertDontSee('package.package_includes', false)
+            ->assertDontSee('package.package_excludes', false)
+            ->assertSee('package.includes', false)
+            ->assertSee('package.excludes', false);
+    }
+
+    public function test_detail_payload_actually_carries_the_inclusions(): void
+    {
+        $package = $this->makePackage();
+
+        $payload = $this->payloadFrom(
+            $this->get(route('tour.package.detail', $package->slug))->getContent()
+        );
+
+        $this->assertSame(['Hotel bintang 3', 'Transportasi AC', 'Tiket masuk'], $payload['includes']);
+        $this->assertSame(['Tiket pesawat', 'Pengeluaran pribadi'], $payload['excludes']);
+    }
+}

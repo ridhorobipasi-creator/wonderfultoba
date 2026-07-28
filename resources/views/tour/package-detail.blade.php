@@ -549,9 +549,20 @@
                     </div>
                 </div>
 
-                <!-- Inclusion / Exclusion -->
+                {{-- Inclusion / Exclusion
+
+                     Dibaca dari package.includes / package.excludes -- kolom
+                     JSON yang benar-benar diisi lewat form admin. Sebelumnya
+                     kedua daftar ini membaca package.package_includes dan
+                     package.package_excludes, yaitu relasi yang TIDAK PERNAH
+                     ikut dimuat: kuncinya bahkan tidak ada di objek package,
+                     jadi x-for berjalan atas undefined dan tidak merender
+                     apa-apa. Akibatnya kedua kotak ini kosong di SETIAP paket,
+                     tanpa error, sementara datanya duduk lengkap di
+                     package.includes. Ini justru informasi yang paling
+                     menentukan orang jadi memesan atau tidak. --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" x-show="(package.includes || []).length" x-cloak>
                         <h3 class="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-3 font-headline-md">
                             <div class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shadow-sm">
                                 <span class="material-symbols-outlined text-[20px]">check_circle</span>
@@ -559,15 +570,15 @@
                             {{ __('Termasuk') }}
                         </h3>
                         <ul class="space-y-4">
-                            <template x-for="item in package.package_includes" :key="item.id">
+                            <template x-for="(item, i) in (package.includes || [])" :key="i">
                                 <li class="flex items-start gap-3">
                                     <div class="mt-1.5 w-1.5 h-1.5 bg-primary rounded-full shrink-0 shadow-sm"></div>
-                                    <span class="text-slate-700 font-medium text-xs leading-tight font-body-md" x-text="item.name"></span>
+                                    <span class="text-slate-700 font-medium text-xs leading-tight font-body-md" x-text="item"></span>
                                 </li>
                             </template>
                         </ul>
                     </div>
-                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200" x-show="(package.excludes || []).length" x-cloak>
                         <h3 class="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-3 font-headline-md">
                             <div class="w-9 h-9 rounded-lg bg-red-100 text-error flex items-center justify-center">
                                 <span class="material-symbols-outlined text-[20px]">cancel</span>
@@ -575,10 +586,10 @@
                             {{ __('Tidak Termasuk') }}
                         </h3>
                         <ul class="space-y-4">
-                            <template x-for="item in package.package_excludes" :key="item.id">
+                            <template x-for="(item, i) in (package.excludes || [])" :key="i">
                                 <li class="flex items-start gap-3">
                                     <div class="mt-1.5 w-1.5 h-1.5 bg-error rounded-full shrink-0"></div>
-                                    <span class="text-slate-700 font-medium text-xs leading-tight font-body-md" x-text="item.name"></span>
+                                    <span class="text-slate-700 font-medium text-xs leading-tight font-body-md" x-text="item"></span>
                                 </li>
                             </template>
                         </ul>
