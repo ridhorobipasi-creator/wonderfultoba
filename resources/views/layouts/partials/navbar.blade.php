@@ -21,7 +21,9 @@
     $navLinks = [
         ['label' => __('Tentang Kami'),     'url' => '/about',         'active' => request()->is('about')],
         ['label' => __('Blog'),             'url' => '/tour/blog',     'active' => request()->is('tour/blog*')],
-        ['label' => __('Kontak'),           'url' => route('booking.track.form'), 'active' => request()->is('track-booking*')],
+        // Tautannya memang menuju form pelacakan, bukan halaman kontak —
+        // labelnya disesuaikan supaya menjanjikan apa yang benar-benar dibuka.
+        ['label' => __('Lacak Booking'),    'url' => route('booking.track.form'), 'active' => request()->is('track-booking*')],
     ];
 @endphp
 
