@@ -1,3 +1,135 @@
+# SESI 2026-07-28 — tag HTML putus karena @json di atribut (SELESAI, terverifikasi)
+
+Halaman detail paket menampilkan kode Alpine mentah sebagai teks. Akarnya satu:
+direktif `@json` dipakai di dalam atribut `x-data="..."`. `@json` mengeluarkan
+JSON mentah, jadi kutip gandanya menutup atribut, parser membaca sisa kode
+sebagai atribut acak sampai ketemu `>` pertama (di panah `=>`), lalu menutup tag
+di tempat yang salah. Sisanya tumpah jadi teks. Penggantinya `@js`.
+
+Ditemukan 13 titik di 4 file — yang paling luas justru bukan yang terlihat:
+`navbar.blade.php:33,35` memutus tag `<header>` di SETIAP halaman, membuat
+Alpine navbar (hamburger menu) mati diam-diam entah sejak kapan.
+
+**ATURAN BARU:** di dalam blok `x-data`, jangan pernah menulis karakter kutip
+ganda — termasuk di dalam komentar. Dan jangan menulis `@js`/`@json` di dalam
+komentar Blade: direktifnya tetap dikompilasi dan jadi PHP syntax error.
+
+Deteksi: pindai `@json` yang berada di dalam atribut ber-kutip ganda (buang isi
+`<script>` dulu, di sana `@json` sah). Verifikasi runtime: parse HTML halaman,
+pastikan tidak ada text node yang memuat `x-data`/`isMenuOpen`/`isSubmitting`.
+
+## Sapuan kerusakan menyeluruh (hasil: bersih)
+
+45 halaman (semua paket, blog, 15 kota pSEO): status HTTP semua 200, nol
+kebocoran JS jadi teks, nol tag putus. 14 halaman dicek konsol browser: nol
+error. Alpine terinisialisasi penuh di 11 halaman, toggle navbar berfungsi.
+Seluruh rute GET admin 302 ke login (nol 500). Jalur uang diuji dengan POST
+sungguhan bernama `O'Brien`: booking terbit, total RM 1.037,85 cocok dengan
+kalkulator depan, mata uang beku (MYR + IDR + kurs) tersimpan, track & invoice
+200, validasi menolak pax 99999 / telepon `abc` / email ngawur / tanpa centang
+S&K, rate limit aktif. Data uji sudah dihapus dari DB lokal.
+
+Temuan sampingan, bukan kerusakan kode:
+- [ ] Blog berstatus `draft` menulis baris `ERROR` ke log tiap kali dibuka
+      (`aktivitas-air-danau-toba`, `budget-travel-danau-toba-2026`). Bising, bukan rusak.
+- [ ] Gambar tanpa `alt` 1-3 per halaman, konsisten di seluruh situs (sudah ada di Batch 3).
+- Logo 404 di `/login` HANYA di lokal: `settings.general.logo_light_url`/`logo_dark_url`/
+  `icon_url` menunjuk file `.png` lama yang tidak ada. Produksi memakai
+  `logo-1-1780548538.webp` (HTTP 200). Artefak dump DB lokal, tidak perlu diperbaiki.
+
+Catatan: `php artisan test` tidak tersedia (phpunit belum terpasang di mesin ini),
+jadi jaring pengamannya murni verifikasi manual di atas.
+
+---
+
+# SESI 2026-07-24 malam — sapuan tampilan navbar/slider/tour (BELUM terverifikasi visual)
+
+Ter-push ke `sujai` + `origin` sebagai dua commit terpisah:
+- **`e63869f`** `style(ui)` — navbar, home-slider, kartu tour & blog
+- **`bff7710`** `fix(tour)` — `back()` -> `abort(500)` di `PublicController@tour`
+
+> **Peringatan status:** perubahan ini di-push TANPA pernah dilihat render-nya.
+> DB lokal tidak tembus sepanjang sesi (lihat "Blokir verifikasi lokal" di bawah),
+> jadi tidak ada satu pun halaman yang benar-benar dibuka. Cek langsung di situs
+> setelah deploy sebelum menganggap beres.
+
+## Hasil analisis perubahan
+
+### 1. `abort(500)` — ini memperbaiki bug nyata, bukan sekadar selera
+Kode lama `return back()->with('error', ...)` **menelan errornya diam-diam**.
+Alasannya: `session('error')` hanya dirender di `admin/layout.blade.php` dan
+`tour/package-detail.blade.php` — layout publik `layouts/app.blade.php` tidak
+merendernya sama sekali. Jadi pengunjung yang membuka `/tour` saat DB ngadat
+dipantulkan ke halaman lain **tanpa pesan apa pun**. Kegagalan jadi tak terlihat.
+`abort(500)` membuatnya jujur.
+
+Dua ekor yang masih menggantung:
+- [ ] **Belum ada `resources/views/errors/500.blade.php`.** Isi folder `errors/`
+      cuma `404.blade.php` + `maintenance.blade.php`. Jadi di produksi
+      (`APP_DEBUG=false`) pengunjung dapat halaman error bawaan Laravel yang polos.
+- [ ] **Pertimbangkan `503` daripada `500`.** Gangguan koneksi DB itu *sementara*.
+      Google memperlakukan 503 sebagai "coba lagi nanti" tapi 500 sebagai error
+      server — dan `/tour` adalah halaman uang. `abort(503)` + `Retry-After`
+      lebih aman untuk SEO.
+
+### 2. i18n — satu diperbaiki tanpa sengaja, satu masih tertinggal
+Kunci lama `__('HUBUNGI KAMI!')` (pakai `!`) **tidak pernah ada** di `lang/*.json` —
+yang terdaftar `"HUBUNGI KAMI"` tanpa `!`. Artinya selama ini pengunjung berbahasa
+Inggris melihat tulisan Indonesia mentah, bukan "CONTACT US". Perubahan ke
+`__('Hubungi Kami')` kebetulan menyembuhkan itu, karena kunci tersebut memang ada
+di ketiga file (`en/id/my`).
+
+- [ ] **`navbar.blade.php:178` masih memakai kunci rusak `__('HUBUNGI KAMI!')`.**
+      Itu `aria-label` tombol WhatsApp mobile yang cuma ikon — jadi satu-satunya
+      nama aksesibelnya. Akibatnya pembaca layar berbahasa Inggris/Melayu mendengar
+      "HUBUNGI KAMI!" dalam bahasa Indonesia. Baris 170 & 279 sudah benar; tinggal
+      178 yang belum ikut. Perbaikan: samakan jadi `__('Hubungi Kami')`.
+
+### 3. Features bar jadi transparan — AMAN, karena berpasangan
+Sekilas mencurigakan: `rgba(15,15,15,0.85)` (nyaris pekat) -> `rgba(255,255,255,0.05)`
+(nyaris tembus pandang) dengan teks putih. Tapi di commit yang sama overlay hero
+digelapkan `0.55` -> `0.7` di titik 100%, dan features bar berada **di dalam** hero
+(`home-slider.blade.php:345`, di atas overlay). Jadi latar di belakangnya tetap
+70% hitam — teks putih masih terbaca. Dua perubahan ini saling melengkapi, bukan
+regresi kontras.
+
+### 4. `backdrop-filter` bertambah — bertentangan dengan bahasa desain sendiri
+Commit ini menambah `backdrop-blur` di dua tempat baru (features bar `blur(16px)`,
+panel harga kartu tour `backdrop-blur-md`). Bahasa desain "Toba Editorial" di
+dokumen ini menyebut eksplisit: *"kurangi backdrop-blur berat (mahal di GPU
+mobile)"*. Bukan salah, tapi arahnya berlawanan — putuskan mana yang menang.
+
+- [ ] Ukur dampaknya di HP kelas menengah sebelum menyebar pola ini lebih jauh.
+
+### 5. Kartu tour kehilangan token desain
+Panel harga pindah dari `bg-secondary-fixed` + `text-on-secondary-fixed`
+(token dengan jaminan kontras) ke `bg-white/10` + `text-white`. Kontras harga
+sekarang bergantung pada foto paket, bukan pada sistem warna.
+
+- [ ] Cek paket berfoto terang (pantai/langit siang) — harga adalah informasi
+      komersial paling penting di kartu itu.
+
+## Blokir verifikasi lokal (sesi ini)
+
+`php artisan serve` + `npm run dev` jalan normal (`:8000` dan `:5173`), tapi setiap
+halaman mati di query pertama: `[1045] Access denied for user
+'u754986547_toba'@'103.154.212.252'`. Sudah dicoba menambah whitelist IP di hPanel
+**dan** mengganti password DB — tetap ditolak.
+
+Sebabnya tidak bisa dipastikan dari sisi lokal: MySQL mengembalikan error yang
+**persis sama** untuk "host belum di-grant" maupun "password salah". Sudah diuji
+tiga kombinasi (user asli + pw `.env`, user asli + pw ngawur, user ngawur) —
+ketiganya `1045` identik. Menebak bergantian tidak akan konvergen.
+
+- [ ] **Jalur yang direkomendasikan, belum dikerjakan:** MySQL lokal via XAMPP
+      (`C:\xampp`, `mysqld` ada tapi service mati). Import `u754986547_toba.sql`,
+      backup `.env` -> `.env.produksi`, arahkan `DB_HOST=127.0.0.1`. Sekali kerja,
+      lalu lokal tidak lagi bergantung pada IP rumah maupun rotasi password produksi.
+- [ ] `storage/logs/laravel.log` menggelembung jadi 9,6 MB, isinya hampir seluruhnya
+      error 1045 ini. Aman dikosongkan.
+
+---
+
 # SELESAI sesi 2026-07-24 (terverifikasi render lokal + validator)
 
 Batch "Trust & Jalur Uang" + a11y — semua di bawah ini DIKERJAKAN & di-push (sujai+origin):
