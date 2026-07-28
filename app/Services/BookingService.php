@@ -93,13 +93,37 @@ class BookingService
                 $data['status'] = $data['status'] ?? 'pending';
 
                 // Sync Customer — include soft-deleted records so a repeat booking
-                // from a previously removed email restores that customer instead of
-                // hitting the customers_email_unique index with a fresh insert.
-                $customer = Customer::withTrashed()->firstOrNew(['email' => $data['customerEmail']]);
+                // from a previously removed customer restores that record instead
+                // of hitting the unique index with a fresh insert.
+                //
+                // Dikunci pada NOMOR TELEPON, bukan email: email tidak lagi
+                // diminta saat memesan. Kalau tetap dikunci pada email, setiap
+                // tamu tanpa email akan bertabrakan jadi satu baris pelanggan
+                // yang sama — namanya bertukar-tukar setiap ada pesanan baru.
+                $phoneKey = Customer::phoneKey($data['customerPhone'] ?? null);
+                $email = trim((string) ($data['customerEmail'] ?? '')) ?: null;
+                $data['customerEmail'] = $email;
+
+                if ($phoneKey !== null) {
+                    $customer = Customer::withTrashed()->firstOrNew(['phone_key' => $phoneKey]);
+                } elseif ($email !== null) {
+                    $customer = Customer::withTrashed()->firstOrNew(['email' => $email]);
+                } else {
+                    // Tanpa keduanya tidak ada yang bisa dijadikan pengenal;
+                    // buat baris baru daripada menempel ke pelanggan asing.
+                    $customer = new Customer;
+                }
+
                 $customer->fill([
                     'name' => $data['customerName'],
                     'phone' => $data['customerPhone'] ?? null,
+                    'phone_key' => $phoneKey,
                 ]);
+                // Email hanya ditimpa bila memang diisi — pesanan baru tanpa
+                // email tidak boleh menghapus alamat yang sudah tercatat.
+                if ($email !== null) {
+                    $customer->email = $email;
+                }
                 if ($customer->trashed()) {
                     $customer->deleted_at = null;
                 }

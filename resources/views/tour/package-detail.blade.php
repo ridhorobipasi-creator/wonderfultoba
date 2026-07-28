@@ -165,7 +165,6 @@
         'paxChildren' => max(0, (int) old('paxChildren', (int) request()->query('anak', 0))),
         'notesUser' => (string) old('notesUser', ''),
         'customerName' => (string) old('customerName', ''),
-        'customerEmail' => (string) old('customerEmail', ''),
         'customerPhone' => (string) old('customerPhone', ''),
         'startDate' => (string) old('startDate', ''),
     ];
@@ -213,10 +212,8 @@
             selected: false
         })),
         isSubmitting: false,
-        termsAccepted: false,
         notesUser: @js($formOld['notesUser']),
         customerName: @js($formOld['customerName']),
-        customerEmail: @js($formOld['customerEmail']),
         customerPhone: @js($formOld['customerPhone']),
         startDate: @js($formOld['startDate']),
 
@@ -776,14 +773,13 @@
                             @error('customerName') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
-                        <!-- Email & WhatsApp -->
+                        {{-- Kolom email dihapus. Pasarnya berjalan lewat
+                             WhatsApp dan email tidak pernah dipakai menghubungi
+                             tamu -- notifikasi booking hanya ke admin. Pengenal
+                             pelanggan kini nomor telepon (Customer::phoneKey),
+                             jadi tamu tanpa email tidak lagi bertabrakan jadi
+                             satu baris pelanggan yang sama. --}}
                         <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <label for="bk-customerEmail" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Email') }} <span class="text-red-500">*</span></label>
-                                <input type="email" id="bk-customerEmail" name="customerEmail" x-model="customerEmail" required placeholder="{{ __('email@contoh.com') }}" autocomplete="email" inputmode="email"
-                                    class="w-full border border-outline-variant rounded-lg p-3 text-sm text-on-surface bg-background focus:ring-1 focus:ring-secondary focus:border-secondary outline-none font-body-md transition">
-                                @error('customerEmail') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                            </div>
                             <div>
                                 <label for="bk-customerPhone" class="font-label-caps text-label-caps text-slate-700 mb-2 block uppercase tracking-wider">{{ __('Nomor WhatsApp') }} <span class="text-red-500">*</span></label>
                                 <input type="tel" id="bk-customerPhone" name="customerPhone" x-model="customerPhone" required placeholder="{{ __('0812-xxxx-xxxx') }}" autocomplete="tel" inputmode="tel"
@@ -919,26 +915,27 @@
                             <input type="text" name="website_url" id="website_url" value="" autocomplete="off" tabindex="-1">
                         </div>
 
-                        <!-- Persetujuan S&K + Kebijakan Privasi (wajib) -->
-                        <div>
-                            <label for="bk-terms" class="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" id="bk-terms" name="terms" value="1" x-model="termsAccepted" required
-                                    class="mt-0.5 w-4 h-4 shrink-0 text-secondary border-outline-variant rounded focus:ring-1 focus:ring-secondary">
-                                <span class="text-[11px] text-slate-600 font-body-md leading-relaxed">
-                                    {!! __('Saya menyetujui :terms dan :privacy, termasuk kebijakan pembatalan & pengembalian dana.', [
-                                        'terms' => '<a href="'.route('terms').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Syarat & Ketentuan').'</a>',
-                                        'privacy' => '<a href="'.route('privacy').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Kebijakan Privasi').'</a>',
-                                    ]) !!}
-                                </span>
-                            </label>
-                            @error('terms') <span class="text-xs text-error font-body-md mt-1 block">{{ $message }}</span> @enderror
-                        </div>
+                        {{-- Persetujuan S&K + Kebijakan Privasi.
+
+                             Centangnya dihapus atas permintaan pemilik: satu
+                             tindakan lagi sebelum memesan. Persetujuannya tidak
+                             ikut hilang -- ia jadi pemberitahuan tepat di atas
+                             tombol kirim, pola yang lazim dipakai dan tetap
+                             merupakan tindakan afirmatif (menekan tombolnya).
+                             Relevan UU PDP 27/2022 dan PDPA untuk tamu SG/MY. --}}
+                        <p class="text-[11px] text-slate-600 font-body-md leading-relaxed">
+                            {!! __('Dengan menekan :button, Anda menyetujui :terms dan :privacy, termasuk kebijakan pembatalan & pengembalian dana.', [
+                                'button' => '<strong>'.__('Pesan Sekarang').'</strong>',
+                                'terms' => '<a href="'.route('terms').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Syarat & Ketentuan').'</a>',
+                                'privacy' => '<a href="'.route('privacy').'" target="_blank" rel="noopener" class="text-secondary font-semibold underline">'.__('Kebijakan Privasi').'</a>',
+                            ]) !!}
+                        </p>
 
                         <!-- Submit Button -->
                         <button
                             type="submit"
-                            :disabled="isSubmitting || !termsAccepted"
-                            :class="(isSubmitting || !termsAccepted) ? 'opacity-50 cursor-not-allowed' : ''"
+                            :disabled="isSubmitting"
+                            :class="isSubmitting ? 'opacity-50 cursor-not-allowed' : ''"
                             class="w-full bg-primary text-on-primary py-4 rounded-lg font-semibold text-xs uppercase tracking-wider hover:bg-primary-container transition duration-300 shadow-sm flex items-center justify-center gap-2"
                         >
                             <span x-show="!isSubmitting" class="flex items-center justify-center gap-2">

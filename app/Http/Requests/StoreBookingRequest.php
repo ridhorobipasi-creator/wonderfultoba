@@ -46,7 +46,12 @@ class StoreBookingRequest extends FormRequest
         return [
             'packageId' => 'required|exists:packages,id',
             'customerName' => 'required|string|max:255',
-            'customerEmail' => 'required|email|max:255',
+            // Opsional. Pasarnya berjalan lewat WhatsApp, dan email tidak
+            // pernah dipakai menghubungi tamu -- notifikasi booking hanya ke
+            // admin. Menjadikannya wajib berarti kehilangan calon tamu di
+            // kolom yang tidak pernah kita baca. Pengenal pelanggan kini
+            // nomor telepon (Customer::phoneKey).
+            'customerEmail' => 'nullable|email|max:255',
             // Telepon: hanya angka, spasi, +, -, (), 7–20 karakter. Menutup "abc"
             // yang lolos lalu bikin konfirmasi WhatsApp gagal.
             'customerPhone' => ['required', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
@@ -58,9 +63,13 @@ class StoreBookingRequest extends FormRequest
             'selected_services' => 'nullable|array',
             'selected_services.*' => 'string',
             'notes' => 'nullable|string|max:2000',
-            // Persetujuan S&K + Kebijakan Privasi wajib. Relevan UU PDP 27/2022
-            // dan PDPA untuk tamu SG/MY. 'accepted' mewajibkan nilai truthy.
-            'terms' => 'accepted',
+            // Centang S&K dihapus atas permintaan pemilik: satu tindakan lagi
+            // sebelum memesan. Persetujuannya TIDAK hilang -- ia pindah jadi
+            // pemberitahuan di atas tombol kirim ("dengan menekan Pesan, Anda
+            // menyetujui ..."), pola yang lazim dan tetap merupakan tindakan
+            // afirmatif. Relevan UU PDP 27/2022 dan PDPA untuk tamu SG/MY;
+            // kalau bentuk persetujuannya perlu lebih tegas, kembalikan
+            // 'terms' => 'accepted' di sini dan centangnya di form.
         ];
     }
 
@@ -75,7 +84,6 @@ class StoreBookingRequest extends FormRequest
             'customerEmail.email' => 'Format email tidak valid.',
             'customerPhone.regex' => 'Nomor telepon tidak valid. Gunakan angka, boleh diawali +.',
             'pax.max' => 'Jumlah peserta terlalu besar. Hubungi kami untuk rombongan besar.',
-            'terms.accepted' => 'Anda harus menyetujui Syarat & Ketentuan dan Kebijakan Privasi.',
         ];
     }
 }

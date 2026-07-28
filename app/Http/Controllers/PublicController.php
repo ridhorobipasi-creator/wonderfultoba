@@ -333,7 +333,14 @@ class PublicController extends Controller
                          '- '.__('Paket').': '.$package->name."\n".
                          '- '.__('Link Paket').': '.route('tour.package.detail', $package->slug)."\n".
                          '- '.__('Nama').': '.$validated['customerName']."\n".
-                         '- '.__('Email').': '.$validated['customerEmail']."\n".
+                         // Email tidak lagi wajib di form; barisnya hanya ikut
+                         // bila memang diisi. Membacanya tanpa penjaga membuat
+                         // SELURUH pengiriman pesanan gagal dengan "Undefined
+                         // array key" -- tamu menerima form yang memantul tanpa
+                         // pesan yang bisa ia perbaiki.
+                         (! empty($validated['customerEmail'])
+                             ? '- '.__('Email').': '.$validated['customerEmail']."\n"
+                             : '').
                          '- '.__('WhatsApp').': '.$validated['customerPhone']."\n".
                          '- '.__('Tanggal').': '.$formattedDate."\n".
                          '- '.__('Peserta').': '.$validated['pax'].' '.__('Orang')."\n".
