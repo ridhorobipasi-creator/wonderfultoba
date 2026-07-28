@@ -132,7 +132,7 @@
             <template x-for="(post, i) in rest" :key="post.id">
                 <article class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden shadow-lg border border-outline-variant/20 hover:border-secondary/30 transition duration-500 hover:-translate-y-1.5 animate-in fade-in slide-in-from-bottom-8 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                     <a :href="'/tour/blog/' + (post.slug || post.id)" class="block relative overflow-hidden h-64">
-                        <img :src="post.image_url || '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.title"
+                        <img :src="post.image_url || '{{ asset('images/sumut/sumatra_panorama.webp') }}'" :alt="post.translated_title"
                             loading="lazy" decoding="async"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out">
                         <div class="absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors"></div>
@@ -146,7 +146,7 @@
                             <span class="material-symbols-outlined text-xs">calendar_today</span>
                             <span x-text="new Date(post.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' })"></span>
                         </div>
-                        <h2 class="text-xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors leading-tight line-clamp-2 tracking-tight" x-text="post.title"></h2>
+                        <h2 class="text-xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors leading-tight line-clamp-2 tracking-tight" x-text="post.translated_title"></h2>
                         <p class="text-on-surface-variant text-xs leading-relaxed mb-6 line-clamp-3 font-light flex-grow" x-text="post.translated_excerpt || post.content"></p>
                         
                         <div class="pt-6 border-t border-outline-variant/20 mt-auto">

@@ -88,6 +88,33 @@ class ContactHelper
         return $message ? $url.'?text='.urlencode($message) : $url;
     }
 
+    /** Alamat email resmi bila belum ada apa pun di pengaturan. */
+    public const DEFAULT_EMAIL = 'info@sujailaketoba.com';
+
+    /**
+     * Alamat email perusahaan.
+     *
+     * Sama seperti nomor telepon, alamat ini sebelumnya punya DUA nilai bawaan
+     * yang bertentangan: 'hello@' dipakai schema.org, PDF paket, dan form admin,
+     * sementara 'info@' dipakai footer, navbar, halaman S&K, dan halaman
+     * pembayaran. Mesin pencari membaca satu alamat, pengunjung membaca alamat
+     * lain, dan salah satunya hampir pasti tidak ada yang membacanya.
+     *
+     * @return string
+     */
+    public static function email()
+    {
+        $settings = self::settings();
+
+        $raw = $settings['cms_tour']['contact_email']
+            ?? $settings['general']['contact_email']
+            ?? null;
+
+        $raw = is_string($raw) ? trim($raw) : '';
+
+        return filter_var($raw, FILTER_VALIDATE_EMAIL) ? $raw : self::DEFAULT_EMAIL;
+    }
+
     /**
      * Nomor spesialis bila diatur; kalau tidak, jatuh ke nomor utama.
      *

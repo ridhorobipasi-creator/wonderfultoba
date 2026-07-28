@@ -147,7 +147,7 @@
 
     <div class="footer">
         <p>&copy; {{ date('Y') }} {{ $siteSettings['general']['site_name'] ?? 'Sujai Laketoba' }}. All rights reserved.</p>
-        <p>Hubungi kami: {{ \App\Helpers\ContactHelper::whatsappDisplay() }} | {{ $siteSettings['general']['contact_email'] ?? 'info@sujailaketoba.com' }}</p>
+        <p>Hubungi kami: {{ \App\Helpers\ContactHelper::whatsappDisplay() }} | {{ \App\Helpers\ContactHelper::email() }}</p>
     </div>
 </body>
 </html>

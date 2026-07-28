@@ -21,7 +21,7 @@
     }
     $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('assets/img/logo.png'));
     $schemaPhone   = '+' . \App\Helpers\ContactHelper::whatsappDigits();
-    $schemaEmail   = $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com';
+    $schemaEmail   = \App\Helpers\ContactHelper::email();
     $schemaDesc    = $settings['meta_description'] ?? 'Agen perjalanan wisata Danau Toba terpercaya';
 
     $homepageSchema = [
@@ -181,10 +181,22 @@
                  init() {
                      this.scrollContainer = this.$refs.strip;
                      this.startAutoScroll();
+                     // Berhenti saat kursor atau fokus keyboard berada di dalam
+                     // galeri: gerakan yang jalan sendiri membuat orang kehilangan
+                     // tempat bacaannya, dan bagi pengguna keyboard kartunya
+                     // berpindah tepat saat hendak ditekan.
+                     this.$el.addEventListener('mouseenter', () => this.stopAutoScroll());
+                     this.$el.addEventListener('mouseleave', () => this.startAutoScroll());
+                     this.$el.addEventListener('focusin', () => this.stopAutoScroll());
                  },
 
                  startAutoScroll() {
                      this.stopAutoScroll();
+                     // prefers-reduced-motion: sebagian orang memilih setelan ini
+                     // karena gerakan otomatis memicu pusing atau mual. Hormati.
+                     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                         return;
+                     }
                      this.autoTimer = setInterval(() => {
                          if (!this.scrollContainer) return;
                          const maxScroll = this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
@@ -443,11 +455,18 @@
             <div class="space-y-2 md:space-y-4" x-data="{ selected: 1 }">
                 @foreach($faqs as $index => $faq)
                 <div class="bg-white px-5 md:px-6 rounded-2xl border border-slate-100 shadow-xs transition-shadow hover:shadow-sm">
-                    <button @click="selected !== {{ $index + 1 }} ? selected = {{ $index + 1 }} : selected = null" class="w-full py-5 md:py-6 flex justify-between items-center gap-4 text-left focus:outline-none">
+                    {{-- aria-expanded + aria-controls: tanpa ini pembaca layar
+                         mengumumkan tombol tanpa memberi tahu apakah jawabannya
+                         sedang terbuka atau tertutup. --}}
+                    <button @click="selected !== {{ $index + 1 }} ? selected = {{ $index + 1 }} : selected = null"
+                            :aria-expanded="selected === {{ $index + 1 }} ? 'true' : 'false'"
+                            aria-controls="faq-panel-{{ $index + 1 }}"
+                            id="faq-tombol-{{ $index + 1 }}"
+                            class="w-full py-5 md:py-6 flex justify-between items-center gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-toba-green focus-visible:ring-offset-2">
                         <span class="text-[15px] md:text-[18px] text-primary font-bold leading-snug">{{ __($faq['q']) }}</span>
-                        <span :class="selected === {{ $index + 1 }} ? 'rotate-180 text-secondary' : ''" class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+                        <span :class="selected === {{ $index + 1 }} ? 'rotate-180 text-secondary' : ''" class="material-symbols-outlined transition-transform duration-300" aria-hidden="true">expand_more</span>
                     </button>
-                    <div x-show="selected === {{ $index + 1 }}" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="overflow-hidden">
+                    <div x-show="selected === {{ $index + 1 }}" id="faq-panel-{{ $index + 1 }}" role="region" aria-labelledby="faq-tombol-{{ $index + 1 }}" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="overflow-hidden">
                         <p class="pb-5 md:pb-6 font-body-md text-[14px] md:text-[16px] text-on-surface-variant leading-relaxed">
                             {{ __($faq['a']) }}
                         </p>

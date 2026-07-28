@@ -73,7 +73,7 @@
                             <p class="text-slate-600 font-normal text-sm leading-relaxed mb-2">Metode paling murah dan tercepat untuk transfer dari Singapura dan Malaysia. Tidak ada biaya tersembunyi dan kurs mendekati nilai pasar.</p>
                             <p class="text-slate-400 text-xs">Best option for international guests. Low fees, transparent exchange rate, supports MYR and SGD.</p>
                             <div class="mt-4 card-flat-soft p-4 text-xs font-normal text-slate-600">
-                                <p>📧 Email Wise: <strong>info@sujailaketoba.com</strong></p>
+                                <p>📧 Email Wise: <strong>{{ \App\Helpers\ContactHelper::email() }}</strong></p>
                                 <p class="mt-1">Atau hubungi kami via WhatsApp untuk detail rekening Wise terbaru.</p>
                             </div>
                         </div>

@@ -150,9 +150,15 @@
                     @endif
                     <div class="flex items-center space-x-3">
                         <span class="material-symbols-outlined text-secondary text-[18px] shrink-0">mail</span>
-                        <a href="mailto:{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}"
+                        {{-- Lewat ContactHelper. Footer punya nilai bawaan sendiri
+                             ('info@') yang berbeda dari sisa situs ('hello@'), dan
+                             karena $g di sini kadang tidak memuat contact_email,
+                             halaman S&K sempat menampilkan DUA alamat berbeda
+                             sekaligus: satu di badan teks, satu di footernya. --}}
+                        @php $footerEmail = \App\Helpers\ContactHelper::email(); @endphp
+                        <a href="mailto:{{ $footerEmail }}"
                            class="hover:text-secondary transition-colors">
-                            {{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}
+                            {{ $footerEmail }}
                         </a>
                     </div>
                     @if($g['operating_hours'] ?? false)

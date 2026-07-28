@@ -341,7 +341,7 @@
                 <div class="flex items-center gap-4">
                     {{-- Toggle Button --}}
                     <button @click="sidebarOpen = !sidebarOpen"
-                            class="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition focus:outline-none">
+                            class="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition focus:outline-none focus-visible:ring-2 focus-visible:ring-toba-green focus-visible:ring-offset-2">
                         <i class="fas fa-bars text-xs"></i>
                     </button>
                     <div>

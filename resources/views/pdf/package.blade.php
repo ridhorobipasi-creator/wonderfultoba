@@ -121,7 +121,7 @@
         <p>Solusi Perjalanan & Outbound Terbaik di Sumatera Utara</p>
         {{-- Nomor lewat ContactHelper, bukan nilai contoh '+6281234567890'
              yang dulu tercetak di PDF yang dikirim ke calon pembeli. --}}
-        <p>Telp: {{ \App\Helpers\ContactHelper::whatsappDisplay() }} | Email: {{ $settings['contact_email'] ?? 'hello@sujailaketoba.com' }}</p>
+        <p>Telp: {{ \App\Helpers\ContactHelper::whatsappDisplay() }} | Email: {{ \App\Helpers\ContactHelper::email() }}</p>
     </div>
 
     <div class="package-title">{{ $package->name }}</div>

@@ -31,7 +31,7 @@
         scrolled: false,
         contact: {
             phone: @js(\App\Helpers\ContactHelper::whatsappDisplay()),
-            email: '{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}',
+            email: {{ \Illuminate\Support\Js::from(\App\Helpers\ContactHelper::email()) }},
             whatsapp: @js(\App\Helpers\ContactHelper::whatsappDigits())
         }
     }"

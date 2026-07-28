@@ -265,7 +265,7 @@
 
                 <!-- PENGATURAN LANJUTAN (ACCORDION) -->
                 <div x-data="{ advancedOpen: false }" class="bg-gray-50 rounded-2xl border border-gray-200 mt-8">
-                    <button type="button" @click="advancedOpen = !advancedOpen" class="w-full px-6 py-4 flex items-center justify-between focus:outline-none">
+                    <button type="button" @click="advancedOpen = !advancedOpen" class="w-full px-6 py-4 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-toba-green focus-visible:ring-offset-2">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-gray-200 text-gray-600 flex items-center justify-center font-black">
                                 <i class="fas fa-sliders-h"></i>
