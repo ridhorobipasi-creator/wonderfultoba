@@ -212,7 +212,13 @@ class BookingService
             // Punya harga grosir? Maka harga datang dari tier, titik. Aturan
             // pemilihannya hidup di satu tempat, Package::pricingTierFor(),
             // supaya kalkulator di kartu paket tidak bisa memakai aturan lain.
-            $tier = $package->pricingTierFor($pax);
+            //
+            // Ambang tier dihitung dari TOTAL orang, dewasa + anak: satu anak
+            // tetap satu kursi di bus dan satu kepala yang harus diurus, jadi
+            // rombongan 8 dewasa + 4 anak adalah rombongan 12. Harganya tetap
+            // per jenis -- dewasa memakai harga dewasa tier, anak memakai
+            // harga anak tier; yang dibagi bersama hanyalah ambangnya.
+            $tier = $package->pricingTierFor($pax + $paxChildren);
             if ($tier !== null) {
                 $pricePerPerson = $tier['price'] ?? $pricePerPerson;
                 // Harga anak ikut tier juga. childPrice paket sengaja TIDAK

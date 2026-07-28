@@ -93,6 +93,14 @@ arsitektur untuk memecah satu halaman yang belum penuh.
 
    Tanpa tier, tidak ada yang berubah: harga dasar + `childPrice` paket.
 
+9. **Ambang tier dihitung dari TOTAL orang, dewasa + anak** (keputusan user).
+   Sebelumnya hanya dewasa: 8 dewasa + 4 anak dianggap rombongan 8 dan
+   kehilangan diskon yang mestinya didapat rombongan 12. Satu anak tetap satu
+   kursi dan satu kepala yang harus diurus. Harganya tetap per jenis — dewasa
+   memakai harga dewasa tier, anak memakai harga anak tier; yang dibagi
+   bersama hanya ambangnya. Satu anak kini bisa mendorong rombongan melewati
+   ambang (10 dewasa + 1 anak = 11 orang → tier 11-15).
+
 **Konsekuensi bisnis yang perlu disadari:** dengan ambang diskon, rombongan
 yang lebih kecil bisa membayar total lebih mahal daripada yang lebih besar bila
 selisih tier-nya tajam (10 x RM 350 = 3.500 vs 11 x RM 300 = 3.300). Itu sifat
@@ -101,9 +109,12 @@ harga grosir berambang, bukan cacat — tapi pilih selisih tier dengan sadar.
 **Cara memverifikasi paritas kartu vs server** (dipakai sesi ini): dump
 `Package::pricingTierFor()` untuk matriks fixture x jumlah pax dari PHP, lalu
 jalankan `paxCalc` yang **diekstrak dari HTML terender** di Node terhadap
-matriks yang sama. 11 skenario x 14 jumlah pax = 154 perbandingan, semuanya
-sepakat. Harness-nya dibuktikan bisa merah: dengan aturan celah di sisi JS
-disabotase, 11 baris langsung berbeda.
+matriks yang sama. 11 skenario x 14 jumlah dewasa x 5 jumlah anak = 770
+perbandingan (harga dewasa, harga anak, dan total), semuanya sepakat.
+
+Harness-nya dibuktikan bisa merah dua kali: aturan celah di sisi JS disabotase
+→ 11 baris berbeda; ambang dikembalikan ke dewasa-saja → 113 baris berbeda.
+Harness yang tidak pernah dibuktikan bisa gagal hanya menghasilkan rasa aman.
 
 ## Aturan baru
 

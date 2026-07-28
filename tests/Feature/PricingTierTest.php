@@ -231,6 +231,41 @@ class PricingTierTest extends TestCase
         $this->assertEquals(300.00, $breakdown['price_anak_total']); // 3 x 100
     }
 
+    public function test_children_count_toward_the_tier_threshold(): void
+    {
+        // 8 dewasa + 4 anak = rombongan 12, jadi tier 11-15 yang berlaku --
+        // bukan tier 1-9 seperti kalau anak tidak dihitung. Harganya tetap
+        // per jenis: dewasa RM 320, anak setengahnya (RM 160).
+        $package = $this->makePackage($this->standardTiers());
+
+        $booking = app(BookingService::class)->create([
+            'packageId' => $package->id,
+            'type' => 'package',
+            'customerName' => 'Rombongan Keluarga',
+            'customerEmail' => 'keluarga@test.local',
+            'customerPhone' => '08123456789',
+            'startDate' => now()->addDays(30)->format('Y-m-d'),
+            'endDate' => now()->addDays(32)->format('Y-m-d'),
+            'status' => 'pending',
+            'metadata' => ['pax' => 8, 'paxChildren' => 4],
+        ]);
+
+        $breakdown = $booking->metadata['price_breakdown'];
+
+        $this->assertEquals(2560.00, $breakdown['price_dewasa_total']); // 8 x 320
+        $this->assertEquals(640.00, $breakdown['price_anak_total']);    // 4 x 160
+    }
+
+    public function test_a_child_can_push_a_group_over_the_wholesale_threshold(): void
+    {
+        // 10 dewasa + 1 anak = 11 orang: ambang tier 11-15 tercapai justru
+        // karena anaknya. Tanpa anak itu, 10 dewasa masih di harga 1-9.
+        $package = $this->makePackage($this->standardTiers());
+
+        $this->assertEquals(350.00, $package->pricingTierFor(10)['price']);
+        $this->assertEquals(320.00, $package->pricingTierFor(10 + 1)['price']);
+    }
+
     public function test_admin_package_forms_render(): void
     {
         // Kedua form ini yang dipakai mengubah harga tiap paket. Keduanya

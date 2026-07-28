@@ -219,10 +219,13 @@
                     // Harga grosir. Cerminan persis Package::pricingTierFor():
                     // kalau paket punya tier, harga SELALU datang dari salah
                     // satu tier -- tidak pernah diam-diam jatuh ke harga dasar.
-                    // Tier dipilih dari jumlah DEWASA saja, sama dengan
-                    // BookingService yang mencocokkan $pax (bukan pax + anak).
+                    //
+                    // Ambangnya dari TOTAL orang, dewasa + anak, sama dengan
+                    // BookingService yang memanggil pricingTierFor($pax +
+                    // $paxChildren). Harganya tetap per jenis; yang dibagi
+                    // bersama hanya ambangnya.
                     get activeTier() {
-                        var n = this.adults, list = this.tiers;
+                        var n = this.adults + this.children, list = this.tiers;
                         if (!list.length) return null;
 
                         var match = list.find(function (t) { return n >= t.min_pax && n <= t.max_pax; });
