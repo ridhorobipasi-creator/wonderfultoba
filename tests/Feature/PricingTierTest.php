@@ -231,6 +231,23 @@ class PricingTierTest extends TestCase
         $this->assertEquals(300.00, $breakdown['price_anak_total']); // 3 x 100
     }
 
+    public function test_admin_package_forms_render(): void
+    {
+        // Kedua form ini yang dipakai mengubah harga tiap paket. Keduanya
+        // disentuh saat kolom harga anak tier dijadikan wajib, dan sebelumnya
+        // tidak ada satu pun tes yang pernah membukanya.
+        $admin = \App\Models\User::factory()->create(['role' => 'superadmin']);
+        $package = $this->makePackage($this->standardTiers(), childPrice: 200.00);
+
+        $this->actingAs($admin)->get('/admin/packages/create')
+            ->assertOk()
+            ->assertSee('Harga Anak (RM)', false);
+
+        $this->actingAs($admin)->get("/admin/packages/{$package->id}/edit")
+            ->assertOk()
+            ->assertSee('Harga Anak (RM)', false);
+    }
+
     public function test_admin_cannot_save_a_tier_without_a_child_price(): void
     {
         // Kolom harga anak di tier wajib diisi. Kalau ia boleh kosong, harga
