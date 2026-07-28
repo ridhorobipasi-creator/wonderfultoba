@@ -74,10 +74,14 @@ class BookingTrackingTest extends TestCase
         $response->assertSee('Lihat Paket');
     }
 
-    public function test_unknown_tracking_code_returns_not_found(): void
+    public function test_unknown_tracking_code_returns_to_form_with_message(): void
     {
+        // Dulu ini 404 mentah. Salah ketik kode adalah kesalahan yang wajar, dan
+        // terjadi justru saat tamu cemas menunggu kabar pesanannya — kembalikan
+        // ke form pelacakan dengan alasan yang bisa ditindaklanjuti.
         $response = $this->get(route('booking.track', 'WT-MISSING'));
 
-        $response->assertNotFound();
+        $response->assertRedirect(route('booking.track.form'));
+        $response->assertSessionHas('error');
     }
 }
