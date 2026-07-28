@@ -202,7 +202,14 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {{-- items-start: tiap kartu setinggi isinya sendiri. Dengan
+                 align-items: stretch bawaan, seluruh kartu dipaksa setinggi
+                 yang tertinggi -- begitu satu akordeon dibuka, kartu itu jadi
+                 yang tertinggi dan SEMUA tetangganya ikut melar mengikuti,
+                 isinya menggantung di ruang kosong. Tinggi kartu tertutup
+                 tetap seragam karena judul dan deskripsinya sudah dibatasi
+                 line-clamp. --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-start">
                 <template x-for="(pkg, i) in filteredPackages" :key="pkg.id">
                     <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-slate-200 transition-colors duration-300 group h-full flex flex-col shadow-sm">

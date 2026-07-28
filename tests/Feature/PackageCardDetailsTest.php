@@ -66,6 +66,22 @@ class PackageCardDetailsTest extends TestCase
         $this->assertStringNotContainsString('aria-controls="pkg-detail-grid-"', $html);
     }
 
+    public function test_card_containers_do_not_stretch_siblings(): void
+    {
+        // Wadah flex dan grid memakai align-items: stretch secara bawaan, jadi
+        // seluruh kartu dipaksa setinggi yang tertinggi. Begitu satu akordeon
+        // dibuka, kartu itu menjadi yang tertinggi dan SEMUA tetangganya ikut
+        // melar mengikutinya -- isinya menggantung di ruang kosong. Akordeon
+        // di dalam wadah yang stretch tidak akan pernah benar tanpa ini.
+        $this->makePackage();
+
+        $grid = $this->get(route('tour.packages'))->assertOk()->getContent();
+        $this->assertStringContainsString('gap-6 md:gap-8 items-start', $grid);
+
+        $beranda = $this->get(route('index'))->assertOk()->getContent();
+        $this->assertStringContainsString('flex items-start gap-6', $beranda);
+    }
+
     public function test_accordion_is_labelled_for_screen_readers(): void
     {
         $this->makePackage();

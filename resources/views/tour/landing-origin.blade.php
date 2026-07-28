@@ -151,7 +151,8 @@
         <div x-ref="pkgStrip"
              @mousedown="onDown($event)" @mousemove="onMove($event)" @mouseup="onUp()" @mouseleave="onUp()"
              @scroll="const max = el.scrollWidth - el.clientWidth; scrollPercent = max > 0 ? (el.scrollLeft / max) * 100 : 0"
-             class="flex gap-6 overflow-x-auto scroll-smooth px-6 md:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] pb-4 no-scrollbar select-none snap-x snap-mandatory overscroll-x-contain"
+             {{-- items-start: lihat catatan di tour/packages.blade.php. --}}
+             class="flex items-start gap-6 overflow-x-auto scroll-smooth px-6 md:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] pb-4 no-scrollbar select-none snap-x snap-mandatory overscroll-x-contain"
              :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
 
             @foreach($packages as $index => $pkg)
