@@ -63,7 +63,16 @@
                     <span class="w-px h-3 bg-slate-700" aria-hidden="true"></span>
                 @endif
 
-                <div x-data="{ open: false }" class="relative z-[110]">
+                {{-- z-[130] harus LEBIH TINGGI daripada z-[120] milik <nav> di
+                     bawahnya. Panel ini duduk di topbar tapi terbuka ke bawah,
+                     melintasi batas topbar dan bertumpuk dengan isi nav --
+                     tombol "Hubungi Kami" di sana menimpanya.
+
+                     z-[200] pada panelnya sendiri TIDAK menolong: nilai itu
+                     hanya berlaku di dalam konteks penumpukan yang dibuat div
+                     ini, ia tidak bisa melompati induknya. Yang menentukan
+                     adalah z div ini terhadap z milik <nav>. --}}
+                <div x-data="{ open: false }" class="relative z-[130]">
                     <button @click="open = !open" type="button"
                             :aria-expanded="open" aria-haspopup="true"
                             class="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors duration-200 font-semibold uppercase tracking-wider">
