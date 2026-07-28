@@ -18,6 +18,28 @@
              bersamaan. filter() membuang kategori kosong supaya tidak ada chip hampa. --}}
         categories: ['Semua', ...new Set(@js($images->pluck('category')->filter()->unique()->values()->toArray()))],
         
+        {{-- Kategori dan pencarian ikut tersimpan di URL supaya hasilnya bisa
+             dibagikan. Kategori divalidasi ke daftar yang benar-benar ada:
+             ?kategori= sembarangan akan menampilkan galeri kosong tanpa
+             satu pun chip terlihat aktif. --}}
+        init() {
+            const params = new URLSearchParams(window.location.search);
+            const cat = params.get('kategori');
+            if (cat && this.categories.includes(cat)) this.activeCategory = cat;
+            this.searchQuery = params.get('q') || '';
+            ['activeCategory', 'searchQuery'].forEach(key => {
+                this.$watch(key, () => this.syncUrl());
+            });
+        },
+
+        syncUrl() {
+            const params = new URLSearchParams();
+            if (this.activeCategory !== 'Semua') params.set('kategori', this.activeCategory);
+            if (this.searchQuery.trim() !== '') params.set('q', this.searchQuery.trim());
+            const query = params.toString();
+            window.history.replaceState({}, '', query ? window.location.pathname + '?' + query : window.location.pathname);
+        },
+
         get filteredImages() {
             return this.images.filter(img => {
                 const matchCat = this.activeCategory === 'Semua' || img.category === this.activeCategory;
@@ -66,6 +88,9 @@
 
         <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pt-20">
             <div class="max-w-4xl animate-fade-in-up">
+                <x-breadcrumb :dark="true" class="mb-4" :items="[
+                    ['label' => __('Galeri')],
+                ]" />
                 <div class="flex items-center space-x-2 mb-4 animate-fade-in-down">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/20 backdrop-blur-md border border-secondary/30 text-secondary-container text-[10px] font-black uppercase tracking-[0.25em] rounded-full">
                         {{ __('Visual Storytelling') }}

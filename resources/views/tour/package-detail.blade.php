@@ -346,6 +346,13 @@
                      onerror="this.src='{{ asset('images/home/tour.webp') }}'"/>
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 md:bottom-10 md:left-10 bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-[1.5rem] max-w-[92%] md:max-w-[75%] shadow-glass">
+                    {{-- Nama paket diambil dari sisi server, bukan dari x-text
+                         Alpine: breadcrumb ikut dibaca crawler yang tidak
+                         menjalankan JavaScript. --}}
+                    <x-breadcrumb :dark="true" class="mb-3" :items="[
+                        ['label' => __('Paket Wisata'), 'url' => route('tour.packages')],
+                        ['label' => $package->translated_name ?? $package->name],
+                    ]" />
                     <div class="flex items-center gap-2 mb-3">
                         <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                         <span class="font-label-caps text-[10px] md:text-xs text-green-100 uppercase tracking-[0.2em]" x-text="locationDisplay"></span>

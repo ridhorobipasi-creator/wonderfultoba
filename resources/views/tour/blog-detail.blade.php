@@ -62,6 +62,11 @@
                     {{ __('Kembali ke Jurnal') }}
                 </a>
                 
+                <x-breadcrumb :dark="true" class="mb-5" :items="[
+                    ['label' => __('Blog'), 'url' => route('tour.blog')],
+                    ['label' => $post->translated_title ?? $post->title],
+                ]" />
+
                 {{-- Category & date badges --}}
                 <div class="flex flex-wrap items-center gap-3 mb-6">
                     <span class="px-4 py-1.5 bg-secondary text-on-secondary rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">

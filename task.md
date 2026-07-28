@@ -1,3 +1,80 @@
+# SESI 2026-07-28 (III) — sisa item yang bisa dikode, dibereskan
+
+Menutup empat item yang tersisa dari sesi sebelumnya, lalu dua fitur yang
+diminta. Suite: **85/85 hijau** (sebelumnya 78/78; 7 tes baru). `php -l` atas
+139 view terkompilasi: bersih. 36 blok `x-data` dari 5 halaman terender
+dievaluasi; satu-satunya yang melempar adalah `paxCalc`, komponen yang memang
+didaftarkan runtime lewat `window.Alpine.data()`. Logika filter-di-URL diuji
+dengan sumber x-data **diambil langsung dari HTML terender**, bukan disalin
+ulang, supaya tesnya tidak bisa melenceng dari kode nyata (16 pemeriksaan).
+
+## Yang ditutup
+
+1. **`admin/finance` menjumlahkan halaman aktif saja.** Kartu "Total Omzet" dan
+   "Rata-rata Transaksi" menjumlahkan koleksi hasil `paginate(20)`, sementara
+   kartu "Total Pesanan" di sebelahnya memakai `total()` atas seluruh data. Di
+   layar yang sama, satu angka bicara 20 baris dan satu lagi bicara semuanya —
+   dan omzetnya menyusut setiap admin pindah halaman. Agregat kini dihitung
+   lewat query `SUM`/`AVG` terpisah atas seluruh dataset.
+2. **Terjemahan `invoice/show` (430 baris) + `booking/track` (301 baris).**
+   83 kunci dipakai, 71 di antaranya baru, ditambahkan ke `en.json` + `my.json`.
+   `id.json` sengaja tidak disentuh: kunci Laravel di proyek ini adalah kalimat
+   Indonesia itu sendiri, jadi bahasa Indonesia jatuh ke kunci dan tetap benar.
+3. **Banner OG tidak pernah kedaluwarsa.** `OgBannerService` menyimpan judul,
+   gambar, DAN harga ke `og-banners/{type}_{id}.webp`, lalu memakai file itu
+   selamanya. Setelah harga diubah, kartu yang muncul di WhatsApp masih
+   memajang harga lama — tanpa gejala apa pun di halamannya sendiri. Kini
+   `PackageObserver`/`BlogObserver` membuang banner-nya saat model disimpan.
+4. **Tombol "Salin Rekening" di invoice melempar sejak CDN dilepas.** Fungsinya
+   masih mencari `<i>` FontAwesome yang sudah diganti `<svg>` inline;
+   `querySelector` mengembalikan null dan baris berikutnya melempar, jadi
+   nomor tersalin tapi tamu tidak pernah melihat konfirmasi.
+
+## Dua hal yang ketemu saat mengerjakannya
+
+- **Seluruh test suite diam-diam berjalan dalam bahasa Melayu.**
+  `LocaleCurrencyMiddleware` men-default pengunjung tanpa sesi ke `'my'`
+  (disengaja — `config/app.php` juga `'my'`), jadi `APP_LOCALE` di `phpunit.xml`
+  tidak berpengaruh sama sekali. Selama teks halaman ditulis langsung di Blade
+  hal ini tak terlihat; begitu satu halaman diterjemahkan, assertion berbahasa
+  Indonesia mulai gagal tanpa ada perilaku yang berubah. Tes tracking sekarang
+  mengunci locale-nya sendiri lewat `withSession(['locale' => ...])`.
+- **`streamInvoice()` memulangkan teks error dengan status 200.** Ia menangkap
+  `Throwable` lalu mengembalikan `'Gagal membuka invoice: '.$e->getMessage()`
+  sebagai badan respons. Artinya `assertOk()` saja tidak membuktikan apa pun,
+  dan tamu menerima halaman "sukses" berisi pesan error PHP. `InvoicePageTest`
+  karena itu memeriksa isi, bukan status. **Belum diperbaiki** — mengubahnya
+  jadi 500 mengubah perilaku yang terlihat pengunjung, perlu keputusan.
+
+## Dua fitur yang diminta dan dikerjakan
+
+5. **State filter hidup di URL** (`/tour/packages`, `/tour/gallery`, `/tour/blog`).
+   Sebelumnya hasil penyaringan tidak bisa dibagikan maupun di-bookmark: tautan
+   yang dikirim ke calon tamu selalu membuka daftar penuh, dan menekan tombol
+   kembali dari halaman detail mengembalikan filter ke kondisi kosong. Dipakai
+   `replaceState`, bukan `pushState`, supaya tiap ketikan di kotak pencarian
+   tidak menumpuk satu entri riwayat. Kategori dari URL divalidasi ke daftar
+   yang benar-benar ada — `?kategori=` ngawur akan menampilkan galeri kosong
+   tanpa satu pun chip terlihat aktif.
+6. **Breadcrumb + schema BreadcrumbList** di 6 halaman: daftar paket, galeri,
+   blog, detail paket, detail artikel, dan landing pSEO per kota. Komponen
+   `<x-breadcrumb>`; item terakhir tidak ditautkan (halaman itu sendiri) dan
+   nama paket/artikel diambil sisi server, bukan `x-text` Alpine, supaya ikut
+   terbaca crawler yang tidak menjalankan JavaScript.
+
+**Pagination sengaja TIDAK dibuat.** Isinya 8 paket dan 10 artikel. Pagination
+berarti memindahkan penyaringan dari Alpine ke sisi server — perubahan
+arsitektur untuk memecah satu halaman yang belum penuh.
+
+## Aturan baru
+
+- **`x-text="cond ? 'A' : 'B'"` haram untuk teks yang diterjemahkan.** Satu
+  apostrof di terjemahan mana pun memutus ekspresi Alpine dan mematikan seluruh
+  tombol. Pakai dua elemen dengan `x-show` + `x-cloak`; tidak ada literal string
+  JS yang bisa pecah. (Keluarga yang sama dengan `@json` di atribut.)
+
+---
+
 # SESI 2026-07-28 (lanjutan) — sapuan audit menyeluruh, 4 commit ter-push
 
 **Baca ini dulu: daftar Batch 1/1B/1C/1D/2/3 di bawah adalah CATATAN TEMUAN,

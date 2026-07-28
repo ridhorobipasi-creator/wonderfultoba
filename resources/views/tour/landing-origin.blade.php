@@ -89,6 +89,10 @@
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
         <div class="max-w-5xl mx-auto relative z-10 text-center">
+            <x-breadcrumb :dark="true" class="mb-5 flex justify-center" :items="[
+                ['label' => __('Paket Wisata'), 'url' => route('tour.packages')],
+                ['label' => __('Dari :city', ['city' => $originName])],
+            ]" />
             <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary text-secondary font-bold text-xs uppercase tracking-widest mb-6 backdrop-blur-md">
                 <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
                 Keberangkatan dari {{ $originName }}

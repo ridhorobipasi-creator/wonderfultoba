@@ -54,7 +54,34 @@
         sortBy: 'default',
         packages: @js($packages),
         cities: @js($cities),
-        
+
+        {{-- Filter hidup di URL. Sebelumnya hasil penyaringan tidak bisa
+             dibagikan atau di-bookmark sama sekali: tautan yang dikirim ke
+             calon tamu selalu membuka daftar penuh, dan menekan tombol kembali
+             dari halaman detail mengembalikan filter ke kondisi kosong.
+             replaceState, bukan pushState, supaya setiap ketikan di kotak
+             pencarian tidak menumpuk satu entri riwayat. --}}
+        init() {
+            const params = new URLSearchParams(window.location.search);
+            this.searchQuery = params.get('q') || '';
+            this.filterCity = params.get('kota') || 'all';
+            this.filterDuration = params.get('durasi') || 'Semua';
+            this.sortBy = params.get('urut') || 'default';
+            ['searchQuery', 'filterCity', 'filterDuration', 'sortBy'].forEach(key => {
+                this.$watch(key, () => this.syncUrl());
+            });
+        },
+
+        syncUrl() {
+            const params = new URLSearchParams();
+            if (this.searchQuery.trim() !== '') params.set('q', this.searchQuery.trim());
+            if (this.filterCity !== 'all') params.set('kota', this.filterCity);
+            if (this.filterDuration !== 'Semua') params.set('durasi', this.filterDuration);
+            if (this.sortBy !== 'default') params.set('urut', this.sortBy);
+            const query = params.toString();
+            window.history.replaceState({}, '', query ? window.location.pathname + '?' + query : window.location.pathname);
+        },
+
         get filteredPackages() {
             let filtered = this.packages.filter(p => {
                 const matchCity = this.filterCity === 'all' || (p.cities && p.cities.some(c => String(c.id) === this.filterCity)) || String(p.cityId) === this.filterCity;
@@ -106,6 +133,9 @@
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-slate-50"></div>
             <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-28">
                 <div class="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                    <x-breadcrumb :dark="true" class="mb-4" :items="[
+                        ['label' => __('Paket Wisata')],
+                    ]" />
                     <span class="inline-flex items-center gap-2 px-3 py-1 bg-toba-green/20 backdrop-blur-md border border-white/10 text-white text-[10px] font-semibold uppercase tracking-[0.2em] rounded-full mb-4">Eksplorasi Indonesia & Dunia</span>
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1]">
                         Paket Wisata <span class="text-toba-green">Pilihan Terbaik</span>

@@ -15,6 +15,26 @@
             return cats;
         },
         
+        {{-- Kategori dan pencarian tersimpan di URL supaya hasilnya bisa
+             dibagikan dan bertahan saat pembaca kembali dari satu artikel. --}}
+        init() {
+            const params = new URLSearchParams(window.location.search);
+            const cat = params.get('kategori');
+            if (cat && this.categories.includes(cat)) this.activeCategory = cat;
+            this.searchQuery = params.get('q') || '';
+            ['activeCategory', 'searchQuery'].forEach(key => {
+                this.$watch(key, () => this.syncUrl());
+            });
+        },
+
+        syncUrl() {
+            const params = new URLSearchParams();
+            if (this.activeCategory !== '{{ __('Semua') }}') params.set('kategori', this.activeCategory);
+            if ((this.searchQuery || '').trim() !== '') params.set('q', this.searchQuery.trim());
+            const query = params.toString();
+            window.history.replaceState({}, '', query ? window.location.pathname + '?' + query : window.location.pathname);
+        },
+
         get filteredPosts() {
             return this.posts.filter(p => {
                 const matchCat = this.activeCategory === '{{ __('Semua') }}' || p.category === this.activeCategory;
@@ -48,6 +68,9 @@
 
         <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pt-20">
             <div class="max-w-4xl">
+                <x-breadcrumb :dark="true" class="mb-4" :items="[
+                    ['label' => __('Blog')],
+                ]" />
                 <div class="flex items-center space-x-2 mb-4 animate-fade-in-down">
                     <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary-container/20 backdrop-blur-md border border-secondary/30 text-secondary-container text-[10px] font-black uppercase tracking-[0.25em] rounded-full">
                         {{ __('JOURNAL & STORIES') }}
