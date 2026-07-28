@@ -192,26 +192,15 @@
                                 </button>
                             </div>
 
-                            <div class="p-6 flex flex-col flex-grow">
+                            <div class="px-6 pt-6 pb-4 flex flex-col flex-grow">
                                 <div class="flex items-center text-toba-green text-[9px] font-semibold uppercase tracking-wider mb-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                     <span x-text="(pkg.cities && pkg.cities.length > 0) ? pkg.cities.map(c => c.name).join(', ') : (cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara')"></span>
                                 </div>
                                 <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
-                                <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>
-                                
-                                <div class="flex items-center justify-between pt-5 border-t border-slate-100">
-                                    <div>
-                                        <p class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">{{ __('Mulai dari') }}</p>
-                                        <div class="flex items-baseline space-x-1">
-                                            <span class="text-lg font-bold text-slate-900" x-text="pkg.formatted_price || '-'"></span>
-                                        </div>
-                                    </div>
-                                    <a :href="'/tour/package/' + (pkg.slug || pkg.id)" class="w-10 h-10 bg-slate-950 text-white rounded-xl flex items-center justify-center hover:bg-toba-green transition group/btn" aria-label="Lihat detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right group-hover/btn:translate-x-0.5 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                    </a>
-                                </div>
+                                <p class="text-slate-500 text-xs leading-relaxed mb-4 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>
                             </div>
+                            @include('partials.pax-calc', ['xdata' => 'paxCalc(pkg.price, pkg.childPrice, pkg.slug || pkg.id)'])
                         </div>
                     </div>
                 </template>

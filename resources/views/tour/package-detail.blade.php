@@ -161,8 +161,8 @@
     // Dikumpulkan sekali, dengan tipe yang sudah pasti, lalu diserahkan ke
     // Alpine lewat @json. Nilai kosong tidak boleh menghasilkan angka kosong.
     $formOld = [
-        'pax' => max(1, (int) old('pax', 1)),
-        'paxChildren' => max(0, (int) old('paxChildren', 0)),
+        'pax' => max(1, (int) old('pax', (int) request()->query('pax', 1))),
+        'paxChildren' => max(0, (int) old('paxChildren', (int) request()->query('anak', 0))),
         'notesUser' => (string) old('notesUser', ''),
         'customerName' => (string) old('customerName', ''),
         'customerEmail' => (string) old('customerEmail', ''),

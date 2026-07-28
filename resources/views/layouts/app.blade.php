@@ -128,6 +128,55 @@
     @stack('schema')
 </head>
 <body class="font-sans text-slate-900 bg-white selection:bg-green-100 selection:text-green-900 overflow-x-hidden pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-0" x-data="{ isDark: false }">
+    {{-- Kalkulator pax per-kartu (paxCalc) + config mata uang untuk total live.
+         Harga paket disimpan MYR; dikali rate -> mata uang tampilan sesuai locale. --}}
+    @php
+        $__curCode = \App\Helpers\CurrencyHelper::currencyFor();
+        $__curCfg  = \App\Helpers\CurrencyHelper::CURRENCIES[$__curCode] ?? \App\Helpers\CurrencyHelper::CURRENCIES['MYR'];
+        $__paxCur  = [
+            'rate'         => (float) \App\Helpers\CurrencyHelper::getRate($__curCode),
+            'symbol'       => $__curCfg['symbol'],
+            'decimals'     => (int) $__curCfg['decimals'],
+            'decPoint'     => $__curCfg['decPoint'],
+            'thousandsSep' => $__curCfg['thousandsSep'],
+        ];
+    @endphp
+    <script>
+        window.SUJAI_CUR = @json($__paxCur);
+        window.sujaiMoney = function (n) {
+            var c = window.SUJAI_CUR;
+            var fixed = (Number(n) || 0).toFixed(c.decimals);
+            var parts = fixed.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, c.thousandsSep);
+            return c.symbol + (parts.length > 1 ? parts.join(c.decPoint) : parts[0]);
+        };
+        document.addEventListener('alpine:init', function () {
+            window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug) {
+                var a  = Number(adultMyr) || 0;
+                var ch = Number(childMyr) > 0 ? Number(childMyr) : a; // harga anak kosong -> ikut dewasa
+                return {
+                    adults: 1,
+                    children: 0,
+                    adultUnit: a,
+                    childUnit: ch,
+                    slug: slug || '',
+                    _clamp: function (v, lo, hi) { v = parseInt(v, 10); if (isNaN(v)) v = lo; return Math.min(hi, Math.max(lo, v)); },
+                    incA: function () { this.adults = this._clamp(this.adults + 1, 1, 30); },
+                    decA: function () { this.adults = this._clamp(this.adults - 1, 1, 30); },
+                    incC: function () { this.children = this._clamp(this.children + 1, 0, 30); },
+                    decC: function () { this.children = this._clamp(this.children - 1, 0, 30); },
+                    normA: function () { this.adults = this._clamp(this.adults, 1, 30); },
+                    normC: function () { this.children = this._clamp(this.children, 0, 30); },
+                    get rate() { return window.SUJAI_CUR.rate; },
+                    get adultDisplay() { return this.adultUnit * this.rate; },
+                    get childDisplay() { return this.childUnit * this.rate; },
+                    get total() { return (this.adults * this.adultUnit + this.children * this.childUnit) * this.rate; },
+                    fmt: function (n) { return window.sujaiMoney(n); },
+                    get bookingUrl() { return '/tour/package/' + this.slug + '?pax=' + this.adults + '&anak=' + this.children; }
+                };
+            });
+        });
+    </script>
     
     <!-- Navbar -->
     @include('layouts.partials.navbar')
