@@ -209,35 +209,15 @@ class BookingService
             $costPerPerson = $package->cost_price ?? 0;
             $childPricePerPerson = $package->childPrice ?? ($pricePerPerson * 0.5);
 
-            // Check if there are pricing details for specific pax count
-            if ($package->pricingDetails && is_array($package->pricingDetails)) {
-                $tiers = $package->pricingDetails['tiers'] ?? [];
-                
-                // Find matching pax tier
-                $match = null;
-                foreach ($tiers as $detail) {
-                    if (isset($detail['min_pax']) && isset($detail['max_pax']) && $pax >= $detail['min_pax'] && $pax <= $detail['max_pax']) {
-                        $match = $detail;
-                        break;
-                    }
-                }
-
-                if ($match) {
-                    $pricePerPerson = $match['price'] ?? $pricePerPerson;
-                    $childPricePerPerson = $match['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
-                } else {
-                    // If no match, check if pax exceeds max tier
-                    $maxTier = null;
-                    foreach ($tiers as $detail) {
-                        if (isset($detail['max_pax']) && (!$maxTier || $detail['max_pax'] > $maxTier['max_pax'])) {
-                            $maxTier = $detail;
-                        }
-                    }
-                    if ($maxTier && $pax > $maxTier['max_pax']) {
-                        $pricePerPerson = $maxTier['price'] ?? $pricePerPerson;
-                        $childPricePerPerson = $maxTier['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
-                    }
-                }
+            // Punya harga grosir? Maka harga datang dari tier, titik. Aturan
+            // pemilihannya hidup di satu tempat, Package::pricingTierFor(),
+            // supaya kalkulator di kartu paket tidak bisa memakai aturan lain.
+            $tier = $package->pricingTierFor($pax);
+            if ($tier !== null) {
+                $pricePerPerson = $tier['price'] ?? $pricePerPerson;
+                // Urutan cadangan harga anak: harga anak di tier -> childPrice
+                // paket -> setengah harga dewasa YANG BERLAKU (sudah tier).
+                $childPricePerPerson = $tier['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
             }
 
             $priceDewasa = $pricePerPerson * $pax;

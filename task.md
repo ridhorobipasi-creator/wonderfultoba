@@ -66,6 +66,34 @@ ulang, supaya tesnya tidak bisa melenceng dari kode nyata (16 pemeriksaan).
 berarti memindahkan penyaringan dari Alpine ke sisi server — perubahan
 arsitektur untuk memecah satu halaman yang belum penuh.
 
+## Harga grosir: kalau ada tier, tier yang dipakai (keputusan user)
+
+7. **Celah antar-tier diam-diam dibayar harga dasar.** Tier `1-9` dan `11-15`
+   lalu tamu memesan 10 pax: tidak cocok tier mana pun, tidak pula melampaui
+   tier tertinggi — jadi dipakai `$package->price`, angka dasar yang mungkin
+   sudah lama tidak diurus, dan sering LEBIH MAHAL daripada tier termurah.
+   Sekarang: kalau paket punya tier, harga selalu datang dari salah satu tier.
+   - jatuh di celah → tier terdekat **di bawahnya** (diskon berlaku setelah
+     ambang benar-benar tercapai: 10 pax bayar harga 1-9, bukan 11-15)
+   - di bawah tier terendah → tier terendah
+   - di atas tier tertinggi → tier tertinggi (tidak berubah)
+   - tier bertumpuk → yang ditulis lebih dulu menang (tidak berubah)
+
+   Aturannya kini hidup di SATU tempat, `Package::pricingTierFor()`, dipanggil
+   `BookingService`; `paxCalc` di `layouts/app.blade.php` mencerminkannya.
+
+**Konsekuensi bisnis yang perlu disadari:** dengan ambang diskon, rombongan
+yang lebih kecil bisa membayar total lebih mahal daripada yang lebih besar bila
+selisih tier-nya tajam (10 x RM 350 = 3.500 vs 11 x RM 300 = 3.300). Itu sifat
+harga grosir berambang, bukan cacat — tapi pilih selisih tier dengan sadar.
+
+**Cara memverifikasi paritas kartu vs server** (dipakai sesi ini): dump
+`Package::pricingTierFor()` untuk matriks fixture x jumlah pax dari PHP, lalu
+jalankan `paxCalc` yang **diekstrak dari HTML terender** di Node terhadap
+matriks yang sama. 11 skenario x 14 jumlah pax = 154 perbandingan, semuanya
+sepakat. Harness-nya dibuktikan bisa merah: dengan aturan celah di sisi JS
+disabotase, 11 baris langsung berbeda.
+
 ## Aturan baru
 
 - **`x-text="cond ? 'A' : 'B'"` haram untuk teks yang diterjemahkan.** Satu

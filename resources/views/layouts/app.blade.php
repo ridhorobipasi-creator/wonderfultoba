@@ -216,17 +216,33 @@
                     decC: function () { this.children = this._clamp(this.children - 1, 0, 30); },
                     normA: function () { this.adults = this._clamp(this.adults, 1, 30); },
                     normC: function () { this.children = this._clamp(this.children, 0, 30); },
-                    // Harga grosir. Tier dipilih dari jumlah DEWASA saja, sama
-                    // dengan BookingService::calculateTotalPriceAndCost yang
-                    // mencocokkan $pax (bukan pax + anak). Kalau jumlahnya
-                    // melampaui tier tertinggi, harga tier tertinggi yang dipakai.
+                    // Harga grosir. Cerminan persis Package::pricingTierFor():
+                    // kalau paket punya tier, harga SELALU datang dari salah
+                    // satu tier -- tidak pernah diam-diam jatuh ke harga dasar.
+                    // Tier dipilih dari jumlah DEWASA saja, sama dengan
+                    // BookingService yang mencocokkan $pax (bukan pax + anak).
                     get activeTier() {
                         var n = this.adults, list = this.tiers;
                         if (!list.length) return null;
+
                         var match = list.find(function (t) { return n >= t.min_pax && n <= t.max_pax; });
                         if (match) return match;
-                        var top = list.slice().sort(function (a, b) { return b.max_pax - a.max_pax; })[0];
-                        return (top && n > top.max_pax) ? top : null;
+
+                        var highest = list[0], lowest = list[0];
+                        list.forEach(function (t) {
+                            if (t.max_pax > highest.max_pax) highest = t;
+                            if (t.min_pax < lowest.min_pax) lowest = t;
+                        });
+                        if (n > highest.max_pax) return highest;
+                        if (n < lowest.min_pax) return lowest;
+
+                        // Celah antar-tier: pakai tier terdekat DI BAWAHNYA.
+                        // Diskon grosir baru berlaku setelah ambangnya tercapai.
+                        var below = null;
+                        list.forEach(function (t) {
+                            if (t.max_pax < n && (below === null || t.max_pax > below.max_pax)) below = t;
+                        });
+                        return below || lowest;
                     },
                     get adultUnit() {
                         var t = this.activeTier;

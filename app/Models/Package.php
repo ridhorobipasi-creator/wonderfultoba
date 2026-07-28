@@ -45,6 +45,77 @@ class Package extends Model
         'dronePrice' => 'double',
     ];
 
+    /**
+     * Tier harga grosir yang berlaku untuk sejumlah peserta dewasa.
+     *
+     * Aturannya: kalau paket ini punya harga grosir, harga SELALU datang dari
+     * salah satu tier. Sebelumnya jumlah pax yang jatuh di celah antar-tier
+     * (mis. tier 1-9 dan 11-15, lalu tamu memesan 10) tidak cocok dengan tier
+     * mana pun, tidak pula melampaui tier tertinggi, sehingga diam-diam dibayar
+     * dengan harga dasar paket — angka yang mungkin sudah lama tidak diurus.
+     * Tidak ada gejalanya: halaman tetap terlihat wajar dengan harga yang salah.
+     *
+     * Mengembalikan null hanya bila paket ini memang tidak punya tier.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function pricingTierFor(int $pax): ?array
+    {
+        $tiers = [];
+        foreach ($this->pricingDetails['tiers'] ?? [] as $tier) {
+            // Baris tak lengkap dibuang: membandingkan pax dengan null selalu
+            // menghasilkan kecocokan palsu pada tier pertama.
+            if (is_array($tier) && isset($tier['min_pax'], $tier['max_pax'])) {
+                $tiers[] = $tier;
+            }
+        }
+
+        if ($tiers === []) {
+            return null;
+        }
+
+        // Cocok persis. Urutan asli dipertahankan: bila dua tier bertumpuk,
+        // yang ditulis lebih dulu yang menang — sama seperti sebelumnya.
+        foreach ($tiers as $tier) {
+            if ($pax >= $tier['min_pax'] && $pax <= $tier['max_pax']) {
+                return $tier;
+            }
+        }
+
+        $highest = $tiers[0];
+        $lowest = $tiers[0];
+        foreach ($tiers as $tier) {
+            if ($tier['max_pax'] > $highest['max_pax']) {
+                $highest = $tier;
+            }
+            if ($tier['min_pax'] < $lowest['min_pax']) {
+                $lowest = $tier;
+            }
+        }
+
+        // Rombongan lebih besar dari tier tertinggi: pakai tier tertinggi.
+        if ($pax > $highest['max_pax']) {
+            return $highest;
+        }
+
+        // Lebih kecil dari tier terendah: pakai tier terendah.
+        if ($pax < $lowest['min_pax']) {
+            return $lowest;
+        }
+
+        // Jatuh di celah: pakai tier terdekat DI BAWAHNYA. Diskon grosir baru
+        // berlaku setelah ambangnya benar-benar tercapai — 10 pax di antara
+        // tier 1-9 dan 11-15 membayar harga 1-9, bukan harga diskon 11-15.
+        $below = null;
+        foreach ($tiers as $tier) {
+            if ($tier['max_pax'] < $pax && ($below === null || $tier['max_pax'] > $below['max_pax'])) {
+                $below = $tier;
+            }
+        }
+
+        return $below ?? $lowest;
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class, 'cityId');
