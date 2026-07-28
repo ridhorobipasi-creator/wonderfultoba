@@ -213,21 +213,27 @@ class BookingService
             // pemilihannya hidup di satu tempat, Package::pricingTierFor(),
             // supaya kalkulator di kartu paket tidak bisa memakai aturan lain.
             //
-            // Ambang tier dihitung dari TOTAL orang, dewasa + anak: satu anak
-            // tetap satu kursi di bus dan satu kepala yang harus diurus, jadi
-            // rombongan 8 dewasa + 4 anak adalah rombongan 12. Harganya tetap
-            // per jenis -- dewasa memakai harga dewasa tier, anak memakai
-            // harga anak tier; yang dibagi bersama hanyalah ambangnya.
-            $tier = $package->pricingTierFor($pax + $paxChildren);
-            if ($tier !== null) {
-                $pricePerPerson = $tier['price'] ?? $pricePerPerson;
+            // Dewasa dan anak dihitung TERPISAH: tier harga dewasa dipilih dari
+            // jumlah dewasa, tier harga anak dari jumlah anak. Menggabungkan
+            // keduanya jadi satu ambang membuat menambah anak justru bisa
+            // MENURUNKAN total tagihan -- rombongan yang lebih besar membayar
+            // lebih murah daripada rombongan yang lebih kecil, dan tamu yang
+            // membatalkan satu anak menerima harga yang naik.
+            $adultTier = $package->pricingTierFor($pax);
+            $childTier = $package->pricingTierFor($paxChildren);
+
+            if ($adultTier !== null) {
+                $pricePerPerson = $adultTier['price'] ?? $pricePerPerson;
+            }
+            if ($childTier !== null) {
                 // Harga anak ikut tier juga. childPrice paket sengaja TIDAK
                 // dipakai di sini: mencampur harga anak dasar dengan harga
                 // dewasa tier membuat anak bisa lebih mahal daripada setengah
                 // harga dewasa yang benar-benar dibayar. Kolomnya wajib diisi
-                // di form admin; setengah harga dewasa tier hanya jaring
-                // pengaman untuk baris tier lama yang terlanjur kosong.
-                $childPricePerPerson = $tier['child_price'] ?? ($pricePerPerson * 0.5);
+                // di form admin; setengah harga dewasa tier-nya sendiri hanya
+                // jaring pengaman untuk baris tier lama yang terlanjur kosong.
+                $childPricePerPerson = $childTier['child_price']
+                    ?? (($childTier['price'] ?? $pricePerPerson) * 0.5);
             }
 
             $priceDewasa = $pricePerPerson * $pax;

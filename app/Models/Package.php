@@ -48,11 +48,11 @@ class Package extends Model
     /**
      * Tier harga grosir yang berlaku untuk sejumlah peserta.
      *
-     * $pax di sini adalah TOTAL orang — dewasa ditambah anak. Satu anak tetap
-     * satu kursi dan satu kepala yang harus diurus, jadi 8 dewasa + 4 anak
-     * adalah rombongan 12, bukan 8. Yang dibagi bersama hanya ambangnya:
-     * harga tetap per jenis, dewasa memakai harga dewasa tier dan anak
-     * memakai harga anak tier.
+     * Dipanggil DUA KALI oleh BookingService: sekali dengan jumlah dewasa
+     * untuk memilih harga dewasa, sekali dengan jumlah anak untuk memilih
+     * harga anak. Keduanya dihitung terpisah — satu ambang gabungan
+     * (dewasa + anak) membuat menambah satu anak justru bisa MENURUNKAN total
+     * tagihan, karena penghematan tier bisa melebihi harga anak itu sendiri.
      *
      * Aturannya: kalau paket ini punya harga grosir, harga SELALU datang dari
      * salah satu tier. Sebelumnya jumlah pax yang jatuh di celah antar-tier

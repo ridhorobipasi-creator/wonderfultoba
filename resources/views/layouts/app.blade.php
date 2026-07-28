@@ -219,13 +219,8 @@
                     // Harga grosir. Cerminan persis Package::pricingTierFor():
                     // kalau paket punya tier, harga SELALU datang dari salah
                     // satu tier -- tidak pernah diam-diam jatuh ke harga dasar.
-                    //
-                    // Ambangnya dari TOTAL orang, dewasa + anak, sama dengan
-                    // BookingService yang memanggil pricingTierFor($pax +
-                    // $paxChildren). Harganya tetap per jenis; yang dibagi
-                    // bersama hanya ambangnya.
-                    get activeTier() {
-                        var n = this.adults + this.children, list = this.tiers;
+                    tierFor: function (n) {
+                        var list = this.tiers;
                         if (!list.length) return null;
 
                         var match = list.find(function (t) { return n >= t.min_pax && n <= t.max_pax; });
@@ -247,20 +242,26 @@
                         });
                         return below || lowest;
                     },
+                    // Dewasa dan anak dihitung TERPISAH, sama dengan
+                    // BookingService. Satu ambang gabungan membuat menambah
+                    // anak justru bisa MENURUNKAN total tagihan.
+                    get adultTier() { return this.tierFor(this.adults); },
+                    get childTier() { return this.tierFor(this.children); },
                     get adultUnit() {
-                        var t = this.activeTier;
+                        var t = this.adultTier;
                         return (t && t.price != null) ? (Number(t.price) || 0) : baseAdult;
                     },
                     get childUnit() {
-                        var t = this.activeTier;
+                        var t = this.childTier;
                         // Paket dengan harga grosir: harga anak ikut tier juga.
                         // childPrice paket sengaja dilewati -- mencampurnya
                         // dengan harga dewasa tier membuat anak bisa lebih mahal
                         // daripada setengah harga dewasa yang dibayar. Setengah
-                        // harga dewasa tier cuma jaring pengaman untuk baris
-                        // tier lama yang terlanjur kosong.
+                        // harga dewasa tier-nya sendiri cuma jaring pengaman
+                        // untuk baris tier lama yang terlanjur kosong.
                         if (t) {
-                            return (t.child_price != null) ? (Number(t.child_price) || 0) : this.adultUnit * 0.5;
+                            if (t.child_price != null) return Number(t.child_price) || 0;
+                            return ((t.price != null ? Number(t.price) : baseAdult) || 0) * 0.5;
                         }
                         // Tanpa tier: harga anak paket, lalu setengah harga
                         // dewasa. Dulu di sini jatuh ke harga dewasa PENUH,

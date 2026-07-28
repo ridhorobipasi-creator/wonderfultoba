@@ -136,8 +136,9 @@ class PricingTierTest extends TestCase
 
     public function test_child_price_falls_back_to_half_of_the_tier_price_not_the_base_price(): void
     {
-        // Paket tanpa childPrice: anak = 50% harga dewasa YANG BERLAKU.
-        // Setengah dari tier (RM 320), bukan setengah harga dasar (RM 500).
+        // Paket tanpa childPrice: anak = 50% harga dewasa di tier ANAK.
+        // 2 anak masuk tier 1-9 (RM 350), jadi RM 175 -- bukan setengah harga
+        // dasar paket (RM 250), dan bukan pula setengah tier dewasanya.
         $package = $this->makePackage($this->standardTiers());
 
         $booking = app(BookingService::class)->create([
@@ -155,17 +156,17 @@ class PricingTierTest extends TestCase
         $breakdown = $booking->metadata['price_breakdown'];
 
         $this->assertEquals(3840.00, $breakdown['price_dewasa_total']); // 12 x 320
-        $this->assertEquals(320.00, $breakdown['price_anak_total']);    // 2 x 160
+        $this->assertEquals(350.00, $breakdown['price_anak_total']);    // 2 x 175
     }
 
     public function test_package_child_price_is_ignored_once_a_tier_is_active(): void
     {
         // Paket punya harga anak sendiri (RM 250), tapi tier yang berlaku tidak
-        // mencantumkan harga anak. Harga anak paket TIDAK boleh dipakai di sini:
-        // mencampur harga anak dasar dengan harga dewasa tier membuat anak
-        // (RM 250) lebih mahal daripada setengah harga dewasa yang benar-benar
-        // dibayar (RM 160). Kolom harga anak tier kini wajib diisi di admin;
-        // ini menjaga baris tier lama yang terlanjur kosong.
+        // mencantumkan harga anak. Harga anak paket TIDAK boleh dipakai di
+        // sini: begitu paket punya harga grosir, harga anak pun datang dari
+        // tier. 2 anak masuk tier 1-9, jadi setengah RM 350 = RM 175. Kolom
+        // harga anak tier kini wajib diisi di admin; ini menjaga baris tier
+        // lama yang terlanjur kosong.
         $package = $this->makePackage($this->standardTiers(), childPrice: 250.00);
 
         $booking = app(BookingService::class)->create([
@@ -182,7 +183,7 @@ class PricingTierTest extends TestCase
 
         $breakdown = $booking->metadata['price_breakdown'];
 
-        $this->assertEquals(320.00, $breakdown['price_anak_total']); // 2 x 160, bukan 2 x 250
+        $this->assertEquals(350.00, $breakdown['price_anak_total']); // 2 x 175, bukan 2 x 250
     }
 
     public function test_package_child_price_still_applies_when_there_are_no_tiers(): void
@@ -231,39 +232,68 @@ class PricingTierTest extends TestCase
         $this->assertEquals(300.00, $breakdown['price_anak_total']); // 3 x 100
     }
 
-    public function test_children_count_toward_the_tier_threshold(): void
+    public function test_adult_and_child_tiers_are_chosen_separately(): void
     {
-        // 8 dewasa + 4 anak = rombongan 12, jadi tier 11-15 yang berlaku --
-        // bukan tier 1-9 seperti kalau anak tidak dihitung. Harganya tetap
-        // per jenis: dewasa RM 320, anak setengahnya (RM 160).
-        $package = $this->makePackage($this->standardTiers());
+        // Dewasa dan anak dihitung sendiri-sendiri. 12 dewasa masuk tier
+        // 11-15 (RM 320); 2 anak masuk tier 1-9, jadi harga anaknya RM 175 --
+        // setengah dari RM 350, bukan setengah dari RM 320.
+        $package = $this->makePackage([
+            ['min_pax' => 1, 'max_pax' => 9, 'price' => 350.00, 'child_price' => 175.00],
+            ['min_pax' => 10, 'max_pax' => 15, 'price' => 320.00, 'child_price' => 160.00],
+        ]);
 
         $booking = app(BookingService::class)->create([
             'packageId' => $package->id,
             'type' => 'package',
-            'customerName' => 'Rombongan Keluarga',
-            'customerEmail' => 'keluarga@test.local',
+            'customerName' => 'Hitung Terpisah',
+            'customerEmail' => 'terpisah@test.local',
             'customerPhone' => '08123456789',
             'startDate' => now()->addDays(30)->format('Y-m-d'),
             'endDate' => now()->addDays(32)->format('Y-m-d'),
             'status' => 'pending',
-            'metadata' => ['pax' => 8, 'paxChildren' => 4],
+            'metadata' => ['pax' => 12, 'paxChildren' => 2],
         ]);
 
         $breakdown = $booking->metadata['price_breakdown'];
 
-        $this->assertEquals(2560.00, $breakdown['price_dewasa_total']); // 8 x 320
-        $this->assertEquals(640.00, $breakdown['price_anak_total']);    // 4 x 160
+        $this->assertEquals(3840.00, $breakdown['price_dewasa_total']); // 12 x 320
+        $this->assertEquals(350.00, $breakdown['price_anak_total']);    // 2 x 175
     }
 
-    public function test_a_child_can_push_a_group_over_the_wholesale_threshold(): void
+    public function test_adding_a_child_never_lowers_the_bill(): void
     {
-        // 10 dewasa + 1 anak = 11 orang: ambang tier 11-15 tercapai justru
-        // karena anaknya. Tanpa anak itu, 10 dewasa masih di harga 1-9.
-        $package = $this->makePackage($this->standardTiers());
+        // Inti dari pemisahan ini. Dengan satu ambang gabungan, 2 dewasa
+        // (RM 1.600) menjadi LEBIH MURAH begitu ditambah satu anak (RM 1.500):
+        // rombongan lebih besar membayar lebih sedikit, dan tamu yang
+        // membatalkan satu anak menerima harga yang naik.
+        $package = $this->makePackage([
+            ['min_pax' => 1, 'max_pax' => 2, 'price' => 800.00, 'child_price' => 400.00],
+            ['min_pax' => 3, 'max_pax' => 3, 'price' => 600.00, 'child_price' => 300.00],
+            ['min_pax' => 4, 'max_pax' => 99, 'price' => 550.00, 'child_price' => 275.00],
+        ]);
 
-        $this->assertEquals(350.00, $package->pricingTierFor(10)['price']);
-        $this->assertEquals(320.00, $package->pricingTierFor(10 + 1)['price']);
+        $totalFor = function (int $adults, int $children) use ($package): float {
+            $adultTier = $package->pricingTierFor($adults);
+            $childTier = $package->pricingTierFor($children);
+
+            return $adults * $adultTier['price'] + $children * $childTier['child_price'];
+        };
+
+        // Setiap penambahan satu orang harus menaikkan total, tanpa kecuali.
+        for ($adults = 1; $adults <= 12; $adults++) {
+            for ($children = 0; $children <= 8; $children++) {
+                $this->assertGreaterThan(
+                    $totalFor($adults, $children),
+                    $totalFor($adults, $children + 1),
+                    "menambah anak ke-{$children} pada {$adults} dewasa malah menurunkan total"
+                );
+                $this->assertGreaterThan(
+                    $totalFor($adults, $children),
+                    $totalFor($adults + 1, $children),
+                    "menambah dewasa ke-{$adults} pada {$children} anak malah menurunkan total"
+                );
+            }
+        }
     }
 
     public function test_admin_package_forms_render(): void

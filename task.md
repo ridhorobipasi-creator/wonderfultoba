@@ -93,18 +93,24 @@ arsitektur untuk memecah satu halaman yang belum penuh.
 
    Tanpa tier, tidak ada yang berubah: harga dasar + `childPrice` paket.
 
-9. **Ambang tier dihitung dari TOTAL orang, dewasa + anak** (keputusan user).
-   Sebelumnya hanya dewasa: 8 dewasa + 4 anak dianggap rombongan 8 dan
-   kehilangan diskon yang mestinya didapat rombongan 12. Satu anak tetap satu
-   kursi dan satu kepala yang harus diurus. Harganya tetap per jenis — dewasa
-   memakai harga dewasa tier, anak memakai harga anak tier; yang dibagi
-   bersama hanya ambangnya. Satu anak kini bisa mendorong rombongan melewati
-   ambang (10 dewasa + 1 anak = 11 orang → tier 11-15).
+9. **Dewasa dan anak dihitung TERPISAH** (keputusan user, 28 Juli).
+   Tier harga dewasa dipilih dari jumlah dewasa; tier harga anak dari jumlah
+   anak. `Package::pricingTierFor()` dipanggil dua kali.
 
-**Konsekuensi bisnis yang perlu disadari:** dengan ambang diskon, rombongan
-yang lebih kecil bisa membayar total lebih mahal daripada yang lebih besar bila
-selisih tier-nya tajam (10 x RM 350 = 3.500 vs 11 x RM 300 = 3.300). Itu sifat
-harga grosir berambang, bukan cacat — tapi pilih selisih tier dengan sadar.
+   Sempat dicoba ambang gabungan (dewasa + anak). Ditinggalkan setelah
+   terlihat akibatnya pada struktur tier nyata milik user (1-2 = 800/400,
+   3 = 600/300, ... 10-99 = 450/225): **menambah satu anak justru MENURUNKAN
+   total.** 2 dewasa = RM 1.600, tapi 2 dewasa + 1 anak = RM 1.500 — anak
+   ketiga mendorong ke tier 3 sehingga hemat RM 300 sementara anaknya sendiri
+   cuma RM 300. Ada tiga titik seperti itu; salah satunya membuat anak kedua
+   benar-benar gratis. Rombongan lebih besar membayar lebih sedikit, dan tamu
+   yang membatalkan satu anak menerima harga yang NAIK.
+
+   Dengan penghitungan terpisah, ketiganya hilang: disisir 1-20 dewasa x 0-10
+   anak, tidak ada satu pun penambahan orang yang menurunkan total.
+   `test_adding_a_child_never_lowers_the_bill` mengunci sifat itu — ia
+   memeriksa monotonisitas, bukan angka hafalan, jadi ia ikut menjaga struktur
+   tier apa pun yang dipasang kemudian.
 
 **Cara memverifikasi paritas kartu vs server** (dipakai sesi ini): dump
 `Package::pricingTierFor()` untuk matriks fixture x jumlah pax dari PHP, lalu
