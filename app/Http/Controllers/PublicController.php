@@ -179,7 +179,9 @@ class PublicController extends Controller
 
             $city = City::find($package->cityId);
 
-            $taxPercentage = 11;
+            // Bawaan nol — lihat catatan di BookingService. Kalkulator depan
+            // dan tagihan harus memakai angka yang sama.
+            $taxPercentage = 0;
             $setting = Setting::where('key', 'general')->first();
             if ($setting && isset($setting->value['finance']['tax_percentage'])) {
                 $taxPercentage = (float) $setting->value['finance']['tax_percentage'];

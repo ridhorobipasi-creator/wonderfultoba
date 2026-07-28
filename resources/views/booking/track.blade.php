@@ -237,10 +237,14 @@
                         </div>
                         @endforeach
                     @endif
+                    {{-- Hanya bila ada yang dipungut; lihat catatan di
+                         invoice/show.blade.php. --}}
+                    @if(($pb['tax'] ?? 0) > 0)
                     <div class="flex justify-between">
-                        <span>{{ __('Pajak & Layanan') }} ({{ $pb['tax_percentage'] ?? 11 }}%)</span>
-                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['tax'] ?? 0, $cur) }}</span>
+                        <span>{{ __('Pajak & Layanan') }} ({{ $pb['tax_percentage'] ?? 0 }}%)</span>
+                        <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['tax'], $cur) }}</span>
                     </div>
+                    @endif
                     <div class="pt-2 border-t border-slate-100 flex justify-between font-bold text-slate-950 mt-2">
                         <span>{{ __('Total Ringkasan') }}</span>
                         <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['total'] ?? $booking->totalPrice, $cur) }}</span>

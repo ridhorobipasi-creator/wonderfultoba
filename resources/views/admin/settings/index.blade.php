@@ -385,7 +385,11 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest">Pajak & Layanan</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input type="number" step="0.1" name="finance[tax_percentage]" value="{{ $finance['tax_percentage'] ?? 11 }}" class="w-32 px-4 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm text-center">
+                                {{-- Bawaan 0. Angka 11 yang tertanam sebelumnya
+                                     membuat setiap pesanan dipungut PPN tanpa
+                                     seorang pun pernah memilihnya. Isi hanya
+                                     bila memang sudah berstatus PKP. --}}
+                                <input type="number" step="0.1" name="finance[tax_percentage]" value="{{ $finance['tax_percentage'] ?? 0 }}" class="w-32 px-4 py-4 bg-white border-none rounded-2xl font-black text-slate-900 text-lg shadow-sm text-center">
                                 <span class="font-bold text-slate-500 text-xl">%</span>
                             </div>
                             <p class="text-[8px] font-bold text-blue-400 uppercase tracking-widest italic">Pajak akan ditambahkan di total akhir pemesanan paket.</p>

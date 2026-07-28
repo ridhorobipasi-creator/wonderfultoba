@@ -212,7 +212,12 @@ class BookingService
         $paxChildren = $data['metadata']['paxChildren'] ?? 0;
         $selectedServices = $data['metadata']['selected_services'] ?? [];
 
-        $taxPercentage = 11;
+        // Bawaan NOL, bukan 11. Memungut 11% adalah keputusan yang hanya boleh
+        // diambil sadar oleh pemilik -- memungut PPN tanpa berstatus PKP itu
+        // masalah hukum, dan angka 11 yang tertanam di kode berarti setiap
+        // pesanan sejak awal dipungut tanpa seorang pun pernah memilihnya.
+        // Kalau nanti sudah PKP, isi Pengaturan > Keuangan > Persentase Pajak.
+        $taxPercentage = 0;
         $surchargeWeekend = 0;
         $surchargePeak = 0;
         $peakStart = '';
@@ -220,7 +225,7 @@ class BookingService
 
         $setting = \App\Models\Setting::where('key', 'general')->first();
         if ($setting && isset($setting->value['finance'])) {
-            $taxPercentage = (float) ($setting->value['finance']['tax_percentage'] ?? 11);
+            $taxPercentage = (float) ($setting->value['finance']['tax_percentage'] ?? 0);
             $surchargeWeekend = (float) ($setting->value['finance']['surcharge_weekend'] ?? 0);
             $surchargePeak = (float) ($setting->value['finance']['surcharge_peak'] ?? 0);
             $peakStart = $setting->value['finance']['surcharge_peak_start'] ?? '';

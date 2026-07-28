@@ -349,15 +349,21 @@
                                 <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($sc['amount'] ?? 0, $cur) }}</span>
                             </div>
                             @endforeach
+                            {{-- Baris pajak hanya muncul bila memang ada yang
+                                 dipungut. "Pajak & Layanan RM 0,00" pada
+                                 dokumen keuangan bukan informasi, ia pertanyaan.
+
+                                 JANGAN menempelkan @if langsung di belakang huruf
+                                 (mis. "Layanan@if(...)"): Blade tidak mengenalinya
+                                 sebagai direktif dan membiarkannya jadi teks, tapi
+                                 @endif-nya tetap dikompilasi -- blok if jadi tidak
+                                 seimbang dan seluruh view gagal parse. --}}
+                            @if(($taxAmount ?? 0) > 0)
                             <div class="flex justify-between items-center text-sm">
-                                {{-- JANGAN menempelkan @if langsung di belakang huruf
-                                     (mis. "Layanan@if(...)"): Blade tidak mengenalinya
-                                     sebagai direktif dan membiarkannya jadi teks, tapi
-                                     @endif-nya tetap dikompilasi -- blok if jadi tidak
-                                     seimbang dan seluruh view gagal parse. --}}
                                 <span class="text-neutral-600 font-medium">{{ __('Pajak & Layanan') }}{{ $taxPercent ? ' (' . $taxPercent . '%)' : '' }}</span>
-                                <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($taxAmount ?? 0, $cur) }}</span>
+                                <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($taxAmount, $cur) }}</span>
                             </div>
+                            @endif
                         @else
                             {{-- Pesanan lama tanpa rincian tersimpan. Menampilkan
                                  "Pajak 0" untuk pesanan yang pajaknya sebenarnya
