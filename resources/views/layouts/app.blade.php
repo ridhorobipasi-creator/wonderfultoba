@@ -194,6 +194,37 @@
             return out;
         };
         document.addEventListener('alpine:init', function () {
+            // Ringkasan isi paket di kartu: termasuk / tidak termasuk / rute.
+            // Sengaja RINGKASAN, bukan salinan halaman detail -- itinerary
+            // lengkap paket 3 hari saja 15 baris aktivitas, lebih tinggi
+            // daripada kartunya sendiri, dan karena kartu duduk di dalam grid
+            // satu kartu yang memanjang ikut menarik seluruh barisnya.
+            // Jadi: butir termasuk/tidak termasuk apa adanya (pendek), tapi
+            // itinerary hanya judul harinya.
+            window.Alpine.data('pkgDetails', function (includes, excludes, itinerary) {
+                var bersih = function (arr) {
+                    return (Array.isArray(arr) ? arr : []).filter(function (v) {
+                        return typeof v === 'string' && v.trim() !== '';
+                    });
+                };
+                return {
+                    open: false,
+                    includes: bersih(includes),
+                    excludes: bersih(excludes),
+                    days: (Array.isArray(itinerary) ? itinerary : [])
+                        .map(function (d, i) {
+                            if (!d || typeof d !== 'object') return null;
+                            var judul = typeof d.title === 'string' ? d.title.trim() : '';
+                            if (judul === '') return null;
+                            return { day: (d.day != null ? d.day : i + 1), title: judul };
+                        })
+                        .filter(Boolean),
+                    get isEmpty() {
+                        return this.includes.length === 0 && this.excludes.length === 0 && this.days.length === 0;
+                    },
+                };
+            });
+
             window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug, tiers) {
                 var baseAdult = Number(adultMyr) || 0;
                 // null dibedakan dari 0: server memakai ?? (harga anak 0 berarti

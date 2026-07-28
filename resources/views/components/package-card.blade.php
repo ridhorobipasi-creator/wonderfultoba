@@ -24,6 +24,15 @@
         . \Illuminate\Support\Js::from($package->childPrice ?? null) . ', '
         . \Illuminate\Support\Js::from($slug) . ', '
         . \Illuminate\Support\Js::from($paxTiers) . ')';
+
+    // Ringkasan isi paket. Sumbernya kolom JSON includes/excludes -- yang
+    // benar-benar diisi lewat form admin -- bukan relasi packageIncludes.
+    $detailsXdata = 'pkgDetails('
+        . \Illuminate\Support\Js::from(array_values((array) ($package->includes ?? []))) . ', '
+        . \Illuminate\Support\Js::from(array_values((array) ($package->excludes ?? []))) . ', '
+        . \Illuminate\Support\Js::from(array_values((array) ($package->itinerary ?? []))) . ')';
+    // Ekspresi Alpine yang menghasilkan id, bukan id itu sendiri.
+    $detailsUid = \Illuminate\Support\Js::from('pkg-detail-'.($package->id ?? $slug));
 @endphp
 
 <div class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all duration-300 h-full">
@@ -70,6 +79,9 @@
             </h3>
         </div>
     </a>
+
+    {{-- Ringkasan isi paket (akordeon) --}}
+    @include('partials.package-details', ['xdata' => $detailsXdata, 'uid' => $detailsUid])
 
     {{-- Kalkulator pax + estimasi total + booking (di luar <a> agar tombol bisa diklik) --}}
     @include('partials.pax-calc', ['xdata' => $paxXdata])

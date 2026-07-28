@@ -122,6 +122,56 @@ Harness-nya dibuktikan bisa merah dua kali: aturan celah di sisi JS disabotase
 → 11 baris berbeda; ambang dikembalikan ke dewasa-saja → 113 baris berbeda.
 Harness yang tidak pernah dibuktikan bisa gagal hanya menghasilkan rasa aman.
 
+## "Termasuk / Tidak Termasuk" kosong di SETIAP halaman paket
+
+10. Ketemu saat menyiapkan akordeon kartu, tidak ada di daftar audit mana pun.
+    `package-detail.blade.php` merender `package.package_includes` dan
+    `package.package_excludes` — **relasi yang tidak pernah ikut dimuat**.
+    `getPackageBySlug` hanya memuat gambar dan kota, jadi kunci itu bahkan
+    tidak ada di objek `package`; `x-for` berjalan atas `undefined` dan tidak
+    merender apa pun. Kedua kotak terbit sebagai judul dengan daftar kosong,
+    tanpa satu pun error, sementara datanya duduk lengkap di
+    `package.includes` (6–10 butir per paket).
+
+    Ini informasi yang paling menentukan orang jadi memesan atau tidak.
+
+    Diperbaiki dengan membaca kolom JSON `includes`/`excludes` — sumber yang
+    benar-benar diisi form admin. Relasi `packageIncludes`/`packageExcludes`
+    ternyata tidak dipakai di mana pun selain baris rusak itu; isinya juga
+    lebih sedikit (paket #1: relasi 4 vs JSON 7) dan nol untuk 5 dari 8 paket.
+    Kotaknya kini disembunyikan bila daftarnya memang kosong.
+
+    **Penjaga barunya bersifat umum, bukan khusus kasus ini:**
+    `test_detail_page_binds_only_to_keys_that_exist_in_the_payload` menyisir
+    setiap `x-for` atas `package.*` di halaman terender lalu menuntut kuncinya
+    ada di payload. Binding mati apa pun, di kunci mana pun, akan merah.
+
+## Akordeon "Detail Paket" di kartu
+
+11. Ringkasan termasuk / tidak termasuk / rute, tertutup secara bawaan.
+    Markup-nya **satu berkas** (`partials/package-details.blade.php`) yang
+    dipakai kartu beranda (nilai PHP) dan kartu grid `/tour/packages`
+    (ekspresi `pkg.*`) — mengikuti pola `partials/pax-calc` yang sudah ada,
+    supaya keduanya tidak bisa menyimpang seperti harga kartu vs invoice dulu.
+
+    Keputusan sengaja: **itinerary hanya judul hari, bukan aktivitas.** Paket
+    3 hari punya 15 baris aktivitas — lebih tinggi daripada kartunya sendiri,
+    dan karena kartu duduk di dalam grid, satu kartu yang memanjang menarik
+    seluruh barisnya. Aktivitas per hari tetap di halaman detail.
+
+    Tiga jebakan yang ditemui saat mengerjakannya:
+    - `x-collapse` **tidak terpasang** di proyek ini (`@alpinejs/collapse`
+      tidak ada di `app.js`) — kalau dipakai, panelnya diam saja. Diganti
+      `x-show` + `x-transition`.
+    - Id panel harus **ekspresi**, bukan string. Di grid, partial dirender
+      sekali lalu diulang `x-for`: id statis terpasang kembar di semua kartu
+      dan `aria-controls` tiap tombol menunjuk panel kartu pertama.
+    - Kunci `'Hari'` sudah dipakai untuk durasi dan berarti *"Days"* dalam
+      bahasa Inggris — `__('Hari') . ' 1'` akan terbaca "Days 1". Dipakai
+      kunci baru `'Hari ke-'`, dan labelnya ditulis sebagai teks Blade dengan
+      hanya angkanya yang di-bind (bukan literal string JS, yang akan pecah
+      begitu ada terjemahan mengandung apostrof).
+
 ## Aturan baru
 
 - **`x-text="cond ? 'A' : 'B'"` haram untuk teks yang diterjemahkan.** Satu
