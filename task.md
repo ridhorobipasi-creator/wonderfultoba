@@ -1,3 +1,73 @@
+# SESI 2026-07-28 (lanjutan) — sapuan audit menyeluruh, 4 commit ter-push
+
+**Baca ini dulu: daftar Batch 1/1B/1C/1D/2/3 di bawah adalah CATATAN TEMUAN,
+bukan status.** Banyak kotak yang masih kosong sebenarnya sudah tertutup di
+commit 24 Juli. Sesi ini memverifikasi ulang setiap item ke kode sebelum
+menyentuhnya. Yang sudah tertutup sebelum sesi ini: apostrof di x-data, nomor
+WA (ContactHelper), validasi booking, label form, consent S&K, testimoni palsu,
+kartu keyboard-accessible, timeline track, ikon dinamis track, 16 h1 homepage,
+polling CMS (sudah punya penjaga isUserEditing).
+
+Ter-push ke `sujai` + `origin` sebagai 4 commit:
+- `98ae1b9` harga grosir per tier + harga anak di kartu paket
+- `4a731bf` pesanan mendarat di URL permanen + kalkulator ikut surcharge
+- `4769f45` aritmetika invoice, lepas 3 CDN, halaman 500/503
+- `8d1c448` galeri, filter, dan janji-janji kosong
+- `3d70d2d` fokus keyboard, ARIA akordeon, satu alamat email
+
+## Tiga bug yang TIDAK ada di daftar audit, ketemu saat mengerjakannya
+
+1. **Invoice: Subtotal + Pajak != Total, di setiap invoice.** Barisnya membaca
+   kunci `subtotal` yang tidak pernah ditulis BookingService — yang ada
+   `subtotal_base`. Nilainya jatuh ke totalPrice yang SUDAH termasuk pajak.
+2. **Galeri kehilangan separuh isinya.** `getGallery()` menyaring ke kategori
+   'tour' saja: 10 gambar aktif, hanya 5 yang pernah tampil.
+3. **`new Set(objek)` mematikan seluruh halaman galeri.** `unique()`
+   mempertahankan kunci, jadi `toArray()` menghasilkan objek, bukan array.
+
+## ATURAN BARU (keluarga yang sama dengan @json di atribut)
+
+- **Jangan tempelkan `@if` langsung di belakang huruf** (`Layanan@if(...)`).
+  Blade tidak mengenalinya sebagai direktif dan membiarkannya jadi teks, TAPI
+  `@endif`-nya tetap dikompilasi — blok if jadi tidak seimbang dan seluruh view
+  gagal parse saat dirender.
+- **`view:cache` bukan pemeriksa.** Ia melaporkan sukses walau PHP hasil
+  kompilasinya rusak, karena hanya menulis file. Verifikasi sebenarnya:
+  `php -l` pada seluruh isi `storage/framework/views/`.
+- **`unique()` tanpa `values()`** menghasilkan objek saat di-JSON-kan.
+
+## Cara verifikasi yang dipakai sesi ini
+
+- Paritas kalkulator depan vs `BookingService`, dengan fungsi JS-nya **diambil
+  langsung dari blade** supaya tesnya tidak bisa melenceng dari kode nyata:
+  4 fixture tier x 12 jumlah pax (44/48 meleset sebelum, 0 sesudah), dan
+  8 tanggal surcharge termasuk musim ramai yang melompati tahun (semua cocok).
+- `php -l` atas 138 view hasil kompilasi.
+- Evaluasi 86 blok `x-data` dari 11 halaman terender (nol yang melempar;
+  2 sisanya variabel lingkup `x-for`).
+- POST booking sungguhan sampai invoice; data uji dihapus setiap kali.
+- Render `errors/500` & `errors/503` dengan koneksi DB sengaja diputus.
+
+## Masih terbuka (sengaja, dengan alasan)
+
+- [ ] **Terjemahan `invoice/show` (397 baris) dan `booking/track` (212 baris).**
+      Butuh ~120 kunci baru di 3 file bahasa. Mekanis tapi besar; belum dikerjakan.
+- [ ] **Pagination, state filter di URL, breadcrumb, halaman Kontak.** Fitur
+      baru, bukan perbaikan kerusakan.
+- [ ] **15 tautan kota di setiap halaman paket** (mendekati doorway pages).
+      Perlu keputusan SEO, bukan sekadar kode.
+- [ ] **Email sinkron + render PDF inline** saat booking (`BookingService`).
+      Perlu queue worker di produksi — keputusan infrastruktur.
+- [ ] **`finance/index` menjumlahkan halaman aktif saja** (paginasi 20/hal).
+- [ ] **Regenerasi banner OG** setelah harga dibulatkan.
+- [ ] **KEPUTUSAN BISNIS, tidak bisa diselesaikan dengan kode:** NIB/TDUP,
+      status PKP vs pungutan 11%, alamat legal (schema Balige vs footer Parapat),
+      bukti kemitraan (Mandiri/USU/Pelindo/Hyundai + logo di-hotlink dari
+      Wikipedia), dan angka statistik pelanggan yang sebenarnya.
+- [ ] `image copy*.png` masih tergeletak di root proyek.
+
+---
+
 # SESI 2026-07-28 — tag HTML putus karena @json di atribut (SELESAI, terverifikasi)
 
 Halaman detail paket menampilkan kode Alpine mentah sebagai teks. Akarnya satu:
