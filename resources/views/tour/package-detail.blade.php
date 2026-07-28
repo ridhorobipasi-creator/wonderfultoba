@@ -308,21 +308,36 @@
         <h2>{{ $package->translated_name }}</h2>
         <p>{{ $package->translated_description }}</p>
         <p>Price: {{ \App\Helpers\CurrencyHelper::formatIn($package->price, \App\Helpers\CurrencyHelper::PRICE_BASE) }}</p>
-        @if(!empty($package->pricingDetails['includes']))
-        <h3>Includes</h3>
+        {{-- Sumbernya kolom includes/excludes — yang benar-benar diisi form
+             admin. Dua baris ini dulu membaca pricingDetails['includes'],
+             lokasi ketiga yang tidak pernah ditulis oleh siapa pun: kosong di
+             kedelapan paket, jadi ringkasan untuk pembaca layar dan crawler
+             tidak pernah menyebut satu pun isi paket. --}}
+        @if(!empty($package->includes))
+        <h3>{{ __('Termasuk') }}</h3>
         <ul>
-            @foreach($package->pricingDetails['includes'] as $inc)
+            @foreach($package->includes as $inc)
                 <li>{{ is_array($inc) ? ($inc['text'] ?? '') : $inc }}</li>
             @endforeach
         </ul>
         @endif
-        @if(!empty($package->pricingDetails['excludes']))
-        <h3>Excludes</h3>
+        @if(!empty($package->excludes))
+        <h3>{{ __('Tidak Termasuk') }}</h3>
         <ul>
-            @foreach($package->pricingDetails['excludes'] as $exc)
+            @foreach($package->excludes as $exc)
                 <li>{{ is_array($exc) ? ($exc['text'] ?? '') : $exc }}</li>
             @endforeach
         </ul>
+        @endif
+        @if(!empty($package->itinerary))
+        <h3>{{ __('Rute Perjalanan') }}</h3>
+        <ol>
+            @foreach($package->itinerary as $i => $day)
+                @if(is_array($day) && ! empty($day['title']))
+                <li>{{ __('Hari ke-') }} {{ $day['day'] ?? $i + 1 }}: {{ $day['title'] }}</li>
+                @endif
+            @endforeach
+        </ol>
         @endif
     </section>
 

@@ -93,6 +93,21 @@ class PackageContentTest extends TestCase
             ->assertSee('package.excludes', false);
     }
 
+    public function test_screen_reader_summary_lists_the_inclusions_too(): void
+    {
+        // Ringkasan sr-only ini dulu membaca pricingDetails['includes'] --
+        // lokasi ketiga yang tidak pernah ditulis form admin dan kosong di
+        // seluruh paket. Akibatnya pembaca layar dan crawler tidak pernah
+        // mendengar satu pun isi paket, walau daftarnya terpampang di layar.
+        $package = $this->makePackage();
+
+        $this->get(route('tour.package.detail', $package->slug))
+            ->assertOk()
+            ->assertSee('Hotel bintang 3', false)
+            ->assertSee('Tiket pesawat', false)
+            ->assertSee('Penjemputan - Parapat', false);
+    }
+
     public function test_detail_payload_actually_carries_the_inclusions(): void
     {
         $package = $this->makePackage();
