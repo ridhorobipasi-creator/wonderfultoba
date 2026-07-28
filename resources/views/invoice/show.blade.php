@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,19 +84,19 @@
 
     if ($booking->type === 'package' && $booking->package) {
         $itemName = $booking->package->name;
-        $itemDesc = trim(($booking->package->duration ?? '') . ' menikmati pesona wisata Sumatera Utara.');
+        $itemDesc = trim(($booking->package->duration ?? '') . ' ' . __('menikmati pesona wisata Sumatera Utara.'));
         $itemDest = $booking->package->city?->name ?? 'Sumatera Utara';
     } else {
-        $itemName = 'Layanan ' . $companyName;
-        $itemDesc = 'Pemesanan layanan wisata.';
+        $itemName = __('Layanan :company', ['company' => $companyName]);
+        $itemDesc = __('Pemesanan layanan wisata.');
         $itemDest = 'Sumatera Utara';
     }
 
     $statusMap = [
-        'pending'   => ['label' => 'MENUNGGU PEMBAYARAN', 'bg' => 'bg-amber-100',   'text' => 'text-amber-700',   'border' => 'border-amber-200',   'dot' => 'bg-amber-500'],
-        'confirmed' => ['label' => 'PEMBAYARAN DIKONFIRMASI', 'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
-        'completed' => ['label' => 'SELESAI',              'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
-        'cancelled' => ['label' => 'DIBATALKAN',           'bg' => 'bg-rose-100',    'text' => 'text-rose-700',    'border' => 'border-rose-200',    'dot' => 'bg-rose-500'],
+        'pending'   => ['label' => __('MENUNGGU PEMBAYARAN'), 'bg' => 'bg-amber-100',   'text' => 'text-amber-700',   'border' => 'border-amber-200',   'dot' => 'bg-amber-500'],
+        'confirmed' => ['label' => __('PEMBAYARAN DIKONFIRMASI'), 'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
+        'completed' => ['label' => __('SELESAI'),              'bg' => 'bg-green-100', 'text' => 'text-green-700', 'border' => 'border-green-200', 'dot' => 'bg-green-500'],
+        'cancelled' => ['label' => __('DIBATALKAN'),           'bg' => 'bg-rose-100',    'text' => 'text-rose-700',    'border' => 'border-rose-200',    'dot' => 'bg-rose-500'],
     ];
     $st = $statusMap[$booking->status] ?? $statusMap['pending'];
 @endphp
@@ -135,7 +135,7 @@
                 <!-- Billed To -->
                 <div class="bg-neutral-100/50 p-5 rounded-xl border border-neutral-200">
                     <div class="flex items-center gap-2 mb-3">
-                        <h3 class="text-xs font-bold text-brand uppercase tracking-wider">Diterbitkan Untuk</h3>
+                        <h3 class="text-xs font-bold text-brand uppercase tracking-wider">{{ __('Diterbitkan Untuk') }}</h3>
                     </div>
                     <div class="space-y-2">
                         <p class="text-lg font-bold text-neutral-900">{{ $booking->customerName }}</p>
@@ -155,32 +155,32 @@
                 <!-- Invoice Details -->
                 <div class="bg-brand-light/30 p-5 rounded-xl border border-brand-light/50">
                     <div class="flex items-center gap-2 mb-3">
-                        <h3 class="text-xs font-bold text-brand uppercase tracking-wider">Rincian Invoice</h3>
+                        <h3 class="text-xs font-bold text-brand uppercase tracking-wider">{{ __('Rincian Invoice') }}</h3>
                     </div>
                     <div class="space-y-3">
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600">No. Referensi:</span>
+                            <span class="text-neutral-600">{{ __('No. Referensi:') }}</span>
                             <span class="font-bold text-neutral-900 bg-white px-2 py-1 rounded shadow-sm border border-neutral-200">{{ $booking->bookingCode }}</span>
                         </div>
                         {{-- Label ini dulu berbunyi "Tanggal Pesanan" tapi
                              menampilkan tanggal BERANGKAT. Dua-duanya penting,
                              jadi sekarang keduanya ditulis apa adanya. --}}
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600">Tanggal Pesanan:</span>
+                            <span class="text-neutral-600">{{ __('Tanggal Pesanan:') }}</span>
                             <span class="font-semibold text-neutral-900">{{ optional($booking->createdAt)->format('d M Y') ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600">Tanggal Berangkat:</span>
+                            <span class="text-neutral-600">{{ __('Tanggal Berangkat:') }}</span>
                             <span class="font-semibold text-neutral-900">{{ optional($booking->startDate)->format('d M Y') ?? '-' }}</span>
                         </div>
                         @if($dueDate && ! in_array($booking->status, ['completed', 'cancelled'], true))
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600">Jatuh Tempo:</span>
+                            <span class="text-neutral-600">{{ __('Jatuh Tempo:') }}</span>
                             <span class="font-bold text-brand-dark">{{ $dueDate->format('d M Y') }}</span>
                         </div>
                         @endif
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600">Status Pembayaran:</span>
+                            <span class="text-neutral-600">{{ __('Status Pembayaran:') }}</span>
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold {{ $st['bg'] }} {{ $st['text'] }} border {{ $st['border'] }}">
                                 <span class="w-1.5 h-1.5 rounded-full {{ $st['dot'] }}"></span>
                                 {{ $st['label'] }}
@@ -195,10 +195,10 @@
                 <table class="w-full min-w-[560px] text-left border-collapse">
                     <thead class="bg-neutral-50 border-b border-neutral-200">
                         <tr>
-                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider w-1/2">Deskripsi Layanan</th>
-                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider text-center">Kuantitas</th>
-                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider text-right">Harga Satuan</th>
-                            <th class="py-4 px-6 text-xs font-bold text-brand uppercase tracking-wider text-right">Total</th>
+                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider w-1/2">{{ __('Deskripsi Layanan') }}</th>
+                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider text-center">{{ __('Kuantitas') }}</th>
+                            <th class="py-4 px-6 text-xs font-bold text-neutral-600 uppercase tracking-wider text-right">{{ __('Harga Satuan') }}</th>
+                            <th class="py-4 px-6 text-xs font-bold text-brand uppercase tracking-wider text-right">{{ __('Total') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-100">
@@ -215,9 +215,9 @@
                                         <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
                                         </div>
                                         <div>
-                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Dewasa)</p>
+                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} ({{ __('Dewasa') }})</p>
                                             <p class="text-xs text-neutral-500 leading-relaxed">
-                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">Destinasi: {{ $itemDest }}</span>
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">{{ __('Destinasi:') }} {{ $itemDest }}</span>
                                             </p>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
                                         <div class="mt-1 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 flex-shrink-0">
                                         </div>
                                         <div>
-                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Anak-anak)</p>
+                                            <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} ({{ __('Anak-anak') }})</p>
                                         </div>
                                     </div>
                                 </td>
@@ -272,12 +272,12 @@
                                             <p class="font-bold text-neutral-900 text-base mb-1">{{ $itemName }}</p>
                                             <p class="text-sm text-neutral-500 leading-relaxed">
                                                 {{ $itemDesc }} <br>
-                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">Destinasi: {{ $itemDest }}</span>
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">{{ __('Destinasi:') }} {{ $itemDest }}</span>
                                             </p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-6 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pax }} Pax</td>
+                                <td class="py-6 px-6 align-middle text-center font-semibold text-neutral-700">{{ $pax }} {{ __('Pax') }}</td>
                                 <td class="py-6 px-6 align-middle text-right text-neutral-700">{{ \App\Helpers\CurrencyHelper::formatRecord($unitPrice, $cur) }}</td>
                                 <td class="py-6 px-6 align-middle text-right text-neutral-900 font-bold">{{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice, $cur) }}</td>
                             </tr>
@@ -296,21 +296,25 @@
                 <div class="w-full md:w-1/2">
                     <div class="bg-gradient-to-br from-brand-dark to-brand rounded-xl p-6 text-white shadow-md relative overflow-hidden">
                         <div class="flex items-center gap-2 mb-3 relative z-10">
-                            <h4 class="text-xs font-bold text-brand-accent uppercase tracking-wider">Instruksi Pembayaran</h4>
+                            <h4 class="text-xs font-bold text-brand-accent uppercase tracking-wider">{{ __('Instruksi Pembayaran') }}</h4>
                         </div>
                         {{-- Kalimatnya menyesuaikan diri: kalau rekening belum
                              dikonfigurasi, "transfer ke rekening berikut" menunjuk
                              ruang kosong dan tamu tidak punya cara membayar. --}}
                         <p class="text-sm text-brand-light font-medium leading-relaxed relative z-10">
+                            @php
+                                $codeChip = '<span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">' . e($booking->bookingCode) . '</span>';
+                            @endphp
                             @if($bankAccount)
-                                Mohon lakukan transfer ke rekening berikut dan lampirkan kode referensi <span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">{{ $booking->bookingCode }}</span> pada berita acara transfer Anda.
+                                {!! __('Mohon lakukan transfer ke rekening berikut dan lampirkan kode referensi :code pada berita acara transfer Anda.', ['code' => $codeChip]) !!}
                             @else
-                                Untuk mendapatkan nomor rekening dan instruksi pembayaran, silakan hubungi kami di
-                                <a href="{{ \App\Helpers\ContactHelper::whatsappLink('Halo Sujai Laketoba, saya ingin membayar pesanan ' . $booking->bookingCode . '.') }}" class="font-bold text-white underline">{{ \App\Helpers\ContactHelper::whatsappDisplay() }}</a>
-                                dengan menyebut kode referensi <span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">{{ $booking->bookingCode }}</span>.
+                                {!! __('Untuk mendapatkan nomor rekening dan instruksi pembayaran, silakan hubungi kami di :contact dengan menyebut kode referensi :code.', [
+                                    'contact' => '<a href="' . e(\App\Helpers\ContactHelper::whatsappLink(__('Halo Sujai Laketoba, saya ingin membayar pesanan :code.', ['code' => $booking->bookingCode]))) . '" class="font-bold text-white underline">' . e(\App\Helpers\ContactHelper::whatsappDisplay()) . '</a>',
+                                    'code' => $codeChip,
+                                ]) !!}
                             @endif
                             @if($dueDate && ! in_array($booking->status, ['completed', 'cancelled'], true))
-                                <span class="mt-2 block">Pelunasan paling lambat <strong class="text-white">{{ $dueDate->format('d M Y') }}</strong>.</span>
+                                <span class="mt-2 block">{!! __('Pelunasan paling lambat :date.', ['date' => '<strong class="text-white">' . e($dueDate->format('d M Y')) . '</strong>']) !!}</span>
                             @endif
                         </p>
 
@@ -320,9 +324,9 @@
                                 <div class="bg-white/15 rounded p-2 flex items-center justify-center">
                                 </div>
                                 <div>
-                                    <p class="text-xs text-brand-light">a.n {{ $bankAccountName }}</p>
+                                    <p class="text-xs text-brand-light">{{ __('a.n') }} {{ $bankAccountName }}</p>
                                     <p class="font-bold tracking-wider">{{ $bankAccount }}
-                                        <button class="ml-2 text-brand-accent hover:text-white transition-colors no-print" onclick="copyAccount(this)" data-account="{{ $bankAccount }}" title="Salin Rekening" aria-label="Salin Rekening"><svg class="inline w-4 h-4 align-text-bottom" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2v-2M10 3h8a2 2 0 012 2v10a2 2 0 01-2 2h-8a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg></button>
+                                        <button class="ml-2 text-brand-accent hover:text-white transition-colors no-print" onclick="copyAccount(this)" data-account="{{ $bankAccount }}" title="{{ __('Salin Rekening') }}" aria-label="{{ __('Salin Rekening') }}"><svg data-icon="copy" class="inline w-4 h-4 align-text-bottom" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2v-2M10 3h8a2 2 0 012 2v10a2 2 0 01-2 2h-8a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg><svg data-icon="done" class="hidden w-4 h-4 align-text-bottom" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></button>
                                     </p>
                                 </div>
                             </div>
@@ -336,7 +340,7 @@
                     <div class="space-y-4">
                         @if($subtotalBase !== null)
                             <div class="flex justify-between items-center text-sm">
-                                <span class="text-neutral-600 font-medium">Subtotal</span>
+                                <span class="text-neutral-600 font-medium">{{ __('Subtotal') }}</span>
                                 <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($subtotalBase, $cur) }}</span>
                             </div>
                             @foreach($surchargeRows as $sc)
@@ -351,7 +355,7 @@
                                      sebagai direktif dan membiarkannya jadi teks, tapi
                                      @endif-nya tetap dikompilasi -- blok if jadi tidak
                                      seimbang dan seluruh view gagal parse. --}}
-                                <span class="text-neutral-600 font-medium">Pajak &amp; Layanan{{ $taxPercent ? ' (' . $taxPercent . '%)' : '' }}</span>
+                                <span class="text-neutral-600 font-medium">{{ __('Pajak & Layanan') }}{{ $taxPercent ? ' (' . $taxPercent . '%)' : '' }}</span>
                                 <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($taxAmount ?? 0, $cur) }}</span>
                             </div>
                         @else
@@ -359,13 +363,13 @@
                                  "Pajak 0" untuk pesanan yang pajaknya sebenarnya
                                  sudah termasuk di dalam total akan lebih menyesatkan
                                  daripada tidak menampilkan barisnya sama sekali. --}}
-                            <p class="text-[11px] leading-relaxed text-neutral-500">Rincian pajak tidak tersimpan untuk pesanan ini. Nilai di bawah adalah total akhir yang berlaku.</p>
+                            <p class="text-[11px] leading-relaxed text-neutral-500">{{ __('Rincian pajak tidak tersimpan untuk pesanan ini. Nilai di bawah adalah total akhir yang berlaku.') }}</p>
                         @endif
 
                         <div class="pt-4 border-t border-neutral-300 border-dashed">
                             <div class="flex justify-between items-end">
                                 <div>
-                                    <span class="block text-brand-dark font-bold uppercase tracking-wider text-xs mb-1">Total Tagihan</span>
+                                    <span class="block text-brand-dark font-bold uppercase tracking-wider text-xs mb-1">{{ __('Total Tagihan') }}</span>
                                     <span class="block text-[10px] text-neutral-500">({{ $cur }})</span>
                                 </div>
                                 <span class="text-2xl font-bold text-brand-dark">{{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice, $cur) }}</span>
@@ -374,9 +378,12 @@
                             {{-- Reference only, at the rate frozen on the booking date.
                                  The amount owed is the figure above. --}}
                             <p class="mt-3 text-right text-[11px] leading-relaxed text-neutral-500">
-                                Setara {{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR') }}
-                                (kurs 1 {{ $cur }} = Rp {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }},
-                                dikunci {{ optional($booking->createdAt)->format('d/m/Y') }}).
+                                {{ __('Setara :amount (kurs 1 :currency = Rp :rate, dikunci :date).', [
+                                    'amount' => \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR'),
+                                    'currency' => $cur,
+                                    'rate' => number_format((float) $booking->exchange_rate_idr, 0, ',', '.'),
+                                    'date' => optional($booking->createdAt)->format('d/m/Y'),
+                                ]) }}
                             </p>
                             @endif
                         </div>
@@ -386,7 +393,7 @@
 
             <!-- Footer -->
             <div class="mt-8 pt-8 border-t border-neutral-200 text-center">
-                <p class="font-serif italic text-lg text-brand-dark mb-3">"Terima kasih telah memilih kami untuk petualangan Anda selanjutnya."</p>
+                <p class="font-serif italic text-lg text-brand-dark mb-3">"{{ __('Terima kasih telah memilih kami untuk petualangan Anda selanjutnya.') }}"</p>
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 text-xs text-neutral-500">
                     <span class="flex items-center gap-1">{{ $address }}</span>
                     @if($email)
@@ -405,23 +412,31 @@
 
     <!-- Action Buttons (Visible only on screen) -->
     <div class="fixed bottom-8 right-8 flex flex-col gap-3 no-print z-50">
-        <button onclick="window.print()" class="group relative bg-brand hover:bg-brand-dark text-white font-medium w-12 h-12 rounded-full shadow-lg transition flex items-center justify-center hover:scale-105" title="Cetak / Simpan PDF">
+        <button onclick="window.print()" class="group relative bg-brand hover:bg-brand-dark text-white font-medium w-12 h-12 rounded-full shadow-lg transition flex items-center justify-center hover:scale-105" title="{{ __('Cetak / Simpan PDF') }}">
             {{-- SVG inline: ikon di dokumen ini tidak boleh bergantung pada CDN. --}}
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"/>
             </svg>
-            <span class="absolute right-14 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Cetak / Simpan PDF</span>
+            <span class="absolute right-14 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">{{ __('Cetak / Simpan PDF') }}</span>
         </button>
     </div>
 
     <script>
+        // Ikon di tombol ini sudah jadi <svg> inline sejak CDN FontAwesome dilepas,
+        // tapi fungsinya masih mencari <i> — querySelector mengembalikan null dan
+        // baris berikutnya melempar, jadi tombol tidak pernah memberi konfirmasi.
         function copyAccount(btn) {
             const acc = (btn.getAttribute('data-account') || '').replace(/\s/g, '');
+            const copyIcon = btn.querySelector('[data-icon="copy"]');
+            const doneIcon = btn.querySelector('[data-icon="done"]');
             navigator.clipboard.writeText(acc).then(() => {
-                const icon = btn.querySelector('i');
-                const prev = icon.className;
-                icon.className = 'fa-solid fa-check';
-                setTimeout(() => { icon.className = prev; }, 1500);
+                if (!copyIcon || !doneIcon) return;
+                copyIcon.classList.add('hidden');
+                doneIcon.classList.remove('hidden');
+                setTimeout(() => {
+                    copyIcon.classList.remove('hidden');
+                    doneIcon.classList.add('hidden');
+                }, 1500);
             });
         }
     </script>

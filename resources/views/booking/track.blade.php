@@ -1,28 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Tracking Booking ' . $booking->bookingCode . ' | Sujai Laketoba')
-@section('description', 'Lihat status booking wisata Sujai Laketoba dengan kode booking.')
+@section('title', __('Tracking Booking') . ' ' . $booking->bookingCode . ' | Sujai Laketoba')
+@section('description', __('Lihat status booking wisata Sujai Laketoba dengan kode booking.'))
 
 @php
     $statusMap = [
         'pending' => [
-            'label' => 'Menunggu Konfirmasi',
-            'description' => 'Admin akan menghubungi Anda untuk memastikan ketersediaan paket, harga final, dan instruksi pembayaran.',
+            'label' => __('Menunggu Konfirmasi'),
+            'description' => __('Admin akan menghubungi Anda untuk memastikan ketersediaan paket, harga final, dan instruksi pembayaran.'),
             'class' => 'bg-amber-50 text-amber-700 border-amber-200',
         ],
         'confirmed' => [
-            'label' => 'Dikonfirmasi',
-            'description' => 'Booking sudah dikonfirmasi. Silakan simpan kode booking dan invoice Anda.',
+            'label' => __('Dikonfirmasi'),
+            'description' => __('Booking sudah dikonfirmasi. Silakan simpan kode booking dan invoice Anda.'),
             'class' => 'bg-green-50 text-green-700 border-green-200',
         ],
         'completed' => [
-            'label' => 'Selesai',
-            'description' => 'Perjalanan sudah selesai. Terima kasih telah memilih Sujai Laketoba.',
+            'label' => __('Selesai'),
+            'description' => __('Perjalanan sudah selesai. Terima kasih telah memilih Sujai Laketoba.'),
             'class' => 'bg-slate-50 text-slate-700 border-slate-200',
         ],
         'cancelled' => [
-            'label' => 'Dibatalkan',
-            'description' => 'Booking ini tercatat dibatalkan. Hubungi admin jika perlu bantuan.',
+            'label' => __('Dibatalkan'),
+            'description' => __('Booking ini tercatat dibatalkan. Hubungi admin jika perlu bantuan.'),
             'class' => 'bg-rose-50 text-rose-700 border-rose-200',
         ],
     ];
@@ -34,7 +34,7 @@
     // Satu sumber nomor. Rantai ?? sebelumnya menyebut kunci yang sama tiga kali
     // dan tetap bisa menghasilkan nomor yang berbeda dari yang tampil di footer.
     $waNumber = \App\Helpers\ContactHelper::whatsappDigits();
-    $waText = urlencode('Halo Sujai Laketoba, saya ingin bertanya tentang booking ' . $booking->bookingCode . '.');
+    $waText = urlencode(__('Halo Sujai Laketoba, saya ingin bertanya tentang booking :code.', ['code' => $booking->bookingCode]));
 
     // Tenggat pembatalan khusus pesanan ini, diturunkan dari aturan di /terms
     // (>14 hari 100%, 7-14 hari 50%, <7 hari hangus). Aturannya sudah tertulis
@@ -43,10 +43,10 @@
     $refundHalf = $booking->startDate ? $booking->startDate->copy()->subDays(7) : null;
     $showRefund = $refundFull && ! in_array($booking->status, ['cancelled', 'completed'], true);
     $steps = [
-        'pending' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dikonfirmasi', 'Trip Selesai'],
-        'confirmed' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dikonfirmasi', 'Trip Selesai'],
-        'completed' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dikonfirmasi', 'Trip Selesai'],
-        'cancelled' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dibatalkan'],
+        'pending' => [__('Booking Diterima'), __('Menunggu Konfirmasi'), __('Dikonfirmasi'), __('Trip Selesai')],
+        'confirmed' => [__('Booking Diterima'), __('Menunggu Konfirmasi'), __('Dikonfirmasi'), __('Trip Selesai')],
+        'completed' => [__('Booking Diterima'), __('Menunggu Konfirmasi'), __('Dikonfirmasi'), __('Trip Selesai')],
+        'cancelled' => [__('Booking Diterima'), __('Menunggu Konfirmasi'), __('Dibatalkan')],
     ];
     $activeSteps = $steps[$booking->status] ?? $steps['pending'];
     // The furthest step actually reached. Each status lands ON its own label,
@@ -68,21 +68,25 @@
     </div>
 
     <div class="relative mx-auto max-w-5xl px-5 py-20 md:px-8 md:py-28">
-        <p class="text-xs font-bold uppercase tracking-[0.28em] text-green-300">Tracking Booking</p>
+        <p class="text-xs font-bold uppercase tracking-[0.28em] text-green-300">{{ __('Tracking Booking') }}</p>
         <h1 class="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
             {{ $booking->bookingCode }}
         </h1>
         <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-200 md:text-base">
-            Simpan kode booking ini saat berkomunikasi dengan admin Sujai Laketoba.
+            {{ __('Simpan kode booking ini saat berkomunikasi dengan admin Sujai Laketoba.') }}
         </p>
         <div class="mt-7 flex flex-col gap-3 sm:flex-row">
             <button type="button" @click="copyCode()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-green-50">
                 <span class="material-symbols-outlined text-base">content_copy</span>
-                <span x-text="copied ? 'Kode Tersalin' : 'Copy Kode Booking'"></span>
+                {{-- Dua span, bukan x-text dengan literal string: label yang
+                     mengandung apostrof (mis. terjemahan Inggris) akan memutus
+                     ekspresi Alpine dan mematikan seluruh tombol. --}}
+                <span x-show="!copied">{{ __('Copy Kode Booking') }}</span>
+                <span x-show="copied" x-cloak>{{ __('Kode Tersalin') }}</span>
             </button>
             <a href="{{ route('booking.track.form') }}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10">
                 <span class="material-symbols-outlined text-base">search</span>
-                Cek Kode Lain
+                {{ __('Cek Kode Lain') }}
             </a>
         </div>
     </div>
@@ -120,7 +124,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <div class="flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Status Saat Ini</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ __('Status Saat Ini') }}</p>
                     <h2 class="mt-2 text-2xl font-extrabold text-slate-950">{{ $status['label'] }}</h2>
                 </div>
                 <span class="inline-flex w-fit items-center rounded-full border px-4 py-2 text-xs font-bold {{ $status['class'] }}">
@@ -133,7 +137,7 @@
             </p>
 
             <div class="mt-8 rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Timeline</p>
+                <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ __('Timeline') }}</p>
                 <div class="mt-5 relative pl-2">
                     <!-- Connecting Vertical Line -->
                     <div class="absolute left-[1.4rem] top-4 bottom-4 w-px bg-slate-200"></div>
@@ -164,7 +168,7 @@
                                 <div class="pt-1.5">
                                     <p class="text-sm font-bold {{ $isDone ? 'text-slate-900' : 'text-slate-400' }}">{{ $step }}</p>
                                     @if($stepNumber === $currentStep)
-                                        <p class="mt-1 text-xs font-semibold {{ $isCancelStep ? 'text-rose-600 bg-rose-50' : 'text-green-600 bg-green-50' }} px-2 py-0.5 rounded w-fit">Status saat ini</p>
+                                        <p class="mt-1 text-xs font-semibold {{ $isCancelStep ? 'text-rose-600 bg-rose-50' : 'text-green-600 bg-green-50' }} px-2 py-0.5 rounded w-fit">{{ __('Status saat ini') }}</p>
                                     @endif
                                 </div>
                             </div>
@@ -175,31 +179,31 @@
 
             <div class="mt-8 grid gap-4 sm:grid-cols-2">
                 <div class="rounded-xl bg-slate-50 p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Paket</p>
-                    <p class="mt-2 font-bold text-slate-950">{{ $booking->package->name ?? 'Paket Wisata' }}</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{ __('Paket') }}</p>
+                    <p class="mt-2 font-bold text-slate-950">{{ $booking->package->name ?? __('Paket Wisata') }}</p>
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Tanggal Berangkat</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{ __('Tanggal Berangkat') }}</p>
                     <p class="mt-2 font-bold text-slate-950">{{ optional($booking->startDate)->translatedFormat('d F Y') ?? '-' }}</p>
                     {{-- endDate sudah dihitung backend dari durasi paket sejak lama,
                          tapi tidak pernah ditampilkan ke tamu yang justru perlu
                          tahu kapan ia pulang untuk memesan tiket. --}}
                     @if($booking->endDate && optional($booking->startDate)->notEqualTo($booking->endDate))
-                    <p class="mt-1 text-xs text-slate-500">s/d {{ $booking->endDate->translatedFormat('d F Y') }}</p>
+                    <p class="mt-1 text-xs text-slate-500">{{ __('s/d') }} {{ $booking->endDate->translatedFormat('d F Y') }}</p>
                     @endif
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Peserta</p>
-                    <p class="mt-2 font-bold text-slate-950">{{ $pax }} Orang</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{ __('Peserta') }}</p>
+                    <p class="mt-2 font-bold text-slate-950">{{ __(':count Orang', ['count' => $pax]) }}</p>
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Estimasi Total</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{ __('Estimasi Total') }}</p>
                     <p class="mt-2 font-bold text-slate-950">{{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice, $booking->currency) }}</p>
                     @if($booking->currency !== 'IDR')
                     {{-- The amount agreed is above; this is only a reference for
                          transfers from an Indonesian bank, at the rate frozen
                          when the booking was made. --}}
-                    <p class="mt-1 text-xs text-slate-400">≈ {{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR') }} <span class="whitespace-nowrap">(kurs {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }})</span></p>
+                    <p class="mt-1 text-xs text-slate-400">≈ {{ \App\Helpers\CurrencyHelper::formatRecord($booking->totalPrice_idr, 'IDR') }} <span class="whitespace-nowrap">({{ __('kurs') }} {{ number_format((float) $booking->exchange_rate_idr, 0, ',', '.') }})</span></p>
                     @endif
                 </div>
             </div>
@@ -213,15 +217,15 @@
                 $cur = $booking->currency;
             @endphp
             <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Rincian Biaya</p>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">{{ __('Rincian Biaya') }}</p>
                 <div class="space-y-2 text-sm text-slate-600">
                     <div class="flex justify-between">
-                        <span>Ekspedisi Dewasa ({{ $pb['pax_dewasa'] }}x)</span>
+                        <span>{{ __('Ekspedisi Dewasa') }} ({{ $pb['pax_dewasa'] }}x)</span>
                         <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['price_dewasa_total'], $cur) }}</span>
                     </div>
                     @if(isset($pb['pax_anak']) && $pb['pax_anak'] > 0)
                     <div class="flex justify-between">
-                        <span>Ekspedisi Anak-Anak ({{ $pb['pax_anak'] }}x)</span>
+                        <span>{{ __('Ekspedisi Anak-Anak') }} ({{ $pb['pax_anak'] }}x)</span>
                         <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['price_anak_total'], $cur) }}</span>
                     </div>
                     @endif
@@ -234,11 +238,11 @@
                         @endforeach
                     @endif
                     <div class="flex justify-between">
-                        <span>Pajak & Layanan ({{ $pb['tax_percentage'] ?? 11 }}%)</span>
+                        <span>{{ __('Pajak & Layanan') }} ({{ $pb['tax_percentage'] ?? 11 }}%)</span>
                         <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['tax'] ?? 0, $cur) }}</span>
                     </div>
                     <div class="pt-2 border-t border-slate-100 flex justify-between font-bold text-slate-950 mt-2">
-                        <span>Total Ringkasan</span>
+                        <span>{{ __('Total Ringkasan') }}</span>
                         <span>{{ \App\Helpers\CurrencyHelper::formatRecord($pb['total'] ?? $booking->totalPrice, $cur) }}</span>
                     </div>
                 </div>
@@ -247,52 +251,52 @@
 
             @if($booking->notes)
                 <div class="mt-6 rounded-xl border border-slate-200 bg-white p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Catatan</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{ __('Catatan') }}</p>
                     <p class="mt-2 text-sm leading-7 text-slate-600">{{ $booking->notes }}</p>
                 </div>
             @endif
         </div>
 
         <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Link Booking</p>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ __('Link Booking') }}</p>
             <div class="mt-5 space-y-3">
                 <a href="{{ $invoiceUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
-                    <span>Invoice</span>
+                    <span>{{ __('Invoice') }}</span>
                     <span class="material-symbols-outlined text-base">open_in_new</span>
                 </a>
                 {{-- Tanpa tautan ini, halaman yang paling sering dibuka tamu yang
                      SUDAH memesan tidak pernah memberi tahu ke mana harus membayar. --}}
                 <a href="{{ route('payment') }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
-                    <span>Cara Pembayaran</span>
+                    <span>{{ __('Cara Pembayaran') }}</span>
                     <span class="material-symbols-outlined text-base">account_balance</span>
                 </a>
                 <a href="{{ $packageUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
-                    <span>Lihat Paket</span>
+                    <span>{{ __('Lihat Paket') }}</span>
                     <span class="material-symbols-outlined text-base">travel_explore</span>
                 </a>
                 @if($waNumber)
                     <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-toba-green px-4 py-4 text-sm font-bold text-white transition hover:bg-primary-container">
-                        <span>Hubungi Admin</span>
+                        <span>{{ __('Hubungi Admin') }}</span>
                         <span class="material-symbols-outlined text-base">chat</span>
                     </a>
                 @endif
             </div>
 
             <div class="mt-6 rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-600">
-                Jika ada perubahan tanggal, jumlah peserta, atau titik penjemputan, kirim kode booking ini ke admin.
+                {{ __('Jika ada perubahan tanggal, jumlah peserta, atau titik penjemputan, kirim kode booking ini ke admin.') }}
             </div>
 
             @if($showRefund)
                 {{-- Tenggat konkret, bukan "lihat S&K". Tanggalnya dihitung dari
                      keberangkatan pesanan ini sendiri. --}}
                 <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
-                    <p class="text-xs font-bold uppercase tracking-widest text-amber-700">Tenggat Pembatalan</p>
+                    <p class="text-xs font-bold uppercase tracking-widest text-amber-700">{{ __('Tenggat Pembatalan') }}</p>
                     <ul class="mt-3 space-y-1.5 text-xs leading-6 text-amber-900">
-                        <li>Batalkan sebelum <strong>{{ $refundFull->translatedFormat('d F Y') }}</strong> — dana kembali 100% (potong biaya admin).</li>
-                        <li>Sampai <strong>{{ $refundHalf->translatedFormat('d F Y') }}</strong> — dana kembali 50%.</li>
-                        <li>Setelah itu dana tidak dapat dikembalikan.</li>
+                        <li>{!! __('Batalkan sebelum :date — dana kembali 100% (potong biaya admin).', ['date' => '<strong>' . e($refundFull->translatedFormat('d F Y')) . '</strong>']) !!}</li>
+                        <li>{!! __('Sampai :date — dana kembali 50%.', ['date' => '<strong>' . e($refundHalf->translatedFormat('d F Y')) . '</strong>']) !!}</li>
+                        <li>{{ __('Setelah itu dana tidak dapat dikembalikan.') }}</li>
                     </ul>
-                    <a href="{{ route('terms') }}" class="mt-3 inline-block text-xs font-bold text-amber-800 underline">Selengkapnya di Syarat &amp; Ketentuan</a>
+                    <a href="{{ route('terms') }}" class="mt-3 inline-block text-xs font-bold text-amber-800 underline">{{ __('Selengkapnya di Syarat & Ketentuan') }}</a>
                 </div>
             @endif
         </aside>
