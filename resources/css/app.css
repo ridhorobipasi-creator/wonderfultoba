@@ -9,7 +9,10 @@
   font-family: 'Material Symbols Outlined';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  /* block, bukan swap: font ikon. swap menampilkan teks ligatur mentah
+     ("travel_explore" dll) selama font belum termuat. block menyembunyikannya
+     sampai glyph siap sehingga tidak ada flash teks. */
+  font-display: block;
   src: url('../fonts/material-symbols-subset.woff2') format('woff2');
 }
 

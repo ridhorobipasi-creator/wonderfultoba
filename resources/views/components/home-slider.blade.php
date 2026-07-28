@@ -76,7 +76,11 @@
 }
 @media (max-width: 768px) {
     .sujai-hero-section {
+        /* svh (small viewport height) memperhitungkan address bar mobile, sehingga
+           dasar hero (features bar + tombol Book Now) tidak melorot menabrak
+           fixed CTA bar di bawah. vh dipertahankan sebagai fallback browser lama. */
         height: 65vh;
+        height: 65svh;
         min-height: 360px;
         max-height: 650px;
     }
@@ -106,6 +110,17 @@
         rgba(0,0,0,0.7) 100%
     );
     z-index: 2;
+}
+
+/* BOOK NOW button wrapper — posisi absolut di dalam hero */
+.sujai-book-wrap {
+    position: absolute;
+    bottom: 78px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 35;
 }
 
 /* BOOK NOW button */
@@ -233,17 +248,27 @@
 @media (max-width: 640px) {
     .sujai-features-bar { flex-wrap: wrap; }
     .sujai-feat-item {
-        min-width: 50%;
-        flex: none;
+        /* tepat 50%, tidak melebar; teks boleh menyusut & wrap -> tak terpotong */
+        flex: 0 0 50%;
+        max-width: 50%;
+        min-width: 0;
+        justify-content: flex-start;
         border-right: none;
         border-bottom: 1px solid rgba(255,255,255,0.08);
-        padding: 10px 14px;
+        padding: 10px 10px;
+        gap: 8px;
     }
+    /* wadah teks harus boleh menyusut agar judul/subjudul wrap, bukan meluber */
+    .sujai-feat-item > div:last-child { min-width: 0; }
     .sujai-feat-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.10); }
     .sujai-feat-item:nth-last-child(-n+2) { border-bottom: none; }
-    .sujai-feat-title { font-size: 10px; }
+    .sujai-feat-icon { width: 30px; height: 30px; }
+    .sujai-feat-title { font-size: 10px; letter-spacing: 0.04em; }
     .sujai-feat-sub { font-size: 9px; }
     .sujai-dots { bottom: 82px; }
+    /* features bar 2 baris (~105px) menutupi tombol Book Now di bottom:78px.
+       Angkat tombol ke atas features bar agar tidak ketimpa. */
+    .sujai-book-wrap { bottom: 132px; }
 }
 </style>
 
@@ -306,7 +331,7 @@
         <div class="sujai-slide-overlay"></div>
 
         {{-- BOOK NOW button — tiap slide pakai link & teksnya sendiri --}}
-        <div style="position:absolute;bottom:78px;left:0;right:0;display:flex;justify-content:center;z-index:35;">
+        <div class="sujai-book-wrap">
             <a href="{{ $slide['cta_link'] }}" class="sujai-book-btn">
                 {{ !empty($slide['cta_text']) ? $slide['cta_text'] : 'Book Now!' }}
             </a>
