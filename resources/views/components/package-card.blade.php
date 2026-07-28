@@ -15,7 +15,15 @@
     $slug = $package->slug ?: $package->id;
 
     // Ekspresi Alpine untuk kalkulator pax (harga MYR mentah; dikonversi di JS).
-    $paxXdata = 'paxCalc(' . (float) ($package->price ?? 0) . ', ' . (float) ($package->childPrice ?? 0) . ', ' . \Illuminate\Support\Js::from($slug) . ')';
+    // childPrice dikirim apa adanya (null != 0) dan tier harga grosir ikut,
+    // supaya angka kartu sama dengan BookingService.
+    $paxPricing = is_array($package->pricingDetails ?? null) ? $package->pricingDetails : [];
+    $paxTiers = array_values($paxPricing['tiers'] ?? []);
+    $paxXdata = 'paxCalc('
+        . (float) ($package->price ?? 0) . ', '
+        . \Illuminate\Support\Js::from($package->childPrice ?? null) . ', '
+        . \Illuminate\Support\Js::from($slug) . ', '
+        . \Illuminate\Support\Js::from($paxTiers) . ')';
 @endphp
 
 <div class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all duration-300 h-full">

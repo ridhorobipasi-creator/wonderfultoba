@@ -1,5 +1,6 @@
 {{-- Mini kalkulator pax (dewasa/anak) + estimasi total + tombol booking.
-     Butuh $xdata = string ekspresi Alpine "paxCalc(hargaDewasaMYR, hargaAnakMYR, slug)".
+     Butuh $xdata = string ekspresi Alpine
+     "paxCalc(hargaDewasaMYR, hargaAnakMYR|null, slug, tiersHargaGrosir)".
      Dipakai oleh <x-package-card> (nilai PHP) dan kartu grid /tour/packages (nilai pkg.*). --}}
 <div x-data="{{ $xdata }}" class="border-t border-slate-100 px-4 py-3 space-y-2">
     {{-- Baris Dewasa --}}

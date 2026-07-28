@@ -151,15 +151,21 @@
             return c.symbol + (parts.length > 1 ? parts.join(c.decPoint) : parts[0]);
         };
         document.addEventListener('alpine:init', function () {
-            window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug) {
-                var a  = Number(adultMyr) || 0;
-                var ch = Number(childMyr) > 0 ? Number(childMyr) : a; // harga anak kosong -> ikut dewasa
+            window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug, tiers) {
+                var baseAdult = Number(adultMyr) || 0;
+                // null dibedakan dari 0: server memakai ?? (harga anak 0 berarti
+                // gratis, bukan "kosong"), jadi jangan ratakan keduanya jadi 0.
+                var baseChild = (childMyr === null || childMyr === undefined || childMyr === '') ? null : (Number(childMyr) || 0);
+                // Buang baris tier yang tidak lengkap supaya perbandingan
+                // jumlah pax tidak pernah dibandingkan dengan undefined.
+                var tierList = (Array.isArray(tiers) ? tiers : []).filter(function (t) {
+                    return t && t.min_pax != null && t.max_pax != null;
+                });
                 return {
                     adults: 1,
                     children: 0,
-                    adultUnit: a,
-                    childUnit: ch,
                     slug: slug || '',
+                    tiers: tierList,
                     _clamp: function (v, lo, hi) { v = parseInt(v, 10); if (isNaN(v)) v = lo; return Math.min(hi, Math.max(lo, v)); },
                     incA: function () { this.adults = this._clamp(this.adults + 1, 1, 30); },
                     decA: function () { this.adults = this._clamp(this.adults - 1, 1, 30); },
@@ -167,6 +173,31 @@
                     decC: function () { this.children = this._clamp(this.children - 1, 0, 30); },
                     normA: function () { this.adults = this._clamp(this.adults, 1, 30); },
                     normC: function () { this.children = this._clamp(this.children, 0, 30); },
+                    // Harga grosir. Tier dipilih dari jumlah DEWASA saja, sama
+                    // dengan BookingService::calculateTotalPriceAndCost yang
+                    // mencocokkan $pax (bukan pax + anak). Kalau jumlahnya
+                    // melampaui tier tertinggi, harga tier tertinggi yang dipakai.
+                    get activeTier() {
+                        var n = this.adults, list = this.tiers;
+                        if (!list.length) return null;
+                        var match = list.find(function (t) { return n >= t.min_pax && n <= t.max_pax; });
+                        if (match) return match;
+                        var top = list.slice().sort(function (a, b) { return b.max_pax - a.max_pax; })[0];
+                        return (top && n > top.max_pax) ? top : null;
+                    },
+                    get adultUnit() {
+                        var t = this.activeTier;
+                        return (t && t.price != null) ? (Number(t.price) || 0) : baseAdult;
+                    },
+                    get childUnit() {
+                        var t = this.activeTier;
+                        if (t && t.child_price != null) return Number(t.child_price) || 0;
+                        // Urutan sama persis dengan server: child_price tier ->
+                        // childPrice paket -> setengah harga dewasa yang berlaku.
+                        // Dulu di sini jatuh ke harga dewasa PENUH, sehingga
+                        // kartu memasang angka lebih mahal dari tagihan.
+                        return baseChild != null ? baseChild : this.adultUnit * 0.5;
+                    },
                     get rate() { return window.SUJAI_CUR.rate; },
                     get adultDisplay() { return this.adultUnit * this.rate; },
                     get childDisplay() { return this.childUnit * this.rate; },

@@ -200,7 +200,7 @@
                                 <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
                                 <p class="text-slate-500 text-xs leading-relaxed mb-4 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>
                             </div>
-                            @include('partials.pax-calc', ['xdata' => 'paxCalc(pkg.price, pkg.childPrice, pkg.slug || pkg.id)'])
+                            @include('partials.pax-calc', ['xdata' => 'paxCalc(pkg.price, pkg.childPrice, pkg.slug || pkg.id, (pkg.pricingDetails && pkg.pricingDetails.tiers) || [])'])
                         </div>
                     </div>
                 </template>
