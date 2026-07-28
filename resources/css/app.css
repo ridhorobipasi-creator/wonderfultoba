@@ -66,6 +66,17 @@
   --color-outline: #717972;
   --color-outline-variant: #c0c9c3;
 
+  /* -- Invoice --
+     Dulu warna ini hidup di dalam tailwind.config yang ditulis inline di
+     invoice/show.blade.php dan dikompilasi di browser oleh cdn.tailwindcss.com.
+     Invoice adalah dokumen yang disimpan, dicetak, dan dibuka lagi berbulan
+     kemudian: kalau CDN-nya diblokir jaringan kantor atau mati, tamu menerima
+     teks mentah tanpa gaya. Sekarang ikut ter-build bersama aset lain. */
+  --color-brand: #006b29;
+  --color-brand-dark: #004d1e;
+  --color-brand-light: #e0f2e7;
+  --color-brand-accent: #d4af37;
+
   /* Premium Shadows - Softened for Minimalist look */
   --shadow-premium: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
   --shadow-glass: 0 4px 20px 0 rgba(15, 23, 42, 0.03);

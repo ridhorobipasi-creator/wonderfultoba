@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class PublicController extends Controller
 {
@@ -88,7 +89,11 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error('Error loading tour index: '.$e->getMessage());
 
-            return abort(500, 'Gagal memuat data tour. Terjadi gangguan koneksi sistem.');
+            // 503, bukan 500: gangguan koneksi database itu SEMENTARA. Google
+            // membaca 503 sebagai "coba lagi nanti" dan mempertahankan peringkat,
+            // sedangkan 500 dibaca sebagai halaman rusak. Retry-After memberi
+            // tahu kapan boleh kembali.
+            throw new ServiceUnavailableHttpException(300, 'Gagal memuat data tour. Terjadi gangguan koneksi sistem.');
         }
     }
 
@@ -103,7 +108,10 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             Log::error('Error loading tour packages: '.$e->getMessage());
 
-            return back()->with('error', 'Gagal memuat daftar paket.');
+            // back() memantulkan pengunjung ke halaman lain TANPA pesan apa pun:
+            // layout publik tidak pernah merender session('error'). Kegagalannya
+            // jadi tak terlihat. Sama seperti /tour, ini gangguan sementara.
+            throw new ServiceUnavailableHttpException(300, 'Gagal memuat daftar paket.');
         }
     }
 

@@ -4,39 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice {{ $booking->bookingCode }} - {{ $companyName }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#004d1e',
-                            DEFAULT: '#006b29',
-                            light: '#e0f2e7',
-                            accent: '#d4af37',
-                        },
-                        neutral: {
-                            900: '#1a202c',
-                            800: '#2d3748',
-                            600: '#718096',
-                            300: '#e2e8f0',
-                            100: '#f7fafc',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    backgroundImage: {
-                        'pattern-subtle': "url('data:image/svg+xml,%3Csvg width=\\'20\\' height=\\'20\\' viewBox=\\'0 0 20 20\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'%23006b54\\' fill-opacity=\\'0.03\\' fill-rule=\\'evenodd\\'%3E%3Ccircle cx=\\'3\\' cy=\\'3\\' r=\\'3\\'/%3E%3Ccircle cx=\\'13\\' cy=\\'13\\' r=\\'3\\'/%3E%3C/g%3E%3C/svg%3E')",
-                    }
-                }
-            }
-        }
-    </script>
+    {{-- Aset di-build sendiri. Sebelumnya halaman ini bergantung pada TIGA
+         CDN: cdn.tailwindcss.com (build yang mengompilasi CSS di browser saat
+         runtime — resmi bukan untuk produksi), Google Fonts, dan FontAwesome.
+         Invoice dibuka di jaringan kantor, disimpan, dicetak, lalu dibuka lagi
+         berbulan kemudian; satu CDN diblokir sudah cukup membuat tamu menerima
+         teks polos tanpa gaya. Warna brand-* kini hidup di resources/css/app.css. --}}
+    @vite(['resources/css/app.css'])
     <style>
         body {
             background-color: #f1f5f9;
@@ -58,6 +32,10 @@
             background: linear-gradient(90deg, #004d1e 0%, #006b29 50%, #d4af37 100%);
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
+        }
+        /* Dulu utility bg-pattern-subtle dari config CDN. */
+        .bg-pattern-subtle {
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23006b54' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
         }
         .table-row-hover:hover {
             background-color: #f8fafc;
@@ -81,6 +59,23 @@
 @php
     $pax        = max((int) ($booking->metadata['pax'] ?? 1), 1);
     $unitPrice  = $booking->totalPrice / $pax;
+
+    // Rincian yang dibekukan saat pemesanan. Kunci-kuncinya ditulis oleh
+    // BookingService::calculateTotalPriceAndCost — perhatikan `subtotal_base`,
+    // BUKAN `subtotal`. Baris Subtotal di bawah dulu membaca `subtotal` yang
+    // tidak pernah ada, lalu jatuh ke totalPrice yang SUDAH termasuk pajak.
+    // Akibatnya di dokumen keuangan ini Subtotal + Pajak tidak sama dengan
+    // Total, dan pajaknya terlihat dipungut dua kali.
+    $pb            = $booking->metadata['price_breakdown'] ?? null;
+    $subtotalBase  = $pb['subtotal_base'] ?? null;
+    $surchargeRows = $pb['surcharges'] ?? [];
+    $taxAmount     = $pb['tax'] ?? null;
+    $taxPercent    = $pb['tax_percentage'] ?? null;
+
+    // Tenggat pelunasan: 7 hari sebelum keberangkatan (S&K pasal 2). Tanpa ini
+    // invoice tidak pernah menyebut kapan harus dibayar — penyebab paling umum
+    // pesanan menggantung.
+    $dueDate = $booking->startDate ? $booking->startDate->copy()->subDays(7) : null;
 
     // The currency this invoice was issued in, frozen when the booking was
     // made. An invoice is a record: it must read the same today as it did the
@@ -109,11 +104,6 @@
 
     <div class="invoice-card bg-white w-full max-w-[850px] mx-auto rounded-lg overflow-hidden border border-neutral-300">
 
-        <!-- Watermark effect -->
-        <div class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0">
-            <i class="fa-solid fa-mountain-sun text-[300px]"></i>
-        </div>
-
         <div class="p-5 sm:p-10 md:p-14 relative z-10 bg-pattern-subtle">
 
             <!-- Header Section -->
@@ -124,8 +114,8 @@
                             <img src="{{ $logoUrl }}" alt="{{ $companyName }}" class="h-14 w-auto object-contain">
                         </div>
                     @else
-                        <div class="w-14 h-14 bg-brand rounded-lg flex items-center justify-center text-white shadow-md">
-                            <i class="fa-solid fa-water text-2xl"></i>
+                        <div class="w-14 h-14 bg-brand rounded-lg flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                            {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($companyName, 0, 1)) }}
                         </div>
                     @endif
                     <div>
@@ -145,20 +135,17 @@
                 <!-- Billed To -->
                 <div class="bg-neutral-100/50 p-5 rounded-xl border border-neutral-200">
                     <div class="flex items-center gap-2 mb-3">
-                        <i class="fa-solid fa-user-tag text-brand text-sm"></i>
                         <h3 class="text-xs font-bold text-brand uppercase tracking-wider">Diterbitkan Untuk</h3>
                     </div>
                     <div class="space-y-2">
                         <p class="text-lg font-bold text-neutral-900">{{ $booking->customerName }}</p>
                         @if($booking->customerEmail)
                         <div class="flex items-center gap-2 text-sm text-neutral-600">
-                            <i class="fa-regular fa-envelope w-4"></i>
                             <span>{{ $booking->customerEmail }}</span>
                         </div>
                         @endif
                         @if($booking->customerPhone)
                         <div class="flex items-center gap-2 text-sm text-neutral-600">
-                            <i class="fa-solid fa-phone w-4"></i>
                             <span>{{ $booking->customerPhone }}</span>
                         </div>
                         @endif
@@ -168,7 +155,6 @@
                 <!-- Invoice Details -->
                 <div class="bg-brand-light/30 p-5 rounded-xl border border-brand-light/50">
                     <div class="flex items-center gap-2 mb-3">
-                        <i class="fa-solid fa-circle-info text-brand text-sm"></i>
                         <h3 class="text-xs font-bold text-brand uppercase tracking-wider">Rincian Invoice</h3>
                     </div>
                     <div class="space-y-3">
@@ -176,10 +162,23 @@
                             <span class="text-neutral-600">No. Referensi:</span>
                             <span class="font-bold text-neutral-900 bg-white px-2 py-1 rounded shadow-sm border border-neutral-200">{{ $booking->bookingCode }}</span>
                         </div>
+                        {{-- Label ini dulu berbunyi "Tanggal Pesanan" tapi
+                             menampilkan tanggal BERANGKAT. Dua-duanya penting,
+                             jadi sekarang keduanya ditulis apa adanya. --}}
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600">Tanggal Pesanan:</span>
-                            <span class="font-semibold text-neutral-900">{{ optional($booking->startDate)->format('d M Y') ?? optional($booking->created_at)->format('d M Y') ?? '-' }}</span>
+                            <span class="font-semibold text-neutral-900">{{ optional($booking->createdAt)->format('d M Y') ?? '-' }}</span>
                         </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-neutral-600">Tanggal Berangkat:</span>
+                            <span class="font-semibold text-neutral-900">{{ optional($booking->startDate)->format('d M Y') ?? '-' }}</span>
+                        </div>
+                        @if($dueDate && ! in_array($booking->status, ['completed', 'cancelled'], true))
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-neutral-600">Jatuh Tempo:</span>
+                            <span class="font-bold text-brand-dark">{{ $dueDate->format('d M Y') }}</span>
+                        </div>
+                        @endif
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-neutral-600">Status Pembayaran:</span>
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold {{ $st['bg'] }} {{ $st['text'] }} border {{ $st['border'] }}">
@@ -214,12 +213,11 @@
                                 <td class="py-4 px-6 align-middle">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
-                                            <i class="fa-solid fa-map-location-dot text-sm"></i>
                                         </div>
                                         <div>
                                             <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Dewasa)</p>
                                             <p class="text-xs text-neutral-500 leading-relaxed">
-                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600"><i class="fa-solid fa-location-dot mr-1"></i> Destinasi: {{ $itemDest }}</span>
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">Destinasi: {{ $itemDest }}</span>
                                             </p>
                                         </div>
                                     </div>
@@ -234,7 +232,6 @@
                                 <td class="py-4 px-6 align-middle">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-1 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 flex-shrink-0">
-                                            <i class="fa-solid fa-child text-sm"></i>
                                         </div>
                                         <div>
                                             <p class="font-bold text-neutral-900 text-sm mb-1">{{ $itemName }} (Anak-anak)</p>
@@ -253,7 +250,6 @@
                                     <td class="py-4 px-6 align-middle">
                                         <div class="flex items-start gap-3">
                                             <div class="mt-1 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 flex-shrink-0">
-                                                <i class="fa-solid fa-star text-sm"></i>
                                             </div>
                                             <div>
                                                 <p class="font-bold text-neutral-900 text-sm mb-1">{{ $srv['name'] }}</p>
@@ -271,13 +267,12 @@
                                 <td class="py-6 px-6 align-top">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-1 w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand flex-shrink-0">
-                                            <i class="fa-solid fa-map-location-dot text-sm"></i>
                                         </div>
                                         <div>
                                             <p class="font-bold text-neutral-900 text-base mb-1">{{ $itemName }}</p>
                                             <p class="text-sm text-neutral-500 leading-relaxed">
                                                 {{ $itemDesc }} <br>
-                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600"><i class="fa-solid fa-location-dot mr-1"></i> Destinasi: {{ $itemDest }}</span>
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-neutral-100 rounded text-xs font-medium text-neutral-600">Destinasi: {{ $itemDest }}</span>
                                             </p>
                                         </div>
                                     </div>
@@ -300,28 +295,34 @@
                 <!-- Payment Instructions -->
                 <div class="w-full md:w-1/2">
                     <div class="bg-gradient-to-br from-brand-dark to-brand rounded-xl p-6 text-white shadow-md relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 opacity-10">
-                            <i class="fa-solid fa-money-bill-wave text-8xl"></i>
-                        </div>
-
                         <div class="flex items-center gap-2 mb-3 relative z-10">
-                            <i class="fa-solid fa-building-columns text-brand-accent"></i>
                             <h4 class="text-xs font-bold text-brand-accent uppercase tracking-wider">Instruksi Pembayaran</h4>
                         </div>
+                        {{-- Kalimatnya menyesuaikan diri: kalau rekening belum
+                             dikonfigurasi, "transfer ke rekening berikut" menunjuk
+                             ruang kosong dan tamu tidak punya cara membayar. --}}
                         <p class="text-sm text-brand-light font-medium leading-relaxed relative z-10">
-                            Mohon lakukan transfer ke rekening berikut dan lampirkan kode referensi <span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">{{ $booking->bookingCode }}</span> pada berita acara transfer Anda.
+                            @if($bankAccount)
+                                Mohon lakukan transfer ke rekening berikut dan lampirkan kode referensi <span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">{{ $booking->bookingCode }}</span> pada berita acara transfer Anda.
+                            @else
+                                Untuk mendapatkan nomor rekening dan instruksi pembayaran, silakan hubungi kami di
+                                <a href="{{ \App\Helpers\ContactHelper::whatsappLink('Halo Sujai Laketoba, saya ingin membayar pesanan ' . $booking->bookingCode . '.') }}" class="font-bold text-white underline">{{ \App\Helpers\ContactHelper::whatsappDisplay() }}</a>
+                                dengan menyebut kode referensi <span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold tracking-wider">{{ $booking->bookingCode }}</span>.
+                            @endif
+                            @if($dueDate && ! in_array($booking->status, ['completed', 'cancelled'], true))
+                                <span class="mt-2 block">Pelunasan paling lambat <strong class="text-white">{{ $dueDate->format('d M Y') }}</strong>.</span>
+                            @endif
                         </p>
 
                         @if($bankAccount)
                         <div class="mt-4 pt-4 border-t border-white/20 relative z-10">
                             <div class="flex items-center gap-3">
                                 <div class="bg-white/15 rounded p-2 flex items-center justify-center">
-                                    <i class="fa-solid fa-building-columns text-brand-accent"></i>
                                 </div>
                                 <div>
                                     <p class="text-xs text-brand-light">a.n {{ $bankAccountName }}</p>
                                     <p class="font-bold tracking-wider">{{ $bankAccount }}
-                                        <button class="ml-2 text-brand-accent hover:text-white transition-colors no-print" onclick="copyAccount(this)" data-account="{{ $bankAccount }}" title="Salin Rekening"><i class="fa-regular fa-copy"></i></button>
+                                        <button class="ml-2 text-brand-accent hover:text-white transition-colors no-print" onclick="copyAccount(this)" data-account="{{ $bankAccount }}" title="Salin Rekening" aria-label="Salin Rekening"><svg class="inline w-4 h-4 align-text-bottom" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2v-2M10 3h8a2 2 0 012 2v10a2 2 0 01-2 2h-8a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg></button>
                                     </p>
                                 </div>
                             </div>
@@ -333,18 +334,33 @@
                 <!-- Calculation -->
                 <div class="w-full md:w-5/12 bg-neutral-50 p-6 rounded-xl border border-neutral-200">
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600 font-medium">Subtotal</span>
-                            <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['subtotal'] ?? $booking->totalPrice) : $booking->totalPrice, $cur) }}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600 font-medium">Pajak & Layanan</span>
-                            <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord(isset($booking->metadata['price_breakdown']) ? ($booking->metadata['price_breakdown']['tax'] ?? 0) : 0, $cur) }}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-neutral-600 font-medium">Diskon</span>
-                            <span class="font-bold text-neutral-800">- {{ \App\Helpers\CurrencyHelper::formatRecord(0, $cur) }}</span>
-                        </div>
+                        @if($subtotalBase !== null)
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-neutral-600 font-medium">Subtotal</span>
+                                <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($subtotalBase, $cur) }}</span>
+                            </div>
+                            @foreach($surchargeRows as $sc)
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-neutral-600 font-medium">{{ $sc['name'] }}</span>
+                                <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($sc['amount'] ?? 0, $cur) }}</span>
+                            </div>
+                            @endforeach
+                            <div class="flex justify-between items-center text-sm">
+                                {{-- JANGAN menempelkan @if langsung di belakang huruf
+                                     (mis. "Layanan@if(...)"): Blade tidak mengenalinya
+                                     sebagai direktif dan membiarkannya jadi teks, tapi
+                                     @endif-nya tetap dikompilasi -- blok if jadi tidak
+                                     seimbang dan seluruh view gagal parse. --}}
+                                <span class="text-neutral-600 font-medium">Pajak &amp; Layanan{{ $taxPercent ? ' (' . $taxPercent . '%)' : '' }}</span>
+                                <span class="font-bold text-neutral-800">{{ \App\Helpers\CurrencyHelper::formatRecord($taxAmount ?? 0, $cur) }}</span>
+                            </div>
+                        @else
+                            {{-- Pesanan lama tanpa rincian tersimpan. Menampilkan
+                                 "Pajak 0" untuk pesanan yang pajaknya sebenarnya
+                                 sudah termasuk di dalam total akan lebih menyesatkan
+                                 daripada tidak menampilkan barisnya sama sekali. --}}
+                            <p class="text-[11px] leading-relaxed text-neutral-500">Rincian pajak tidak tersimpan untuk pesanan ini. Nilai di bawah adalah total akhir yang berlaku.</p>
+                        @endif
 
                         <div class="pt-4 border-t border-neutral-300 border-dashed">
                             <div class="flex justify-between items-end">
@@ -372,14 +388,14 @@
             <div class="mt-8 pt-8 border-t border-neutral-200 text-center">
                 <p class="font-serif italic text-lg text-brand-dark mb-3">"Terima kasih telah memilih kami untuk petualangan Anda selanjutnya."</p>
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 text-xs text-neutral-500">
-                    <span class="flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ $address }}</span>
+                    <span class="flex items-center gap-1">{{ $address }}</span>
                     @if($email)
                     <span class="hidden sm:inline text-neutral-300">|</span>
-                    <a href="mailto:{{ $email }}" class="flex items-center gap-1 hover:text-brand transition-colors"><i class="fa-solid fa-envelope"></i> {{ $email }}</a>
+                    <a href="mailto:{{ $email }}" class="flex items-center gap-1 hover:text-brand transition-colors">{{ $email }}</a>
                     @endif
                     @if($instagram)
                     <span class="hidden sm:inline text-neutral-300">|</span>
-                    <a href="https://instagram.com/{{ ltrim($instagram, '@') }}" target="_blank" class="flex items-center gap-1 hover:text-brand transition-colors"><i class="fa-brands fa-instagram"></i> {{ '@' . ltrim($instagram, '@') }}</a>
+                    <a href="https://instagram.com/{{ ltrim($instagram, '@') }}" target="_blank" class="flex items-center gap-1 hover:text-brand transition-colors">{{ '@' . ltrim($instagram, '@') }}</a>
                     @endif
                 </div>
             </div>
@@ -390,7 +406,10 @@
     <!-- Action Buttons (Visible only on screen) -->
     <div class="fixed bottom-8 right-8 flex flex-col gap-3 no-print z-50">
         <button onclick="window.print()" class="group relative bg-brand hover:bg-brand-dark text-white font-medium w-12 h-12 rounded-full shadow-lg transition flex items-center justify-center hover:scale-105" title="Cetak / Simpan PDF">
-            <i class="fa-solid fa-print text-lg"></i>
+            {{-- SVG inline: ikon di dokumen ini tidak boleh bergantung pada CDN. --}}
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"/>
+            </svg>
             <span class="absolute right-14 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Cetak / Simpan PDF</span>
         </button>
     </div>
