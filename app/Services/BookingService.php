@@ -22,12 +22,44 @@ class BookingService
     ) {}
 
     /**
-     * Check if a package/date is available for booking.
-     * Currently always returns true — extend with real capacity/blackout logic.
+     * Apakah paket/tanggal ini masih boleh dipesan.
+     *
+     * Dulu selalu mengembalikan true, sehingga pemesanan untuk tanggal yang
+     * SUDAH LEWAT tetap diterima dan masuk ke daftar pesanan sebagai kerja
+     * admin yang harus dibatalkan manual. Lead time-nya sendiri sudah ditegakkan
+     * di StoreBookingRequest, tapi create() juga dipanggil dari admin dan dari
+     * jalur lain yang tidak melewati form request itu — jadi penjaga terakhirnya
+     * harus ada di sini.
      */
     public function isAvailable(array $data): bool
     {
-        // Future: check package capacity, blackout dates, fleet availability
+        if (empty($data['startDate'])) {
+            return false;
+        }
+
+        try {
+            $start = \Carbon\Carbon::parse($data['startDate'])->startOfDay();
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        if ($start->lt(now()->startOfDay())) {
+            return false;
+        }
+
+        // Tanggal yang diblokir admin, bila diatur.
+        $blackouts = optional(\App\Models\Setting::where('key', 'booking_settings')->first())->value['blackout_dates'] ?? [];
+        foreach ((array) $blackouts as $blocked) {
+            try {
+                if (\Carbon\Carbon::parse($blocked)->isSameDay($start)) {
+                    return false;
+                }
+            } catch (\Throwable $e) {
+                // Baris yang salah format diabaikan, jangan sampai menjatuhkan pemesanan.
+                continue;
+            }
+        }
+
         return true;
     }
 

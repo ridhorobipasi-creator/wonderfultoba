@@ -81,7 +81,11 @@
     <!-- Programmatic SEO Hero Banner -->
     <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-primary px-5 md:px-8">
         <div class="absolute inset-0 opacity-40">
-            <img src="{{ imageUrl($settings['hero_image_1_url'] ?? null, 'sumatra-panorama') }}" alt="Danau Toba" class="w-full h-full object-cover">
+            {{-- Halaman pSEO adalah jalur masuk utama dari Google, tapi selama ini
+                 gambarnya melewatkan semua optimasi yang sudah dipakai homepage.
+                 responsiveImage() memasang srcset 480/800/1200w. Hero tetap eager
+                 + fetchpriority high karena dialah elemen LCP-nya. --}}
+            {!! responsiveImage($settings['hero_image_1_url'] ?? null, 'w-full h-full object-cover', __('Panorama Danau Toba'), 'fetchpriority="high" decoding="async"') !!}
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
         <div class="max-w-5xl mx-auto relative z-10 text-center">
@@ -417,7 +421,7 @@
             @foreach($blogs as $blog)
             <a href="{{ route('tour.blog.detail', $blog->slug) }}" class="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded-lg">
                 <div class="aspect-[16/10] overflow-hidden rounded-lg mb-4 md:mb-6 shadow-md border border-slate-100 bg-slate-100">
-                    <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}"/>
+                    <img alt="{{ $blog->translated_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $blog->image_url }}" loading="lazy" decoding="async"/>
                 </div>
                 <span class="font-label-caps text-[10px] text-secondary border border-secondary px-2 py-0.5 rounded-full uppercase tracking-wider mb-3 md:mb-4 inline-block">{{ strtoupper($blog->category ?? 'EKSPEDISI') }}</span>
                 <h3 class="font-headline-md text-[20px] md:text-[22px] group-hover:text-secondary transition-colors duration-300 font-bold leading-tight">{{ $blog->translated_title }}</h3>
@@ -480,7 +484,7 @@
     <section class="py-16 md:py-32 px-5 md:px-8 bg-surface">
         <div class="max-w-7xl mx-auto bg-primary rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px] shadow-primary/30">
             <div class="absolute inset-0 opacity-40">
-                <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? 'Call to action image' }}" class="w-full h-full object-cover">
+                <img src="{{ $ctaImg }}" alt="{{ $ctaAlt ?? __('Suasana perjalanan bersama Sujai Laketoba') }}" class="w-full h-full object-cover" loading="lazy" decoding="async">
             </div>
             <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary/60 to-transparent"></div>
             
@@ -513,7 +517,7 @@
                         ];
                         @endphp
                         @foreach($avatarPhotos as $avatarUrl)
-                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-primary shadow-xl object-cover" alt="Pelanggan Sujai Laketoba">
+                            <img src="{{ $avatarUrl }}" class="w-14 h-14 rounded-full border-4 border-primary shadow-xl object-cover" alt="" loading="lazy" decoding="async">
                         @endforeach
                         <div class="w-14 h-14 rounded-full border-4 border-primary bg-secondary flex items-center justify-center text-white text-[10px] font-bold">
                             {{ $touristsCount }}

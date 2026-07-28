@@ -16,6 +16,19 @@
 
 <section class="bg-slate-50 py-10 md:py-16">
     <div class="mx-auto max-w-xl px-5 md:px-8">
+        {{-- Kode yang tidak ditemukan dulu berakhir di 404 mentah; sekarang tamu
+             dikembalikan ke sini beserta alasannya. --}}
+        @if(session('error'))
+            <div class="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                <p class="text-sm font-semibold leading-6 text-amber-900">{{ session('error') }}</p>
+                <a href="{{ \App\Helpers\ContactHelper::whatsappLink(__('Halo Sujai Laketoba, saya kesulitan melacak pesanan saya.')) }}"
+                   target="_blank" rel="noopener"
+                   class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 underline">
+                    {{ __('Hubungi admin') }} — {{ \App\Helpers\ContactHelper::whatsappDisplay() }}
+                </a>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('booking.track.lookup') }}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             @csrf
             <label for="booking_code" class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">

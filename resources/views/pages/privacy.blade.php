@@ -9,7 +9,16 @@
             <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Kebijakan <span class="text-toba-green">Privasi</span></h1>
             
             <div class="prose prose-slate max-w-none text-slate-600 text-sm font-normal leading-relaxed">
-                <p class="mb-8 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Terakhir diperbarui: {{ date('d F Y') }}</p>
+                {{-- date('d F Y') membuat "terakhir diperbarui" selalu berbunyi
+                     HARI INI, berapa pun lamanya teks ini tidak berubah. Untuk
+                     dokumen hukum itu klaim yang keliru. Pakai tanggal pembaruan
+                     yang sebenarnya bila ada, kalau tidak pakai tanggal tetap. --}}
+                @php
+                    $privacyUpdated = !empty($content['updated_at'])
+                        ? \Illuminate\Support\Carbon::parse($content['updated_at'])->translatedFormat('d F Y')
+                        : 'Juni 2025';
+                @endphp
+                <p class="mb-8 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Terakhir diperbarui: {{ $privacyUpdated }}</p>
                 
                 @if(isset($content['content']))
                     {!! $content['content'] !!}

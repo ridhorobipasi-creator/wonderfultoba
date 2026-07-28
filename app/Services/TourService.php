@@ -209,14 +209,14 @@ class TourService
      */
     public function getGallery()
     {
+        // Dulu dibatasi ke kategori 'tour'/'Tour'/kosong saja. Akibatnya foto
+        // berkategori Adventure, Culture, Waterfall, dan Wildlife — yang semuanya
+        // foto tour juga — tidak pernah tampil: separuh isi galeri hilang diam-diam.
+        // Sekaligus itu membuat chip filter di halaman galeri mustahil punya lebih
+        // dari satu pilihan, jadi filternya tampak rusak padahal kueri ini
+        // penyebabnya. Galeri publik = semua gambar yang admin tandai aktif.
         return GalleryImage::where('isActive', true)
             ->with('imageMedia')
-            ->where(function ($query) {
-                $query->where('category', 'tour')
-                    ->orWhere('category', 'Tour')
-                    ->orWhereNull('category')
-                    ->orWhere('category', '');
-            })
             ->orderBy('orderPriority')
             ->get();
     }

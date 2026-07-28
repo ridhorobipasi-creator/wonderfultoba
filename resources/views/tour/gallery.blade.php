@@ -11,7 +11,12 @@
         searchQuery: '', 
         images: @js($images),
         lightbox: { open: false, index: 0 },
-        categories: ['Semua', ...new Set(@js($images->pluck('category')->unique()->toArray()))],
+        {{-- values() itu WAJIB: unique() mempertahankan kunci aslinya, sehingga
+             toArray() menghasilkan objek {0:...,2:...}, bukan array. Objek tidak
+             iterable, jadi new Set(...) melempar TypeError dan SELURUH x-data
+             halaman ini gagal dievaluasi -- galeri, filter, dan lightbox mati
+             bersamaan. filter() membuang kategori kosong supaya tidak ada chip hampa. --}}
+        categories: ['Semua', ...new Set(@js($images->pluck('category')->filter()->unique()->values()->toArray()))],
         
         get filteredImages() {
             return this.images.filter(img => {

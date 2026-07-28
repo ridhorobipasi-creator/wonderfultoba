@@ -141,7 +141,10 @@
                     @if(isset($post->tags) && count($post->tags) > 0)
                         <div class="mt-12 pt-8 border-t border-outline-variant/30 flex flex-wrap gap-2">
                             @foreach($post->tags as $tag)
-                                <span class="px-4 py-1.5 bg-surface-container-low text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-wider border border-outline-variant/30 hover:bg-secondary hover:text-on-secondary transition cursor-default">
+                                {{-- Gaya hover dihapus: tag ini bukan tautan (belum ada
+                                     halaman arsip per tag), jadi warna yang berubah saat
+                                     disentuh menjanjikan klik yang tidak akan terjadi. --}}
+                                <span class="px-4 py-1.5 bg-surface-container-low text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-wider border border-outline-variant/30 cursor-default">
                                     #{{ $tag }}
                                 </span>
                             @endforeach

@@ -88,7 +88,13 @@
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-slate-300 transition duration-300 shadow-sm">
                             @php
-                                $touristsCount = $content['stat_tourists'] ?? '5k+';
+                                // Nilai bawaannya dulu '5k+' di sini tapi '1.500+' di
+                                // homepage dan halaman pSEO — situs yang sama mengklaim
+                                // dua angka pelanggan yang berbeda. Kalau admin belum
+                                // mengisi kolom ini, ikuti angka yang dipakai halaman
+                                // lain daripada mengarang angka ketiga.
+                                $touristsCount = $content['stat_tourists']
+                                    ?? ($siteSettings['cms_tour']['stat_customers'] ?? '1.500+');
                             @endphp
                             <p class="text-4xl font-headline-md font-semibold text-primary mb-1 tracking-tight">
                                 {{ $touristsCount }}

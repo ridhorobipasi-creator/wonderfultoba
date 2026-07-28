@@ -181,6 +181,12 @@
                 <div class="rounded-xl bg-slate-50 p-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Tanggal Berangkat</p>
                     <p class="mt-2 font-bold text-slate-950">{{ optional($booking->startDate)->translatedFormat('d F Y') ?? '-' }}</p>
+                    {{-- endDate sudah dihitung backend dari durasi paket sejak lama,
+                         tapi tidak pernah ditampilkan ke tamu yang justru perlu
+                         tahu kapan ia pulang untuk memesan tiket. --}}
+                    @if($booking->endDate && optional($booking->startDate)->notEqualTo($booking->endDate))
+                    <p class="mt-1 text-xs text-slate-500">s/d {{ $booking->endDate->translatedFormat('d F Y') }}</p>
+                    @endif
                 </div>
                 <div class="rounded-xl bg-slate-50 p-4">
                     <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Peserta</p>

@@ -89,18 +89,30 @@
                         <div class="w-full">
                             <h3 class="font-bold text-slate-900 text-base mb-1.5">Transfer Bank Lokal (Indonesia)</h3>
                             <p class="text-slate-600 font-normal text-sm leading-relaxed mb-4">Untuk tamu yang sudah memiliki akses ke rekening bank Indonesia atau menggunakan agen jasa keuangan.</p>
+                            {{-- Rekening ditulis mati "Hubungi kami untuk no. rekening"
+                                 di dua kotak. Kini dibaca dari pengaturan perusahaan,
+                                 sumber yang sama dengan invoice; kalau memang belum
+                                 diisi, halaman ini memberi satu jalan yang jelas
+                                 alih-alih dua kotak kosong yang tampak seperti isi. --}}
+                            @if(!empty($bankAccounts))
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach($bankAccounts as $acc)
                                 <div class="card-flat-soft p-4">
-                                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Bank BCA</p>
-                                    <p class="font-bold text-slate-900 text-sm">Hubungi kami untuk no. rekening</p>
-                                    <p class="text-xs text-slate-500">a.n. Sujai Laketoba</p>
+                                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ $acc['bank'] ?? 'Bank' }}</p>
+                                    <p class="font-bold text-slate-900 text-sm tracking-wider">{{ $acc['number'] }}</p>
+                                    @if(!empty($acc['holder']))
+                                    <p class="text-xs text-slate-500">a.n. {{ $acc['holder'] }}</p>
+                                    @endif
                                 </div>
-                                <div class="card-flat-soft p-4">
-                                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Bank Mandiri</p>
-                                    <p class="font-bold text-slate-900 text-sm">Hubungi kami untuk no. rekening</p>
-                                    <p class="text-xs text-slate-500">a.n. Sujai Laketoba</p>
-                                </div>
+                                @endforeach
                             </div>
+                            @else
+                            <div class="card-flat-soft p-4">
+                                <p class="text-sm text-slate-600 font-normal leading-relaxed">Nomor rekening dikirim bersama konfirmasi pesanan. Sudah memesan tapi belum menerimanya? Kirim kode booking Anda ke
+                                    <a href="{{ \App\Helpers\ContactHelper::whatsappLink('Halo Sujai Laketoba, saya ingin nomor rekening untuk pembayaran.') }}" target="_blank" rel="noopener" class="font-semibold text-toba-green hover:underline">{{ \App\Helpers\ContactHelper::whatsappDisplay() }}</a>.
+                                </p>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -132,7 +144,15 @@
                 ['q' => 'Apakah saya bisa membayar dengan kartu kredit?', 'a' => 'Saat ini kami belum menerima pembayaran kartu kredit langsung. Namun Anda bisa menggunakan Wise yang mendukung transfer dari rekening kartu. Hubungi kami untuk alternatif lain.'],
                 ['q' => 'Berapa lama waktu yang dibutuhkan untuk konfirmasi setelah transfer?', 'a' => 'Konfirmasi diberikan dalam 1x24 jam kerja setelah dana diterima. Untuk transfer via Wise biasanya lebih cepat (1-4 jam). Kirimkan bukti transfer ke WhatsApp kami untuk mempercepat proses.'],
                 ['q' => 'Apakah harga paket sudah termasuk semua biaya?', 'a' => 'Setiap paket memiliki daftar "Termasuk" dan "Tidak Termasuk" yang jelas. Biasanya tidak termasuk: tiket pesawat, visa, pengeluaran pribadi, dan makanan di luar itinerary.'],
-                ['q' => 'Bisakah saya melihat harga dalam MYR atau SGD?', 'a' => 'Ya! Gunakan toggle bahasa di pojok kanan atas (🇲🇾 / 🇸🇬) untuk melihat harga dikonversi otomatis menggunakan kurs hari ini.'],
+                // Instruksi lama menyuruh pengunjung mencari toggle "di pojok kanan
+                // atas". Di mobile toggle itu tombol ikon tanpa teks dan bilahnya
+                // disembunyikan — pengunjung dikirim mencari sesuatu yang tak ada.
+                ['q' => 'Bisakah saya melihat harga dalam MYR atau SGD?', 'a' => 'Ya. Ganti bahasa lewat tombol bendera di menu (di ponsel: buka menu ☰ terlebih dulu). Harga langsung dikonversi memakai kurs yang berlaku.'],
+                // Dua pertanyaan soal uang. Aturannya sudah tertulis lengkap di
+                // Syarat & Ketentuan, tapi tidak pernah muncul di tempat orang
+                // benar-benar memikirkannya.
+                ['q' => 'Bagaimana kalau saya harus membatalkan?', 'a' => 'Pembatalan lebih dari 14 hari sebelum keberangkatan: dana kembali 100% (dipotong biaya admin Rp 50.000). 7–14 hari sebelumnya: kembali 50%. Kurang dari 7 hari: dana tidak dapat dikembalikan. Pembatalan karena bencana alam atau force majeure: dana kembali penuh atau dijadwalkan ulang tanpa biaya.'],
+                ['q' => 'Kapan saya harus melunasi?', 'a' => 'Uang muka 30–50% menjadi tanda jadi, dan pelunasan paling lambat 7 hari sebelum tanggal keberangkatan. Tanggal jatuh tempo pesanan Anda tercantum di invoice dan di halaman pelacakan pesanan.'],
             ];
             @endphp
             <div class="space-y-4">

@@ -393,7 +393,17 @@ class PublicController extends Controller
         $code = strtoupper(trim($code));
         $booking = \App\Models\Booking::with(['package', 'package.city'])
             ->where('bookingCode', $code)
-            ->firstOrFail();
+            ->first();
+
+        // firstOrFail() melempar tamu ke 404 mentah. Kode yang salah ketik adalah
+        // kesalahan yang wajar dan sering terjadi justru saat orang cemas menunggu
+        // kabar pesanannya — kembalikan ke form dengan pesan yang bisa ditindaklanjuti.
+        if (! $booking) {
+            return redirect()
+                ->route('booking.track.form')
+                ->withInput(['booking_code' => $code])
+                ->with('error', __('Kode booking :code tidak ditemukan. Periksa kembali huruf dan angkanya, atau hubungi kami jika Anda yakin kodenya benar.', ['code' => $code]));
+        }
 
         return view('booking.track', compact('booking', 'siteSettings'));
     }
@@ -431,7 +441,24 @@ class PublicController extends Controller
     {
         $siteSettings = $this->getSiteSettings(['cms_landing', 'general']);
 
-        return view('pages.payment', compact('siteSettings'));
+        // Rekening dari pengaturan perusahaan — sumber yang sama dengan invoice.
+        // Halaman ini dulu menulis "Hubungi kami untuk no. rekening" secara mati
+        // di dua kotak bank, jadi meski admin sudah mengisi rekening, halaman
+        // yang isinya cuma satu hal itu tetap tidak memberitahukannya.
+        $company = Setting::where('key', 'company')->first()?->value ?? [];
+        $bankAccounts = array_values(array_filter($company['bank_accounts'] ?? [], function ($row) {
+            return ! empty($row['number'] ?? null);
+        }));
+
+        if (! $bankAccounts && ! empty($company['bank_account'])) {
+            $bankAccounts = [[
+                'bank' => $company['bank_name'] ?? 'Bank',
+                'number' => $company['bank_account'],
+                'holder' => $company['bank_account_name'] ?? ($company['legal_name'] ?? null),
+            ]];
+        }
+
+        return view('pages.payment', compact('siteSettings', 'bankAccounts'));
     }
 
     public function submitOutboundQuote(Request $request)
