@@ -508,6 +508,29 @@ document.addEventListener('alpine:init', () => {
                             </div>
                         </label>
                     </div>
+                    {{-- Judul bagian ini dulu tertanam di kode. Sekarang diatur
+                         di sini supaya bisa diubah tanpa menyentuh Blade. --}}
+                    <div class="p-5 bg-slate-50 rounded-3xl space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[7px] font-black text-slate-400 uppercase tracking-widest">Label Kecil (di atas judul)</label>
+                            <input type="text" name="testimonials_eyebrow" value="{{ $settings['testimonials_eyebrow'] ?? '' }}"
+                                   placeholder="Testimoni Wisatawan"
+                                   class="w-full px-3 py-1.5 bg-white border-none rounded-lg font-bold text-[10px]">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[7px] font-black text-slate-400 uppercase tracking-widest">Judul Bagian</label>
+                            <input type="text" name="testimonials_title" value="{{ $settings['testimonials_title'] ?? '' }}"
+                                   placeholder="Apa Kata Mereka Tentang Sujai Laketoba?"
+                                   class="w-full px-3 py-1.5 bg-white border-none rounded-lg font-black text-[11px]">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[7px] font-black text-slate-400 uppercase tracking-widest">Deskripsi (opsional)</label>
+                            <textarea name="testimonials_subtitle" rows="2"
+                                      placeholder="Kosongkan kalau tidak perlu. Hindari klaim angka yang belum bisa dibuktikan."
+                                      class="w-full px-3 py-2 bg-white border-none rounded-xl font-medium text-[9px] leading-relaxed">{{ $settings['testimonials_subtitle'] ?? '' }}</textarea>
+                        </div>
+                    </div>
+
                     <div class="flex justify-end">
                         <button type="button" @click="addTestimonial()" class="px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-amber-200">
                             + Tambah Ulasan

@@ -328,47 +328,104 @@
     @endif
 
 
-    <!-- Testimonials — minimal -->
-    {{-- Hanya render bila admin sudah mengisi testimoni ASLI. Tidak ada
-         placeholder fiktif: testimoni karangan melanggar UU Perlindungan
-         Konsumen, dan section kosong lebih baik daripada nama palsu. --}}
-    <!-- Testimonials — Modern & Elegant -->
-    @php $testimonials = $settings['testimonials'] ?? []; @endphp
-    @if(($settings['show_testimonials'] ?? true) && count($testimonials))
-    <section class="py-16 md:py-24 bg-slate-50/50 border-t border-b border-slate-100">
-        <div class="max-w-5xl mx-auto px-5 md:px-8">
-            <div class="flex items-center gap-3 mb-10 md:mb-12">
-                <span class="w-6 h-px bg-toba-green"></span>
-                <span class="text-[11px] font-bold text-toba-green uppercase tracking-[0.25em]">{{ __('Testimoni Wisatawan') }}</span>
-            </div>
+    {{-- Testimonials — slider
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach($testimonials as $t)
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1 text-amber-400 mb-4">
-                            @for($i=0; $i<5; $i++)
-                            <svg class="w-4 h-4 fill-amber-400 text-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            @endfor
-                        </div>
-                        <p class="text-slate-700 text-sm md:text-[15px] leading-relaxed font-medium italic mb-6">
-                            "{{ __($t['text']) }}"
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-4 border-t border-slate-100">
-                        <img alt="{{ $t['name'] }}"
-                             src="{{ imageUrl($t['image'] ?? null, 'user' . ($loop->iteration ?? 1)) }}"
-                             loading="lazy" decoding="async"
-                             class="w-11 h-11 rounded-full object-cover shrink-0 ring-2 ring-slate-100">
-                        <div>
-                            <p class="text-sm font-bold text-slate-900 leading-tight">{{ $t['name'] }}</p>
-                            <p class="text-xs text-slate-400 mt-0.5 font-medium">{{ __($t['location'] ?? 'Wisatawan Terverifikasi') }}</p>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
+         Hanya render bila admin sudah mengisi testimoni ASLI. Tidak ada
+         placeholder fiktif: testimoni karangan melanggar UU Perlindungan
+         Konsumen, dan section kosong lebih baik daripada nama palsu.
+
+         Baris kosong ikut dibuang. Form admin menyimpan baris begitu tombol
+         "Tambah Ulasan" ditekan, jadi baris yang belum sempat diisi tetap
+         tersimpan -- tanpa saringan ini ia terbit sebagai kartu hampa
+         lengkap dengan bintang lima dan foto profil kosong. --}}
+    @php
+        $testimonials = array_values(array_filter(
+            $settings['testimonials'] ?? [],
+            fn ($t) => is_array($t)
+                && trim((string) ($t['name'] ?? '')) !== ''
+                && trim((string) ($t['text'] ?? '')) !== ''
+        ));
+    @endphp
+    @if(($settings['show_testimonials'] ?? true) && count($testimonials))
+    <section class="py-16 md:py-24 bg-slate-50/50 border-t border-b border-slate-100 overflow-hidden"
+             x-data="{
+                 isDragging: false, startX: 0, scrollLeft: 0,
+                 get el() { return this.$refs.tstStrip },
+                 onDown(e) { this.isDragging = true; this.startX = e.pageX - this.el.offsetLeft; this.scrollLeft = this.el.scrollLeft; },
+                 onMove(e) { if (!this.isDragging) return; e.preventDefault(); this.el.scrollLeft = this.scrollLeft - ((e.pageX - this.el.offsetLeft) - this.startX); },
+                 onUp() { this.isDragging = false; },
+                 scrollPrev() { this.el.scrollBy({ left: -420, behavior: 'smooth' }); },
+                 scrollNext() { this.el.scrollBy({ left: 420, behavior: 'smooth' }); },
+             }">
+        <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
+            <span class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-toba-green mb-3">
+                <span class="w-6 h-px bg-toba-green"></span>
+                {{ $settings['testimonials_eyebrow'] ?? __('Testimoni Wisatawan') }}
+                <span class="w-6 h-px bg-toba-green"></span>
+            </span>
+            <h2 class="text-3xl md:text-5xl font-bold text-primary tracking-tight leading-[1.1]">
+                {{ $settings['testimonials_title'] ?? __('Apa Kata Mereka Tentang Sujai Laketoba?') }}
+            </h2>
+            @if(! empty($settings['testimonials_subtitle']))
+            <p class="text-on-surface-variant text-sm md:text-base mt-4 leading-relaxed">
+                {{ $settings['testimonials_subtitle'] }}
+            </p>
+            @endif
         </div>
+
+        {{-- items-start supaya kartu tidak saling menarik tingginya, sama
+             seperti strip paket di atas. --}}
+        <div x-ref="tstStrip"
+             @mousedown="onDown($event)" @mousemove="onMove($event)" @mouseup="onUp()" @mouseleave="onUp()"
+             class="flex items-start gap-6 overflow-x-auto scroll-smooth px-5 md:px-[max(1.5rem,calc((100vw-64rem)/2+1.5rem))] pt-10 md:pt-12 pb-4 no-scrollbar select-none snap-x snap-mandatory overscroll-x-contain"
+             :class="isDragging ? 'cursor-grabbing' : 'cursor-grab'">
+            @foreach($testimonials as $t)
+            <figure class="shrink-0 snap-start w-[300px] sm:w-[360px] md:w-[420px] bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 md:p-8 flex flex-col">
+                <svg class="w-8 h-8 text-toba-green/15 shrink-0 mb-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9.5 5C6.46 5 4 7.46 4 10.5c0 2.76 2.24 5 5 5 .17 0 .34-.01.5-.03V16c0 1.66-1.34 3-3 3v3c3.31 0 6-2.69 6-6v-5.5C12.5 7.46 10.04 5 9.5 5zm10 0C16.46 5 14 7.46 14 10.5c0 2.76 2.24 5 5 5 .17 0 .34-.01.5-.03V16c0 1.66-1.34 3-3 3v3c3.31 0 6-2.69 6-6v-5.5C22.5 7.46 20.04 5 19.5 5z"/>
+                </svg>
+
+                {{-- Tinggi tetap + gulir sendiri: ulasan panjang tidak membuat
+                     satu kartu jauh lebih tinggi daripada tetangganya. --}}
+                <blockquote class="max-h-32 overflow-y-auto pr-2 text-slate-700 text-sm md:text-[15px] leading-relaxed font-medium">
+                    {{ __($t['text']) }}
+                </blockquote>
+
+                <div class="flex items-center gap-1 text-amber-400 mt-5" role="img" aria-label="{{ __('Bintang 5 dari 5') }}">
+                    @for($i = 0; $i < 5; $i++)
+                    <svg class="w-4 h-4 fill-amber-400" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    @endfor
+                </div>
+
+                <figcaption class="flex items-center gap-3.5 mt-5 pt-5 border-t border-slate-100">
+                    <img alt="{{ $t['name'] }}"
+                         src="{{ imageUrl($t['image'] ?? null, 'user' . $loop->iteration) }}"
+                         loading="lazy" decoding="async"
+                         class="w-11 h-11 rounded-full object-cover shrink-0 ring-2 ring-slate-100">
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-slate-900 leading-tight truncate">{{ $t['name'] }}</p>
+                        <p class="text-xs text-slate-400 mt-0.5 font-medium truncate">{{ __($t['location'] ?? 'Wisatawan') }}</p>
+                    </div>
+                </figcaption>
+            </figure>
+            @endforeach
+        </div>
+
+        {{-- Tombol geser disembunyikan bila isinya belum cukup untuk digeser;
+             tombol yang tidak melakukan apa-apa lebih membingungkan daripada
+             tidak ada tombol. --}}
+        @if(count($testimonials) > 1)
+        <div class="flex items-center justify-center gap-3 mt-6">
+            <button type="button" @click="scrollPrev()" aria-label="{{ __('Testimoni sebelumnya') }}"
+                    class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_left</span>
+            </button>
+            <button type="button" @click="scrollNext()" aria-label="{{ __('Testimoni berikutnya') }}"
+                    class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary hover:border-primary transition">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_right</span>
+            </button>
+        </div>
+        @endif
     </section>
     @endif
 
