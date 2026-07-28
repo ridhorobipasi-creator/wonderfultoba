@@ -31,15 +31,17 @@
     $pax = (int) ($booking->metadata['pax'] ?? 1);
     $packageUrl = $booking->package ? route('tour.package.detail', $booking->package->slug) : route('tour.packages');
     $invoiceUrl = route('invoice.download', $booking->bookingCode);
-    $waSource = $siteSettings['cms_tour']['contact_whatsapp']
-        ?? $siteSettings['general']['contact_whatsapp']
-        ?? $siteSettings['general']['contact_whatsapp']
-        ?? $siteSettings['general']['contact_wa_1']
-        ?? $siteSettings['general']['contact_whatsapp']
-        ?? config('services.whatsapp.number')
-        ?? '';
-    $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
+    // Satu sumber nomor. Rantai ?? sebelumnya menyebut kunci yang sama tiga kali
+    // dan tetap bisa menghasilkan nomor yang berbeda dari yang tampil di footer.
+    $waNumber = \App\Helpers\ContactHelper::whatsappDigits();
     $waText = urlencode('Halo Sujai Laketoba, saya ingin bertanya tentang booking ' . $booking->bookingCode . '.');
+
+    // Tenggat pembatalan khusus pesanan ini, diturunkan dari aturan di /terms
+    // (>14 hari 100%, 7-14 hari 50%, <7 hari hangus). Aturannya sudah tertulis
+    // rapi di halaman S&K tapi tidak pernah muncul di tempat tamu memikirkannya.
+    $refundFull = $booking->startDate ? $booking->startDate->copy()->subDays(14) : null;
+    $refundHalf = $booking->startDate ? $booking->startDate->copy()->subDays(7) : null;
+    $showRefund = $refundFull && ! in_array($booking->status, ['cancelled', 'completed'], true);
     $steps = [
         'pending' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dikonfirmasi', 'Trip Selesai'],
         'confirmed' => ['Booking Diterima', 'Menunggu Konfirmasi', 'Dikonfirmasi', 'Trip Selesai'],
@@ -85,6 +87,33 @@
         </div>
     </div>
 </section>
+
+@if(session('success'))
+    {{-- Tamu yang baru saja memesan mendarat di sini, bukan lagi di panel yang
+         hilang begitu halaman di-refresh. Kode booking-nya ada di judul atas. --}}
+    <section class="bg-white">
+        <div class="mx-auto max-w-5xl px-5 pt-8 md:px-8">
+            <div class="rounded-2xl border border-green-200 bg-green-50 p-5 md:p-6">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5 text-green-600">check_circle</span>
+                        <div>
+                            <p class="text-sm font-extrabold text-green-900">{{ __('Reservasi Terkirim') }}</p>
+                            <p class="mt-1 text-xs leading-6 text-green-800">{{ __('Simpan halaman ini. Alamatnya permanen, jadi Anda bisa membukanya lagi kapan saja untuk melihat status pesanan.') }}</p>
+                        </div>
+                    </div>
+                    @if(session('whatsappUrl'))
+                        <a href="{{ session('whatsappUrl') }}" target="_blank" rel="noopener"
+                           class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-toba-green px-5 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-primary-container">
+                            <span class="material-symbols-outlined text-base">chat</span>
+                            {{ __('Konfirmasi via WhatsApp') }}
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </section>
+@endif
 
 <section class="bg-slate-50 py-10 md:py-16">
     <div class="mx-auto grid max-w-5xl gap-6 px-5 md:grid-cols-[1.1fr_0.9fr] md:px-8">
@@ -225,6 +254,12 @@
                     <span>Invoice</span>
                     <span class="material-symbols-outlined text-base">open_in_new</span>
                 </a>
+                {{-- Tanpa tautan ini, halaman yang paling sering dibuka tamu yang
+                     SUDAH memesan tidak pernah memberi tahu ke mana harus membayar. --}}
+                <a href="{{ route('payment') }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
+                    <span>Cara Pembayaran</span>
+                    <span class="material-symbols-outlined text-base">account_balance</span>
+                </a>
                 <a href="{{ $packageUrl }}" class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-4 text-sm font-bold text-slate-800 transition hover:border-green-300 hover:bg-green-50">
                     <span>Lihat Paket</span>
                     <span class="material-symbols-outlined text-base">travel_explore</span>
@@ -240,6 +275,20 @@
             <div class="mt-6 rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-600">
                 Jika ada perubahan tanggal, jumlah peserta, atau titik penjemputan, kirim kode booking ini ke admin.
             </div>
+
+            @if($showRefund)
+                {{-- Tenggat konkret, bukan "lihat S&K". Tanggalnya dihitung dari
+                     keberangkatan pesanan ini sendiri. --}}
+                <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <p class="text-xs font-bold uppercase tracking-widest text-amber-700">Tenggat Pembatalan</p>
+                    <ul class="mt-3 space-y-1.5 text-xs leading-6 text-amber-900">
+                        <li>Batalkan sebelum <strong>{{ $refundFull->translatedFormat('d F Y') }}</strong> — dana kembali 100% (potong biaya admin).</li>
+                        <li>Sampai <strong>{{ $refundHalf->translatedFormat('d F Y') }}</strong> — dana kembali 50%.</li>
+                        <li>Setelah itu dana tidak dapat dikembalikan.</li>
+                    </ul>
+                    <a href="{{ route('terms') }}" class="mt-3 inline-block text-xs font-bold text-amber-800 underline">Selengkapnya di Syarat &amp; Ketentuan</a>
+                </div>
+            @endif
         </aside>
     </div>
 </section>

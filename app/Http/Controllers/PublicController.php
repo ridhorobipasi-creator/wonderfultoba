@@ -177,7 +177,19 @@ class PublicController extends Controller
                 $taxPercentage = (float) $setting->value['finance']['tax_percentage'];
             }
 
-            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity', 'taxPercentage'));
+            // Surcharge akhir pekan & musim ramai ikut dikirim ke kalkulator depan.
+            // Selama nilainya 0 tidak ada bedanya, tapi begitu admin mengisinya,
+            // halaman ini akan mengutip angka yang lebih murah dari yang ditagih
+            // BookingService — dan tamu baru tahu setelah menekan Pesan.
+            $finance = $setting->value['finance'] ?? [];
+            $surcharge = [
+                'weekend' => (float) ($finance['surcharge_weekend'] ?? 0),
+                'peak' => (float) ($finance['surcharge_peak'] ?? 0),
+                'peakStart' => (string) ($finance['surcharge_peak_start'] ?? ''),
+                'peakEnd' => (string) ($finance['surcharge_peak_end'] ?? ''),
+            ];
+
+            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity', 'taxPercentage', 'surcharge'));
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): ".$e->getMessage());
 
@@ -251,12 +263,15 @@ class PublicController extends Controller
         try {
             // Honeypot Security Check (Pencegahan Spam)
             if ($request->filled('website_url')) {
-                // Bot terdeteksi karena mengisi hidden input. Berikan respon seolah berhasil.
+                // Bot terdeteksi karena mengisi hidden input. Balas seolah berhasil
+                // supaya bot tidak belajar, TAPI tanpa kode booking palsu: kode
+                // 'BOT-xxxxxx' yang dulu dikirim ke sini selalu 404 di halaman
+                // pelacakan, jadi manusia yang terjaring autofill justru dikirim
+                // mengejar pesanan yang tidak pernah ada.
                 Log::warning('Honeypot triggered during booking submission.', ['ip' => $request->ip()]);
+
                 return back()->with([
                     'success' => __('Booking berhasil dikirim! Kami akan menghubungi Anda segera.'),
-                    'bookingCode' => 'BOT-' . strtoupper(Str::random(6)),
-                    'whatsappUrl' => null,
                 ]);
             }
 
@@ -326,31 +341,17 @@ class PublicController extends Controller
 
             $waMessage .= "\n".__('Mohon konfirmasinya. Terima kasih!');
 
-            $settings = Setting::where('key', 'cms_tour')->first()?->value ?? [];
-            $genSettings = Setting::where('key', 'general')->first()?->value ?? [];
+            // Satu sumber nomor (ContactHelper), sama dengan yang ditampilkan di
+            // footer/navbar/pembayaran. Sebelumnya blok ini menurunkan nomornya
+            // sendiri dari setting, sehingga bisa berbeda dari yang dilihat tamu.
+            $waUrl = \App\Helpers\ContactHelper::whatsappLink($waMessage);
 
-            $waSource = $settings['contact_whatsapp']
-                ?? $genSettings['contact_whatsapp'] 
-                ?? config('services.whatsapp.number');
-            $waNumber = preg_replace('/[^0-9]/', '', (string) $waSource);
-
-            // If there's no WhatsApp number configured, log and return success without WA URL
-            if (empty($waNumber)) {
-                \Log::warning('submitBooking: WhatsApp number not configured.', ['cms_tour' => $settings, 'general' => $genSettings]);
-
-                return back()->with([
-                    'success' => __('Booking berhasil dikirim! Kami akan menghubungi Anda segera.'),
-                    'bookingCode' => $booking->bookingCode,
-                    'whatsappUrl' => null,
-                    'warning' => __('Nomor WhatsApp belum dikonfigurasi. Tim admin akan menghubungi Anda.'),
-                ]);
-            }
-
-            $waUrl = "https://wa.me/{$waNumber}?text=".urlencode($waMessage);
-
-            return back()->with([
+            // Redirect ke URL permanen, bukan back(). Dengan back(), kode booking
+            // hidup di flash session: begitu tamu me-refresh atau menekan Back,
+            // satu-satunya bukti pesanannya hilang. Halaman pelacakan menampung
+            // status, rincian biaya, invoice, dan tombol konfirmasi sekaligus.
+            return redirect()->route('booking.track', $booking->bookingCode)->with([
                 'success' => __('Booking berhasil dikirim! Kami akan menghubungi Anda segera.'),
-                'bookingCode' => $booking->bookingCode,
                 'whatsappUrl' => $waUrl,
             ]);
         } catch (\Exception $e) {

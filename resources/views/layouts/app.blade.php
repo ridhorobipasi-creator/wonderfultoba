@@ -150,6 +150,49 @@
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, c.thousandsSep);
             return c.symbol + (parts.length > 1 ? parts.join(c.decPoint) : parts[0]);
         };
+        // Surcharge akhir pekan + musim ramai, cerminan langkah yang sama di
+        // BookingService::calculateTotalPriceAndCost. Ditaruh di sini, bukan di
+        // dalam atribut x-data, supaya logika tanggal ini punya tempat menulis
+        // tanpa melanggar aturan tanpa-kutip-ganda di blok x-data.
+        window.sujaiSurcharge = function (dateStr, cfg, subtotal) {
+            var out = { amount: 0, items: [] };
+            if (!dateStr || !cfg || !subtotal) return out;
+            var d = new Date(dateStr + 'T00:00:00');
+            if (isNaN(d.getTime())) return out;
+
+            var add = function (label, percent) {
+                var amt = subtotal * (percent / 100);
+                out.amount += amt;
+                out.items.push({ label: label + ' (' + percent + '%)', amount: amt });
+            };
+
+            var weekend = Number(cfg.weekend) || 0;
+            if (weekend > 0 && (d.getDay() === 0 || d.getDay() === 6)) {
+                add('Akhir Pekan', weekend);
+            }
+
+            var peak = Number(cfg.peak) || 0;
+            var ps = String(cfg.peakStart || '').split('/');
+            var pe = String(cfg.peakEnd || '').split('/');
+            if (peak > 0 && ps.length === 2 && pe.length === 2) {
+                var y = d.getFullYear();
+                var start = new Date(y, Number(ps[1]) - 1, Number(ps[0]), 0, 0, 0);
+                var end = new Date(y, Number(pe[1]) - 1, Number(pe[0]), 23, 59, 59);
+                // Rentang yang melompati tahun baru, mis. 20/12 - 05/01.
+                if (end < start) {
+                    if (d.getMonth() <= end.getMonth()) {
+                        start.setFullYear(y - 1);
+                    } else {
+                        end.setFullYear(y + 1);
+                    }
+                }
+                if (d >= start && d <= end) {
+                    add('Musim Ramai', peak);
+                }
+            }
+
+            return out;
+        };
         document.addEventListener('alpine:init', function () {
             window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug, tiers) {
                 var baseAdult = Number(adultMyr) || 0;

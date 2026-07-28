@@ -221,32 +221,30 @@
         startDate: @js($formOld['startDate']),
 
         get currentUnitPrice() {
-            if (this.pkgTiers && this.pkgTiers.length > 0) {
-                // Find matching tier
-                const matchingTier = this.pkgTiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
-                if (matchingTier) {
-                    return matchingTier.price;
-                }
-                // Check if pax exceeds max tier, use the highest tier or default
-                const maxTier = [...this.pkgTiers].sort((a, b) => b.max_pax - a.max_pax)[0];
-                if (maxTier && this.pax > maxTier.max_pax) {
-                    return maxTier.price; // Optional logic: use max tier price for beyond
-                }
-            }
-            return this.package.price;
+            const t = this.activeTier;
+            return (t && t.price != null) ? t.price : this.package.price;
         },
 
         get priceDewasa() {
             return this.pax * this.currentUnitPrice;
         },
+        get activeTier() {
+            if (!this.pkgTiers || !this.pkgTiers.length) return null;
+            const match = this.pkgTiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
+            if (match) return match;
+            const maxTier = [...this.pkgTiers].sort((a, b) => b.max_pax - a.max_pax)[0];
+            return (maxTier && this.pax > maxTier.max_pax) ? maxTier : null;
+        },
         get currentChildUnitPrice() {
-            if (this.pkgTiers && this.pkgTiers.length > 0) {
-                let activeTier = this.pkgTiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
-                if (activeTier && activeTier.child_price) {
-                    return activeTier.child_price;
-                }
-            }
-            return this.package.childPrice ? this.package.childPrice : (this.currentUnitPrice * 0.5);
+            // Urutan server: child_price tier -> childPrice paket -> separuh
+            // harga dewasa yang berlaku. Dibandingkan dengan != null, bukan
+            // dengan cek truthy: harga anak 0 berarti gratis, bukan kosong.
+            // Tier tertinggi juga ikut dipakai saat pax melampauinya, yang
+            // sebelumnya terlewat sehingga anak ditagih tarif tier lain.
+            const t = this.activeTier;
+            if (t && t.child_price != null) return Number(t.child_price) || 0;
+            if (this.package.childPrice != null) return Number(this.package.childPrice) || 0;
+            return this.currentUnitPrice * 0.5;
         },
         get priceAnak() {
             return this.paxChildren * this.currentChildUnitPrice;
@@ -260,14 +258,26 @@
             return this.priceDewasa + this.priceAnak + this.additionalServicesPrice;
         },
         taxPercentage: {{ isset($taxPercentage) ? $taxPercentage : 11 }},
+        surchargeCfg: @js($surcharge ?? []),
+        get surcharge() {
+            return window.sujaiSurcharge(this.startDate, this.surchargeCfg, this.totalSebelumPajak);
+        },
+        get surchargeAmount() { return this.surcharge.amount; },
+        get surchargeItems() { return this.surcharge.items; },
+        get totalDenganSurcharge() {
+            // Server menambahkan surcharge SEBELUM pajak. Urutan ini tidak boleh
+            // dibalik: pajak atas subtotal yang belum kena surcharge menghasilkan
+            // total yang lebih kecil dari tagihan.
+            return this.totalSebelumPajak + this.surchargeAmount;
+        },
         get pajakLayanan() {
             // Must match BookingService::calculateTotalPriceAndCost exactly —
             // 2 decimals, because prices are in ringgit and rounding to whole
             // units here would quote a different total than the server charges.
-            return Math.round(this.totalSebelumPajak * (this.taxPercentage / 100) * 100) / 100;
+            return Math.round(this.totalDenganSurcharge * (this.taxPercentage / 100) * 100) / 100;
         },
         get totalAkhir() {
-            return this.totalSebelumPajak + this.pajakLayanan;
+            return this.totalDenganSurcharge + this.pajakLayanan;
         },
         get serializedNotes() {
             let lines = [];
@@ -666,99 +676,24 @@
         <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
             <div class="md:sticky md:top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 md:max-h-[85vh] md:overflow-y-auto custom-scroll">
                 @if(session('success'))
-                    <div 
-                        x-data="{ 
-                            countdown: 2, 
-                            redirectCancelled: false,
-                            timer: null,
-                            hasUrl: {{ session('whatsappUrl') ? 'true' : 'false' }},
-                            init() {
-                                if (this.hasUrl) {
-                                    this.timer = setInterval(() => {
-                                        if (this.countdown > 0 && !this.redirectCancelled) {
-                                            this.countdown--;
-                                        } else {
-                                            clearInterval(this.timer);
-                                            if (!this.redirectCancelled) {
-                                                window.location.href = '{!! session('whatsappUrl') !!}';
-                                            }
-                                        }
-                                    }, 1000);
-                                }
-                            },
-                            cancelRedirect() {
-                                this.redirectCancelled = true;
-                                if (this.timer) clearInterval(this.timer);
-                            }
-                        }"
-                        class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500"
-                    >
+                    {{-- Pesanan yang benar-benar tercatat sekarang dialihkan ke
+                         halaman pelacakan (URL permanen), jadi panel ini hanya
+                         tersisa untuk balasan honeypot. Countdown 2 detik yang
+                         melempar tab ke WhatsApp, beserta URL yang disuntik
+                         mentah ke dalam string JS, ikut hilang bersamanya. --}}
+                    <div class="py-6 px-4 bg-primary/5 rounded-2xl border border-primary/10 text-center animate-in zoom-in duration-500">
                         <div class="w-14 h-14 bg-white text-secondary rounded-full flex items-center justify-center text-2xl shadow-sm border border-secondary/20 mx-auto mb-4">
                             <span class="material-symbols-outlined text-[32px]">check_circle</span>
                         </div>
                         <h4 class="text-xl font-semibold font-headline-md text-primary mb-2">{{ __('Reservasi Terkirim') }}</h4>
                         
-                        @if(session('warning'))
-                            <div class="p-3 bg-yellow-50 text-yellow-800 rounded-lg text-xs font-body-md mb-4 border border-yellow-200">
-                                {{ session('warning') }}
-                            </div>
-                        @else
-                            <p class="text-slate-600 font-body-md mb-6 text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Silakan lanjutkan konfirmasi via WhatsApp.') }}</p>
-                        @endif
-                        
-                        <div class="inline-flex flex-col items-center px-6 py-4 bg-white rounded-lg border border-outline-variant mb-6 w-full">
-                            <p class="font-label-caps text-[9px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Booking ID</p>
-                            <p class="text-2xl font-semibold font-body-md text-primary tracking-wider">{{ session('bookingCode') }}</p>
-                        </div>
-                        
-                        <!-- Redirection Countdown Status -->
-                        <template x-if="hasUrl">
-                            <div class="mb-6 p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200/50 text-[11px] text-slate-600">
-                                <template x-if="!redirectCancelled && countdown > 0">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <svg class="animate-spin h-3.5 w-3.5 text-secondary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                        <span>Mengalihkan ke WhatsApp otomatis dalam <span class="font-bold text-secondary text-sm" x-text="countdown"></span> detik...</span>
-                                    </div>
-                                </template>
-                                <template x-if="!redirectCancelled && countdown === 0">
-                                    <span>Menghubungkan ke WhatsApp...</span>
-                                </template>
-                                <template x-if="redirectCancelled">
-                                    <span class="text-slate-500 font-medium">Pengalihan otomatis dibatalkan. Silakan lakukan konfirmasi manual.</span>
-                                </template>
-                            </div>
-                        </template>
-                        
-                        <!-- Action Buttons -->
-                        <template x-if="hasUrl">
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <template x-if="!redirectCancelled && countdown > 0">
-                                <button 
-                                    @click="cancelRedirect()"
-                                    type="button"
-                                    class="flex-1 py-3 border border-slate-300 text-slate-700 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-50 transition focus:outline-none"
-                                >
-                                    {{ __('Batal Alihkan') }}
-                                </button>
-                            </template>
-                            <a 
-                                href="{{ session('whatsappUrl') }}"
-                                target="_blank"
-                                class="flex-1 py-3 bg-secondary text-on-secondary rounded-lg font-semibold text-[11px] uppercase tracking-wider shadow-sm hover:bg-secondary/90 transition flex items-center justify-center gap-2 group"
-                            >
-                                <span class="material-symbols-outlined text-[18px]">chat</span>
-                                {{ __('KONFIRMASI SEKARANG') }}
-                            </a>
-                        </div>
-                        </template>
+                        <p class="text-slate-600 font-body-md text-sm leading-relaxed">{{ __('Pesanan Anda berhasil kami catat. Tim kami akan menghubungi Anda.') }}</p>
 
-                        @if(session('bookingCode'))
-                        <a href="{{ route('booking.track', session('bookingCode')) }}"
+                        <a href="{{ route('booking.track.form') }}"
                            class="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] font-semibold text-primary hover:text-secondary transition-colors">
                             <span class="material-symbols-outlined text-[16px]">travel_explore</span>
                             {{ __('Lacak status pesanan Anda') }}
                         </a>
-                        @endif
                     </div>
                 @else
                         <div class="flex justify-between items-end border-b border-slate-200 pb-4">
@@ -926,6 +861,12 @@
                                 <div x-show="service.selected" class="flex justify-between text-xs text-slate-600 font-body-md">
                                     <span x-text="service.name"></span>
                                     <span x-text="AppCurrency.format(service.price)"></span>
+                                </div>
+                            </template>
+                            <template x-for="(item, idx) in surchargeItems" :key="idx">
+                                <div class="flex justify-between text-xs text-slate-600 font-body-md">
+                                    <span x-text="item.label"></span>
+                                    <span x-text="AppCurrency.format(item.amount)"></span>
                                 </div>
                             </template>
                             <div class="flex justify-between text-xs text-slate-600 font-body-md">
