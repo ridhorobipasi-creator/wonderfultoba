@@ -113,7 +113,11 @@ class PackageController extends Controller
             'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
             'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
             'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
-            'pricingDetails.tiers.*.child_price' => 'nullable|numeric|min:0',
+            // Wajib. Begitu sebuah paket punya harga grosir, harga anak TIDAK
+            // lagi boleh diam-diam diambil dari harga anak paket -- itu
+            // mencampur harga dasar dengan harga tier, dan tamu rombongan
+            // membayar harga anak yang tidak pernah diniatkan siapa pun.
+            'pricingDetails.tiers.*.child_price' => 'required|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);
@@ -174,7 +178,11 @@ class PackageController extends Controller
             'pricingDetails.tiers.*.min_pax' => 'required|integer|min:1',
             'pricingDetails.tiers.*.max_pax' => 'required|integer|gte:pricingDetails.tiers.*.min_pax',
             'pricingDetails.tiers.*.price' => 'required|numeric|min:0',
-            'pricingDetails.tiers.*.child_price' => 'nullable|numeric|min:0',
+            // Wajib. Begitu sebuah paket punya harga grosir, harga anak TIDAK
+            // lagi boleh diam-diam diambil dari harga anak paket -- itu
+            // mencampur harga dasar dengan harga tier, dan tamu rombongan
+            // membayar harga anak yang tidak pernah diniatkan siapa pun.
+            'pricingDetails.tiers.*.child_price' => 'required|numeric|min:0',
         ]);
 
         $pricingDetails = $request->input('pricingDetails', []);

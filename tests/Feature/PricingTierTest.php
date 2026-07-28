@@ -158,6 +158,56 @@ class PricingTierTest extends TestCase
         $this->assertEquals(320.00, $breakdown['price_anak_total']);    // 2 x 160
     }
 
+    public function test_package_child_price_is_ignored_once_a_tier_is_active(): void
+    {
+        // Paket punya harga anak sendiri (RM 250), tapi tier yang berlaku tidak
+        // mencantumkan harga anak. Harga anak paket TIDAK boleh dipakai di sini:
+        // mencampur harga anak dasar dengan harga dewasa tier membuat anak
+        // (RM 250) lebih mahal daripada setengah harga dewasa yang benar-benar
+        // dibayar (RM 160). Kolom harga anak tier kini wajib diisi di admin;
+        // ini menjaga baris tier lama yang terlanjur kosong.
+        $package = $this->makePackage($this->standardTiers(), childPrice: 250.00);
+
+        $booking = app(BookingService::class)->create([
+            'packageId' => $package->id,
+            'type' => 'package',
+            'customerName' => 'Tier Tanpa Harga Anak',
+            'customerEmail' => 'tanpaanak@test.local',
+            'customerPhone' => '08123456789',
+            'startDate' => now()->addDays(30)->format('Y-m-d'),
+            'endDate' => now()->addDays(32)->format('Y-m-d'),
+            'status' => 'pending',
+            'metadata' => ['pax' => 12, 'paxChildren' => 2],
+        ]);
+
+        $breakdown = $booking->metadata['price_breakdown'];
+
+        $this->assertEquals(320.00, $breakdown['price_anak_total']); // 2 x 160, bukan 2 x 250
+    }
+
+    public function test_package_child_price_still_applies_when_there_are_no_tiers(): void
+    {
+        // Tanpa harga grosir, harga yang ada tetap yang dipakai.
+        $package = $this->makePackage([], childPrice: 250.00);
+
+        $booking = app(BookingService::class)->create([
+            'packageId' => $package->id,
+            'type' => 'package',
+            'customerName' => 'Tanpa Tier',
+            'customerEmail' => 'tanpatier@test.local',
+            'customerPhone' => '08123456789',
+            'startDate' => now()->addDays(30)->format('Y-m-d'),
+            'endDate' => now()->addDays(32)->format('Y-m-d'),
+            'status' => 'pending',
+            'metadata' => ['pax' => 2, 'paxChildren' => 2],
+        ]);
+
+        $breakdown = $booking->metadata['price_breakdown'];
+
+        $this->assertEquals(1000.00, $breakdown['price_dewasa_total']); // 2 x 500 (harga dasar)
+        $this->assertEquals(500.00, $breakdown['price_anak_total']);    // 2 x 250 (harga anak paket)
+    }
+
     public function test_tier_child_price_wins_over_every_fallback(): void
     {
         $package = $this->makePackage([
@@ -179,6 +229,56 @@ class PricingTierTest extends TestCase
         $breakdown = $booking->metadata['price_breakdown'];
 
         $this->assertEquals(300.00, $breakdown['price_anak_total']); // 3 x 100
+    }
+
+    public function test_admin_cannot_save_a_tier_without_a_child_price(): void
+    {
+        // Kolom harga anak di tier wajib diisi. Kalau ia boleh kosong, harga
+        // anak untuk rombongan jadi angka turunan yang tidak pernah dilihat
+        // siapa pun sebelum invoice terbit.
+        $admin = \App\Models\User::factory()->create(['role' => 'superadmin']);
+
+        $response = $this->actingAs($admin)->post('/admin/packages', [
+            'name' => 'Paket Uji Tier',
+            'price' => 500,
+            'status' => 'active',
+            // description & duration NOT NULL di tabel packages, walau aturan
+            // validasinya menyebut nullable.
+            'description' => 'Deskripsi uji.',
+            'duration' => '3 Hari',
+            'pricingDetails' => [
+                'tiers' => [
+                    ['min_pax' => 1, 'max_pax' => 9, 'price' => 350],
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHasErrors('pricingDetails.tiers.0.child_price');
+        $this->assertDatabaseMissing('packages', ['name' => 'Paket Uji Tier']);
+    }
+
+    public function test_admin_can_save_a_tier_with_a_zero_child_price(): void
+    {
+        // Nol berarti anak gratis -- itu nilai yang sah, bukan "kosong".
+        $admin = \App\Models\User::factory()->create(['role' => 'superadmin']);
+
+        $response = $this->actingAs($admin)->post('/admin/packages', [
+            'name' => 'Paket Anak Gratis',
+            'price' => 500,
+            'status' => 'active',
+            // description & duration NOT NULL di tabel packages, walau aturan
+            // validasinya menyebut nullable.
+            'description' => 'Deskripsi uji.',
+            'duration' => '3 Hari',
+            'pricingDetails' => [
+                'tiers' => [
+                    ['min_pax' => 1, 'max_pax' => 9, 'price' => 350, 'child_price' => 0],
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('packages', ['name' => 'Paket Anak Gratis']);
     }
 
     protected function tearDown(): void

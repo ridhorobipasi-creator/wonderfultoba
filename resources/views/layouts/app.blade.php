@@ -250,11 +250,18 @@
                     },
                     get childUnit() {
                         var t = this.activeTier;
-                        if (t && t.child_price != null) return Number(t.child_price) || 0;
-                        // Urutan sama persis dengan server: child_price tier ->
-                        // childPrice paket -> setengah harga dewasa yang berlaku.
-                        // Dulu di sini jatuh ke harga dewasa PENUH, sehingga
-                        // kartu memasang angka lebih mahal dari tagihan.
+                        // Paket dengan harga grosir: harga anak ikut tier juga.
+                        // childPrice paket sengaja dilewati -- mencampurnya
+                        // dengan harga dewasa tier membuat anak bisa lebih mahal
+                        // daripada setengah harga dewasa yang dibayar. Setengah
+                        // harga dewasa tier cuma jaring pengaman untuk baris
+                        // tier lama yang terlanjur kosong.
+                        if (t) {
+                            return (t.child_price != null) ? (Number(t.child_price) || 0) : this.adultUnit * 0.5;
+                        }
+                        // Tanpa tier: harga anak paket, lalu setengah harga
+                        // dewasa. Dulu di sini jatuh ke harga dewasa PENUH,
+                        // sehingga kartu memasang angka lebih mahal dari tagihan.
                         return baseChild != null ? baseChild : this.adultUnit * 0.5;
                     },
                     get rate() { return window.SUJAI_CUR.rate; },

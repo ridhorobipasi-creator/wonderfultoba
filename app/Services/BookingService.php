@@ -215,9 +215,13 @@ class BookingService
             $tier = $package->pricingTierFor($pax);
             if ($tier !== null) {
                 $pricePerPerson = $tier['price'] ?? $pricePerPerson;
-                // Urutan cadangan harga anak: harga anak di tier -> childPrice
-                // paket -> setengah harga dewasa YANG BERLAKU (sudah tier).
-                $childPricePerPerson = $tier['child_price'] ?? $package->childPrice ?? ($pricePerPerson * 0.5);
+                // Harga anak ikut tier juga. childPrice paket sengaja TIDAK
+                // dipakai di sini: mencampur harga anak dasar dengan harga
+                // dewasa tier membuat anak bisa lebih mahal daripada setengah
+                // harga dewasa yang benar-benar dibayar. Kolomnya wajib diisi
+                // di form admin; setengah harga dewasa tier hanya jaring
+                // pengaman untuk baris tier lama yang terlanjur kosong.
+                $childPricePerPerson = $tier['child_price'] ?? ($pricePerPerson * 0.5);
             }
 
             $priceDewasa = $pricePerPerson * $pax;

@@ -82,6 +82,17 @@ arsitektur untuk memecah satu halaman yang belum penuh.
    Aturannya kini hidup di SATU tempat, `Package::pricingTierFor()`, dipanggil
    `BookingService`; `paxCalc` di `layouts/app.blade.php` mencerminkannya.
 
+8. **Harga anak ikut tier juga, dan kolomnya kini WAJIB diisi.** Sebelumnya
+   harga anak di tier boleh kosong dan jatuh ke `childPrice` paket — mencampur
+   harga anak dasar dengan harga dewasa tier, sehingga anak bisa lebih mahal
+   daripada setengah harga dewasa yang benar-benar dibayar (anak RM 250 di
+   samping dewasa RM 320). Kolomnya sekarang `required` di validasi `store()`
+   dan `update()` serta di kedua form admin; isi `0` kalau anak gratis. Bila
+   sebuah baris tier lama terlanjur kosong, dipakai setengah harga dewasa tier
+   — bukan harga anak paket.
+
+   Tanpa tier, tidak ada yang berubah: harga dasar + `childPrice` paket.
+
 **Konsekuensi bisnis yang perlu disadari:** dengan ambang diskon, rombongan
 yang lebih kecil bisa membayar total lebih mahal daripada yang lebih besar bila
 selisih tier-nya tajam (10 x RM 350 = 3.500 vs 11 x RM 300 = 3.300). Itu sifat
