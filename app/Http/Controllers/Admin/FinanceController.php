@@ -16,7 +16,18 @@ class FinanceController extends Controller
             ->latest('createdAt')
             ->paginate(20);
 
-        return view('admin.finance.index', compact('transactions'));
+        // Agregat dihitung ulang atas SELURUH data, bukan atas $transactions:
+        // koleksi itu hanya berisi 20 baris halaman aktif, jadi menjumlahkannya
+        // membuat omzet menyusut setiap kali admin pindah halaman.
+        $summary = Booking::whereIn('status', ['confirmed', 'completed'])
+            ->selectRaw('COALESCE(SUM(totalPrice_idr), 0) as revenue, COALESCE(AVG(totalPrice_idr), 0) as average')
+            ->first();
+
+        return view('admin.finance.index', [
+            'transactions' => $transactions,
+            'revenue' => (float) $summary->revenue,
+            'average' => (float) $summary->average,
+        ]);
     }
 
     public function export()

@@ -13,7 +13,7 @@
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Omzet Tour</p>
             {{-- Agregat omzet selalu IDR: dijumlahkan dari totalPrice_idr yang dibekukan saat pemesanan. --}}
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($transactions->sum('totalPrice_idr'), 'IDR') }}</h3>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($revenue, 'IDR') }}</h3>
         </div>
 
         <!-- Average Value -->
@@ -22,7 +22,7 @@
                 <i class="fas fa-chart-line"></i>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rata-rata Transaksi</p>
-            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($transactions->avg('totalPrice_idr'), 'IDR') }}</h3>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ \App\Helpers\CurrencyHelper::formatIn($average, 'IDR') }}</h3>
         </div>
 
         <!-- Total Bookings -->
