@@ -76,7 +76,7 @@
 @endpush
 
 @section('content')
-<div x-data="{ waNumber: @json(\App\Helpers\ContactHelper::whatsappDigits()) }">
+<div x-data="{ waNumber: @js(\App\Helpers\ContactHelper::whatsappDigits()) }">
     
     <!-- Programmatic SEO Hero Banner -->
     <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-primary px-5 md:px-8">

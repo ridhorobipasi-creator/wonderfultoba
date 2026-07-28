@@ -30,9 +30,9 @@
         isMenuOpen: false,
         scrolled: false,
         contact: {
-            phone: @json(\App\Helpers\ContactHelper::whatsappDisplay()),
+            phone: @js(\App\Helpers\ContactHelper::whatsappDisplay()),
             email: '{{ $g['contact_email'] ?? 'info@sujailaketoba.com' }}',
-            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits())
+            whatsapp: @js(\App\Helpers\ContactHelper::whatsappDigits())
         }
     }"
     x-init="$watch('isMenuOpen', open => document.body.classList.toggle('overflow-hidden', open))"

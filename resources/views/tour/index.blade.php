@@ -75,7 +75,7 @@
 @endpush
 
 @section('content')
-<div x-data="{ waNumber: @json(\App\Helpers\ContactHelper::whatsappDigits()) }">
+<div x-data="{ waNumber: @js(\App\Helpers\ContactHelper::whatsappDigits()) }">
 
     {{-- H1 semantik halaman. sr-only karena slider kini hanya gambar + tombol,
          tak ada tempat wajar untuk heading terlihat tanpa merusak desainnya.

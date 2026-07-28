@@ -179,11 +179,11 @@
         package_images: @js($packageImagesArray),
         city: @js($city),
         contact: {
-            whatsapp: @json(\App\Helpers\ContactHelper::whatsappDigits()),
+            whatsapp: @js(\App\Helpers\ContactHelper::whatsappDigits()),
             email: '{{ $siteSettings['cms_tour']['contact_email'] ?? $siteSettings['general']['contact_email'] ?? 'hello@sujailaketoba.com' }}'
         },
         get waNumber() {
-            return (this.contact.whatsapp || @json(\App\Helpers\ContactHelper::whatsappDigits())).replace(/[^0-9]/g, '');
+            return (this.contact.whatsapp || @js(\App\Helpers\ContactHelper::whatsappDigits())).replace(/[^0-9]/g, '');
         },
         get locationDisplay() {
             return this.city ? (this.city.type === 'international' ? (this.city.place || this.city.region || '') + ', ' + this.city.country : this.city.name) : (this.package.locationTag || 'Danau Toba');
@@ -193,16 +193,20 @@
 
         // Booking form variables.
         //
-        // Semua nilai diserahkan lewat direktif json Blade, tidak pernah
-        // diinterpolasi ke dalam string JS.
+        // Semua nilai diserahkan lewat direktif js Blade, BUKAN direktif
+        // json, dan tidak pernah diinterpolasi ke dalam string JS.
+        // Direktif json mengeluarkan kutip ganda mentah; di dalam atribut
+        // x-data kutip itu menutup atributnya dan memutus tag div ini.
+        // ATURAN: jangan pernah menulis kutip ganda di dalam blok ini,
+        // termasuk di dalam komentar.
         // Bentuk lamanya membungkus old() dengan tanda kutip
         // tunggal: Blade mengubah apostrof jadi entity, browser
         // mengembalikannya jadi apostrof, string JS terputus, dan SELURUH
         // Alpine di halaman ini mati. Satu pembeli bernama O(apostrof)Brien
         // yang gagal validasi sudah cukup. Nilai pax yang kosong dulu juga
         // menghasilkan properti tanpa nilai, yang sama fatalnya.
-        pax: @json($formOld['pax']),
-        paxChildren: @json($formOld['paxChildren']),
+        pax: @js($formOld['pax']),
+        paxChildren: @js($formOld['paxChildren']),
         pkgTiers: @js($package->pricingDetails['tiers'] ?? []),
         services: (@js($package->pricingDetails['additional_services'] ?? [])).map(s => ({
             ...s,
@@ -210,11 +214,11 @@
         })),
         isSubmitting: false,
         termsAccepted: false,
-        notesUser: @json($formOld['notesUser']),
-        customerName: @json($formOld['customerName']),
-        customerEmail: @json($formOld['customerEmail']),
-        customerPhone: @json($formOld['customerPhone']),
-        startDate: @json($formOld['startDate']),
+        notesUser: @js($formOld['notesUser']),
+        customerName: @js($formOld['customerName']),
+        customerEmail: @js($formOld['customerEmail']),
+        customerPhone: @js($formOld['customerPhone']),
+        startDate: @js($formOld['startDate']),
 
         get currentUnitPrice() {
             if (this.pkgTiers && this.pkgTiers.length > 0) {
