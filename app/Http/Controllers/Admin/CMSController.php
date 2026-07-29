@@ -57,6 +57,14 @@ class CMSController extends Controller
 
     public function save(Request $request, $key)
     {
+        // SECURITY: {key} comes from the URL, so restrict it to the CMS/page settings this
+        // controller owns. Without this, a low-privilege admin could POST to any key
+        // (e.g. 'general', 'company') and overwrite global/company/SMTP settings.
+        $allowedKeys = ['cms_landing', 'cms_tour', 'page_about', 'page_terms', 'page_privacy'];
+        if (! in_array($key, $allowedKeys, true)) {
+            abort(404);
+        }
+
         try {
             DB::beginTransaction();
 

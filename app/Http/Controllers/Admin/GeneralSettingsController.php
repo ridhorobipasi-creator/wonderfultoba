@@ -25,6 +25,14 @@ class GeneralSettingsController extends Controller
 
     public function update(Request $request)
     {
+        // Branding uploads must be real images (the trait also enforces this, but validate
+        // here for a clean error instead of an exception).
+        $request->validate([
+            'logo_light_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
+            'logo_dark_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
+            'icon_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:15360',
+        ]);
+
         $data = $request->except(['_token', 'logo_light_file', 'logo_dark_file', 'icon_file', 'company']);
 
         $setting = Setting::firstOrNew(['key' => 'general']);
