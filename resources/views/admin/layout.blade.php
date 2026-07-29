@@ -195,6 +195,12 @@
                                 <i class="fas fa-file-invoice-dollar w-5 text-sm {{ request()->routeIs('admin.reports.financial') ? 'text-white' : 'text-green-500' }}"></i>
                                 Laporan Keuangan
                             </a>
+                            <a href="{{ route('admin.finance.index') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
+                                      {{ request()->routeIs('admin.finance.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                <i class="fas fa-cash-register w-5 text-sm {{ request()->routeIs('admin.finance.*') ? 'text-white' : 'text-green-500' }}"></i>
+                                Buku Kas / Transaksi
+                            </a>
                             @endif
                         </div>
                     </div>
@@ -235,6 +241,12 @@
                                  <i class="fas fa-images w-5 text-sm {{ request()->routeIs('admin.gallery.*') && request('category', 'tour') == 'tour' ? 'text-white' : 'text-green-500' }}"></i>
                                  Galeri Tour
                              </a>
+                             <a href="{{ route('admin.clients.index') }}"
+                                class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
+                                       {{ request()->routeIs('admin.clients.*') ? 'bg-toba-green text-white shadow-lg shadow-toba-green/20' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                                 <i class="fas fa-handshake w-5 text-sm {{ request()->routeIs('admin.clients.*') ? 'text-white' : 'text-green-500' }}"></i>
+                                 Partner / Klien
+                             </a>
                              @if(auth()->user()->isSuperAdmin())
                              <a href="{{ route('admin.cms.pages') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
@@ -258,21 +270,6 @@
                             </a>
                         </div>
                     </div>
-
-                    {{-- TONG SAMPAH --}}
-                    @if(auth()->user()->isSuperAdmin())
-                    <div class="mb-5">
-                        <div class="space-y-0.5">
-                            <a href="#"
-                               class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition font-bold text-[13px]
-                                      text-slate-500 hover:bg-slate-50 hover:text-slate-900">
-                                 <i class="fas fa-trash-can w-5 text-sm text-orange-500"></i>
-                                 Tong Sampah (Segera Hadir)
-                            </a>
-                        </div>
-                    </div>
-                    @endif
-
 
                     {{-- SYSTEM MANAGEMENT - Restricted to Superadmin --}}
                     @if(auth()->user()->isSuperAdmin())

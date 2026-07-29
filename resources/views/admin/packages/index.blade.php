@@ -191,6 +191,12 @@
                             <a href="{{ route('admin.packages.show', $package) }}" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-slate-900 hover:text-white transition shadow-sm">
                                 <i class="fas fa-external-link-alt text-xs"></i>
                             </a>
+                            <form action="{{ route('admin.packages.toggle-status', $package) }}" method="POST" onsubmit="return confirm('{{ $package->status === 'active' ? 'Nonaktifkan paket ini?' : 'Aktifkan paket ini?' }}')">
+                                @csrf
+                                <button type="submit" class="w-10 h-10 rounded-xl {{ $package->status === 'active' ? 'bg-amber-50 text-amber-600 hover:bg-amber-500' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600' }} flex items-center justify-center hover:text-white transition shadow-sm" title="{{ $package->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                    <i class="fas {{ $package->status === 'active' ? 'fa-toggle-on' : 'fa-toggle-off' }} text-xs"></i>
+                                </button>
+                            </form>
                         </div>
                         <div class="flex items-center gap-2">
                             <form action="{{ route('admin.packages.duplicate', $package) }}" method="POST" onsubmit="return confirm('Duplikat paket ini?')">
