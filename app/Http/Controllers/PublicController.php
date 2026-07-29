@@ -181,17 +181,15 @@ class PublicController extends Controller
 
             // Bawaan nol — lihat catatan di BookingService. Kalkulator depan
             // dan tagihan harus memakai angka yang sama.
-            $taxPercentage = 0;
-            $setting = Setting::where('key', 'general')->first();
-            if ($setting && isset($setting->value['finance']['tax_percentage'])) {
-                $taxPercentage = (float) $setting->value['finance']['tax_percentage'];
-            }
+            // Ambil dari $siteSettings (sudah di-cache di getSiteSettings) daripada
+            // query 'general' lagi — ini halaman publik paling ramai.
+            $finance = $siteSettings['general']['finance'] ?? [];
+            $taxPercentage = (float) ($finance['tax_percentage'] ?? 0);
 
             // Surcharge akhir pekan & musim ramai ikut dikirim ke kalkulator depan.
             // Selama nilainya 0 tidak ada bedanya, tapi begitu admin mengisinya,
             // halaman ini akan mengutip angka yang lebih murah dari yang ditagih
             // BookingService — dan tamu baru tahu setelah menekan Pesan.
-            $finance = $setting->value['finance'] ?? [];
             $surcharge = [
                 'weekend' => (float) ($finance['surcharge_weekend'] ?? 0),
                 'peak' => (float) ($finance['surcharge_peak'] ?? 0),

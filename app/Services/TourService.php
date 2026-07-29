@@ -110,6 +110,7 @@ class TourService
         Cache::forget('featured_packages');
         Cache::forget('tour_blogs_all');
         Cache::forget('tour_homepage_data');
+        Cache::forget('tour_gallery_all');
         Cache::forget('site_settings_structured_cms_tour_general');
 
         if ($slug) {
@@ -215,10 +216,14 @@ class TourService
         // Sekaligus itu membuat chip filter di halaman galeri mustahil punya lebih
         // dari satu pilihan, jadi filternya tampak rusak padahal kueri ini
         // penyebabnya. Galeri publik = semua gambar yang admin tandai aktif.
-        return GalleryImage::where('isActive', true)
-            ->with('imageMedia')
-            ->orderBy('orderPriority')
-            ->get();
+        // Di-cache seperti data tour lain; key 'tour_gallery_all' ikut dibersihkan
+        // clearCache() saat admin mengubah galeri (via Syncable → triggerSync).
+        return Cache::remember('tour_gallery_all', 600, function () {
+            return GalleryImage::where('isActive', true)
+                ->with('imageMedia')
+                ->orderBy('orderPriority')
+                ->get();
+        });
     }
 
     /**

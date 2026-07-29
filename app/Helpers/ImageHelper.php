@@ -27,6 +27,16 @@ require_once __DIR__.'/RatingHelper.php';
 if (! function_exists('imageUrl')) {
     function imageUrl(?string $path, ?string $fallback = null): string
     {
+        // Request-level memo: this resolver runs several file_exists()/Storage::exists()
+        // stat calls and is invoked for every image in every loop. A given (path, fallback)
+        // resolves identically within one request, so cache it to avoid repeating the I/O.
+        static $memo = [];
+        $memoKey = ($path ?? "\0").'|'.($fallback ?? "\0");
+        if (array_key_exists($memoKey, $memo)) {
+            return $memo[$memoKey];
+        }
+
+        return $memo[$memoKey] = (function () use ($path, $fallback): string {
         // If path is null or empty, use fallback if specified, otherwise default local asset
         if (empty($path) || $path === 'null') {
             if ($fallback) {
@@ -360,6 +370,7 @@ if (! function_exists('imageUrl')) {
         }
 
         return '/storage/' . ltrim($clean, '/');
+        })();
     }
 }
 
