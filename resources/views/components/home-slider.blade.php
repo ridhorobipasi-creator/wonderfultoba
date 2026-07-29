@@ -25,14 +25,14 @@
         $slides = [
             [
                 'type'      => 'manual',
-                'image_url' => asset('images/slider/slider-1-85.png'),
+                'image_url' => asset('images/sumut/toba_hero.webp'),
                 'alt'       => 'Sujai Tour - Danau Toba',
                 'cta_text'  => 'Book Now!',
                 'cta_link'  => '/tour/packages',
             ],
             [
                 'type'      => 'manual',
-                'image_url' => asset('images/slider/slider-2-99.png'),
+                'image_url' => asset('images/sumut/sumatra_panorama.webp'),
                 'alt'       => 'Sujai Tour - Wisata Toba',
                 'cta_text'  => 'Book Now!',
                 'cta_link'  => '/tour/packages',

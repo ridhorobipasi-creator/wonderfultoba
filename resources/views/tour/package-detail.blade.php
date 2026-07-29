@@ -98,7 +98,7 @@
 @section('og_image')
     @php
         $mainImg = count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : null;
-        echo $mainImg ?: asset('images/og-default.webp');
+        echo $mainImg ?: asset('images/sumut/sumatra_panorama.webp');
     @endphp
 @endsection
 
@@ -111,7 +111,7 @@
       "@@type": "Product",
       "name": "{{ $package->translated_name }}",
       "image": [
-        "{{ count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : asset('images/og-default.webp') }}"
+        "{{ count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : asset('images/sumut/sumatra_panorama.webp') }}"
       ],
       "description": "{{ Str::limit(strip_tags($package->translated_description), 160) }}",
       "sku": "PKG-{{ $package->id }}",

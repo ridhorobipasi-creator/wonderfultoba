@@ -93,9 +93,9 @@
                         </div>
                     </div>
                     <div class="group">
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Alamat Email</label>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Alamat Email <span class="text-slate-300 normal-case font-bold">(opsional)</span></label>
                         <div class="relative">
-                            <input type="email" name="customerEmail" placeholder="john@example.com" required
+                            <input type="email" name="customerEmail" placeholder="john@example.com"
                                 class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-toba-green/10 focus:bg-white transition font-bold text-sm">
                             <i class="fas fa-envelope absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-toba-green transition"></i>
                         </div>

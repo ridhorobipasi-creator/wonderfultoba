@@ -19,7 +19,7 @@
     if (!empty($siteSettings['general']['social_youtube'])) {
         $sameAsLinks[] = 'https://www.youtube.com/' . $siteSettings['general']['social_youtube'];
     }
-    $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('assets/img/logo.png'));
+    $schemaLogoUrl = imageUrl($siteSettings['general']['logo_light_url'] ?? null, asset('images/logo_compressed.webp'));
     $schemaPhone   = '+' . \App\Helpers\ContactHelper::whatsappDigits();
     $schemaEmail   = \App\Helpers\ContactHelper::email();
     $schemaDesc    = $settings['meta_description'] ?? 'Agen perjalanan wisata Danau Toba terpercaya';

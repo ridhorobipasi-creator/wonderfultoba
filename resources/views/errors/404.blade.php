@@ -41,7 +41,7 @@
         <!-- Logo -->
         <div class="mb-8 flex justify-center scale-95 md:scale-100">
             @php
-                $logoUrl = imageUrl($siteSettings['general']['logo_dark_url'] ?? null, asset('assets/img/logo-white.png'));
+                $logoUrl = imageUrl($siteSettings['general']['logo_dark_url'] ?? null, asset('images/logo_compressed.webp'));
             @endphp
             @if(!empty($logoUrl))
                 <img src="{{ $logoUrl }}" class="h-14 w-auto object-contain brightness-0 invert opacity-90 transition hover:opacity-100" alt="Sujai Laketoba">
