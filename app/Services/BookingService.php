@@ -174,7 +174,38 @@ class BookingService
     public function update(Booking $booking, array $data)
     {
         return DB::transaction(function () use ($booking, $data) {
-            return $this->repository->update($booking, $data);
+            // Admin mengoreksi totalPrice (ringgit). totalPrice_idr — yang dibaca
+            // laporan pendapatan & total_spent pelanggan — harus ikut diperbarui,
+            // TAPI dengan kurs BEKU booking ini (exchange_rate_idr), bukan kurs
+            // terkini, agar invoice & pendapatan bulan lalu tidak berubah surut.
+            if (array_key_exists('totalPrice', $data)) {
+                $rate = (float) ($booking->exchange_rate_idr ?? 0);
+                if (strtoupper((string) $booking->currency) === 'IDR') {
+                    // Pesanan lama pra-ringgit: totalPrice sudah dalam rupiah.
+                    $data['totalPrice_idr'] = (float) $data['totalPrice'];
+                } elseif ($rate > 0) {
+                    $data['totalPrice_idr'] = round((float) $data['totalPrice'] * $rate, 2);
+                } else {
+                    // Data lama tanpa kurs beku: jaring pengaman pakai kurs terkini.
+                    $data['totalPrice_idr'] = CurrencyHelper::toIdr((float) $data['totalPrice']);
+                }
+            }
+
+            $updated = $this->repository->update($booking, $data);
+
+            // Harga/status berubah → segarkan statistik pelanggan agar total_spent
+            // tetap cocok dengan jumlah totalPrice_idr pesanan confirmed/completed.
+            $customer = $updated->customer;
+            if ($customer) {
+                $customer->update([
+                    'total_bookings' => $customer->bookings()->count(),
+                    'total_spent' => $customer->bookings()
+                        ->whereIn('status', ['confirmed', 'completed'])
+                        ->sum('totalPrice_idr'),
+                ]);
+            }
+
+            return $updated;
         });
     }
 

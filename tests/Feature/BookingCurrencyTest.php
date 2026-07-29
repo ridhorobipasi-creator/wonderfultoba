@@ -183,4 +183,41 @@ class BookingCurrencyTest extends TestCase
         $response->assertSee('Rp 6.000.000');
         $response->assertDontSee('RM 6.000.000');
     }
+
+    public function test_admin_editing_price_updates_frozen_idr_using_the_booking_rate(): void
+    {
+        $this->setRate(4400);
+        $package = $this->makePackage();
+
+        $booking = Booking::create([
+            'bookingCode' => 'WT-EDIT1',
+            'type' => 'package',
+            'packageId' => $package->id,
+            'customerName' => 'Edit Test',
+            'customerPhone' => '08123456789',
+            'startDate' => now()->addDay(),
+            'endDate' => now()->addDays(2),
+            'totalPrice' => 700.00,
+            'currency' => 'MYR',
+            'exchange_rate_idr' => 4400,
+            'totalPrice_idr' => 3080000,
+            'status' => 'confirmed',
+            'metadata' => ['pax' => 2],
+        ]);
+
+        // The current rate moves after the booking; the correction must ignore it.
+        $this->setRate(5000);
+
+        app(\App\Services\BookingService::class)->update($booking, [
+            'status' => 'confirmed',
+            'totalPrice' => 1000.00,
+        ]);
+        $booking->refresh();
+
+        // IDR follows the corrected price at the FROZEN rate (1000 * 4400),
+        // never the new 5000 rate (which would give 5,000,000).
+        $this->assertEquals(1000.00, $booking->totalPrice);
+        $this->assertEquals(4400000, $booking->totalPrice_idr);
+        $this->assertEquals(4400, $booking->exchange_rate_idr);
+    }
 }

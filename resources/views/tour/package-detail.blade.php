@@ -217,29 +217,49 @@
         customerPhone: @js($formOld['customerPhone']),
         startDate: @js($formOld['startDate']),
 
+        // Pemilihan tier meniru Package::pricingTierFor() di server PERSIS:
+        // cocok-persis → di atas tier tertinggi pakai tertinggi → di bawah terendah
+        // pakai terendah → jatuh di celah pakai tier terdekat DI BAWAHNYA. Dewasa dan
+        // anak memilih tier dari jumlah MASING-MASING, bukan tier dewasa untuk anak —
+        // supaya harga yang ditampilkan sama persis dengan yang ditagih server.
+        tierFor(count) {
+            const tiers = this.pkgTiers || [];
+            if (!tiers.length) return null;
+            const match = tiers.find(t => count >= t.min_pax && count <= t.max_pax);
+            if (match) return match;
+            let highest = tiers[0], lowest = tiers[0];
+            for (const t of tiers) {
+                if (t.max_pax > highest.max_pax) highest = t;
+                if (t.min_pax < lowest.min_pax) lowest = t;
+            }
+            if (count > highest.max_pax) return highest;
+            if (count < lowest.min_pax) return lowest;
+            let below = null;
+            for (const t of tiers) {
+                if (t.max_pax < count && (below === null || t.max_pax > below.max_pax)) below = t;
+            }
+            return below || lowest;
+        },
+        get activeTier() {
+            return this.tierFor(this.pax);
+        },
         get currentUnitPrice() {
             const t = this.activeTier;
-            return (t && t.price != null) ? t.price : this.package.price;
+            return (t && t.price != null) ? (Number(t.price) || 0) : this.package.price;
         },
-
         get priceDewasa() {
             return this.pax * this.currentUnitPrice;
         },
-        get activeTier() {
-            if (!this.pkgTiers || !this.pkgTiers.length) return null;
-            const match = this.pkgTiers.find(t => this.pax >= t.min_pax && this.pax <= t.max_pax);
-            if (match) return match;
-            const maxTier = [...this.pkgTiers].sort((a, b) => b.max_pax - a.max_pax)[0];
-            return (maxTier && this.pax > maxTier.max_pax) ? maxTier : null;
-        },
         get currentChildUnitPrice() {
-            // Urutan server: child_price tier -> childPrice paket -> separuh
-            // harga dewasa yang berlaku. Dibandingkan dengan != null, bukan
-            // dengan cek truthy: harga anak 0 berarti gratis, bukan kosong.
-            // Tier tertinggi juga ikut dipakai saat pax melampauinya, yang
-            // sebelumnya terlewat sehingga anak ditagih tarif tier lain.
-            const t = this.activeTier;
-            if (t && t.child_price != null) return Number(t.child_price) || 0;
+            // Sama seperti server: tier anak dipilih dari jumlah ANAK. Ada tier →
+            // child_price tier, kosong → separuh harga tier anak. Paket tanpa tier →
+            // childPrice paket, kosong → separuh harga dewasa berlaku. != null:
+            // harga anak 0 berarti gratis, bukan kosong.
+            const ct = this.tierFor(this.paxChildren);
+            if (ct) {
+                if (ct.child_price != null) return Number(ct.child_price) || 0;
+                return (ct.price != null ? (Number(ct.price) || 0) : this.currentUnitPrice) * 0.5;
+            }
             if (this.package.childPrice != null) return Number(this.package.childPrice) || 0;
             return this.currentUnitPrice * 0.5;
         },
@@ -254,7 +274,7 @@
         get totalSebelumPajak() {
             return this.priceDewasa + this.priceAnak + this.additionalServicesPrice;
         },
-        taxPercentage: {{ isset($taxPercentage) ? $taxPercentage : 11 }},
+        taxPercentage: {{ isset($taxPercentage) ? $taxPercentage : 0 }},
         surchargeCfg: @js($surcharge ?? []),
         get surcharge() {
             return window.sujaiSurcharge(this.startDate, this.surchargeCfg, this.totalSebelumPajak);
