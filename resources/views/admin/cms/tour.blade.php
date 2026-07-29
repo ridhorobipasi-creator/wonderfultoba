@@ -282,7 +282,10 @@ document.addEventListener('alpine:init', () => {
 
         <form action="{{ route('admin.cms.save', 'cms_tour') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
-            
+            {{-- Daftar yang boleh dikosongkan total. Kalau semua itemnya dihapus,
+                 browser tidak mengirim key-nya sama sekali; tanpa ini data lama akan bertahan. --}}
+            <input type="hidden" name="_clear_if_empty" value="homepage_slides,testimonials,featured_package_ids">
+
             <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm overflow-hidden">
                 <!-- Hero Tab -->
                 <div x-show="activeTab === 'hero'" x-transition class="space-y-6">
@@ -293,6 +296,7 @@ document.addEventListener('alpine:init', () => {
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
+                                <input type="hidden" name="show_hero" value="0">
                                 <input type="checkbox" name="show_hero" value="1" {{ ($settings['show_hero'] ?? true) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-toba-green transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>
@@ -426,6 +430,7 @@ document.addEventListener('alpine:init', () => {
                         <label class="flex items-center cursor-pointer gap-2">
                             <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tampilkan</span>
                             <div class="relative inline-block w-8 h-4">
+                                <input type="hidden" name="show_stats" value="0">
                                 <input type="checkbox" name="show_stats" value="1" {{ ($settings['show_stats'] ?? true) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-full h-full bg-slate-200 rounded-full peer peer-checked:bg-slate-900 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-3 after:w-3 after:transition peer-checked:after:translate-x-4"></div>
                             </div>

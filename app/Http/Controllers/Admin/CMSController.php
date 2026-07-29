@@ -65,7 +65,16 @@ class CMSController extends Controller
             $existing = $setting ? ($setting->value ?? []) : [];
 
             // 2. Ambil data input baru (kecuali token)
-            $data = $request->except(['_token']);
+            $data = $request->except(['_token', '_clear_if_empty']);
+
+            // 2b. Daftar yang dikosongkan total tidak dikirim browser sama sekali.
+            // Tanpa ini, menghapus semua slide/testimoni/pin akan terlihat "tidak tersimpan".
+            foreach (explode(',', (string) $request->input('_clear_if_empty', '')) as $clearable) {
+                $clearable = trim($clearable);
+                if ($clearable !== '' && ! $request->has($clearable)) {
+                    $data[$clearable] = [];
+                }
+            }
 
             // 3. Handle recursive file uploads (including nested arrays like slides)
             $processFiles = function ($files, &$targetData) use (&$processFiles) {
