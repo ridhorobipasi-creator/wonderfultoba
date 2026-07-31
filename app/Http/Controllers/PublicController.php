@@ -138,7 +138,18 @@ class PublicController extends Controller
         return view('tour.blog', compact('posts', 'siteSettings'));
     }
 
-    public function tourPackageDetail($slug)
+    /**
+     * Halaman detail paket tanpa form pemesanan (/tour/detail/{slug}).
+     *
+     * Sengaja menumpang jalur yang sama: isi, media, harga, dan SEO-nya harus
+     * identik dengan halaman berform -- yang berbeda cuma isi sidebarnya.
+     */
+    public function tourPackageDetailNoForm($slug)
+    {
+        return $this->tourPackageDetail($slug, false);
+    }
+
+    public function tourPackageDetail($slug, bool $showBookingForm = true)
     {
         try {
             $siteSettings = $this->getSiteSettings();
@@ -197,7 +208,7 @@ class PublicController extends Controller
                 'peakEnd' => (string) ($finance['surcharge_peak_end'] ?? ''),
             ];
 
-            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity', 'taxPercentage', 'surcharge'));
+            return view('tour.package-detail', compact('package', 'city', 'siteSettings', 'originCity', 'taxPercentage', 'surcharge', 'showBookingForm'));
         } catch (\Exception $e) {
             Log::error("Error loading package detail ($slug): ".$e->getMessage());
 

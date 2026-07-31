@@ -95,6 +95,11 @@
 @section('title', ($package->translated_name ?? 'Paket Wisata') . $originSuffix . ' – Sujai Laketoba')
 @section('description', (isset($originCity) && $originCity ? 'Paket ' . ($package->translated_name ?? 'Wisata') . ' keberangkatan dari ' . $originCity . '. ' : '') . ($package->translated_description ?? ''))
 
+{{-- Versi tanpa form isinya sama persis dengan versi berform. Canonical-nya
+     ditunjuk ke versi berform supaya Google memilih satu pemenang, bukan
+     membagi peringkat antara dua URL kembar. --}}
+@section('canonical', route('tour.package.detail', $package->slug))
+
 @section('og_image')
     @php
         $mainImg = count($packageImagesArray) > 0 ? $packageImagesArray[0]['url'] : null;
@@ -316,7 +321,13 @@
     }"
     x-init="$watch('totalAkhir', value => { totalChanged = true; setTimeout(() => totalChanged = false, 500); })"
     @scroll.window="showConcierge = window.scrollY > 300"
-    class="bg-background text-on-background font-body-md min-h-screen pb-32 pt-32 md:pt-28"
+    {{-- pt-32 bawaan itu mengimbangi navbar seolah-olah ia `fixed`. Navbar-nya
+         `sticky`, jadi sudah memakan ruangnya sendiri di alur normal --
+         128px itu ruang kosong murni di bawah menu. Di halaman tanpa form
+         (yang dibaca sambil menggulir cepat di ponsel) dipangkas habis.
+         Halaman berform sengaja dibiarkan apa adanya: bukan bagian dari
+         permintaan ini. --}}
+    class="bg-background text-on-background font-body-md min-h-screen {{ $showBookingForm ? 'pb-32 pt-32 md:pt-28' : 'pb-10 pt-4 md:pt-8' }}"
 >
     {{-- Ringkasan teks untuk pembaca layar & crawler. sr-only saja (TANPA
          aria-hidden) supaya teknologi bantu ikut membacanya — ini pola sah,
@@ -359,15 +370,20 @@
     </section>
 
     <!-- Gallery & Hero Section -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 grid grid-cols-1 md:grid-cols-12 gap-8">
+    {{-- pb ekstra di mobile khusus halaman tanpa form: batang lengket di bawah
+         menutupi ~72px terakhir, dan tanpa ini tombol penutup tersembunyi
+         permanen di baliknya. --}}
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 {{ $showBookingForm ? '' : 'layout-rapat pb-28 md:pb-10' }} grid grid-cols-1 md:grid-cols-12 gap-8">
         
         <!-- LEFT COLUMN WRAPPER -->
-        <div class="contents md:block md:col-span-8">
+        {{-- Tanpa form, tidak ada lagi yang perlu duduk di sebelah kanan:
+             kolomnya dilebarkan penuh dan panel harga turun ke paling bawah. --}}
+        <div class="contents md:block {{ $showBookingForm ? 'md:col-span-8' : 'md:col-span-12' }}">
 
         <!-- Hero/Gallery Part -->
         <div class="space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000 order-1 mb-8 md:mb-12">
             <!-- Main Gallery -->
-            <div class="relative h-[min(420px,60dvh)] md:h-[550px] overflow-hidden rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
+            <div class="relative h-[min(420px,60dvh)] md:h-[550px] overflow-hidden group {{ $showBookingForm ? 'rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)]' : 'bleed-mobile md:rounded-[2rem] md:shadow-[0_8px_30px_rgb(0,0,0,0.12)]' }}">
                 <img class="w-full h-full object-cover ken-burns group-hover:scale-110 transition-transform duration-[10s]"
                      fetchpriority="high" decoding="async"
                      :src="package_images[activeImg] ? package_images[activeImg].url : '{{ imageUrl($package->images[0] ?? null) }}'"
@@ -685,10 +701,21 @@
                 </div>
             </div>
             
+            @include('tour.partials.package-media', ['salesMode' => ! $showBookingForm])
+
+            @if(! $showBookingForm)
+                @include('tour.partials.package-sales-blocks')
+            @endif
+
             <!-- Travel Specialist & PDF CTA Row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-                <!-- PDF Download -->
-                <a href="{{ route('itinerary.download', $package->slug) }}" class="flex flex-col items-center justify-center p-8 bg-white border border-outline-variant rounded-xl shadow-lg hover:border-secondary hover:shadow-xl transition duration-300 group text-center h-full">
+                {{-- Brosur yang diunggah admin menang atas itinerary PDF yang
+                     dibangkitkan sistem: kalau admin sampai menyiapkan brosur
+                     sendiri untuk paket ini, itulah yang ingin ia berikan. --}}
+                @php $brochureUrl = $package->brochureUrl(); @endphp
+                <a href="{{ $brochureUrl ?? route('itinerary.download', $package->slug) }}"
+                   @if($brochureUrl) target="_blank" rel="noopener" @endif
+                   class="flex flex-col items-center justify-center p-8 bg-white border border-outline-variant rounded-xl shadow-lg hover:border-secondary hover:shadow-xl transition duration-300 group text-center h-full">
                     <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined text-[24px]">download</span>
                     </div>
@@ -723,8 +750,13 @@
         </div> <!-- END LEFT COLUMN WRAPPER -->
 
         <!-- Booking Form Sidebar (Sticky) -->
-        <div id="booking-form-sidebar" class="md:col-span-4 relative order-2 h-full">
-            <div class="md:sticky md:top-28 bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 md:max-h-[85vh] md:overflow-y-auto custom-scroll">
+        {{-- order-2 menaruh panel ini tepat setelah hero, di TENGAH bacaan.
+             Di halaman tanpa form ia dipindah ke order paling akhir: isinya
+             harga + kalkulator, yang baru relevan setelah tamu selesai
+             membaca, bukan sebelum. Sticky & max-h ikut dilepas -- tidak ada
+             gunanya melengket kalau ia sudah jadi blok terakhir. --}}
+        <div id="booking-form-sidebar" class="{{ $showBookingForm ? 'md:col-span-4 relative order-2 h-full' : 'md:col-span-12 relative order-last' }}">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6 {{ $showBookingForm ? 'md:sticky md:top-28 md:max-h-[85vh] md:overflow-y-auto custom-scroll' : 'md:max-w-lg md:mx-auto' }}">
                 @if(session('success'))
                     {{-- Pesanan yang benar-benar tercatat sekarang dialihkan ke
                          halaman pelacakan (URL permanen), jadi panel ini hanya
@@ -774,6 +806,26 @@
                         </div>
                     @endif
 
+                    @if(! $showBookingForm)
+                        {{-- Halaman /tour/detail: tanpa form pemesanan.
+                             Kalkulatornya partial yang sama dengan kartu paket,
+                             jadi angkanya tidak mungkin berbeda dari yang di
+                             halaman lain. Tombolnya membawa ke halaman berform,
+                             tamu tidak dibuat buntu. --}}
+                        @php
+                            $quotePricing = is_array($package->pricingDetails ?? null) ? $package->pricingDetails : [];
+                            $quoteXdata = 'paxCalc('
+                                . (float) ($package->price ?? 0) . ', '
+                                . \Illuminate\Support\Js::from($package->childPrice ?? null) . ', '
+                                . \Illuminate\Support\Js::from($package->slug) . ', '
+                                . \Illuminate\Support\Js::from(array_values($quotePricing['tiers'] ?? [])) . ', '
+                                . \Illuminate\Support\Js::from($package->translated_name ?? $package->name) . ')';
+                        @endphp
+                        <div class="-mx-6 md:-mx-8">
+                            @include('partials.pax-calc', ['xdata' => $quoteXdata])
+                        </div>
+                        <p class="text-center text-[11px] text-slate-500 font-body-md">{{ __('Konfirmasi cepat tersedia untuk tanggal terpilih.') }}</p>
+                    @else
                     <form id="booking-form" action="{{ route('tour.booking.submit') }}" method="POST" class="space-y-5" @submit="isSubmitting = true">
                         @csrf
                         <input type="hidden" name="packageId" :value="package.id">
@@ -972,12 +1024,49 @@
                             * {{ __('Data Anda akan disimpan di sistem kami. Anda akan diarahkan ke WhatsApp untuk melakukan konfirmasi cepat.') }}
                         </p>
                     </form>
+                    @endif
                 @endif
             </div>
         </div>
 
 
     </section>
+
+    @if(! $showBookingForm)
+        {{-- Batang lengket khusus mobile di halaman tanpa form.
+             Concierge bar di bawah ini `hidden md:flex` -- di ponsel halaman
+             ini sama sekali tidak punya ajakan yang selalu terlihat, padahal
+             di sinilah mayoritas tamunya membaca. Halaman rujukan pun hanya
+             menaruh WhatsApp di kaki halaman: tamu yang berhenti membaca di
+             tengah tidak pernah sampai ke sana. --}}
+        <div class="md:hidden fixed inset-x-0 bottom-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200"
+             style="padding-bottom: env(safe-area-inset-bottom);">
+            <div class="flex items-center gap-2.5 px-4 py-2.5">
+                <div class="min-w-0 flex-1">
+                    <p class="font-label-caps text-[9px] text-slate-500 uppercase tracking-widest leading-none">{{ __('Mulai dari') }}</p>
+                    <p class="text-[15px] font-extrabold text-primary leading-tight truncate" x-text="AppCurrency.format(package.price)"></p>
+                </div>
+                {{-- URL-nya dirakit di sisi server, bukan di dalam atribut
+                     Alpine: teks terjemahannya mengandung apostrof (mis. "I'm
+                     interested"), dan itu memutus string JS di dalam atribut. --}}
+                @php
+                    $barPesan = __('Halo, saya berminat dengan paket *:name*.', ['name' => $package->translated_name ?? $package->name])
+                        ."\n".url()->current();
+                @endphp
+                <a href="https://wa.me/{{ \App\Helpers\ContactHelper::whatsappDigits() }}?text={{ rawurlencode($barPesan) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="{{ __('Tanya lewat WhatsApp') }}"
+                   class="shrink-0 w-11 h-11 rounded-full border border-toba-green text-toba-green flex items-center justify-center active:scale-95 transition-transform">
+                    <x-icon name="whatsapp" class="w-4 h-4" />
+                </a>
+                <a href="{{ route('tour.package.detail', $package->slug) }}"
+                   class="shrink-0 inline-flex items-center gap-1.5 bg-toba-green text-white px-5 py-3 rounded-full font-semibold text-[13px] active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                    {{ __('Pesan Sekarang') }}
+                </a>
+            </div>
+        </div>
+    @endif
 
     <!-- Floating Concierge Bar -->
     <div 

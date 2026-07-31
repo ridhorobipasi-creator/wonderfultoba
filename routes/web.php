@@ -181,6 +181,10 @@ Route::prefix('tour')->name('tour.')->group(function () {
     Route::get('/gallery', [PublicController::class, 'tourGallery'])->name('gallery');
     Route::get('/blog', [PublicController::class, 'tourBlog'])->name('blog');
     Route::get('/package/{slug}', [PublicController::class, 'tourPackageDetail'])->name('package.detail');
+    // Halaman detail yang sama, tanpa form pemesanan. Satu controller & satu
+    // view dengan flag -- menyalin view 1.000+ baris menjamin dua halaman ini
+    // melenceng, dan setiap perbaikan harus dikerjakan dua kali.
+    Route::get('/detail/{slug}', [PublicController::class, 'tourPackageDetailNoForm'])->name('package.detail.plain');
     Route::get('/blog/{slug}', [PublicController::class, 'tourBlogDetail'])->name('blog.detail');
 
     // Booking with Rate Limiting

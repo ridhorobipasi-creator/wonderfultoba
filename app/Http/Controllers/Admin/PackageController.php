@@ -99,6 +99,26 @@ class PackageController extends Controller
             'cityIds.*' => 'exists:cities,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
+            // Media tambahan. Nama input sengaja TIDAK 'videos'/'brochure':
+            // keduanya kolom fillable, jadi berkas mentahnya akan ikut masuk
+            // ke fill() dan menimpa kolom dengan objek UploadedFile.
+            'mapEmbed' => 'nullable|string|max:2000',
+            'video_links' => 'nullable|array',
+            'video_links.*.src' => 'nullable|string|max:500',
+            'video_links.*.title' => 'nullable|string|max:255',
+            'video_links.*.gear' => 'nullable|string|max:255',
+            'accommodations' => 'nullable|array',
+            'accommodations.*.night' => 'nullable|integer|min:1|max:60',
+            'accommodations.*.name' => 'nullable|string|max:255',
+            'accommodations.*.class' => 'nullable|string|max:100',
+            'accommodations.*.image' => 'nullable|string|max:500',
+            'accommodation_files' => 'nullable|array',
+            'accommodation_files.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
+            'video_files' => 'nullable|array',
+            'video_files.*' => 'file|mimetypes:video/mp4,video/webm,video/quicktime|max:'.maxUploadKb(51200),
+            'brochure_file' => 'nullable|file|mimes:pdf|max:'.maxUploadKb(20480),
+            'remove_videos' => 'nullable|array',
+            'remove_brochure' => 'nullable|boolean',
             'itinerary' => 'nullable|array',
             'cost_price' => 'nullable|numeric|min:0',
             'includes' => 'nullable|array',
@@ -131,6 +151,15 @@ class PackageController extends Controller
 
         try {
             $validated['image_files'] = $request->file('images');
+            $validated['video_files'] = $request->file('video_files');
+            $validated['brochure_file'] = $request->file('brochure_file');
+            // Dikirim eksplisit walau kosong. Kalau kuncinya hilang saat admin
+            // menghapus baris tautan terakhir, service tidak punya cara
+            // membedakan "tidak ada perubahan" dari "hapus semuanya".
+            $validated['video_links'] = $request->input('video_links', []);
+            $validated['remove_videos'] = $request->input('remove_videos', []);
+            $validated['accommodations'] = $request->input('accommodations', []);
+            $validated['accommodation_files'] = $request->file('accommodation_files', []);
             $package = $tourService->savePackage($validated);
 
             $this->logActivity('created', "Created new package: {$package->name}", $package);
@@ -164,6 +193,26 @@ class PackageController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
             'remove_images' => 'nullable|array',
+            // Media tambahan. Nama input sengaja TIDAK 'videos'/'brochure':
+            // keduanya kolom fillable, jadi berkas mentahnya akan ikut masuk
+            // ke fill() dan menimpa kolom dengan objek UploadedFile.
+            'mapEmbed' => 'nullable|string|max:2000',
+            'video_links' => 'nullable|array',
+            'video_links.*.src' => 'nullable|string|max:500',
+            'video_links.*.title' => 'nullable|string|max:255',
+            'video_links.*.gear' => 'nullable|string|max:255',
+            'accommodations' => 'nullable|array',
+            'accommodations.*.night' => 'nullable|integer|min:1|max:60',
+            'accommodations.*.name' => 'nullable|string|max:255',
+            'accommodations.*.class' => 'nullable|string|max:100',
+            'accommodations.*.image' => 'nullable|string|max:500',
+            'accommodation_files' => 'nullable|array',
+            'accommodation_files.*' => 'image|mimes:jpeg,png,jpg,webp|max:15360',
+            'video_files' => 'nullable|array',
+            'video_files.*' => 'file|mimetypes:video/mp4,video/webm,video/quicktime|max:'.maxUploadKb(51200),
+            'brochure_file' => 'nullable|file|mimes:pdf|max:'.maxUploadKb(20480),
+            'remove_videos' => 'nullable|array',
+            'remove_brochure' => 'nullable|boolean',
             'itinerary' => 'nullable|array',
             'cost_price' => 'nullable|numeric|min:0',
             'includes' => 'nullable|array',
@@ -196,6 +245,15 @@ class PackageController extends Controller
 
         try {
             $validated['image_files'] = $request->file('images');
+            $validated['video_files'] = $request->file('video_files');
+            $validated['brochure_file'] = $request->file('brochure_file');
+            // Dikirim eksplisit walau kosong. Kalau kuncinya hilang saat admin
+            // menghapus baris tautan terakhir, service tidak punya cara
+            // membedakan "tidak ada perubahan" dari "hapus semuanya".
+            $validated['video_links'] = $request->input('video_links', []);
+            $validated['remove_videos'] = $request->input('remove_videos', []);
+            $validated['accommodations'] = $request->input('accommodations', []);
+            $validated['accommodation_files'] = $request->file('accommodation_files', []);
             $tourService->savePackage($validated, $package);
 
             $this->logActivity('updated', "Updated package: {$package->name}", $package);

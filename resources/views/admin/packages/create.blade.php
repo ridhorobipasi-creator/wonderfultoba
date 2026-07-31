@@ -63,6 +63,8 @@
                 @error('package_images') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
                 @error('media_ids') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
 
+                @include('admin.packages._media-fields', ['package' => null])
+
                 <!-- Short Description -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">Short Description</label>

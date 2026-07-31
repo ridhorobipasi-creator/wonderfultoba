@@ -262,6 +262,121 @@
 .delay-300 { animation-delay: 0.3s; }
 .delay-500 { animation-delay: 0.5s; }
 
+/* Blok yang menembus padding induknya sampai tepi layar -- hanya di mobile.
+   Dipakai halaman detail tanpa form (/tour/detail): media yang menempel tepi
+   layar membuat halaman terbaca seperti poster, bukan seperti kartu di dalam
+   kotak. Di >=768px blok kembali normal mengikuti grid.
+
+   Pakai calc(50% - 50vw), bukan nilai margin tetap: dengan begitu ia tidak
+   perlu tahu berapa padding induknya, jadi mengubah --spacing-margin-mobile
+   tidak diam-diam merusak keselarasannya. */
+.bleed-mobile {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
+}
+.bleed-mobile img,
+.bleed-mobile iframe,
+.bleed-mobile video {
+  border-radius: 0;
+}
+@media (min-width: 768px) {
+  .bleed-mobile {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* ============================================================
+   IRAMA VERTIKAL DI PONSEL
+   ============================================================
+   Jarak antar-bagian di situs ini ditulis dengan ukuran desktop (py-24 = 96px,
+   py-36 = 144px) TANPA varian mobile, jadi angka yang sama ikut terpakai apa
+   adanya di layar 375px. Di sana ia bukan "napas" lagi, melainkan layar-layar
+   kosong yang harus digulir.
+
+   Dikoreksi di satu tempat, bukan dengan menyunting ~150 kelas di 10+ file:
+   perubahan sebesar itu mustahil ditinjau, dan satu kelas yang terlewat
+   langsung terlihat sebagai bagian yang jomplang.
+
+   HANYA berlaku < 768px. Utilitas ber-prefix (md:py-24) dibungkus media query
+   min-width oleh Tailwind, jadi tampilan desktop tidak tersentuh sama sekali.
+
+   Mau menyetel ulang? Ubah angkanya di sini. Mau satu bagian tetap lapang?
+   Beri kelas md:-nya, atau naikkan spesifisitasnya seperti .layout-rapat. */
+@media (max-width: 767px) {
+  .py-36 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+  .py-24 { padding-top: 2.75rem; padding-bottom: 2.75rem; }
+  .py-20 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  .py-16 { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+  .py-12 { padding-top: 1.75rem; padding-bottom: 1.75rem; }
+
+  .pt-32 { padding-top: 2.5rem; }
+  .pt-20 { padding-top: 2.5rem; }
+  .pt-16 { padding-top: 2.25rem; }
+  .pb-32 { padding-bottom: 2.5rem; }
+  .pb-24 { padding-bottom: 2.75rem; }
+
+  .mb-16 { margin-bottom: 1.75rem; }
+  .mb-14 { margin-bottom: 1.5rem; }
+  .mb-12 { margin-bottom: 1.5rem; }
+  .mb-10 { margin-bottom: 1.25rem; }
+  .mt-16 { margin-top: 1.75rem; }
+  .mt-12 { margin-top: 1.5rem; }
+
+  .gap-16 { gap: 1.75rem; }
+  .gap-12 { gap: 1.5rem; }
+  .gap-10 { gap: 1.25rem; }
+
+  .space-y-16 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.75rem; }
+  .space-y-12 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+  .space-y-10 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+}
+
+/* Halaman detail tanpa form (/tour/detail) dibaca sambil menggulir cepat di
+   ponsel. Jarak bawaan situs dirancang untuk halaman berform yang lebih
+   tenang; di sini ia meninggalkan terlalu banyak ruang kosong.
+
+   Diperketat lewat SATU pembungkus, bukan dengan mengubah puluhan kelas satu
+   per satu di Blade: halaman berform tidak ikut berubah, angkanya terkumpul di
+   satu tempat kalau mau disetel ulang, dan tidak ada kelas yang tertinggal
+   waktu ada blok baru ditambahkan.
+
+   Selector .layout-rapat .x lebih spesifik (0,2,0) daripada utilitas Tailwind
+   (0,1,0), jadi menang tanpa perlu !important. */
+@media (max-width: 767px) {
+  .layout-rapat {
+    padding-top: 1.25rem;
+    row-gap: 1.25rem;
+  }
+  /* space-y-16 memisahkan bagian-bagian besar: 64px per sekat, dan halaman
+     ini punya banyak sekat. Ini penyumbang ruang kosong terbesar setelah
+     padding pembungkus. */
+  .layout-rapat .space-y-16 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.75rem; }
+  .layout-rapat .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+  .layout-rapat .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+  .layout-rapat .pt-8 { padding-top: 1.25rem; }
+  .layout-rapat .py-12 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .layout-rapat .p-8 { padding: 1.25rem; }
+  .layout-rapat .p-6 { padding: 1rem; }
+  .layout-rapat .p-5 { padding: 0.875rem; }
+  .layout-rapat .p-4 { padding: 0.75rem; }
+  .layout-rapat .gap-y-5 { row-gap: 0.875rem; }
+  .layout-rapat .gap-8 { gap: 1.25rem; }
+  .layout-rapat .gap-5 { gap: 0.75rem; }
+  .layout-rapat .gap-4 { gap: 0.625rem; }
+  .layout-rapat .mb-12 { margin-bottom: 1.25rem; }
+  .layout-rapat .mb-8 { margin-bottom: 1rem; }
+  .layout-rapat .mb-6 { margin-bottom: 0.875rem; }
+  .layout-rapat .mb-5 { margin-bottom: 0.75rem; }
+  .layout-rapat .mt-4 { margin-top: 0.625rem; }
+
+  /* Blok berlatar warna (pembeda & CTA penutup) tetap butuh napas supaya
+     tidak terlihat sesak, tapi tidak sebanyak bawaannya. */
+  .layout-rapat .py-10 { padding-top: 1.75rem; padding-bottom: 1.75rem; }
+  .layout-rapat .py-7 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+}
+
 /* Hide scrollbar but keep scrolling */
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }

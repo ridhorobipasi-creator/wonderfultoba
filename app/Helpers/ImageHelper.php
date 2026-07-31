@@ -12,6 +12,43 @@ use Illuminate\Support\Facades\Storage;
 require_once __DIR__.'/RatingHelper.php';
 
 /**
+ * Batas unggah efektif server, dalam KB.
+ *
+ * PHP menolak berkas yang melewati upload_max_filesize/post_max_size SEBELUM
+ * Laravel sempat memvalidasi: form-nya memantul tanpa pesan kesalahan yang
+ * bisa dipahami admin. Jadi aturan validasi dan tulisan di form harus mengutip
+ * angka server yang sebenarnya, bukan angka yang kita harapkan.
+ *
+ * @param  int  $ceilingKb  batas atas yang kita mau, misal 50 MB untuk video
+ */
+if (! function_exists('maxUploadKb')) {
+    function maxUploadKb(int $ceilingKb = 51200): int
+    {
+        $toKb = static function (string $val): int {
+            $val = trim($val);
+            if ($val === '' || $val === '0') {
+                return PHP_INT_MAX; // 0 = tanpa batas
+            }
+            $unit = strtolower(substr($val, -1));
+            $num = (float) $val;
+
+            return (int) match ($unit) {
+                'g' => $num * 1024 * 1024,
+                'm' => $num * 1024,
+                'k' => $num,
+                default => $num / 1024,
+            };
+        };
+
+        return max(1, min(
+            $ceilingKb,
+            $toKb((string) ini_get('upload_max_filesize')),
+            $toKb((string) ini_get('post_max_size'))
+        ));
+    }
+}
+
+/**
  * Global Image Path Resolution Helper
  *
  * Single source of truth for resolving storage/asset paths to full URLs.

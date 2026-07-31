@@ -17,7 +17,7 @@
     ];
     $localeShort = ['my' => '🇲🇾 MYR', 'id' => '🇮🇩 IDR', 'en' => '🇸🇬 SGD'];
 
-    // Satu sumber kebenaran untuk menu — desktop & drawer mobile membacanya sama.
+    // Satu sumber kebenaran untuk menu — desktop & strip mobile membacanya sama.
     $navLinks = [
         ['label' => __('Tentang Kami'),     'url' => '/about',         'active' => request()->is('about')],
         ['label' => __('Blog'),             'url' => '/tour/blog',     'active' => request()->is('tour/blog*')],
@@ -25,11 +25,21 @@
         // labelnya disesuaikan supaya menjanjikan apa yang benar-benar dibuka.
         ['label' => __('Lacak Booking'),    'url' => route('booking.track.form'), 'active' => request()->is('track-booking*')],
     ];
+
+    // Strip mobile itu daftar datar — tanpa dropdown — jadi Home & Paket
+    // ikut jadi item biasa di depan $navLinks.
+    $mobileNav = array_merge([
+        ['label' => __('Home'), 'url' => '/', 'active' => request()->is('/')],
+        [
+            'label'  => __('Paket Wisata Toba'),
+            'url'    => '/tour/packages',
+            'active' => request()->is('tour/packages*') || request()->is('tour/package/*'),
+        ],
+    ], $navLinks);
 @endphp
 
 <header
     x-data="{
-        isMenuOpen: false,
         scrolled: false,
         contact: {
             phone: @js(\App\Helpers\ContactHelper::whatsappDisplay()),
@@ -37,8 +47,6 @@
             whatsapp: @js(\App\Helpers\ContactHelper::whatsappDigits())
         }
     }"
-    x-init="$watch('isMenuOpen', open => document.body.classList.toggle('overflow-hidden', open))"
-    @keydown.escape.window="isMenuOpen = false"
     class="relative w-full font-sans z-[100]"
 >
     <!-- 1. Topbar (Minimalist Dark) -->
@@ -105,11 +113,14 @@
     </div>
 
     <!-- 2. Main Nav Putih (sticky, clean) -->
+    {{-- Padding vertikal dipegang baris logo, bukan <nav>, supaya strip menu
+         mobile bisa menempel rapat di tepi bawah nav yang sticky. --}}
     <nav @scroll.window="scrolled = window.scrollY > 24"
-         :class="scrolled ? 'shadow-md py-2.5' : 'py-3 md:py-3.5'"
-         class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 py-3 md:py-3.5 transition-all duration-300 z-[120]">
+         :class="scrolled && 'shadow-md'"
+         class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 z-[120]">
         <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center gap-4">
+            <div :class="scrolled ? 'py-2.5' : 'py-3 md:py-3.5'"
+                 class="flex justify-between items-center gap-4 py-3 md:py-3.5 transition-all duration-300">
                 <!-- Logo -->
                 <a href="/" aria-label="{{ $g['site_name'] ?? 'Sujai Tour' }} — Beranda"
                    class="group flex items-baseline gap-1 shrink-0 mr-4 focus-visible:outline-none rounded">
@@ -183,114 +194,77 @@
                     </a>
                 </div>
 
-                <!-- Aksi Mobile -->
-                <div class="lg:hidden flex items-center gap-2">
-                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
-                       aria-label="{{ __('HUBUNGI KAMI!') }}"
-                       class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center active:scale-95 transition-transform">
-                        <x-icon name="whatsapp" class="w-4 h-4" />
-                    </a>
-                    <button @click="isMenuOpen = true" type="button"
-                            aria-label="{{ __('Buka menu') }}" :aria-expanded="isMenuOpen"
-                            class="p-2 -mr-2 text-slate-800 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+                <!-- Aksi Mobile — menu pindah ke strip di bawah -->
+                <div class="lg:hidden flex items-center gap-2 shrink-0">
+                    {{-- Kembaran pemilih bahasa milik topbar. Topbar itu `hidden
+                         sm:block`, jadi di bawah 640px pemilihnya lenyap sama
+                         sekali; chip ini menutup lubang itu dan `sm:hidden`
+                         supaya tidak muncul dobel begitu topbar kembali ada.
 
-    <!-- Drawer Mobile -->
-    <div x-show="isMenuOpen" x-cloak class="lg:hidden fixed inset-0 z-[150]" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
-        <div x-show="isMenuOpen" @click="isMenuOpen = false"
-             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-             class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
-
-        <!-- Panel -->
-        <div x-show="isMenuOpen"
-             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
-             class="absolute inset-y-0 right-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col">
-            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100">
-                <span class="text-xl font-extrabold text-slate-900 leading-none uppercase">SUJAI<span class="text-toba-green italic font-medium ml-1 normal-case" style="font-family: 'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive;">Tour</span></span>
-                <button @click="isMenuOpen = false" type="button" aria-label="{{ __('Tutup menu') }}"
-                        class="w-9 h-9 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-800 flex items-center justify-center transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-
-            <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
-                @php
-                    $isPkgMobile = request()->is('tour/packages*') || request()->is('tour/package/*');
-                    $mobileLinks = $navLinks;
-                @endphp
-
-                <a href="/" @if(request()->is('/')) aria-current="page" @endif
-                   class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-medium transition-colors {{ request()->is('/') ? 'bg-slate-50 text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                    <span>{{ __('Home') }}</span>
-                </a>
-
-                <!-- Paket -->
-                <div x-data="{ openPkgMobile: {{ $isPkgMobile ? 'true' : 'false' }} }">
-                    <div class="flex items-center rounded-xl {{ $isPkgMobile ? 'bg-slate-50' : '' }}">
-                        <a href="/tour/packages" @if($isPkgMobile) aria-current="page" @endif
-                           class="flex-1 px-4 py-3.5 rounded-xl text-[15px] font-medium transition-colors {{ $isPkgMobile ? 'text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                            {{ __('Paket Wisata Toba') }}
-                        </a>
-                        @if(count($navPackages ?? []))
-                            <button @click="openPkgMobile = !openPkgMobile" type="button"
-                                    :aria-expanded="openPkgMobile" aria-label="{{ __('Lihat daftar paket') }}"
-                                    class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors">
-                                <svg class="w-4 h-4 transition-transform duration-200" :class="openPkgMobile && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                            </button>
-                        @endif
-                    </div>
-                    @if(count($navPackages ?? []))
-                        <div x-show="openPkgMobile" x-cloak
+                         Sengaja TIDAK ditaruh di dalam strip menu: strip itu
+                         `overflow-x-auto`, dan overflow di satu sumbu ikut
+                         mengkliping sumbu satunya — panel dropdown akan
+                         terpotong di tepi bawah strip. --}}
+                    <div x-data="{ open: false }" class="sm:hidden relative">
+                        <button @click="open = !open" type="button"
+                                :aria-expanded="open" aria-haspopup="true"
+                                aria-label="{{ __('Pilih bahasa & mata uang') }}"
+                                class="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-100 active:scale-95 transition-all">
+                            <span>{{ $localeShort[$activeLocale] ?? $localeShort['my'] }}</span>
+                            <svg class="w-2.5 h-2.5 text-slate-400 transition-transform duration-200" :class="open && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div x-show="open" x-cloak @click.away="open = false"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 -translate-y-1"
                              x-transition:enter-end="opacity-100 translate-y-0"
-                             class="mt-1 ml-4 pl-4 border-l-2 border-slate-100 space-y-1">
-                            @foreach($navPackages as $navPkg)
-                                <a href="/tour/package/{{ $navPkg->slug }}"
-                                   class="block px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
-                                    <span class="block text-sm font-medium">{{ $navPkg->translated_name }}</span>
-                                    @if($navPkg->duration)
-                                        <span class="block mt-0.5 text-xs text-slate-400">{{ $navPkg->duration }}</span>
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="absolute right-0 mt-2 w-48 bg-white text-slate-700 rounded-xl shadow-xl shadow-slate-900/10 ring-1 ring-slate-200 py-1 text-[13px] font-medium overflow-hidden z-[200]">
+                            @foreach($locales as $code => $label)
+                                <a href="{{ route('change-locale', $code) }}"
+                                   class="flex items-center justify-between gap-2 px-4 py-3 transition-colors hover:bg-slate-50 {{ $activeLocale === $code ? 'text-toba-green font-semibold bg-slate-50' : 'text-slate-600' }}">
+                                    <span>{{ $label }}</span>
+                                    @if($activeLocale === $code)
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     @endif
                                 </a>
                             @endforeach
                         </div>
-                    @endif
-                </div>
-
-                @foreach($mobileLinks as $link)
-                    <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
-                       class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-medium transition-colors {{ $link['active'] ? 'bg-slate-50 text-slate-900' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <span>{{ $link['label'] }}</span>
-                    </a>
-                @endforeach
-            </nav>
-
-            <div class="px-6 py-5 border-t border-slate-100 space-y-4" style="padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));">
-                @if(count($socials))
-                    <div class="flex items-center justify-center gap-4">
-                        @foreach($socials as $name => $url)
-                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ ucfirst($name) }}"
-                               class="text-slate-400 hover:text-slate-900 transition-colors duration-200">
-                                <x-icon :name="$name" class="w-4 h-4" />
-                            </a>
-                        @endforeach
                     </div>
-                @endif
-                <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
-                   class="w-full py-3.5 bg-slate-900 hover:bg-toba-green text-white rounded-full font-medium text-[15px] text-center flex items-center justify-center gap-2 transition-colors">
-                    <span>{{ __('Hubungi Kami') }}</span>
-                    <x-icon name="whatsapp" class="w-4 h-4 opacity-90" />
-                </a>
+
+                    <a :href="'https://wa.me/' + contact.whatsapp" target="_blank" rel="noopener noreferrer"
+                       aria-label="{{ __('Hubungi Kami') }}"
+                       class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center active:scale-95 transition-transform">
+                        <x-icon name="whatsapp" class="w-4 h-4" />
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+
+        {{-- Strip menu mobile: satu baris, geser horizontal kalau item melebihi
+             lebar layar. Saat halaman dibuka, item aktif digeser ke tengah
+             sendiri lewat scrollLeft (bukan scrollIntoView, yang ikut menggeser
+             halaman secara vertikal). --}}
+        <div class="lg:hidden border-t border-slate-100 overflow-x-auto no-scrollbar overscroll-x-contain"
+             x-init="$nextTick(() => {
+                 const item = $el.querySelector('[aria-current=page]');
+                 if (item) $el.scrollLeft = item.offsetLeft - ($el.clientWidth - item.offsetWidth) / 2;
+             })">
+            <ul class="flex items-stretch whitespace-nowrap px-4 sm:px-6 gap-7 sm:gap-9 justify-start sm:justify-center">
+                @foreach($mobileNav as $link)
+                    <li>
+                        <a href="{{ $link['url'] }}" @if($link['active']) aria-current="page" @endif
+                           class="relative flex items-center py-3 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-colors {{ $link['active'] ? 'text-toba-green' : 'text-slate-500 hover:text-slate-900' }}">
+                            {{ $link['label'] }}
+                            @if($link['active'])
+                                <span class="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-toba-green"></span>
+                            @endif
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </nav>
+
 </header>

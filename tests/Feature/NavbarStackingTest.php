@@ -42,15 +42,38 @@ class NavbarStackingTest extends TestCase
         );
     }
 
-    public function test_mobile_menu_still_covers_everything_in_the_navbar(): void
+    public function test_menu_mobile_berupa_strip_geser_bukan_burger(): void
     {
-        // Menu mobile adalah lapisan penuh layar; menaikkan dropdown mata uang
-        // tidak boleh membuatnya menembus menu itu.
+        // Drawer penuh layar beserta tombol burger-nya sudah diganti strip
+        // menu horizontal. Tesnya menjaga keduanya tidak diam-diam kembali:
+        // dua pola navigasi mobile sekaligus berarti satu di antaranya
+        // membusuk tanpa ada yang tahu.
         $html = $this->get(route('index'))->assertOk()->getContent();
 
-        $pembungkusDropdown = $this->zOf($html, '/class="relative z-\[(\d+)\]"/');
-        $menuMobile = $this->zOf($html, '/class="lg:hidden fixed inset-0 z-\[(\d+)\]"/');
+        $this->assertStringNotContainsString(
+            'M4 6h16M4 12h16M4 18h16',
+            $html,
+            'ikon burger seharusnya sudah tidak dirender'
+        );
+        $this->assertStringContainsString('overflow-x-auto no-scrollbar', $html, 'strip menu mobile hilang');
+    }
 
-        $this->assertGreaterThan($pembungkusDropdown, $menuMobile);
+    public function test_pemilih_bahasa_tetap_terjangkau_di_layar_ponsel(): void
+    {
+        // Topbar -- rumah asli pemilih bahasa -- disembunyikan di bawah 640px.
+        // Tanpa kembarannya di baris logo, tamu ponsel TIDAK punya cara sama
+        // sekali mengganti bahasa atau mata uang.
+        $html = $this->get(route('index'))->assertOk()->getContent();
+
+        $this->assertStringContainsString('class="sm:hidden relative"', $html, 'chip bahasa versi ponsel hilang');
+
+        // Tiga bahasa, dua tempat (topbar + chip ponsel).
+        foreach (['my', 'id', 'en'] as $kode) {
+            $this->assertSame(
+                2,
+                substr_count($html, route('change-locale', $kode)),
+                "tautan ganti bahasa '{$kode}' harus ada di topbar DAN chip ponsel"
+            );
+        }
     }
 }

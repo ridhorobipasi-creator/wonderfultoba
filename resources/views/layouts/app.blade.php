@@ -23,7 +23,10 @@
     <title>@yield('title', $siteSettings['general']['seo_meta_title'] ?? 'Sujai Laketoba | Premium Tour Travel')</title>
     <meta name="description" content="{{ strip_tags($__env->yieldContent('description', $siteSettings['general']['seo_meta_desc'] ?? 'Portal utama Sujai Laketoba. Pilih layanan premium Tour Travel Sumatera Utara.')) }}">
     <meta name="keywords" content="{{ strip_tags($__env->yieldContent('keywords', $siteSettings['general']['seo_meta_keywords'] ?? 'tour danau toba, travel sumatera utara')) }}">
-    <link rel="canonical" href="{{ url()->current() }}">
+    {{-- Bawaannya URL halaman itu sendiri. Halaman yang punya kembaran dengan
+         isi sama (mis. detail paket versi tanpa form) menimpanya lewat
+         @section('canonical') supaya keduanya tidak saling menggerus di Google. --}}
+    <link rel="canonical" href="@yield('canonical', url()->current())">
     @if(!empty($siteSettings['general']['seo_google_verification']))
     <meta name="google-site-verification" content="{{ $siteSettings['general']['seo_google_verification'] }}">
     @endif
@@ -143,6 +146,16 @@
     @endphp
     <script>
         window.SUJAI_CUR = @json($__paxCur);
+        // Nomor & templat pesan untuk tombol WhatsApp di kalkulator pax.
+        // Templatnya ditaruh di file bahasa (bukan dirangkai di JS) supaya
+        // ketiga locale menerjemahkannya lewat jalur yang sama seperti teks lain.
+        window.SUJAI_WA = @json(\App\Helpers\ContactHelper::whatsappDigits());
+        window.SUJAI_WA_TPL = @json(__('Halo, saya berminat dengan paket *:name*.') . "\n"
+            . __('Dewasa') . ': :adults' . "\n"
+            . __('Anak-anak') . ': :children' . "\n"
+            . __('Estimasi Total') . ': :total' . "\n"
+            . ':url' . "\n\n"
+            . __('Boleh minta info lebih lanjut?'));
         window.sujaiMoney = function (n) {
             var c = window.SUJAI_CUR;
             var fixed = (Number(n) || 0).toFixed(c.decimals);
@@ -225,7 +238,7 @@
                 };
             });
 
-            window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug, tiers) {
+            window.Alpine.data('paxCalc', function (adultMyr, childMyr, slug, tiers, name) {
                 var baseAdult = Number(adultMyr) || 0;
                 // null dibedakan dari 0: server memakai ?? (harga anak 0 berarti
                 // gratis, bukan "kosong"), jadi jangan ratakan keduanya jadi 0.
@@ -239,6 +252,7 @@
                     adults: 1,
                     children: 0,
                     slug: slug || '',
+                    name: name || '',
                     tiers: tierList,
                     _clamp: function (v, lo, hi) { v = parseInt(v, 10); if (isNaN(v)) v = lo; return Math.min(hi, Math.max(lo, v)); },
                     incA: function () { this.adults = this._clamp(this.adults + 1, 1, 30); },
@@ -304,7 +318,26 @@
                     get childDisplay() { return this.childUnit * this.rate; },
                     get total() { return (this.adults * this.adultUnit + this.children * this.childUnit) * this.rate; },
                     fmt: function (n) { return window.sujaiMoney(n); },
-                    get bookingUrl() { return '/tour/package/' + this.slug + '?pax=' + this.adults + '&anak=' + this.children; }
+                    get bookingUrl() { return '/tour/package/' + this.slug + '?pax=' + this.adults + '&anak=' + this.children; },
+                    // Pesan WhatsApp dibangun dari state kalkulator yang sedang
+                    // dilihat tamu -- jumlah pax dan totalnya persis yang tertera
+                    // di kartu, jadi admin tidak perlu menanyakan ulang.
+                    get waUrl() {
+                        var vals = {
+                            ':name': this.name || this.slug,
+                            ':adults': String(this.adults),
+                            ':children': String(this.children),
+                            ':total': this.fmt(this.total),
+                            ':url': window.location.origin + this.bookingUrl
+                        };
+                        // Penggantinya fungsi, bukan string: total dalam SGD
+                        // berbunyi "S$800", dan pada replace() bentuk string
+                        // "$" di sisi pengganti ditafsir sebagai pola ($&, $').
+                        var msg = String(window.SUJAI_WA_TPL || '').replace(/:name|:adults|:children|:total|:url/g, function (k) {
+                            return vals[k];
+                        });
+                        return 'https://wa.me/' + (window.SUJAI_WA || '') + '?text=' + encodeURIComponent(msg);
+                    }
                 };
             });
         });

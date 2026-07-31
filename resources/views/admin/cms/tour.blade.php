@@ -281,13 +281,68 @@ document.addEventListener('alpine:init', () => {
             <button type="button" @click="activeTab = 'seo'" :class="activeTab === 'seo' ? 'bg-green-800 text-white shadow' : 'text-slate-500 hover:bg-slate-100'" class="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wide transition whitespace-nowrap">
                 🔍 <span>SEO</span>
             </button>
+            <button type="button" @click="activeTab = 'detailpage'" :class="activeTab === 'detailpage' ? 'bg-slate-900 text-white shadow' : 'text-slate-500 hover:bg-slate-100'" class="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wide transition whitespace-nowrap">
+                📄 <span>Halaman Detail</span>
+            </button>
         </div>
 
         <form action="{{ route('admin.cms.save', 'cms_tour') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             {{-- Daftar yang boleh dikosongkan total. Kalau semua itemnya dihapus,
                  browser tidak mengirim key-nya sama sekali; tanpa ini data lama akan bertahan. --}}
-            <input type="hidden" name="_clear_if_empty" value="homepage_slides,testimonials,featured_package_ids">
+            <input type="hidden" name="_clear_if_empty" value="homepage_slides,testimonials,featured_package_ids,detail_usp">
+
+            {{-- Blok khusus halaman detail tanpa form (/tour/detail).
+                 Isinya global: sekali ditulis, berlaku untuk semua paket --
+                 admin tidak perlu mengetik ulang kalimat pembeda yang sama di
+                 delapan paket, lalu lupa memperbaruinya di tujuh di antaranya. --}}
+            <div x-show="activeTab === 'detailpage'" x-transition
+                 x-data="{ usp: {{ \Illuminate\Support\Js::from(array_values($settings['detail_usp'] ?? [])) }} }"
+                 class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm space-y-8">
+
+                <div>
+                    <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-1">
+                        <span class="w-2 h-2 rounded-full bg-slate-900"></span> Keterangan Keaslian Video
+                    </h4>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Muncul di bawah galeri video</p>
+                    <input type="text" name="video_credit_note"
+                           value="{{ $settings['video_credit_note'] ?? '' }}"
+                           placeholder="Semua video di atas rekaman tim kami sendiri, bukan stok."
+                           class="w-full px-4 py-3 bg-slate-50 rounded-2xl border-none font-bold text-xs text-slate-900">
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-slate-900"></span> Kenapa Kami Berbeda
+                            </h4>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">3-4 poin pembeda</p>
+                        </div>
+                        <button type="button" @click="usp.push({ title: '', text: '' })"
+                                class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg">
+                            + Tambah Poin
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <template x-for="(item, idx) in usp" :key="'usp' + idx">
+                            <div class="p-5 bg-slate-50 rounded-3xl space-y-3 relative group">
+                                <button type="button" @click="usp.splice(idx, 1)"
+                                        class="absolute top-4 right-4 w-6 h-6 rounded-full bg-white text-rose-500 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fas fa-times text-[10px]"></i>
+                                </button>
+                                <input type="text" x-model="item.title" placeholder="Judul poin"
+                                       :name="'detail_usp[' + idx + '][title]'"
+                                       class="w-full px-3 py-2 bg-white rounded-xl border-none font-black text-[11px] text-slate-900">
+                                <textarea x-model="item.text" rows="2" placeholder="Penjelasan singkat"
+                                          :name="'detail_usp[' + idx + '][text]'"
+                                          class="w-full px-3 py-2 bg-white rounded-xl border-none font-bold text-[10px] text-slate-600"></textarea>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
 
             <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm overflow-hidden">
                 <!-- Hero Tab -->

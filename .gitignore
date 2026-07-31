@@ -66,3 +66,8 @@ ROTASI-RAHASIA.*
 
 # Dump database — jangan pernah masuk riwayat
 *.sql
+
+# Font Material Symbols versi penuh (~450 KiB) yang diunduh skrip subset
+# sebagai cache. Yang dipakai situs cuma hasil pangkasannya
+# (material-symbols-subset.woff2), dan berkas ini bisa diunduh ulang kapan saja.
+/resources/fonts/_ms-full.woff2

@@ -23,7 +23,8 @@
         . (float) ($package->price ?? 0) . ', '
         . \Illuminate\Support\Js::from($package->childPrice ?? null) . ', '
         . \Illuminate\Support\Js::from($slug) . ', '
-        . \Illuminate\Support\Js::from($paxTiers) . ')';
+        . \Illuminate\Support\Js::from($paxTiers) . ', '
+        . \Illuminate\Support\Js::from($name) . ')';
 
     // Ringkasan isi paket. Sumbernya kolom JSON includes/excludes -- yang
     // benar-benar diisi lewat form admin -- bukan relasi packageIncludes.
@@ -37,8 +38,12 @@
 
 <div class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all duration-300 h-full">
 
-    {{-- Bagian yang bisa diklik menuju detail: gambar + lokasi + judul --}}
-    <a href="/tour/package/{{ $slug }}" class="flex flex-col flex-grow">
+    {{-- Bagian yang bisa diklik menuju detail: gambar + lokasi + judul.
+         Menuju versi TANPA form: klik di sini niatnya "lihat-lihat dulu",
+         bukan "saya mau pesan". Yang berniat memesan menekan tombol Booking
+         di bawah, yang membawa langsung ke halaman berform beserta jumlah
+         pax yang sudah ia setel. --}}
+    <a href="/tour/detail/{{ $slug }}" class="flex flex-col flex-grow">
         {{-- Gambar --}}
         <div class="relative h-44 overflow-hidden shrink-0">
             <img

@@ -217,13 +217,16 @@
                                 <!-- Blur placeholder -->
                                 <div class="absolute inset-0 bg-gradient-to-br from-toba-green/20 via-slate-200/50 to-toba-green/20 animate-pulse"
                                      x-show="!loaded"></div>
-                                <img :src="pkg.first_image" :alt="pkg.name" 
+                                <a :href="'/tour/detail/' + (pkg.slug || pkg.id)" class="block w-full h-full"
+                                   :aria-label="pkg.translated_name">
+                                <img :src="pkg.first_image" :alt="pkg.name"
                                      class="w-full h-full object-cover group-hover:scale-105 transition duration-[1.5s]"
                                      :class="loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'"
                                      style="transition: opacity 0.6s ease, transform 1.5s ease"
                                      loading="lazy" decoding="async"
                                      x-on:load="loaded = true"
                                      x-on:error="loaded = true">
+                                </a>
                                 
                                 @php $__pkgRating = siteRating(); @endphp
                                 <div class="absolute top-4 left-4 flex flex-col space-y-1.5">
@@ -247,14 +250,20 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-1.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                     <span x-text="(pkg.cities && pkg.cities.length > 0) ? pkg.cities.map(c => c.name).join(', ') : (cities.find(c => String(c.id) === String(pkg.cityId))?.name || 'Sumatera Utara')"></span>
                                 </div>
-                                <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
+                                {{-- Kartu di grid ini sebelumnya tidak bisa diklik sama
+                                     sekali: satu-satunya jalan masuk cuma tombol Booking,
+                                     jadi tamu yang cuma ingin membaca detail tidak punya
+                                     pintu. Judulnya kini menuju halaman detail tanpa form. --}}
+                                <a :href="'/tour/detail/' + (pkg.slug || pkg.id)" class="block">
+                                    <h3 class="text-lg font-bold text-slate-900 mb-3 line-clamp-1 group-hover:text-toba-green transition-colors tracking-tight" x-text="pkg.translated_name"></h3>
+                                </a>
                                 <p class="text-slate-500 text-xs leading-relaxed mb-4 line-clamp-2 font-normal flex-grow" x-text="pkg.translated_description"></p>
                             </div>
                             @include('partials.package-details', [
                                 'xdata' => 'pkgDetails(pkg.includes || [], pkg.excludes || [], pkg.itinerary || [])',
                                 'uid' => '\'pkg-detail-grid-\' + pkg.id',
                             ])
-                            @include('partials.pax-calc', ['xdata' => 'paxCalc(pkg.price, pkg.childPrice, pkg.slug || pkg.id, (pkg.pricingDetails && pkg.pricingDetails.tiers) || [])'])
+                            @include('partials.pax-calc', ['xdata' => 'paxCalc(pkg.price, pkg.childPrice, pkg.slug || pkg.id, (pkg.pricingDetails && pkg.pricingDetails.tiers) || [], pkg.translated_name || pkg.name)'])
                         </div>
                     </div>
                 </template>

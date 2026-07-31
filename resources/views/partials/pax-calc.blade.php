@@ -29,15 +29,27 @@
         </div>
     </div>
 
-    {{-- Estimasi total + tombol Booking --}}
-    <div class="flex items-center justify-between gap-2 pt-2 border-t border-dashed border-slate-200">
+    {{-- Estimasi total + tombol Booking & WhatsApp.
+         Dua tombol tidak muat di sisa baris total pada lebar kartu (~300px),
+         jadi totalnya dapat barisnya sendiri dan tombolnya turun jadi dua kolom
+         sama lebar. --}}
+    <div class="pt-2 border-t border-dashed border-slate-200 space-y-2">
         <div class="min-w-0">
             <p class="text-[8.5px] uppercase tracking-widest text-slate-400 leading-tight">{{ __('Estimasi Total') }}</p>
             <p class="text-[15px] font-extrabold text-toba-green leading-tight" x-text="fmt(total)"></p>
         </div>
-        <a :href="bookingUrl" class="shrink-0 inline-flex items-center gap-1 bg-toba-green text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-lg hover:bg-primary-container active:scale-95 transition">
-            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            {{ __('Booking') }}
-        </a>
+        <div class="grid grid-cols-2 gap-2">
+            <a :href="bookingUrl" class="inline-flex items-center justify-center gap-1 bg-toba-green text-white text-[11px] font-bold uppercase tracking-wider px-3 py-2 rounded-lg hover:bg-primary-container active:scale-95 transition">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                {{ __('Booking') }}
+            </a>
+            {{-- Langsung ke WhatsApp, pesannya sudah terisi jumlah pax & total
+                 yang sedang tampil di kalkulator ini. --}}
+            <a :href="waUrl" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-1.5 border border-toba-green text-toba-green text-[11px] font-bold uppercase tracking-wider px-3 py-2 rounded-lg hover:bg-toba-green hover:text-white active:scale-95 transition">
+                <x-icon name="whatsapp" class="w-3.5 h-3.5 shrink-0" />
+                {{ __('WhatsApp') }}
+            </a>
+        </div>
     </div>
 </div>

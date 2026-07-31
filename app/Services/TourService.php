@@ -65,6 +65,117 @@ class TourService
 
         $data['images'] = array_values(array_unique($currentImages));
 
+        // 5b. Video: baris tautan dari form + berkas unggahan digabung jadi
+        // satu daftar. Kuncinya `videos` hanya ditulis kalau formnya memang
+        // mengirim salah satunya -- kalau tidak, kolomnya jangan disentuh,
+        // supaya simpan dari form lain (mis. toggle status) tidak mengosongkan
+        // video yang sudah ada.
+        if (array_key_exists('video_links', $data) || isset($data['video_files']) || isset($data['remove_videos'])) {
+            $keep = [];
+            $remove = array_filter((array) ($data['remove_videos'] ?? []));
+
+            foreach ((array) ($package->videos ?? []) as $existing) {
+                if (! is_array($existing)) {
+                    continue;
+                }
+                $src = (string) ($existing['src'] ?? '');
+                if ($src === '' || in_array($src, $remove, true)) {
+                    // Berkas yang dibuang ikut dihapus dari disk; kalau tidak,
+                    // video 40 MB itu menghuni hosting selamanya tanpa rujukan.
+                    if ($src !== '' && ($existing['type'] ?? '') === 'file') {
+                        Storage::disk('public')->delete($src);
+                    }
+
+                    continue;
+                }
+                $keep[] = $existing;
+            }
+
+            // Baris tautan dikirim ulang utuh setiap simpan, jadi yang lama
+            // dibuang dan diganti isi form -- itu yang membuat tombol hapus
+            // pada baris tautan benar-benar menghapus.
+            $keep = array_values(array_filter($keep, fn ($v) => ($v['type'] ?? 'link') === 'file'));
+
+            foreach ((array) ($data['video_links'] ?? []) as $row) {
+                $src = trim((string) (is_array($row) ? ($row['src'] ?? '') : $row));
+                if ($src === '') {
+                    continue;
+                }
+                $keep[] = [
+                    'type' => 'link',
+                    'src' => $src,
+                    'title' => trim((string) (is_array($row) ? ($row['title'] ?? '') : '')),
+                    'gear' => trim((string) (is_array($row) ? ($row['gear'] ?? '') : '')),
+                ];
+            }
+
+            foreach ((array) ($data['video_files'] ?? []) as $file) {
+                if (! $file) {
+                    continue;
+                }
+                // Video TIDAK lewat uploadAndIndex: helper itu mengonversi ke
+                // WebP dan mengindeks ke pustaka gambar.
+                $path = $file->store('packages/videos', 'public');
+                if ($path) {
+                    $keep[] = ['type' => 'file', 'src' => $path, 'title' => $file->getClientOriginalName()];
+                }
+            }
+
+            $data['videos'] = array_values($keep);
+        }
+
+        // 5b-2. Penginapan per malam. Barisnya dikirim ulang utuh tiap simpan,
+        // foto lama dipertahankan lewat field tersembunyi kecuali ada unggahan
+        // baru di baris yang sama.
+        if (array_key_exists('accommodations', $data)) {
+            $rows = [];
+            $files = (array) ($data['accommodation_files'] ?? []);
+
+            foreach ((array) $data['accommodations'] as $i => $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+
+                $name = trim((string) ($row['name'] ?? ''));
+                if ($name === '') {
+                    continue;
+                }
+
+                $image = trim((string) ($row['image'] ?? ''));
+                if (! empty($files[$i])) {
+                    $baru = $this->uploadAndIndex($files[$i], 'packages', 'akomodasi', $name);
+                    if ($baru) {
+                        // Foto lama baris ini tidak lagi dirujuk siapa pun.
+                        if ($image !== '') {
+                            Storage::disk('public')->delete($image);
+                        }
+                        $image = $baru;
+                    }
+                }
+
+                $rows[] = [
+                    'night' => (int) ($row['night'] ?? 0) ?: count($rows) + 1,
+                    'name' => $name,
+                    'class' => trim((string) ($row['class'] ?? '')),
+                    'image' => $image,
+                ];
+            }
+
+            $data['accommodations'] = $rows;
+        }
+
+        // 5c. Brosur PDF -- satu berkas, unggahan baru menggantikan yang lama.
+        if (! empty($data['remove_brochure']) && $package->brochure) {
+            Storage::disk('public')->delete($package->brochure);
+            $data['brochure'] = null;
+        }
+        if (isset($data['brochure_file']) && $data['brochure_file']) {
+            if ($package->brochure) {
+                Storage::disk('public')->delete($package->brochure);
+            }
+            $data['brochure'] = $data['brochure_file']->store('packages/brochures', 'public');
+        }
+
         // 6. Save Package
         $package->fill($data);
         $package->save();

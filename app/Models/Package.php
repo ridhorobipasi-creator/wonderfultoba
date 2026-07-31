@@ -7,6 +7,7 @@ use App\Helpers\CurrencyHelper;
 use App\Traits\HasImageFallback;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin \Eloquent
@@ -24,6 +25,7 @@ class Package extends Model
     protected $fillable = [
         'slug', 'name', 'shortDescription', 'description', 'locationTag',
         'price', 'childPrice', 'cost_price', 'priceDisplay', 'duration', 'images',
+        'videos', 'brochure', 'mapEmbed', 'accommodations',
         'includes', 'excludes', 'pricingDetails', 'itinerary', 'itineraryText',
         'dronePrice', 'droneLocation', 'notes', 'status', 'isFeatured',
         'sortOrder', 'metaTitle', 'metaDescription',
@@ -34,6 +36,8 @@ class Package extends Model
 
     protected $casts = [
         'images' => 'array',
+        'videos' => 'array',
+        'accommodations' => 'array',
         'includes' => 'array',
         'excludes' => 'array',
         'pricingDetails' => 'array',
@@ -44,6 +48,163 @@ class Package extends Model
         'childPrice' => 'double',
         'dronePrice' => 'double',
     ];
+
+    /**
+     * Daftar video paket yang sudah siap dirender.
+     *
+     * Admin boleh menempel tautan ATAU mengunggah berkas, jadi normalisasinya
+     * dikerjakan di satu tempat: halaman detail berform dan halaman detail
+     * tanpa form membaca hasil yang sama persis.
+     *
+     * Tautan yang tidak dikenali DIBUANG, bukan diteruskan apa adanya. Nilai
+     * ini masuk ke atribut src <iframe>; meloloskan string sembarang dari form
+     * admin membuka jalan javascript: dan data: URI.
+     *
+     * @return array<int, array{kind: string, url: string, title: string, gear: string}>
+     */
+    public function videoList(): array
+    {
+        $out = [];
+
+        foreach ((array) ($this->videos ?? []) as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $src = trim((string) ($row['src'] ?? ''));
+            if ($src === '') {
+                continue;
+            }
+
+            $title = trim((string) ($row['title'] ?? ''));
+            // Alat rekam. Yang menjual jasa dokumentasi bukan videonya sendiri,
+            // melainkan bukti bahwa itu rekaman tim ini -- bukan stok.
+            $gear = trim((string) ($row['gear'] ?? ''));
+
+            // Berkas unggahan: diputar pemutar bawaan browser, bukan iframe.
+            if (($row['type'] ?? 'link') === 'file') {
+                $out[] = ['kind' => 'file', 'url' => Storage::disk('public')->url($src), 'title' => $title, 'gear' => $gear];
+
+                continue;
+            }
+
+            if ($embed = self::videoEmbedUrl($src)) {
+                $out[] = ['kind' => 'embed', 'url' => $embed, 'title' => $title, 'gear' => $gear];
+
+                continue;
+            }
+
+            // Tautan langsung ke berkas video (mis. CDN) tetap bisa diputar
+            // pemutar bawaan, selama skemanya http(s).
+            if (preg_match('~^https?://~i', $src) && preg_match('~\.(mp4|webm|ogg)(\?.*)?$~i', $src)) {
+                $out[] = ['kind' => 'file', 'url' => $src, 'title' => $title, 'gear' => $gear];
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Daftar penginapan per malam, sudah bersih dan berurutan.
+     *
+     * Baris tanpa nama hotel dibuang: kartu "Malam 2" yang kosong lebih buruk
+     * daripada tidak ada kartunya sama sekali -- tamu membacanya sebagai
+     * "belum diputuskan".
+     *
+     * @return array<int, array{night: int, name: string, class: string, image: string|null}>
+     */
+    public function accommodationList(): array
+    {
+        $out = [];
+
+        foreach ((array) ($this->accommodations ?? []) as $i => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $name = trim((string) ($row['name'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+
+            $image = trim((string) ($row['image'] ?? ''));
+
+            $out[] = [
+                'night' => (int) ($row['night'] ?? 0) ?: count($out) + 1,
+                'name' => $name,
+                'class' => trim((string) ($row['class'] ?? '')),
+                'image' => $image !== '' ? $image : null,
+            ];
+        }
+
+        usort($out, fn ($a, $b) => $a['night'] <=> $b['night']);
+
+        return $out;
+    }
+
+    /**
+     * URL sematan untuk tautan YouTube/Vimeo. null bila bukan keduanya.
+     */
+    public static function videoEmbedUrl(string $url): ?string
+    {
+        if (preg_match('~(?:youtube\.com/(?:watch\?(?:.*&)?v=|embed/|live/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{6,})~i', $url, $m)) {
+            return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+        }
+
+        if (preg_match('~vimeo\.com/(?:video/)?(\d+)~i', $url, $m)) {
+            return 'https://player.vimeo.com/video/'.$m[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * URL sematan peta lokasi, atau null bila kolomnya kosong/tak dikenali.
+     *
+     * Admin boleh menempel kode <iframe> utuh dari Google Maps, tautan biasa,
+     * atau sepasang koordinat. Yang diambil hanya URL-nya lalu diperiksa
+     * host-nya -- kode <iframe> mentah TIDAK pernah dicetak ke halaman, karena
+     * itu berarti satu akun admin yang jebol bisa menanam skrip di halaman
+     * publik yang paling ramai.
+     */
+    public function mapEmbedUrl(): ?string
+    {
+        $raw = trim((string) ($this->mapEmbed ?? ''));
+        if ($raw === '') {
+            return null;
+        }
+
+        // Ambil src bila yang ditempel kode <iframe> utuh.
+        if (preg_match('~<iframe[^>]*\ssrc=["\']([^"\']+)["\']~i', $raw, $m)) {
+            $raw = html_entity_decode($m[1]);
+        }
+
+        // Sepasang koordinat: -2.6845, 98.8756
+        if (preg_match('~^\s*(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)\s*$~', $raw, $m)) {
+            return 'https://maps.google.com/maps?q='.$m[1].','.$m[2].'&z=14&output=embed';
+        }
+
+        if (preg_match('~^https?://~i', $raw)) {
+            $host = strtolower((string) parse_url($raw, PHP_URL_HOST));
+            // Hanya domain peta Google. Selain itu diabaikan diam-diam:
+            // halaman tetap tampil, cuma tanpa peta.
+            if ($host !== '' && preg_match('~(^|\.)(google\.[a-z.]+|goo\.gl)$~', $host)) {
+                return $raw;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * URL unduhan brosur, atau null bila belum diunggah.
+     */
+    public function brochureUrl(): ?string
+    {
+        $path = trim((string) ($this->brochure ?? ''));
+
+        return $path === '' ? null : Storage::disk('public')->url($path);
+    }
 
     /**
      * Tier harga grosir yang berlaku untuk sejumlah peserta.

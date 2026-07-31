@@ -112,6 +112,8 @@
                     <p class="text-xs text-gray-400 mt-2 italic">* Hover over existing images to delete them.</p>
                 </div>
 
+                @include('admin.packages._media-fields')
+
                 <!-- Short Description -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">Short Description</label>
