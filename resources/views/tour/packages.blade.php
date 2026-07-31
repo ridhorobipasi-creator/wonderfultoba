@@ -48,76 +48,8 @@
 @section('content')
 <div 
     x-data="{ 
-        searchQuery: '', 
-        filterCity: 'all', 
-        filterDuration: 'Semua', 
-        sortBy: 'default',
         packages: @js($packages),
-        cities: @js($cities),
-
-        {{-- Filter hidup di URL. Sebelumnya hasil penyaringan tidak bisa
-             dibagikan atau di-bookmark sama sekali: tautan yang dikirim ke
-             calon tamu selalu membuka daftar penuh, dan menekan tombol kembali
-             dari halaman detail mengembalikan filter ke kondisi kosong.
-             replaceState, bukan pushState, supaya setiap ketikan di kotak
-             pencarian tidak menumpuk satu entri riwayat. --}}
-        init() {
-            const params = new URLSearchParams(window.location.search);
-            this.searchQuery = params.get('q') || '';
-            this.filterCity = params.get('kota') || 'all';
-            this.filterDuration = params.get('durasi') || 'Semua';
-            this.sortBy = params.get('urut') || 'default';
-            ['searchQuery', 'filterCity', 'filterDuration', 'sortBy'].forEach(key => {
-                this.$watch(key, () => this.syncUrl());
-            });
-        },
-
-        syncUrl() {
-            const params = new URLSearchParams();
-            if (this.searchQuery.trim() !== '') params.set('q', this.searchQuery.trim());
-            if (this.filterCity !== 'all') params.set('kota', this.filterCity);
-            if (this.filterDuration !== 'Semua') params.set('durasi', this.filterDuration);
-            if (this.sortBy !== 'default') params.set('urut', this.sortBy);
-            const query = params.toString();
-            window.history.replaceState({}, '', query ? window.location.pathname + '?' + query : window.location.pathname);
-        },
-
-        get filteredPackages() {
-            let filtered = this.packages.filter(p => {
-                const matchCity = this.filterCity === 'all' || (p.cities && p.cities.some(c => String(c.id) === this.filterCity)) || String(p.cityId) === this.filterCity;
-                // Pencarian ikut menyisir nama kota, lokasi, dan durasi. Sebelumnya
-                // hanya nama & deskripsi: mengetik Samosir bisa memberi nol hasil
-                // walaupun paketnya memang ke Samosir, karena nama kota tidak
-                // selalu muncul di dua kolom itu.
-                const q = this.searchQuery.toLowerCase().trim();
-                const haystack = [
-                    p.translated_name,
-                    p.translated_description,
-                    p.locationTag,
-                    p.duration,
-                    (p.cities || []).map(c => c.name).join(' '),
-                    (this.cities.find(c => String(c.id) === String(p.cityId)) || {}).name,
-                ].filter(Boolean).join(' ').toLowerCase();
-                const matchSearch = q === '' || haystack.includes(q);
-                
-                // Duration matching
-                let matchDur = true;
-                if (this.filterDuration !== 'Semua') {
-                    const daysMatch = p.duration ? p.duration.match(/\d+/) : null;
-                    const days = daysMatch ? parseInt(daysMatch[0]) : 0;
-                    if (this.filterDuration === '1-3 Hari') matchDur = days >= 1 && days <= 3;
-                    else if (this.filterDuration === '4-7 Hari') matchDur = days >= 4 && days <= 7;
-                    else if (this.filterDuration === '7+ Hari') matchDur = days > 7;
-                }
-                
-                return matchCity && matchSearch && matchDur;
-            });
-            
-            if (this.sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
-            else if (this.sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
-            
-            return filtered;
-        }
+        cities: @js($cities)
     }"
     class="min-h-screen flex flex-col bg-slate-50"
 >
@@ -131,7 +63,7 @@
             @endphp
             <img src="{{ $heroImg }}" alt="Packages Hero" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high" decoding="async">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/50 to-slate-50"></div>
-            <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-28">
+            <div class="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
                 <div class="animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <x-breadcrumb :dark="true" class="mb-4" :items="[
                         ['label' => __('Paket Wisata')],
@@ -144,61 +76,12 @@
             </div>
         </div>
 
-        <!-- Filter Section -->
-        <div class="max-w-7xl mx-auto px-5 md:px-8 -mt-16 relative z-20">
-            <div class="bg-white/95 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-slate-100 animate-in fade-in zoom-in duration-1000 delay-300">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Search Box -->
-                    <div class="relative group lg:col-span-2">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-focus-within:bg-toba-green group-focus-within:text-white transition shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-                        </div>
-                        <input type="text" placeholder="Cari destinasi atau paket..." x-model="searchQuery"
-                            class="w-full pl-14 pr-4 py-3 bg-slate-50/50 border border-slate-200/50 rounded-2xl focus:ring-1 focus:ring-toba-green font-medium text-slate-700 placeholder:text-slate-400 text-sm outline-none">
-                    </div>
-                    <!-- City Filter -->
-                    <div class="relative group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-toba-green pointer-events-none"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <select x-model="filterCity"
-                            class="w-full pl-12 pr-4 py-3 bg-slate-50/50 border border-slate-200/50 rounded-2xl focus:ring-1 focus:ring-toba-green font-medium text-slate-700 appearance-none cursor-pointer outline-none text-sm">
-                            <option value="all">Semua Wilayah</option>
-                            @foreach($cities as $city)
-                                <option value="{{ $city->id }}">{{ $city->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <!-- Sort Filter -->
-                    <div class="relative group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-toba-green pointer-events-none"><path d="m21 16-4 4-4-4"></path><path d="M17 20V4"></path><path d="m3 8 4-4 4 4"></path><path d="M7 4v16"></path></svg>
-                        <select x-model="sortBy"
-                            class="w-full pl-12 pr-4 py-3 bg-slate-50/50 border border-slate-200/50 rounded-2xl focus:ring-1 focus:ring-toba-green font-medium text-slate-700 appearance-none cursor-pointer outline-none text-sm">
-                            <option value="default">Urutkan</option>
-                            <option value="price-asc">Harga Terendah</option>
-                            <option value="price-desc">Harga Tertinggi</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2 mt-4 items-center">
-                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mr-1">Durasi:</span>
-                    @foreach(['Semua', '1-3 Hari', '4-7 Hari', '7+ Hari'] as $d)
-                    <button @click="filterDuration = '{{ $d }}'"
-                        :class="filterDuration === '{{ $d }}' ? 'bg-toba-green text-white shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/50'"
-                        class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold transition whitespace-nowrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
-                        {{ $d }}
-                    </button>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
         <!-- Results Grid -->
-        <div class="max-w-7xl mx-auto px-5 md:px-8 mt-14">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 mt-8 md:mt-14">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 mb-0.5">Menampilkan Hasil</h2>
-                    <p class="text-slate-500 font-normal text-xs">Ditemukan <span class="text-toba-green font-bold" x-text="filteredPackages.length"></span> paket wisata</p>
+                    <p class="text-slate-500 font-normal text-xs">Ditemukan <span class="text-toba-green font-bold" x-text="packages.length"></span> paket wisata</p>
                 </div>
             </div>
 
@@ -210,7 +93,7 @@
                  tetap seragam karena judul dan deskripsinya sudah dibatasi
                  line-clamp. --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-start">
-                <template x-for="(pkg, i) in filteredPackages" :key="pkg.id">
+                <template x-for="(pkg, i) in packages" :key="pkg.id">
                     <div class="animate-in fade-in slide-in-from-bottom-12 duration-1000" :style="'animation-delay: ' + (i * 100) + 'ms'">
                         <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-slate-200 transition-colors duration-300 group h-full flex flex-col shadow-sm">
                             <div class="relative h-64 overflow-hidden shrink-0" x-data="{ loaded: false }">
@@ -269,17 +152,25 @@
                 </template>
             </div>
 
-            <!-- Premium Empty State -->
-            <div x-show="filteredPackages.length === 0" class="text-center py-24 bg-white rounded-3xl border border-slate-100 shadow-sm animate-in fade-in zoom-in duration-700">
+            {{-- Tanpa filter, daftar kosong hanya berarti satu hal: memang belum
+                 ada paket aktif. Tombol "Reset Semua Filter" di sini dulu
+                 merujuk state yang sudah tidak ada -- sekali diklik, Alpine
+                 melempar ReferenceError dan seluruh komponen berhenti bekerja. --}}
+            <div x-show="packages.length === 0" class="text-center py-24 bg-white rounded-3xl border border-slate-100 shadow-sm animate-in fade-in zoom-in duration-700">
                 <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-x"><path d="m16 16 5 5"></path><circle cx="10" cy="10" r="7"></circle><path d="m7 7 6 6"></path><path d="m13 7-6 6"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900 mb-3 tracking-tight">Destinasi Belum Ditemukan</h3>
-                <p class="text-slate-500 text-xs font-normal max-w-xs mx-auto mb-8 leading-relaxed">Kami tidak menemukan paket yang sesuai dengan kriteria Anda. Cobalah untuk mereset filter atau mencari dengan kata kunci lain.</p>
-                <button @click="searchQuery = ''; filterCity = 'all'; filterDuration = 'Semua'; sortBy = 'default'"
-                    class="bg-slate-950 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-toba-green transition-colors duration-300">
-                    Reset Semua Filter
-                </button>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3 tracking-tight">{{ __('Paket Belum Tersedia') }}</h3>
+                <p class="text-slate-500 text-xs font-normal max-w-xs mx-auto mb-8 leading-relaxed">{{ __('Daftar paket sedang kami perbarui. Ceritakan rencana Anda dan kami susunkan penawarannya.') }}</p>
+                @php
+                    $kosongPesan = __('Halo, saya ingin bertanya tentang paket wisata Danau Toba.');
+                @endphp
+                <a href="https://wa.me/{{ \App\Helpers\ContactHelper::whatsappDigits() }}?text={{ rawurlencode($kosongPesan) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 bg-slate-950 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-toba-green transition-colors duration-300">
+                    <x-icon name="whatsapp" class="w-3.5 h-3.5" />
+                    {{ __('Tanya lewat WhatsApp') }}
+                </a>
             </div>
         </div>
 
